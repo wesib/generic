@@ -59,9 +59,9 @@ function baseConfig(tsconfig) {
     output: {
       format: 'umd',
       sourcemap: true,
-      name: 'webcbb.common',
+      name: 'wesib.common',
       globals: {
-        '@webcbb/webcbb': 'webcbb',
+        '@wesib/wesib': 'wesib',
       }
     },
   };
@@ -71,10 +71,10 @@ const umdConfig = makeConfig(
     baseConfig('tsconfig.umd.json'),
     {
       external: [
-        '@webcbb/webcbb',
+        '@wesib/wesib',
       ],
       output: {
-        file: './dist/webcbb.common.umd.js',
+        file: './dist/wesib.common.umd.js',
       },
     },
     uglifyConfig);
@@ -84,11 +84,11 @@ const esm5Config = makeConfig(
     {
       external: [
         'tslib',
-        '@webcbb/webcbb',
+        '@wesib/wesib',
       ],
       output: {
         format: 'es',
-        file: './dist/webcbb.common.esm5.js',
+        file: './dist/wesib.common.esm5.js',
       },
     },
     terserConfig);
@@ -98,11 +98,11 @@ const esm2015Config = makeConfig(
     {
       external: [
         'tslib',
-        '@webcbb/webcbb',
+        '@wesib/wesib',
       ],
       output: {
         format: 'es',
-        file: './dist/webcbb.common.esm2015.js',
+        file: './dist/wesib.common.esm2015.js',
       },
     },
     terserConfig);

@@ -1,4 +1,4 @@
-import { WebFeature, BootstrapContext } from '@webcbb/webcbb';
+import { BootstrapContext, WebFeature } from '@wesib/wesib';
 
 /**
  * Component tree support feature.
