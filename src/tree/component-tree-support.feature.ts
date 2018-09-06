@@ -1,9 +1,9 @@
-import { BootstrapContext, WebFeature } from '@wesib/wesib';
+import { BootstrapContext, WesFeature } from '@wesib/wesib';
 
 /**
  * Component tree support feature.
  */
-@WebFeature({
+@WesFeature({
   configure: enableComponentTree,
 })
 export class ComponentTreeSupport {
