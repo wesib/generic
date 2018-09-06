@@ -21,9 +21,7 @@
   "es2015": "dist/wesib.common.esm2015.js",
   "typings": "index.d.ts",
   "dependencies": {
-    "install": "^0.12.1",
-    "tslib": "^1.9.0",
-    "yarn": "^1.9.4"
+    "tslib": "^1.9.0"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.8",
