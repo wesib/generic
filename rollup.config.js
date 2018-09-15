@@ -59,7 +59,7 @@ function baseConfig(tsconfig) {
     output: {
       format: 'umd',
       sourcemap: true,
-      name: 'wesib.common',
+      name: 'wesib.generic',
       globals: {
         '@wesib/wesib': 'wesib',
       }
@@ -74,7 +74,7 @@ const umdConfig = makeConfig(
         '@wesib/wesib',
       ],
       output: {
-        file: './dist/wesib.common.umd.js',
+        file: './dist/wesib.generic.umd.js',
       },
     },
     uglifyConfig);
@@ -88,7 +88,7 @@ const esm5Config = makeConfig(
       ],
       output: {
         format: 'es',
-        file: './dist/wesib.common.esm5.js',
+        file: './dist/wesib.generic.esm5.js',
       },
     },
     terserConfig);
@@ -102,7 +102,7 @@ const esm2015Config = makeConfig(
       ],
       output: {
         format: 'es',
-        file: './dist/wesib.common.esm2015.js',
+        file: './dist/wesib.generic.esm2015.js',
       },
     },
     terserConfig);

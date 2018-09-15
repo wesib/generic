@@ -1,7 +1,7 @@
 {
-  "name": "@wesib/common",
+  "name": "@wesib/generic",
   "version": "1.0.0",
-  "description": "Commonly used web components and features",
+  "description": "Generic web components",
   "keywords": [
     "web-components",
     "library"
@@ -9,16 +9,16 @@
   "homepage": "https://github.com/wesib/wesib",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wesib/common.git"
+    "url": "git+https://github.com/wesib/generic.git"
   },
   "license": "MIT",
   "author": "Ruslan Lopatin<ruslan.lopatin@gmail.com>",
   "bugs": {
     "url": "https://github.com/wesib/wesib/issues"
   },
-  "main": "dist/wesib.common.umd.js",
-  "module": "dist/wesib.common.esm5.js",
-  "es2015": "dist/wesib.common.esm2015.js",
+  "main": "dist/wesib.generic.umd.js",
+  "module": "dist/wesib.generic.esm5.js",
+  "es2015": "dist/wesib.generic.esm2015.js",
   "typings": "index.d.ts",
   "dependencies": {
     "tslib": "^1.9.0"
