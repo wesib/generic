@@ -7,7 +7,7 @@
     "library",
     "typescript"
   ],
-  "homepage": "https://github.com/wesib/wesib",
+  "homepage": "https://github.com/wesib/generic",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wesib/generic.git"
