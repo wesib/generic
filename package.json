@@ -27,6 +27,7 @@
   "devDependencies": {
     "@types/fs-extra": "^5.0.4",
     "@types/jasmine": "^2.8.8",
+    "@wesib/wesib": "=1.0.0-alpha.0",
     "fs-extra": "^7.0.0",
     "jasmine": "^3.2.0",
     "karma": "3.0.0",
@@ -44,6 +45,9 @@
     "rollup-plugin-uglify": "^4.0.0",
     "tslint": "^5.11.0",
     "typescript": "^3.0.3"
+  },
+  "peerDependencies": {
+    "@wesib/wesib": "=1.0.0-alpha.0"
   },
   "scripts": {
     "build": "rollup --config ./rollup.config.js",
