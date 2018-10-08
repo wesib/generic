@@ -20,8 +20,8 @@ describe('tree/component-path', () => {
         expect(ComponentPath.fragment('name-2')).toEqual({ name: 'name-2' });
       });
       it('interprets component identifier', () => {
-        expect(ComponentPath.fragment('!foo')).toEqual({ id: 'foo'});
-        expect(ComponentPath.fragment('!12')).toEqual({ id: '12'});
+        expect(ComponentPath.fragment('!foo')).toEqual({ uid: 'foo'});
+        expect(ComponentPath.fragment('!12')).toEqual({ uid: '12'});
       });
       it('interprets node index', () => {
         expect(ComponentPath.fragment('0')).toEqual({ index: 0 });
@@ -29,9 +29,9 @@ describe('tree/component-path', () => {
         expect(ComponentPath.fragment('999')).toEqual({ index: 999 });
       });
       it('interprets multiple conditions', () => {
-        expect(ComponentPath.fragment('some-name;!id;*;13;')).toEqual({
+        expect(ComponentPath.fragment('some-name;!uid;*;13;')).toEqual({
           name: 'some-name',
-          id: 'id',
+          uid: 'uid',
           index: 13,
         });
       });
@@ -45,7 +45,7 @@ describe('tree/component-path', () => {
       });
       it('returns unique path', () => {
 
-        const path: ComponentPath.Unique = [{ id: 'parent-id' }, { id: 'child-id' }];
+        const path: ComponentPath.Unique = [{ uid: 'parent-uid' }, { uid: 'child-uid' }];
         const unique: ComponentPath.Unique = ComponentPath.of(path);
 
         expect(unique).toBe(path);

@@ -19,7 +19,7 @@ export namespace ComponentPath {
   /**
    * Unique component path consisting of node identifiers only.
    */
-  export type Unique = { id: string }[];
+  export type Unique = { uid: string }[];
 
   /**
    * Component path fragment.
@@ -31,11 +31,11 @@ export namespace ComponentPath {
   export interface Fragment {
 
     /**
-     * Requested component identifier.
+     * Requested component unique identifier.
      *
      * An unique identifier assigned to component should be equal to this one.
      */
-    id?: string;
+    uid?: string;
 
     /**
      * Requested component name.
@@ -128,7 +128,7 @@ export namespace ComponentPath {
     const firstChar = input[0];
 
     if (firstChar === '!') {
-      return { id: decodeURIComponent(input.substring(1)) };
+      return { uid: decodeURIComponent(input.substring(1)) };
     }
     if (firstChar >= '0' && firstChar <= '9') {
       return { index: parseInt(input, 10) };
