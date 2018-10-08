@@ -15,7 +15,7 @@ export abstract class ComponentNode<T extends object = object> {
   /**
    * A key of component context value containing a component node instance.
    */
-  static readonly key: ContextValueKey<ComponentNode> = new SingleValueKey('component-node');
+  static readonly key: ContextValueKey<ComponentNode<any>> = new SingleValueKey('component-node');
 
   /**
    * Component context.
