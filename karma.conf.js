@@ -15,6 +15,7 @@ module.exports = (config) => {
       require('karma-chrome-launcher'),
       require('karma-jasmine'),
       require('karma-jasmine-html-reporter'),
+      require('karma-junit-reporter'),
       require('karma-typescript'),
     ],
     files: [
@@ -77,9 +78,23 @@ module.exports = (config) => {
         },*/
       },
       reports: {
-        'html': 'target/coverage',
+        'html': {
+          'directory': 'target',
+          'subdirectory': 'coverage',
+          'filename': 'html',
+        },
+        'lcovonly': {
+          'directory': 'target',
+          'subdirectory': 'coverage/lcov',
+          'filename': 'coverage.lcov',
+        },
         'text-summary': null,
-      }
+      },
+      junitReporter: {
+        outputDir: 'target/test-results/junit',
+        outputFile: 'junit.xml',
+        useBrowserName: false,
+      },
     },
     customLaunchers: {
       Puppeteer: {
