@@ -14,8 +14,8 @@ class DynamicNodeList<T extends object> implements ComponentNodeList<T> {
     this._observer = new MutationObserver(mutations => this._update(mutations));
   }
 
-  get [Symbol.iterator]() {
-    return this.all[Symbol.iterator];
+  [Symbol.iterator]() {
+    return this.all[Symbol.iterator]();
   }
 
   get all(): ComponentNode_<T>[] {

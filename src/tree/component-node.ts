@@ -1,4 +1,4 @@
-import { ComponentContext, ContextValueKey, EventEmitter, EventProducer, SingleValueKey } from '@wesib/wesib';
+import { ComponentContext, ContextValueKey, EventProducer, SingleValueKey } from '@wesib/wesib';
 
 /**
  * Component node.
