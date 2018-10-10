@@ -1,5 +1,4 @@
-import { ComponentContext, ContextValueKey, EventProducer, SingleValueKey } from '@wesib/wesib';
-import { ComponentPath } from './component-path';
+import { ComponentContext, ContextValueKey, EventEmitter, EventProducer, SingleValueKey } from '@wesib/wesib';
 
 /**
  * Component node.
@@ -23,15 +22,6 @@ export abstract class ComponentNode<T extends object = object> {
   abstract readonly context: ComponentContext<T>;
 
   /**
-   * Unique path to this component.
-   *
-   * This is empty when component's element is not connected.
-   *
-   * The path may change e.g. when component's element is moved in the DOM tree.
-   */
-  abstract path: ComponentPath.Unique[];
-
-  /**
    * Parent component node, or `null` if the component has no parent.
    *
    * This is `null` when component's element is not connected.
@@ -39,26 +29,26 @@ export abstract class ComponentNode<T extends object = object> {
   abstract readonly parent: ComponentNode | null;
 
   /**
-   * Nested component nodes.
+   * Event producer notifying on parent node updates. I.e. when parent components changed.
    */
-  abstract readonly nested: Iterable<ComponentNode>;
+  abstract readonly onParentUpdate: EventProducer<(this: void, parent: ComponentNode | null) => void>;
 
   /**
-   * Event producer notifying on component node updates. I.e. when parent and/or nested components added or removed.
+   * Select nested component nodes matching the given selector.
+   *
+   * @param selector Simple CSS selector of nested components. E.g. component element name.
+   * @param subtree Set to `true` to select from entire subtree. Otherwise - select from component child nodes only.
    */
-  abstract readonly on: EventProducer<ComponentNodeListener>;
+  abstract select<N extends object = object>(
+      selector: string,
+      { subtree }?: { subtree?: boolean }): ComponentNodeList<N>;
 
 }
 
-/**
- * Component node listener.
- *
- * @param node An updated component node.
- * @param added Nested component nodes added to this component.
- * @param removed Nested component nodes removed from this component.
- */
-export type ComponentNodeListener<T extends object = object> = (
-    this: void,
-    node: ComponentNode<T>,
-    added: Iterable<ComponentNode>,
-    removed: Iterable<ComponentNode>) => void;
+export interface ComponentNodeList<T extends object> extends Iterable<ComponentNode<T>> {
+
+  readonly onUpdate: EventProducer<(this: void, list: ComponentNode<T>[]) => void>;
+
+  readonly all: ComponentNode<T>[];
+
+}
