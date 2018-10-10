@@ -21,12 +21,12 @@ export abstract class ComponentTree {
    * This identifier is used e.g. as part of attribute name appended to each component belonging to the same component
    * tree.
    */
-  static readonly idKey: ContextValueKey<string> = new SingleValueKey(
-      'component-tree-id',
-      () => `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`);
+  static readonly idKey: ContextValueKey<string> = new SingleValueKey('component-tree:id', nextId);
 
 }
 
-function s4(): string {
-  return Math.floor(Math.random() * 0x10000).toString(16);
+let idSeq = 0;
+
+function nextId(): string {
+  return idSeq++ ? '' : `${idSeq}`;
 }

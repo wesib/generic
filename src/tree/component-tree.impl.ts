@@ -1,22 +1,23 @@
-import { BootstrapContext, ComponentContext, EventEmitter, SingleValueKey } from '@wesib/wesib';
+import { BootstrapContext, ComponentContext, ContextValues, EventEmitter, SingleValueKey } from '@wesib/wesib';
 import { ComponentNode as ComponentNode_, ComponentNodeListener } from './component-node';
-import { ComponentTree as ComponentTree_ } from './component-tree';
+import { ComponentTree, ComponentTree as ComponentTree_ } from './component-tree';
 
-const implKey = new SingleValueKey<ComponentTreeImpl>('component-tree:impl');
+const treeImplKey = new SingleValueKey<ComponentTreeImpl>('component-tree:impl');
 
 export class ComponentNodeImpl<T extends object = object> {
 
+  static readonly uidKey = new SingleValueKey<string>('component-node:uid');
   static readonly key = new SingleValueKey<ComponentNodeImpl<any>>('component-node:impl');
 
   readonly nodes = new EventEmitter<ComponentNodeListener>();
   private readonly _tree: ComponentTreeImpl;
-  private _node?: ComponentNode_;
+  private _node?: ComponentNode_<T>;
 
   constructor(private readonly _context: ComponentContext<T>) {
-    this._tree = _context.get(implKey);
+    this._tree = _context.get(treeImplKey);
   }
 
-  get node(): ComponentNode_ {
+  get node(): ComponentNode_<T> {
     if (this._node) {
       return this._node;
     }
@@ -58,7 +59,7 @@ export class ComponentNodeImpl<T extends object = object> {
 
 export class ComponentTreeImpl {
 
-  static readonly key = implKey;
+  static readonly key = treeImplKey;
   readonly id: string;
   private _tree?: ComponentTree_;
 
@@ -77,4 +78,15 @@ export class ComponentTreeImpl {
     return new ComponentTree();
   }
 
+}
+
+export function treeAttribute(ctx: ContextValues) {
+
+  const treeId = ctx.get(ComponentTree.idKey);
+
+  if (treeId) {
+    return `wesib-${treeId}-tree`;
+  }
+
+  return `wesib-tree`;
 }
