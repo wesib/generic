@@ -19,7 +19,7 @@ class DynamicNodeList<T extends object> implements ComponentNodeList<T> {
   }
 
   get all(): ComponentNode_<T>[] {
-    if (this._updates.hasConsumers) {
+    if (this._updates.consumers) {
       return [...this._list];
     }
     return this._refresh();
@@ -68,7 +68,7 @@ class DynamicNodeList<T extends object> implements ComponentNodeList<T> {
   get onUpdate(): EventProducer<(this: void, list: ComponentNode_<T>[]) => void> {
     return listener => {
 
-      const firstConsumer = !this._updates.hasConsumers;
+      const firstConsumer = !this._updates.consumers;
       const interest = this._updates.on(listener);
 
       if (firstConsumer) {
@@ -79,7 +79,7 @@ class DynamicNodeList<T extends object> implements ComponentNodeList<T> {
       return {
         off: () => {
           interest.off();
-          if (!this._updates.hasConsumers) {
+          if (!this._updates.consumers) {
             this._observer.disconnect();
           }
         },
