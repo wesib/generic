@@ -1,8 +1,8 @@
-import { WesFeature } from '@wesib/wesib';
+import { Feature } from '@wesib/wesib';
 import { ModelFactory } from './model';
 import { modelFactory } from './model-factory';
 
-@WesFeature({
+@Feature({
   prebootstrap: { provide: ModelFactory, value: modelFactory },
 })
 export class ModelSupport {}

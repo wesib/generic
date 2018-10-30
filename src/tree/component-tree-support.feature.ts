@@ -1,4 +1,4 @@
-import { WesFeature } from '@wesib/wesib';
+import { Feature } from '@wesib/wesib';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
 
@@ -7,7 +7,7 @@ import { ComponentNodeImpl } from './component-node.impl';
  *
  * Provides a `ComponentNode` instances for each component.
  */
-@WesFeature({
+@Feature({
   bootstrap(context) {
     context.forComponents({ provide: ComponentNodeImpl, provider: ctx => new ComponentNodeImpl(ctx) });
     context.forComponents({ provide: ComponentNode, provider: ctx => ctx.get(ComponentNodeImpl).node });
