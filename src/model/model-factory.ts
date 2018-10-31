@@ -5,7 +5,7 @@ import { ModelDef } from './model-def';
 export function modelFactory<M extends object>(modelType: ModelClass<M>): ModelRef_<M> {
 
   let boundTo: ComponentContext | undefined;
-  const binds = new EventEmitter<(this: ModelRef) => void>();
+  const binds = new EventEmitter<(this: ModelRef, to: ComponentContext) => void>();
   const unbinds = new EventEmitter<(this: ModelRef) => void>();
   let connectInterest = EventInterest.none;
   let disconnectInterest = EventInterest.none;
@@ -28,7 +28,7 @@ export function modelFactory<M extends object>(modelType: ModelClass<M>): ModelR
       return boundTo;
     }
 
-    get onBind(): EventProducer<(this: this) => void> {
+    get onBind(): EventProducer<(this: this, to: ComponentContext) => void> {
       return binds.on;
     }
 
@@ -36,11 +36,11 @@ export function modelFactory<M extends object>(modelType: ModelClass<M>): ModelR
       return unbinds.on;
     }
 
-    bind(context: ComponentContext) {
+    bind(to: ComponentContext) {
       this.unbind();
-      boundTo = context;
+      boundTo = to;
 
-      const doBind = () => binds.forEach(listener => listener.call(this));
+      const doBind = () => binds.forEach(listener => listener.call(this, to));
 
       connectInterest = boundTo.onConnect(doBind);
       disconnectInterest = boundTo.onDisconnect(() => unbinds.forEach(listener => listener.call(this)));

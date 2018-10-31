@@ -43,7 +43,7 @@ export abstract class ModelRef<M extends object = object> {
    *
    * @return An event interest instance.
    */
-  abstract readonly onBind: EventProducer<(this: this) => void>;
+  abstract readonly onBind: EventProducer<(this: this, to: ComponentContext) => void>;
 
   /**
    * Registers model unbinding listener.
@@ -77,7 +77,7 @@ export abstract class ModelRef<M extends object = object> {
     return context;
   }
 
-  abstract bind(target: ComponentContext): this;
+  abstract bind(to: ComponentContext): this;
 
   abstract unbind(): this;
 
