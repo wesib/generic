@@ -120,7 +120,7 @@ class DynamicNodeList<T extends object> implements ComponentNodeList<T> {
 }
 
 const WATCH_CHILD_LIST = { childList: true };
-const WATCH_SUBTREE = { childList: true, subtree: true };
+const WATCH_DEEP = { childList: true, subtree: true };
 
 export class ComponentNodeImpl<T extends object = object> {
 
@@ -149,8 +149,8 @@ export class ComponentNodeImpl<T extends object = object> {
 
   select<N extends object = object>(
       selector: string,
-      { subtree = false }: { subtree?: boolean } = {}): ComponentNodeList<N> {
-    return new DynamicNodeList<N>(this, selector, subtree ? WATCH_SUBTREE : WATCH_CHILD_LIST);
+      { deep = false }: { deep?: boolean } = {}): ComponentNodeList<N> {
+    return new DynamicNodeList<N>(this, selector, deep ? WATCH_DEEP : WATCH_CHILD_LIST);
   }
 
   private _findParent(): ComponentNodeImpl | undefined {
@@ -195,7 +195,7 @@ export class ComponentNodeImpl<T extends object = object> {
         return impl._parentUpdates.on;
       }
 
-      select<N extends object = object>(selector: string, opts?: { subtree?: boolean }): ComponentNodeList<N> {
+      select<N extends object = object>(selector: string, opts?: { deep?: boolean }): ComponentNodeList<N> {
         return impl.select(selector, opts);
       }
 

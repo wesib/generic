@@ -37,11 +37,11 @@ export abstract class ComponentNode<T extends object = object> {
    * Select nested component nodes matching the given selector.
    *
    * @param selector Simple CSS selector of nested components. E.g. component element name.
-   * @param subtree Set to `true` to select from entire subtree. Otherwise - select from component child nodes only.
+   * @param deep Set to `true` to select from entire subtree. Otherwise - select from component child nodes only.
    */
   abstract select<N extends object = object>(
       selector: string,
-      { subtree }?: { subtree?: boolean }): ComponentNodeList<N>;
+      { deep }?: { deep?: boolean }): ComponentNodeList<N>;
 
 }
 
