@@ -1,4 +1,5 @@
 import { ComponentContext, ContextValueKey, EventProducer, SingleValueKey } from '@wesib/wesib';
+import { AIterable } from 'a-iterable';
 
 /**
  * Component node.
@@ -45,10 +46,14 @@ export abstract class ComponentNode<T extends object = object> {
 
 }
 
-export interface ComponentNodeList<T extends object> extends Iterable<ComponentNode<T>> {
+export abstract class ComponentNodeList<T extends object> extends AIterable<ComponentNode<T>> {
 
-  readonly onUpdate: EventProducer<(this: void, list: ComponentNode<T>[]) => void>;
+  abstract readonly onUpdate: EventProducer<(this: void, list: ComponentNode<T>[]) => void>;
 
-  readonly all: ComponentNode<T>[];
+  abstract readonly all: ComponentNode<T>[];
+
+  [Symbol.iterator]() {
+    return this.all[Symbol.iterator]();
+  }
 
 }

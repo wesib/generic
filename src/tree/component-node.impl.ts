@@ -1,7 +1,7 @@
 import { ComponentContext, EventEmitter, EventProducer, SingleValueKey } from '@wesib/wesib';
 import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
 
-class DynamicNodeList<T extends object> implements ComponentNodeList<T> {
+class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
 
   private readonly _observer: MutationObserver;
   private _list: Set<ComponentNode_<T>> = new Set();
@@ -11,11 +11,8 @@ class DynamicNodeList<T extends object> implements ComponentNodeList<T> {
       private readonly _node: ComponentNodeImpl<any>,
       private readonly _selector: string,
       private readonly _init: MutationObserverInit) {
+    super();
     this._observer = new MutationObserver(mutations => this._update(mutations));
-  }
-
-  [Symbol.iterator]() {
-    return this.all[Symbol.iterator]();
   }
 
   get all(): ComponentNode_<T>[] {
