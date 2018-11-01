@@ -83,8 +83,9 @@ const esm5Config = makeConfig(
     baseConfig('tsconfig.esm5.json'),
     {
       external: [
-        'tslib',
         '@wesib/wesib',
+        'a-iterable',
+        'tslib',
       ],
       output: {
         format: 'es',
@@ -97,8 +98,9 @@ const esm2015Config = makeConfig(
     baseConfig('tsconfig.esm2015.json'),
     {
       external: [
-        'tslib',
         '@wesib/wesib',
+        'a-iterable',
+        'tslib',
       ],
       output: {
         format: 'es',
