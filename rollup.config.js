@@ -72,6 +72,7 @@ const umdConfig = makeConfig(
     {
       external: [
         '@wesib/wesib',
+        'a-iterable',
       ],
       output: {
         file: './dist/wesib.generic.umd.js',
