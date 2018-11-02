@@ -47,10 +47,10 @@
   dependencies:
     tslib "^1.9.0"
 
-a-iterable@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/a-iterable/-/a-iterable-1.0.1.tgz#a6f2852c12c0b63207452e03b258def62e378605"
-  integrity sha512-ga7TujHNfNjJwkXz8GQl2G78ZfjB3HFI7oJSQJFjl7bg95er/DHQlZ79jE4KFcD8cqcS+qais+Snfy6hwhGNrA==
+a-iterable@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/a-iterable/-/a-iterable-1.1.1.tgz#ab1ebc6954da8d80836bb2998ddd3402c15da3a1"
+  integrity sha512-UVNjLFSwdWhrPQ3o/YNk69DRVX8KKSRAvOHdf0PQtp6BYe8pAbQ7SAIY1q+kjZgN/yNPRnRmOtQIFVf9HvcA7A==
   dependencies:
     tslib "^1.9.0"
 
