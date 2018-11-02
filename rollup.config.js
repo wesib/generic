@@ -62,7 +62,8 @@ function baseConfig(tsconfig) {
       name: 'wesib.generic',
       globals: {
         '@wesib/wesib': 'wesib',
-      }
+        'a-iterable': 'aIterable',
+      },
     },
   };
 }
