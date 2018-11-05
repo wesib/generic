@@ -29,7 +29,7 @@
     "@types/fs-extra": "^5.0.4",
     "@types/jasmine": "^2.8.9",
     "@wesib/wesib": "^1.0.0-alpha.1",
-    "a-iterable": "^1.1.1",
+    "a-iterable": "^1.2.0",
     "fs-extra": "^7.0.0",
     "jasmine": "^3.3.0",
     "karma": "3.1.1",
@@ -50,8 +50,7 @@
     "typescript": "^3.1.5"
   },
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.1",
-    "a-iterable": "^1.1.1"
+    "@wesib/wesib": "^1.0.0-alpha.1"
   },
   "scripts": {
     "build": "rollup --config ./rollup.config.js",

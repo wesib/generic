@@ -1,5 +1,5 @@
 import { ComponentContext, ContextValueKey, EventProducer, SingleValueKey } from '@wesib/wesib';
-import { AIterable } from 'a-iterable';
+import { AIterable, itsIterator, reverseArray } from 'a-iterable';
 
 /**
  * Component node.
@@ -53,7 +53,11 @@ export abstract class ComponentNodeList<T extends object> extends AIterable<Comp
   abstract readonly all: ComponentNode<T>[];
 
   [Symbol.iterator]() {
-    return this.all[Symbol.iterator]();
+    return itsIterator(this.all);
+  }
+
+  reverse(): AIterable<ComponentNode<T>> {
+    return AIterable.from(reverseArray(this.all));
   }
 
 }
