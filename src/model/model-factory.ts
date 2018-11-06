@@ -1,12 +1,13 @@
-import { ComponentContext, EventEmitter, EventInterest, EventProducer } from '@wesib/wesib';
+import { ComponentContext } from '@wesib/wesib';
+import { EventEmitter, EventInterest, EventProducer } from 'fun-events';
 import { ModelClass, ModelRef as ModelRef_ } from './model';
 import { ModelDef } from './model-def';
 
 export function modelFactory<M extends object>(modelType: ModelClass<M>): ModelRef_<M> {
 
   let boundTo: ComponentContext | undefined;
-  const binds = new EventEmitter<(this: ModelRef, to: ComponentContext) => void>();
-  const unbinds = new EventEmitter<(this: ModelRef) => void>();
+  const binds = new EventEmitter<(this: any, to: ComponentContext) => void>();
+  const unbinds = new EventEmitter<(this: any) => void>();
   let connectInterest = EventInterest.none;
   let disconnectInterest = EventInterest.none;
 

@@ -1,10 +1,11 @@
 import {
   ComponentContext,
   decoratePropertyAccessor,
-  EventInterest,
   PropertyAccessorDescriptor,
-  StatePath, StateTracker,
+  StatePath,
+  StateTracker,
 } from '@wesib/wesib';
+import { EventInterest } from 'fun-events';
 import { ModelClass, ModelRef } from './model';
 import { ModelDef } from './model-def';
 

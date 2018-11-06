@@ -1,7 +1,28 @@
-import { ComponentContext, EventEmitter, EventProducer, SingleValueKey } from '@wesib/wesib';
+import { ComponentContext, SingleValueKey } from '@wesib/wesib';
+import { EventEmitter, EventProducer } from 'fun-events';
 import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
 
 class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
+
+  readonly onUpdate = EventProducer.of<(this: void, list: ComponentNode_<T>[]) => void>(listener => {
+
+      const firstConsumer = !this._updates.consumers;
+      const interest = this._updates.on(listener);
+
+      if (firstConsumer) {
+        this._refresh();
+        this._observer.observe(this._node.context.element, this._init);
+      }
+
+      return {
+        off: () => {
+          interest.off();
+          if (!this._updates.consumers) {
+            this._observer.disconnect();
+          }
+        },
+      };
+    });
 
   private readonly _observer: MutationObserver;
   private _list: Set<ComponentNode_<T>> = new Set();
@@ -60,28 +81,6 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
     }
 
     return list;
-  }
-
-  get onUpdate(): EventProducer<(this: void, list: ComponentNode_<T>[]) => void> {
-    return listener => {
-
-      const firstConsumer = !this._updates.consumers;
-      const interest = this._updates.on(listener);
-
-      if (firstConsumer) {
-        this._refresh();
-        this._observer.observe(this._node.context.element, this._init);
-      }
-
-      return {
-        off: () => {
-          interest.off();
-          if (!this._updates.consumers) {
-            this._observer.disconnect();
-          }
-        },
-      };
-    };
   }
 
   private _update(mutations: MutationRecord[]) {

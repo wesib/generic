@@ -1,4 +1,5 @@
-import { ComponentContext, ContextValueKey, EventProducer, SingleValueKey } from '@wesib/wesib';
+import { ComponentContext, ContextValueKey, SingleValueKey } from '@wesib/wesib';
+import { EventProducer } from 'fun-events';
 
 /**
  * Model class constructor.
