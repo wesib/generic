@@ -4,6 +4,6 @@ import { modelFactory } from './model-factory';
 
 @Feature({
   require: StateSupport,
-  prebootstrap: { provide: ModelFactory, value: modelFactory },
+  prebootstrap: { a: ModelFactory, is: modelFactory },
 })
 export class ModelSupport {}

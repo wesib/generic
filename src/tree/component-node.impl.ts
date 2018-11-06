@@ -1,4 +1,4 @@
-import { ComponentContext, SingleValueKey } from '@wesib/wesib';
+import { ComponentContext, SingleContextKey } from '@wesib/wesib';
 import { EventEmitter, EventProducer } from 'fun-events';
 import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
 
@@ -120,7 +120,7 @@ const WATCH_DEEP = { childList: true, subtree: true };
 
 export class ComponentNodeImpl<T extends object = object> {
 
-  static readonly key = new SingleValueKey<ComponentNodeImpl<any>>('component-node:impl');
+  static readonly key = new SingleContextKey<ComponentNodeImpl<any>>('component-node:impl');
 
   private _parent?: ComponentNodeImpl;
   private readonly _parentUpdates = new EventEmitter<(this: void, parent: ComponentNode_ | null) => void>();

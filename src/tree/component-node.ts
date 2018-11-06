@@ -1,4 +1,4 @@
-import { ComponentContext, ContextValueKey, SingleValueKey } from '@wesib/wesib';
+import { ComponentContext, ContextKey, SingleContextKey } from '@wesib/wesib';
 import { AIterable, itsIterator, reverseArray } from 'a-iterable';
 import { EventProducer } from 'fun-events';
 
@@ -16,7 +16,7 @@ export abstract class ComponentNode<T extends object = object> {
   /**
    * A key of component context value containing a component node instance.
    */
-  static readonly key: ContextValueKey<ComponentNode<any>> = new SingleValueKey('component-node');
+  static readonly key: ContextKey<ComponentNode<any>> = new SingleContextKey('component-node');
 
   /**
    * Component context.

@@ -1,4 +1,4 @@
-import { ComponentContext, ContextValueKey, SingleValueKey } from '@wesib/wesib';
+import { ComponentContext, ContextKey, SingleContextKey } from '@wesib/wesib';
 import { EventProducer } from 'fun-events';
 
 /**
@@ -17,7 +17,7 @@ export type ModelFactory = <M extends object>(this: void, modelType: ModelClass<
 
 export namespace ModelFactory {
 
-  export const key: ContextValueKey<ModelRef> = new SingleValueKey('model-factory');
+  export const key: ContextKey<ModelRef> = new SingleContextKey('model-factory');
 
 }
 
