@@ -64,11 +64,8 @@ export function decorateBoundModelProperty<M extends ModelClass, V>(
 
           function bind(to: ComponentContext) {
             applyModelValue(model, to);
-
-            const updateInterest = to.get(StateTracker).track(path).onUpdate(updateModelProperty);
-
-            if (updateInterest !== EventInterest.none) { // Unless already listening for updates.
-              interest = updateInterest;
+            if (interest === EventInterest.none) { // Unless already listening for updates.
+              interest = to.get(StateTracker).track(path).onUpdate(updateModelProperty);
             }
           }
 
