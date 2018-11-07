@@ -60,6 +60,7 @@ function baseConfig(tsconfig) {
       '@wesib/wesib',
       'a-iterable',
       'fun-events',
+      'tslib',
     ],
     output: {
       format: 'umd',
