@@ -9,8 +9,14 @@ import { ComponentNodeImpl } from './component-node.impl';
  */
 @Feature({
   bootstrap(context) {
-    context.forComponents({ a: ComponentNodeImpl, by: ctx => new ComponentNodeImpl(ctx) });
-    context.forComponents({ a: ComponentNode, by: ctx => ctx.get(ComponentNodeImpl).node });
+    context.forComponents({ as: ComponentNodeImpl });
+    context.forComponents({
+      a: ComponentNode,
+      by(impl: ComponentNodeImpl): ComponentNode {
+        return impl.node;
+      },
+      with: [ComponentNodeImpl],
+    });
   },
 })
 export class ComponentTreeSupport {
