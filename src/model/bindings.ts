@@ -71,6 +71,7 @@ export function decorateBoundModelProperty<M extends ModelClass, V>(
 
           function unbind() {
             interest.off();
+            interest = EventInterest.none;
             resetModelValue(model);
           }
 
