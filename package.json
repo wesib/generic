@@ -31,7 +31,7 @@
     "@wesib/wesib": "^1.0.0-alpha.1",
     "a-iterable": "^1.2.0",
     "fs-extra": "^7.0.0",
-    "fun-events": "^1.0.1",
+    "fun-events": "^1.2.0",
     "jasmine": "^3.3.0",
     "karma": "3.1.1",
     "karma-chrome-launcher": "^2.2.0",

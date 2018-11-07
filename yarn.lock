@@ -336,9 +336,9 @@ blob@0.0.5:
   integrity sha512-gaqbzQPqOoamawKg0LGVd7SzLgXS+JH61oWprSLH+P+abTczqJbhTR8CmJ2u9/bUYNmHTGJx/UEmn6doAvvuig==
 
 bluebird@^3.3.0:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.2.tgz#1be0908e054a751754549c270489c1505d4ab15a"
-  integrity sha512-dhHTWMI7kMx5whMQntl7Vr9C6BvV10lFXDAasnqnrMYhXVCzzk6IO9Fo2L75jXHT07WrOngL1WDXOp+yYS91Yg==
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.3.tgz#7d01c6f9616c9a51ab0f8c549a79dfe6ec33efa7"
+  integrity sha512-/qKPUQlaW1OyR51WeCPBvRnAlnZFUJkCSG5HzGnuIqhgyJtF+T94lFnn33eiazjRm2LAHVy2guNnaq48X9SJuw==
 
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.4.0:
   version "4.11.8"
@@ -1375,10 +1375,10 @@ fsevents@^1.2.2:
     nan "^2.9.2"
     node-pre-gyp "^0.10.0"
 
-fun-events@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/fun-events/-/fun-events-1.0.1.tgz#a357b2b719fd8092586c9c4f00db536412da1c43"
-  integrity sha512-T2thwBTIgvgWwOUWioM8xvG8vGoV1cv7yOb7CdaLGn1xN7niGvbH8afEzHnwxugvOgArr8qRCOggmocoQNPFNg==
+fun-events@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/fun-events/-/fun-events-1.2.0.tgz#782b2ca8d8d7220b74744f99a6dc67722d5f6363"
+  integrity sha512-P9OOU2tyTDMBoy53kjmgv0JHHg3WNxdNWQkHb+kNCDEllAuCJ1RJkSXb+PX5bgVmUXbJKHum5yDM1hSbiXnMcg==
   dependencies:
     tslib "^1.9.0"
 
