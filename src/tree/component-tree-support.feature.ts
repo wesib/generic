@@ -8,7 +8,7 @@ import { ComponentNodeImpl } from './component-node.impl';
  * Provides a `ComponentNode` instances for each component.
  */
 @Feature({
-  bootstrap(context) {
+  init(context) {
     context.forComponents({ as: ComponentNodeImpl });
     context.forComponents({
       a: ComponentNode,
