@@ -1,4 +1,6 @@
-import { ComponentContext, SingleContextKey } from '@wesib/wesib';
+import { ComponentContext } from '@wesib/wesib';
+import { AIterable, overArray } from 'a-iterable';
+import { SingleContextKey } from 'context-values';
 import { EventEmitter, EventProducer } from 'fun-events';
 import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
 
@@ -40,47 +42,27 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
     if (this._updates.consumers) {
       return [...this._list];
     }
-    return this._refresh();
+    return [...this._refresh()];
   }
 
   private _refresh() {
-
-    const list = this._request();
-
-    this._list = new Set<ComponentNode_<T>>(list);
-
-    return list;
+    return this._list = new Set<ComponentNode_<T>>(this._request());
   }
 
-  private _request(): ComponentNode_<T>[] {
+  private _request(): AIterable<ComponentNode_<T>> {
 
     const element: HTMLElement = this._node.context.element;
-    let list: ComponentNode_<T>[] = [];
+    let iter: AIterable<Element>;
 
     if (this._init.subtree) {
-      list = Array.prototype.forEach.call(element.querySelectorAll(this._selector), (item: Element) => {
-
-        const node = nodeOf<T>(item);
-
-        if (node) {
-          list.push(node);
-        }
-      });
+      iter = AIterable.from(overArray(element.querySelectorAll(this._selector)));
     } else {
-      Array.prototype.forEach.call(element.children, (item: Element) => {
-        if (!item.matches(this._selector)) {
-          return;
-        }
-
-        const node = nodeOf<T>(item);
-
-        if (node) {
-          list.push(node);
-        }
-      });
+      iter = AIterable.from(overArray(element.children))
+          .filter(item => item.matches(this._selector));
     }
 
-    return list;
+    return iter.map<ComponentNode_<T> | undefined>(nodeOf)
+            .filter<ComponentNode_<T>>(isPresent);
   }
 
   private _update(mutations: MutationRecord[]) {
@@ -207,4 +189,8 @@ function nodeOf<T extends object>(node: Node): ComponentNode_<T> | undefined {
   const ctx: ComponentContext | undefined = (node as any)[ComponentContext.symbol];
 
   return ctx && ctx.get(ComponentNode_);
+}
+
+function isPresent<T>(item: T | undefined): item is T {
+  return item != null;
 }

@@ -59,6 +59,8 @@ function baseConfig(tsconfig) {
     external: [
       '@wesib/wesib',
       'a-iterable',
+      'call-thru',
+      'context-values',
       'fun-events',
       'tslib',
     ],
@@ -69,6 +71,8 @@ function baseConfig(tsconfig) {
       globals: {
         '@wesib/wesib': 'wesib',
         'a-iterable': 'aIterable',
+        'call-thru': 'callThru',
+        'context-values': 'contextValues',
         'fun-events': 'funEvents',
         'tslib': 'tslib',
       },
@@ -89,7 +93,7 @@ const esm5Config = makeConfig(
     baseConfig('tsconfig.esm5.json'),
     {
       output: {
-        format: 'es',
+        format: 'esm',
         file: './dist/wesib.generic.esm5.js',
       },
     },
@@ -99,7 +103,7 @@ const esm2015Config = makeConfig(
     baseConfig('tsconfig.esm2015.json'),
     {
       output: {
-        format: 'es',
+        format: 'esm',
         file: './dist/wesib.generic.esm2015.js',
       },
     },

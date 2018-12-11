@@ -1,4 +1,5 @@
-import { ComponentContext, ContextKey, SingleContextKey } from '@wesib/wesib';
+import { ComponentContext } from '@wesib/wesib';
+import { ContextKey, SingleContextKey } from 'context-values';
 import { EventProducer } from 'fun-events';
 
 /**

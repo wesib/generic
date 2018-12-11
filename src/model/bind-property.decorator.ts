@@ -1,4 +1,5 @@
-import { StatePath, TypedPropertyDecorator } from '@wesib/wesib';
+import { TypedPropertyDecorator } from '@wesib/wesib';
+import { StatePath } from 'fun-events';
 import { decorateBoundModelProperty } from './bindings';
 import { ModelClass } from './model';
 
@@ -11,7 +12,7 @@ export function BindProperty<M extends ModelClass>(opts?: BindProperty.Opts | st
     return decorateBoundModelProperty({
       target,
       key: key,
-      path: [StatePath.property, elementKey],
+      path: StatePath.ofProperty(elementKey),
       desc: desc,
       get(boundTo) {
 
