@@ -35,6 +35,7 @@
     "@wesib/wesib": "^1.0.0-alpha.3",
     "a-iterable": "^2.0.1",
     "call-thru": "^2.0.0",
+    "codecov": "^3.1.0",
     "context-values": "^1.0.0",
     "fs-extra": "^7.0.1",
     "fun-events": "^2.0.0",
