@@ -133,7 +133,7 @@ export class ComponentNodeImpl<T extends object = object> {
 
   private _findParent(): ComponentNodeImpl | undefined {
 
-    let parent: ParentNode | null = (this.context.contentRoot as any).parentNode;;
+    let parent: ParentNode | null = (this.context.contentRoot as any).parentNode;
 
     while (parent) {
 
@@ -173,7 +173,7 @@ export class ComponentNodeImpl<T extends object = object> {
         return impl._parentUpdates.on;
       }
 
-      select<N extends object = object>(selector: string, opts?: { deep?: boolean }): ComponentNodeList<N> {
+      select<N extends object = object>(selector: string, opts?: ComponentNode_.SelectorOpts): ComponentNodeList<N> {
         return impl.select(selector, opts);
       }
 
