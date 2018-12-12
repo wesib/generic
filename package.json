@@ -28,7 +28,7 @@
   "devDependencies": {
     "@types/fs-extra": "^5.0.4",
     "@types/jasmine": "^3.3.1",
-    "@wesib/wesib": "^1.0.0-alpha.2",
+    "@wesib/wesib": "^1.0.0-alpha.3",
     "a-iterable": "^2.0.1",
     "call-thru": "^2.0.0",
     "context-values": "^1.0.0",
@@ -53,7 +53,7 @@
     "typescript": "^3.2.2"
   },
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.2"
+    "@wesib/wesib": "^1.0.0-alpha.3"
   },
   "scripts": {
     "build": "rollup --config ./rollup.config.js",
