@@ -1,4 +1,4 @@
-import { ComponentContext } from '@wesib/wesib';
+import { BootstrapWindow, Class, ComponentContext } from '@wesib/wesib';
 import { AIterable, itsIterator, overArray } from 'a-iterable';
 import { SingleContextKey } from 'context-values';
 import { EventEmitter, EventProducer } from 'fun-events';
@@ -35,7 +35,10 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
       private readonly _selector: string,
       private readonly _init: MutationObserverInit) {
     super();
-    this._observer = new MutationObserver(mutations => this._update(mutations));
+
+    const Observer: typeof MutationObserver = (_node.context.get(BootstrapWindow) as any).MutationObserver;
+
+    this._observer = new Observer(mutations => this._update(mutations));
   }
 
   [Symbol.iterator]() {

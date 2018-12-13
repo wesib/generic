@@ -1,38 +1,49 @@
 import Mocked = jest.Mocked;
-import { ComponentContext } from '@wesib/wesib';
+import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { ContextRequest } from 'context-values';
 import { JSDOM } from 'jsdom';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
+import Mock = jest.Mock;
 
 describe('tree/component-node', () => {
 
   let dom: JSDOM;
+  let MockMutationObserver: Mock<MutationObserver>;
 
   beforeEach(() => {
     dom = new JSDOM();
+    MockMutationObserver = jest.fn();
+    (dom.window as any).MutationObserver = MockMutationObserver;
   });
 
-  function newComponentNode() {
+  type ComponentNodeInfo = ReturnType<typeof newComponentNode>;
+
+  function newComponentNode(name = 'div') {
 
     let connect: () => void = noop;
     let disconnect: () => void = noop;
-    const contentRoot: Element = dom.window.document.createElement('div');
+    const element: Element = dom.window.document.createElement(name);
     const context: Mocked<ComponentContext> = {
       get: jest.fn(),
       onConnect: jest.fn((listener: () => void) => connect = listener),
       onDisconnect: jest.fn((listener: () => void) => disconnect = listener),
-      get contentRoot() {
-        return contentRoot;
-      }
+      contentRoot: element,
+      element,
     } as any;
-    (contentRoot as any)[ComponentContext.symbol] = context;
+    (element as any)[ComponentContext.symbol] = context;
     const impl = new ComponentNodeImpl(context);
 
     context.get.mockImplementation((request: ContextRequest<any>) => {
       if (request.key === ComponentNodeImpl.key) {
         return impl;
+      }
+      if (request.key === ComponentNode.key) {
+        return impl.node;
+      }
+      if (request.key === BootstrapWindow.key) {
+        return dom.window;
       }
       return;
     });
@@ -40,7 +51,7 @@ describe('tree/component-node', () => {
     return {
       connect,
       disconnect,
-      contentRoot,
+      element,
       context,
       impl,
       get node() {
@@ -54,7 +65,7 @@ describe('tree/component-node', () => {
 
   describe('ComponentNodeImpl', () => {
 
-    let node: ReturnType<typeof newComponentNode>;
+    let node: ComponentNodeInfo;
 
     beforeEach(() => {
       node = newComponentNode();
@@ -66,11 +77,11 @@ describe('tree/component-node', () => {
 
     describe('parent', () => {
 
-      let parent: ReturnType<typeof newComponentNode>;
+      let parent: ComponentNodeInfo;
 
       beforeEach(() => {
         parent = newComponentNode();
-        parent.contentRoot.appendChild(node.contentRoot);
+        parent.element.appendChild(node.element);
       });
 
       it('is `null` by default', () => {
@@ -83,17 +94,17 @@ describe('tree/component-node', () => {
         });
       });
       it('remains `null` if not found', () => {
-        parent.contentRoot.removeChild(node.contentRoot);
+        parent.element.removeChild(node.element);
         node.connect();
         expect(node.parent).toBeNull();
       });
       it('ignores non-component elements', () => {
-        parent.contentRoot.removeChild(node.contentRoot);
+        parent.element.removeChild(node.element);
 
         const nonComponentParent = dom.window.document.createElement('span');
 
-        parent.contentRoot.appendChild(nonComponentParent);
-        nonComponentParent.appendChild(node.contentRoot);
+        parent.element.appendChild(nonComponentParent);
+        nonComponentParent.appendChild(node.element);
 
         node.connect();
 
@@ -123,8 +134,36 @@ describe('tree/component-node', () => {
     });
 
     describe('select', () => {
-      it('selects child elements', () => {
 
+      let c1: ComponentNodeInfo;
+      let c2: ComponentNodeInfo;
+      let c21: ComponentNodeInfo;
+      let c3: ComponentNodeInfo;
+
+      beforeEach(() => {
+        c1 = newComponentNode('test-component');
+        c2 = newComponentNode('test-component');
+        c21 = newComponentNode('test-component');
+        c3 = newComponentNode('test-component-3');
+
+        node.element.appendChild(c1.element);
+        node.element.appendChild(c2.element);
+        c2.element.appendChild(c21.element);
+        node.element.appendChild(c3.element);
+      });
+
+      let observer: Mocked<MutationObserver>;
+
+      beforeEach(() => {
+        observer = {} as any;
+        MockMutationObserver.mockReturnValueOnce(observer);
+      });
+
+      it('selects child elements', () => {
+        expect([...node.node.select('test-component')]).toEqual([c1.node, c2.node]);
+      });
+      it('selects subtree elements with `deep` option', () => {
+        expect([...node.node.select('test-component', { deep: true } )]).toEqual([c1.node, c2.node, c21.node]);
       });
     });
   });
