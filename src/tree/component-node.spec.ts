@@ -1,7 +1,7 @@
 import Mocked = jest.Mocked;
 import { ComponentContext } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { ContextKey, ContextRequest } from 'context-values';
+import { ContextRequest } from 'context-values';
 import { JSDOM } from 'jsdom';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
@@ -14,108 +14,117 @@ describe('tree/component-node', () => {
     dom = new JSDOM();
   });
 
+  function newComponentNode() {
+
+    let connect: () => void = noop;
+    let disconnect: () => void = noop;
+    const contentRoot: Element = dom.window.document.createElement('div');
+    const context: Mocked<ComponentContext> = {
+      get: jest.fn(),
+      onConnect: jest.fn((listener: () => void) => connect = listener),
+      onDisconnect: jest.fn((listener: () => void) => disconnect = listener),
+      get contentRoot() {
+        return contentRoot;
+      }
+    } as any;
+    (contentRoot as any)[ComponentContext.symbol] = context;
+    const impl = new ComponentNodeImpl(context);
+
+    context.get.mockImplementation((request: ContextRequest<any>) => {
+      if (request.key === ComponentNodeImpl.key) {
+        return impl;
+      }
+      return;
+    });
+
+    return {
+      connect,
+      disconnect,
+      contentRoot,
+      context,
+      impl,
+      get node() {
+        return impl.node;
+      },
+      get parent() {
+        return this.node.parent;
+      }
+    };
+  }
+
   describe('ComponentNodeImpl', () => {
 
-    let componentContextMock: Mocked<ComponentContext>;
-    let impl: ComponentNodeImpl;
-    let node: ComponentNode;
-    let connect: () => void;
-    let disconnect: () => void;
-    let contentRoot: Element;
+    let node: ReturnType<typeof newComponentNode>;
 
     beforeEach(() => {
-      contentRoot = dom.window.document.createElement('div');
-    });
-    beforeEach(() => {
-      connect = noop;
-      disconnect = noop;
-
-      componentContextMock = {
-        onConnect: jest.fn((listener: () => void) => connect = listener),
-        onDisconnect: jest.fn((listener: () => void) => disconnect = listener),
-        get contentRoot() {
-          return contentRoot;
-        }
-      } as any;
-    });
-    beforeEach(() => {
-      impl = new ComponentNodeImpl(componentContextMock);
-      node = impl.node;
+      node = newComponentNode();
     });
 
     it('caches node instance', () => {
-      expect(impl.node).toBe(node);
+      expect(node.node).toBe(node.node);
     });
 
     describe('parent', () => {
 
-      let parentContextMock: Mocked<ComponentContext>;
-      let parentElement: Element;
-      let parentImpl: ComponentNodeImpl;
+      let parent: ReturnType<typeof newComponentNode>;
 
       beforeEach(() => {
-        parentContextMock = {
-          onConnect: jest.fn(),
-          onDisconnect: jest.fn(),
-          get: jest.fn((request: ContextRequest<any>) => {
-            if (request.key === ComponentNodeImpl.key) {
-              return parentImpl;
-            }
-            return;
-          }),
-        } as any;
-        parentImpl = new ComponentNodeImpl(parentContextMock);
-        parentElement = dom.window.document.createElement('div');
-        parentElement.appendChild(contentRoot);
-        (parentElement as any)[ComponentContext.symbol] = parentContextMock;
+        parent = newComponentNode();
+        parent.contentRoot.appendChild(node.contentRoot);
       });
 
       it('is `null` by default', () => {
         expect(node.parent).toBeNull();
       });
       it('is detected on connect', () => {
-        connect();
+        node.connect();
         expect(node.parent).toMatchObject({
-          context: parentContextMock,
+          context: parent.context,
         });
       });
       it('remains `null` if not found', () => {
-        parentElement.removeChild(contentRoot);
-        connect();
+        parent.contentRoot.removeChild(node.contentRoot);
+        node.connect();
         expect(node.parent).toBeNull();
       });
       it('ignores non-component elements', () => {
-        parentElement.removeChild(contentRoot);
+        parent.contentRoot.removeChild(node.contentRoot);
 
         const nonComponentParent = dom.window.document.createElement('span');
 
-        parentElement.appendChild(nonComponentParent);
-        nonComponentParent.appendChild(contentRoot);
+        parent.contentRoot.appendChild(nonComponentParent);
+        nonComponentParent.appendChild(node.contentRoot);
 
-        connect();
+        node.connect();
 
         expect(node.parent).toMatchObject({
-          context: parentContextMock,
+          context: parent.context,
         });
       });
       it('is lost on disconnect', () => {
-        connect();
-        disconnect();
+        node.connect();
+        node.disconnect();
         expect(node.parent).toBeNull();
       });
       it('notifies on update', () => {
 
         const onUpdate = jest.fn();
 
-        node.onParentUpdate(onUpdate);
+        node.node.onParentUpdate(onUpdate);
         expect(onUpdate).not.toHaveBeenCalled();
 
-        connect();
-        expect(onUpdate).toHaveBeenCalledWith(parentImpl.node);
+        node.connect();
+        expect(onUpdate).toHaveBeenCalledWith(parent.node);
 
         onUpdate.mockClear();
-        disconnect();
+        node.disconnect();
         expect(onUpdate).toHaveBeenCalledWith(null);
+      });
+    });
+
+    describe('select', () => {
+      it('selects child elements', () => {
+
       });
     });
   });
