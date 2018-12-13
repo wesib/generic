@@ -1,5 +1,5 @@
 import { ComponentContext } from '@wesib/wesib';
-import { AIterable, itsIterator, reverseArray } from 'a-iterable';
+import { AIterable } from 'a-iterable';
 import { ContextKey, SingleContextKey } from 'context-values';
 import { EventProducer } from 'fun-events';
 

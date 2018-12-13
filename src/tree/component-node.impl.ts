@@ -42,18 +42,14 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
     return itsIterator(this.all);
   }
 
-  reverse() {
-    return this.all.reverse();
-  }
-
-  get all(): AIterable<ComponentNode_<T>> {
+  get all(): Set<ComponentNode_<T>> {
     if (this._updates.consumers) {
-      return AIterable.from(this._all);
+      return this._all;
     }
-    return AIterable.from(this._refresh());
+    return this._refresh();
   }
 
-  private _refresh() {
+  private _refresh(): Set<ComponentNode_<T>> {
     return this._all = new Set<ComponentNode_<T>>(this._request());
   }
 
