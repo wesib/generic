@@ -1,12 +1,12 @@
 import { ComponentContext } from '@wesib/wesib';
-import { AIterable, overArray } from 'a-iterable';
+import { AIterable, itsIterator, overArray } from 'a-iterable';
 import { SingleContextKey } from 'context-values';
 import { EventEmitter, EventProducer } from 'fun-events';
 import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
 
 class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
 
-  readonly onUpdate = EventProducer.of<(this: void, list: ComponentNode_<T>[]) => void>(listener => {
+  readonly onUpdate = EventProducer.of<(this: void, list: AIterable<ComponentNode_<T>>) => void>(listener => {
 
       const firstConsumer = !this._updates.consumers;
       const interest = this._updates.on(listener);
@@ -27,8 +27,8 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
     });
 
   private readonly _observer: MutationObserver;
-  private _list: Set<ComponentNode_<T>> = new Set();
-  private readonly _updates = new EventEmitter<(this: void, list: ComponentNode_<T>[]) => void>();
+  private _all: Set<ComponentNode_<T>> = new Set();
+  private readonly _updates = new EventEmitter<(this: void, list: AIterable<ComponentNode_<T>>) => void>();
 
   constructor(
       private readonly _node: ComponentNodeImpl<any>,
@@ -38,15 +38,23 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
     this._observer = new MutationObserver(mutations => this._update(mutations));
   }
 
-  get all(): ComponentNode_<T>[] {
+  [Symbol.iterator]() {
+    return itsIterator(this.all);
+  }
+
+  reverse() {
+    return this.all.reverse();
+  }
+
+  get all(): AIterable<ComponentNode_<T>> {
     if (this._updates.consumers) {
-      return [...this._list];
+      return AIterable.from(this._all);
     }
-    return [...this._refresh()];
+    return AIterable.from(this._refresh());
   }
 
   private _refresh() {
-    return this._list = new Set<ComponentNode_<T>>(this._request());
+    return this._all = new Set<ComponentNode_<T>>(this._request());
   }
 
   private _request(): AIterable<ComponentNode_<T>> {
@@ -74,8 +82,8 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
 
         const node = nodeOf<T>(added);
 
-        if (node && !this._list.has(node)) {
-          this._list.add(node);
+        if (node && !this._all.has(node)) {
+          this._all.add(node);
           updated = true;
         }
       });
@@ -83,15 +91,15 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
 
         const node = nodeOf<T>(removed);
 
-        if (node && this._list.has(node)) {
-          this._list.delete(node);
+        if (node && this._all.has(node)) {
+          this._all.delete(node);
           updated = true;
         }
       });
     });
 
     if (updated) {
-      this._updates.notify([...this._list]);
+      this._updates.notify(AIterable.from(this._all));
     }
   }
 

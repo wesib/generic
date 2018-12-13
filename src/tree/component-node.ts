@@ -66,16 +66,6 @@ export namespace ComponentNode {
 
 export abstract class ComponentNodeList<T extends object> extends AIterable<ComponentNode<T>> {
 
-  abstract readonly onUpdate: EventProducer<(this: void, list: ComponentNode<T>[]) => void>;
-
-  abstract readonly all: ComponentNode<T>[];
-
-  [Symbol.iterator]() {
-    return itsIterator(this.all);
-  }
-
-  reverse(): AIterable<ComponentNode<T>> {
-    return AIterable.from(reverseArray(this.all));
-  }
+  abstract readonly onUpdate: EventProducer<(this: void, list: AIterable<ComponentNode<T>>) => void>;
 
 }
