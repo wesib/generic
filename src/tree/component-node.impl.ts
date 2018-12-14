@@ -1,4 +1,4 @@
-import { BootstrapWindow, Class, ComponentContext } from '@wesib/wesib';
+import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
 import { AIterable, itsIterator, overArray } from 'a-iterable';
 import { SingleContextKey } from 'context-values';
 import { EventEmitter, EventProducer } from 'fun-events';
@@ -77,24 +77,26 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
     let updated = false;
 
     mutations.forEach(mutation => {
-      mutation.addedNodes.forEach(added => {
+      AIterable.from(overArray(mutation.addedNodes))
+          .forEach(added => {
 
-        const node = nodeOf<T>(added);
+            const node = nodeOf<T>(added);
 
-        if (node && !this._all.has(node)) {
-          this._all.add(node);
-          updated = true;
-        }
-      });
-      mutation.removedNodes.forEach(removed => {
+            if (node && !this._all.has(node)) {
+              this._all.add(node);
+              updated = true;
+            }
+          });
+      AIterable.from(overArray(mutation.removedNodes))
+          .forEach(removed => {
 
-        const node = nodeOf<T>(removed);
+            const node = nodeOf<T>(removed);
 
-        if (node && this._all.has(node)) {
-          this._all.delete(node);
-          updated = true;
-        }
-      });
+            if (node && this._all.has(node)) {
+              this._all.delete(node);
+              updated = true;
+            }
+          });
     });
 
     if (updated) {

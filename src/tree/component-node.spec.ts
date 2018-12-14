@@ -15,8 +15,23 @@ describe('tree/component-node', () => {
 
   beforeEach(() => {
     dom = new JSDOM();
+  });
+
+  let observer: Mocked<MutationObserver>;
+  let mutate: (records: Partial<MutationRecord>[]) => void = noop;
+
+  beforeEach(() => {
     MockMutationObserver = jest.fn();
     (dom.window as any).MutationObserver = MockMutationObserver;
+
+    observer = {
+      observe: jest.fn(),
+      disconnect: jest.fn(),
+    } as any;
+    MockMutationObserver.mockImplementation((listener: (records: Partial<MutationRecord>[]) => void) => {
+      mutate = listener;
+      return observer;
+    });
   });
 
   type ComponentNodeInfo = ReturnType<typeof newComponentNode>;
@@ -65,6 +80,10 @@ describe('tree/component-node', () => {
         return this.node.parent;
       }
     };
+  }
+
+  function nodeList(...nodes: Node[]): NodeList {
+    return nodes as any;
   }
 
   describe('ComponentNodeImpl', () => {
@@ -156,18 +175,96 @@ describe('tree/component-node', () => {
         node.element.appendChild(c3.element);
       });
 
-      let observer: Mocked<MutationObserver>;
-
-      beforeEach(() => {
-        observer = {} as any;
-        MockMutationObserver.mockReturnValueOnce(observer);
-      });
-
       it('selects child elements', () => {
         expect([...node.node.select('test-component')]).toEqual([c1.node, c2.node]);
       });
       it('selects subtree elements with `deep` option', () => {
         expect([...node.node.select('test-component', { deep: true } )]).toEqual([c1.node, c2.node, c21.node]);
+      });
+      it('does not observe DOM mutations initially', () => {
+        expect(observer.observe).not.toHaveBeenCalled();
+      });
+      it('observes DOM mutations', () => {
+
+        const list = node.node.select('test-component');
+
+        list.onUpdate(() => {});
+        expect(observer.observe).toHaveBeenCalled();
+      });
+      it('disconnects when no more listeners', () => {
+
+        const list = node.node.select('test-component');
+
+        const interest1 = list.onUpdate(() => {});
+        const interest2 = list.onUpdate(() => {});
+
+        expect(observer.observe).toHaveBeenCalledTimes(1);
+
+        interest1.off();
+        expect(observer.disconnect).not.toHaveBeenCalled();
+
+        interest2.off();
+        expect(observer.disconnect).toHaveBeenCalled();
+      });
+      it('handles child removal', () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        mutate([{ addedNodes: nodeList(), removedNodes: nodeList(c2.element) }]);
+
+        expect([...list]).toEqual([c1.node]);
+        expect(onUpdateMock).toHaveBeenCalled();
+        expect([...onUpdateMock.mock.calls[0][0]]).toEqual([c1.node]);
+      });
+      it('ignores irrelevant child removal', () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        mutate([{ addedNodes: nodeList(), removedNodes: nodeList(c3.element) }]);
+
+        expect([...list]).toEqual([c1.node, c2.node]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+      });
+      it('handles child addition', () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        mutate([{ addedNodes: nodeList(c3.element), removedNodes: nodeList() }]);
+
+        expect([...list]).toEqual([c1.node, c2.node, c3.node]);
+        expect(onUpdateMock).toHaveBeenCalled();
+        expect([...onUpdateMock.mock.calls[0][0]]).toEqual([c1.node, c2.node, c3.node]);
+      });
+      it('ignores irrelevant child addition', () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        const irrelevant = dom.window.document.createElement('div');
+
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        mutate([{ addedNodes: nodeList(irrelevant), removedNodes: nodeList() }]);
+
+        expect([...list]).toEqual([c1.node, c2.node]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
       });
     });
   });
