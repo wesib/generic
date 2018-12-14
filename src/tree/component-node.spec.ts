@@ -1,11 +1,11 @@
-import Mocked = jest.Mocked;
-import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
-import { noop } from 'call-thru';
-import { ContextRequest } from 'context-values';
-import { JSDOM } from 'jsdom';
-import { ComponentNode } from './component-node';
-import { ComponentNodeImpl } from './component-node.impl';
 import Mock = jest.Mock;
+import Mocked = jest.Mocked;
+import { BootstrapWindow, Component, ComponentContext, Feature } from '@wesib/wesib';
+import { noop } from 'call-thru';
+import { JSDOM } from 'jsdom';
+import { MockElement, testElement } from '../spec/test-element';
+import { ComponentNodeImpl } from './component-node.impl';
+import { ComponentTreeSupport } from './component-tree-support.feature';
 
 describe('tree/component-node', () => {
 
@@ -22,31 +22,37 @@ describe('tree/component-node', () => {
 
   function newComponentNode(name = 'div') {
 
+    @Component({
+      name,
+      extend: {
+        type: MockElement,
+      },
+    })
+    @Feature({
+      need: ComponentTreeSupport,
+      set: { a: BootstrapWindow, is: dom.window },
+    })
+    class TestComponent {
+    }
+
+    const Element = testElement(TestComponent);
+    const realElement = new Element();
+
+    const context = ComponentContext.of(realElement);
+    const element: Element = dom.window.document.createElement(name);
+
+    (element as any)[ComponentContext.symbol] = context;
+
+    jest.spyOn(context, 'onConnect').mockImplementation((listener: () => void) => connect = listener);
+    jest.spyOn(context, 'onDisconnect').mockImplementation((listener: () => void) => disconnect = listener);
+
+    jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
+    (context as any).element = element;
+
     let connect: () => void = noop;
     let disconnect: () => void = noop;
-    const element: Element = dom.window.document.createElement(name);
-    const context: Mocked<ComponentContext> = {
-      get: jest.fn(),
-      onConnect: jest.fn((listener: () => void) => connect = listener),
-      onDisconnect: jest.fn((listener: () => void) => disconnect = listener),
-      contentRoot: element,
-      element,
-    } as any;
-    (element as any)[ComponentContext.symbol] = context;
-    const impl = new ComponentNodeImpl(context);
 
-    context.get.mockImplementation((request: ContextRequest<any>) => {
-      if (request.key === ComponentNodeImpl.key) {
-        return impl;
-      }
-      if (request.key === ComponentNode.key) {
-        return impl.node;
-      }
-      if (request.key === BootstrapWindow.key) {
-        return dom.window;
-      }
-      return;
-    });
+    const impl = context.get(ComponentNodeImpl);
 
     return {
       connect,
