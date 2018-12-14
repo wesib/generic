@@ -4,6 +4,7 @@ import { BootstrapWindow, Component, ComponentContext, Feature } from '@wesib/we
 import { noop } from 'call-thru';
 import { JSDOM } from 'jsdom';
 import { MockElement, testElement } from '../spec/test-element';
+import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
 import { ComponentTreeSupport } from './component-tree-support.feature';
 
@@ -43,26 +44,23 @@ describe('tree/component-node', () => {
 
     (element as any)[ComponentContext.symbol] = context;
 
+    let connect: () => void = noop;
+    let disconnect: () => void = noop;
+
     jest.spyOn(context, 'onConnect').mockImplementation((listener: () => void) => connect = listener);
     jest.spyOn(context, 'onDisconnect').mockImplementation((listener: () => void) => disconnect = listener);
 
     jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
     (context as any).element = element;
 
-    let connect: () => void = noop;
-    let disconnect: () => void = noop;
-
-    const impl = context.get(ComponentNodeImpl);
+    const node = context.get(ComponentNode);
 
     return {
       connect,
       disconnect,
       element,
       context,
-      impl,
-      get node() {
-        return impl.node;
-      },
+      node,
       get parent() {
         return this.node.parent;
       }
@@ -78,7 +76,7 @@ describe('tree/component-node', () => {
     });
 
     it('caches node instance', () => {
-      expect(node.node).toBe(node.node);
+      expect(node.context.get(ComponentNodeImpl).node).toBe(node.node);
     });
 
     describe('parent', () => {
