@@ -18,7 +18,7 @@ export type ModelFactory = <M extends object>(this: void, modelType: ModelClass<
 
 export namespace ModelFactory {
 
-  export const key: ContextKey<ModelRef> = new SingleContextKey('model-factory');
+  export const key: ContextKey<ModelFactory> = new SingleContextKey('model-factory');
 
 }
 

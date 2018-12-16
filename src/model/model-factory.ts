@@ -3,6 +3,9 @@ import { EventEmitter, EventInterest, EventProducer } from 'fun-events';
 import { ModelClass, ModelRef as ModelRef_ } from './model';
 import { ModelDef } from './model-def';
 
+/**
+ * @internal
+ */
 export function modelFactory<M extends object>(modelType: ModelClass<M>): ModelRef_<M> {
 
   let boundTo: ComponentContext | undefined;

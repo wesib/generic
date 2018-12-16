@@ -29,9 +29,13 @@ export function BindAttribute<M extends ModelClass>(opts?: BindAttribute.Opts | 
       init(boundTo, initial) {
 
         const element = boundTo.element as HTMLElement;
+        const attrValue = element.getAttribute(attributeName);
 
-        if (element.getAttribute(attributeName) == null) {
-          // Apply model value unless attribute has its own.
+        if (attrValue != null) {
+          // Attribute is present. Replace model value with attribute's one
+          (target as any)[key] = attrValue;
+        } else {
+          // Attribute is absent. Apply model value
           element.setAttribute(attributeName, initial);
         }
       },

@@ -27,7 +27,7 @@ export function decorateBoundModelProperty<M extends ModelClass, V>(
   const modelKey = Symbol(`${key.toString()}@model`);
 
   interface ModelValue {
-    val: string;
+    val: any;
   }
 
   function resetModelValue(model: Model) {
