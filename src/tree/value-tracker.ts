@@ -3,7 +3,7 @@ import { EventProducer } from 'fun-events';
 /**
  * Value accessor and changes tracker.
  */
-export abstract class ValueTracker<T = any, O extends T = T> {
+export abstract class ValueTracker<T = any, O = T> {
 
   /**
    * Value changes event producer.

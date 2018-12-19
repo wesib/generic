@@ -2,6 +2,7 @@ import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
 import { AIterable, itsIterator, overArray } from 'a-iterable';
 import { SingleContextKey } from 'context-values';
 import { EventEmitter, EventProducer } from 'fun-events';
+import { AttributeTracker } from './attribute-tracker';
 import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
 import { PropertyTracker } from './property-tracker';
 import { ValueTracker } from './value-tracker';
@@ -190,6 +191,10 @@ export class ComponentNodeImpl<T extends object = object> {
 
       property<V>(key: PropertyKey): ValueTracker<V> {
         return new PropertyTracker(this.context, key);
+      }
+
+      attribute(name: string): ValueTracker<string, string | null> {
+        return new AttributeTracker(impl.context, name);
       }
 
     }
