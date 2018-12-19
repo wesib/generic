@@ -2,6 +2,7 @@ import { ComponentContext } from '@wesib/wesib';
 import { AIterable } from 'a-iterable';
 import { ContextKey, SingleContextKey } from 'context-values';
 import { EventProducer } from 'fun-events';
+import { ValueTracker } from './value-tracker';
 
 /**
  * Component node.
@@ -32,7 +33,7 @@ export abstract class ComponentNode<T extends object = object> {
   abstract readonly parent: ComponentNode | null;
 
   /**
-   * Event producer notifying on parent node updates. I.e. when parent components changed.
+   * Event producer notifying on parent node updates. I.e. when parent component changed.
    */
   abstract readonly onParentUpdate: EventProducer<(this: void, parent: ComponentNode | null) => void>;
 
@@ -45,6 +46,18 @@ export abstract class ComponentNode<T extends object = object> {
   abstract select<N extends object = object>(
       selector: string,
       opts?: ComponentNode.SelectorOpts): ComponentNodeList<N>;
+
+  /**
+   * Returns the given element's property value tracker.
+   *
+   * The changes are tracked with `StateTracker`. So it is expected that the target property notifies on its changes
+   * with state updater. E.g. when it is defined by `@DomProperty` decorator.
+   *
+   * @param key A key of the target property.
+   *
+   * @returns Target property value tracker instance.
+   */
+  abstract property<V>(key: PropertyKey): ValueTracker<V>;
 
 }
 

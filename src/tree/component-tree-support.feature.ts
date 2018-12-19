@@ -1,4 +1,4 @@
-import { Feature } from '@wesib/wesib';
+import { Feature, StateSupport } from '@wesib/wesib';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
 
@@ -8,6 +8,7 @@ import { ComponentNodeImpl } from './component-node.impl';
  * Provides a `ComponentNode` instances for each component.
  */
 @Feature({
+  need: StateSupport,
   init(context) {
     context.forComponents({ as: ComponentNodeImpl });
     context.forComponents({
