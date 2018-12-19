@@ -1,4 +1,5 @@
 import { Feature, StateSupport } from '@wesib/wesib';
+import { AttributesObserver } from './attributes-observer';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
 
@@ -10,6 +11,7 @@ import { ComponentNodeImpl } from './component-node.impl';
 @Feature({
   need: StateSupport,
   init(context) {
+    context.forComponents({ as: AttributesObserver });
     context.forComponents({ as: ComponentNodeImpl });
     context.forComponents({
       a: ComponentNode,

@@ -28,6 +28,7 @@ describe('tree/component-node', () => {
     observer = {
       observe: jest.fn(),
       disconnect: jest.fn(),
+      takeRecords: jest.fn().mockImplementation(() => []),
     } as any;
     MockMutationObserver.mockImplementation((listener: (records: Partial<MutationRecord>[]) => void) => {
       mutate = listener;
@@ -315,7 +316,7 @@ describe('tree/component-node', () => {
         expect(property.it).toBe(newValue);
         expect(element.property).toBe(newValue);
       });
-      it('notifies on value updates', () => {
+      it('notifies on property updates', () => {
 
         const newValue = 'new value';
         const onUpdate = jest.fn();
@@ -324,6 +325,151 @@ describe('tree/component-node', () => {
 
         element.property = newValue;
         expect(onUpdate).toHaveBeenCalledWith(newValue, 'value');
+      });
+    });
+
+    describe('attribute', () => {
+
+      let element: any;
+      let compNode: ComponentNode;
+      let attribute: ValueTracker<string, string | null>;
+
+      beforeEach(() => {
+
+        @Component({
+          name: 'test-component',
+          extend: {
+            type: MockElement,
+          },
+        })
+        @Feature({
+          need: ComponentTreeSupport,
+          set: { a: BootstrapWindow, is: dom.window },
+        })
+        class TestComponent {
+
+        }
+
+        element = new (testElement(TestComponent))();
+        compNode = ComponentContext.of(element).get(ComponentNode);
+        attribute = compNode.attribute('attr');
+      });
+
+      function setAttribute(name: string, value: string, oldValue: string) {
+        element.setAttribute(name, value);
+        mutate([{ type: 'attributes', oldValue, attributeName: name }]);
+      }
+
+      it('reads attribute value', () => {
+        expect(attribute.it).toBeNull();
+
+        const newValue = 'new value';
+
+        element.setAttribute('attr', newValue);
+
+        expect(attribute.it).toBe(newValue);
+      });
+      it('updates attribute value', () => {
+
+        const newValue = 'new value';
+
+        attribute.it = newValue;
+
+        expect(attribute.it).toBe(newValue);
+        expect(element.getAttribute('attr')).toBe(newValue);
+      });
+      it('does not observe attributes mutations initially', () => {
+        expect(observer.observe).not.toHaveBeenCalled();
+      });
+      it('notifies on attribute updates', () => {
+
+        const oldValue = 'old value';
+        const newValue = 'new value';
+        const onUpdate = jest.fn();
+
+        attribute.on(onUpdate);
+
+        setAttribute('attr', newValue, oldValue);
+        expect(onUpdate).toHaveBeenCalledWith(newValue, oldValue);
+      });
+      it('does not notify on another attribute updates', () => {
+
+        const oldValue = 'old value';
+        const newValue = 'new value';
+        const onUpdate = jest.fn();
+
+        attribute.on(onUpdate);
+
+        setAttribute('other-attr', newValue, oldValue);
+        expect(onUpdate).not.toHaveBeenCalled();
+      });
+      it('handles multiple consumers of the same attribute updates', () => {
+
+        const value0 = 'old value';
+        const value1 = 'new value';
+        const value2 = 'value 2';
+        const onUpdate1 = jest.fn();
+        const onUpdate2 = jest.fn();
+
+        const interest1 = attribute.on(onUpdate1);
+        const interest2 = attribute.on(onUpdate2);
+
+        observer.disconnect.mockClear();
+
+        setAttribute('attr', value1, value0);
+        expect(onUpdate1).toHaveBeenCalledWith(value1, value0);
+        expect(onUpdate2).toHaveBeenCalledWith(value1, value0);
+        
+        onUpdate1.mockClear();
+        onUpdate2.mockClear();
+
+        interest1.off();
+        expect(observer.disconnect).not.toHaveBeenCalled();
+
+        setAttribute('attr', value2, value1);
+        expect(onUpdate1).not.toHaveBeenCalled();
+        expect(onUpdate2).toHaveBeenCalledWith(value2, value1);
+
+        interest2.off();
+        expect(observer.disconnect).toHaveBeenCalled();
+      });
+      it('handles multiple attributes consumers', () => {
+
+        const attribute2 = compNode.attribute('attr2');
+
+        const value0 = 'old value';
+        const value1 = 'new value';
+        const value2 = 'value 2';
+        const value3 = 'value 3';
+        const onUpdate1 = jest.fn();
+        const onUpdate2 = jest.fn();
+
+        const interest1 = attribute.on(onUpdate1);
+        const interest2 = attribute2.on(onUpdate2);
+
+        observer.disconnect.mockClear();
+
+        element.setAttribute('attr', value1);
+        element.setAttribute('attr2', value2);
+        mutate([
+          { type: 'attributes', oldValue: value0, attributeName: 'attr' },
+          { type: 'attributes', oldValue: value0, attributeName: 'attr2' },
+        ]);
+        expect(onUpdate1).toHaveBeenCalledWith(value1, value0);
+        expect(onUpdate2).toHaveBeenCalledWith(value2, value0);
+
+        onUpdate1.mockClear();
+        onUpdate2.mockClear();
+
+        interest1.off();
+        expect(observer.disconnect).not.toHaveBeenCalled();
+
+        setAttribute('attr2', value3, value2);
+        expect(onUpdate1).not.toHaveBeenCalled();
+        expect(onUpdate2).toHaveBeenCalledWith(value3, value2);
+
+        interest2.off();
+        expect(observer.disconnect).toHaveBeenCalled();
       });
     });
   });

@@ -48,16 +48,25 @@ export abstract class ComponentNode<T extends object = object> {
       opts?: ComponentNode.SelectorOpts): ComponentNodeList<N>;
 
   /**
-   * Returns the given element's property value tracker.
+   * Returns a value tracker of element's property.
    *
    * The changes are tracked with `StateTracker`. So it is expected that the target property notifies on its changes
    * with state updater. E.g. when it is defined by `@DomProperty` decorator.
    *
-   * @param key A key of the target property.
+   * @param key Target property key.
    *
-   * @returns Target property value tracker instance.
+   * @returns Target property's value tracker.
    */
   abstract property<V>(key: PropertyKey): ValueTracker<V>;
+
+  /**
+   * Returns a value tracker of element's attribute.
+   *
+   * @param name Target attribute name.
+   *
+   * @returns Target attribute's value tracker.
+   */
+  abstract attribute(name: string): ValueTracker<string, string | null>;
 
 }
 
