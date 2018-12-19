@@ -419,7 +419,7 @@ describe('tree/component-node', () => {
         setAttribute('attr', value1, value0);
         expect(onUpdate1).toHaveBeenCalledWith(value1, value0);
         expect(onUpdate2).toHaveBeenCalledWith(value1, value0);
-        
+
         onUpdate1.mockClear();
         onUpdate2.mockClear();
 
