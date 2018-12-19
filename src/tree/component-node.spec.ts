@@ -1,12 +1,13 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
-import { BootstrapWindow, Component, ComponentContext, Feature } from '@wesib/wesib';
+import { BootstrapWindow, Component, ComponentContext, DomProperty, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { JSDOM } from 'jsdom';
 import { MockElement, testElement } from '../spec/test-element';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
 import { ComponentTreeSupport } from './component-tree-support.feature';
+import { ValueTracker } from './value-tracker';
 
 describe('tree/component-node', () => {
 
@@ -265,6 +266,64 @@ describe('tree/component-node', () => {
 
         expect([...list]).toEqual([c1.node, c2.node]);
         expect(onUpdateMock).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('property', () => {
+
+      let element: any;
+      let property: ValueTracker<string>;
+
+      beforeEach(() => {
+
+        @Component({
+          name: 'test-component',
+          extend: {
+            type: MockElement,
+          },
+        })
+        @Feature({
+          need: ComponentTreeSupport,
+          set: { a: BootstrapWindow, is: dom.window },
+        })
+        class TestComponent {
+
+          @DomProperty()
+          property = 'value';
+
+        }
+
+        element = new (testElement(TestComponent))();
+        property = ComponentContext.of(element).get(ComponentNode).property('property');
+      });
+
+      it('reads property value', () => {
+        expect(property.it).toBe('value');
+
+        const newValue = 'new value';
+
+        element.property = newValue;
+
+        expect(property.it).toBe(newValue);
+      });
+      it('updates property value', () => {
+
+        const newValue = 'new value';
+
+        property.it = newValue;
+
+        expect(property.it).toBe(newValue);
+        expect(element.property).toBe(newValue);
+      });
+      it('notifies on value updates', () => {
+
+        const newValue = 'new value';
+        const onUpdate = jest.fn();
+
+        property.on(onUpdate);
+
+        element.property = newValue;
+        expect(onUpdate).toHaveBeenCalledWith(newValue, 'value');
       });
     });
   });

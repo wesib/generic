@@ -3,6 +3,8 @@ import { AIterable, itsIterator, overArray } from 'a-iterable';
 import { SingleContextKey } from 'context-values';
 import { EventEmitter, EventProducer } from 'fun-events';
 import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
+import { PropertyTracker } from './property-tracker';
+import { ValueTracker } from './value-tracker';
 
 class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
 
@@ -184,6 +186,10 @@ export class ComponentNodeImpl<T extends object = object> {
 
       select<N extends object = object>(selector: string, opts?: ComponentNode_.SelectorOpts): ComponentNodeList<N> {
         return impl.select(selector, opts);
+      }
+
+      property<V>(key: PropertyKey): ValueTracker<V> {
+        return new PropertyTracker(this.context, key);
       }
 
     }
