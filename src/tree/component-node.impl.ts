@@ -5,7 +5,7 @@ import { EventEmitter, EventProducer } from 'fun-events';
 import { AttributeTracker } from './attribute-tracker';
 import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
 import { PropertyTracker } from './property-tracker';
-import { ValueTracker } from './value-tracker';
+import { ValueTracker } from '../common/value-tracker';
 
 class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
 
@@ -193,7 +193,7 @@ export class ComponentNodeImpl<T extends object = object> {
         return new PropertyTracker(this.context, key);
       }
 
-      attribute(name: string): ValueTracker<string, string | null> {
+      attribute(name: string): ValueTracker<string | null, string> {
         return new AttributeTracker(impl.context, name);
       }
 

@@ -2,7 +2,7 @@ import { ComponentContext } from '@wesib/wesib';
 import { AIterable } from 'a-iterable';
 import { ContextKey, SingleContextKey } from 'context-values';
 import { EventProducer } from 'fun-events';
-import { ValueTracker } from './value-tracker';
+import { ValueTracker } from '../common';
 
 /**
  * Component node.
@@ -66,7 +66,7 @@ export abstract class ComponentNode<T extends object = object> {
    *
    * @returns Target attribute's value tracker.
    */
-  abstract attribute(name: string): ValueTracker<string, string | null>;
+  abstract attribute(name: string): ValueTracker<string | null, string>;
 
 }
 

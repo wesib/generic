@@ -7,7 +7,7 @@ import { MockElement, testElement } from '../spec/test-element';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
 import { ComponentTreeSupport } from './component-tree-support.feature';
-import { ValueTracker } from './value-tracker';
+import { ValueTracker } from '../common/value-tracker';
 
 describe('tree/component-node', () => {
 
@@ -332,7 +332,7 @@ describe('tree/component-node', () => {
 
       let element: any;
       let compNode: ComponentNode;
-      let attribute: ValueTracker<string, string | null>;
+      let attribute: ValueTracker<string | null, string>;
 
       beforeEach(() => {
 
