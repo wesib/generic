@@ -1,6 +1,7 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
 import { BootstrapWindow, Component, ComponentContext, DomProperty, Feature } from '@wesib/wesib';
+import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
 import { ValueTracker } from 'fun-events';
 import { JSDOM } from 'jsdom';
@@ -8,6 +9,7 @@ import { MockElement, testElement } from '../spec/test-element';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
 import { ComponentTreeSupport } from './component-tree-support.feature';
+import { ElementNode, ElementNodeList } from './element-node';
 
 describe('tree/component-node', () => {
 
@@ -99,7 +101,9 @@ describe('tree/component-node', () => {
     it('caches node instance', () => {
       expect(node.context.get(ComponentNodeImpl).node).toBe(node.node);
     });
-
+    it('has `component` type', () => {
+      expect(node.node.type).toBe('component');
+    });
     describe('parent', () => {
 
       let parent: ComponentNodeInfo;
@@ -133,9 +137,10 @@ describe('tree/component-node', () => {
 
         node.connect();
 
-        expect(node.parent).toMatchObject({
-          context: parent.context,
-        });
+        expect(node.parent!.type).toBe('component');
+        expect(node.parent!.context).toBe(parent.context);
+        expect(node.node.parentNode!.type).toBe('element');
+        expect(node.node.parentNode!.element).toBe(nonComponentParent);
       });
       it('is lost on disconnect', () => {
         node.connect();
@@ -182,6 +187,60 @@ describe('tree/component-node', () => {
       });
       it('selects subtree elements with `deep` option', () => {
         expect([...node.node.select('test-component', { deep: true } )]).toEqual([c1.node, c2.node, c21.node]);
+      });
+      describe('non-component node', () => {
+
+        let span: HTMLSpanElement;
+
+        beforeEach(() => {
+          span = dom.window.document.createElement('span');
+          node.element.appendChild(span);
+        });
+
+        it('is ignored by default', () => {
+          expect([...node.node.select('*')]).toEqual([c1.node, c2.node, c3.node]);
+        });
+        it('selected when requested', () => {
+          expect([...node.node.select('*', { all: true })]).toEqual([
+            c1.node,
+            c2.node,
+            c3.node,
+            expect.objectContaining({ type: 'element', element: span }),
+          ]);
+        });
+
+        describe('selected', () => {
+
+          let div: HTMLDivElement;
+          let spanNode: ElementNode;
+          let list: ElementNodeList;
+          let divNode: ElementNode;
+
+          beforeEach(() => {
+            div = dom.window.document.createElement('div');
+            span.appendChild(div);
+            spanNode = itsFirst(node.node.select('span', { all: true })) as ElementNode;
+            list = spanNode.select('div', { all: true });
+            divNode = itsFirst(list) as ElementNode;
+          });
+
+          describe('parentNode', () => {
+            it('refers to parent node', () => {
+              expect(divNode.parentNode).toBe(spanNode);
+              expect(spanNode.parentNode).toBe(node.node);
+            });
+            it('becomes `null` when element node removed from DOM tree', () => {
+              div.remove();
+              expect(divNode.parentNode).toBeNull();
+            });
+          });
+          describe('attribute', () => {
+            it('reflects attribute', () => {
+              div.setAttribute('attr', 'value');
+              expect(divNode.attribute('attr').it).toBe('value');
+            });
+          });
+        });
       });
       it('does not observe DOM mutations initially', () => {
         expect(observer.observe).not.toHaveBeenCalled();
@@ -273,6 +332,7 @@ describe('tree/component-node', () => {
     describe('property', () => {
 
       let element: any;
+      let compNode: ComponentNode;
       let property: ValueTracker<string>;
 
       beforeEach(() => {
@@ -295,7 +355,8 @@ describe('tree/component-node', () => {
         }
 
         element = new (testElement(TestComponent))();
-        property = ComponentContext.of(element).get(ComponentNode).property('property');
+        compNode = ComponentContext.of(element).get(ComponentNode);
+        property = compNode.property('property');
       });
 
       it('reads property value', () => {
@@ -325,6 +386,9 @@ describe('tree/component-node', () => {
 
         element.property = newValue;
         expect(onUpdate).toHaveBeenCalledWith(newValue, 'value');
+      });
+      it('returns the same tracker instance', () => {
+        expect(compNode.property('property')).toBe(property);
       });
     });
 
@@ -402,6 +466,9 @@ describe('tree/component-node', () => {
 
         setAttribute('other-attr', newValue, oldValue);
         expect(onUpdate).not.toHaveBeenCalled();
+      });
+      it('returns the same tracker instance', () => {
+        expect(compNode.attribute('attr')).toBe(attribute);
       });
       it('handles multiple consumers of the same attribute updates', () => {
 
