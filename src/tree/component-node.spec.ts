@@ -2,12 +2,12 @@ import Mock = jest.Mock;
 import Mocked = jest.Mocked;
 import { BootstrapWindow, Component, ComponentContext, DomProperty, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
+import { ValueTracker } from 'fun-events';
 import { JSDOM } from 'jsdom';
 import { MockElement, testElement } from '../spec/test-element';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
 import { ComponentTreeSupport } from './component-tree-support.feature';
-import { ValueTracker } from '../common/value-tracker';
 
 describe('tree/component-node', () => {
 

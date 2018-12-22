@@ -1,12 +1,11 @@
 import { ComponentContext } from '@wesib/wesib';
-import { EventProducer } from 'fun-events';
+import { EventProducer, ValueTracker } from 'fun-events';
 import { AttributesObserver } from './attributes-observer';
-import { ValueTracker } from '../common';
 
 /**
  * @internal
  */
-export class AttributeTracker extends ValueTracker<string | null | string> {
+export class AttributeTracker extends ValueTracker<string | null, string> {
 
   readonly on: EventProducer<(this: void, newValue: string, oldValue: string | null) => void>;
 
