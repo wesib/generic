@@ -1,11 +1,10 @@
 import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
 import { AIterable, itsIterator, overArray } from 'a-iterable';
 import { SingleContextKey } from 'context-values';
-import { EventEmitter, EventProducer } from 'fun-events';
+import { EventEmitter, EventProducer, ValueTracker } from 'fun-events';
 import { AttributeTracker } from './attribute-tracker';
 import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
 import { PropertyTracker } from './property-tracker';
-import { ValueTracker } from '../common/value-tracker';
 
 class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
 

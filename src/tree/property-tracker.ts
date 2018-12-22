@@ -1,6 +1,5 @@
 import { ComponentContext } from '@wesib/wesib';
-import { EventProducer, StatePath, StateTracker } from 'fun-events';
-import { ValueTracker } from '../common';
+import { EventProducer, StatePath, StateTracker, ValueTracker } from 'fun-events';
 
 /**
  * @internal

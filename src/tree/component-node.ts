@@ -1,8 +1,7 @@
 import { ComponentContext } from '@wesib/wesib';
 import { AIterable } from 'a-iterable';
 import { ContextKey, SingleContextKey } from 'context-values';
-import { EventProducer } from 'fun-events';
-import { ValueTracker } from '../common';
+import { EventProducer, ValueTracker } from 'fun-events';
 
 /**
  * Component node.
