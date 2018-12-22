@@ -1,21 +1,25 @@
 import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
 import { AIterable, itsIterator, overArray } from 'a-iterable';
-import { SingleContextKey } from 'context-values';
+import { ContextValues, SingleContextKey } from 'context-values';
 import { EventEmitter, EventProducer, ValueTracker } from 'fun-events';
-import { AttributeTracker } from './attribute-tracker';
-import { ComponentNode as ComponentNode_, ComponentNodeList } from './component-node';
-import { PropertyTracker } from './property-tracker';
+import { NodeAttributes } from './attribute-tracker';
+import { ComponentNode as ComponentNode_ } from './component-node';
+import { ElementNode as ElementNode_, ElementNodeList } from './element-node';
+import { NodeProperties } from './property-tracker';
 
-class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
+const WATCH_CHILD_LIST = { childList: true };
+const WATCH_DEEP = { childList: true, subtree: true };
 
-  readonly onUpdate = EventProducer.of<(this: void, list: AIterable<ComponentNode_<T>>) => void>(listener => {
+abstract class DynamicNodeList<N extends ElementNode_> extends ElementNodeList<N> {
+
+  readonly onUpdate = EventProducer.of<(this: void, list: AIterable<N>) => void>(listener => {
 
       const firstConsumer = !this._updates.consumers;
       const interest = this._updates.on(listener);
 
       if (firstConsumer) {
         this._refresh();
-        this._observer.observe(this._node.context.element, this._init);
+        this._observer.observe(this._element, this._init);
       }
 
       return {
@@ -29,16 +33,19 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
     });
 
   private readonly _observer: MutationObserver;
-  private _all: Set<ComponentNode_<T>> = new Set();
-  private readonly _updates = new EventEmitter<(this: void, list: AIterable<ComponentNode_<T>>) => void>();
+  private _all: Set<N> = new Set();
+  private readonly _updates = new EventEmitter<(this: void, list: AIterable<N>) => void>();
+  private readonly _init: MutationObserverInit;
 
-  constructor(
-      private readonly _node: ComponentNodeImpl<any>,
+  protected constructor(
+      context: ContextValues,
+      private readonly _element: any,
       private readonly _selector: string,
-      private readonly _init: MutationObserverInit) {
+      { deep }: ElementNode_.SelectorOpts) {
     super();
+    this._init = deep ? WATCH_DEEP : WATCH_CHILD_LIST;
 
-    const Observer: typeof MutationObserver = (_node.context.get(BootstrapWindow) as any).MutationObserver;
+    const Observer: typeof MutationObserver = (context.get(BootstrapWindow) as any).MutationObserver;
 
     this._observer = new Observer(mutations => this._update(mutations));
   }
@@ -47,20 +54,20 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
     return itsIterator(this.all);
   }
 
-  get all(): Set<ComponentNode_<T>> {
+  get all(): Set<N> {
     if (this._updates.consumers) {
       return this._all;
     }
     return this._refresh();
   }
 
-  private _refresh(): Set<ComponentNode_<T>> {
-    return this._all = new Set<ComponentNode_<T>>(this._request());
+  private _refresh(): Set<N> {
+    return this._all = new Set<N>(this._request());
   }
 
-  private _request(): AIterable<ComponentNode_<T>> {
+  private _request(): AIterable<N> {
 
-    const element: HTMLElement = this._node.context.element;
+    const element: HTMLElement = this._element;
     let iter: AIterable<Element>;
 
     if (this._init.subtree) {
@@ -70,8 +77,8 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
           .filter(item => item.matches(this._selector));
     }
 
-    return iter.map<ComponentNode_<T> | undefined>(nodeOf)
-            .filter<ComponentNode_<T>>(isPresent);
+    return iter.map<N | undefined>(node => this.nodeOf(node))
+            .filter<N>(isPresent);
   }
 
   private _update(mutations: MutationRecord[]) {
@@ -82,7 +89,7 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
       AIterable.from(overArray(mutation.addedNodes))
           .forEach(added => {
 
-            const node = nodeOf<T>(added);
+            const node = this.nodeOf(added);
 
             if (node && !this._all.has(node)) {
               this._all.add(node);
@@ -92,7 +99,7 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
       AIterable.from(overArray(mutation.removedNodes))
           .forEach(removed => {
 
-            const node = nodeOf<T>(removed);
+            const node = this.nodeOf(removed);
 
             if (node && this._all.has(node)) {
               this._all.delete(node);
@@ -106,10 +113,105 @@ class DynamicNodeList<T extends object> extends ComponentNodeList<T> {
     }
   }
 
+  protected abstract nodeOf(node: Node): N | undefined;
+
 }
 
-const WATCH_CHILD_LIST = { childList: true };
-const WATCH_DEEP = { childList: true, subtree: true };
+class DynamicComponentNodeList extends DynamicNodeList<ComponentNode_<any>> {
+
+  constructor(context: ContextValues, node: ElementNode_, selector: string, opts: ElementNode_.SelectorOpts) {
+    super(context, node, selector, opts);
+  }
+
+  protected nodeOf(node: Node): ComponentNode_<any> | undefined {
+    return componentNodeOf(node);
+  }
+
+}
+
+class DynamicElementNodeList extends DynamicNodeList<ElementNode_> {
+
+  constructor(
+      private readonly _context: ContextValues,
+      element: any,
+      selector: string,
+      opts: ElementNode_.SelectorOpts) {
+    super(_context, element, selector, opts);
+  }
+
+  protected nodeOf(node: Node): ElementNode_ {
+    return elementNodeOf(this._context, node);
+  }
+
+}
+
+function selectNodes(
+    context: ContextValues,
+    element: any,
+    selector: string,
+    opts: ElementNode_.SelectorOpts = {}): ElementNodeList<any> {
+  if (opts.all) {
+    return new DynamicElementNodeList(context, element, selector, opts);
+  }
+  return new DynamicComponentNodeList(context, element, selector, opts);
+}
+
+const NODE_REF = Symbol('element-node');
+
+class ElementNode extends ElementNode_ {
+
+  private readonly _attrs: NodeAttributes;
+
+  constructor(private readonly _context: ContextValues, readonly element: Node) {
+    super();
+    this._attrs = new NodeAttributes(_context, element);
+  }
+
+  get type(): 'element' {
+    return 'element';
+  }
+
+  get parentNode() {
+    return parentNode(this._context, this.element);
+  }
+
+  attribute(name: string): ValueTracker<string | null, string> {
+    return this._attrs.get(name);
+  }
+
+  select(selector: string, opts?: ElementNode_.SelectorOpts): ElementNodeList<any> {
+    return selectNodes(this._context, this.element, selector, opts);
+  }
+
+}
+
+function elementNodeOf(context: ContextValues, node: Node): ElementNode_ {
+
+  const componentNode = componentNodeOf(node);
+
+  if (componentNode) {
+    return componentNode;
+  }
+
+  const found: ElementNode_ = (node as any)[NODE_REF];
+
+  if (found) {
+    return found;
+  }
+
+  const constructed = new ElementNode(context, node);
+
+  (node as any)[NODE_REF] = constructed;
+
+  return constructed;
+}
+
+function parentNode(context: ContextValues, node: Node): ElementNode_ | null {
+
+  const parent = node.parentElement;
+
+  return parent != null ? elementNodeOf(context, parent) : null;
+}
 
 export class ComponentNodeImpl<T extends object = object> {
 
@@ -118,10 +220,14 @@ export class ComponentNodeImpl<T extends object = object> {
   private _parent?: ComponentNodeImpl;
   private readonly _parentUpdates = new EventEmitter<(this: void, parent: ComponentNode_ | null) => void>();
   private _node?: ComponentNode_<T>;
+  private readonly _attrs: NodeAttributes;
+  private readonly _props: NodeProperties;
 
   constructor(readonly context: ComponentContext<T>) {
     context.onConnect(() => this.parent = this._findParent());
     context.onDisconnect(() => this.parent = undefined);
+    this._attrs = new NodeAttributes(context, context.element);
+    this._props = new NodeProperties(context, context.element);
   }
 
   get parent(): ComponentNodeImpl | undefined {
@@ -136,15 +242,9 @@ export class ComponentNodeImpl<T extends object = object> {
     this._parentUpdates.notify(value ? value.node : null);
   }
 
-  select<N extends object = object>(
-      selector: string,
-      { deep = false }: { deep?: boolean } = {}): ComponentNodeList<N> {
-    return new DynamicNodeList<N>(this, selector, deep ? WATCH_DEEP : WATCH_CHILD_LIST);
-  }
-
   private _findParent(): ComponentNodeImpl | undefined {
 
-    let parent: ParentNode | null = (this.context.contentRoot as any).parentNode;
+    let parent: ParentNode | null = (this.context.contentRoot as any).parentElement;
 
     while (parent) {
 
@@ -154,7 +254,7 @@ export class ComponentNodeImpl<T extends object = object> {
         return parentCtx.get(ComponentNodeImpl);
       }
 
-      parent = (parent as any).parentNode;
+      parent = (parent as any).parentElement;
     }
 
     return;
@@ -168,6 +268,14 @@ export class ComponentNodeImpl<T extends object = object> {
     const impl = this;
 
     class ComponentNode extends ComponentNode_<T> {
+
+      get element() {
+        return impl.context.element;
+      }
+
+      get parentNode() {
+        return parentNode(impl.context, this.element);
+      }
 
       get context() {
         return impl.context;
@@ -184,16 +292,16 @@ export class ComponentNodeImpl<T extends object = object> {
         return impl._parentUpdates.on;
       }
 
-      select<N extends object = object>(selector: string, opts?: ComponentNode_.SelectorOpts): ComponentNodeList<N> {
-        return impl.select(selector, opts);
-      }
-
-      property<V>(key: PropertyKey): ValueTracker<V> {
-        return new PropertyTracker(this.context, key);
+      select(selector: string, opts?: ElementNode_.SelectorOpts): ElementNodeList<any> {
+        return selectNodes(this.context, this.element, selector, opts);
       }
 
       attribute(name: string): ValueTracker<string | null, string> {
-        return new AttributeTracker(impl.context, name);
+        return impl._attrs.get(name);
+      }
+
+      property<V>(key: PropertyKey): ValueTracker<V> {
+        return impl._props.get(key);
       }
 
     }
@@ -203,7 +311,7 @@ export class ComponentNodeImpl<T extends object = object> {
 
 }
 
-function nodeOf<T extends object>(node: Node): ComponentNode_<T> | undefined {
+function componentNodeOf(node: Node): ComponentNode_<any> | undefined {
 
   const ctx: ComponentContext | undefined = (node as any)[ComponentContext.symbol];
 
