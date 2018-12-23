@@ -4,6 +4,7 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 import { terser } from 'rollup-plugin-terser';
 import typescript from 'rollup-plugin-typescript2';
 import { uglify } from 'rollup-plugin-uglify';
+import pkg from './package.json';
 
 function makeConfig(baseConfig, ...configs) {
   return configs.reduce(
@@ -80,37 +81,47 @@ function baseConfig(tsconfig) {
   };
 }
 
-const umdConfig = makeConfig(
-    baseConfig('tsconfig.umd.json'),
+const mainConfig = makeConfig(
+    baseConfig('tsconfig.main.json'),
     {
       output: {
-        file: './dist/wesib.generic.umd.js',
-      },
-    },
-    uglifyConfig);
-
-const esm5Config = makeConfig(
-    baseConfig('tsconfig.esm5.json'),
-    {
-      output: {
-        format: 'esm',
-        file: './dist/wesib.generic.esm5.js',
+        file: pkg.main,
       },
     },
     terserConfig);
 
-const esm2015Config = makeConfig(
-    baseConfig('tsconfig.esm2015.json'),
+const umdConfig = makeConfig(
+    baseConfig('tsconfig.umd.json'),
+    {
+      output: {
+        file: pkg.browser,
+      },
+    },
+    uglifyConfig);
+
+const esmConfig = makeConfig(
+    baseConfig('tsconfig.esm.json'),
     {
       output: {
         format: 'esm',
-        file: './dist/wesib.generic.esm2015.js',
+        file: pkg.module,
+      },
+    },
+    terserConfig);
+
+const esm5Config = makeConfig(
+    baseConfig('tsconfig.umd.json'),
+    {
+      output: {
+        format: 'esm',
+        file: pkg.esm5,
       },
     },
     terserConfig);
 
 export default [
+  mainConfig,
   umdConfig,
+  esmConfig,
   esm5Config,
-  esm2015Config,
 ]
