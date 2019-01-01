@@ -10,17 +10,16 @@ import { ComponentNodeImpl } from './component-node.impl';
  */
 @Feature({
   need: StateSupport,
-  init(context) {
-    context.forComponents({ as: AttributesObserver });
-    context.forComponents({ as: ComponentNodeImpl });
-    context.forComponents({
+  forComponents: [
+    { as: AttributesObserver },
+    { as: ComponentNodeImpl },
+    {
       a: ComponentNode,
       by(impl: ComponentNodeImpl): ComponentNode {
         return impl.node;
       },
       with: [ComponentNodeImpl],
-    });
-  },
+    },
+  ],
 })
-export class ComponentTreeSupport {
-}
+export class ComponentTreeSupport {}
