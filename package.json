@@ -26,13 +26,13 @@
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.4"
+    "@wesib/wesib": "^1.0.0-alpha.6"
   },
   "devDependencies": {
     "@types/fs-extra": "^5.0.4",
-    "@types/jest": "^23.3.10",
-    "@types/jsdom": "^12.2.0",
-    "@wesib/wesib": "^1.0.0-alpha.4",
+    "@types/jest": "^23.3.11",
+    "@types/jsdom": "^12.2.1",
+    "@wesib/wesib": "^1.0.0-alpha.6",
     "a-iterable": "^2.1.0",
     "call-thru": "^2.1.0",
     "codecov": "^3.1.0",
@@ -41,7 +41,7 @@
     "fun-events": "^2.2.0",
     "jest": "^23.6.0",
     "jest-junit": "^5.2.0",
-    "rollup": "^0.68.1",
+    "rollup": "^0.68.2",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
