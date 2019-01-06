@@ -1,10 +1,9 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
-import { BootstrapWindow, Component, ComponentContext, DomProperty, Feature } from '@wesib/wesib';
+import { Component, ComponentContext, DomProperty, Feature } from '@wesib/wesib';
 import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
 import { ValueTracker } from 'fun-events';
-import { JSDOM } from 'jsdom';
 import { MockElement, testElement } from '../spec/test-element';
 import { ComponentNode } from './component-node';
 import { ComponentNodeImpl } from './component-node.impl';
@@ -13,19 +12,14 @@ import { ElementNode, ElementNodeList } from './element-node';
 
 describe('tree/component-node', () => {
 
-  let dom: JSDOM;
   let MockMutationObserver: Mock<MutationObserver>;
-
-  beforeEach(() => {
-    dom = new JSDOM();
-  });
 
   let observer: Mocked<MutationObserver>;
   let mutate: (records: Partial<MutationRecord>[]) => void = noop;
 
   beforeEach(() => {
     MockMutationObserver = jest.fn();
-    (dom.window as any).MutationObserver = MockMutationObserver;
+    (window as any).MutationObserver = MockMutationObserver;
 
     observer = {
       observe: jest.fn(),
@@ -50,7 +44,6 @@ describe('tree/component-node', () => {
     })
     @Feature({
       need: ComponentTreeSupport,
-      set: { a: BootstrapWindow, is: dom.window },
     })
     class TestComponent {
     }
@@ -59,7 +52,7 @@ describe('tree/component-node', () => {
     const realElement = new Element();
 
     const context = ComponentContext.of(realElement);
-    const element: Element = dom.window.document.createElement(name);
+    const element: Element = document.createElement(name);
 
     (element as any)[ComponentContext.symbol] = context;
 
@@ -130,7 +123,7 @@ describe('tree/component-node', () => {
       it('ignores non-component elements', () => {
         parent.element.removeChild(node.element);
 
-        const nonComponentParent = dom.window.document.createElement('span');
+        const nonComponentParent = document.createElement('span');
 
         parent.element.appendChild(nonComponentParent);
         nonComponentParent.appendChild(node.element);
@@ -193,7 +186,7 @@ describe('tree/component-node', () => {
         let span: HTMLSpanElement;
 
         beforeEach(() => {
-          span = dom.window.document.createElement('span');
+          span = document.createElement('span');
           node.element.appendChild(span);
         });
 
@@ -217,7 +210,7 @@ describe('tree/component-node', () => {
           let divNode: ElementNode;
 
           beforeEach(() => {
-            div = dom.window.document.createElement('div');
+            div = document.createElement('div');
             span.appendChild(div);
             spanNode = itsFirst(node.node.select('span', { all: true })) as ElementNode;
             list = spanNode.select('div', { all: true });
@@ -318,7 +311,7 @@ describe('tree/component-node', () => {
 
         list.onUpdate(onUpdateMock);
 
-        const irrelevant = dom.window.document.createElement('div');
+        const irrelevant = document.createElement('div');
 
         expect(onUpdateMock).not.toHaveBeenCalled();
 
@@ -345,7 +338,6 @@ describe('tree/component-node', () => {
         })
         @Feature({
           need: ComponentTreeSupport,
-          set: { a: BootstrapWindow, is: dom.window },
         })
         class TestComponent {
 
@@ -408,11 +400,8 @@ describe('tree/component-node', () => {
         })
         @Feature({
           need: ComponentTreeSupport,
-          set: { a: BootstrapWindow, is: dom.window },
         })
-        class TestComponent {
-
-        }
+        class TestComponent {}
 
         element = new (testElement(TestComponent))();
         compNode = ComponentContext.of(element).get(ComponentNode);
