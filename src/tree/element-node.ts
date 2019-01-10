@@ -101,6 +101,6 @@ export namespace ElementNode {
 
 export abstract class ElementNodeList<N extends ElementNode = ElementNode> extends AIterable<N> {
 
-  abstract readonly onUpdate: EventProducer<(this: void, list: AIterable<N>) => void>;
+  abstract readonly onUpdate: EventProducer<[AIterable<N>]>;
 
 }

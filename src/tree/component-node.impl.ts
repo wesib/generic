@@ -12,7 +12,7 @@ const WATCH_DEEP = { childList: true, subtree: true };
 
 abstract class DynamicNodeList<N extends ElementNode_> extends ElementNodeList<N> {
 
-  readonly onUpdate = EventProducer.of<(this: void, list: AIterable<N>) => void>(listener => {
+  readonly onUpdate = EventProducer.of<[AIterable<N>]>(listener => {
 
       const firstConsumer = !this._updates.consumers;
       const interest = this._updates.on(listener);
@@ -34,7 +34,7 @@ abstract class DynamicNodeList<N extends ElementNode_> extends ElementNodeList<N
 
   private readonly _observer: MutationObserver;
   private _all: Set<N> = new Set();
-  private readonly _updates = new EventEmitter<(this: void, list: AIterable<N>) => void>();
+  private readonly _updates = new EventEmitter<[AIterable<N>]>();
   private readonly _init: MutationObserverInit;
 
   protected constructor(
@@ -218,7 +218,7 @@ export class ComponentNodeImpl<T extends object = object> {
   static readonly key = new SingleContextKey<ComponentNodeImpl<any>>('component-node:impl');
 
   private _parent?: ComponentNodeImpl;
-  private readonly _parentUpdates = new EventEmitter<(this: void, parent: ComponentNode_ | null) => void>();
+  private readonly _parentUpdates = new EventEmitter<[ComponentNode_ | null]>();
   private _node?: ComponentNode_<T>;
   private readonly _attrs: NodeAttributes;
   private readonly _props: NodeProperties;

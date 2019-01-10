@@ -4,7 +4,7 @@ import { AttributesObserver } from './attributes-observer';
 
 class AttributeTracker extends ValueTracker<string | null, string> {
 
-  readonly on: EventProducer<(this: void, newValue: string, oldValue: string | null) => void>;
+  readonly on: EventProducer<[string, string | null]>;
 
   constructor(
       context: ContextValues,

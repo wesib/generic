@@ -3,7 +3,7 @@ import { EventProducer, StatePath, StateTracker, ValueTracker } from 'fun-events
 
 class PropertyTracker<T> extends ValueTracker<T> {
 
-  readonly on: EventProducer<(this: void, newValue: T, oldValue: T) => void>;
+  readonly on: EventProducer<[T, T]>;
 
   constructor(
       context: ContextValues,

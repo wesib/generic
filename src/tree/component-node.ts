@@ -38,7 +38,7 @@ export abstract class ComponentNode<T extends object = object> extends ElementNo
   /**
    * Event producer notifying on parent node updates. I.e. when parent component changed.
    */
-  abstract readonly onParentUpdate: EventProducer<(this: void, parent: ComponentNode | null) => void>;
+  abstract readonly onParentUpdate: EventProducer<[ComponentNode | null]>;
 
   /**
    * Returns a value tracker of element's property.

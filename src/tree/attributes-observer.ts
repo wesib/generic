@@ -10,7 +10,7 @@ export class AttributesObserver {
   static key: ContextKey<AttributesObserver> = new SingleContextKey('attributes-observer');
 
   private readonly _observer: MutationObserver;
-  private readonly _attributes = new Map<string, EventEmitter<(oldValue: string, newValue: string | null) => void>>();
+  private readonly _attributes = new Map<string, EventEmitter<[string, string | null]>>();
 
   constructor(private readonly _context: ComponentContext) {
 
@@ -47,7 +47,7 @@ export class AttributesObserver {
     };
   }
 
-  private _emitter(name: string): [EventEmitter<(oldValue: string, newValue: string | null) => void>, boolean] {
+  private _emitter(name: string): [EventEmitter<[string, string | null]>, boolean] {
 
     let emitter = this._attributes.get(name);
 
