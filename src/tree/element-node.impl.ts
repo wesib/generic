@@ -1,4 +1,4 @@
-import { BootstrapContext, ComponentContext, ComponentEvent } from '@wesib/wesib';
+import { BootstrapContext, ComponentContext, ComponentEvent, ElementAdapter } from '@wesib/wesib';
 import { ValueTracker } from 'fun-events';
 import { NodeAttributes } from './attribute-tracker';
 import { ElementNode as ElementNode_ } from './element-node';
@@ -72,6 +72,9 @@ function selectNodes(
     root: Element,
     selector: string,
     opts: ElementNode_.SelectorOpts = {}): ElementNodeList<any> {
+
+  const adapter = bs.get(ElementAdapter);
+
   if (opts.all) {
     return new ElementNodeList<ElementNode_.Any>(
         bs,
@@ -85,7 +88,7 @@ function selectNodes(
       root,
       selector,
       (element, optional) => {
-        if ((element as any)[ComponentContext.symbol]) {
+        if (adapter(element)) {
           return elementNodeOf(bs, element, optional) as ElementNode_.Component<any>;
         }
         return undefined;

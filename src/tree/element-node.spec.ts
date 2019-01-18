@@ -287,6 +287,59 @@ describe('tree/element-node', () => {
         expect([...list]).toEqual([c1.node, c2.node]);
         expect(onUpdateMock).not.toHaveBeenCalled();
       });
+      it('handles child mount', async () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        @Component('other-component')
+        @Feature({ need: ComponentTreeSupport })
+        class OtherComponent {}
+
+        const added = document.createElement('test-component');
+
+        node.element.appendChild(added);
+        mutate([{ addedNodes: nodeList(added), removedNodes: nodeList() }]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        const factory = await testComponentFactory(OtherComponent);
+        const mount = factory.mountTo(added);
+        const addedNode = mount.context.get(ElementNode);
+
+        expect([...list]).toEqual([c1.node, c2.node, addedNode]);
+        expect(onUpdateMock).toHaveBeenCalled();
+        expect([...onUpdateMock.mock.calls[0][0]]).toEqual([c1.node, c2.node, addedNode]);
+      });
+      it('ignores irrelevant child mount', async () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        @Component('other-component')
+        @Feature({ need: ComponentTreeSupport })
+        class OtherComponent {}
+
+        const added = document.createElement('other-component');
+
+        node.element.appendChild(added);
+        mutate([{ addedNodes: nodeList(added), removedNodes: nodeList() }]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        const factory = await testComponentFactory(OtherComponent);
+
+        factory.mountTo(added);
+
+        expect([...list]).toEqual([c1.node, c2.node]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+      });
     });
 
     describe.each([
