@@ -1,7 +1,7 @@
 import { BootstrapContext, ComponentContext, ComponentEvent, ElementAdapter } from '@wesib/wesib';
 import { ValueTracker } from 'fun-events';
 import { NodeAttributes } from './attribute-tracker';
-import { ElementNode as ElementNode_ } from './element-node';
+import { ComponentNode, ElementNode as ElementNode_ } from './element-node';
 import { ElementNodeList } from './element-node-list.impl';
 import { NodeProperties } from './property-tracker';
 
@@ -83,13 +83,13 @@ function selectNodes(
         (element, optional) => elementNodeOf(bs, element, optional),
         opts);
   }
-  return new ElementNodeList<ElementNode_.Component<any>>(
+  return new ElementNodeList<ComponentNode<any>>(
       bs,
       root,
       selector,
       (element, optional) => {
         if (adapter(element)) {
-          return elementNodeOf(bs, element, optional) as ElementNode_.Component<any>;
+          return elementNodeOf(bs, element, optional) as ComponentNode<any>;
         }
         return undefined;
       },

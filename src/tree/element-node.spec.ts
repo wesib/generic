@@ -6,7 +6,7 @@ import { noop } from 'call-thru';
 import { ValueTracker } from 'fun-events';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
-import { ElementNode, ElementNodeList } from './element-node';
+import { ComponentNode, ElementNode, ElementNodeList } from './element-node';
 
 describe('tree/element-node', () => {
 
@@ -63,7 +63,7 @@ describe('tree/element-node', () => {
     jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
     (context as any).element = element;
 
-    const node = context.get(ElementNode);
+    const node = context.get(ComponentNode);
 
     return {
       connect,
@@ -308,7 +308,7 @@ describe('tree/element-node', () => {
 
         const factory = await testComponentFactory(OtherComponent);
         const mount = factory.mountTo(added);
-        const addedNode = mount.context.get(ElementNode);
+        const addedNode = mount.context.get(ComponentNode);
 
         expect([...list]).toEqual([c1.node, c2.node, addedNode]);
         expect(onUpdateMock).toHaveBeenCalled();
@@ -348,7 +348,7 @@ describe('tree/element-node', () => {
         async (TestComponent: ComponentClass) => {
 
           const element = new (testElement(TestComponent))();
-          const elementNode = ComponentContext.of(element).get(ElementNode);
+          const elementNode = ComponentContext.of(element).get(ComponentNode);
           const property = elementNode.property<string>('property');
 
           return {
@@ -377,7 +377,7 @@ describe('tree/element-node', () => {
           const mount = factory.mountTo(element);
 
           expect(mount.context.element).toBe(element);
-          expect(mount.context.get(ElementNode)).toBe(elementNode);
+          expect(mount.context.get(ComponentNode)).toBe(elementNode);
           expect(elementNode.property('property')).toBe(property);
 
           return {
@@ -460,7 +460,7 @@ describe('tree/element-node', () => {
     describe('attribute', () => {
 
       let element: any;
-      let compNode: ElementNode;
+      let compNode: ComponentNode;
       let attribute: ValueTracker<string | null, string>;
 
       beforeEach(() => {
@@ -477,7 +477,7 @@ describe('tree/element-node', () => {
         class TestComponent {}
 
         element = new (testElement(TestComponent))();
-        compNode = ComponentContext.of(element).get(ElementNode);
+        compNode = ComponentContext.of(element).get(ComponentNode);
         attribute = compNode.attribute('attr');
       });
 

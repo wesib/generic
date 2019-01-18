@@ -9,11 +9,6 @@ import { EventProducer, ValueTracker } from 'fun-events';
 export abstract class ElementNode {
 
   /**
-   * A key of component context value containing an element node instance.
-   */
-  static readonly key: ContextKey<ElementNode.Component> = new SingleContextKey('element-node');
-
-  /**
    * The element itself.
    */
   abstract readonly element: any;
@@ -46,7 +41,7 @@ export abstract class ElementNode {
    */
   abstract select(
       selector: string,
-      opts?: ElementNode.ComponentSelectorOpts): ElementNodeList<ElementNode.Component<any>>;
+      opts?: ElementNode.ComponentSelectorOpts): ElementNodeList<ComponentNode>;
 
   /**
    * Returns a value tracker of element's attribute.
@@ -83,18 +78,9 @@ export namespace ElementNode {
   }
 
   /**
-   * Element node representing an element bound to some component.
-   */
-  export interface Component<T extends object = object> extends ElementNode {
-
-    readonly context: ComponentContext<T>;
-
-  }
-
-  /**
    * Any element node. Either bound to some component or not.
    */
-  export type Any = Raw | Component<any>;
+  export type Any = Raw | ComponentNode;
 
   /**
    * Element node selector options.
@@ -136,7 +122,25 @@ export namespace ElementNode {
 
 }
 
-export abstract class ElementNodeList<N extends ElementNode = ElementNode> extends AIterable<N> {
+/**
+ * Element node representing an element bound to some component.
+ */
+export interface ComponentNode<T extends object = object> extends ElementNode {
+
+  readonly context: ComponentContext<T>;
+
+}
+
+export namespace ComponentNode {
+
+  /**
+   * A key of component context value containing a component node instance.
+   */
+  export const key: ContextKey<ComponentNode> = new SingleContextKey('component-node');
+
+}
+
+export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any> extends AIterable<N> {
 
   abstract readonly onUpdate: EventProducer<[AIterable<N>]>;
 
