@@ -1,7 +1,7 @@
-import { Feature, StateSupport } from '@wesib/wesib';
+import { ComponentContext, Feature, StateSupport } from '@wesib/wesib';
 import { AttributesObserver } from './attributes-observer';
-import { ComponentNode } from './component-node';
-import { ComponentNodeImpl } from './component-node.impl';
+import { ComponentNode } from './element-node';
+import { elementNodeOf } from './element-node.impl';
 
 /**
  * Component tree support feature.
@@ -10,15 +10,15 @@ import { ComponentNodeImpl } from './component-node.impl';
  */
 @Feature({
   need: StateSupport,
+  set: { as: AttributesObserver },
   forComponents: [
-    { as: AttributesObserver },
-    { as: ComponentNodeImpl },
     {
       a: ComponentNode,
-      by(impl: ComponentNodeImpl): ComponentNode {
-        return impl.node;
+      by(context: ComponentContext) {
+        return elementNodeOf(
+            (context as any) /* TODO replace with BootstrapContext */,
+            context.element) as ComponentNode;
       },
-      with: [ComponentNodeImpl],
     },
   ],
 })

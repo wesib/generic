@@ -1,21 +1,32 @@
-import { ContextValues } from 'context-values';
-import { EventProducer, StatePath, StateTracker, ValueTracker } from 'fun-events';
+import { ComponentContext } from '@wesib/wesib';
+import { EventEmitter, EventProducer, StatePath, StateTracker, ValueTracker } from 'fun-events';
 
 class PropertyTracker<T> extends ValueTracker<T> {
 
-  readonly on: EventProducer<[T, T]>;
+  private readonly _updates = new EventEmitter<[T, T]>();
 
   constructor(
-      context: ContextValues,
       private readonly _element: any,
-      private readonly _key: PropertyKey) {
+      private readonly _key: PropertyKey,
+      context?: ComponentContext) {
     super();
+    if (context) {
+      this.bind(context);
+    }
+  }
 
-    const tracker = context.get(StateTracker).track(StatePath.ofProperty(_key));
+  get on(): EventProducer<[T, T]> {
+    return this._updates.on;
+  }
 
-    this.on = EventProducer.of(
+  bind(context: ComponentContext) {
+
+    const tracker = context.get(StateTracker).track(StatePath.ofProperty(this._key));
+    const onUpdate = EventProducer.of(
         (consumer: (newValue: T, oldValue: T) => void) => tracker.onUpdate(
             (_path, newValue: any, oldValue: any) => consumer(newValue, oldValue)));
+
+    onUpdate((...args) => this._updates.notify(...args));
   }
 
   get it(): T {
@@ -34,10 +45,15 @@ class PropertyTracker<T> extends ValueTracker<T> {
 export class NodeProperties {
 
   private readonly _attrs = new Map<PropertyKey, PropertyTracker<any>>();
+  private _context?: ComponentContext<any>;
 
-  constructor(
-      private readonly _context: ContextValues,
-      private readonly _element: any) {}
+  constructor(private readonly _element: any) {
+  }
+
+  bind(context: ComponentContext) {
+    this._context = context;
+    this._attrs.forEach(prop => prop.bind(context));
+  }
 
   get<T>(key: PropertyKey): ValueTracker<T> {
 
@@ -47,7 +63,7 @@ export class NodeProperties {
       return existing;
     }
 
-    const created = new PropertyTracker<any>(this._context, this._element, key);
+    const created = new PropertyTracker<any>(this._element, key, this._context);
 
     this._attrs.set(key, created);
 

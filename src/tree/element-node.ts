@@ -1,20 +1,12 @@
+import { ComponentContext } from '@wesib/wesib';
 import { AIterable } from 'a-iterable';
+import { ContextKey, SingleContextKey } from 'context-values';
 import { EventProducer, ValueTracker } from 'fun-events';
-import { ComponentNode } from './component-node';
 
 /**
  * Component tree node representing arbitrary element.
- *
- * If element is a component one, the node is implemented by `ComponentNode`. Otherwise it is implemented by this class.
  */
 export abstract class ElementNode {
-
-  /**
-   * A type of component:
-   * - `component` for component node.
-   * - `element` for arbitrary element node.
-   */
-  abstract readonly type: 'element' | 'component';
 
   /**
    * The element itself.
@@ -22,9 +14,14 @@ export abstract class ElementNode {
   abstract readonly element: any;
 
   /**
+   * A context of component bound to this element, if any.
+   */
+  abstract readonly context?: ComponentContext<any>;
+
+  /**
    * Parent element node, or `null` if element has no parent.
    */
-  abstract readonly parentNode: ElementNode | null;
+  abstract readonly parent: ElementNode | null;
 
   /**
    * Select element nodes matching the given selector.
@@ -44,7 +41,7 @@ export abstract class ElementNode {
    */
   abstract select(
       selector: string,
-      opts?: ElementNode.ComponentSelectorOpts): ElementNodeList<ComponentNode<any>>;
+      opts?: ElementNode.ComponentSelectorOpts): ElementNodeList<ComponentNode>;
 
   /**
    * Returns a value tracker of element's attribute.
@@ -55,9 +52,35 @@ export abstract class ElementNode {
    */
   abstract attribute(name: string): ValueTracker<string | null, string>;
 
+  /**
+   * Returns a value tracker of element's property.
+   *
+   * The changes are tracked with `StateTracker`. So it is expected that the target property notifies on its changes
+   * with state updater. E.g. when it is defined by `@DomProperty` decorator.
+   *
+   * @param key Target property key.
+   *
+   * @returns Target property's value tracker.
+   */
+  abstract property<V>(key: PropertyKey): ValueTracker<V>;
+
 }
 
 export namespace ElementNode {
+
+  /**
+   * Element node representing raw element no bound to any component.
+   */
+  export interface Raw extends ElementNode {
+
+    readonly context?: undefined;
+
+  }
+
+  /**
+   * Any element node. Either bound to some component or not.
+   */
+  export type Any = Raw | ComponentNode;
 
   /**
    * Element node selector options.
@@ -99,7 +122,25 @@ export namespace ElementNode {
 
 }
 
-export abstract class ElementNodeList<N extends ElementNode = ElementNode> extends AIterable<N> {
+/**
+ * Element node representing an element bound to some component.
+ */
+export interface ComponentNode<T extends object = object> extends ElementNode {
+
+  readonly context: ComponentContext<T>;
+
+}
+
+export namespace ComponentNode {
+
+  /**
+   * A key of component context value containing a component node instance.
+   */
+  export const key: ContextKey<ComponentNode> = new SingleContextKey('component-node');
+
+}
+
+export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any> extends AIterable<N> {
 
   abstract readonly onUpdate: EventProducer<[AIterable<N>]>;
 

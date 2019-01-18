@@ -1,16 +1,14 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
-import { Component, ComponentContext, DomProperty, Feature } from '@wesib/wesib';
+import { Component, ComponentClass, ComponentContext, DomProperty, Feature } from '@wesib/wesib';
 import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
 import { ValueTracker } from 'fun-events';
-import { MockElement, testElement } from '../spec/test-element';
-import { ComponentNode } from './component-node';
-import { ComponentNodeImpl } from './component-node.impl';
+import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
-import { ElementNode, ElementNodeList } from './element-node';
+import { ComponentNode, ElementNode, ElementNodeList } from './element-node';
 
-describe('tree/component-node', () => {
+describe('tree/element-node', () => {
 
   let MockMutationObserver: Mock<MutationObserver>;
 
@@ -83,7 +81,7 @@ describe('tree/component-node', () => {
     return nodes as any;
   }
 
-  describe('ComponentNodeImpl', () => {
+  describe('ElementNode', () => {
 
     let node: ComponentNodeInfo;
 
@@ -91,68 +89,20 @@ describe('tree/component-node', () => {
       node = newComponentNode();
     });
 
-    it('caches node instance', () => {
-      expect(node.context.get(ComponentNodeImpl).node).toBe(node.node);
-    });
-    it('has `component` type', () => {
-      expect(node.node.type).toBe('component');
-    });
     describe('parent', () => {
-
-      let parent: ComponentNodeInfo;
-
-      beforeEach(() => {
-        parent = newComponentNode();
-        parent.element.appendChild(node.element);
-      });
-
       it('is `null` by default', () => {
         expect(node.parent).toBeNull();
       });
-      it('is detected on connect', () => {
-        node.connect();
+      it('is detected when added to document', () => {
+
+        let parent: ComponentNodeInfo;
+
+        parent = newComponentNode();
+        parent.element.appendChild(node.element);
+
         expect(node.parent).toMatchObject({
           context: parent.context,
         });
-      });
-      it('remains `null` if not found', () => {
-        parent.element.removeChild(node.element);
-        node.connect();
-        expect(node.parent).toBeNull();
-      });
-      it('ignores non-component elements', () => {
-        parent.element.removeChild(node.element);
-
-        const nonComponentParent = document.createElement('span');
-
-        parent.element.appendChild(nonComponentParent);
-        nonComponentParent.appendChild(node.element);
-
-        node.connect();
-
-        expect(node.parent!.type).toBe('component');
-        expect(node.parent!.context).toBe(parent.context);
-        expect(node.node.parentNode!.type).toBe('element');
-        expect(node.node.parentNode!.element).toBe(nonComponentParent);
-      });
-      it('is lost on disconnect', () => {
-        node.connect();
-        node.disconnect();
-        expect(node.parent).toBeNull();
-      });
-      it('notifies on update', () => {
-
-        const onUpdate = jest.fn();
-
-        node.node.onParentUpdate(onUpdate);
-        expect(onUpdate).not.toHaveBeenCalled();
-
-        node.connect();
-        expect(onUpdate).toHaveBeenCalledWith(parent.node);
-
-        onUpdate.mockClear();
-        node.disconnect();
-        expect(onUpdate).toHaveBeenCalledWith(null);
       });
     });
 
@@ -198,7 +148,7 @@ describe('tree/component-node', () => {
             c1.node,
             c2.node,
             c3.node,
-            expect.objectContaining({ type: 'element', element: span }),
+            expect.objectContaining({ element: span }),
           ]);
         });
 
@@ -217,14 +167,14 @@ describe('tree/component-node', () => {
             divNode = itsFirst(list) as ElementNode;
           });
 
-          describe('parentNode', () => {
+          describe('parent', () => {
             it('refers to parent node', () => {
-              expect(divNode.parentNode).toBe(spanNode);
-              expect(spanNode.parentNode).toBe(node.node);
+              expect(divNode.parent).toBe(spanNode);
+              expect(spanNode.parent).toBe(node.node);
             });
             it('becomes `null` when element node removed from DOM tree', () => {
               div.remove();
-              expect(divNode.parentNode).toBeNull();
+              expect(divNode.parent).toBeNull();
             });
           });
           describe('attribute', () => {
@@ -298,11 +248,14 @@ describe('tree/component-node', () => {
 
         expect(onUpdateMock).not.toHaveBeenCalled();
 
-        mutate([{ addedNodes: nodeList(c3.element), removedNodes: nodeList() }]);
+        const added = newComponentNode('test-component');
 
-        expect([...list]).toEqual([c1.node, c2.node, c3.node]);
+        node.element.appendChild(added.element);
+        mutate([{ addedNodes: nodeList(added.element), removedNodes: nodeList() }]);
+
+        expect([...list]).toEqual([c1.node, c2.node, added.node]);
         expect(onUpdateMock).toHaveBeenCalled();
-        expect([...onUpdateMock.mock.calls[0][0]]).toEqual([c1.node, c2.node, c3.node]);
+        expect([...onUpdateMock.mock.calls[0][0]]).toEqual([c1.node, c2.node, added.node]);
       });
       it('ignores irrelevant child addition', () => {
 
@@ -313,76 +266,196 @@ describe('tree/component-node', () => {
 
         const irrelevant = document.createElement('div');
 
+        node.element.appendChild(irrelevant);
+        mutate([{ addedNodes: nodeList(irrelevant), removedNodes: nodeList() }]);
+
+        expect([...list]).toEqual([c1.node, c2.node]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+      });
+      it('ignores non-component child addition', () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        const irrelevant = document.createElement('test-component');
+
+        node.element.appendChild(irrelevant);
+        mutate([{ addedNodes: nodeList(irrelevant), removedNodes: nodeList() }]);
+
+        expect([...list]).toEqual([c1.node, c2.node]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+      });
+      it('handles child mount', async () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
         expect(onUpdateMock).not.toHaveBeenCalled();
 
-        mutate([{ addedNodes: nodeList(irrelevant), removedNodes: nodeList() }]);
+        @Component('other-component')
+        @Feature({ need: ComponentTreeSupport })
+        class OtherComponent {}
+
+        const added = document.createElement('test-component');
+
+        node.element.appendChild(added);
+        mutate([{ addedNodes: nodeList(added), removedNodes: nodeList() }]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        const factory = await testComponentFactory(OtherComponent);
+        const mount = factory.mountTo(added);
+        const addedNode = mount.context.get(ComponentNode);
+
+        expect([...list]).toEqual([c1.node, c2.node, addedNode]);
+        expect(onUpdateMock).toHaveBeenCalled();
+        expect([...onUpdateMock.mock.calls[0][0]]).toEqual([c1.node, c2.node, addedNode]);
+      });
+      it('ignores irrelevant child mount', async () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        @Component('other-component')
+        @Feature({ need: ComponentTreeSupport })
+        class OtherComponent {}
+
+        const added = document.createElement('other-component');
+
+        node.element.appendChild(added);
+        mutate([{ addedNodes: nodeList(added), removedNodes: nodeList() }]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        const factory = await testComponentFactory(OtherComponent);
+
+        factory.mountTo(added);
 
         expect([...list]).toEqual([c1.node, c2.node]);
         expect(onUpdateMock).not.toHaveBeenCalled();
       });
     });
 
-    describe('property', () => {
+    describe.each([
+      [
+        'custom element property',
+        async (TestComponent: ComponentClass) => {
 
-      let element: any;
-      let compNode: ComponentNode;
-      let property: ValueTracker<string>;
+          const element = new (testElement(TestComponent))();
+          const elementNode = ComponentContext.of(element).get(ComponentNode);
+          const property = elementNode.property<string>('property');
 
-      beforeEach(() => {
+          return {
+            element,
+            elementNode,
+            property,
+          };
+        },
+      ],
+      [
+        'mounted element property',
+        async (TestComponent: ComponentClass) => {
 
-        @Component({
-          name: 'test-component',
-          extend: {
-            type: MockElement,
-          },
-        })
-        @Feature({
-          need: ComponentTreeSupport,
-        })
-        class TestComponent {
+          const root = newComponentNode('root-component');
 
-          @DomProperty()
-          property = 'value';
+          document.body.appendChild(root.element);
 
+          const element = document.createElement('test-component');
+
+          root.element.appendChild(element);
+
+          const elementNode = itsFirst(root.node.select('test-component', { all: true }))!;
+          const property = elementNode.property<string>('property');
+          const factory = await testComponentFactory(TestComponent);
+
+          const mount = factory.mountTo(element);
+
+          expect(mount.context.element).toBe(element);
+          expect(mount.context.get(ComponentNode)).toBe(elementNode);
+          expect(elementNode.property('property')).toBe(property);
+
+          return {
+            element,
+            elementNode,
+            property,
+          };
         }
+      ],
+    ])(
+        '%s',
+        (name: string, init: (TestComponent: ComponentClass) => Promise<{
+          element: any;
+          elementNode: ElementNode;
+          property: ValueTracker<string>;
+        }>) => {
 
-        element = new (testElement(TestComponent))();
-        compNode = ComponentContext.of(element).get(ComponentNode);
-        property = compNode.property('property');
-      });
+          let element: any;
+          let elementNode: ElementNode;
+          let property: ValueTracker<string>;
 
-      it('reads property value', () => {
-        expect(property.it).toBe('value');
+          beforeEach(async () => {
 
-        const newValue = 'new value';
+            @Component({
+              name: 'test-component',
+              extend: {
+                type: MockElement,
+              },
+            })
+            @Feature({
+              need: ComponentTreeSupport,
+            })
+            class TestComponent {
 
-        element.property = newValue;
+              @DomProperty()
+              property = 'value';
 
-        expect(property.it).toBe(newValue);
-      });
-      it('updates property value', () => {
+            }
 
-        const newValue = 'new value';
+            const result = await init(TestComponent);
 
-        property.it = newValue;
+            element = result.element;
+            elementNode = result.elementNode;
+            property = result.property;
+          });
 
-        expect(property.it).toBe(newValue);
-        expect(element.property).toBe(newValue);
-      });
-      it('notifies on property updates', () => {
+          it('reads property value', () => {
+            expect(property.it).toBe('value');
 
-        const newValue = 'new value';
-        const onUpdate = jest.fn();
+            const newValue = 'new value';
 
-        property.on(onUpdate);
+            element.property = newValue;
 
-        element.property = newValue;
-        expect(onUpdate).toHaveBeenCalledWith(newValue, 'value');
-      });
-      it('returns the same tracker instance', () => {
-        expect(compNode.property('property')).toBe(property);
-      });
-    });
+            expect(property.it).toBe(newValue);
+          });
+          it('updates property value', () => {
+
+            const newValue = 'new value';
+
+            property.it = newValue;
+
+            expect(property.it).toBe(newValue);
+            expect(element.property).toBe(newValue);
+          });
+          it('notifies on property update', () => {
+
+            const newValue = 'new value';
+            const onUpdate = jest.fn();
+
+            property.on(onUpdate);
+
+            element.property = newValue;
+            expect(onUpdate).toHaveBeenCalledWith(newValue, 'value');
+          });
+          it('returns the same tracker instance', () => {
+            expect(elementNode.property('property')).toBe(property);
+          });
+        });
 
     describe('attribute', () => {
 
