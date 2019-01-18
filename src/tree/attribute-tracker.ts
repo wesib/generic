@@ -1,4 +1,4 @@
-import { ContextValues } from 'context-values';
+import { BootstrapContext } from '@wesib/wesib';
 import { EventProducer, ValueTracker } from 'fun-events';
 import { AttributesObserver } from './attributes-observer';
 
@@ -7,14 +7,14 @@ class AttributeTracker extends ValueTracker<string | null, string> {
   readonly on: EventProducer<[string, string | null]>;
 
   constructor(
-      context: ContextValues,
+      bs: BootstrapContext,
       private readonly _element: any,
       private readonly _name: string) {
     super();
 
-    const observer = context.get(AttributesObserver);
+    const observer = bs.get(AttributesObserver);
 
-    this.on = EventProducer.of(consumer => observer.observe(_name, consumer));
+    this.on = EventProducer.of(consumer => observer.observe(_element, _name, consumer));
   }
 
   get it(): string | null {
@@ -34,9 +34,8 @@ export class NodeAttributes {
 
   private readonly _attrs = new Map<string, AttributeTracker>();
 
-  constructor(
-      private readonly _context: ContextValues,
-      private readonly _element: any) {}
+  constructor(private readonly _bs: BootstrapContext, private readonly _element: any) {
+  }
 
   get(name: string): ValueTracker<string | null, string> {
 
@@ -46,7 +45,7 @@ export class NodeAttributes {
       return existing;
     }
 
-    const created = new AttributeTracker(this._context, this._element, name);
+    const created = new AttributeTracker(this._bs, this._element, name);
 
     this._attrs.set(name, created);
 

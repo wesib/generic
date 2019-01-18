@@ -1,4 +1,40 @@
-import { bootstrapComponents, Class, ComponentClass, ComponentDef, CustomElements, Feature } from '@wesib/wesib';
+import {
+  bootstrapComponents,
+  Class,
+  ComponentClass,
+  ComponentDef,
+  ComponentFactory,
+  CustomElements,
+  Feature,
+} from '@wesib/wesib';
+
+export function testComponentFactory<T extends object>(componentType: Class<T>): Promise<ComponentFactory<T>> {
+  ComponentDef.define(componentType);
+
+  let result!: Class;
+
+  const customElements: CustomElements = {
+
+    define(compType: ComponentClass<any>, elementType: Class<any>): void {
+      result = elementType;
+    },
+
+    whenDefined(): Promise<void> {
+      return Promise.resolve();
+    }
+
+  };
+
+  @Feature({
+    need: componentType,
+    set: { a: CustomElements, is: customElements },
+  })
+  class TestFeature {}
+
+  const kit = bootstrapComponents(TestFeature);
+
+  return kit.whenDefined(componentType);
+}
 
 export function testElement(componentType: Class<any>): Class<any> {
   ComponentDef.define(componentType);
@@ -31,6 +67,7 @@ export function testElement(componentType: Class<any>): Class<any> {
 export class MockElement {
 
   readonly dispatchEvent = jest.fn();
+  readonly addEventListener = jest.fn();
   private _target: any;
   private _attributes: { [name: string]: string | null } = {};
 

@@ -1,4 +1,4 @@
-import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
+import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { ContextKey, SingleContextKey } from 'context-values';
 import { EventEmitter, EventInterest } from 'fun-events';
 
@@ -9,25 +9,26 @@ export class AttributesObserver {
 
   static key: ContextKey<AttributesObserver> = new SingleContextKey('attributes-observer');
 
-  private readonly _observer: MutationObserver;
   private readonly _attributes = new Map<string, EventEmitter<[string, string | null]>>();
 
-  constructor(private readonly _context: ComponentContext) {
-
-    const Observer: typeof MutationObserver = (_context.get(BootstrapWindow) as any).MutationObserver;
-
-    this._observer = new Observer(mutations => this._update(mutations));
+  constructor(private readonly _context: BootstrapContext) {
   }
 
-  observe(name: string, consumer: (oldValue: string, newValue: string | null) => void): EventInterest {
+  observe(
+      element: Element,
+      name: string,
+      consumer: (oldValue: string, newValue: string | null) => void): EventInterest {
+
+    const Observer: typeof MutationObserver = (this._context.get(BootstrapWindow) as any).MutationObserver;
+    const observer = new Observer(mutations => this._update(element, mutations));
 
     const [emitter, newAttribute] = this._emitter(name);
     const interest = emitter.on(consumer);
 
     if (newAttribute) {
-      this._observer.disconnect();
-      this._update(this._observer.takeRecords());
-      this._observer.observe(this._context.element, {
+      observer.disconnect();
+      this._update(element, observer.takeRecords());
+      observer.observe(element, {
         attributes: true,
         attributeOldValue: true,
         attributeFilter: [...this._attributes.keys()],
@@ -40,7 +41,7 @@ export class AttributesObserver {
         if (!emitter.consumers) {
           this._attributes.delete(name);
           if (!this._attributes.size) {
-            this._observer.disconnect();
+            observer.disconnect();
           }
         }
       }
@@ -61,7 +62,7 @@ export class AttributesObserver {
     return [emitter, true];
   }
 
-  private _update(mutations: MutationRecord[]) {
+  private _update(element: Element, mutations: MutationRecord[]) {
     mutations.forEach(mutation => {
 
       const attributeName = mutation.attributeName as string;
@@ -71,7 +72,7 @@ export class AttributesObserver {
         return;
       }
 
-      emitter.notify(this._context.element.getAttribute(attributeName), mutation.oldValue);
+      emitter.notify(element.getAttribute(attributeName) as string, mutation.oldValue);
     });
   }
 
