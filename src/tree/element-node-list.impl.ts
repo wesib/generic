@@ -2,7 +2,6 @@ import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { AIterable, filterIt, itsIterator, itsReduction, overArray } from 'a-iterable';
 import { EventEmitter, EventProducer } from 'fun-events';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
-import { isElement } from './element-node.impl';
 
 const WATCH_CHILD_LIST = { childList: true };
 const WATCH_DEEP = { childList: true, subtree: true };
@@ -137,6 +136,10 @@ export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> 
     return !!this._nodeOf(node, true);
   }
 
+}
+
+function isElement(node: Node): node is Element {
+  return node.nodeType === Node.ELEMENT_NODE;
 }
 
 function isPresent<T>(item: T | undefined): item is T {
