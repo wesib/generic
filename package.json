@@ -26,13 +26,13 @@
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.8"
+    "@wesib/wesib": "^1.0.0-alpha.9"
   },
   "devDependencies": {
     "@types/fs-extra": "^5.0.4",
-    "@types/jest": "^23.3.12",
+    "@types/jest": "^23.3.13",
     "@types/jsdom": "^12.2.1",
-    "@wesib/wesib": "^1.0.0-alpha.8",
+    "@wesib/wesib": "^1.0.0-alpha.9",
     "a-iterable": "^2.1.0",
     "call-thru": "^2.1.0",
     "codecov": "^3.1.0",
