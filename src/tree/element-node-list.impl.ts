@@ -2,6 +2,7 @@ import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { AIterable, filterIt, itsIterator, itsReduction, overArray } from 'a-iterable';
 import { EventEmitter, EventProducer } from 'fun-events';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
+import { isElement } from './element-node.impl';
 
 const WATCH_CHILD_LIST = { childList: true };
 const WATCH_DEEP = { childList: true, subtree: true };
@@ -98,9 +99,7 @@ export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> 
 
           return itsReduction(
               overArray(mutation.addedNodes),
-              (up, added) => {
-                return this._added(added as Element) || up;
-              },
+              (up, added) => this._added(added) || up,
               hasRemoved);
         },
         false);
@@ -110,13 +109,16 @@ export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> 
     }
   }
 
-  private _added(element: Element): boolean {
-    if (element.matches(this._selector) && !this._all.has(element)) {
-      this._all.add(element);
+  private _added(node: Node): boolean {
+    if (!isElement(node)) {
+      return false;
+    }
+    if (node.matches(this._selector) && !this._all.has(node)) {
+      this._all.add(node);
 
-      const node = this._nodeOf(element);
+      const elementNode = this._nodeOf(node);
 
-      if (node) {
+      if (elementNode) {
         return true;
       }
     }
@@ -124,16 +126,15 @@ export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> 
     return false;
   }
 
-  private _removed(element: Element): boolean {
-    if (!this._all.has(element)) {
+  private _removed(node: Node): boolean {
+    if (!isElement(node)) {
+      return false;
+    }
+    if (!this._all.delete(node)) {
       return false;
     }
 
-    this._all.delete(element);
-
-    const node = this._nodeOf(element, true);
-
-    return !!node;
+    return !!this._nodeOf(node, true);
   }
 
 }

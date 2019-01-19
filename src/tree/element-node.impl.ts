@@ -56,6 +56,10 @@ class ElementNode extends ElementNode_ {
 
 }
 
+export function isElement(node: Node): node is Element {
+  return node.nodeType === Node.ELEMENT_NODE;
+}
+
 export function elementNodeOf(bs: BootstrapContext, element: Element, optional?: boolean): ElementNode_.Any {
 
   const found: ElementNode_.Any = (element as any)[NODE_REF];

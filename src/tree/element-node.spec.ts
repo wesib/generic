@@ -239,6 +239,20 @@ describe('tree/element-node', () => {
         expect([...list]).toEqual([c1.node, c2.node]);
         expect(onUpdateMock).not.toHaveBeenCalled();
       });
+      it('ignores non-element child removal', () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        expect(onUpdateMock).not.toHaveBeenCalled();
+
+        mutate([{ addedNodes: nodeList(), removedNodes: nodeList(document.createTextNode('text')) }]);
+
+        expect([...list]).toEqual([c1.node, c2.node]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+      });
       it('handles child addition', () => {
 
         const list = node.node.select('test-component');
@@ -268,6 +282,21 @@ describe('tree/element-node', () => {
 
         node.element.appendChild(irrelevant);
         mutate([{ addedNodes: nodeList(irrelevant), removedNodes: nodeList() }]);
+
+        expect([...list]).toEqual([c1.node, c2.node]);
+        expect(onUpdateMock).not.toHaveBeenCalled();
+      });
+      it('ignores non-element child addition', () => {
+
+        const list = node.node.select('test-component');
+        const onUpdateMock = jest.fn();
+
+        list.onUpdate(onUpdateMock);
+
+        const text = document.createTextNode('text');
+
+        node.element.appendChild(text);
+        mutate([{ addedNodes: nodeList(text), removedNodes: nodeList() }]);
 
         expect([...list]).toEqual([c1.node, c2.node]);
         expect(onUpdateMock).not.toHaveBeenCalled();
