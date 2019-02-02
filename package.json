@@ -38,7 +38,7 @@
     "codecov": "^3.1.0",
     "context-values": "^1.1.2",
     "fs-extra": "^7.0.1",
-    "fun-events": "^3.1.0",
+    "fun-events": "^3.1.1",
     "jest": "^23.6.0",
     "jest-junit": "^6.2.1",
     "rollup": "^1.1.2",
