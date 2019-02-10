@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^5.0.4",
-    "@types/jest": "^23.3.13",
+    "@types/jest": "^23.3.14",
     "@types/jsdom": "^12.2.1",
     "@wesib/wesib": "^1.0.0-alpha.9",
     "a-iterable": "^2.1.0",
@@ -45,12 +45,12 @@
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-terser": "^4.0.3",
+    "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-typescript2": "^0.19.2",
     "rollup-plugin-uglify": "^6.0.2",
     "ts-jest": "^23.10.5",
     "tslint": "^5.12.1",
-    "typescript": "^3.3.1"
+    "typescript": "^3.3.3"
   },
   "scripts": {
     "build": "rollup --config ./rollup.config.js",

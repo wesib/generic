@@ -1,9 +1,9 @@
 import Mock = jest.Mock;
-import Mocked = jest.Mocked;
 import { Component, ComponentClass, ComponentContext, DomProperty, Feature } from '@wesib/wesib';
 import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
-import { ValueTracker } from 'fun-events';
+import { EventInterest, ValueTracker } from 'fun-events';
+import { ObjectMock } from '../spec/mocks';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
 import { ComponentNode, ElementNode, ElementNodeList } from './element-node';
@@ -11,8 +11,7 @@ import { ComponentNode, ElementNode, ElementNodeList } from './element-node';
 describe('tree/element-node', () => {
 
   let MockMutationObserver: Mock<MutationObserver>;
-
-  let observer: Mocked<MutationObserver>;
+  let observer: ObjectMock<MutationObserver>;
   let mutate: (records: Partial<MutationRecord>[]) => void = noop;
 
   beforeEach(() => {
@@ -54,11 +53,17 @@ describe('tree/element-node', () => {
 
     (element as any)[ComponentContext.symbol] = context;
 
-    let connect: () => void = noop;
-    let disconnect: () => void = noop;
+    let connect: (ctx: ComponentContext) => void = noop;
+    let disconnect: (ctx: ComponentContext) => void = noop;
 
-    jest.spyOn(context, 'onConnect').mockImplementation((listener: () => void) => connect = listener);
-    jest.spyOn(context, 'onDisconnect').mockImplementation((listener: () => void) => disconnect = listener);
+    jest.spyOn(context, 'onConnect').mockImplementation((listener: (ctx: ComponentContext) => void) => {
+      connect = listener;
+      return EventInterest.none;
+    });
+    jest.spyOn(context, 'onDisconnect').mockImplementation((listener: (ctx: ComponentContext) => void) => {
+      disconnect = listener;
+      return EventInterest.none;
+    });
 
     jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
     (context as any).element = element;
