@@ -2,12 +2,16 @@ import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { ContextKey, SingleContextKey } from 'context-values';
 import { EventEmitter, EventInterest } from 'fun-events';
 
+const KEY = /*#__PURE__*/ new SingleContextKey<AttributesObserver>('attributes-observer');
+
 /**
  * @internal
  */
 export class AttributesObserver {
 
-  static key: ContextKey<AttributesObserver> = new SingleContextKey('attributes-observer');
+  static get key(): ContextKey<AttributesObserver> {
+    return KEY;
+  }
 
   private readonly _attributes = new Map<string, EventEmitter<[string, string | null]>>();
 

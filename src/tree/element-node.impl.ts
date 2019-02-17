@@ -11,7 +11,7 @@ import { ComponentNode, ElementNode as ElementNode_ } from './element-node';
 import { ElementNodeList } from './element-node-list.impl';
 import { NodeProperties } from './property-tracker';
 
-const NODE_REF = Symbol('element-node');
+const NODE_REF = /*#__PURE__*/ Symbol('element-node');
 
 class ElementNode extends ElementNode_ {
 
