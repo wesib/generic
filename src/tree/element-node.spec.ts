@@ -1,8 +1,15 @@
 import Mock = jest.Mock;
-import { Component, ComponentClass, ComponentContext, DomProperty, Feature } from '@wesib/wesib';
+import {
+  Component,
+  ComponentClass,
+  ComponentContext,
+  componentContextSymbol,
+  DomProperty,
+  Feature,
+} from '@wesib/wesib';
 import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
-import { EventInterest, ValueTracker } from 'fun-events';
+import { noEventInterest, ValueTracker } from 'fun-events';
 import { ObjectMock } from '../spec/mocks';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
@@ -51,18 +58,18 @@ describe('tree/element-node', () => {
     const context = ComponentContext.of(realElement);
     const element: Element = document.createElement(name);
 
-    (element as any)[ComponentContext.symbol] = context;
+    (element as any)[componentContextSymbol] = context;
 
     let connect: (ctx: ComponentContext) => void = noop;
     let disconnect: (ctx: ComponentContext) => void = noop;
 
     jest.spyOn(context, 'onConnect').mockImplementation((listener: (ctx: ComponentContext) => void) => {
       connect = listener;
-      return EventInterest.none;
+      return noEventInterest();
     });
     jest.spyOn(context, 'onDisconnect').mockImplementation((listener: (ctx: ComponentContext) => void) => {
       disconnect = listener;
-      return EventInterest.none;
+      return noEventInterest();
     });
 
     jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
