@@ -131,14 +131,18 @@ export interface ComponentNode<T extends object = object> extends ElementNode {
 
 }
 
-export namespace ComponentNode {
+const KEY = /*#__PURE__*/ new SingleContextKey<ComponentNode>('component-node');
+
+export const ComponentNode = {
 
   /**
    * A key of component context value containing a component node instance.
    */
-  export const key: ContextKey<ComponentNode> = new SingleContextKey('component-node');
+  get key(): ContextKey<ComponentNode> {
+    return KEY;
+  }
 
-}
+};
 
 export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any> extends AIterable<N> {
 
