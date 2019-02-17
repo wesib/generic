@@ -90,15 +90,6 @@ const mainConfig = makeConfig(
     },
     terserConfig);
 
-const umdConfig = makeConfig(
-    baseConfig('tsconfig.umd.json'),
-    {
-      output: {
-        file: pkg.browser,
-      },
-    },
-    uglifyConfig);
-
 const esmConfig = makeConfig(
     baseConfig('tsconfig.esm.json'),
     {
@@ -121,7 +112,6 @@ const esm5Config = makeConfig(
 
 export default [
   mainConfig,
-  umdConfig,
   esmConfig,
   esm5Config,
 ]

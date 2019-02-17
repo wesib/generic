@@ -18,7 +18,6 @@
     "url": "https://github.com/wesib/wesib/issues"
   },
   "main": "dist/wesib.generic.js",
-  "browser": "dist/wesib.generic.umd.js",
   "module": "dist/wesib.generic.mjs",
   "esm5": "dist/wesib.generic.esm5.js",
   "typings": "index.d.ts",
@@ -29,7 +28,6 @@
     "@wesib/wesib": "^1.0.0-alpha.9"
   },
   "devDependencies": {
-    "@types/fs-extra": "^5.0.4",
     "@types/jest": "^23.3.14",
     "@types/jsdom": "^12.2.1",
     "@wesib/wesib": "^1.0.0-alpha.9",
