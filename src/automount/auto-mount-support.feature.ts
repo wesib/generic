@@ -11,6 +11,7 @@ import {
 import { AIterable, overArray } from 'a-iterable';
 import { DomEventDispatcher } from 'fun-events';
 import { AutoMountConfig } from './auto-mount-config';
+import { AutoMounter } from './auto-mounter';
 
 let DEF: FeatureDef | undefined;
 
@@ -61,8 +62,20 @@ export function autoMountSupport(config?: AutoMountConfig): Class {
 function featureDef(config: AutoMountConfig = {}): FeatureDef {
   return {
     need: AutoConnectSupport,
+    set: [
+      { as: AutoMounter },
+      {
+        a: ElementAdapter,
+        by(mounter: AutoMounter): ElementAdapter {
+          return (element: any) => mounter.adapt(element);
+        },
+        with: [AutoMounter],
+      }
+    ],
     init(context) {
-      adaptExistingElement(context, config);
+      context.whenReady(() => {
+        adaptExistingElement(context, config);
+      });
     },
   };
 }
