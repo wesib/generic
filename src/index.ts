@@ -1,3 +1,2 @@
+export * from './automount';
 export * from './tree';
-
-import '@wesib/wesib';
