@@ -44,7 +44,7 @@ class PropertyTracker<T> extends ValueTracker<T> {
  */
 export class NodeProperties {
 
-  private readonly _attrs = new Map<PropertyKey, PropertyTracker<any>>();
+  private readonly _props = new Map<PropertyKey, PropertyTracker<any>>();
   private _context?: ComponentContext<any>;
 
   constructor(private readonly _element: any) {
@@ -52,12 +52,12 @@ export class NodeProperties {
 
   bind(context: ComponentContext) {
     this._context = context;
-    this._attrs.forEach(prop => prop.bind(context));
+    this._props.forEach(prop => prop.bind(context));
   }
 
   get<T>(key: PropertyKey): ValueTracker<T> {
 
-    const existing = this._attrs.get(key);
+    const existing = this._props.get(key);
 
     if (existing) {
       return existing;
@@ -65,7 +65,7 @@ export class NodeProperties {
 
     const created = new PropertyTracker<any>(this._element, key, this._context);
 
-    this._attrs.set(key, created);
+    this._props.set(key, created);
 
     return created;
   }
