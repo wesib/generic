@@ -9,7 +9,7 @@ import {
 } from '@wesib/wesib';
 import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
-import { noEventInterest, ValueTracker } from 'fun-events';
+import { afterEventKey, noEventInterest, ValueTracker } from 'fun-events';
 import { ObjectMock } from '../spec/mocks';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
@@ -157,6 +157,18 @@ describe('tree/element-node', () => {
         });
         it('selected when requested', () => {
           expect([...node.node.select('*', { all: true })]).toEqual([
+            c1.node,
+            c2.node,
+            c3.node,
+            expect.objectContaining({ element: span }),
+          ]);
+        });
+        it('is cached event source', () => {
+
+          const receiver = jest.fn();
+
+          node.node.select('*', { all: true })[afterEventKey](receiver);
+          expect([...receiver.mock.calls[0][0]]).toEqual([
             c1.node,
             c2.node,
             c3.node,

@@ -1,7 +1,15 @@
 import { ComponentContext } from '@wesib/wesib';
 import { AIterable } from 'a-iterable';
 import { ContextKey, SingleContextKey } from 'context-values';
-import { EventProducer, ValueTracker } from 'fun-events';
+import {
+  EventProducer,
+  ValueTracker,
+  EventSource,
+  CachedEventSource,
+  onEventKey,
+  afterEventKey,
+  CachedEventProducer,
+} from 'fun-events';
 
 /**
  * Component tree node representing arbitrary element.
@@ -144,8 +152,17 @@ export const ComponentNode = {
 
 };
 
-export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any> extends AIterable<N> {
+export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
+    extends AIterable<N>
+    implements EventSource<[AIterable<N>]>, CachedEventSource<[AIterable<N>]> {
 
   abstract readonly onUpdate: EventProducer<[AIterable<N>]>;
+
+  get [onEventKey](): EventProducer<[AIterable<N>]> {
+    return this.onUpdate;
+  }
+
+  readonly [afterEventKey]: CachedEventProducer<[AIterable<N>]> =
+      CachedEventProducer.from<[AIterable<N>]>(this, () => [this]);
 
 }
