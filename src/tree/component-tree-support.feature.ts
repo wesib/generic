@@ -1,4 +1,4 @@
-import { BootstrapContext, ComponentContext, FeatureDef, featureDefSymbol, StateSupport } from '@wesib/wesib';
+import { BootstrapContext, ComponentContext, FeatureDef, FeatureDef__symbol, StateSupport } from '@wesib/wesib';
 import { AttributesObserver } from './attributes-observer';
 import { ComponentNode } from './element-node';
 import { elementNodeOf } from './element-node.impl';
@@ -23,7 +23,7 @@ const DEF: FeatureDef = {
  */
 export class ComponentTreeSupport {
 
-  static get [featureDefSymbol](): FeatureDef {
+  static get [FeatureDef__symbol](): FeatureDef {
     return DEF;
   }
 

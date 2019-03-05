@@ -3,7 +3,7 @@ import {
   Component,
   ComponentClass,
   ComponentContext,
-  componentContextSymbol,
+  ComponentContext__symbol,
   DomProperty,
   Feature,
 } from '@wesib/wesib';
@@ -58,7 +58,7 @@ describe('tree/element-node', () => {
     const context = ComponentContext.of(realElement);
     const element: Element = document.createElement(name);
 
-    (element as any)[componentContextSymbol] = context;
+    (element as any)[ComponentContext__symbol] = context;
 
     let connect: (ctx: ComponentContext) => void = noop;
     let disconnect: (ctx: ComponentContext) => void = noop;

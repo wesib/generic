@@ -3,7 +3,11 @@ import {
   BootstrapContext,
   BootstrapRoot,
   BootstrapWindow,
-  Class, Component, ComponentClass, ComponentContext, componentContextSymbol,
+  Class,
+  Component,
+  ComponentClass,
+  ComponentContext,
+  ComponentContext__symbol,
   ElementAdapter,
   Feature,
 } from '@wesib/wesib';
@@ -123,7 +127,7 @@ describe('automount/mount.decorator', () => {
 
       bootstrap(componentType);
 
-      expect(element[componentContextSymbol]).toBeUndefined();
+      expect(element[ComponentContext__symbol]).toBeUndefined();
     });
   });
 

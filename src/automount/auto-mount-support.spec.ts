@@ -9,7 +9,7 @@ import {
   ElementAdapter,
   Feature,
   FeatureDef,
-  featureDefSymbol,
+  FeatureDef__symbol,
 } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { ObjectMock } from '../spec/mocks';
@@ -56,7 +56,7 @@ describe('automount/auto-mount-support', () => {
 
   describe('AutoMountSupport', () => {
     it('caches feature definition', () => {
-      expect(AutoMountSupport[featureDefSymbol]).toBe(AutoMountSupport[featureDefSymbol]);
+      expect(AutoMountSupport[FeatureDef__symbol]).toBe(AutoMountSupport[FeatureDef__symbol]);
     });
     it('enables `AutoConnectSupport`', () => {
       expect([...new ArraySet(FeatureDef.of(AutoMountSupport).need)]).toContain(AutoConnectSupport);

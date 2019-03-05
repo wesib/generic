@@ -1,7 +1,7 @@
 import {
   BootstrapContext,
   ComponentContext,
-  componentContextSymbol,
+  ComponentContext__symbol,
   ComponentEvent,
   ElementAdapter,
 } from '@wesib/wesib';
@@ -24,7 +24,7 @@ class ElementNode extends ElementNode_ {
     this._props = new NodeProperties(element);
     (element as any)[NODE_REF] = this;
 
-    const context = (element as any)[componentContextSymbol] as ComponentContext<any> | undefined;
+    const context = (element as any)[ComponentContext__symbol] as ComponentContext<any> | undefined;
 
     if (context) {
       this._bind(context);
@@ -34,7 +34,7 @@ class ElementNode extends ElementNode_ {
   }
 
   get context(): ComponentContext<any> | undefined {
-    return (this.element as any)[componentContextSymbol];
+    return (this.element as any)[ComponentContext__symbol];
   }
 
   get parent() {

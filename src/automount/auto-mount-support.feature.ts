@@ -6,7 +6,7 @@ import {
   Class,
   ElementAdapter,
   FeatureDef,
-  featureDefSymbol,
+  FeatureDef__symbol,
 } from '@wesib/wesib';
 import { AIterable, overArray } from 'a-iterable';
 import { DomEventDispatcher } from 'fun-events';
@@ -28,7 +28,7 @@ let DEF: FeatureDef | undefined;
  */
 export class AutoMountSupport {
 
-  static get [featureDefSymbol](): FeatureDef {
+  static get [FeatureDef__symbol](): FeatureDef {
     return DEF || (DEF = featureDef());
   }
 
@@ -51,7 +51,7 @@ export function autoMountSupport(config?: AutoMountConfig): Class {
   };
 
   class ConfiguredAutoMountSupport {
-    static get [featureDefSymbol]() {
+    static get [FeatureDef__symbol]() {
       return def;
     }
   }

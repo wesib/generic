@@ -167,10 +167,10 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
-"@wesib/wesib@^1.0.0-alpha.12":
-  version "1.0.0-alpha.12"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.12.tgz#18fb238ca44d3767ce960488fc5b0479d023df4e"
-  integrity sha512-oAsoUwvNmO07dGy/qbHZzOpP/aFEYxLseibacE9wj+1ZqzzajAwH8XKYUuG9TEtFQ7gLgNgbaqj+CeZNDLD47Q==
+"@wesib/wesib@^1.0.0-alpha.13":
+  version "1.0.0-alpha.13"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.13.tgz#18dc67c019acc9f69ea5fad73ebf96ad65463878"
+  integrity sha512-G1g+Sl9/bqfKygv2GYzXEJFFrw9i1VcdnJO55iDoKENQFC4fS+VDMTBMy2K2usj+T+dU25DIUzGbqqr1BykjGA==
   dependencies:
     tslib "^1.9.0"
 
