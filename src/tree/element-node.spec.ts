@@ -175,6 +175,15 @@ describe('tree/element-node', () => {
             expect.objectContaining({ element: span }),
           ]);
         });
+        describe('first', () => {
+          it('refers the first node', () => {
+
+            const receiver = jest.fn();
+
+            node.node.select('*', { all: true }).first(receiver);
+            expect(receiver).toHaveBeenCalledWith(c1.node);
+          });
+        });
 
         describe('selected', () => {
 

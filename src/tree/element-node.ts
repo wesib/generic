@@ -1,5 +1,5 @@
 import { ComponentContext } from '@wesib/wesib';
-import { AIterable } from 'a-iterable';
+import { AIterable, itsFirst } from 'a-iterable';
 import { ContextKey, SingleContextKey } from 'context-values';
 import {
   EventProducer,
@@ -152,10 +152,21 @@ export const ComponentNode = {
 
 };
 
+/**
+ * Dynamic list of selected component tree nodes.
+ *
+ * It is an iterable of nodes. When list updated an `onUpdate` event producer notifies the registered consumers on
+ * the changes. The list also implements an `EventSource` interface by delegating event consumer registration to
+ * `onUpdate` event producer, and `CachedEventSource` interface by notifying the registered event consumers on
+ * current node list and all updates to it.
+ */
 export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
     extends AIterable<N>
     implements EventSource<[AIterable<N>]>, CachedEventSource<[AIterable<N>]> {
 
+  /**
+   * An event producer
+   */
   abstract readonly onUpdate: EventProducer<[AIterable<N>]>;
 
   get [onEventKey](): EventProducer<[AIterable<N>]> {
@@ -164,5 +175,21 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
 
   readonly [afterEventKey]: CachedEventProducer<[AIterable<N>]> =
       CachedEventProducer.from<[AIterable<N>]>(this, () => [this]);
+
+  /**
+   * A reference to the first node in this list.
+   *
+   * This is a cached event producer notifying on the first node changes. May also notify on `undefined` values when
+   * the list is empty.
+   */
+  readonly first: CachedEventProducer<[N?]>;
+
+  protected constructor() {
+    super();
+
+    const onUpdateFirst: EventProducer<[any]> = EventProducer.from(this).thru(itsFirst);
+
+    this.first = CachedEventProducer.from<[N | undefined]>(onUpdateFirst, () => [itsFirst(this)]);
+  }
 
 }
