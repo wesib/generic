@@ -25,12 +25,12 @@
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.13"
+    "@wesib/wesib": "^1.0.0-alpha.14"
   },
   "devDependencies": {
     "@types/jest": "^24.0.9",
     "@types/jsdom": "^12.2.3",
-    "@wesib/wesib": "^1.0.0-alpha.13",
+    "@wesib/wesib": "^1.0.0-alpha.14",
     "a-iterable": "^2.2.0",
     "call-thru": "^2.2.0",
     "codecov": "^3.2.0",
