@@ -1,6 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { ContextKey, SingleContextKey } from 'context-values';
-import { EventEmitter, EventInterest } from 'fun-events';
+import { EventEmitter, eventInterest, EventInterest } from 'fun-events';
 
 const KEY = /*#__PURE__*/ new SingleContextKey<AttributesObserver>('attributes-observer');
 
@@ -21,13 +21,13 @@ export class AttributesObserver {
   observe(
       element: Element,
       name: string,
-      consumer: (oldValue: string, newValue: string | null) => void): EventInterest {
+      receiver: (oldValue: string, newValue: string | null) => void): EventInterest {
 
     const Observer: typeof MutationObserver = (this._context.get(BootstrapWindow) as any).MutationObserver;
     const observer = new Observer(mutations => this._update(element, mutations));
 
     const [emitter, newAttribute] = this._emitter(name);
-    const interest = emitter.on(consumer);
+    const interest = emitter.on(receiver);
 
     if (newAttribute) {
       observer.disconnect();
@@ -39,17 +39,15 @@ export class AttributesObserver {
       });
     }
 
-    return {
-      off: () => {
-        interest.off();
-        if (!emitter.consumers) {
-          this._attributes.delete(name);
-          if (!this._attributes.size) {
-            observer.disconnect();
-          }
+    return eventInterest(() => {
+      interest.off();
+      if (!emitter.size) {
+        this._attributes.delete(name);
+        if (!this._attributes.size) {
+          observer.disconnect();
         }
       }
-    };
+    }).needs(interest);
   }
 
   private _emitter(name: string): [EventEmitter<[string, string | null]>, boolean] {
@@ -76,7 +74,7 @@ export class AttributesObserver {
         return;
       }
 
-      emitter.notify(element.getAttribute(attributeName) as string, mutation.oldValue);
+      emitter.send(element.getAttribute(attributeName) as string, mutation.oldValue);
     });
   }
 

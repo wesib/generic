@@ -9,7 +9,7 @@ import {
 } from '@wesib/wesib';
 import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
-import { afterEventKey, noEventInterest, ValueTracker } from 'fun-events';
+import { AfterEvent__symbol, noEventInterest, ValueTracker } from 'fun-events';
 import { ObjectMock } from '../spec/mocks';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
@@ -163,11 +163,14 @@ describe('tree/element-node', () => {
             expect.objectContaining({ element: span }),
           ]);
         });
-        it('is cached event source', () => {
+        it('is event keeper', () => {
 
+          const list = node.node.select('*', { all: true });
           const receiver = jest.fn();
 
-          node.node.select('*', { all: true })[afterEventKey](receiver);
+          expect(list[AfterEvent__symbol]).toBe(list[AfterEvent__symbol]);
+
+          list[AfterEvent__symbol](receiver);
           expect([...receiver.mock.calls[0][0]]).toEqual([
             c1.node,
             c2.node,
@@ -182,6 +185,12 @@ describe('tree/element-node', () => {
 
             node.node.select('*', { all: true }).first(receiver);
             expect(receiver).toHaveBeenCalledWith(c1.node);
+          });
+          it('is cached', () => {
+
+            const list = node.node.select('*', { all: true });
+
+            expect(list.first).toBe(list.first);
           });
         });
 
@@ -594,7 +603,7 @@ describe('tree/element-node', () => {
       it('returns the same tracker instance', () => {
         expect(compNode.attribute('attr')).toBe(attribute);
       });
-      it('handles multiple consumers of the same attribute updates', () => {
+      it('handles multiple receivers of the same attribute updates', () => {
 
         const value0 = 'old value';
         const value1 = 'new value';
@@ -624,7 +633,7 @@ describe('tree/element-node', () => {
         interest2.off();
         expect(observer.disconnect).toHaveBeenCalled();
       });
-      it('handles multiple attributes consumers', () => {
+      it('handles multiple attributes receivers', () => {
 
         const attribute2 = compNode.attribute('attr2');
 

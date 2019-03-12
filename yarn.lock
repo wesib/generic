@@ -174,10 +174,10 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
-"@wesib/wesib@^1.0.0-alpha.14":
-  version "1.0.0-alpha.14"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.14.tgz#e617cfd3afbc82be2c9fbef8d31f74e1d018710c"
-  integrity sha512-uN0K4WN0kbS5+VsuMDQJpRoV2HxaoYc8K4/5zSpOLx0gCVPlQRAdwz8d5wM5kvt75Fk4njJe/SYezfPzop4i1A==
+"@wesib/wesib@^1.0.0-alpha.15":
+  version "1.0.0-alpha.15"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.15.tgz#6c4fb08b79c7a006ad9efaae1cdaea8f5fb4f671"
+  integrity sha512-Y0k0TZQsZkHG2kZf4TI6mtAV8faGRozpKZ1RCOr+uVFsrMZkfc4lUYtfmx+OK72i9WUz/1c1aTZ2eJ5EhEhTyA==
   dependencies:
     tslib "^1.9.0"
 
@@ -1242,10 +1242,10 @@ fsevents@^1.2.3:
     nan "^2.9.2"
     node-pre-gyp "^0.10.0"
 
-fun-events@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/fun-events/-/fun-events-3.3.0.tgz#6f61b30575445ab5bc19de2f22e97f10394af811"
-  integrity sha512-aQKs/HpG5QmSl2XEEL2XRmbFPwYYlnWIWj4Im+1G+cNXdO2CG607DR0WBpbA1LyBo9hgXJySfMBFv9c+ixVkGg==
+fun-events@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/fun-events/-/fun-events-4.0.0.tgz#2b0729db238cd3e461fa0a6a1a26b679e9649d14"
+  integrity sha512-gwfMPtn1Ugli5aEzmbG2cUkkXtRMzKc1tsMFr4DkZGwS8NcX2/ukRM83cy7V5GHlhO46jXcZJWYZRU659ULr2w==
   dependencies:
     tslib "^1.9.0"
 

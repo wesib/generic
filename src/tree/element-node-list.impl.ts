@@ -1,6 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { AIterable, filterIt, itsIterator, itsReduction, overArray } from 'a-iterable';
-import { EventEmitter, EventProducer } from 'fun-events';
+import { EventEmitter, eventInterest, onEventBy } from 'fun-events';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
 
 const WATCH_CHILD_LIST = { childList: true };
@@ -8,24 +8,22 @@ const WATCH_DEEP = { childList: true, subtree: true };
 
 export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> {
 
-  readonly onUpdate = EventProducer.of<[AIterable<N>]>(listener => {
+  readonly onUpdate = onEventBy<[AIterable<N>]>(listener => {
 
-    const firstConsumer = !this._updates.consumers;
+    const firstReceiver = !this._updates.size;
     const interest = this._updates.on(listener);
 
-    if (firstConsumer) {
+    if (firstReceiver) {
       this._refresh();
       this._observer.observe(this._root, this._init);
     }
 
-    return {
-      off: () => {
-        interest.off();
-        if (!this._updates.consumers) {
-          this._observer.disconnect();
-        }
-      },
-    };
+    return eventInterest(() => {
+      interest.off();
+      if (!this._updates.size) {
+        this._observer.disconnect();
+      }
+    }).needs(interest);
   });
 
   private readonly _observer: MutationObserver;
@@ -58,7 +56,7 @@ export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> 
   }
 
   get all(): Set<Element> {
-    return this._updates.consumers ? this._all : this._refresh();
+    return this._updates.size ? this._all : this._refresh();
   }
 
   private _refresh(): Set<Element> {
@@ -81,7 +79,7 @@ export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> 
       const element = event.target as Element;
 
       if (this._all.has(element)) {
-        this._updates.notify(this);
+        this._updates.send(this);
       }
     });
   }
@@ -104,7 +102,7 @@ export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> 
         false);
 
     if (updated) {
-      this._updates.notify(this);
+      this._updates.send(this);
     }
   }
 

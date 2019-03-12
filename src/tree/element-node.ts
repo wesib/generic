@@ -2,13 +2,15 @@ import { ComponentContext } from '@wesib/wesib';
 import { AIterable, itsFirst } from 'a-iterable';
 import { ContextKey, SingleContextKey } from 'context-values';
 import {
-  EventProducer,
+  AfterEvent,
+  AfterEvent__symbol,
+  afterEventFrom,
+  EventKeeper,
+  EventSender,
+  OnEvent,
+  OnEvent__symbol,
+  onEventFrom,
   ValueTracker,
-  EventSource,
-  CachedEventSource,
-  onEventKey,
-  afterEventKey,
-  CachedEventProducer,
 } from 'fun-events';
 
 /**
@@ -152,44 +154,61 @@ export const ComponentNode = {
 
 };
 
+const afterEvent__symbol = /*#__PURE__*/ Symbol('node-list:after-event');
+const first__symbol = /*#__PURE__*/ Symbol('node-list:first');
+
 /**
  * Dynamic list of selected component tree nodes.
  *
- * It is an iterable of nodes. When list updated an `onUpdate` event producer notifies the registered consumers on
- * the changes. The list also implements an `EventSource` interface by delegating event consumer registration to
- * `onUpdate` event producer, and `CachedEventSource` interface by notifying the registered event consumers on
- * current node list and all updates to it.
+ * It is an iterable of nodes. When list updated an `onUpdate` notifies the registered receivers on changes.
+ * The list also implements an `EventSender` interface by delegating event receiver registration to `onUpdate`
+ * registrar, and an `EventKeeper` interface by notifying the registered event receivers on current node list and all
+ * updates to it.
  */
 export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
     extends AIterable<N>
-    implements EventSource<[AIterable<N>]>, CachedEventSource<[AIterable<N>]> {
+    implements EventSender<[AIterable<N>]>, EventKeeper<[AIterable<N>]> {
 
   /**
-   * An event producer
+   * An sender of list changes.
    */
-  abstract readonly onUpdate: EventProducer<[AIterable<N>]>;
+  abstract readonly onUpdate: OnEvent<[AIterable<N>]>;
 
-  get [onEventKey](): EventProducer<[AIterable<N>]> {
+  get [OnEvent__symbol](): OnEvent<[AIterable<N>]> {
     return this.onUpdate;
   }
 
-  readonly [afterEventKey]: CachedEventProducer<[AIterable<N>]> =
-      CachedEventProducer.from<[AIterable<N>]>(this, () => [this]);
+  /**
+   * @internal
+   */
+  private [afterEvent__symbol]?: AfterEvent<[AIterable<N>]>;
+
+  get [AfterEvent__symbol](): AfterEvent<[AIterable<N>]> {
+      return this[afterEvent__symbol]
+          || (this[afterEvent__symbol] = afterEventFrom<[AIterable<N>]>(this.onUpdate, () => [this]));
+  }
+
+  /**
+   * @internal
+   */
+  private [first__symbol]?: AfterEvent<[N?]>;
 
   /**
    * A reference to the first node in this list.
    *
-   * This is a cached event producer notifying on the first node changes. May also notify on `undefined` values when
-   * the list is empty.
+   * This is an event keeper of first node changes. May also send on `undefined` values when the list is empty.
    */
-  readonly first: CachedEventProducer<[N?]>;
+  get first(): AfterEvent<[N?]> {
 
-  protected constructor() {
-    super();
+    const existing = this[first__symbol];
 
-    const onUpdateFirst: EventProducer<[any]> = EventProducer.from(this).thru(itsFirst);
+    if (existing) {
+      return existing;
+    }
 
-    this.first = CachedEventProducer.from<[N | undefined]>(onUpdateFirst, () => [itsFirst(this)]);
+    const onUpdateFirst: OnEvent<[any]> = onEventFrom(this).thru(itsFirst);
+
+    return this[first__symbol] = afterEventFrom<[N | undefined]>(onUpdateFirst, () => [itsFirst(this)]);
   }
 
 }

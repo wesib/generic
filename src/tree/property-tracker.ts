@@ -1,5 +1,5 @@
-import { ComponentContext, ComponentState, domPropertyPath } from '@wesib/wesib';
-import { EventEmitter, EventProducer, ValueTracker } from 'fun-events';
+import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
+import { EventEmitter, OnEvent, onEventBy, ValueTracker } from 'fun-events';
 
 class PropertyTracker<T> extends ValueTracker<T> {
 
@@ -15,18 +15,18 @@ class PropertyTracker<T> extends ValueTracker<T> {
     }
   }
 
-  get on(): EventProducer<[T, T]> {
+  get on(): OnEvent<[T, T]> {
     return this._updates.on;
   }
 
   bind(context: ComponentContext) {
 
-    const tracker = context.get(ComponentState).track(domPropertyPath(this._key));
-    const onUpdate = EventProducer.of(
-        (consumer: (newValue: T, oldValue: T) => void) => tracker.onUpdate(
-            (_path, newValue: any, oldValue: any) => consumer(newValue, oldValue)));
+    const tracker = context.get(ComponentState).track(domPropertyPathTo(this._key));
+    const onUpdate = onEventBy(
+        (receiver: (newValue: T, oldValue: T) => void) => tracker.onUpdate(
+            (_path, newValue: any, oldValue: any) => receiver(newValue, oldValue)));
 
-    onUpdate((...args) => this._updates.notify(...args));
+    onUpdate((...args) => this._updates.send(...args));
   }
 
   get it(): T {

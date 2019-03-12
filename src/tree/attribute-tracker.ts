@@ -1,10 +1,10 @@
 import { BootstrapContext } from '@wesib/wesib';
-import { EventProducer, ValueTracker } from 'fun-events';
+import { OnEvent, onEventBy, ValueTracker } from 'fun-events';
 import { AttributesObserver } from './attributes-observer';
 
 class AttributeTracker extends ValueTracker<string | null, string> {
 
-  readonly on: EventProducer<[string, string | null]>;
+  readonly on: OnEvent<[string, string | null]>;
 
   constructor(
       bs: BootstrapContext,
@@ -14,7 +14,7 @@ class AttributeTracker extends ValueTracker<string | null, string> {
 
     const observer = bs.get(AttributesObserver);
 
-    this.on = EventProducer.of(consumer => observer.observe(_element, _name, consumer));
+    this.on = onEventBy(receiver => observer.observe(_element, _name, receiver));
   }
 
   get it(): string | null {
