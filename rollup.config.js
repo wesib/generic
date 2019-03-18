@@ -8,13 +8,13 @@ const mainConfig = makeConfig(
     baseConfig('tsconfig.main.json'),
     {
       output: {
-        format: 'umd',
+        format: 'cjs',
         file: pkg.main,
       },
     });
 
 const esmConfig = makeConfig(
-    baseConfig('tsconfig.esm.json'),
+    baseConfig('tsconfig.es6.json'),
     {
       output: {
         file: pkg.module,
@@ -22,7 +22,7 @@ const esmConfig = makeConfig(
     });
 
 const esm5Config = makeConfig(
-    baseConfig('tsconfig.umd.json'),
+    baseConfig('tsconfig.es5.json'),
     {
       output: {
         file: pkg.esm5,
@@ -69,15 +69,6 @@ function baseConfig(tsconfig) {
     output: {
       format: 'esm',
       sourcemap: true,
-      name: 'wesib.generic',
-      globals: {
-        '@wesib/wesib': 'wesib',
-        'a-iterable': 'aIterable',
-        'call-thru': 'callThru',
-        'context-values': 'contextValues',
-        'fun-events': 'funEvents',
-        'tslib': 'tslib',
-      },
     },
   };
 }

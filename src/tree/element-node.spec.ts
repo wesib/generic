@@ -413,7 +413,11 @@ describe('tree/element-node', () => {
       });
     });
 
-    describe.each([
+    describe.each<[string, (TestComponent: ComponentClass) => Promise<{
+      element: any;
+      elementNode: ElementNode;
+      property: ValueTracker<string>;
+    }>]>([
       [
         'custom element property',
         async (TestComponent: ComponentClass) => {
@@ -460,11 +464,7 @@ describe('tree/element-node', () => {
       ],
     ])(
         '%s',
-        (name: string, init: (TestComponent: ComponentClass) => Promise<{
-          element: any;
-          elementNode: ElementNode;
-          property: ValueTracker<string>;
-        }>) => {
+        (name, init) => {
 
           let element: any;
           let elementNode: ElementNode;
