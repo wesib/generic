@@ -495,6 +495,9 @@ describe('tree/element-node', () => {
             property = result.property;
           });
 
+          it('returns the same tracker instance', () => {
+            expect(elementNode.property('property')).toBe(property);
+          });
           it('reads property value', () => {
             expect(property.it).toBe('value');
 
@@ -513,7 +516,7 @@ describe('tree/element-node', () => {
             expect(property.it).toBe(newValue);
             expect(element.property).toBe(newValue);
           });
-          it('notifies on property update', () => {
+          it('sends property updates', () => {
 
             const newValue = 'new value';
             const onUpdate = jest.fn();
@@ -523,8 +526,18 @@ describe('tree/element-node', () => {
             element.property = newValue;
             expect(onUpdate).toHaveBeenCalledWith(newValue, 'value');
           });
-          it('returns the same tracker instance', () => {
-            expect(elementNode.property('property')).toBe(property);
+          describe('clear', () => {
+            it('stops sending property updates', () => {
+
+              const newValue = 'new value';
+              const onUpdate = jest.fn();
+
+              property.on(onUpdate);
+
+              property.clear();
+              element.property = newValue;
+              expect(onUpdate).not.toHaveBeenCalledWith(newValue, expect.anything());
+            });
           });
         });
 
