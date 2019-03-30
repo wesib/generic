@@ -25,7 +25,7 @@
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.16"
+    "@wesib/wesib": "^1.0.0-alpha.17"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
