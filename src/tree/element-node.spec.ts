@@ -696,18 +696,6 @@ describe('tree/element-node', () => {
           setAttribute('attr', newValue, oldValue);
           expect(onUpdate).not.toHaveBeenCalledWith(newValue, oldValue);
         });
-        it('allows to resume updates', () => {
-
-          const oldValue = 'old value';
-          const newValue = 'new value';
-          const onUpdate = jest.fn();
-
-          attribute.on(onUpdate);
-          attribute.clear();
-          attribute.on(onUpdate);
-          setAttribute('attr', newValue, oldValue);
-          expect(onUpdate).toHaveBeenCalledWith(newValue, oldValue);
-        });
       });
     });
   });

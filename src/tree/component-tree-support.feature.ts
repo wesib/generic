@@ -1,11 +1,9 @@
 import { BootstrapContext, ComponentContext, FeatureDef, FeatureDef__symbol, StateSupport } from '@wesib/wesib';
-import { AttributesObserver } from './attributes-observer';
 import { ComponentNode } from './element-node';
 import { elementNodeOf } from './element-node.impl';
 
 const DEF: FeatureDef = {
   need: StateSupport,
-  set: { as: AttributesObserver },
   forComponents: [
     {
       a: ComponentNode,
