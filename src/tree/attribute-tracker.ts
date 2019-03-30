@@ -1,9 +1,10 @@
 import { BootstrapContext } from '@wesib/wesib';
-import { OnEvent, onEventBy, ValueTracker } from 'fun-events';
+import { EventEmitter, noEventInterest, OnEvent, onEventBy, ValueTracker, eventInterest } from 'fun-events';
 import { AttributesObserver } from './attributes-observer';
 
 class AttributeTracker extends ValueTracker<string | null, string> {
 
+  private readonly _updates = new EventEmitter<[string, string | null]>();
   readonly on: OnEvent<[string, string | null]>;
 
   constructor(
@@ -13,8 +14,25 @@ class AttributeTracker extends ValueTracker<string | null, string> {
     super();
 
     const observer = bs.get(AttributesObserver);
+    let observeInterest = noEventInterest();
 
-    this.on = onEventBy(receiver => observer.observe(_element, _name, receiver));
+    this.on = onEventBy(receiver => {
+      if (!this._updates.size) {
+        observeInterest = observer.observe(_element, _name, (newValue, oldValue) => {
+          this._updates.send(newValue, oldValue);
+        });
+      }
+
+      const interest = this._updates.on(receiver);
+
+      return eventInterest(reason => {
+        interest.off(reason);
+        if (!this._updates.size) {
+          observeInterest.off(reason);
+          observeInterest = noEventInterest();
+        }
+      }).needs(interest).needs(observeInterest);
+    });
   }
 
   get it(): string | null {
@@ -23,6 +41,11 @@ class AttributeTracker extends ValueTracker<string | null, string> {
 
   set it(value: string | null) {
     this._element.setAttribute(this._name, value);
+  }
+
+  clear(reason?: any): this {
+    this._updates.clear(reason);
+    return this;
   }
 
 }

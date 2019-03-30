@@ -557,6 +557,9 @@ describe('tree/element-node', () => {
         mutate([{ type: 'attributes', oldValue, attributeName: name }]);
       }
 
+      it('returns the same tracker instance', () => {
+        expect(compNode.attribute('attr')).toBe(attribute);
+      });
       it('reads attribute value', () => {
         expect(attribute.it).toBeNull();
 
@@ -578,7 +581,7 @@ describe('tree/element-node', () => {
       it('does not observe attributes mutations initially', () => {
         expect(observer.observe).not.toHaveBeenCalled();
       });
-      it('notifies on attribute updates', () => {
+      it('sends attribute updates', () => {
 
         const oldValue = 'old value';
         const newValue = 'new value';
@@ -589,7 +592,7 @@ describe('tree/element-node', () => {
         setAttribute('attr', newValue, oldValue);
         expect(onUpdate).toHaveBeenCalledWith(newValue, oldValue);
       });
-      it('does not notify on another attribute updates', () => {
+      it('does not send another attribute updates', () => {
 
         const oldValue = 'old value';
         const newValue = 'new value';
@@ -599,9 +602,6 @@ describe('tree/element-node', () => {
 
         setAttribute('other-attr', newValue, oldValue);
         expect(onUpdate).not.toHaveBeenCalled();
-      });
-      it('returns the same tracker instance', () => {
-        expect(compNode.attribute('attr')).toBe(attribute);
       });
       it('handles multiple receivers of the same attribute updates', () => {
 
@@ -670,6 +670,31 @@ describe('tree/element-node', () => {
 
         interest2.off();
         expect(observer.disconnect).toHaveBeenCalled();
+      });
+      describe('clear', () => {
+        it('stops sends attribute updates', () => {
+
+          const oldValue = 'old value';
+          const newValue = 'new value';
+          const onUpdate = jest.fn();
+
+          attribute.on(onUpdate);
+          attribute.clear();
+          setAttribute('attr', newValue, oldValue);
+          expect(onUpdate).not.toHaveBeenCalledWith(newValue, oldValue);
+        });
+        it('allows to resume updates', () => {
+
+          const oldValue = 'old value';
+          const newValue = 'new value';
+          const onUpdate = jest.fn();
+
+          attribute.on(onUpdate);
+          attribute.clear();
+          attribute.on(onUpdate);
+          setAttribute('attr', newValue, oldValue);
+          expect(onUpdate).toHaveBeenCalledWith(newValue, oldValue);
+        });
       });
     });
   });
