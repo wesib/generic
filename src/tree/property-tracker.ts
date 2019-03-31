@@ -37,8 +37,8 @@ class PropertyTracker<T> extends ValueTracker<T> {
     this._element[this._key] = value;
   }
 
-  clear(reason?: any): this {
-    this._updates.clear(reason);
+  done(reason?: any): this {
+    this._updates.done(reason);
     return this;
   }
 

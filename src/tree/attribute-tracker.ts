@@ -117,8 +117,8 @@ class AttributeTracker extends ValueTracker<string | null, string> {
     this._observer.element.setAttribute(this._name, value as string);
   }
 
-  clear(reason?: any): this {
-    this._updates.clear(reason);
+  done(reason?: any): this {
+    this._updates.done(reason);
     return this;
   }
 

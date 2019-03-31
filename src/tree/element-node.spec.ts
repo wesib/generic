@@ -526,7 +526,7 @@ describe('tree/element-node', () => {
             element.property = newValue;
             expect(onUpdate).toHaveBeenCalledWith(newValue, 'value');
           });
-          describe('clear', () => {
+          describe('done', () => {
             it('stops sending property updates', () => {
 
               const newValue = 'new value';
@@ -534,7 +534,7 @@ describe('tree/element-node', () => {
 
               property.on(onUpdate);
 
-              property.clear();
+              property.done();
               element.property = newValue;
               expect(onUpdate).not.toHaveBeenCalledWith(newValue, expect.anything());
             });
@@ -684,7 +684,7 @@ describe('tree/element-node', () => {
         interest2.off();
         expect(observer.disconnect).toHaveBeenCalled();
       });
-      describe('clear', () => {
+      describe('done', () => {
         it('stops sends attribute updates', () => {
 
           const oldValue = 'old value';
@@ -692,7 +692,7 @@ describe('tree/element-node', () => {
           const onUpdate = jest.fn();
 
           attribute.on(onUpdate);
-          attribute.clear();
+          attribute.done();
           setAttribute('attr', newValue, oldValue);
           expect(onUpdate).not.toHaveBeenCalledWith(newValue, oldValue);
         });
