@@ -34,8 +34,8 @@ function makeConfig(baseConfig, ...configs) {
       (prev, config) => ({
         ...prev,
         ...config,
-        plugins: config.plugins ? [ ...prev.plugins, ...config.plugins ] : prev.plugins,
-        output: { ...prev.output, ...config.output },
+        plugins: [ ...(prev.plugins || []), ...(config.plugins || []) ],
+        output: { ...(prev.output || {}), ...(config.output || {}) },
       }),
       baseConfig);
 }
@@ -58,14 +58,7 @@ function baseConfig(tsconfig) {
       sourcemaps(),
     ],
     input: './src/index.ts',
-    external: [
-      '@wesib/wesib',
-      'a-iterable',
-      'call-thru',
-      'context-values',
-      'fun-events',
-      'tslib',
-    ],
+    external: [ ...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies) ],
     output: {
       format: 'esm',
       sourcemap: true,
