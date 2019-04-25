@@ -4,12 +4,12 @@ import { BootstrapNamespaceAliaser } from './bootstrap-namespace-aliaser';
 import { ComponentStyleProducer } from './component-style-producer.impl';
 import { ProduceComponentStyle } from './produce-component-style';
 
-const DEF: FeatureDef = {
+const StyleProducerSupport__feature: FeatureDef = {
   set: {
     a: BootstrapNamespaceAliaser,
     by: newNamespaceAliaser,
   },
-  forComponents: [
+  perComponent: [
     {
       as: ComponentStyleProducer,
     },
@@ -33,7 +33,7 @@ const DEF: FeatureDef = {
 export class StyleProducerSupport {
 
   static get [FeatureDef__symbol]() {
-    return DEF;
+    return StyleProducerSupport__feature;
   }
 
 }
