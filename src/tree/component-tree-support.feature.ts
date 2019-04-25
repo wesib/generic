@@ -17,7 +17,7 @@ const DEF: FeatureDef = {
 /**
  * Component tree support feature.
  *
- * Provides a `ComponentNode` instances for each component.
+ * Provides a `ComponentNode` instance for each component.
  */
 export class ComponentTreeSupport {
 
