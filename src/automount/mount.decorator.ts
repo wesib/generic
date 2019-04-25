@@ -1,4 +1,4 @@
-import { ComponentClass, ComponentDef, ComponentFactory, FeatureDef, TypedClassDecorator } from '@wesib/wesib';
+import { ComponentClass, ComponentDef, ComponentFactory, TypedClassDecorator } from '@wesib/wesib';
 import { AutoMountSupport } from './auto-mount-support.feature';
 import { AutoMounter } from './auto-mounter';
 
@@ -14,10 +14,13 @@ import { AutoMounter } from './auto-mounter';
 export function Mount<T extends ComponentClass = any>(opts: Mount.Opts | Mount.Opts['to']): TypedClassDecorator<T> {
   return (type: T) => {
     return ComponentDef.define(
-        FeatureDef.define(type, { need: AutoMountSupport }),
+        type,
         {
           define(definitionContext) {
             definitionContext.get(AutoMounter).register(definitionContext.get(ComponentFactory), opts);
+          },
+          feature: {
+            needs: AutoMountSupport,
           },
         });
   };

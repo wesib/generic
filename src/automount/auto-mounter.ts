@@ -2,14 +2,14 @@ import { ComponentContext, ComponentFactory, ElementAdapter } from '@wesib/wesib
 import { ContextKey, SingleContextKey } from 'context-values';
 import { Mount } from './mount.decorator';
 
-const KEY = /*#__PURE__*/ new SingleContextKey<AutoMounter>('auto-mounter');
+const AutoMounter__key = /*#__PURE__*/ new SingleContextKey<AutoMounter>('auto-mounter');
 
 export class AutoMounter {
 
   private _adapters: ElementAdapter[] = [];
 
   static get key(): ContextKey<AutoMounter> {
-    return KEY;
+    return AutoMounter__key;
   }
 
   register(factory: ComponentFactory, opts: Mount.Opts | Mount.Opts['to']) {

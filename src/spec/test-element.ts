@@ -26,7 +26,7 @@ export function testComponentFactory<T extends object>(componentType: Class<T>):
   };
 
   @Feature({
-    need: componentType,
+    needs: componentType,
     set: { a: CustomElements, is: customElements },
   })
   class TestFeature {}
@@ -55,7 +55,7 @@ export function testElement(componentType: Class<any>): Class<any> {
 
   @Feature({
     set: { a: CustomElements, is: customElements },
-    need: componentType,
+    needs: componentType,
   })
   class TestFeature {}
 

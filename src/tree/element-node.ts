@@ -1,6 +1,6 @@
 import { ComponentContext } from '@wesib/wesib';
 import { AIterable, itsFirst } from 'a-iterable';
-import { ContextKey, SingleContextKey } from 'context-values';
+import { ContextRequest, ContextTarget, SingleContextKey } from 'context-values';
 import {
   AfterEvent,
   AfterEvent__symbol,
@@ -141,18 +141,11 @@ export interface ComponentNode<T extends object = object> extends ElementNode {
 
 }
 
-const KEY = /*#__PURE__*/ new SingleContextKey<ComponentNode>('component-node');
-
-export const ComponentNode = {
-
-  /**
-   * A key of component context value containing a component node instance.
-   */
-  get key(): ContextKey<ComponentNode> {
-    return KEY;
-  }
-
-};
+/**
+ * A key of component context value containing a component node instance.
+ */
+export const ComponentNode: ContextTarget<ComponentNode> & ContextRequest<ComponentNode> =
+    /*#__PURE__*/ new SingleContextKey<ComponentNode>('component-node');
 
 const afterEvent__symbol = /*#__PURE__*/ Symbol('node-list:after-event');
 const first__symbol = /*#__PURE__*/ Symbol('node-list:first');

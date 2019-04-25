@@ -47,7 +47,7 @@ describe('tree/element-node', () => {
       },
     })
     @Feature({
-      need: ComponentTreeSupport,
+      needs: ComponentTreeSupport,
     })
     class TestComponent {
     }
@@ -368,7 +368,7 @@ describe('tree/element-node', () => {
         expect(onUpdateMock).not.toHaveBeenCalled();
 
         @Component('other-component')
-        @Feature({ need: ComponentTreeSupport })
+        @Feature({ needs: ComponentTreeSupport })
         class OtherComponent {}
 
         const added = document.createElement('test-component');
@@ -395,7 +395,7 @@ describe('tree/element-node', () => {
         expect(onUpdateMock).not.toHaveBeenCalled();
 
         @Component('other-component')
-        @Feature({ need: ComponentTreeSupport })
+        @Feature({ needs: ComponentTreeSupport })
         class OtherComponent {}
 
         const added = document.createElement('other-component');
@@ -479,7 +479,7 @@ describe('tree/element-node', () => {
               },
             })
             @Feature({
-              need: ComponentTreeSupport,
+              needs: ComponentTreeSupport,
             })
             class TestComponent {
 
@@ -556,7 +556,7 @@ describe('tree/element-node', () => {
           },
         })
         @Feature({
-          need: ComponentTreeSupport,
+          needs: ComponentTreeSupport,
         })
         class TestComponent {}
 
