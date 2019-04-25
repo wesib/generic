@@ -1,6 +1,6 @@
 import { ComponentContext, ComponentFactory, ElementAdapter } from '@wesib/wesib';
 import { ContextKey, SingleContextKey } from 'context-values';
-import { Mount } from './mount.decorator';
+import { MountDef } from './mount-def';
 
 const AutoMounter__key = /*#__PURE__*/ new SingleContextKey<AutoMounter>('auto-mounter');
 
@@ -12,7 +12,7 @@ export class AutoMounter {
     return AutoMounter__key;
   }
 
-  register(factory: ComponentFactory, opts: Mount.Opts | Mount.Opts['to']) {
+  register(factory: ComponentFactory, opts: MountDef | MountDef['to']) {
     this._adapters.push(mountAdapter(factory, opts));
   }
 
@@ -31,7 +31,7 @@ export class AutoMounter {
 
 }
 
-function mountAdapter(factory: ComponentFactory, opts: Mount.Opts | Mount.Opts['to']): ElementAdapter {
+function mountAdapter(factory: ComponentFactory, opts: MountDef | MountDef['to']): ElementAdapter {
 
   const matches = elementMatcher(opts);
 
@@ -43,7 +43,7 @@ function mountAdapter(factory: ComponentFactory, opts: Mount.Opts | Mount.Opts['
   };
 }
 
-function elementMatcher(opts: Mount.Opts | Mount.Opts['to']): (element: Element) => boolean {
+function elementMatcher(opts: MountDef | MountDef['to']): (element: Element) => boolean {
 
   const to = typeof opts === 'object' ? opts.to : opts;
 
