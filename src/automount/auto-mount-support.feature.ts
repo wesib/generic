@@ -13,7 +13,7 @@ import { DomEventDispatcher } from 'fun-events';
 import { AutoMountConfig } from './auto-mount-config';
 import { AutoMounter } from './auto-mounter';
 
-let DEF: FeatureDef | undefined;
+let AutoMountSupport__feature: FeatureDef | undefined;
 
 /**
  * Auto-mount support feature.
@@ -29,7 +29,7 @@ let DEF: FeatureDef | undefined;
 export class AutoMountSupport {
 
   static get [FeatureDef__symbol](): FeatureDef {
-    return DEF || (DEF = featureDef());
+    return AutoMountSupport__feature || (AutoMountSupport__feature = featureDef());
   }
 
 }
@@ -61,7 +61,7 @@ export function autoMountSupport(config?: AutoMountConfig): Class {
 
 function featureDef(config: AutoMountConfig = {}): FeatureDef {
   return {
-    need: AutoConnectSupport,
+    needs: AutoConnectSupport,
     set: [
       { as: AutoMounter },
       {

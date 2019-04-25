@@ -59,7 +59,7 @@ describe('automount/auto-mount-support', () => {
       expect(AutoMountSupport[FeatureDef__symbol]).toBe(AutoMountSupport[FeatureDef__symbol]);
     });
     it('enables `AutoConnectSupport`', () => {
-      expect([...new ArraySet(FeatureDef.of(AutoMountSupport).need)]).toContain(AutoConnectSupport);
+      expect([...new ArraySet(FeatureDef.of(AutoMountSupport).needs)]).toContain(AutoConnectSupport);
     });
     it('adapts all elements', () => {
       bootstrap(AutoMountSupport);

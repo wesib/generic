@@ -15,6 +15,6 @@ export interface AutoMountConfig {
    *
    * Note that selector is relative to `BootstrapRoot`,
    */
-  select?: string | boolean;
+  readonly select?: string | boolean;
 
 }

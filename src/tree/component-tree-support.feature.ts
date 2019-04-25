@@ -2,16 +2,14 @@ import { BootstrapContext, ComponentContext, FeatureDef, FeatureDef__symbol, Sta
 import { ComponentNode } from './element-node';
 import { elementNodeOf } from './element-node.impl';
 
-const DEF: FeatureDef = {
-  need: StateSupport,
-  forComponents: [
-    {
-      a: ComponentNode,
-      by(context: ComponentContext) {
-        return elementNodeOf(context.get(BootstrapContext), context.element) as ComponentNode;
-      },
+const ComponentTreeSupport__feature: FeatureDef = {
+  needs: StateSupport,
+  perComponent: {
+    a: ComponentNode,
+    by(context: ComponentContext) {
+      return elementNodeOf(context.get(BootstrapContext), context.element) as ComponentNode;
     },
-  ],
+  },
 };
 
 /**
@@ -22,7 +20,7 @@ const DEF: FeatureDef = {
 export class ComponentTreeSupport {
 
   static get [FeatureDef__symbol](): FeatureDef {
-    return DEF;
+    return ComponentTreeSupport__feature;
   }
 
 }
