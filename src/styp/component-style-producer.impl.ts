@@ -1,9 +1,16 @@
-import { BootstrapWindow, ComponentContext, ContentRoot, RenderScheduler, ShadowContentRoot } from '@wesib/wesib';
+import {
+  ArraySet,
+  BootstrapWindow,
+  ComponentContext,
+  ContentRoot,
+  RenderScheduler,
+  ShadowContentRoot,
+} from '@wesib/wesib';
 import { ContextKey, SingleContextKey } from 'context-values';
 import { EventInterest } from 'fun-events';
-import { produceStyle, StypOptions, StypRules, StypSelector } from 'style-producer';
+import { produceStyle, StypOptions, StypRender, StypRules, StypSelector } from 'style-producer';
 import { BootstrapNamespaceAliaser } from './bootstrap-namespace-aliaser';
-import { UniqueElementClass } from './unique-element-class';
+import { ElementIdClass } from './element-id-class';
 
 const ComponentStyleProducer__key =
     /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer');
@@ -25,6 +32,7 @@ export class ComponentStyleProducer {
   produce(rules: StypRules, opts: StypOptions = {}): EventInterest {
 
     const context = this._context;
+    const shadowRoot = context.get(ShadowContentRoot, { or: null });
 
     return produceStyle(rules, {
       ...opts,
@@ -33,21 +41,43 @@ export class ComponentStyleProducer {
       rootSelector: opts.rootSelector || buildRootSelector(),
       schedule: opts.schedule || buildScheduler(),
       nsAlias: opts.nsAlias || context.get(BootstrapNamespaceAliaser),
+      render: buildRender(),
     });
 
     function buildScheduler(): (operation: () => void) => void {
 
       const scheduler = context.get(RenderScheduler);
 
-      return operation => scheduler.scheduleRender(operation)
+      return operation => scheduler.scheduleRender(operation);
     }
 
     function buildRootSelector(): StypSelector {
+      return shadowRoot ? hostSelector : [];
+    }
 
-      const shadowRoot = context.get(ShadowContentRoot, { or: null });
+    function buildRender(): StypRender | readonly StypRender[] | undefined {
 
-      return shadowRoot ? hostSelector : [{ c: context.get(UniqueElementClass) }];
+      const { render } = opts;
+
+      if (shadowRoot) {
+        return render;
+      }
+
+      return new ArraySet<StypRender>(render)
+          .add(noShadowRender(context.get(ElementIdClass)))
+          .value;
     }
   }
 
+}
+
+function noShadowRender(idClass: ElementIdClass): StypRender {
+  return {
+    order: -100,
+    render(producer, properties) {
+      producer.render(properties, {
+        selector: [{ c: [idClass] }, ...producer.selector],
+      });
+    },
+  };
 }
