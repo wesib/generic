@@ -3,24 +3,20 @@ import {
   ComponentContext,
   ComponentDef,
   ComponentMount,
-  DomProperty,
   Feature,
-  Render,
-  RenderScheduler, ShadowContentRoot, ShadowRootBuilder,
+  RenderScheduler,
+  ShadowContentRoot,
 } from '@wesib/wesib';
-import { noop } from 'call-thru';
 import { trackValue } from 'fun-events';
-import { StypProperties, stypRoot, StypRule, stypSelectorText } from 'style-producer';
+import { StypProperties, stypRoot, StypRule, StypRules, stypSelectorText } from 'style-producer';
 import { testComponentFactory } from '../spec/test-element';
 import { ElementIdClass } from './element-id-class';
-import { ProduceComponentStyle } from './produce-component-style';
+import { ProduceStyle } from './produce-style.decorator';
 import { StyleProducerSupport } from './style-producer-support.feature';
 
 describe('styp/component-style-producer', () => {
 
-  let element: HTMLElement & {
-    css: StypProperties;
-  };
+  let element: HTMLElement;
 
   beforeEach(() => {
     element = document.createElement('test-component') as any;
@@ -37,10 +33,20 @@ describe('styp/component-style-producer', () => {
 
     expect(style.display).toBe('block');
   });
-  it('updates style', async () => {
-    await connect();
+  it('renders styles', async () => {
+    await connect(stypRoot({ display: 'block' }).rules);
 
-    element.css = { display: 'inline-block' };
+    const style = cssStyle();
+
+    expect(style.display).toBe('block');
+  });
+  it('updates style', async () => {
+
+    const css = trackValue<StypProperties>({ display: 'block' });
+
+    await connect(stypRoot(css));
+
+    css.it = { display: 'inline-block' };
 
     const style = cssStyle();
 
@@ -56,7 +62,7 @@ describe('styp/component-style-producer', () => {
   });
   it('prepends element id class to CSS rule selector of anonymous component', async () => {
 
-    const context = await connect({});
+    const context = await connect(undefined, {});
     const rule = cssStyleRule();
     const idClass = context.get(ElementIdClass);
     const selector = stypSelectorText({ c: idClass });
@@ -65,7 +71,7 @@ describe('styp/component-style-producer', () => {
     expect(selector).toMatch(/^\.component\\#\d+\\@/);
   });
   it('prepends `:host` CSS rule selector when shadow DOM supported', async () => {
-    await connect({
+    await connect(undefined, {
       perComponent: {
         a: ShadowContentRoot,
         by(ctx: ComponentContext) {
@@ -78,16 +84,21 @@ describe('styp/component-style-producer', () => {
     expect(rule.selectorText).toBe(':host');
   });
 
-  async function connect(def?: ComponentDef): Promise<ComponentContext<any>> {
+  async function connect(
+      style?: StypRule | StypRules,
+      def?: ComponentDef): Promise<ComponentContext<any>> {
 
-    const mnt = await mount(def);
+    const mnt = await mount(style, def);
 
     mnt.connected = true;
 
     return mnt.context;
   }
 
-  async function mount(def: ComponentDef = { name: 'test-component' }): Promise<ComponentMount<any>> {
+  async function mount(
+      style: StypRule | StypRules = stypRoot({ display: 'block' }),
+      def: ComponentDef = { name: 'test-component' }):
+      Promise<ComponentMount<any>> {
 
     @Component(def)
     @Feature({
@@ -103,24 +114,9 @@ describe('styp/component-style-producer', () => {
     })
     class TestComponent {
 
-      private readonly _produceStyle: ProduceComponentStyle;
-      private readonly _root: StypRule;
-      private readonly _css = trackValue<StypProperties>({ display: 'block' });
-
-      constructor(ctx: ComponentContext<TestComponent>) {
-        this._produceStyle = ctx.get(ProduceComponentStyle);
-        this._root = stypRoot(this._css);
-      }
-
-      @Render()
-      renderStyle() {
-        this._produceStyle(this._root.rules);
-        return noop; // Do not re-render
-      }
-
-      @DomProperty()
-      set css(value: StypProperties) {
-        this._css.it = value;
+      @ProduceStyle()
+      get style(): StypRule | StypRules {
+        return style;
       }
 
     }

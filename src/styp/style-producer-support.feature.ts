@@ -1,8 +1,8 @@
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { newNamespaceAliaser } from 'style-producer';
 import { BootstrapNamespaceAliaser } from './bootstrap-namespace-aliaser';
-import { ComponentStyleProducer } from './component-style-producer.impl';
-import { ProduceComponentStyle } from './produce-component-style';
+import { ComponentStyleProducer } from './component-style-producer';
+import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
 
 const StyleProducerSupport__feature: FeatureDef = {
   set: {
@@ -11,14 +11,14 @@ const StyleProducerSupport__feature: FeatureDef = {
   },
   perComponent: [
     {
-      as: ComponentStyleProducer,
+      as: ComponentStyleProducer_,
     },
     {
-      a: ProduceComponentStyle,
-      by(producer: ComponentStyleProducer): ProduceComponentStyle {
+      a: ComponentStyleProducer,
+      by(producer: ComponentStyleProducer_): ComponentStyleProducer {
         return (rules, opts) => producer.produce(rules, opts);
       },
-      with: [ComponentStyleProducer],
+      with: [ComponentStyleProducer_],
     },
   ],
 };

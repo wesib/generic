@@ -1,4 +1,4 @@
-import { ContextKey, ContextRequest, ContextTarget, SingleContextKey } from 'context-values';
+import { ContextRequest, ContextTarget, SingleContextKey } from 'context-values';
 import { EventInterest } from 'fun-events';
 import { StypOptions, StypRules } from 'style-producer';
 
@@ -12,10 +12,10 @@ import { StypOptions, StypRules } from 'style-producer';
  * @returns Event interest instance. When this interest is lost (i.e. its `off()` method is called) the produced
  * stylesheets are removed.
  */
-export type ProduceComponentStyle = (rules: StypRules, opts?: StypOptions) => EventInterest;
+export type ComponentStyleProducer = (rules: StypRules, opts?: StypOptions) => EventInterest;
 
 /**
  * A key of component context value containing a component style producer.
  */
-export const ProduceComponentStyle: ContextTarget<ProduceComponentStyle> & ContextRequest<ProduceComponentStyle> =
-    /*#__PURE__*/ new SingleContextKey<ProduceComponentStyle>('produce-component-style');
+export const ComponentStyleProducer: ContextTarget<ComponentStyleProducer> & ContextRequest<ComponentStyleProducer> =
+    /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer');

@@ -13,7 +13,7 @@ import { BootstrapNamespaceAliaser } from './bootstrap-namespace-aliaser';
 import { ElementIdClass } from './element-id-class';
 
 const ComponentStyleProducer__key =
-    /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer');
+    /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer:impl');
 
 const hostSelector: StypSelector.Normalized = [{ e: ':host' }];
 
