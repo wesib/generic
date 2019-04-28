@@ -54,7 +54,11 @@ function baseConfig(tsconfig) {
       sourcemaps(),
     ],
     input: './src/index.ts',
-    external: [ ...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies) ],
+    external: [
+      ...Object.keys(pkg.dependencies),
+      ...Object.keys(pkg.peerDependencies),
+      ...Object.keys(pkg.devDependencies),
+    ],
     output: {
       format: 'esm',
       sourcemap: true,
