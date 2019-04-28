@@ -8,6 +8,7 @@ import {
   Render,
   RenderScheduler, ShadowContentRoot, ShadowRootBuilder,
 } from '@wesib/wesib';
+import { noop } from 'call-thru';
 import { trackValue } from 'fun-events';
 import { StypProperties, stypRoot, StypRule, stypSelectorText } from 'style-producer';
 import { testComponentFactory } from '../spec/test-element';
@@ -35,6 +36,15 @@ describe('styp/component-style-producer', () => {
     const style = cssStyle();
 
     expect(style.display).toBe('block');
+  });
+  it('updates style', async () => {
+    await connect();
+
+    element.css = { display: 'inline-block' };
+
+    const style = cssStyle();
+
+    expect(style.display).toBe('inline-block');
   });
   it('prepends element id class to CSS rule selector', async () => {
 
@@ -105,6 +115,7 @@ describe('styp/component-style-producer', () => {
       @Render()
       renderStyle() {
         this._produceStyle(this._root.rules);
+        return noop; // Do not re-render
       }
 
       @DomProperty()
@@ -125,10 +136,11 @@ describe('styp/component-style-producer', () => {
 
   function cssStyleRule(): CSSStyleRule {
 
-    const style = element.querySelector('style') as HTMLStyleElement;
+    const styles = element.querySelectorAll('style');
 
-    expect(style).toBeDefined();
+    expect(styles).toHaveLength(1);
 
+    const style = styles[0];
     const sheet = style.sheet as CSSStyleSheet;
     const rule = sheet.cssRules[0] as CSSStyleRule;
 
