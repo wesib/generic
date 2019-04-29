@@ -63,11 +63,11 @@ describe('tree/element-node', () => {
     let connect: (ctx: ComponentContext) => void = noop;
     let disconnect: (ctx: ComponentContext) => void = noop;
 
-    jest.spyOn(context as any, 'onConnect', 'get').mockReturnValue((listener: (ctx: ComponentContext) => void) => {
+    jest.spyOn(context as any, 'whenOn', 'get').mockReturnValue((listener: (ctx: ComponentContext) => void) => {
       connect = listener;
       return noEventInterest();
     });
-    jest.spyOn(context as any, 'onDisconnect', 'get').mockReturnValue((listener: (ctx: ComponentContext) => void) => {
+    jest.spyOn(context as any, 'whenOff', 'get').mockReturnValue((listener: (ctx: ComponentContext) => void) => {
       disconnect = listener;
       return noEventInterest();
     });
