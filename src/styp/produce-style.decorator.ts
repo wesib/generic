@@ -1,6 +1,6 @@
 import { ComponentClass, ComponentDef } from '@wesib/wesib';
-import { StypOptions, StypRule, StypRules } from 'style-producer';
-import { ComponentStyleProducer } from './component-style-producer';
+import { StypRule, StypRules } from 'style-producer';
+import { ComponentStypOptions } from './component-styp-options';
 import { StyleProducerSupport } from './style-producer-support.feature';
 
 /**
@@ -11,11 +11,13 @@ import { StyleProducerSupport } from './style-producer-support.feature';
  *
  * This decorator automatically enables `StyleProducerSupport` feature.
  *
- * @param opts Non-mandatory CSS style production options.
+ * Utilizes `ComponentStypOptions.produce()` function to produce CSS stylesheets.
+ *
+ * @param options Non-mandatory CSS style production options.
  *
  * @returns Component property decorator.
  */
-export function ProduceStyle<T extends ComponentClass>(opts?: StypOptions):
+export function ProduceStyle<T extends ComponentClass>(options?: ComponentStypOptions):
     <V extends StypRule | StypRules>(
         target: InstanceType<T>,
         propertyKey: string | symbol,
@@ -32,11 +34,8 @@ export function ProduceStyle<T extends ComponentClass>(opts?: StypOptions):
               componentContext.whenReady(() => {
 
                 const component = componentContext.component as any;
-                const produceStyle = componentContext.get(ComponentStyleProducer);
 
-                componentContext.onConnect(() => {
-                  produceStyle(toStypRules(component[propertyKey] as any), opts);
-                });
+                ComponentStypOptions.produce(componentContext, component[propertyKey], options);
               });
             });
           },
@@ -45,11 +44,4 @@ export function ProduceStyle<T extends ComponentClass>(opts?: StypOptions):
           },
         });
   };
-}
-
-function toStypRules(styleDef: StypRule | StypRules): StypRules {
-  if (styleDef instanceof StypRule) {
-    return styleDef.rules;
-  }
-  return styleDef;
 }

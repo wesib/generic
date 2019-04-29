@@ -29,18 +29,18 @@ export class ComponentStyleProducer {
   constructor(private readonly _context: ComponentContext) {
   }
 
-  produce(rules: StypRules, opts: StypOptions = {}): EventInterest {
+  produce(rules: StypRules, options: StypOptions = {}): EventInterest {
 
     const context = this._context;
     const shadowRoot = context.get(ShadowContentRoot, { or: null });
 
     return produceStyle(rules, {
-      ...opts,
-      document: opts.document || context.get(BootstrapWindow).document,
-      parent: opts.parent || context.get(ContentRoot),
-      rootSelector: opts.rootSelector || buildRootSelector(),
-      schedule: opts.schedule || buildScheduler(),
-      nsAlias: opts.nsAlias || context.get(BootstrapNamespaceAliaser),
+      ...options,
+      document: options.document || context.get(BootstrapWindow).document,
+      parent: options.parent || context.get(ContentRoot),
+      rootSelector: options.rootSelector || buildRootSelector(),
+      schedule: options.schedule || buildScheduler(),
+      nsAlias: options.nsAlias || context.get(BootstrapNamespaceAliaser),
       render: buildRender(),
     });
 
@@ -57,7 +57,7 @@ export class ComponentStyleProducer {
 
     function buildRender(): StypRender | readonly StypRender[] | undefined {
 
-      const { render } = opts;
+      const { render } = options;
 
       if (shadowRoot) {
         return render;

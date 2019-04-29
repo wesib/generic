@@ -10,6 +10,7 @@ import {
 import { trackValue } from 'fun-events';
 import { StypProperties, stypRoot, StypRule, StypRules, stypSelectorText } from 'style-producer';
 import { testComponentFactory } from '../spec/test-element';
+import { ComponentStypOptions } from './component-styp-options';
 import { ElementIdClass } from './element-id-class';
 import { ProduceStyle } from './produce-style.decorator';
 import { StyleProducerSupport } from './style-producer-support.feature';
@@ -27,34 +28,50 @@ describe('styp/component-style-producer', () => {
   });
 
   it('renders style', async () => {
-    await connect();
-
-    const style = cssStyle();
-
-    expect(style.display).toBe('block');
+    await mount();
+    expect(cssStyle().display).toBe('block');
   });
   it('renders styles', async () => {
-    await connect(stypRoot({ display: 'block' }).rules);
+    await mount(stypRoot({ display: 'block' }).rules);
+    expect(cssStyle().display).toBe('block');
+  });
+  it('renders styles immediately when `offline="always"`', async () => {
+    await mount(undefined, undefined, { offline: 'always' });
+    expect(cssStyle().display).toBe('block');
+  });
+  it('removes styles on disconnection when `offline=false`', async () => {
 
-    const style = cssStyle();
+    const mnt = await mount(undefined, undefined, { offline: false });
 
-    expect(style.display).toBe('block');
+    mnt.connected = false;
+    expect(mnt.context.element.querySelectorAll('style')).toHaveLength(0);
+  });
+  it('does not remove styles on disconnection', async () => {
+
+    const mnt = await mount();
+
+    mnt.connected = false;
+    expect(cssStyle().display).toBe('block');
+  });
+  it('removes styles on component destruction', async () => {
+
+    const mnt = await mount();
+
+    mnt.context.destroy();
+    expect(mnt.context.element.querySelectorAll('style')).toHaveLength(0);
   });
   it('updates style', async () => {
 
     const css = trackValue<StypProperties>({ display: 'block' });
 
-    await connect(stypRoot(css));
+    await mount(stypRoot(css));
 
     css.it = { display: 'inline-block' };
-
-    const style = cssStyle();
-
-    expect(style.display).toBe('inline-block');
+    expect(cssStyle().display).toBe('inline-block');
   });
   it('prepends element id class to CSS rule selector', async () => {
 
-    const context = await connect();
+    const context = (await mount()).context;
     const rule = cssStyleRule();
     const idClass = context.get(ElementIdClass);
 
@@ -62,7 +79,7 @@ describe('styp/component-style-producer', () => {
   });
   it('prepends element id class to CSS rule selector of anonymous component', async () => {
 
-    const context = await connect(undefined, {});
+    const context = (await mount(undefined, {})).context;
     const rule = cssStyleRule();
     const idClass = context.get(ElementIdClass);
     const selector = stypSelectorText({ c: idClass });
@@ -71,7 +88,7 @@ describe('styp/component-style-producer', () => {
     expect(selector).toMatch(/^\.component\\#\d+\\@/);
   });
   it('prepends `:host` CSS rule selector when shadow DOM supported', async () => {
-    await connect(undefined, {
+    await mount(undefined, {
       perComponent: {
         a: ShadowContentRoot,
         by(ctx: ComponentContext) {
@@ -79,25 +96,16 @@ describe('styp/component-style-producer', () => {
         },
       }
     });
+
     const rule = cssStyleRule();
 
     expect(rule.selectorText).toBe(':host');
   });
 
-  async function connect(
-      style?: StypRule | StypRules,
-      def?: ComponentDef): Promise<ComponentContext<any>> {
-
-    const mnt = await mount(style, def);
-
-    mnt.connected = true;
-
-    return mnt.context;
-  }
-
   async function mount(
       style: StypRule | StypRules = stypRoot({ display: 'block' }),
-      def: ComponentDef = { name: 'test-component' }):
+      def: ComponentDef = { name: 'test-component' },
+      options?: ComponentStypOptions):
       Promise<ComponentMount<any>> {
 
     @Component(def)
@@ -114,7 +122,7 @@ describe('styp/component-style-producer', () => {
     })
     class TestComponent {
 
-      @ProduceStyle()
+      @ProduceStyle(options)
       get style(): StypRule | StypRules {
         return style;
       }
