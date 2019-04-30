@@ -46,9 +46,9 @@ export class ComponentStyleProducer {
 
     function buildScheduler(): (operation: () => void) => void {
 
-      const scheduler = context.get(RenderScheduler);
+      const schedule = context.get(RenderScheduler).newSchedule();
 
-      return operation => scheduler.scheduleRender(operation);
+      return operation => schedule.schedule(operation);
     }
 
     function buildRootSelector(): StypSelector {

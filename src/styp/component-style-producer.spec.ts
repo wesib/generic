@@ -3,7 +3,7 @@ import {
   ComponentContext,
   ComponentDef,
   ComponentMount,
-  Feature,
+  Feature, RenderSchedule,
   RenderScheduler,
   ShadowContentRoot,
 } from '@wesib/wesib';
@@ -114,8 +114,12 @@ describe('styp/component-style-producer', () => {
       set: {
         a: RenderScheduler,
         is: {
-          scheduleRender(op: () => void) {
-            op();
+          newSchedule(): RenderSchedule {
+            return {
+              schedule(op: () => void) {
+                op();
+              },
+            };
           },
         },
       }
