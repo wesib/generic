@@ -1,7 +1,7 @@
 import { ComponentContext } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { eventInterest, EventInterest, noEventInterest } from 'fun-events';
-import { StypOptions, StypRule, StypRules } from 'style-producer';
+import { lazyStypRules, StypOptions, StypRules } from 'style-producer';
 import { ComponentStyleProducer } from './component-style-producer';
 
 /**
@@ -30,7 +30,7 @@ export const ComponentStypOptions = {
    * Produces and dynamically updates component's CSS stylesheets based on the given CSS rules.
    *
    * @param context Target component context.
-   * @param rules CSS rule or rules to produce stylesheets for.
+   * @param rules A source of CSS rules to produce stylesheets for.
    * @param options Production options.
    *
    * @returns Event interest instance. When this interest is lost (i.e. its `off()` method is called) the produced
@@ -38,10 +38,10 @@ export const ComponentStypOptions = {
    */
   produce(
       context: ComponentContext,
-      rules: StypRule | StypRules,
+      rules: StypRules.Source,
       options?: ComponentStypOptions): EventInterest {
 
-    const css = toStypRules(rules);
+    const css = lazyStypRules(rules);
     const offline = options && options.offline;
     const produceStyle = context.get(ComponentStyleProducer);
 
@@ -73,7 +73,3 @@ export const ComponentStypOptions = {
     return interest;
   }
 };
-
-function toStypRules(rules: StypRule | StypRules): StypRules {
-  return rules instanceof StypRule ? rules.rules : rules;
-}

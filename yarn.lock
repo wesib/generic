@@ -2607,9 +2607,9 @@ nice-try@^1.0.4:
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
 node-fetch@^2.2.0:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.4.1.tgz#b2e38f1117b8acbedbe0524f041fb3177188255d"
-  integrity sha512-P9UbpFK87NyqBZzUuDBDz4f6Yiys8xm8j7ACDbi6usvFm6KItklQUKjeoqTrYS/S1k6I8oaOC2YLLDr/gg26Mw==
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.5.0.tgz#8028c49fc1191bba56a07adc6e2a954644a48501"
+  integrity sha512-YuZKluhWGJwCcUu4RlZstdAxr8bFfOVHakc1mplwHkk8J+tqM1Y5yraYvIUpeX8aY7+crCwiELJq7Vl0o0LWXw==
 
 node-int64@^0.4.0:
   version "0.4.0"
@@ -3559,10 +3559,10 @@ strip-json-comments@~2.0.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
 
-style-producer@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/style-producer/-/style-producer-1.0.2.tgz#c2ad19084b59978bcaa3bb5dc4dafc4476b2b769"
-  integrity sha512-DiPM6v2C4+Oono/bck2FocPmeu0yp8rkfts0kUZUHwPLkGlLll8GJQY7lAKEEDR7PUFllDt77nqa1qrl0SAT2Q==
+style-producer@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/style-producer/-/style-producer-1.1.0.tgz#77fb7d1ea70778ba0068588884c3c1e6fbaeb37a"
+  integrity sha512-sqCQDy9qnBIRrTYxGH7AwO4x/7Lhe5KrqgMwW36GA+gbTthECozIjQG6yB+Uka3Io/SlB3o2BpnbwfssacKeaw==
   dependencies:
     a-iterable "^2.3.1"
     call-thru "^2.4.0"
