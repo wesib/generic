@@ -1,13 +1,13 @@
 import { ComponentClass, ComponentDef } from '@wesib/wesib';
-import { StypRule, StypRules } from 'style-producer';
+import { StypRules } from 'style-producer';
 import { ComponentStypOptions } from './component-styp-options';
 import { StyleProducerSupport } from './style-producer-support.feature';
 
 /**
  * A decorator of component property returning CSS rules to produce.
  *
- * Decorated property values should be of type `StypRules` or `StypRule`. In the latter case a `StypRule.rules` will
- * be used.
+ * Decorated property value should either contain a CSS rules source of type `StypRules.Source` or be a method
+ * returning it.
  *
  * This decorator automatically enables `StyleProducerSupport` feature.
  *
@@ -18,7 +18,7 @@ import { StyleProducerSupport } from './style-producer-support.feature';
  * @returns Component property decorator.
  */
 export function ProduceStyle<T extends ComponentClass>(options?: ComponentStypOptions):
-    <V extends StypRule | StypRules>(
+    <V extends StypRules.Source | (() => StypRules.Source)>(
         target: InstanceType<T>,
         propertyKey: string | symbol,
         descriptor?: TypedPropertyDescriptor<V>) => any | void {
@@ -33,9 +33,13 @@ export function ProduceStyle<T extends ComponentClass>(options?: ComponentStypOp
             defContext.onComponent(componentContext => {
               componentContext.whenReady(() => {
 
-                const component = componentContext.component as any;
+                const component = componentContext.component;
+                const property = component[propertyKey];
 
-                ComponentStypOptions.produce(componentContext, component[propertyKey], options);
+                ComponentStypOptions.produce(
+                    componentContext,
+                    typeof property === 'function' ? property.bind(component) : property,
+                    options);
               });
             });
           },
