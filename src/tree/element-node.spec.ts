@@ -660,7 +660,12 @@ describe('tree/element-node', () => {
         const interest1 = attribute.on(onUpdate1);
         const interest2 = attribute2.on(onUpdate2);
 
+        expect(observer.observe).toHaveBeenCalledWith(
+            element,
+            expect.objectContaining({ attributeFilter: ['attr', 'attr2'] }));
         observer.disconnect.mockClear();
+        observer.takeRecords.mockClear();
+        observer.observe.mockClear();
 
         element.setAttribute('attr', value1);
         element.setAttribute('attr2', value2);
@@ -675,7 +680,14 @@ describe('tree/element-node', () => {
         onUpdate2.mockClear();
 
         interest1.off();
-        expect(observer.disconnect).not.toHaveBeenCalled();
+        expect(observer.disconnect).toHaveBeenCalled();
+        expect(observer.takeRecords).toHaveBeenCalled();
+        expect(observer.observe).toHaveBeenCalledWith(
+            element,
+            expect.objectContaining({ attributeFilter: ['attr2'] }));
+        observer.disconnect.mockClear();
+        observer.takeRecords.mockClear();
+        observer.observe.mockClear();
 
         setAttribute('attr2', value3, value2);
         expect(onUpdate1).not.toHaveBeenCalled();
@@ -683,6 +695,8 @@ describe('tree/element-node', () => {
 
         interest2.off();
         expect(observer.disconnect).toHaveBeenCalled();
+        expect(observer.takeRecords).not.toHaveBeenCalled();
+        expect(observer.observe).not.toHaveBeenCalled();
       });
       describe('done', () => {
         it('stops sending attribute updates', () => {

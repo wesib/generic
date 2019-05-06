@@ -29,25 +29,32 @@ class AttributesObserver {
 
   observe(name: string, receiver: EventReceiver<[string, string | null]>): EventInterest {
 
+    const self = this;
     const observer = this.observer;
     const emitter = this._emitter(name);
     const interest = emitter.on(receiver).whenDone(() => {
       this._emitters.delete(name);
-      if (!this._emitters.size) {
-        observer.disconnect();
+      observer.disconnect();
+      if (this._emitters.size) {
+        reconnect();
+      } else {
         this._observer = undefined;
       }
     });
 
     observer.disconnect();
-    this._update(observer.takeRecords());
-    observer.observe(this.element, {
-      attributes: true,
-      attributeOldValue: true,
-      attributeFilter: [...this._emitters.keys()],
-    });
+    reconnect();
 
     return interest;
+
+    function reconnect() {
+      self._update(observer.takeRecords());
+      observer.observe(self.element, {
+        attributes: true,
+        attributeOldValue: true,
+        attributeFilter: [...self._emitters.keys()],
+      });
+    }
   }
 
   private _update(mutations: MutationRecord[]) {
