@@ -9,6 +9,7 @@ import {
 import { ContextKey, SingleContextKey } from 'context-values';
 import { EventInterest } from 'fun-events';
 import { produceBasicStyle, StypOptions, StypRender, StypRules, StypSelector } from 'style-producer';
+import { ComponentStypRender } from './component-styp-render';
 import { DefaultNamespaceAliaser } from './default-namespace-aliaser';
 import { ElementIdClass } from './element-id-class';
 
@@ -60,14 +61,14 @@ export class ComponentStyleProducer {
     function buildRender(): StypRender | readonly StypRender[] | undefined {
 
       const { render } = options;
+      const renders = new ArraySet<StypRender>(render)
+          .add(...context.get(ComponentStypRender));
 
-      if (shadowRoot) {
-        return render;
+      if (!shadowRoot) {
+        renders.add(noShadowRender(context.get(ElementIdClass)));
       }
 
-      return new ArraySet<StypRender>(render)
-          .add(noShadowRender(context.get(ElementIdClass)))
-          .value;
+      return renders.value;
     }
   }
 

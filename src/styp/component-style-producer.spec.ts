@@ -10,12 +10,15 @@ import {
 } from '@wesib/wesib';
 import { trackValue } from 'fun-events';
 import { StypProperties, stypRoot, StypRules, stypSelectorText } from 'style-producer';
+import { StypRender } from 'style-producer/d.ts/producer/render';
 import { testComponentFactory } from '../spec/test-element';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypOptions } from './component-styp-options';
+import { ComponentStypRender } from './component-styp-render';
 import { ElementIdClass } from './element-id-class';
 import { ProduceStyle } from './produce-style.decorator';
 import { StyleProducerSupport } from './style-producer-support.feature';
+import Mock = jest.Mock;
 
 describe('styp/component-style-producer', () => {
 
@@ -37,7 +40,7 @@ describe('styp/component-style-producer', () => {
     await mount(stypRoot({ display: 'block' }).rules);
     expect(cssStyle().display).toBe('block');
   });
-  it('renders styles with StyleProduceSupport', async () => {
+  it('renders styles with StyleProducerSupport', async () => {
     await mount(stypRoot({ display: 'block' }).rules, { feature: { needs: StyleProducerSupport } });
     expect(cssStyle().display).toBe('block');
   });
@@ -48,6 +51,15 @@ describe('styp/component-style-producer', () => {
   it('renders styles immediately when `offline="always"`', async () => {
     await mount(undefined, undefined, { offline: 'always' });
     expect(cssStyle().display).toBe('block');
+  });
+  it('renders styles using component CSS render', async () => {
+
+    const mockRender = jest.fn<void, Parameters<StypRender.Function>>(
+        (producer, properties) => producer.render(properties));
+
+    await mount(undefined, { perComponent: { a: ComponentStypRender, is: mockRender } });
+    expect(cssStyle().display).toBe('block');
+    expect(mockRender).toHaveBeenCalledWith(expect.anything(), { display: 'block' });
   });
   it('removes styles on disconnection when `offline=false`', async () => {
 
