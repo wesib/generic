@@ -685,7 +685,7 @@ describe('tree/element-node', () => {
         expect(observer.disconnect).toHaveBeenCalled();
       });
       describe('done', () => {
-        it('stops sends attribute updates', () => {
+        it('stops sending attribute updates', () => {
 
           const oldValue = 'old value';
           const newValue = 'new value';

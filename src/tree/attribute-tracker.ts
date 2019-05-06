@@ -1,7 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import {
   EventEmitter,
-  eventInterest,
   EventInterest,
   EventReceiver,
   noEventInterest,
@@ -32,7 +31,13 @@ class AttributesObserver {
 
     const observer = this.observer;
     const emitter = this._emitter(name);
-    const interest = emitter.on(receiver);
+    const interest = emitter.on(receiver).whenDone(() => {
+      this._emitters.delete(name);
+      if (!this._emitters.size) {
+        observer.disconnect();
+        this._observer = undefined;
+      }
+    });
 
     observer.disconnect();
     this._update(observer.takeRecords());
@@ -42,19 +47,10 @@ class AttributesObserver {
       attributeFilter: [...this._emitters.keys()],
     });
 
-    return eventInterest(() => {
-      interest.off();
-      if (!emitter.size) {
-        this._emitters.delete(name);
-        if (!this._emitters.size) {
-          observer.disconnect();
-          this._observer = undefined;
-        }
-      }
-    }).needs(interest);
+    return interest;
   }
 
-  _update(mutations: MutationRecord[]) {
+  private _update(mutations: MutationRecord[]) {
     mutations.forEach(mutation => {
 
       const attributeName = mutation.attributeName as string;
@@ -92,20 +88,17 @@ class AttributeTracker extends ValueTracker<string | null, string> {
 
     this.on = onEventBy(receiver => {
       if (!this._updates.size) {
-        observeInterest = this._observer.observe(_name, (newValue, oldValue) => {
-          this._updates.send(newValue, oldValue);
-        });
+        observeInterest = this._observer.observe(
+            _name,
+            (newValue, oldValue) => this._updates.send(newValue, oldValue));
       }
 
-      const interest = this._updates.on(receiver);
-
-      return eventInterest(reason => {
-        interest.off(reason);
+      return this._updates.on(receiver).whenDone(reason => {
         if (!this._updates.size) {
           observeInterest.off(reason);
           observeInterest = noEventInterest();
         }
-      }).needs(interest).needs(observeInterest);
+      }).needs(observeInterest);
     });
   }
 
