@@ -1,7 +1,7 @@
 import { ComponentClass, ComponentDef } from '@wesib/wesib';
 import { StypRules } from 'style-producer';
+import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypOptions } from './component-styp-options';
-import { StyleProducerSupport } from './style-producer-support.feature';
 
 /**
  * A decorator of component property returning CSS rules to produce.
@@ -9,7 +9,7 @@ import { StyleProducerSupport } from './style-producer-support.feature';
  * Decorated property value should either contain a CSS rules source of type `StypRules.Source` or be a method
  * returning it.
  *
- * This decorator automatically enables `StyleProducerSupport` feature.
+ * This decorator automatically enables [[BasicStyleProducerSupport]] feature.
  *
  * Utilizes `ComponentStypOptions.produce()` function to produce CSS stylesheets.
  *
@@ -44,7 +44,7 @@ export function ProduceStyle<T extends ComponentClass>(options?: ComponentStypOp
             });
           },
           feature: {
-            needs: [StyleProducerSupport],
+            needs: [BasicStyleProducerSupport],
           },
         });
   };

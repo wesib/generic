@@ -8,8 +8,9 @@ import {
 } from '@wesib/wesib';
 import { ContextKey, SingleContextKey } from 'context-values';
 import { EventInterest } from 'fun-events';
-import { produceStyle, StypOptions, StypRender, StypRules, StypSelector } from 'style-producer';
-import { BootstrapNamespaceAliaser } from './bootstrap-namespace-aliaser';
+import { produceBasicStyle, StypOptions, StypRender, StypRules, StypSelector } from 'style-producer';
+import { ComponentStypRender } from './component-styp-render';
+import { DefaultNamespaceAliaser } from './default-namespace-aliaser';
 import { ElementIdClass } from './element-id-class';
 
 const ComponentStyleProducer__key =
@@ -26,7 +27,9 @@ export class ComponentStyleProducer {
     return ComponentStyleProducer__key;
   }
 
-  constructor(private readonly _context: ComponentContext) {
+  constructor(
+      private readonly _context: ComponentContext,
+      private readonly _produce = produceBasicStyle) {
   }
 
   produce(rules: StypRules, options: StypOptions = {}): EventInterest {
@@ -34,13 +37,13 @@ export class ComponentStyleProducer {
     const context = this._context;
     const shadowRoot = context.get(ShadowContentRoot, { or: null });
 
-    return produceStyle(rules, {
+    return this._produce(rules, {
       ...options,
       document: options.document || context.get(BootstrapWindow).document,
       parent: options.parent || context.get(ContentRoot),
       rootSelector: options.rootSelector || buildRootSelector(),
       schedule: options.schedule || buildScheduler(),
-      nsAlias: options.nsAlias || context.get(BootstrapNamespaceAliaser),
+      nsAlias: options.nsAlias || context.get(DefaultNamespaceAliaser),
       render: buildRender(),
     });
 
@@ -58,14 +61,14 @@ export class ComponentStyleProducer {
     function buildRender(): StypRender | readonly StypRender[] | undefined {
 
       const { render } = options;
+      const renders = new ArraySet<StypRender>(render)
+          .add(...context.get(ComponentStypRender));
 
-      if (shadowRoot) {
-        return render;
+      if (!shadowRoot) {
+        renders.add(noShadowRender(context.get(ElementIdClass)));
       }
 
-      return new ArraySet<StypRender>(render)
-          .add(noShadowRender(context.get(ElementIdClass)))
-          .value;
+      return renders.value;
     }
   }
 

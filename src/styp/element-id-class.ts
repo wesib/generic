@@ -1,7 +1,7 @@
 import { ComponentContext, ElementDef } from '@wesib/wesib';
 import { ContextRequest, ContextTarget, ContextValues, SingleContextKey } from 'context-values';
 import { NameInNamespace, NamespaceDef } from 'style-producer';
-import { BootstrapNamespaceAliaser } from './bootstrap-namespace-aliaser';
+import { DefaultNamespaceAliaser } from './default-namespace-aliaser';
 
 /**
  * @internal
@@ -26,8 +26,8 @@ let uniqueClassSeq = 0;
 
 function assignElementId(contextValues: ContextValues): ElementIdClass {
 
+  const aliaser = contextValues.get(DefaultNamespaceAliaser);
   const context = contextValues.get(ComponentContext);
-  const aliaser = context.get(BootstrapNamespaceAliaser);
   const elementDef = context.get(ElementDef);
   const name = elementDef.name || 'component';
   const local = `${name}#${++uniqueClassSeq}`;
