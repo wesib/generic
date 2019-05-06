@@ -1,22 +1,17 @@
-import { ComponentContext, FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
-import { newNamespaceAliaser, produceStyle } from 'style-producer';
-import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
+import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
+import { newNamespaceAliaser } from 'style-producer';
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
 import { DefaultNamespaceAliaser } from './default-namespace-aliaser';
 
-const StyleProducerSupport__feature: FeatureDef = {
-  has: BasicStyleProducerSupport,
+const BasicStyleProducerSupport__feature: FeatureDef = {
   set: {
     a: DefaultNamespaceAliaser,
     by: newNamespaceAliaser,
   },
   perComponent: [
     {
-      a: ComponentStyleProducer_,
-      by(context: ComponentContext) {
-        return new ComponentStyleProducer_(context, produceStyle);
-      }
+      as: ComponentStyleProducer_,
     },
     {
       a: ComponentStyleProducer,
@@ -29,20 +24,20 @@ const StyleProducerSupport__feature: FeatureDef = {
 };
 
 /**
- * Style producer support feature.
+ * Basic style producer support feature.
  *
  * Depends on [style-producer].
  *
- * This is an implementation of [[BasicStyleProducerSupport]] feature that enables default CSS renders.
+ * Unlike [[StyleProducerSupport]] feature this one does not enable default CSS renders.
  *
- * It is not enabled automatically by `@ProduceStyle` decorator.
+ * It is enabled automatically by `@ProduceStyle` decorator.
  *
  * [style-producer]: https://www.npmjs.com/package/style-producer
  */
-export class StyleProducerSupport {
+export class BasicStyleProducerSupport {
 
   static get [FeatureDef__symbol]() {
-    return StyleProducerSupport__feature;
+    return BasicStyleProducerSupport__feature;
   }
 
 }
