@@ -1,18 +1,15 @@
 import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
-import { EventEmitter, OnEvent, onEventBy, ValueTracker } from 'fun-events';
+import { EventEmitter, noEventInterest, OnEvent, ValueTracker } from 'fun-events';
 
 class PropertyTracker<T> extends ValueTracker<T> {
 
   private readonly _updates = new EventEmitter<[T, T]>();
+  private _interest = noEventInterest();
 
   constructor(
       private readonly _element: any,
-      private readonly _key: PropertyKey,
-      context?: ComponentContext) {
+      private readonly _key: PropertyKey) {
     super();
-    if (context) {
-      this.bind(context);
-    }
   }
 
   get on(): OnEvent<[T, T]> {
@@ -21,12 +18,11 @@ class PropertyTracker<T> extends ValueTracker<T> {
 
   bind(context: ComponentContext) {
 
-    const tracker = context.get(ComponentState).track(domPropertyPathTo(this._key));
-    const onUpdate = onEventBy(
-        (receiver: (newValue: T, oldValue: T) => void) => tracker.onUpdate(
-            (_path, newValue: any, oldValue: any) => receiver(newValue, oldValue)));
+    const propertyState = context.get(ComponentState).track(domPropertyPathTo(this._key));
 
-    onUpdate((...args) => this._updates.send(...args));
+    this._interest = propertyState.onUpdate(
+        (_path, newValue: any, oldValue: any) => this._updates.send(newValue, oldValue)
+    ).whenDone(reason => this._updates.done(reason));
   }
 
   get it(): T {
@@ -38,7 +34,7 @@ class PropertyTracker<T> extends ValueTracker<T> {
   }
 
   done(reason?: any): this {
-    this._updates.done(reason);
+    this._interest.off(reason);
     return this;
   }
 
@@ -68,8 +64,11 @@ export class NodeProperties {
       return existing;
     }
 
-    const created = new PropertyTracker<any>(this._element, key, this._context);
+    const created = new PropertyTracker<any>(this._element, key);
 
+    if (this._context) {
+      created.bind(this._context);
+    }
     this._props.set(key, created);
 
     return created;
