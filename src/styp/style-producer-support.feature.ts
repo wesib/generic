@@ -1,16 +1,11 @@
 import { ComponentContext, FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
-import { newNamespaceAliaser, produceStyle } from 'style-producer';
+import { produceStyle } from 'style-producer';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
-import { DefaultNamespaceAliaser } from './default-namespace-aliaser';
 
 const StyleProducerSupport__feature: FeatureDef = {
   has: BasicStyleProducerSupport,
-  set: {
-    a: DefaultNamespaceAliaser,
-    by: newNamespaceAliaser,
-  },
   perComponent: [
     {
       a: ComponentStyleProducer_,

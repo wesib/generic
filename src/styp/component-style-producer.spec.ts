@@ -18,7 +18,6 @@ import { ComponentStypRender } from './component-styp-render';
 import { ElementIdClass } from './element-id-class';
 import { ProduceStyle } from './produce-style.decorator';
 import { StyleProducerSupport } from './style-producer-support.feature';
-import Mock = jest.Mock;
 
 describe('styp/component-style-producer', () => {
 

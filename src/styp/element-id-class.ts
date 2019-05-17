@@ -1,7 +1,6 @@
-import { ComponentContext, ElementDef } from '@wesib/wesib';
+import { ComponentContext, DefaultNamespaceAliaser, ElementDef } from '@wesib/wesib';
 import { ContextRequest, ContextTarget, ContextValues, SingleContextKey } from 'context-values';
-import { NameInNamespace, NamespaceDef } from 'style-producer';
-import { DefaultNamespaceAliaser } from './default-namespace-aliaser';
+import { NameInNamespace, NamespaceDef } from 'namespace-aliaser';
 
 /**
  * @internal
@@ -11,7 +10,7 @@ export type ElementIdClass = NameInNamespace;
 /**
  * @internal
  */
-export const ElementIdClass__ns = /*#__PURE*/ new NamespaceDef(
+export const ElementIdClass__NS = /*#__PURE*/ new NamespaceDef(
     'https://wesib.github.io/ns/element-id-class',
     'elic',
     'element-id-class');
@@ -31,7 +30,7 @@ function assignElementId(contextValues: ContextValues): ElementIdClass {
   const elementDef = context.get(ElementDef);
   const name = elementDef.name || 'component';
   const local = `${name}#${++uniqueClassSeq}`;
-  const qualified = ElementIdClass__ns.qualify(aliaser(ElementIdClass__ns), local, 'css');
+  const qualified = ElementIdClass__NS.qualify(aliaser(ElementIdClass__NS), local, 'css');
   const element = context.element as Element;
 
   element.classList.add(qualified);

@@ -3,6 +3,7 @@ import {
   BootstrapWindow,
   ComponentContext,
   ContentRoot,
+  DefaultNamespaceAliaser,
   RenderScheduler,
   ShadowContentRoot,
 } from '@wesib/wesib';
@@ -10,7 +11,6 @@ import { ContextKey, SingleContextKey } from 'context-values';
 import { EventInterest } from 'fun-events';
 import { produceBasicStyle, StypOptions, StypRender, StypRules, StypSelector } from 'style-producer';
 import { ComponentStypRender } from './component-styp-render';
-import { DefaultNamespaceAliaser } from './default-namespace-aliaser';
 import { ElementIdClass } from './element-id-class';
 
 const ComponentStyleProducer__key =
