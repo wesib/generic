@@ -1,6 +1,6 @@
 import { ComponentContext, DefaultNamespaceAliaser, ElementDef } from '@wesib/wesib';
 import { ContextRequest, ContextTarget, ContextValues, SingleContextKey } from 'context-values';
-import { NameInNamespace, NamespaceDef } from 'namespace-aliaser';
+import { NameInNamespace, NamespaceDef, qualifyHtmlName } from 'namespace-aliaser';
 
 /**
  * @internal
@@ -28,7 +28,7 @@ function assignElementId(contextValues: ContextValues): ElementIdClass {
   const aliaser = contextValues.get(DefaultNamespaceAliaser);
   const context = contextValues.get(ComponentContext);
   const elementDef = context.get(ElementDef);
-  const name = elementDef.name || 'component';
+  const name: string = elementDef.name ? qualifyHtmlName(elementDef.name, aliaser) : 'component';
   const local = `${name}#${++uniqueClassSeq}`;
   const qualified = ElementIdClass__NS.qualify(aliaser(ElementIdClass__NS), local, 'css');
   const element = context.element as Element;
