@@ -57,6 +57,7 @@ function baseConfig(tsconfig) {
     external: [
       ...Object.keys(pkg.dependencies),
       ...Object.keys(pkg.devDependencies),
+      ...Object.keys(pkg.optionalDependencies),
     ],
     output: {
       format: 'esm',
