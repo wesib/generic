@@ -71,7 +71,7 @@ class AttributesObserver {
 
   private _emitter(name: string): EventEmitter<[string, string | null]> {
 
-    const emitter = new EventEmitter();
+    const emitter = new EventEmitter<[string, string | null]>();
 
     this._emitters.set(name, emitter);
 
