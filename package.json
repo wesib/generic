@@ -30,7 +30,7 @@
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.25"
+    "@wesib/wesib": "^1.0.0-alpha.27"
   },
   "optionalDependencies": {
     "style-producer": "^2.1.2"
@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "@types/jsdom": "^12.2.3",
-    "@wesib/wesib": "^1.0.0-alpha.25",
+    "@wesib/wesib": "^1.0.0-alpha.27",
     "codecov": "^3.5.0",
     "cssesc": "^3.0.0",
     "fs-extra": "^8.0.1",
