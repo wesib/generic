@@ -1,4 +1,4 @@
-import { stypRoot, StypRule, stypRules, StypRules } from 'style-producer';
+import { lazyStypRules, stypRoot, StypRule, StypRules } from 'style-producer';
 import { Theme as Theme_ } from './theme';
 import { ThemeStyle } from './theme-style';
 
@@ -18,7 +18,7 @@ export class Theme extends Theme_ {
 
     const theme = this;
 
-    return stypRules(...styles.reduce<StypRules[]>(addStyleRules, []));
+    return lazyStypRules(...styles.reduce<StypRules[]>(addStyleRules, []));
 
     function addStyleRules(target: StypRules[], style: ThemeStyle.Provider) {
 
