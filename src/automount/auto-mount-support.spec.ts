@@ -2,7 +2,6 @@ import {
   ArraySet,
   AutoConnectSupport,
   bootstrapComponents,
-  BootstrapContext,
   BootstrapRoot,
   BootstrapWindow,
   Class,
@@ -27,7 +26,6 @@ describe('automount/auto-mount-support', () => {
     addEventListener: Mock;
   };
   let mockAdapter: ElementAdapter;
-  let bootstrapContext: BootstrapContext;
 
   beforeEach(() => {
     domContentLoaded = noop;
@@ -48,7 +46,7 @@ describe('automount/auto-mount-support', () => {
       document: mockDocument,
     } as any;
     mockRoot = {
-      querySelectorAll: jest.fn(selector => []),
+      querySelectorAll: jest.fn(_selector => []),
       addEventListener: jest.fn(),
     };
     mockAdapter = jest.fn();
@@ -124,9 +122,6 @@ describe('automount/auto-mount-support', () => {
         { a: BootstrapRoot, is: mockRoot },
         { a: ElementAdapter, is: mockAdapter }
       ],
-      init(context) {
-        bootstrapContext = context;
-      }
     })
     class TestFeature {
     }

@@ -86,7 +86,6 @@ class AttributeTracker extends ValueTracker<string | null, string> {
   readonly on: OnEvent<[string, string | null]>;
 
   constructor(
-      bs: BootstrapContext,
       private readonly _observer: AttributesObserver,
       private readonly _name: string) {
     super();
@@ -132,8 +131,8 @@ export class NodeAttributes {
   private readonly _attrs = new Map<string, AttributeTracker>();
   private readonly _observer: AttributesObserver;
 
-  constructor(private readonly _bs: BootstrapContext, private readonly _element: any) {
-    this._observer = new AttributesObserver(_bs, _element);
+  constructor(bs: BootstrapContext, element: any) {
+    this._observer = new AttributesObserver(bs, element);
   }
 
   get(name: string): ValueTracker<string | null, string> {
@@ -144,7 +143,7 @@ export class NodeAttributes {
       return existing;
     }
 
-    const created = new AttributeTracker(this._bs, this._observer, name);
+    const created = new AttributeTracker(this._observer, name);
 
     this._attrs.set(name, created);
 

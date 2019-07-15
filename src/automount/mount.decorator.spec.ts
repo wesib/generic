@@ -1,6 +1,5 @@
 import {
   bootstrapComponents,
-  BootstrapContext,
   BootstrapRoot,
   BootstrapWindow,
   Class,
@@ -11,7 +10,6 @@ import {
   ElementAdapter,
   Feature,
 } from '@wesib/wesib';
-import { noop } from 'call-thru';
 import { ObjectMock } from '../spec/mocks';
 import { MockElement } from '../spec/test-element';
 import { Mount } from './mount.decorator';
@@ -21,27 +19,20 @@ describe('automount/mount.decorator', () => {
 
   let mockWindow: ObjectMock<Window>;
   let mockDocument: ObjectMock<Document>;
-  let domContentLoaded: () => void;
   let mockObserver: ObjectMock<MutationObserver>;
   let mockRoot: {
     querySelectorAll: Mock<any[], [string]>;
     addEventListener: Mock;
   };
   let mockAdapter: ElementAdapter;
-  let bootstrapContext: BootstrapContext;
 
   beforeEach(() => {
-    domContentLoaded = noop;
     mockObserver = {
       observe: jest.fn(),
     } as any;
     mockDocument = {
       readyState: 'interactive',
-      addEventListener: jest.fn((event, listener) => {
-        if (event === 'DOMContentLoaded') {
-          domContentLoaded = listener;
-        }
-      }),
+      addEventListener: jest.fn(),
       removeEventListener: jest.fn(),
     } as any;
     mockWindow = {
@@ -49,7 +40,7 @@ describe('automount/mount.decorator', () => {
       document: mockDocument,
     } as any;
     mockRoot = {
-      querySelectorAll: jest.fn(selector => []),
+      querySelectorAll: jest.fn(_selector => []),
       addEventListener: jest.fn(),
     };
     mockAdapter = jest.fn();
@@ -139,9 +130,6 @@ describe('automount/mount.decorator', () => {
         { a: BootstrapRoot, is: mockRoot },
         { a: ElementAdapter, is: mockAdapter }
       ],
-      init(context) {
-        bootstrapContext = context;
-      }
     })
     class TestFeature {
     }

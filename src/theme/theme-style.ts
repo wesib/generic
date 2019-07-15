@@ -81,7 +81,7 @@ class ThemeStyleKey extends AbstractContextKey<ThemeStyle.ById, ThemeStyle> {
   }
 
   merge(
-      context: ContextValues,
+      _context: ContextValues,
       sources: ContextSources<ThemeStyle>,
       handleDefault: DefaultContextValueHandler<ThemeStyle.ById>): ThemeStyle.ById | null | undefined {
 

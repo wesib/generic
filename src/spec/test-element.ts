@@ -11,12 +11,9 @@ import {
 export function testComponentFactory<T extends object>(componentType: Class<T>): Promise<ComponentFactory<T>> {
   ComponentDef.define(componentType);
 
-  let result!: Class;
-
   const customElements: CustomElements = {
 
-    define(compType: ComponentClass<any>, elementType: Class<any>): void {
-      result = elementType;
+    define(): void {
     },
 
     whenDefined(): Promise<void> {
@@ -43,7 +40,7 @@ export function testElement(componentType: Class<any>): Class<any> {
 
   const customElements: CustomElements = {
 
-    define(compType: ComponentClass<any>, elementType: Class<any>): void {
+    define(_compType: ComponentClass<any>, elementType: Class<any>): void {
       result = elementType;
     },
 
@@ -95,7 +92,7 @@ export class MockElement {
     }
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string) {
+  attributeChangedCallback(_name: string, _oldValue: string | null, _newValue: string) {
   }
 
 }
