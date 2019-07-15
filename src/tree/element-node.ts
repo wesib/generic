@@ -4,7 +4,7 @@ import { ContextRequest, ContextTarget, SingleContextKey } from 'context-values'
 import {
   AfterEvent,
   AfterEvent__symbol,
-  afterEventFrom,
+  afterEventOr,
   EventKeeper,
   EventSender,
   OnEvent,
@@ -178,7 +178,7 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
 
   get [AfterEvent__symbol](): AfterEvent<[AIterable<N>]> {
       return this[afterEvent__symbol]
-          || (this[afterEvent__symbol] = afterEventFrom<[AIterable<N>]>(this.onUpdate, () => [this]));
+          || (this[afterEvent__symbol] = afterEventOr<[AIterable<N>]>(this.onUpdate, () => [this]));
   }
 
   /**
@@ -201,7 +201,7 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
 
     const onUpdateFirst: OnEvent<[any]> = onEventFrom(this).thru(itsFirst);
 
-    return this[first__symbol] = afterEventFrom<[N | undefined]>(onUpdateFirst, () => [itsFirst(this)]);
+    return this[first__symbol] = afterEventOr<[N | undefined]>(onUpdateFirst, () => [itsFirst(this)]);
   }
 
 }
