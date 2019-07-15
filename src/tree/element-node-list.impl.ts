@@ -18,8 +18,8 @@ export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> 
       this._observer.observe(this._root, this._init);
     }
 
-    return eventInterest(() => {
-      interest.off();
+    return eventInterest(reason => {
+      interest.off(reason);
       if (!this._updates.size) {
         this._observer.disconnect();
       }
