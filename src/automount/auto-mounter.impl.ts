@@ -4,6 +4,9 @@ import { MountDef } from './mount-def';
 
 const AutoMounter__key = /*#__PURE__*/ new SingleContextKey<AutoMounter>('auto-mounter');
 
+/**
+ * @internal
+ */
 export class AutoMounter {
 
   private _adapters: ElementAdapter[] = [];

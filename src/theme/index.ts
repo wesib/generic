@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 export * from './theme';
 export * from './theme-factory';
 export * from './theme-style';

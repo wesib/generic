@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 import { ComponentClass, ComponentDef } from '@wesib/wesib';
 import { StypRules } from 'style-producer';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
@@ -11,9 +14,10 @@ import { ComponentStypOptions } from './component-styp-options';
  *
  * This decorator automatically enables [[BasicStyleProducerSupport]] feature.
  *
- * Utilizes `ComponentStypOptions.produce()` function to produce CSS stylesheets.
+ * Utilizes [[ComponentStypOptions.produce]] function to produce CSS stylesheets.
  *
- * @param options Non-mandatory CSS style production options.
+ * @typeparam T  A type of decorated component class.
+ * @param options  Non-mandatory CSS style production options.
  *
  * @returns Component property decorator.
  */
@@ -21,7 +25,8 @@ export function ProduceStyle<T extends ComponentClass>(options?: ComponentStypOp
     <V extends StypRules.Source | (() => StypRules.Source)>(
         target: InstanceType<T>,
         propertyKey: string | symbol,
-        descriptor?: TypedPropertyDescriptor<V>) => any | void {
+        descriptor?: TypedPropertyDescriptor<V>
+    ) => any | void {
   return (target: InstanceType<T>, propertyKey: string | symbol) => {
 
     const componentType = target.constructor as T;

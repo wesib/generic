@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 export * from './basic-style-producer-support.feature';
 export * from './component-style-producer';
 export * from './component-styp-options';

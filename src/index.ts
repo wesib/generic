@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 export * from './automount';
 export * from './styp';
 export * from './theme';

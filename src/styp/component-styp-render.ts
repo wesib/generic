@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 import { ContextRequest, ContextTarget, MultiContextKey } from 'context-values';
 import { StypRender } from 'style-producer';
 

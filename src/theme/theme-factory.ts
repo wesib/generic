@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 import { ContextKey, SingleContextKey } from 'context-values';
 import { Theme } from './theme';
 

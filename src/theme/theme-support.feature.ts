@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { BasicStyleProducerSupport } from '../styp';
 import { Theme } from './theme';

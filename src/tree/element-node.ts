@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 import { ComponentContext } from '@wesib/wesib';
 import { AIterable, itsFirst } from 'a-iterable';
 import { ContextRequest, ContextTarget, SingleContextKey } from 'context-values';
@@ -36,27 +39,29 @@ export abstract class ElementNode {
   /**
    * Select element nodes matching the given selector.
    *
-   * @param selector Simple CSS selector of nested components. E.g. component element name.
-   * @param opts Element selector options.
+   * @param selector  Simple CSS selector of nested components. E.g. component element name.
+   * @param opts  Element selector options.
    */
   abstract select(
       selector: string,
-      opts: ElementNode.ElementSelectorOpts): ElementNodeList;
+      opts: ElementNode.ElementSelectorOpts,
+  ): ElementNodeList;
 
   /**
    * Select component nodes matching the given selector.
    *
-   * @param selector Simple CSS selector of nested components. E.g. component element name.
-   * @param opts Component selector options.
+   * @param selector  Simple CSS selector of nested components. E.g. component element name.
+   * @param opts  Component selector options.
    */
   abstract select(
       selector: string,
-      opts?: ElementNode.ComponentSelectorOpts): ElementNodeList<ComponentNode>;
+      opts?: ElementNode.ComponentSelectorOpts,
+  ): ElementNodeList<ComponentNode>;
 
   /**
    * Returns a value tracker of element's attribute.
    *
-   * @param name Target attribute name.
+   * @param name  Target attribute name.
    *
    * @returns Target attribute's value tracker.
    */
@@ -68,7 +73,7 @@ export abstract class ElementNode {
    * The changes are tracked with `StateTracker`. So it is expected that the target property notifies on its changes
    * with state updater. E.g. when it is defined by `@DomProperty` decorator.
    *
-   * @param key Target property key.
+   * @param key  Target property key.
    *
    * @returns Target property's value tracker.
    */
@@ -177,8 +182,8 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
   private [afterEvent__symbol]?: AfterEvent<[AIterable<N>]>;
 
   get [AfterEvent__symbol](): AfterEvent<[AIterable<N>]> {
-      return this[afterEvent__symbol]
-          || (this[afterEvent__symbol] = afterEventOr<[AIterable<N>]>(this.onUpdate, () => [this]));
+    return this[afterEvent__symbol]
+        || (this[afterEvent__symbol] = afterEventOr<[AIterable<N>]>(this.onUpdate, () => [this]));
   }
 
   /**

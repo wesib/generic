@@ -1,6 +1,9 @@
+/**
+ * @module @wesib/generic
+ */
 import { ComponentDef, ComponentFactory } from '@wesib/wesib';
 import { AutoMountSupport } from './auto-mount-support.feature';
-import { AutoMounter } from './auto-mounter';
+import { AutoMounter } from './auto-mounter.impl';
 
 /**
  * Component auto-mount definition.
@@ -23,9 +26,10 @@ export const MountDef = {
   /**
    * Creates a component definition that mounts component to the matching element.
    *
-   * The returned component definition enables `AutoMountSupport` feature when applied to component.
-
-   * @param def Either component auto-mount definition, matching element selector, or element predicate function.
+   * The returned component definition enables [[AutoMountSupport]] feature when applied to component.
+   *
+   * @typeparam T  A type of component.
+   * @param def  Either component auto-mount definition, matching element selector, or element predicate function.
    */
   componentDef<T extends object = object>(def: MountDef | MountDef['to']): ComponentDef<T> {
     return {

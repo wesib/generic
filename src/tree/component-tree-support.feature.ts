@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 import { BootstrapContext, ComponentContext, FeatureDef, FeatureDef__symbol, StateSupport } from '@wesib/wesib';
 import { ComponentNode } from './element-node';
 import { elementNodeOf } from './element-node.impl';
@@ -15,7 +18,7 @@ const ComponentTreeSupport__feature: FeatureDef = {
 /**
  * Component tree support feature.
  *
- * Provides a `ComponentNode` instance for each component.
+ * Provides a [[ComponentNode]] instance for each component.
  */
 export class ComponentTreeSupport {
 

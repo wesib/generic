@@ -6,10 +6,10 @@ import {
   ElementAdapter,
 } from '@wesib/wesib';
 import { ValueTracker } from 'fun-events';
-import { NodeAttributes } from './attribute-tracker';
+import { NodeAttributes } from './node-attributes.impl';
 import { ComponentNode, ElementNode as ElementNode_ } from './element-node';
 import { ElementNodeList } from './element-node-list.impl';
-import { NodeProperties } from './property-tracker';
+import { NodeProperties } from './node-properties.impl';
 
 const NODE_REF = /*#__PURE__*/ Symbol('element-node');
 

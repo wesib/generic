@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 import {
   AutoConnectSupport,
   BootstrapContext,
@@ -11,20 +14,20 @@ import {
 import { AIterable, overArray } from 'a-iterable';
 import { DomEventDispatcher } from 'fun-events';
 import { AutoMountConfig } from './auto-mount-config';
-import { AutoMounter } from './auto-mounter';
+import { AutoMounter } from './auto-mounter.impl';
 
 let AutoMountSupport__feature: FeatureDef | undefined;
 
 /**
  * Auto-mount support feature.
  *
- * Automatically mounts components decorated with `@Mount()` decorator.
+ * Automatically mounts components decorated with {@link Mount @Mount} decorator.
  *
- * Can be applied directly, or using `autoMountSupport()` function when custom auto-mount configuration is reqiored.
+ * Can be applied directly, or using [[autoMountSupport]] function when custom auto-mount configuration is required.
  *
  * Requires `AutoConnectSupport` feature.
  *
- * Automatically enabled by `@Mount()` decorator.
+ * Automatically enabled by {@link Mount @Mount} decorator.
  */
 export class AutoMountSupport {
 
@@ -37,9 +40,9 @@ export class AutoMountSupport {
 /**
  * Configures auto-mount support.
  *
- * Constructs an `AutoMountSupport` feature replacement with auto-mount configuration applied.
+ * Constructs an [[AutoMountSupport]] feature replacement with auto-mount configuration applied.
  *
- * @param config Custom auto-mount configuration option.
+ * @param config  Custom auto-mount configuration option.
  *
  * @returns Configured auto-mount support feature.
  */

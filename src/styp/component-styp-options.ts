@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 import { ComponentContext } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { eventInterest, EventInterest, noEventInterest } from 'fun-events';
@@ -29,9 +32,9 @@ export const ComponentStypOptions = {
   /**
    * Produces and dynamically updates component's CSS stylesheets based on the given CSS rules.
    *
-   * @param context Target component context.
-   * @param rules A source of CSS rules to produce stylesheets for.
-   * @param options Production options.
+   * @param context  Target component context.
+   * @param rules  A source of CSS rules to produce stylesheets for.
+   * @param options  Production options.
    *
    * @returns Event interest instance. When this interest is lost (i.e. its `off()` method is called) the produced
    * stylesheets are removed.
@@ -39,7 +42,8 @@ export const ComponentStypOptions = {
   produce(
       context: ComponentContext,
       rules: StypRules.Source,
-      options?: ComponentStypOptions): EventInterest {
+      options?: ComponentStypOptions,
+  ): EventInterest {
 
     const css = lazyStypRules(rules);
     const offline = options && options.offline;

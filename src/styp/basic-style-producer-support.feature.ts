@@ -1,3 +1,6 @@
+/**
+ * @module @wesib/generic
+ */
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
@@ -24,7 +27,7 @@ const BasicStyleProducerSupport__feature: FeatureDef = {
  *
  * Unlike [[StyleProducerSupport]] feature this one does not enable default CSS renders.
  *
- * It is enabled automatically by `@ProduceStyle` decorator.
+ * It is enabled automatically by {@link ProduceStyle @ProduceStyle} decorator.
  *
  * [style-producer]: https://www.npmjs.com/package/style-producer
  */
