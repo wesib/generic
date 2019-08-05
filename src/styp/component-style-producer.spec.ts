@@ -15,7 +15,7 @@ import { testComponentFactory } from '../spec/test-element';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypOptions } from './component-styp-options';
 import { ComponentStypRender } from './component-styp-render';
-import { ElementIdClass } from './element-id-class';
+import { ElementIdClass } from './element-id-class.impl';
 import { ProduceStyle } from './produce-style.decorator';
 import { StyleProducerSupport } from './style-producer-support.feature';
 

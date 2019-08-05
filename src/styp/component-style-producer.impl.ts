@@ -11,7 +11,7 @@ import { ContextKey, SingleContextKey } from 'context-values';
 import { EventInterest } from 'fun-events';
 import { produceBasicStyle, StypOptions, StypRender, StypRules, StypSelector } from 'style-producer';
 import { ComponentStypRender } from './component-styp-render';
-import { ElementIdClass } from './element-id-class';
+import { ElementIdClass } from './element-id-class.impl';
 
 const ComponentStyleProducer__key =
     /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer:impl');
