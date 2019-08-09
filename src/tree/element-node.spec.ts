@@ -15,7 +15,7 @@ import { MockElement, testComponentFactory, testElement } from '../spec/test-ele
 import { ComponentTreeSupport } from './component-tree-support.feature';
 import { ComponentNode, ElementNode, ElementNodeList } from './element-node';
 
-describe('tree/element-node', () => {
+describe('tree', () => {
 
   let MockMutationObserver: Mock<MutationObserver>;
   let observer: ObjectMock<MutationObserver>;

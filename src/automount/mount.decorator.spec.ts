@@ -15,7 +15,7 @@ import { MockElement } from '../spec/test-element';
 import { Mount } from './mount.decorator';
 import Mock = jest.Mock;
 
-describe('automount/mount.decorator', () => {
+describe('automount', () => {
 
   let mockWindow: ObjectMock<Window>;
   let mockDocument: ObjectMock<Document>;

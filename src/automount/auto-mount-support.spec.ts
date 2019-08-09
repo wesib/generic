@@ -15,7 +15,7 @@ import { ObjectMock } from '../spec/mocks';
 import { autoMountSupport, AutoMountSupport } from './auto-mount-support.feature';
 import Mock = jest.Mock;
 
-describe('automount/auto-mount-support', () => {
+describe('automount', () => {
 
   let mockWindow: ObjectMock<Window>;
   let mockDocument: ObjectMock<Document>;
