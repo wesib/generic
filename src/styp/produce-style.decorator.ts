@@ -36,15 +36,15 @@ export function ProduceStyle<T extends ComponentClass>(options?: ComponentStypOp
         {
           define(defContext) {
             defContext.onComponent(componentContext => {
-              componentContext.whenReady(() => {
+              componentContext.whenReady(component => {
 
-                const component = componentContext.component;
                 const property = component[propertyKey];
 
                 ComponentStypOptions.produce(
                     componentContext,
                     typeof property === 'function' ? property.bind(component) : property,
-                    options);
+                    options,
+                );
               });
             });
           },
