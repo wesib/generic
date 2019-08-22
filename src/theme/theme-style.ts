@@ -1,14 +1,8 @@
 /**
  * @module @wesib/generic
  */
-import {
-  AbstractContextKey,
-  ContextRequest,
-  ContextSources,
-  ContextTarget,
-  ContextValues,
-  DefaultContextValueHandler,
-} from 'context-values';
+import { AIterable } from 'a-iterable';
+import { ContextRef, ContextValueOpts, ContextValues, SimpleContextKey } from 'context-values';
 import { stypRules, StypRules } from 'style-producer';
 import { Theme } from './theme';
 
@@ -77,20 +71,19 @@ export namespace ThemeStyle {
 
 }
 
-class ThemeStyleKey extends AbstractContextKey<ThemeStyle.ById, ThemeStyle> {
+class ThemeStyleKey extends SimpleContextKey<ThemeStyle.ById, ThemeStyle> {
 
   constructor() {
     super('theme-style');
   }
 
-  merge(
-      _context: ContextValues,
-      sources: ContextSources<ThemeStyle>,
-      handleDefault: DefaultContextValueHandler<ThemeStyle.ById>): ThemeStyle.ById | null | undefined {
+  grow<Ctx extends ContextValues>(
+      opts: ContextValueOpts<Ctx, ThemeStyle.ById, ThemeStyle, AIterable<ThemeStyle>>,
+  ): ThemeStyle.ById | null | undefined {
 
     const providers = new Map<ThemeStyle.Provider, [ThemeStyle.Provider, boolean]>();
 
-    sources.forEach(style => {
+    opts.seed.forEach(style => {
 
       let key: ThemeStyle.Provider;
       let provider: ThemeStyle.Provider;
@@ -122,7 +115,7 @@ class ThemeStyleKey extends AbstractContextKey<ThemeStyle.ById, ThemeStyle> {
       }
     });
 
-    return providers.size ? byId : handleDefault(() => byId);
+    return providers.size ? byId : opts.byDefault(() => byId);
 
     function byId(id: ThemeStyle.Provider): ThemeStyle.Provider {
 
@@ -143,7 +136,7 @@ class ThemeStyleKey extends AbstractContextKey<ThemeStyle.ById, ThemeStyle> {
 /**
  * A key of bootstrap context value containing theme styles.
  */
-export const ThemeStyle: ContextTarget<ThemeStyle> & ContextRequest<ThemeStyle.ById> = new ThemeStyleKey();
+export const ThemeStyle: ContextRef<ThemeStyle.ById, ThemeStyle> = new ThemeStyleKey();
 
 function combineStyles(first: ThemeStyle.Provider, second: ThemeStyle.Provider): ThemeStyle.Provider {
   return theme => stypRules(first(theme), second(theme));

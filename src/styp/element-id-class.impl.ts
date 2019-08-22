@@ -1,5 +1,5 @@
 import { ComponentContext, DefaultNamespaceAliaser, ElementDef } from '@wesib/wesib';
-import { ContextRequest, ContextTarget, ContextValues, SingleContextKey } from 'context-values';
+import { ContextValues, SingleContextKey, SingleContextRef } from 'context-values';
 import { css__naming, html__naming, NamespaceDef, QualifiedName } from 'namespace-aliaser';
 
 /**
@@ -19,8 +19,8 @@ export const ElementIdClass__NS = /*#__PURE*/ new NamespaceDef(
 /**
  * @internal
  */
-export const ElementIdClass: ContextTarget<ElementIdClass> & ContextRequest<ElementIdClass> =
-    /*#__PURE__*/ new SingleContextKey('unique-element-class', assignElementId);
+export const ElementIdClass: SingleContextRef<ElementIdClass> =
+    /*#__PURE__*/ new SingleContextKey('unique-element-class', { byDefault: assignElementId });
 
 let uniqueClassSeq = 0;
 

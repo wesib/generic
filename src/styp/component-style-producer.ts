@@ -1,7 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { ContextRequest, ContextTarget, SingleContextKey } from 'context-values';
+import { SingleContextKey, SingleContextRef } from 'context-values';
 import { EventInterest } from 'fun-events';
 import { StypOptions, StypRules } from 'style-producer';
 
@@ -25,5 +25,5 @@ export type ComponentStyleProducer =
 /**
  * A key of component context value containing a component style producer.
  */
-export const ComponentStyleProducer: ContextTarget<ComponentStyleProducer> & ContextRequest<ComponentStyleProducer> =
+export const ComponentStyleProducer: SingleContextRef<ComponentStyleProducer> =
     /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer');

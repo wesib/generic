@@ -1,5 +1,5 @@
 import { ComponentContext, ComponentFactory, ElementAdapter } from '@wesib/wesib';
-import { ContextKey, SingleContextKey } from 'context-values';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { MountDef } from './mount-def';
 
 const AutoMounter__key = /*#__PURE__*/ new SingleContextKey<AutoMounter>('auto-mounter');
@@ -11,7 +11,7 @@ export class AutoMounter {
 
   private _adapters: ElementAdapter[] = [];
 
-  static get key(): ContextKey<AutoMounter> {
+  static get [ContextKey__symbol](): ContextKey<AutoMounter> {
     return AutoMounter__key;
   }
 
