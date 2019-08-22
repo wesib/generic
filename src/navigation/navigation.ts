@@ -1,7 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { ContextKey, SingleContextKey } from 'context-values';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { AfterEvent, AfterEvent__symbol, EventKeeper, OnDomEvent } from 'fun-events';
 import { NavigateEvent, PreNavigateEvent } from './navigate.event';
 
@@ -23,7 +23,7 @@ const Navigation__key = /*#__PURE__*/ new SingleContextKey<Navigation>('navigati
  */
 export abstract class Navigation implements EventKeeper<[Navigation.Location]> {
 
-  static get key(): ContextKey<Navigation> {
+  static get [ContextKey__symbol](): ContextKey<Navigation> {
     return Navigation__key;
   }
 

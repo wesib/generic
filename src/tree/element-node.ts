@@ -3,7 +3,7 @@
  */
 import { ComponentContext } from '@wesib/wesib';
 import { AIterable, itsFirst } from 'a-iterable';
-import { ContextRequest, ContextTarget, SingleContextKey } from 'context-values';
+import { SingleContextKey, SingleContextRef } from 'context-values';
 import {
   AfterEvent,
   AfterEvent__symbol,
@@ -149,7 +149,7 @@ export interface ComponentNode<T extends object = object> extends ElementNode {
 /**
  * A key of component context value containing a component node instance.
  */
-export const ComponentNode: ContextTarget<ComponentNode> & ContextRequest<ComponentNode> =
+export const ComponentNode: SingleContextRef<ComponentNode> =
     /*#__PURE__*/ new SingleContextKey<ComponentNode>('component-node');
 
 const afterEvent__symbol = /*#__PURE__*/ Symbol('node-list:after-event');

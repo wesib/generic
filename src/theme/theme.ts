@@ -1,7 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { ContextKey, SingleContextKey } from 'context-values';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { RefStypRule, StypProperties, StypRule, StypRuleRef, StypRules } from 'style-producer';
 import { ThemeStyle } from './theme-style';
 
@@ -20,7 +20,7 @@ export abstract class Theme {
   /**
    * A key of bootstrap, definition, or component context value containing current theme instance.
    */
-  static get key(): ContextKey<Theme> {
+  static get [ContextKey__symbol](): ContextKey<Theme> {
     return Theme__key;
   }
 

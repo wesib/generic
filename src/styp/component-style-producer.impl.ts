@@ -7,7 +7,7 @@ import {
   RenderScheduler,
   ShadowContentRoot,
 } from '@wesib/wesib';
-import { ContextKey, SingleContextKey } from 'context-values';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { EventInterest } from 'fun-events';
 import { produceBasicStyle, StypOptions, StypRender, StypRules, StypSelector } from 'style-producer';
 import { ComponentStypRender } from './component-styp-render';
@@ -23,14 +23,14 @@ const hostSelector: StypSelector.Normalized = [{ e: ':host' }];
  */
 export class ComponentStyleProducer {
 
-  static get key(): ContextKey<ComponentStyleProducer> {
+  static get [ContextKey__symbol](): ContextKey<ComponentStyleProducer> {
     return ComponentStyleProducer__key;
   }
 
   constructor(
       private readonly _context: ComponentContext,
-      private readonly _produce = produceBasicStyle) {
-  }
+      private readonly _produce = produceBasicStyle,
+  ) {}
 
   produce(rules: StypRules, options: StypOptions = {}): EventInterest {
 

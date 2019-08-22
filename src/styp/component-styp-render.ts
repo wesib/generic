@@ -1,7 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { ContextRequest, ContextTarget, MultiContextKey } from 'context-values';
+import { MultiContextKey, MultiContextRef } from 'context-values';
 import { StypRender } from 'style-producer';
 
 /**
@@ -12,5 +12,5 @@ export type ComponentStypRender = StypRender;
 /**
  * A key of component context value containing component CSS renders.
  */
-export const ComponentStypRender: ContextTarget<ComponentStypRender> & ContextRequest<ComponentStypRender[]> =
+export const ComponentStypRender: MultiContextRef<ComponentStypRender> =
     /*#__PURE__*/ new MultiContextKey<ComponentStypRender>('component-styp-render');
