@@ -3,11 +3,11 @@
  */
 import {
   AutoConnectSupport,
-  BootstrapContext,
   BootstrapRoot,
   BootstrapWindow,
   Class,
   ElementAdapter,
+  FeatureContext,
   FeatureDef,
   FeatureDef__symbol,
 } from '@wesib/wesib';
@@ -83,7 +83,7 @@ function featureDef(config: AutoMountConfig = {}): FeatureDef {
   };
 }
 
-function adaptExistingElement(context: BootstrapContext, { select = '*' }: AutoMountConfig) {
+function adaptExistingElement(context: FeatureContext, { select = '*' }: AutoMountConfig) {
   if (!select) {
     return; // Initial auto-mount disabled.
   }

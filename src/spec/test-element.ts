@@ -28,12 +28,10 @@ export function testComponentFactory<T extends object>(componentType: Class<T>):
   })
   class TestFeature {}
 
-  const kit = bootstrapComponents(TestFeature);
-
-  return kit.whenDefined(componentType);
+  return bootstrapComponents(TestFeature).whenDefined(componentType);
 }
 
-export function testElement(componentType: Class<any>): Class<any> {
+export async function testElement(componentType: Class<any>): Promise<Class<any>> {
   ComponentDef.define(componentType);
 
   let result!: Class;
@@ -54,9 +52,10 @@ export function testElement(componentType: Class<any>): Class<any> {
     set: { a: CustomElements, is: customElements },
     needs: componentType,
   })
-  class TestFeature {}
+  class TestFeature {
+  }
 
-  bootstrapComponents(TestFeature);
+  await bootstrapComponents(TestFeature).whenDefined(componentType);
 
   return result;
 }

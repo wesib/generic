@@ -59,52 +59,52 @@ describe('automount', () => {
     it('enables `AutoConnectSupport`', () => {
       expect([...new ArraySet(FeatureDef.of(AutoMountSupport).needs)]).toContain(AutoConnectSupport);
     });
-    it('adapts all elements', () => {
-      bootstrap(AutoMountSupport);
+    it('adapts all elements', async () => {
+      await bootstrap(AutoMountSupport);
 
       expect(mockRoot.querySelectorAll).toHaveBeenCalledWith('*');
     });
   });
   describe('autoMountSupport', () => {
-    it('does not adapt elements when disabled', () => {
-      bootstrap(autoMountSupport({ select: false }));
+    it('does not adapt elements when disabled', async () => {
+      await bootstrap(autoMountSupport({ select: false }));
 
       expect(mockRoot.querySelectorAll).not.toHaveBeenCalled();
     });
-    it('adapts all elements when `select` set to `true`', () => {
-      bootstrap(autoMountSupport({ select: true }));
+    it('adapts all elements when `select` set to `true`', async () => {
+      await bootstrap(autoMountSupport({ select: true }));
 
       expect(mockRoot.querySelectorAll).toHaveBeenCalledWith('*');
     });
-    it('selects elements to adapt', () => {
+    it('selects elements to adapt', async () => {
 
       const selector = 'some';
 
-      bootstrap(autoMountSupport({ select: selector }));
+      await bootstrap(autoMountSupport({ select: selector }));
 
       expect(mockRoot.querySelectorAll).toHaveBeenCalledWith(selector);
     });
-    it('adapts selected elements', () => {
+    it('adapts selected elements', async () => {
 
       const element1 = { name: 'element1' };
       const element2 = { name: 'element2' };
 
       mockRoot.querySelectorAll.mockImplementation(() => [element1, element2]);
 
-      bootstrap(autoMountSupport());
+      await bootstrap(autoMountSupport());
 
       expect(mockAdapter).toHaveBeenCalledWith(element1);
       expect(mockAdapter).toHaveBeenCalledWith(element2);
     });
-    it('does not register DOMContentLoaded listener if document is loaded', () => {
-      bootstrap(autoMountSupport());
+    it('does not register DOMContentLoaded listener if document is loaded', async () => {
+      await bootstrap(autoMountSupport());
 
       expect(mockDocument.addEventListener).not.toHaveBeenLastCalledWith('DOMContentLoaded', expect.any(Function));
     });
-    it('registers DOMContentLoaded listener if document is not loaded', () => {
+    it('registers DOMContentLoaded listener if document is not loaded', async () => {
       (mockDocument as any).readyState = 'loading';
 
-      bootstrap(autoMountSupport());
+      await bootstrap(autoMountSupport());
       expect(mockDocument.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', domContentLoaded, undefined);
       expect(mockRoot.querySelectorAll).not.toHaveBeenCalled();
 
@@ -114,7 +114,7 @@ describe('automount', () => {
     });
   });
 
-  function bootstrap(...features: Class[]) {
+  async function bootstrap(...features: Class[]): Promise<void> {
 
     @Feature({
       set: [
@@ -126,6 +126,6 @@ describe('automount', () => {
     class TestFeature {
     }
 
-    return bootstrapComponents(TestFeature, ...features);
+    await new Promise(resolve => bootstrapComponents(TestFeature, ...features).whenReady(resolve));
   }
 });

@@ -10,20 +10,6 @@ describe('theme', () => {
 
     let theme: Theme;
 
-    function bootstrap(...features: Class<any>[]) {
-
-      @Feature({
-        needs: ThemeSupport,
-        init(context) {
-          theme = context.get(Theme);
-        },
-      })
-      class TestFeature {
-      }
-
-      bootstrapComponents(TestFeature, ...features);
-    }
-
     describe('ref', () => {
 
       interface RuleProperties {
@@ -32,8 +18,8 @@ describe('theme', () => {
 
       let ref: StypRuleRef<RuleProperties>;
 
-      beforeEach(() => {
-        bootstrap();
+      beforeEach(async () => {
+        await bootstrap();
         ref = theme.ref(RefStypRule.by({ c: 'custom' }, { $length: StypLength.zero }));
       });
 
@@ -43,8 +29,8 @@ describe('theme', () => {
     });
 
     describe('style', () => {
-      it('obtains unregistered style', () => {
-        bootstrap();
+      it('obtains unregistered style', async () => {
+        await bootstrap();
 
         const rules = theme.style(style);
 
@@ -58,7 +44,7 @@ describe('theme', () => {
           return _theme.root.rules.grab({ $: 'test' });
         }
       });
-      it('obtains registered style', () => {
+      it('obtains registered style', async () => {
 
         @Feature({
           needs: ThemeSupport,
@@ -67,7 +53,7 @@ describe('theme', () => {
         class StyleFeature {
         }
 
-        bootstrap(StyleFeature);
+        await bootstrap(StyleFeature);
 
         const rule: StypRule = itsFirst(theme.style(style))!;
 
@@ -78,8 +64,8 @@ describe('theme', () => {
           return _theme.root.rules.grab({ $: 'test' });
         }
       });
-      it('caches style', () => {
-        bootstrap();
+      it('caches style', async () => {
+        await bootstrap();
 
         expect(theme.style(style)).toBe(theme.style(style));
 
@@ -89,7 +75,7 @@ describe('theme', () => {
       });
 
       describe('combining', () => {
-        it('combines registered style and extension', () => {
+        it('combines registered style and extension', async () => {
 
           @Feature({
             needs: ThemeSupport,
@@ -101,10 +87,10 @@ describe('theme', () => {
           class StyleFeature {
           }
 
-          bootstrap(StyleFeature);
+          await bootstrap(StyleFeature);
           checkCombined();
         });
-        it('combines style with extension registered before it', () => {
+        it('combines style with extension registered before it', async () => {
 
           @Feature({
             needs: ThemeSupport,
@@ -116,10 +102,10 @@ describe('theme', () => {
           class StyleFeature {
           }
 
-          bootstrap(StyleFeature);
+          await bootstrap(StyleFeature);
           checkCombined();
         });
-        it('combines unregistered style and registered extension', () => {
+        it('combines unregistered style and registered extension', async () => {
 
           @Feature({
             needs: ThemeSupport,
@@ -130,7 +116,7 @@ describe('theme', () => {
           class StyleFeature {
           }
 
-          bootstrap(StyleFeature);
+          await bootstrap(StyleFeature);
           checkCombined();
         });
 
@@ -154,6 +140,20 @@ describe('theme', () => {
         }
       });
     });
+
+    async function bootstrap(...features: Class<any>[]) {
+
+      @Feature({
+        needs: ThemeSupport,
+        init(context) {
+          theme = context.get(Theme);
+        },
+      })
+      class TestFeature {
+      }
+
+      await new Promise(resolve => bootstrapComponents(TestFeature, ...features).whenReady(resolve));
+    }
 
   });
 });

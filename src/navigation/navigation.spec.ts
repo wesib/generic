@@ -59,7 +59,7 @@ describe('navigation', () => {
 
     let navigation: Navigation;
 
-    beforeEach(() => {
+    beforeEach(async () => {
 
       let context: BootstrapContext = null!;
 
@@ -73,7 +73,7 @@ describe('navigation', () => {
       class TestFeature {
       }
 
-      bootstrapComponents(TestFeature);
+      await new Promise(resolve => bootstrapComponents(TestFeature).whenReady(resolve));
       navigation = context.get(Navigation);
     });
 

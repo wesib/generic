@@ -36,9 +36,16 @@ describe('tree', () => {
     });
   });
 
-  type ComponentNodeInfo = ReturnType<typeof newComponentNode>;
+  interface ComponentNodeInfo {
+    readonly connect: (ctx: ComponentContext) => void;
+    readonly disconnect: (ctx: ComponentContext) => void;
+    readonly element: Element;
+    readonly context: ComponentContext;
+    readonly node: ComponentNode;
+    readonly parent: ElementNode | null;
+  }
 
-  function newComponentNode(name = 'div') {
+  async function newComponentNode(name = 'div'): Promise<ComponentNodeInfo> {
 
     @Component({
       name,
@@ -52,7 +59,7 @@ describe('tree', () => {
     class TestComponent {
     }
 
-    const Element = testElement(TestComponent);
+    const Element = await testElement(TestComponent);
     const realElement = new Element();
 
     const context = ComponentContext.of(realElement);
@@ -84,7 +91,7 @@ describe('tree', () => {
       context,
       node,
       get parent() {
-        return this.node.parent;
+        return node.parent;
       }
     };
   }
@@ -97,19 +104,19 @@ describe('tree', () => {
 
     let node: ComponentNodeInfo;
 
-    beforeEach(() => {
-      node = newComponentNode();
+    beforeEach(async () => {
+      node = await newComponentNode();
     });
 
     describe('parent', () => {
       it('is `null` by default', () => {
         expect(node.parent).toBeNull();
       });
-      it('is detected when added to document', () => {
+      it('is detected when added to document', async () => {
 
         let parent: ComponentNodeInfo;
 
-        parent = newComponentNode();
+        parent = await newComponentNode();
         parent.element.appendChild(node.element);
 
         expect(node.parent).toMatchObject({
@@ -125,11 +132,11 @@ describe('tree', () => {
       let c21: ComponentNodeInfo;
       let c3: ComponentNodeInfo;
 
-      beforeEach(() => {
-        c1 = newComponentNode('test-component');
-        c2 = newComponentNode('test-component');
-        c21 = newComponentNode('test-component');
-        c3 = newComponentNode('test-component-3');
+      beforeEach(async () => {
+        c1 = await newComponentNode('test-component');
+        c2 = await newComponentNode('test-component');
+        c21 = await newComponentNode('test-component');
+        c3 = await newComponentNode('test-component-3');
 
         node.element.appendChild(c1.element);
         node.element.appendChild(c2.element);
@@ -295,7 +302,7 @@ describe('tree', () => {
         expect([...list]).toEqual([c1.node, c2.node]);
         expect(onUpdateMock).not.toHaveBeenCalled();
       });
-      it('handles child addition', () => {
+      it('handles child addition', async () => {
 
         const list = node.node.select('test-component');
         const onUpdateMock = jest.fn();
@@ -304,7 +311,7 @@ describe('tree', () => {
 
         expect(onUpdateMock).not.toHaveBeenCalled();
 
-        const added = newComponentNode('test-component');
+        const added = await newComponentNode('test-component');
 
         node.element.appendChild(added.element);
         mutate([{ addedNodes: nodeList(added.element), removedNodes: nodeList() }]);
@@ -422,7 +429,7 @@ describe('tree', () => {
         'custom element property',
         async (TestComponent: ComponentClass) => {
 
-          const element = new (testElement(TestComponent))();
+          const element = new (await testElement(TestComponent))();
           const elementNode = ComponentContext.of(element).get(ComponentNode);
           const property = elementNode.property<string>('property');
 
@@ -437,7 +444,7 @@ describe('tree', () => {
         'mounted element property',
         async (TestComponent: ComponentClass) => {
 
-          const root = newComponentNode('root-component');
+          const root = await newComponentNode('root-component');
 
           document.body.appendChild(root.element);
 
@@ -547,7 +554,7 @@ describe('tree', () => {
       let compNode: ComponentNode;
       let attribute: ValueTracker<string | null, string>;
 
-      beforeEach(() => {
+      beforeEach(async () => {
 
         @Component({
           name: 'test-component',
@@ -560,7 +567,7 @@ describe('tree', () => {
         })
         class TestComponent {}
 
-        element = new (testElement(TestComponent))();
+        element = new (await testElement(TestComponent))();
         compNode = ComponentContext.of(element).get(ComponentNode);
         attribute = compNode.attribute('attr');
       });

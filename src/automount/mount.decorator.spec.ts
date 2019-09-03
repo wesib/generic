@@ -63,7 +63,7 @@ describe('automount', () => {
   });
 
   describe('@Mount', () => {
-    it('mounts to matching element', () => {
+    it('mounts to matching element', async () => {
 
       const element = {
         name: 'element',
@@ -73,14 +73,14 @@ describe('automount', () => {
 
       mockRoot.querySelectorAll.mockImplementation(() => [element]);
 
-      bootstrap(componentType);
+      await bootstrap(componentType);
 
       const context = ComponentContext.of(element);
 
       expect(context.componentType).toBe(componentType);
       expect(context.mount).toBeDefined();
     });
-    it('mounts to element matching by custom predicate', () => {
+    it('mounts to element matching by custom predicate', async () => {
 
       @Component({
         extend: {
@@ -100,14 +100,14 @@ describe('automount', () => {
 
       mockRoot.querySelectorAll.mockImplementation(() => [element]);
 
-      bootstrap(TestComponent);
+      await bootstrap(TestComponent);
 
       const context = ComponentContext.of(element);
 
       expect(context.componentType).toBe(TestComponent);
       expect(context.mount).toBeDefined();
     });
-    it('does not mount to non-matching element', () => {
+    it('does not mount to non-matching element', async () => {
 
       const element: any = {
         name: 'element',
@@ -116,13 +116,13 @@ describe('automount', () => {
 
       mockRoot.querySelectorAll.mockImplementation(() => [element]);
 
-      bootstrap(componentType);
+      await bootstrap(componentType);
 
       expect(element[ComponentContext__symbol]).toBeUndefined();
     });
   });
 
-  function bootstrap(...features: Class[]) {
+  async function bootstrap(...features: Class[]): Promise<void> {
 
     @Feature({
       set: [
@@ -134,6 +134,6 @@ describe('automount', () => {
     class TestFeature {
     }
 
-    return bootstrapComponents(TestFeature, ...features);
+    await new Promise(resolve => bootstrapComponents(TestFeature, ...features).whenReady(resolve));
   }
 });
