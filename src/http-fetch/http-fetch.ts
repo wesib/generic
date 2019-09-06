@@ -29,7 +29,7 @@ export type HttpFetch =
  *
  * @returns An `OnEvent` registrar of response object(s) receivers.
  */
-    (input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>;
+    (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>;
 
 /**
  * A key of bootstrap context value containing an [[HttpFetch]] instance.
@@ -38,6 +38,6 @@ export const HttpFetch: FnContextRef<Parameters<HttpFetch>, ReturnType<HttpFetch
     /*#__PURE__*/ new FnContextKey<Parameters<HttpFetch>, ReturnType<HttpFetch>>(
     'http-fetch',
     {
-      byDefault: bootstrapDefault(context => newHttpFetch(context) as HttpFetch),
+      byDefault: bootstrapDefault(newHttpFetch),
     },
 );

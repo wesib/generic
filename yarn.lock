@@ -405,17 +405,16 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@wesib/wesib@^1.0.0-alpha.33":
-  version "1.0.0-alpha.33"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.33.tgz#375654447741e53e0f4a90537c48bb630e7e7c6b"
-  integrity sha512-Ax+Y8gVuqdu9EwWnbxxiw0hSURZFHTE9XoKcOCSTlFDylSseTVPmcsuiv4pJnrfyLPzLRCi1xZstXzq8lVkPxQ==
+"@wesib/wesib@^1.0.0-alpha.35":
+  version "1.0.0-alpha.35"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.35.tgz#7dbe02d81ca04e542afc3b2b6832920ffb3a83c0"
+  integrity sha512-SoG5Fe0g7fPSeajSxCyYBl37j9rDlZ2rnC8iIj2kufizC+laxY72vFgOg+WSLrhBpAQxZPHihMMOifBTTEUvUQ==
   dependencies:
     a-iterable "^2.4.2"
     call-thru "^2.5.2"
-    context-values "2.0.1"
+    context-values "2.0.3"
     fun-events "^5.0.4"
     namespace-aliaser "^2.0.1"
-    tslib "^1.10.0"
 
 a-iterable@^2.4.2:
   version "2.4.2"
@@ -926,15 +925,14 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
-context-values@2.0.1, context-values@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/context-values/-/context-values-2.0.1.tgz#c20b461304f63c52f29e57323018a46d8657afe5"
-  integrity sha512-2GMBaGGQmfhfoR6bQmrHUKuv8SrqjJf/KL6e0xjRWchqsy7FctJ4SWcHM2ib2ylTXSaZ56kogHLQjY4sqX8brw==
+context-values@2.0.3, context-values@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/context-values/-/context-values-2.0.3.tgz#29c971220e7689d78b7b36fd718dd78c283f3046"
+  integrity sha512-SqfEVofr7rYR6TBAjGBZkU0YxBkEtTFesA7EEJuRMkoZQofMu3hc9PI63CNMkldP6uqOtC7VRoyXv6ALhnwBtg==
   dependencies:
     a-iterable "^2.4.2"
     call-thru "^2.5.2"
     fun-events "^5.0.4"
-    tslib "^1.10.0"
 
 convert-source-map@^1.1.0, convert-source-map@^1.4.0:
   version "1.6.0"

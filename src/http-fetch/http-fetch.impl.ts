@@ -1,5 +1,5 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { afterEventBy, DomEventDispatcher, EventEmitter } from 'fun-events';
+import { DomEventDispatcher, EventEmitter, onEventBy } from 'fun-events';
 import { HttpFetch } from './http-fetch';
 
 /**
@@ -9,7 +9,7 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
 
   const window = context.get(BootstrapWindow);
 
-  return (input, init) => afterEventBy(receiver => {
+  return (input, init) => onEventBy(receiver => {
 
     const responseEmitter = new EventEmitter<[Response]>();
     const interest = responseEmitter.on(receiver);
@@ -39,7 +39,10 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
     }
 
     window.fetch(input, init)
-        .then(response => responseEmitter.send(response))
+        .then(response => {
+          responseEmitter.send(response);
+          interest.off();
+        })
         .catch(reason => interest.off(reason));
 
     return interest;
