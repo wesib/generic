@@ -1,6 +1,8 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { DomEventDispatcher, EventEmitter, onEventBy } from 'fun-events';
+import { DomEventDispatcher, EventEmitter, eventInterest, onEventBy } from 'fun-events';
 import { HttpFetch } from './http-fetch';
+
+const HttpFetchAborted = {};
 
 /**
  * @internal
@@ -13,13 +15,19 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
 
     const responseEmitter = new EventEmitter<[Response]>();
     const interest = responseEmitter.on(receiver);
+    let result = interest;
 
     if ('AbortController' in window) {
 
       const abortController = new (window as any).AbortController();
       const { signal } = abortController;
 
-      interest.whenDone(() => abortController.abort());
+      result = eventInterest(() => interest.off(HttpFetchAborted)).needs(interest);
+      interest.whenDone(reason => {
+        if (reason === HttpFetchAborted) {
+          abortController.abort();
+        }
+      });
 
       if (!init) {
         init = { signal };
@@ -45,6 +53,6 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
         })
         .catch(reason => interest.off(reason));
 
-    return interest;
+    return result;
   });
 }
