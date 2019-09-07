@@ -68,6 +68,8 @@
 						<section class="tsd-index-section ">
 							<h3>Modules</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-module"><a href="modules/httpfetchagent.html" class="tsd-kind-icon">Http<wbr>Fetch<wbr>Agent</a></li>
+								<li class="tsd-kind-module tsd-has-type-parameter"><a href="modules/navigateevent.html" class="tsd-kind-icon">Navigate<wbr>Event</a></li>
 								<li class="tsd-kind-module"><a href="modules/themestyle.html" class="tsd-kind-icon">Theme<wbr>Style</a></li>
 							</ul>
 						</section>
@@ -79,6 +81,8 @@
 								<li class="tsd-kind-class"><a href="classes/componenttreesupport.html" class="tsd-kind-icon">Component<wbr>Tree<wbr>Support</a></li>
 								<li class="tsd-kind-class"><a href="classes/elementnode.html" class="tsd-kind-icon">Element<wbr>Node</a></li>
 								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/elementnodelist.html" class="tsd-kind-icon">Element<wbr>Node<wbr>List</a></li>
+								<li class="tsd-kind-class"><a href="classes/navigation.html" class="tsd-kind-icon">Navigation</a></li>
+								<li class="tsd-kind-class"><a href="classes/navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a></li>
 								<li class="tsd-kind-class"><a href="classes/styleproducersupport.html" class="tsd-kind-icon">Style<wbr>Producer<wbr>Support</a></li>
 								<li class="tsd-kind-class"><a href="classes/theme.html" class="tsd-kind-icon">Theme</a></li>
 								<li class="tsd-kind-class"><a href="classes/themefactory.html" class="tsd-kind-icon">Theme<wbr>Factory</a></li>
@@ -99,6 +103,13 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias"><a href="globals.html#componentstyleproducer" class="tsd-kind-icon">Component<wbr>Style<wbr>Producer</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#componentstyprender" class="tsd-kind-icon">Component<wbr>Styp<wbr>Render</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#httpfetch" class="tsd-kind-icon">Http<wbr>Fetch</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Events</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-event"><a href="globals.html#prenavigateevent" class="tsd-kind-icon">Pre<wbr>Navigate<wbr>Event</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -107,6 +118,7 @@
 								<li class="tsd-kind-variable"><a href="globals.html#componentnode" class="tsd-kind-icon">Component<wbr>Node</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#componentstyleproducer" class="tsd-kind-icon">Component<wbr>Style<wbr>Producer</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#componentstyprender" class="tsd-kind-icon">Component<wbr>Styp<wbr>Render</a></li>
+								<li class="tsd-kind-variable"><a href="globals.html#httpfetch" class="tsd-kind-icon">Http<wbr>Fetch</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -135,7 +147,7 @@
 					<div class="tsd-signature tsd-kind-icon">Component<wbr>Style<wbr>Producer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/styp/component-style-producer.ts#L11">styp/component-style-producer.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/styp/component-style-producer.ts#L11">styp/component-style-producer.ts:11</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -189,7 +201,7 @@
 					<div class="tsd-signature tsd-kind-icon">Component<wbr>Styp<wbr>Render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StypRender</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/styp/component-styp-render.ts#L10">styp/component-styp-render.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/styp/component-styp-render.ts#L10">styp/component-styp-render.ts:10</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -198,16 +210,100 @@
 						</div>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="httpfetch" class="tsd-anchor"></a>
+					<h3>Http<wbr>Fetch</h3>
+					<div class="tsd-signature tsd-kind-icon">Http<wbr>Fetch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/http-fetch/http-fetch.ts#L25">http-fetch/http-fetch.ts:25</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>HTTP fetch signature.</p>
+						</div>
+						<p>This is a function that wraps browser&#39;s
+							<a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch">fetch()</a> function and provides
+						additional functionality. E.g. request interception.</p>
+						<p>This function returns an <code>OnEvent</code> registrar of event receivers instead of a <code>Promise</code>. This allows to report
+							multiple responses. E.g. when the resource refresh requested and delivered. The request is sent whenever a receiver
+							is registered in this registrar. When the fetch completes the events are exhausted, and callbacks registered with
+							<code>EventInterest.whenDone()</code> method of event interest returned on receiver registration, are notified. When fetch
+							fails for whatever reason, this reason is passed to these callbacks. The fetch can be aborted by losing interest
+						to the response. I.e. by calling <code>EventInterest.off()</code> method.</p>
+						<p>An instance of <a href="globals.html#httpfetch">HttpFetch</a> is available from bootstrap context.</p>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RequestInfo</span>, init<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">RequestInit</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+										</div>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>this: <span class="tsd-signature-type">void</span></h5>
+											</li>
+											<li>
+												<h5>input: <span class="tsd-signature-type">RequestInfo</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<div class="lead">
+														<p>The resource to fetch. This can either an URL string, or a <code>Request</code> object.</p>
+													</div>
+												</div>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> init: <span class="tsd-signature-type">RequestInit</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<div class="lead">
+														<p>Custom settings to apply to the request.</p>
+													</div>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										<p>An <code>OnEvent</code> registrar of response object(s) receivers.</p>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Events</h2>
+				<section class="tsd-panel tsd-member tsd-kind-event">
+					<a name="prenavigateevent" class="tsd-anchor"></a>
+					<h3>Pre<wbr>Navigate<wbr>Event</h3>
+					<div class="tsd-signature tsd-kind-icon">Pre<wbr>Navigate<wbr>Event<span class="tsd-signature-symbol">:</span> <a href="modules/navigateevent.html" class="tsd-signature-type">NavigateEvent</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">"pre-navigate"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"pre-replace"</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/navigation/navigate.event.ts#L71">navigation/navigate.event.ts:71</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Pre-navigation event fired prior to actual navigation or navigation history update.</p>
+						</div>
+						<p>This event can be cancelled in order to prevent the actual navigation or history update.</p>
+					</div>
+				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="componentnode" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Component<wbr>Node</h3>
-					<div class="tsd-signature tsd-kind-icon">Component<wbr>Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ContextTarget</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ContextRequest</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;/*#__PURE__*/ new SingleContextKey&lt;ComponentNode&gt;(&#x27;component-node&#x27;)</span></div>
+					<div class="tsd-signature tsd-kind-icon">Component<wbr>Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SingleContextRef</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;/*#__PURE__*/ new SingleContextKey&lt;ComponentNode&gt;(&#x27;component-node&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/tree/element-node.ts#L152">tree/element-node.ts:152</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/tree/element-node.ts#L152">tree/element-node.ts:152</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -219,10 +315,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="componentstyleproducer" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Component<wbr>Style<wbr>Producer</h3>
-					<div class="tsd-signature tsd-kind-icon">Component<wbr>Style<wbr>Producer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ContextTarget</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#componentstyleproducer" class="tsd-signature-type">ComponentStyleProducer</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ContextRequest</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#componentstyleproducer" class="tsd-signature-type">ComponentStyleProducer</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;/*#__PURE__*/ new SingleContextKey&lt;ComponentStyleProducer&gt;(&#x27;component-style-producer&#x27;)</span></div>
+					<div class="tsd-signature tsd-kind-icon">Component<wbr>Style<wbr>Producer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SingleContextRef</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#componentstyleproducer" class="tsd-signature-type">ComponentStyleProducer</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;/*#__PURE__*/ new SingleContextKey&lt;ComponentStyleProducer&gt;(&#x27;component-style-producer&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/styp/component-style-producer.ts#L28">styp/component-style-producer.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/styp/component-style-producer.ts#L28">styp/component-style-producer.ts:28</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -234,15 +330,30 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="componentstyprender" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Component<wbr>Styp<wbr>Render</h3>
-					<div class="tsd-signature tsd-kind-icon">Component<wbr>Styp<wbr>Render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ContextTarget</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#componentstyprender" class="tsd-signature-type">ComponentStypRender</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ContextRequest</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#componentstyprender" class="tsd-signature-type">ComponentStypRender</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;/*#__PURE__*/ new MultiContextKey&lt;ComponentStypRender&gt;(&#x27;component-styp-render&#x27;)</span></div>
+					<div class="tsd-signature tsd-kind-icon">Component<wbr>Styp<wbr>Render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">MultiContextRef</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#componentstyprender" class="tsd-signature-type">ComponentStypRender</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;/*#__PURE__*/ new MultiContextKey&lt;ComponentStypRender&gt;(&#x27;component-styp-render&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/styp/component-styp-render.ts#L15">styp/component-styp-render.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/styp/component-styp-render.ts#L15">styp/component-styp-render.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>A key of component context value containing component CSS renders.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="httpfetch" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Http<wbr>Fetch</h3>
+					<div class="tsd-signature tsd-kind-icon">Http<wbr>Fetch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FnContextRef</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#httpfetch" class="tsd-signature-type">HttpFetch</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><a href="globals.html#httpfetch" class="tsd-signature-type">HttpFetch</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;/*#__PURE__*/ new FnContextKey&lt;Parameters&lt;HttpFetch&gt;, ReturnType&lt;HttpFetch&gt;&gt;(&#x27;http-fetch&#x27;,{byDefault: bootstrapDefault(newHttpFetch),},)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/http-fetch/http-fetch.ts#L37">http-fetch/http-fetch.ts:37</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A key of bootstrap context value containing an <a href="globals.html#httpfetch">HttpFetch</a> instance.</p>
 						</div>
 					</div>
 				</section>
@@ -259,7 +370,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/automount/mount.decorator.ts#L19">automount/mount.decorator.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/automount/mount.decorator.ts#L19">automount/mount.decorator.ts:19</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -302,7 +413,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/styp/produce-style.decorator.ts#L24">styp/produce-style.decorator.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/styp/produce-style.decorator.ts#L24">styp/produce-style.decorator.ts:24</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -380,7 +491,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/automount/auto-mount-support.feature.ts#L49">automount/auto-mount-support.feature.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/automount/auto-mount-support.feature.ts#L49">automount/auto-mount-support.feature.ts:49</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -412,7 +523,7 @@
 					<div class="tsd-signature tsd-kind-icon">Component<wbr>Styp<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/styp/component-styp-options.ts#L30">styp/component-styp-options.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/styp/component-styp-options.ts#L30">styp/component-styp-options.ts:30</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -425,7 +536,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/styp/component-styp-options.ts#L42">styp/component-styp-options.ts:42</a></li>
+										<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/styp/component-styp-options.ts#L42">styp/component-styp-options.ts:42</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -467,7 +578,7 @@
 					<div class="tsd-signature tsd-kind-icon">Mount<wbr>Def<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/automount/mount-def.ts#L24">automount/mount-def.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/automount/mount-def.ts#L24">automount/mount-def.ts:24</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter">
@@ -480,7 +591,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/wesib/generic/blob/11af730/src/automount/mount-def.ts#L34">automount/mount-def.ts:34</a></li>
+										<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/automount/mount-def.ts#L34">automount/mount-def.ts:34</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -521,6 +632,12 @@
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="modules/httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
+					</li>
+					<li class=" tsd-kind-module tsd-has-type-parameter">
+						<a href="modules/navigateevent.html">Navigate<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="modules/themestyle.html">Theme<wbr>Style</a>
 					</li>
 				</ul>
@@ -541,6 +658,12 @@
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/elementnodelist.html" class="tsd-kind-icon">Element<wbr>Node<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/navigation.html" class="tsd-kind-icon">Navigation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/styleproducersupport.html" class="tsd-kind-icon">Style<wbr>Producer<wbr>Support</a>
@@ -572,6 +695,12 @@
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#componentstyprender" class="tsd-kind-icon">Component<wbr>Styp<wbr>Render</a>
 					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#httpfetch" class="tsd-kind-icon">Http<wbr>Fetch</a>
+					</li>
+					<li class=" tsd-kind-event">
+						<a href="globals.html#prenavigateevent" class="tsd-kind-icon">Pre<wbr>Navigate<wbr>Event</a>
+					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#componentnode" class="tsd-kind-icon">Component<wbr>Node</a>
 					</li>
@@ -580,6 +709,9 @@
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#componentstyprender" class="tsd-kind-icon">Component<wbr>Styp<wbr>Render</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#httpfetch" class="tsd-kind-icon">Http<wbr>Fetch</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="globals.html#mount" class="tsd-kind-icon">Mount</a>

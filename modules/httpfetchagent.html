@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ThemeStyle | Wesib: Generic Components</title>
+	<title>HttpFetchAgent | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="themestyle.html">ThemeStyle</a>
+					<a href="httpfetchagent.html">HttpFetchAgent</a>
 				</li>
 			</ul>
-			<h1>Module ThemeStyle</h1>
+			<h1>Module HttpFetchAgent</h1>
 		</div>
 	</div>
 </header>
@@ -67,8 +67,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A key of bootstrap context value containing theme styles.</p>
+						<p>A key of context value containing an <a href="httpfetchagent.html">HttpFetchAgent</a> instance.</p>
 					</div>
+					<p>The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -76,16 +77,9 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/themestyle.extension.html" class="tsd-kind-icon">Extension</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="themestyle.html#byid" class="tsd-kind-icon">By<wbr>Id</a></li>
-								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="themestyle.html#provider" class="tsd-kind-icon">Provider</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="httpfetchagent.html#combined" class="tsd-kind-icon">Combined</a></li>
 							</ul>
 						</section>
 					</div>
@@ -94,96 +88,90 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
-					<a name="byid" class="tsd-anchor"></a>
-					<h3>By<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">By<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<a name="combined" class="tsd-anchor"></a>
+					<h3>Combined</h3>
+					<div class="tsd-signature tsd-kind-icon">Combined<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/theme/theme-style.ts#L70">theme/theme-style.ts:70</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/http-fetch/http-fetch-agent.ts#L39">http-fetch/http-fetch-agent.ts:39</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A function obtaining combined style provider. I.e. the one that applies the style along with all extensions.</p>
+							<p>Combined HTTP fetch agent signature.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>param</dt>
-							<dd><p>provider of theme style to apply.</p>
-							</dd>
-							<dt>returns</dt>
-							<dd><p>A combined theme style provider.</p>
-							</dd>
-						</dl>
+						<p>This is what is available under <a href="httpfetchagent.html">HttpFetchAgent</a> key.</p>
 					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, style<span class="tsd-signature-symbol">: </span><a href="themestyle.html#provider" class="tsd-signature-type">Provider</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="themestyle.html#provider" class="tsd-signature-type">Provider</a></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RequestInfo</span>, init<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">RequestInit</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+										</div>
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
 												<h5>this: <span class="tsd-signature-type">void</span></h5>
 											</li>
 											<li>
-												<h5>style: <a href="themestyle.html#provider" class="tsd-signature-type">Provider</a></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <a href="themestyle.html#provider" class="tsd-signature-type">Provider</a></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
-					<a name="provider" class="tsd-anchor"></a>
-					<h3>Provider</h3>
-					<div class="tsd-signature tsd-kind-icon">Provider<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/theme/theme-style.ts#L34">theme/theme-style.ts:34</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Theme style provider function.</p>
-						</div>
-						<p>This function is called at most once per theme to apply styles to the latter. E.g. by declaring CSS rules.</p>
-						<p>This function is used as an identifier of particular style and can be extended using <a href="../interfaces/themestyle.extension.html">ThemeStyle.Extension</a>.</p>
-						<p>It is not absolutely necessary to register style provider. It will be applied on request anyway.</p>
-						<dl class="tsd-comment-tags">
-							<dt>param</dt>
-							<dd><p>A theme to apply styling to.</p>
-							</dd>
-							<dt>returns</dt>
-							<dd><p>Dynamically updated CSS rule set containing the applied styling.</p>
-							</dd>
-						</dl>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, theme<span class="tsd-signature-symbol">: </span><a href="../classes/theme.html" class="tsd-signature-type">Theme</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypRules</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>this: <span class="tsd-signature-type">void</span></h5>
+												<h5>next: <span class="tsd-signature-type">function</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>Either calls the next agent in chain, or actually fetches the data if this agent is the last one.
+													Accepts the same parameters as <a href="../globals.html#httpfetch">HttpFetch</a>.</p>
+												</div>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter-siganture">
+														<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RequestInfo</span>, init<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">RequestInit</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+														</ul>
+														<ul class="tsd-descriptions">
+															<li class="tsd-description">
+																<div class="tsd-comment tsd-typography">
+																	<p>Either calls the next agent in chain, or actually fetches the data if this agent is the last one.
+																	Accepts the same parameters as <a href="../globals.html#httpfetch">HttpFetch</a>.</p>
+																</div>
+																<h4 class="tsd-parameters-title">Parameters</h4>
+																<ul class="tsd-parameters">
+																	<li>
+																		<h5>this: <span class="tsd-signature-type">void</span></h5>
+																	</li>
+																	<li>
+																		<h5>input: <span class="tsd-signature-type">RequestInfo</span></h5>
+																	</li>
+																	<li>
+																		<h5><span class="tsd-flag ts-flagOptional">Optional</span> init: <span class="tsd-signature-type">RequestInit</span></h5>
+																	</li>
+																</ul>
+																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+															</li>
+														</ul>
+													</li>
+												</ul>
 											</li>
 											<li>
-												<h5>theme: <a href="../classes/theme.html" class="tsd-signature-type">Theme</a></h5>
+												<h5>input: <span class="tsd-signature-type">RequestInfo</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<div class="lead">
+														<p>The resource to fetch. This can either an URL string, or a <code>Request</code> object.</p>
+													</div>
+												</div>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> init: <span class="tsd-signature-type">RequestInit</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<div class="lead">
+														<p>Custom settings to apply to the request.</p>
+													</div>
+												</div>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StypRules</span></h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										<p>An <code>OnEvent</code> registrar of response object(s) receivers. It is returned as a result of <a href="../globals.html#httpfetch">HttpFetch</a> call.</p>
 									</li>
 								</ul>
 							</li>
@@ -198,27 +186,21 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
 					</li>
 					<li class=" tsd-kind-module tsd-has-type-parameter">
 						<a href="navigateevent.html">Navigate<wbr>Event</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="themestyle.html">Theme<wbr>Style</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/themestyle.extension.html" class="tsd-kind-icon">Extension</a>
-					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="themestyle.html#byid" class="tsd-kind-icon">By<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="themestyle.html#provider" class="tsd-kind-icon">Provider</a>
+						<a href="httpfetchagent.html#combined" class="tsd-kind-icon">Combined</a>
 					</li>
 				</ul>
 			</nav>

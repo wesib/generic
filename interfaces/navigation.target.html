@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ElementSelectorOpts | Wesib: Generic Components</title>
+	<title>Target | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,13 +54,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../classes/elementnode.html">ElementNode</a>
+					<a href="../classes/navigation.html">Navigation</a>
 				</li>
 				<li>
-					<a href="elementnode.elementselectoropts.html">ElementSelectorOpts</a>
+					<a href="navigation.target.html">Target</a>
 				</li>
 			</ul>
-			<h1>Interface ElementSelectorOpts</h1>
+			<h1>Interface Target</h1>
 		</div>
 	</div>
 </header>
@@ -70,20 +70,16 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Any element node selector options.</p>
+						<p>Navigation target.</p>
 					</div>
+					<p>This is passed to [[Navigation.assign]] and <a href="../classes/navigation.html#replace">Navigation.replace</a> methods.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="elementnode.selectoropts.html" class="tsd-signature-type">SelectorOpts</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">ElementSelectorOpts</span>
-							</li>
-						</ul>
+						<span class="target">Target</span>
 					</li>
 				</ul>
 			</section>
@@ -94,8 +90,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="elementnode.elementselectoropts.html#all" class="tsd-kind-icon">all</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="elementnode.elementselectoropts.html#deep" class="tsd-kind-icon">deep</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="navigation.target.html#data" class="tsd-kind-icon">data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="navigation.target.html#title" class="tsd-kind-icon">title</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="navigation.target.html#url" class="tsd-kind-icon">url</a></li>
 							</ul>
 						</section>
 					</div>
@@ -103,35 +100,48 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="all" class="tsd-anchor"></a>
-					<h3>all</h3>
-					<div class="tsd-signature tsd-kind-icon">all<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="data" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> data</h3>
+					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
-						<p>Overrides <a href="elementnode.selectoropts.html">SelectorOpts</a>.<a href="elementnode.selectoropts.html#all">all</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/tree/element-node.ts#L134">tree/element-node.ts:134</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/navigation/navigation.ts#L142">navigation/navigation.ts:142</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Set to <code>true</code> to select arbitrary nodes. Otherwise - select only component nodes.</p>
+							<p>Opaque data to apply to session history. I.e. either push or replace.</p>
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="deep" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> deep</h3>
-					<div class="tsd-signature tsd-kind-icon">deep<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="title" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> title</h3>
+					<div class="tsd-signature tsd-kind-icon">title<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="elementnode.selectoropts.html">SelectorOpts</a>.<a href="elementnode.selectoropts.html#deep">deep</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/tree/element-node.ts#L113">tree/element-node.ts:113</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/navigation/navigation.ts#L147">navigation/navigation.ts:147</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Set to <code>true</code> to select from entire subtree. Otherwise - select from element child nodes only.</p>
+							<p>New window title.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="url" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> url</h3>
+					<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">URL</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e986300/src/navigation/navigation.ts#L137">navigation/navigation.ts:137</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An URL to update the browser location string to.</p>
 						</div>
 					</div>
 				</section>
@@ -156,62 +166,74 @@
 					<li class=" tsd-kind-class">
 						<a href="../classes/componenttreesupport.html" class="tsd-kind-icon">Component<wbr>Tree<wbr>Support</a>
 					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/elementnode.html" class="tsd-kind-icon">Element<wbr>Node</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="../classes/elementnodelist.html" class="tsd-kind-icon">Element<wbr>Node<wbr>List</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="../classes/elementnode.html" class="tsd-kind-icon">Element<wbr>Node</a>
+						<a href="../classes/navigation.html" class="tsd-kind-icon">Navigation</a>
 						<ul>
 							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="elementnode.componentselectoropts.html" class="tsd-kind-icon">Component<wbr>Selector<wbr>Opts</a>
+								<a href="navigation.location.html" class="tsd-kind-icon">Location</a>
 							</li>
 							<li class="current tsd-kind-interface tsd-parent-kind-class">
-								<a href="elementnode.elementselectoropts.html" class="tsd-kind-icon">Element<wbr>Selector<wbr>Opts</a>
+								<a href="navigation.target.html" class="tsd-kind-icon">Target</a>
 								<ul>
-									<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-										<a href="elementnode.elementselectoropts.html#all" class="tsd-kind-icon">all</a>
+									<li class=" tsd-kind-property tsd-parent-kind-interface">
+										<a href="navigation.target.html#data" class="tsd-kind-icon">data</a>
 									</li>
-									<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-										<a href="elementnode.elementselectoropts.html#deep" class="tsd-kind-icon">deep</a>
+									<li class=" tsd-kind-property tsd-parent-kind-interface">
+										<a href="navigation.target.html#title" class="tsd-kind-icon">title</a>
+									</li>
+									<li class=" tsd-kind-property tsd-parent-kind-interface">
+										<a href="navigation.target.html#url" class="tsd-kind-icon">url</a>
 									</li>
 								</ul>
 							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="elementnode.raw.html" class="tsd-kind-icon">Raw</a>
-							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="elementnode.selectoropts.html" class="tsd-kind-icon">Selector<wbr>Opts</a>
-							</li>
-							<li class=" tsd-kind-type-alias tsd-parent-kind-class tsd-is-static">
-								<a href="../classes/elementnode.html#any" class="tsd-kind-icon">Any</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="../classes/navigation.html#length" class="tsd-kind-icon">length</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#context" class="tsd-kind-icon">context</a>
+								<a href="../classes/navigation.html#onnavigate" class="tsd-kind-icon">on<wbr>Navigate</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#element" class="tsd-kind-icon">element</a>
+								<a href="../classes/navigation.html#prenavigate" class="tsd-kind-icon">pre<wbr>Navigate</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#parent" class="tsd-kind-icon">parent</a>
+								<a href="../classes/navigation.html#read" class="tsd-kind-icon">read</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="../classes/navigation.html#__computed" class="tsd-kind-icon">__computed</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
+								<a href="../classes/navigation.html#__computed-1" class="tsd-kind-icon">__computed</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#attribute" class="tsd-kind-icon">attribute</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="../classes/elementnode.html#property" class="tsd-kind-icon">property</a>
+								<a href="../classes/navigation.html#back" class="tsd-kind-icon">back</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#select" class="tsd-kind-icon">select</a>
+								<a href="../classes/navigation.html#forward" class="tsd-kind-icon">forward</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="../classes/navigation.html#go" class="tsd-kind-icon">go</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="../classes/navigation.html#navigate" class="tsd-kind-icon">navigate</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="../classes/navigation.html#reload" class="tsd-kind-icon">reload</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="../classes/navigation.html#replace" class="tsd-kind-icon">replace</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="../classes/elementnodelist.html" class="tsd-kind-icon">Element<wbr>Node<wbr>List</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/navigation.html" class="tsd-kind-icon">Navigation</a>
-					</li>
 					<li class=" tsd-kind-class">
 						<a href="../classes/navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a>
 					</li>
