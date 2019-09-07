@@ -3,6 +3,8 @@ import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from 
 import { noop } from 'call-thru';
 import { EventInterest, EventReceiver } from 'fun-events';
 import { HttpFetch } from './http-fetch';
+import { HttpFetchAgent } from './http-fetch-agent';
+import Mock = jest.Mock;
 
 describe('http-fetch', () => {
 
@@ -22,11 +24,16 @@ describe('http-fetch', () => {
   });
 
   let bsContext: BootstrapContext;
+  let mockAgent: Mock<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>>;
 
   beforeEach(async () => {
+    mockAgent = jest.fn((next, _input, _init?) => next());
 
     @Feature({
-      set: { a: BootstrapWindow, is: mockWindow },
+      set: [
+        { a: BootstrapWindow, is: mockWindow },
+        { a: HttpFetchAgent, is: mockAgent },
+      ],
     })
     class TestFeature {}
 
@@ -59,6 +66,22 @@ describe('http-fetch', () => {
       expect(receiver).toHaveBeenCalledWith(response);
       expect(interest.done).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
+    });
+    it('calls agent', async () => {
+      await fetch();
+      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request, init);
+      expect(mockWindow.fetch).toHaveBeenCalledWith(request, init);
+    });
+    it('respects agent modification', async () => {
+
+      const request2: Request = { url: 'http://localhost/test2' } as any;
+      const init2: RequestInit = { headers: { 'X-Test': '2' } };
+
+      mockAgent.mockImplementation((next) => next(request2, init2));
+
+      await fetch();
+      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request, init);
+      expect(mockWindow.fetch).toHaveBeenCalledWith(request2, init2);
     });
     it('reports error when fetch fails', async () => {
 

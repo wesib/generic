@@ -24,8 +24,8 @@ import { newHttpFetch } from './http-fetch.impl';
  */
 export type HttpFetch =
 /**
- * @param input  This defines the resource that you wish to fetch. This can either an URL string, or a `Request` object.
- * @param init  An options object containing any custom settings that you want to apply to the request.
+ * @param input  The resource to fetch. This can either an URL string, or a `Request` object.
+ * @param init  Custom settings to apply to the request.
  *
  * @returns An `OnEvent` registrar of response object(s) receivers.
  */
