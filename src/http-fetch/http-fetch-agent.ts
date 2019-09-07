@@ -1,7 +1,7 @@
 /**
  * @module @wesib/wesib
  */
-import { ContextUpKey, ContextValueOpts, ContextValues, FnContextRef } from 'context-values';
+import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
 import { AfterEvent, EventKeeper, EventSender, OnEvent, onEventFrom } from 'fun-events';
 
 /**
@@ -29,8 +29,33 @@ export type HttpFetchAgent =
         init?: RequestInit,
     ) => EventSender<[Response]>;
 
-class HttpFetchAgentKey extends ContextUpKey<HttpFetchAgent, HttpFetchAgent>
-    implements FnContextRef<Parameters<HttpFetchAgent>, ReturnType<HttpFetchAgent>, AfterEvent<HttpFetchAgent[]>> {
+export namespace HttpFetchAgent {
+
+  /**
+   * Combined HTTP fetch agent signature.
+   *
+   * This is what is available under [[HttpFetchAgent]] key.
+   */
+  export type Combined =
+  /**
+   * @param next  Either calls the next agent in chain, or actually fetches the data if this agent is the last one.
+   * Accepts the same parameters as [[HttpFetch]].
+   * @param input  The resource to fetch. This can either an URL string, or a `Request` object.
+   * @param init  Custom settings to apply to the request.
+   *
+   * @returns An `OnEvent` registrar of response object(s) receivers. It is returned as a result of [[HttpFetch]] call.
+   */
+      (
+          this: void,
+          next: (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>,
+          input: RequestInfo,
+          init?: RequestInit,
+      ) => OnEvent<[Response]>;
+
+}
+
+class HttpFetchAgentKey extends ContextUpKey<HttpFetchAgent.Combined, HttpFetchAgent>
+    implements ContextUpRef<HttpFetchAgent.Combined, HttpFetchAgent, AfterEvent<HttpFetchAgent[]>> {
 
   constructor() {
     super('http-fetch-agent');
@@ -39,10 +64,10 @@ class HttpFetchAgentKey extends ContextUpKey<HttpFetchAgent, HttpFetchAgent>
   grow<Ctx extends ContextValues>(
       opts: ContextValueOpts<
           Ctx,
-          HttpFetchAgent,
+          HttpFetchAgent.Combined,
           EventKeeper<HttpFetchAgent[]> | HttpFetchAgent,
           AfterEvent<HttpFetchAgent[]>>,
-  ): HttpFetchAgent {
+  ): HttpFetchAgent.Combined {
     return (next, input, info) => {
 
       const result = opts.byDefault(() => combinedAgent);
@@ -51,7 +76,7 @@ class HttpFetchAgentKey extends ContextUpKey<HttpFetchAgent, HttpFetchAgent>
     };
 
     function combinedAgent(
-        next: (this: void, input?: RequestInfo, init?: RequestInit) => OnEvent<[Response]>,
+        next: (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>,
         input: RequestInfo,
         init?: RequestInit,
     ): OnEvent<[Response]> {
@@ -95,5 +120,5 @@ class HttpFetchAgentKey extends ContextUpKey<HttpFetchAgent, HttpFetchAgent>
  *
  * The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.
  */
-export const HttpFetchAgent: FnContextRef<Parameters<HttpFetchAgent>, ReturnType<HttpFetchAgent>> =
+export const HttpFetchAgent: ContextUpRef<HttpFetchAgent.Combined, HttpFetchAgent> =
     /**#__PURE__*/ new HttpFetchAgentKey();

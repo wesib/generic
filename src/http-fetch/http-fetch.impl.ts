@@ -1,5 +1,5 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { DomEventDispatcher, EventEmitter, eventInterest, OnEvent, onEventBy, onEventFrom } from 'fun-events';
+import { DomEventDispatcher, EventEmitter, eventInterest, OnEvent, onEventBy } from 'fun-events';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
 
@@ -13,14 +13,7 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
   const window = context.get(BootstrapWindow);
   const agent = context.get(HttpFetchAgent);
 
-  return (input, init) => onEventFrom(
-      agent(
-          // HttpEventAgent always substitutes parameters
-          fetch as (input?: RequestInfo, init?: RequestInit) => OnEvent<[Response]>,
-          input,
-          init,
-      ),
-  );
+  return (input, init) => agent(fetch, input, init);
 
   function fetch(input: RequestInfo, init?: RequestInit): OnEvent<[Response]> {
     return onEventBy(receiver => {
