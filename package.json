@@ -23,13 +23,12 @@
   "dependencies": {
     "a-iterable": "^2.4.2",
     "call-thru": "^2.5.2",
-    "context-values": "^2.0.1",
+    "context-values": "^2.0.3",
     "fun-events": "^5.0.4",
-    "namespace-aliaser": "^2.0.1",
-    "tslib": "^1.10.0"
+    "namespace-aliaser": "^2.0.1"
   },
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.33"
+    "@wesib/wesib": "^1.0.0-alpha.35"
   },
   "optionalDependencies": {
     "style-producer": "^3.2.1"
@@ -37,7 +36,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.18",
     "@types/jsdom": "^12.2.4",
-    "@wesib/wesib": "^1.0.0-alpha.33",
+    "@wesib/wesib": "^1.0.0-alpha.35",
     "codecov": "^3.5.0",
     "cssesc": "^3.0.0",
     "fs-extra": "^8.1.0",
