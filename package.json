@@ -21,17 +21,17 @@
   "module": "dist/wesib.generic.mjs",
   "typings": "index.d.ts",
   "dependencies": {
-    "a-iterable": "^2.4.2",
-    "call-thru": "^2.5.2",
-    "context-values": "^2.0.3",
-    "fun-events": "^5.0.4",
-    "namespace-aliaser": "^2.0.1"
+    "a-iterable": "^2.4.3",
+    "call-thru": "^2.5.3",
+    "context-values": "^2.0.4",
+    "fun-events": "^5.0.5",
+    "namespace-aliaser": "^2.0.2"
   },
   "peerDependencies": {
     "@wesib/wesib": "^1.0.0-alpha.35"
   },
   "optionalDependencies": {
-    "style-producer": "^3.2.1"
+    "style-producer": "^3.2.2"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
