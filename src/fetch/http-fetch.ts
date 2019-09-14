@@ -1,5 +1,5 @@
 /**
- * @module @wesib/wesib
+ * @module @wesib/generic
  */
 import { bootstrapDefault } from '@wesib/wesib';
 import { FnContextKey, FnContextRef } from 'context-values';
@@ -7,7 +7,7 @@ import { OnEvent } from 'fun-events';
 import { newHttpFetch } from './http-fetch.impl';
 
 /**
- * HTTP fetch signature.
+ * HTTP fetch function signature.
  *
  * This is a function that wraps browser's
  * [fetch()](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch) function and provides

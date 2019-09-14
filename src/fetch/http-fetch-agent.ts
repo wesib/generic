@@ -1,5 +1,5 @@
 /**
- * @module @wesib/wesib
+ * @module @wesib/generic
  */
 import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
 import { AfterEvent, EventKeeper, EventSender, OnEvent, onEventFrom } from 'fun-events';
