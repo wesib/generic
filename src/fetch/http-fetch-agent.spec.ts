@@ -3,7 +3,7 @@ import { EventEmitter, OnEvent, onEventFrom } from 'fun-events';
 import { HttpFetchAgent } from './http-fetch-agent';
 import Mock = jest.Mock;
 
-describe('http-fetch', () => {
+describe('fetch', () => {
   describe('HttpFetchAgent', () => {
 
     let registry: ContextRegistry;

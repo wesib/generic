@@ -6,7 +6,7 @@ import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
 import Mock = jest.Mock;
 
-describe('http-fetch', () => {
+describe('fetch', () => {
 
   let mockWindow: Mocked<Window>;
   let request: RequestInfo;
