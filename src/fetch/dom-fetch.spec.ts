@@ -105,7 +105,7 @@ describe('fetch', () => {
 
         const receiver = jest.fn();
         const done = jest.fn();
-        const interest = await fetchNode(receiver, done);
+        const interest = await fetchNodes(receiver, done);
 
         expect(receiver).toHaveBeenCalled();
         expect(interest.done).toBe(true);
@@ -125,7 +125,7 @@ describe('fetch', () => {
 
         const receiver = jest.fn();
         const done = jest.fn();
-        const interest = await fetchNode(receiver, done);
+        const interest = await fetchNodes(receiver, done);
 
         expect(receiver).toHaveBeenCalled();
         expect(interest.done).toBe(true);
@@ -156,7 +156,7 @@ describe('fetch', () => {
 
         mockResponse.text.mockImplementation(() => Promise.reject(error));
 
-        const interest = await fetchNode(receiver, done);
+        const interest = await fetchNodes(receiver, done);
 
         expect(receiver).not.toHaveBeenCalled();
         expect(interest.done).toBe(true);
@@ -168,15 +168,15 @@ describe('fetch', () => {
         const receiver = jest.fn();
         const done = jest.fn();
         const error = new Error('Some error');
-        const interest = await fetchNode(receiver, done);
+        const interest = await fetchNodes(receiver, done);
 
         expect(receiver).not.toHaveBeenCalled();
         expect(interest.done).toBe(true);
         expect(done).toHaveBeenCalledWith(error);
       });
 
-      function fetchNode(
-          receiver: EventReceiver<[Node]> = noop,
+      function fetchNodes(
+          receiver: EventReceiver<Node[]> = noop,
           done: (reason?: any) => void = noop,
       ): Promise<EventInterest> {
         return new Promise<EventInterest>(resolve => {
