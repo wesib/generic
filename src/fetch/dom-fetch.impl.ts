@@ -1,6 +1,8 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
+import { nextArgs } from 'call-thru';
 import { EventEmitter, eventInterest, EventInterest, OnEvent, onEventBy } from 'fun-events';
 import { DomFetch, DomFetchResult } from './dom-fetch';
+import { DomFetchMutator } from './dom-fetch-mutator';
 import { HttpFetch } from './http-fetch';
 
 /**
@@ -23,23 +25,22 @@ class DocumentFetchResult implements DomFetchResult {
 
     const window = context.get(BootstrapWindow);
     const httpFetch = context.get(HttpFetch);
+    const mutator = context.get(DomFetchMutator);
 
     this.onResponse = httpFetch(input, init);
 
     const parser: DOMParser = new (window as any).DOMParser();
     const responseTextEmitter = new EventEmitter<[Response, string]>();
-    const onNode: OnEvent<[Node]> = responseTextEmitter.on.thru_(
-        (response, text) => {
-          return parser.parseFromString(text, domResponseType(response));
-        },
+    const onDocument: OnEvent<[Document, Response]> = responseTextEmitter.on.thru_(
+        (response, text) => nextArgs(parser.parseFromString(text, domResponseType(response)), response),
     );
 
-    this.onNode = onEventBy<[Node]>(receiver => {
+    this.onNode = onEventBy<[Document, Response]>(receiver => {
 
       const interest = eventInterest();
       const responseInterest = this.onResponse(response => {
 
-        onNode(receiver).needs(interest);
+        onDocument(receiver).needs(interest);
         response.text().then(
             text => {
               interest.needs(responseInterest);
@@ -51,7 +52,9 @@ class DocumentFetchResult implements DomFetchResult {
       });
 
       return interest;
-    });
+    }).dig_(
+        (document, response) => mutator([document], response, input, init),
+    );
   }
 
   into(target: Range): EventInterest {

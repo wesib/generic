@@ -38,7 +38,7 @@ export interface DomFetchResult {
   readonly onResponse: OnEvent<[Response]>;
 
   /**
-   * An `OnEvent` registrar of parsed DOM nodes contained in response.
+   * An `OnEvent` registrar of parsed DOM nodes contained in the response.
    */
   readonly onNode: OnEvent<Node[]>;
 

@@ -1,7 +1,8 @@
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { EventEmitter, eventInterest, EventInterest, EventReceiver, onEventBy } from 'fun-events';
+import { afterEventOf, EventEmitter, eventInterest, EventInterest, EventReceiver, onEventBy } from 'fun-events';
 import { DomFetch } from './dom-fetch';
+import { DomFetchMutator } from './dom-fetch-mutator';
 import { HttpFetch } from './http-fetch';
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
@@ -41,11 +42,15 @@ describe('fetch', () => {
   });
 
   let bsContext: BootstrapContext;
+  let mockMutator: Mock<ReturnType<DomFetchMutator>, Parameters<DomFetchMutator>>;
 
   beforeEach(async () => {
+    mockMutator = jest.fn((nodes, _response, _input, _info?) => afterEventOf<Node[]>(...nodes));
+
     @Feature({
       set: [
         { a: HttpFetch, is: mockHttpFetch },
+        { a: DomFetchMutator, is: mockMutator },
       ],
     })
     class TestFeature {}
@@ -173,6 +178,19 @@ describe('fetch', () => {
         expect(receiver).not.toHaveBeenCalled();
         expect(interest.done).toBe(true);
         expect(done).toHaveBeenCalledWith(error);
+      });
+      it('applies mutator', async () => {
+        mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
+
+        const newNodes: Node[] = [document.createElement('span'), document.createTextNode('test')];
+
+        mockMutator.mockImplementation(() => afterEventOf(...newNodes));
+
+        const receiver = jest.fn();
+
+        await fetchNodes(receiver);
+
+        expect(receiver).toHaveBeenCalledWith(...newNodes);
       });
 
       function fetchNodes(
