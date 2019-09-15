@@ -1,7 +1,8 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { EventEmitter, eventInterest, EventInterest, OnEvent, OnEvent__symbol, onEventBy } from 'fun-events';
-import { DomFetch, DomFetchResult } from './dom-fetch';
+import { EventEmitter, eventInterest, OnEvent, onEventBy } from 'fun-events';
+import { DomFetch } from './dom-fetch';
 import { DomFetchAgent } from './dom-fetch-agent';
+import { DomFetchResult } from './dom-fetch-result';
 import { HttpFetch } from './http-fetch';
 
 /**
@@ -11,11 +12,12 @@ export function newDomFetch(context: BootstrapContext): DomFetch {
   return (input, init?) => new DocumentFetchResult(context, new Request(input, init));
 }
 
-class DocumentFetchResult implements DomFetchResult {
+class DocumentFetchResult extends DomFetchResult {
 
   readonly onNode: OnEvent<Node[]>;
 
   constructor(context: BootstrapContext, request: Request) {
+    super();
 
     const window = context.get(BootstrapWindow);
     const httpFetch = context.get(HttpFetch);
@@ -49,19 +51,6 @@ class DocumentFetchResult implements DomFetchResult {
         return interest;
       });
     }
-  }
-
-  get [OnEvent__symbol]() {
-    return this.onNode;
-  }
-
-  into(target: Range): EventInterest {
-    return this.onNode((...nodes) => {
-      target.deleteContents();
-      for (let i = nodes.length - 1; i >= 0; --i) {
-        target.insertNode(nodes[i]);
-      }
-    });
   }
 
 }
