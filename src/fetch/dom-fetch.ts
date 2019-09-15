@@ -3,7 +3,7 @@
  */
 import { bootstrapDefault } from '@wesib/wesib';
 import { FnContextKey, FnContextRef } from 'context-values';
-import { EventInterest, OnEvent } from 'fun-events';
+import { EventInterest, EventSender, OnEvent, OnEvent__symbol } from 'fun-events';
 import { newDomFetch } from './dom-fetch.impl';
 
 /**
@@ -30,12 +30,16 @@ export type DomFetch =
  * This is returned from [[DomFetch]] function. The actual fetch would be initiated once event receiver is registered,
  * or contents requested to be inserted to document.
  */
-export interface DomFetchResult {
+export interface DomFetchResult extends EventSender<Node[]> {
 
   /**
    * An `OnEvent` registrar of parsed DOM nodes contained in the response.
+   *
+   * The `[OnEvent__symbol]` property is an alias of this one.
    */
   readonly onNode: OnEvent<Node[]>;
+
+  readonly [OnEvent__symbol]: OnEvent<Node[]>;
 
   /**
    * Inserts the requested DOM nodes into the given document range.

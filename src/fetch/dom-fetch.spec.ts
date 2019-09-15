@@ -1,6 +1,6 @@
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { EventEmitter, eventInterest, EventInterest, EventReceiver, onEventBy } from 'fun-events';
+import { EventEmitter, eventInterest, EventInterest, EventReceiver, onEventBy, onEventFrom } from 'fun-events';
 import { DomFetch } from './dom-fetch';
 import { DomFetchAgent } from './dom-fetch-agent';
 import { HttpFetch } from './http-fetch';
@@ -185,6 +185,15 @@ describe('fetch', () => {
           });
         });
       }
+    });
+
+    describe('[OnEvent__symbol]', () => {
+      it('is an alias of `onNode`', () => {
+
+        const result = domFetch(request);
+
+        expect(onEventFrom(result)).toBe(result.onNode);
+      });
     });
 
     describe('into', () => {

@@ -1,5 +1,5 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { EventEmitter, eventInterest, EventInterest, OnEvent, onEventBy } from 'fun-events';
+import { EventEmitter, eventInterest, EventInterest, OnEvent, OnEvent__symbol, onEventBy } from 'fun-events';
 import { DomFetch, DomFetchResult } from './dom-fetch';
 import { DomFetchAgent } from './dom-fetch-agent';
 import { HttpFetch } from './http-fetch';
@@ -49,6 +49,10 @@ class DocumentFetchResult implements DomFetchResult {
         return interest;
       });
     }
+  }
+
+  get [OnEvent__symbol]() {
+    return this.onNode;
   }
 
   into(target: Range): EventInterest {
