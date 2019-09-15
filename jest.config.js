@@ -37,4 +37,5 @@ module.exports = {
       tsConfig: 'tsconfig.spec.json',
     },
   },
+  setupFiles: ['cross-fetch/polyfill']
 };

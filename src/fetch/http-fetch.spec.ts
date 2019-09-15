@@ -14,7 +14,7 @@ describe('fetch', () => {
   let response: Response;
 
   beforeEach(() => {
-    request = { url: 'http://localhost/test' } as any;
+    request = new Request('http://localhost/test');
     response = { name: 'http response' } as any;
     init = { headers: { 'X-Test': 'true' } };
 
@@ -74,7 +74,7 @@ describe('fetch', () => {
     });
     it('respects agent modification', async () => {
 
-      const request2: Request = { url: 'http://localhost/test2' } as any;
+      const request2 = new Request('http://localhost/test2');
       const init2: RequestInit = { headers: { 'X-Test': '2' } };
 
       mockAgent.mockImplementation((next) => next(request2, init2));

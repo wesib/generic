@@ -24,7 +24,7 @@ describe('fetch', () => {
     beforeEach(() => {
       nodes = [document];
       response = { name: 'response' } as any;
-      request = { url: 'http://localhost/test' } as any;
+      request = new Request('http://localhost/test');
       init = { headers: { 'X-Test': 'true' } };
     });
 

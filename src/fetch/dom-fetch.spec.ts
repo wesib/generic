@@ -16,7 +16,7 @@ describe('fetch', () => {
   let mockResponseHeaders: Mocked<Headers>;
 
   beforeEach(() => {
-    request = { url: 'http://localhost/test' } as any;
+    request = new Request('http://localhost/test');
     init = { headers: { 'X-Test': 'true' } };
     mockResponseHeaders = {
       get: jest.fn(),
