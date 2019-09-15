@@ -13,7 +13,6 @@ export function newDomFetch(context: BootstrapContext): DomFetch {
 
 class DocumentFetchResult implements DomFetchResult {
 
-  readonly onResponse: OnEvent<[Response]>;
   readonly onNode: OnEvent<Node[]>;
 
   constructor(context: BootstrapContext, request: Request) {
@@ -21,9 +20,6 @@ class DocumentFetchResult implements DomFetchResult {
     const window = context.get(BootstrapWindow);
     const httpFetch = context.get(HttpFetch);
     const agent = context.get(DomFetchAgent);
-
-    this.onResponse = httpFetch(request);
-
     const parser: DOMParser = new (window as any).DOMParser();
 
     this.onNode = agent(fetch, request);

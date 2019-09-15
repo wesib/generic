@@ -75,35 +75,6 @@ describe('fetch', () => {
       expect(domFetch).toBeInstanceOf(Function);
     });
 
-    describe('onResponse', () => {
-      it('fetches using `HttpFetch`', async () => {
-
-        const receiver = jest.fn();
-        const done = jest.fn();
-        const interest = await fetchResponse(receiver, done);
-
-        expect(mockHttpFetch).toHaveBeenCalledWith(new Request(request, init));
-        expect(receiver).toHaveBeenCalledWith(mockResponse);
-        expect(interest.done).toBe(true);
-        expect(done).toHaveBeenCalledWith(undefined);
-      });
-
-      function fetchResponse(
-          receiver: EventReceiver<[Response]> = noop,
-          done: (reason?: any) => void = noop,
-      ): Promise<EventInterest> {
-        return new Promise<EventInterest>(resolve => {
-
-          const interest = domFetch(request, init).onResponse(receiver);
-
-          interest.whenDone(reason => {
-            done(reason);
-            resolve(interest);
-          });
-        });
-      }
-    });
-
     describe('onNode', () => {
       it('parses the response as HTML by default', async () => {
         mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
@@ -197,6 +168,7 @@ describe('fetch', () => {
         await fetchNodes(receiver);
 
         expect(receiver).toHaveBeenCalledWith(...newNodes);
+        expect(mockHttpFetch).not.toHaveBeenCalled();
       });
 
       function fetchNodes(

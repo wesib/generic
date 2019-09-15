@@ -33,11 +33,6 @@ export type DomFetch =
 export interface DomFetchResult {
 
   /**
-   * An `OnEvent` registrar of original response object(s) receivers.
-   */
-  readonly onResponse: OnEvent<[Response]>;
-
-  /**
    * An `OnEvent` registrar of parsed DOM nodes contained in the response.
    */
   readonly onNode: OnEvent<Node[]>;
