@@ -1,8 +1,9 @@
 /**
  * @module @wesib/generic
  */
-import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
-import { AfterEvent, EventKeeper, EventSender, OnEvent, onEventFrom } from 'fun-events';
+import { ContextUpRef } from 'context-values';
+import { EventSender, OnEvent } from 'fun-events';
+import { FetchAgentKey } from './fetch-agent-key';
 
 /**
  * HTTP fetch agent signature.
@@ -49,67 +50,10 @@ export namespace HttpFetchAgent {
 
 }
 
-class HttpFetchAgentKey extends ContextUpKey<HttpFetchAgent.Combined, HttpFetchAgent>
-    implements ContextUpRef<HttpFetchAgent.Combined, HttpFetchAgent, AfterEvent<HttpFetchAgent[]>> {
-
-  constructor() {
-    super('http-fetch-agent');
-  }
-
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<
-          Ctx,
-          HttpFetchAgent.Combined,
-          EventKeeper<HttpFetchAgent[]> | HttpFetchAgent,
-          AfterEvent<HttpFetchAgent[]>>,
-  ): HttpFetchAgent.Combined {
-    return (next, request) => {
-
-      const result = opts.byDefault(() => combinedAgent);
-
-      return result ? result(next, request) : next(request);
-    };
-
-    function combinedAgent(
-        next: (this: void, request: Request) => OnEvent<[Response]>,
-        request: Request,
-    ): OnEvent<[Response]> {
-
-      let agents!: HttpFetchAgent[];
-
-      opts.seed.once((...sources) => agents = sources);
-
-      return fetch(0, request);
-
-      function fetch(
-          agentIdx: number,
-          agentRequest: Request,
-      ): OnEvent<[Response]> {
-
-        const agent = agents[agentIdx];
-
-        if (!agent) {
-          return next(agentRequest);
-        }
-
-        return onEventFrom(
-            agent(
-                (
-                    nextRequest = agentRequest,
-                ) => fetch(agentIdx + 1, nextRequest),
-                agentRequest,
-            )
-        );
-      }
-    }
-  }
-
-}
-
 /**
  * A key of context value containing an [[HttpFetchAgent]] instance.
  *
  * The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.
  */
 export const HttpFetchAgent: ContextUpRef<HttpFetchAgent.Combined, HttpFetchAgent> =
-    /**#__PURE__*/ new HttpFetchAgentKey();
+    /**#__PURE__*/ new FetchAgentKey<[Response]>('http-fetch-agent');
