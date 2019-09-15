@@ -23,7 +23,7 @@ describe('fetch', () => {
 
     beforeEach(() => {
       nodes = [document];
-      response = { name: 'response' } as any;
+      response = new Response('response');
       request = new Request('http://localhost/test');
       init = { headers: { 'X-Test': 'true' } };
     });

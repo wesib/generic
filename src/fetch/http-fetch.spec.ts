@@ -5,6 +5,7 @@ import { EventInterest, EventReceiver } from 'fun-events';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
 import Mock = jest.Mock;
+import SpyInstance = jest.SpyInstance;
 
 describe('fetch', () => {
 
@@ -15,7 +16,7 @@ describe('fetch', () => {
 
   beforeEach(() => {
     request = new Request('http://localhost/test');
-    response = { name: 'http response' } as any;
+    response = new Response('http response');
     init = { headers: { 'X-Test': 'true' } };
 
     mockWindow = {
@@ -27,7 +28,7 @@ describe('fetch', () => {
   let mockAgent: Mock<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>>;
 
   beforeEach(async () => {
-    mockAgent = jest.fn((next, _input, _init?) => next());
+    mockAgent = jest.fn((next, _request) => next());
 
     @Feature({
       set: [
@@ -62,26 +63,25 @@ describe('fetch', () => {
       const done = jest.fn();
       const interest = await fetch(receiver, done);
 
-      expect(mockWindow.fetch).toHaveBeenCalledWith(request, init);
+      expect(mockWindow.fetch).toHaveBeenCalledWith(new Request(request, init));
       expect(receiver).toHaveBeenCalledWith(response);
       expect(interest.done).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
     });
     it('calls agent', async () => {
       await fetch();
-      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request, init);
-      expect(mockWindow.fetch).toHaveBeenCalledWith(request, init);
+      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), new Request(request, init));
+      expect(mockWindow.fetch).toHaveBeenCalledWith(new Request(request, init));
     });
     it('respects agent modification', async () => {
 
       const request2 = new Request('http://localhost/test2');
-      const init2: RequestInit = { headers: { 'X-Test': '2' } };
 
-      mockAgent.mockImplementation((next) => next(request2, init2));
+      mockAgent.mockImplementation((next) => next(request2));
 
       await fetch();
-      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request, init);
-      expect(mockWindow.fetch).toHaveBeenCalledWith(request2, init2);
+      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), new Request(request, init));
+      expect(mockWindow.fetch).toHaveBeenCalledWith(request2);
     });
     it('reports error when fetch fails', async () => {
 
@@ -101,18 +101,23 @@ describe('fetch', () => {
     describe('abort signal', () => {
 
       let target: HTMLElement;
-      let mockAbortController: Mocked<AbortController>;
+      let AbortControllerSpy: SpyInstance<AbortController>;
+      let abortController: AbortController;
+      let abortSpy: SpyInstance<void, []>;
 
       beforeEach(() => {
         target = document.createElement('span');
         document.body.appendChild(target);
-        mockAbortController = {
-          signal: target as any,
-          abort: jest.fn(() => {
-            target.dispatchEvent(new CustomEvent('abort'));
-          }),
-        };
-        (mockWindow as any).AbortController = jest.fn(() => mockAbortController);
+
+        const Original = AbortController;
+
+        AbortControllerSpy = jest.spyOn(window as any, 'AbortController').mockImplementation(() => {
+          abortController = new Original();
+          abortSpy = jest.spyOn(abortController, 'abort');
+          return abortController;
+        });
+
+        (mockWindow as any).AbortController = AbortControllerSpy;
       });
       afterEach(() => {
         target.remove();
@@ -120,12 +125,13 @@ describe('fetch', () => {
 
       it('applies abort controller', async () => {
         await fetch();
-        expect(mockWindow.fetch).toHaveBeenCalledWith(request, { ...init, signal: mockAbortController.signal });
+        expect(mockWindow.fetch)
+            .toHaveBeenCalledWith(new Request(request, { ...init, signal: abortController.signal }));
       });
       it('applies abort controller to absent init options', async () => {
         init = undefined;
         await fetch();
-        expect(mockWindow.fetch).toHaveBeenCalledWith(request, { signal: mockAbortController.signal });
+        expect(mockWindow.fetch).toHaveBeenCalledWith(new Request(request, { signal: abortController.signal }));
       });
       it('losing interest aborts the fetch', async () => {
 
@@ -135,11 +141,11 @@ describe('fetch', () => {
 
         interest.off();
 
-        expect(mockAbortController.abort).toHaveBeenCalled();
+        expect(abortSpy).toHaveBeenCalled();
       });
       it('does not abort controller when interest is not explicitly lost', async () => {
         await fetch();
-        expect(mockAbortController.abort).not.toHaveBeenCalled();
+        expect(abortSpy).not.toHaveBeenCalled();
       });
       it('does not abort controller when interest is lost when fetch completed', async () => {
 
@@ -147,31 +153,26 @@ describe('fetch', () => {
 
         interest.off();
 
-        expect(mockAbortController.abort).not.toHaveBeenCalled();
+        expect(abortSpy).not.toHaveBeenCalled();
       });
 
-      let preconfiguredSignal: AbortSignal;
+      let customController: AbortController;
 
       beforeEach(() => {
-        preconfiguredSignal = document.body.appendChild(document.createElement('span')) as any;
-      });
-      afterEach(() => {
-        afterEach(() => {
-          (preconfiguredSignal as any).remove();
-        });
+        customController = new AbortController();
       });
 
       it('aborts fetch on preconfigured abort signal', () => {
-        init = { signal: preconfiguredSignal };
+        init = { signal: customController.signal };
         fetch();
-        preconfiguredSignal.dispatchEvent(new CustomEvent('abort'));
-        expect(mockAbortController.abort).toHaveBeenCalled();
+        customController.abort();
+        expect(abortSpy).toHaveBeenCalled();
       });
       it('receives predefined abort signal', () => {
-        (preconfiguredSignal as any).aborted = true;
-        init = { signal: preconfiguredSignal };
+        customController.abort();
+        init = { signal: customController.signal };
         fetch();
-        expect(mockAbortController.abort).toHaveBeenCalled();
+        expect(abortSpy).toHaveBeenCalled();
       });
     });
 

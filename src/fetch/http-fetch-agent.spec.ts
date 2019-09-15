@@ -18,25 +18,23 @@ describe('fetch', () => {
     });
 
     let request: Request;
-    let init: RequestInit;
     let mockFetch: Mock<OnEvent<[Response]>, [RequestInfo?, RequestInit?]>;
     let emitter: EventEmitter<[Response]>;
 
     beforeEach(() => {
       request = new Request('http://localhost/test');
-      init = { headers: { 'X-Test': 'true' } };
       emitter = new EventEmitter<[Response]>();
       mockFetch = jest.fn((_request?, _init?) => emitter.on);
     });
 
     it('performs the fetch without agents', () => {
-      expect(agent(mockFetch, request, init)).toBe(emitter.on);
-      expect(mockFetch).toHaveBeenCalledWith(request, init);
+      expect(agent(mockFetch, request)).toBe(emitter.on);
+      expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('performs the fetch without agents with `null` fallback value', () => {
       agent = registry.newValues().get(HttpFetchAgent, { or: null }) as HttpFetchAgent;
-      expect(agent(mockFetch, request, init)).toBe(emitter.on);
-      expect(mockFetch).toHaveBeenCalledWith(request, init);
+      expect(agent(mockFetch, request)).toBe(emitter.on);
+      expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('calls the registered agent', async () => {
 
@@ -45,10 +43,10 @@ describe('fetch', () => {
 
       registry.provide({ a: HttpFetchAgent, is: mockAgent });
 
-      const response1: Response = { name: 'response1' } as any;
-      const response2: Response = { name: 'response1' } as any;
+      const response1 = new Response('response1');
+      const response2 = new Response('response2');
       const response = await new Promise<Response>(resolve => {
-        onEventFrom(agent(mockFetch, request, init)).once(resolve);
+        onEventFrom(agent(mockFetch, request)).once(resolve);
         emitter.send(response1);
         emitter2.send(response2);
       });
@@ -58,20 +56,20 @@ describe('fetch', () => {
     it('performs the fetch by calling `next`', async () => {
       registry.provide({ a: HttpFetchAgent, is: next => next() });
 
-      expect(agent(mockFetch, request, init)).toBe(emitter.on);
-      expect(mockFetch).toHaveBeenCalledWith(request, init);
+      expect(agent(mockFetch, request)).toBe(emitter.on);
+      expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('calls the next agent in chain by calling `next`', async () => {
 
       const mockAgent: Mock<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>> =
-          jest.fn((next, _input, _init?) => next());
+          jest.fn((next, _request) => next());
 
       registry.provide({ a: HttpFetchAgent, is: next => next() });
       registry.provide({ a: HttpFetchAgent, is: mockAgent });
 
-      expect(agent(mockFetch, request, init)).toBe(emitter.on);
-      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request, init);
-      expect(mockFetch).toHaveBeenCalledWith(request, init);
+      expect(agent(mockFetch, request)).toBe(emitter.on);
+      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request);
+      expect(mockFetch).toHaveBeenCalledWith(request);
     });
   });
 });

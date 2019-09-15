@@ -14,19 +14,16 @@ import { AfterEvent, EventKeeper, EventSender, OnEvent, onEventFrom } from 'fun-
 export type HttpFetchAgent =
 /**
  * @param next  Either calls the next agent in chain, or actually fetches the data if this agent is the last one.
- * Accepts the same parameters as [[HttpFetch]]. The corresponding parameter will be used instead when either of them
- * is omitted.
- * @param input  The resource to fetch. This can either an URL string, or a `Request` object.
- * @param init  Custom settings to apply to the request.
+ * Accepts an optional `Request` parameter. The original request will be used instead when omitted.
+ * @param request  HTTP request.
  *
  * @returns An `EventSender` of response object(s). It is returned either to preceding agent in chain, or as a result of
  * [[HttpFetch]] call.
  */
     (
         this: void,
-        next: (this: void, input?: RequestInfo, init?: RequestInit) => OnEvent<[Response]>,
-        input: RequestInfo,
-        init?: RequestInit,
+        next: (this: void, request?: Request) => OnEvent<[Response]>,
+        request: Request,
     ) => EventSender<[Response]>;
 
 export namespace HttpFetchAgent {
@@ -39,17 +36,15 @@ export namespace HttpFetchAgent {
   export type Combined =
   /**
    * @param next  Either calls the next agent in chain, or actually fetches the data if this agent is the last one.
-   * Accepts the same parameters as [[HttpFetch]].
-   * @param input  The resource to fetch. This can either an URL string, or a `Request` object.
-   * @param init  Custom settings to apply to the request.
+   * Accepts `Request` parameter.
+   * @param request  HTTP request.
    *
    * @returns An `OnEvent` registrar of response object(s) receivers. It is returned as a result of [[HttpFetch]] call.
    */
       (
           this: void,
-          next: (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>,
-          input: RequestInfo,
-          init?: RequestInit,
+          next: (this: void, request: Request) => OnEvent<[Response]>,
+          request: Request,
       ) => OnEvent<[Response]>;
 
 }
@@ -68,45 +63,41 @@ class HttpFetchAgentKey extends ContextUpKey<HttpFetchAgent.Combined, HttpFetchA
           EventKeeper<HttpFetchAgent[]> | HttpFetchAgent,
           AfterEvent<HttpFetchAgent[]>>,
   ): HttpFetchAgent.Combined {
-    return (next, input, info) => {
+    return (next, request) => {
 
       const result = opts.byDefault(() => combinedAgent);
 
-      return result ? result(next, input, info) : next(input, info);
+      return result ? result(next, request) : next(request);
     };
 
     function combinedAgent(
-        next: (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>,
-        input: RequestInfo,
-        init?: RequestInit,
+        next: (this: void, request: Request) => OnEvent<[Response]>,
+        request: Request,
     ): OnEvent<[Response]> {
 
       let agents!: HttpFetchAgent[];
 
       opts.seed.once((...sources) => agents = sources);
 
-      return fetch(0, input, init);
+      return fetch(0, request);
 
       function fetch(
           agentIdx: number,
-          agentInput: RequestInfo,
-          agentInit: RequestInit | undefined,
+          agentRequest: Request,
       ): OnEvent<[Response]> {
 
         const agent = agents[agentIdx];
 
         if (!agent) {
-          return next(agentInput, agentInit);
+          return next(agentRequest);
         }
 
         return onEventFrom(
             agent(
                 (
-                    nextInput = agentInput,
-                    nextInit = agentInit,
-                ) => fetch(agentIdx + 1, nextInput, nextInit),
-                agentInput,
-                agentInit,
+                    nextRequest = agentRequest,
+                ) => fetch(agentIdx + 1, nextRequest),
+                agentRequest,
             )
         );
       }

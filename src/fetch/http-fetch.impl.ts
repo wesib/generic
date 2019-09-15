@@ -13,9 +13,9 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
   const window = context.get(BootstrapWindow);
   const agent = context.get(HttpFetchAgent);
 
-  return (input, init) => agent(fetch, input, init);
+  return (input, init) => agent(fetch, new Request(input, init));
 
-  function fetch(input: RequestInfo, init?: RequestInit): OnEvent<[Response]> {
+  function fetch(request: Request): OnEvent<[Response]> {
     return onEventBy(receiver => {
 
       const responseEmitter = new EventEmitter<[Response]>();
@@ -34,24 +34,19 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
           }
         });
 
-        if (!init) {
-          init = { signal };
-        } else {
+        const customSignal = request.signal;
 
-          const customSignal = init.signal;
-
-          if (customSignal) {
-            new DomEventDispatcher(customSignal).on('abort').once(() => abortController.abort());
-            if (customSignal.aborted) {
-              abortController.abort();
-            }
+        if (customSignal) {
+          new DomEventDispatcher(customSignal).on('abort').once(() => abortController.abort());
+          if (customSignal.aborted) {
+            abortController.abort();
           }
-
-          init = { ...init, signal };
         }
+
+        request = new Request(request, { signal });
       }
 
-      window.fetch(input, init)
+      window.fetch(request)
           .then(response => {
             responseEmitter.send(response);
             interest.off();
