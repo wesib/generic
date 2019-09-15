@@ -14,9 +14,8 @@ import { AfterEvent, afterEventOf, EventKeeper, OnEvent } from 'fun-events';
 export type DomFetchMutator =
 /**
  * @param nodes  Received DOM nodes.
+ * @param request  HTTP fetch request.
  * @param response  HTTP fetch response.
- * @param request  The fetched resource. This can either an URL string, or a `Request` object.
- * @param init  Custom settings applied to the request.
  *
  * @returns An `OnEvent` registrar of DOM nodes that will be passed to the next mutator in chain, or returned in
  * {@link DomFetchResult.onNode DOM fetch result} if this mutator is the last one in chain.
@@ -24,9 +23,8 @@ export type DomFetchMutator =
     (
         this: void,
         nodes: Node[],
+        request: Request,
         response: Response,
-        input: RequestInfo,
-        init?: RequestInit,
     ) => OnEvent<Node[]>;
 
 class DomFetchMutatorKey extends ContextUpKey<DomFetchMutator, DomFetchMutator> {
@@ -43,18 +41,17 @@ class DomFetchMutatorKey extends ContextUpKey<DomFetchMutator, DomFetchMutator> 
           AfterEvent<DomFetchMutator[]>>,
   ): DomFetchMutator {
 
-    return (nodes, response, input, info) => {
+    return (nodes, request, response) => {
 
       const result = opts.byDefault(() => combinedMutator);
 
-      return result ? result(nodes, response, input, info) : afterEventOf(...nodes);
+      return result ? result(nodes, request, response) : afterEventOf(...nodes);
     };
 
     function combinedMutator(
         nodes: Node[],
+        request: Request,
         response: Response,
-        input: RequestInfo,
-        init?: RequestInit,
     ): OnEvent<Node[]> {
 
       let mutators!: DomFetchMutator[];
@@ -75,7 +72,7 @@ class DomFetchMutatorKey extends ContextUpKey<DomFetchMutator, DomFetchMutator> 
         }
 
         return mutatorNodes.dig_(
-            (...ns) => mutator(ns, response, input, init),
+            (...ns) => mutator(ns, request, response),
         );
       }
     }

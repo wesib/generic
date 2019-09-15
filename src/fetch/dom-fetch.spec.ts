@@ -45,7 +45,7 @@ describe('fetch', () => {
   let mockMutator: Mock<ReturnType<DomFetchMutator>, Parameters<DomFetchMutator>>;
 
   beforeEach(async () => {
-    mockMutator = jest.fn((nodes, _response, _input, _info?) => afterEventOf<Node[]>(...nodes));
+    mockMutator = jest.fn((nodes, _request, _response) => afterEventOf<Node[]>(...nodes));
 
     @Feature({
       set: [
@@ -82,7 +82,7 @@ describe('fetch', () => {
         const done = jest.fn();
         const interest = await fetchResponse(receiver, done);
 
-        expect(mockHttpFetch).toHaveBeenCalledWith(request, init);
+        expect(mockHttpFetch).toHaveBeenCalledWith(new Request(request, init));
         expect(receiver).toHaveBeenCalledWith(mockResponse);
         expect(interest.done).toBe(true);
         expect(done).toHaveBeenCalledWith(undefined);

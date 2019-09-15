@@ -19,13 +19,11 @@ describe('fetch', () => {
     let nodes: Node[];
     let response: Response;
     let request: Request;
-    let init: RequestInit;
 
     beforeEach(() => {
       nodes = [document];
       response = new Response('response');
       request = new Request('http://localhost/test');
-      init = { headers: { 'X-Test': 'true' } };
     });
 
     it('does not modify nodes without mutators', async () => {
@@ -46,7 +44,7 @@ describe('fetch', () => {
 
     function mutate(mut = mutator): Promise<Node[]> {
       return new Promise(resolve => {
-        mut(nodes, response, request, init).once((...received) => resolve(received));
+        mut(nodes, request, response).once((...received) => resolve(received));
       });
     }
   });

@@ -9,7 +9,7 @@ import { HttpFetch } from './http-fetch';
  * @internal
  */
 export function newDomFetch(context: BootstrapContext): DomFetch {
-  return (input, init?) => new DocumentFetchResult(context, input, init);
+  return (input, init?) => new DocumentFetchResult(context, new Request(input, init));
 }
 
 class DocumentFetchResult implements DomFetchResult {
@@ -19,15 +19,14 @@ class DocumentFetchResult implements DomFetchResult {
 
   constructor(
       context: BootstrapContext,
-      input: RequestInfo,
-      init?: RequestInit,
+      request: Request,
   ) {
 
     const window = context.get(BootstrapWindow);
     const httpFetch = context.get(HttpFetch);
     const mutator = context.get(DomFetchMutator);
 
-    this.onResponse = httpFetch(input, init);
+    this.onResponse = httpFetch(request);
 
     const parser: DOMParser = new (window as any).DOMParser();
     const responseTextEmitter = new EventEmitter<[Response, string]>();
@@ -53,7 +52,7 @@ class DocumentFetchResult implements DomFetchResult {
 
       return interest;
     }).dig_(
-        (document, response) => mutator([document], response, input, init),
+        (document, response) => mutator([document], request, response),
     );
   }
 
