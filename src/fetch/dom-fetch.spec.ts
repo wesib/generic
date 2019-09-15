@@ -1,8 +1,8 @@
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { afterEventOf, EventEmitter, eventInterest, EventInterest, EventReceiver, onEventBy } from 'fun-events';
+import { EventEmitter, eventInterest, EventInterest, EventReceiver, onEventBy } from 'fun-events';
 import { DomFetch } from './dom-fetch';
-import { DomFetchMutator } from './dom-fetch-mutator';
+import { DomFetchAgent } from './dom-fetch-agent';
 import { HttpFetch } from './http-fetch';
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
@@ -42,15 +42,15 @@ describe('fetch', () => {
   });
 
   let bsContext: BootstrapContext;
-  let mockMutator: Mock<ReturnType<DomFetchMutator>, Parameters<DomFetchMutator>>;
+  let mockAgent: Mock<ReturnType<DomFetchAgent>, Parameters<DomFetchAgent>>;
 
   beforeEach(async () => {
-    mockMutator = jest.fn((nodes, _request, _response) => afterEventOf<Node[]>(...nodes));
+    mockAgent = jest.fn((next, _request) => next());
 
     @Feature({
       set: [
         { a: HttpFetch, is: mockHttpFetch },
-        { a: DomFetchMutator, is: mockMutator },
+        { a: DomFetchAgent, is: mockAgent },
       ],
     })
     class TestFeature {}
@@ -179,12 +179,18 @@ describe('fetch', () => {
         expect(interest.done).toBe(true);
         expect(done).toHaveBeenCalledWith(error);
       });
-      it('applies mutator', async () => {
-        mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
+      it('calls agent', async () => {
 
         const newNodes: Node[] = [document.createElement('span'), document.createTextNode('test')];
 
-        mockMutator.mockImplementation(() => afterEventOf(...newNodes));
+        mockAgent.mockImplementation(() => {
+
+          const emitter = new EventEmitter<Node[]>();
+
+          Promise.resolve().then(() => emitter.send(...newNodes)).then(() => emitter.done());
+
+          return emitter.on;
+        });
 
         const receiver = jest.fn();
 

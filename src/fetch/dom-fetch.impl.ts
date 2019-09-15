@@ -1,8 +1,7 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { nextArgs } from 'call-thru';
 import { EventEmitter, eventInterest, EventInterest, OnEvent, onEventBy } from 'fun-events';
 import { DomFetch, DomFetchResult } from './dom-fetch';
-import { DomFetchMutator } from './dom-fetch-mutator';
+import { DomFetchAgent } from './dom-fetch-agent';
 import { HttpFetch } from './http-fetch';
 
 /**
@@ -17,43 +16,43 @@ class DocumentFetchResult implements DomFetchResult {
   readonly onResponse: OnEvent<[Response]>;
   readonly onNode: OnEvent<Node[]>;
 
-  constructor(
-      context: BootstrapContext,
-      request: Request,
-  ) {
+  constructor(context: BootstrapContext, request: Request) {
 
     const window = context.get(BootstrapWindow);
     const httpFetch = context.get(HttpFetch);
-    const mutator = context.get(DomFetchMutator);
+    const agent = context.get(DomFetchAgent);
 
     this.onResponse = httpFetch(request);
 
     const parser: DOMParser = new (window as any).DOMParser();
-    const responseTextEmitter = new EventEmitter<[Response, string]>();
-    const onDocument: OnEvent<[Document, Response]> = responseTextEmitter.on.thru_(
-        (response, text) => nextArgs(parser.parseFromString(text, domResponseType(response)), response),
-    );
 
-    this.onNode = onEventBy<[Document, Response]>(receiver => {
+    this.onNode = agent(fetch, request);
 
-      const interest = eventInterest();
-      const responseInterest = this.onResponse(response => {
+    function fetch(fetchRequest: Request): OnEvent<Node[]> {
 
-        onDocument(receiver).needs(interest);
-        response.text().then(
-            text => {
-              interest.needs(responseInterest);
-              responseTextEmitter.send(response, text);
-            },
-        ).catch(
-            e => interest.off(e),
-        );
+      const responseTextEmitter = new EventEmitter<[Response, string]>();
+      const onDocument: OnEvent<[Document]> = responseTextEmitter.on.thru_(
+          (response, text) => parser.parseFromString(text, domResponseType(response)),
+      );
+
+      return onEventBy<[Document]>(receiver => {
+
+        const interest = eventInterest();
+        const responseInterest = httpFetch(fetchRequest)(response => {
+          onDocument(receiver).needs(interest);
+          response.text().then(
+              text => {
+                interest.needs(responseInterest);
+                responseTextEmitter.send(response, text);
+              },
+          ).catch(
+              e => interest.off(e),
+          );
+        });
+
+        return interest;
       });
-
-      return interest;
-    }).dig_(
-        (document, response) => mutator([document], request, response),
-    );
+    }
   }
 
   into(target: Range): EventInterest {
