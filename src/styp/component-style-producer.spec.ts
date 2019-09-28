@@ -9,8 +9,7 @@ import {
   ShadowContentRoot,
 } from '@wesib/wesib';
 import { trackValue } from 'fun-events';
-import { StypProperties, stypRoot, StypRules, stypSelectorText } from 'style-producer';
-import { StypRender } from 'style-producer/d.ts/producer/render';
+import { StypProperties, StypRender, stypRoot, StypRules, stypSelectorText } from 'style-producer';
 import { testComponentFactory } from '../spec/test-element';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypOptions } from './component-styp-options';
