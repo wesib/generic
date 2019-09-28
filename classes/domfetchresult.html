@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>SelectorOpts | Wesib: Generic Components</title>
+	<title>DomFetchResult | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,13 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../classes/elementnode.html">ElementNode</a>
-				</li>
-				<li>
-					<a href="elementnode.selectoropts.html">SelectorOpts</a>
+					<a href="domfetchresult.html">DomFetchResult</a>
 				</li>
 			</ul>
-			<h1>Interface SelectorOpts</h1>
+			<h1>Class DomFetchResult</h1>
 		</div>
 	</div>
 </header>
@@ -70,24 +67,24 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Element node selector options.</p>
+						<p>DOM contents fetch result.</p>
 					</div>
+					<p>This is returned from <a href="../globals.html#domfetch">DomFetch</a> function. The actual fetch would be initiated once event receiver is registered,
+					or contents requested to be inserted to document.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">SelectorOpts</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="elementnode.componentselectoropts.html" class="tsd-signature-type">ComponentSelectorOpts</a>
-							</li>
-							<li>
-								<a href="elementnode.elementselectoropts.html" class="tsd-signature-type">ElementSelectorOpts</a>
-							</li>
-						</ul>
+						<span class="target">DomFetchResult</span>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><span class="tsd-signature-type">EventSender</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -97,8 +94,19 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="elementnode.selectoropts.html#all" class="tsd-kind-icon">all</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="elementnode.selectoropts.html#deep" class="tsd-kind-icon">deep</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="domfetchresult.html#onnode" class="tsd-kind-icon">on<wbr>Node</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="domfetchresult.html#__computed" class="tsd-kind-icon">__computed</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="domfetchresult.html#into" class="tsd-kind-icon">into</a></li>
 							</ul>
 						</section>
 					</div>
@@ -106,35 +114,77 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="all" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> all</h3>
-					<div class="tsd-signature tsd-kind-icon">all<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="onnode" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on<wbr>Node</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/tree/element-node.ts#L108">tree/element-node.ts:108</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/fetch/dom-fetch-result.ts#L19">fetch/dom-fetch-result.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Set to <code>true</code> to select arbitrary nodes. Otherwise - select only component nodes.</p>
+							<p>An <code>OnEvent</code> registrar of parsed DOM nodes contained in the response.</p>
 						</div>
+						<p>The <code>[OnEvent__symbol]</code> property is an alias of this one.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="deep" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> deep</h3>
-					<div class="tsd-signature tsd-kind-icon">deep<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/tree/element-node.ts#L113">tree/element-node.ts:113</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Set to <code>true</code> to select from entire subtree. Otherwise - select from element child nodes only.</p>
-						</div>
-					</div>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="__computed" class="tsd-anchor"></a>
+					<h3>__computed</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __computed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/fetch/dom-fetch-result.ts#L21">fetch/dom-fetch-result.ts:21</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="into" class="tsd-anchor"></a>
+					<h3>into</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">into<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Range</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventInterest</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/fetch/dom-fetch-result.ts#L34">fetch/dom-fetch-result.ts:34</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Inserts the requested DOM nodes into the given document range.</p>
+								</div>
+								<p>Replaces the range contents with received DOM nodes.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>target: <span class="tsd-signature-type">Range</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Document range to insert received DOM nodes into.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">EventInterest</span></h4>
+							<p>An event interest that aborts the fetch when lost.</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -149,102 +199,70 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class">
-						<a href="../classes/automountsupport.html" class="tsd-kind-icon">Auto<wbr>Mount<wbr>Support</a>
+						<a href="automountsupport.html" class="tsd-kind-icon">Auto<wbr>Mount<wbr>Support</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/basicstyleproducersupport.html" class="tsd-kind-icon">Basic<wbr>Style<wbr>Producer<wbr>Support</a>
+						<a href="basicstyleproducersupport.html" class="tsd-kind-icon">Basic<wbr>Style<wbr>Producer<wbr>Support</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/componenttreesupport.html" class="tsd-kind-icon">Component<wbr>Tree<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/domfetchresult.html" class="tsd-kind-icon">Dom<wbr>Fetch<wbr>Result</a>
+						<a href="componenttreesupport.html" class="tsd-kind-icon">Component<wbr>Tree<wbr>Support</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="../classes/elementnode.html" class="tsd-kind-icon">Element<wbr>Node</a>
+						<a href="domfetchresult.html" class="tsd-kind-icon">Dom<wbr>Fetch<wbr>Result</a>
 						<ul>
-							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="elementnode.componentselectoropts.html" class="tsd-kind-icon">Component<wbr>Selector<wbr>Opts</a>
-							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="elementnode.elementselectoropts.html" class="tsd-kind-icon">Element<wbr>Selector<wbr>Opts</a>
-							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="elementnode.raw.html" class="tsd-kind-icon">Raw</a>
-							</li>
-							<li class="current tsd-kind-interface tsd-parent-kind-class">
-								<a href="elementnode.selectoropts.html" class="tsd-kind-icon">Selector<wbr>Opts</a>
-								<ul>
-									<li class=" tsd-kind-property tsd-parent-kind-interface">
-										<a href="elementnode.selectoropts.html#all" class="tsd-kind-icon">all</a>
-									</li>
-									<li class=" tsd-kind-property tsd-parent-kind-interface">
-										<a href="elementnode.selectoropts.html#deep" class="tsd-kind-icon">deep</a>
-									</li>
-								</ul>
-							</li>
-							<li class=" tsd-kind-type-alias tsd-parent-kind-class tsd-is-static">
-								<a href="../classes/elementnode.html#any" class="tsd-kind-icon">Any</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#context" class="tsd-kind-icon">context</a>
+								<a href="domfetchresult.html#onnode" class="tsd-kind-icon">on<wbr>Node</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#element" class="tsd-kind-icon">element</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#parent" class="tsd-kind-icon">parent</a>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="domfetchresult.html#__computed" class="tsd-kind-icon">__computed</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#attribute" class="tsd-kind-icon">attribute</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="../classes/elementnode.html#property" class="tsd-kind-icon">property</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="../classes/elementnode.html#select" class="tsd-kind-icon">select</a>
+								<a href="domfetchresult.html#into" class="tsd-kind-icon">into</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class">
+						<a href="elementnode.html" class="tsd-kind-icon">Element<wbr>Node</a>
+					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="../classes/elementnodelist.html" class="tsd-kind-icon">Element<wbr>Node<wbr>List</a>
+						<a href="elementnodelist.html" class="tsd-kind-icon">Element<wbr>Node<wbr>List</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="../classes/fetchagentkey.html" class="tsd-kind-icon">Fetch<wbr>Agent<wbr>Key</a>
+						<a href="fetchagentkey.html" class="tsd-kind-icon">Fetch<wbr>Agent<wbr>Key</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/navigation.html" class="tsd-kind-icon">Navigation</a>
+						<a href="navigation.html" class="tsd-kind-icon">Navigation</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a>
+						<a href="navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/styleproducersupport.html" class="tsd-kind-icon">Style<wbr>Producer<wbr>Support</a>
+						<a href="styleproducersupport.html" class="tsd-kind-icon">Style<wbr>Producer<wbr>Support</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/theme.html" class="tsd-kind-icon">Theme</a>
+						<a href="theme.html" class="tsd-kind-icon">Theme</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/themefactory.html" class="tsd-kind-icon">Theme<wbr>Factory</a>
+						<a href="themefactory.html" class="tsd-kind-icon">Theme<wbr>Factory</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/themesupport.html" class="tsd-kind-icon">Theme<wbr>Support</a>
+						<a href="themesupport.html" class="tsd-kind-icon">Theme<wbr>Support</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="automountconfig.html" class="tsd-kind-icon">Auto<wbr>Mount<wbr>Config</a>
+						<a href="../interfaces/automountconfig.html" class="tsd-kind-icon">Auto<wbr>Mount<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="componentnode.html" class="tsd-kind-icon">Component<wbr>Node</a>
+						<a href="../interfaces/componentnode.html" class="tsd-kind-icon">Component<wbr>Node</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="componentstypoptions.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a>
+						<a href="../interfaces/componentstypoptions.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="mountdef.html" class="tsd-kind-icon">Mount<wbr>Def</a>
+						<a href="../interfaces/mountdef.html" class="tsd-kind-icon">Mount<wbr>Def</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#componentstyleproducer" class="tsd-kind-icon">Component<wbr>Style<wbr>Producer</a>

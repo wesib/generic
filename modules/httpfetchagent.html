@@ -93,7 +93,7 @@
 					<div class="tsd-signature tsd-kind-icon">Combined<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/119e688/src/http-fetch/http-fetch-agent.ts#L39">http-fetch/http-fetch-agent.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/fetch/http-fetch-agent.ts#L37">fetch/http-fetch-agent.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -107,7 +107,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RequestInfo</span>, init<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">RequestInit</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -122,18 +122,18 @@
 												<h5>next: <span class="tsd-signature-type">function</span></h5>
 												<div class="tsd-comment tsd-typography">
 													<p>Either calls the next agent in chain, or actually fetches the data if this agent is the last one.
-													Accepts the same parameters as <a href="../globals.html#httpfetch">HttpFetch</a>.</p>
+													Accepts <code>Request</code> parameter.</p>
 												</div>
 												<ul class="tsd-parameters">
 													<li class="tsd-parameter-siganture">
 														<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RequestInfo</span>, init<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">RequestInit</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 														</ul>
 														<ul class="tsd-descriptions">
 															<li class="tsd-description">
 																<div class="tsd-comment tsd-typography">
 																	<p>Either calls the next agent in chain, or actually fetches the data if this agent is the last one.
-																	Accepts the same parameters as <a href="../globals.html#httpfetch">HttpFetch</a>.</p>
+																	Accepts <code>Request</code> parameter.</p>
 																</div>
 																<h4 class="tsd-parameters-title">Parameters</h4>
 																<ul class="tsd-parameters">
@@ -141,10 +141,7 @@
 																		<h5>this: <span class="tsd-signature-type">void</span></h5>
 																	</li>
 																	<li>
-																		<h5>input: <span class="tsd-signature-type">RequestInfo</span></h5>
-																	</li>
-																	<li>
-																		<h5><span class="tsd-flag ts-flagOptional">Optional</span> init: <span class="tsd-signature-type">RequestInit</span></h5>
+																		<h5>request: <span class="tsd-signature-type">Request</span></h5>
 																	</li>
 																</ul>
 																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -154,18 +151,10 @@
 												</ul>
 											</li>
 											<li>
-												<h5>input: <span class="tsd-signature-type">RequestInfo</span></h5>
+												<h5>request: <span class="tsd-signature-type">Request</span></h5>
 												<div class="tsd-comment tsd-typography">
 													<div class="lead">
-														<p>The resource to fetch. This can either an URL string, or a <code>Request</code> object.</p>
-													</div>
-												</div>
-											</li>
-											<li>
-												<h5><span class="tsd-flag ts-flagOptional">Optional</span> init: <span class="tsd-signature-type">RequestInit</span></h5>
-												<div class="tsd-comment tsd-typography">
-													<div class="lead">
-														<p>Custom settings to apply to the request.</p>
+														<p>HTTP request.</p>
 													</div>
 												</div>
 											</li>
@@ -185,6 +174,9 @@
 				<ul>
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="domfetchagent.html">Dom<wbr>Fetch<wbr>Agent</a>
 					</li>
 					<li class="current tsd-kind-module">
 						<a href="httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
