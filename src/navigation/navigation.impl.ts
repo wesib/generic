@@ -101,7 +101,12 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
         return false; // Navigation cancelled
       }
 
-      history.pushState(data, title, url && url.toString());
+      try {
+        history.pushState(data, title, url && url.toString());
+      } catch (e) {
+        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
+        throw e;
+      }
       nav.it = new NavigationLocation({ url: to, data });
 
       return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action: 'navigate' }));
@@ -122,10 +127,16 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       };
 
       if (!dispatcher.dispatch(new NavigateEvent(PRE_NAVIGATE_EVT, init))) {
+        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
         return false; // Navigation cancelled
       }
 
-      history.replaceState(data, title, url && url.toString());
+      try {
+        history.replaceState(data, title, url && url.toString());
+      } catch (e) {
+        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
+        throw e;
+      }
       nav.it = new NavigationLocation({ url: to, data });
 
       return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action: 'replace' }));

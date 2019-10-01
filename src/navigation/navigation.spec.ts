@@ -194,6 +194,18 @@ describe('navigation', () => {
         navigation.navigate('/other');
         expect(dontNavigate.to.href).toEqual('http://localhost/other');
       });
+      it('cancels the failed navigation', () => {
+
+        const error = new Error('failed');
+
+        mockedHistory.pushState.mockImplementation(() => { throw error; });
+
+        let dontNavigate!: PreNavigateEvent;
+
+        navigation.dontNavigate(event => dontNavigate = event);
+        expect(() => navigation.navigate('/other')).toThrow(error);
+        expect(dontNavigate.to.href).toEqual('http://localhost/other');
+      });
     });
 
     describe('replace', () => {
@@ -244,9 +256,32 @@ describe('navigation', () => {
       it('does not replace the location if pre-navigate event is cancelled', () => {
         navigation.preNavigate.once(event => event.preventDefault());
         navigation.replace('/other');
-        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(1);
+        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(2);
         expect(mockedHistory.replaceState).not.toHaveBeenCalled();
         expect(location).toEqual({ url: 'http://localhost/index', data: 'initial' });
+        expect(mockedWindow.dispatchEvent)
+            .toHaveBeenCalledWith(expect.objectContaining({ type: 'wesib:dontNavigate' }));
+      });
+      it('informs on navigation cancellation', () => {
+
+        let dontNavigate!: PreNavigateEvent;
+
+        navigation.preNavigate.once(event => event.preventDefault());
+        navigation.dontNavigate(event => dontNavigate = event);
+        navigation.replace('/other');
+        expect(dontNavigate.to.href).toEqual('http://localhost/other');
+      });
+      it('cancels the failed location replacement', () => {
+
+        const error = new Error('failed');
+
+        mockedHistory.replaceState.mockImplementation(() => { throw error; });
+
+        let dontNavigate!: PreNavigateEvent;
+
+        navigation.dontNavigate(event => dontNavigate = event);
+        expect(() => navigation.replace('/other')).toThrow(error);
+        expect(dontNavigate.to.href).toEqual('http://localhost/other');
       });
     });
 
