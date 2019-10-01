@@ -179,9 +179,20 @@ describe('navigation', () => {
       it('does not navigate if pre-navigate event is cancelled', () => {
         navigation.preNavigate.once(event => event.preventDefault());
         navigation.navigate('/other');
-        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(1);
+        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(2);
         expect(mockedHistory.pushState).not.toHaveBeenCalled();
         expect(location).toEqual({ url: 'http://localhost/index', data: 'initial' });
+        expect(mockedWindow.dispatchEvent)
+            .toHaveBeenCalledWith(expect.objectContaining({ type: 'wesib:dontNavigate' }));
+      });
+      it('informs on navigation cancellation', () => {
+
+        let dontNavigate!: PreNavigateEvent;
+
+        navigation.preNavigate.once(event => event.preventDefault());
+        navigation.dontNavigate(event => dontNavigate = event);
+        navigation.navigate('/other');
+        expect(dontNavigate.to.href).toEqual('http://localhost/other');
       });
     });
 

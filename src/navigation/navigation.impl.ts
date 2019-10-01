@@ -4,6 +4,7 @@ import { NavigateEvent, PreNavigateEvent } from './navigate.event';
 import { Navigation as Navigation_ } from './navigation';
 
 const PRE_NAVIGATE_EVT = 'wesib:preNavigate';
+const DONT_NAVIGATE_EVT = 'wesib:dontNavigate';
 const NAVIGATE_EVT = 'wesib:navigate';
 
 class NavigationLocation implements Navigation_.Location {
@@ -28,6 +29,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   const { document, location, history } = window;
   const dispatcher = new DomEventDispatcher(window);
   const preNavigate = dispatcher.on<PreNavigateEvent>(PRE_NAVIGATE_EVT);
+  const dontNavigate = dispatcher.on<PreNavigateEvent>(DONT_NAVIGATE_EVT);
   const onNavigate = dispatcher.on<NavigateEvent>(NAVIGATE_EVT);
   const nav = trackValue<NavigationLocation>(new NavigationLocation({
     url: new URL(location.href),
@@ -68,6 +70,10 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       return onNavigate;
     }
 
+    get dontNavigate() {
+      return dontNavigate;
+    }
+
     get read() {
       return nav.read;
     }
@@ -91,6 +97,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       };
 
       if (!dispatcher.dispatch(new NavigateEvent(PRE_NAVIGATE_EVT, init))) {
+        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
         return false; // Navigation cancelled
       }
 

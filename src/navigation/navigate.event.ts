@@ -52,7 +52,7 @@ export class NavigateEvent<Action extends NavigateEvent.Action = 'navigate' | 'r
       type: string,
       init: NavigateEvent.Init<Action>,
   ) {
-    super(type, { ...init, cancelable: init.action.substring(0, 4) === 'pre-' });
+    super(type, { ...init, cancelable: type === 'wesib:preNavigate' && init.action.substring(0, 4) === 'pre-' });
     this.action = init.action;
     this._from = init.from.toString();
     this._to = init.to.toString();
@@ -68,6 +68,7 @@ export class NavigateEvent<Action extends NavigateEvent.Action = 'navigate' | 'r
  * This event can be cancelled in order to prevent the actual navigation or history update.
  *
  * @event NavigateEvent#wesib:preNavigate
+ * @event NavigateEvent#wesib:dontNavigate
  */
 export type PreNavigateEvent = NavigateEvent<'pre-navigate' | 'pre-replace'>;
 

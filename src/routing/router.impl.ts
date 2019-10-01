@@ -29,8 +29,11 @@ export class Router extends Router_ {
           },
         }),
     );
+    const dont: OnEvent<[Route.Active]> = navigation.dontNavigate.thru_(
+        ({ from: url }) => ({ type: 'active' as const, url })
+    );
 
-    this._active = (trackValue() as ValueTracker<Route.Active>).by(active);
+    this._active = (trackValue() as ValueTracker<Route.Active>).by(onEventFromAny(active, dont));
     this._route = trackValue<Route>(this._active.it).by(onEventFromAny<[Route]>(this._active, next));
   }
 

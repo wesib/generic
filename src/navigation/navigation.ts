@@ -45,6 +45,13 @@ export abstract class Navigation implements EventKeeper<[Navigation.Location]> {
   abstract readonly onNavigate: OnDomEvent<NavigateEvent>;
 
   /**
+   * An `OnDomEvent` registrar of navigation cancellation event receivers.
+   *
+   * These receivers are informed when navigation cancelled by one of pre-navigation  event receivers.
+   */
+  abstract readonly dontNavigate: OnDomEvent<PreNavigateEvent>;
+
+  /**
    * An `AfterEvent` registrar of navigation location receivers.
    *
    * The `[AfterEvent__symbol]` property is an alias of this one.
