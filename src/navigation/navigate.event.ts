@@ -50,7 +50,8 @@ export class NavigateEvent<Action extends NavigateEvent.Action = 'navigate' | 'r
    */
   constructor(
       type: string,
-      init: NavigateEvent.Init<Action>) {
+      init: NavigateEvent.Init<Action>,
+  ) {
     super(type, { ...init, cancelable: init.action.substring(0, 4) === 'pre-' });
     this.action = init.action;
     this._from = init.from.toString();
