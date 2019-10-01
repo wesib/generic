@@ -5,7 +5,7 @@ import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values
 import { AfterEvent, AfterEvent__symbol, EventKeeper } from 'fun-events';
 import { Route } from './route';
 
-const Router__key = new SingleContextKey<Router>('router');
+const Router__key = /*#__PURE__*/ new SingleContextKey<Router>('router');
 
 export abstract class Router implements EventKeeper<[Route]> {
 
