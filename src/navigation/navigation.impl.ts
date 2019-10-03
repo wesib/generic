@@ -35,7 +35,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     url: new URL(location.href),
     data: history.state,
   }));
-  let next: Promise<boolean> = Promise.resolve(true);
+  let next: Promise<any> = Promise.resolve();
 
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
