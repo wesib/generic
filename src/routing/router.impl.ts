@@ -2,6 +2,7 @@ import { BootstrapContext } from '@wesib/wesib';
 import { OnEvent, onEventFromAny, trackValue, ValueTracker } from 'fun-events';
 import { Navigation } from '../navigation';
 import { Route } from './route';
+import { RouteAction, RouteRequest, RouteUpdate } from './route-action';
 import { Router as Router_ } from './router';
 
 /**
@@ -9,40 +10,50 @@ import { Router as Router_ } from './router';
  */
 export class Router extends Router_ {
 
-  private readonly _active: ValueTracker<Route.Active>;
+  readonly on: OnEvent<[RouteAction]>;
   private readonly _route: ValueTracker<Route>;
 
   constructor(context: BootstrapContext) {
     super();
 
     const navigation = context.get(Navigation);
-    const active: OnEvent<[Route.Active]> = navigation.read.thru_(
-        ({ url }) => ({ type: 'active' as const, url }),
+    const route: OnEvent<[Route]> = navigation.read.thru_(
+        ({ url, data }) => ({ url, data }),
     );
-    const next: OnEvent<[Route.Next]> = navigation.preNavigate.thru_(
+
+    this._route = (trackValue() as ValueTracker<Route>).by(route);
+
+    const request: OnEvent<[RouteRequest]> = navigation.preNavigate.thru_(
         event => ({
           type: event.action,
-          from: this._active.it,
-          url: event.to,
+          from: this._route.it,
+          to: {
+            url: event.to,
+            data: event.newData,
+          },
           cancel() {
             event.preventDefault();
           },
         }),
     );
-    const dont: OnEvent<[Route.Active]> = navigation.dontNavigate.thru_(
-        ({ from: url }) => ({ type: 'active' as const, url })
+    const update: OnEvent<[RouteUpdate]> = navigation.onNavigate.thru_(
+        ({ action: type, to: url, newData: data }) => ({
+          type,
+          to: {
+            url,
+            data,
+          },
+        }),
+    );
+    const restore: OnEvent<[RouteUpdate]> = navigation.dontNavigate.thru_(
+        () => ({ type: 'cancel' as const, to: this._route.it })
     );
 
-    this._active = (trackValue() as ValueTracker<Route.Active>).by(active);
-    this._route = trackValue<Route>(this._active.it).by(onEventFromAny<[Route]>(this._active, next, dont));
+    this.on = onEventFromAny<[RouteAction]>(request, update, restore);
   }
 
   get read() {
     return this._route.read;
-  }
-
-  get readActive() {
-    return this._active.read;
   }
 
 }
