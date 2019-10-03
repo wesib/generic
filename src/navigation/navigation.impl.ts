@@ -35,6 +35,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     url: new URL(location.href),
     data: history.state,
   }));
+
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
     const from = nav.it._url;
@@ -83,63 +84,11 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     }
 
     navigate(target: Navigation_.Target | string | URL): boolean {
-
-      const { url, data, title = '' } = navigationTargetOf(target);
-      const from = nav.it._url;
-      const to = url != null ? toURL(url) : from;
-
-      const init: NavigateEvent.Init<'pre-navigate'> = {
-        action: 'pre-navigate',
-        from,
-        to,
-        oldData: nav.it.data,
-        newData: data,
-      };
-
-      if (!dispatcher.dispatch(new NavigateEvent(PRE_NAVIGATE_EVT, init))) {
-        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
-        return false; // Navigation cancelled
-      }
-
-      try {
-        history.pushState(data, title, url && url.toString());
-      } catch (e) {
-        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
-        throw e;
-      }
-      nav.it = new NavigationLocation({ url: to, data });
-
-      return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action: 'navigate' }));
+      return navigate('pre-navigate', 'navigate', 'pushState', target);
     }
 
     replace(target: Navigation_.Target | string | URL): boolean {
-
-      const { url, data, title = '' } = navigationTargetOf(target);
-      const from = nav.it._url;
-      const to = url != null ? toURL(url) : from;
-
-      const init: NavigateEvent.Init<'pre-replace'> = {
-        action: 'pre-replace',
-        from,
-        to,
-        oldData: nav.it.data,
-        newData: data,
-      };
-
-      if (!dispatcher.dispatch(new NavigateEvent(PRE_NAVIGATE_EVT, init))) {
-        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
-        return false; // Navigation cancelled
-      }
-
-      try {
-        history.replaceState(data, title, url && url.toString());
-      } catch (e) {
-        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
-        throw e;
-      }
-      nav.it = new NavigationLocation({ url: to, data });
-
-      return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action: 'replace' }));
+      return navigate('pre-replace', 'replace', 'replaceState', target);
     }
 
   }
@@ -151,6 +100,40 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       return new URL(url, document.baseURI);
     }
     return url;
+  }
+
+  function navigate(
+      preAction: 'pre-navigate' | 'pre-replace',
+      action: 'navigate' | 'replace',
+      method: 'pushState' | 'replaceState',
+      target: Navigation_.Target | string | URL,
+  ): boolean {
+    const { url, data, title = '' } = navigationTargetOf(target);
+    const from = nav.it._url;
+    const to = url != null ? toURL(url) : from;
+
+    const init: NavigateEvent.Init<typeof preAction> = {
+      action: preAction,
+      from,
+      to,
+      oldData: nav.it.data,
+      newData: data,
+    };
+
+    if (!dispatcher.dispatch(new NavigateEvent(PRE_NAVIGATE_EVT, init))) {
+      dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
+      return false; // Navigation cancelled
+    }
+
+    try {
+      history[method](data, title, url && url.toString());
+    } catch (e) {
+      dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
+      throw e;
+    }
+    nav.it = new NavigationLocation({ url: to, data });
+
+    return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action }));
   }
 }
 
