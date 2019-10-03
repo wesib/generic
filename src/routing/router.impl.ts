@@ -31,12 +31,12 @@ export class Router extends Router_ {
             url: event.to,
             data: event.newData,
           },
-          cancel() {
+          abort() {
             event.preventDefault();
           },
         }),
     );
-    const update: OnEvent<[RouteUpdate]> = navigation.onNavigate.thru_(
+    const reach: OnEvent<[RouteUpdate]> = navigation.onNavigate.thru_(
         ({ action: type, to: url, newData: data }) => ({
           type,
           to: {
@@ -45,11 +45,11 @@ export class Router extends Router_ {
           },
         }),
     );
-    const restore: OnEvent<[RouteUpdate]> = navigation.dontNavigate.thru_(
-        () => ({ type: 'cancel' as const, to: this._route.it })
+    const abort: OnEvent<[RouteUpdate]> = navigation.dontNavigate.thru_(
+        () => ({ type: 'abort' as const, to: this._route.it })
     );
 
-    this.on = onEventFromAny<[RouteAction]>(request, update, restore);
+    this.on = onEventFromAny<[RouteAction]>(request, reach, abort);
   }
 
   get read() {

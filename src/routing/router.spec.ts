@@ -68,7 +68,7 @@ describe('Router', () => {
     expect(route.url.href).toBe(location.it.url.href);
     expect(route.data).toBe(location.it.data);
   });
-  it('notifies on navigation request', () => {
+  it('notifies when route requested', () => {
 
     const event = new NavigateEvent(
         'wesib:preNavigate',
@@ -90,7 +90,7 @@ describe('Router', () => {
     expect(request.to.url.href).toBe(event.to.href);
     expect(request.to.data).toEqual(event.newData);
   });
-  it('notifies on navigation success', () => {
+  it('notifies when route reached', () => {
 
     const event = new NavigateEvent(
         'wesib:navigate',
@@ -111,7 +111,7 @@ describe('Router', () => {
     expect(update.to.url.href).toBe(event.to.href);
     expect(update.to.data).toEqual(event.newData);
   });
-  it('notifies on navigation cancellation', () => {
+  it('notifies when route aborted', () => {
 
     const event = new NavigateEvent(
         'wesib:dontNavigate',
@@ -128,7 +128,7 @@ describe('Router', () => {
 
     const update = action as RouteUpdate;
 
-    expect(update.type).toBe('cancel');
+    expect(update.type).toBe('abort');
     expect(update.to).toBe(route);
   });
 
@@ -145,8 +145,8 @@ describe('Router', () => {
   });
 
   describe('Route', () => {
-    describe('cancel', () => {
-      it('cancels navigation', () => {
+    describe('abort', () => {
+      it('aborts navigation', () => {
 
         const event = new NavigateEvent(
             'wesib:preNavigate',
@@ -161,7 +161,7 @@ describe('Router', () => {
 
         router.on(a => {
           if (a.type === 'pre-navigate') {
-            a.cancel();
+            a.abort();
           }
         });
         preNavigate.send(event);
