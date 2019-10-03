@@ -2,8 +2,8 @@ import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { afterEventFrom, EventEmitter, onDomEventBy, onEventFrom, trackValue, ValueTracker } from 'fun-events';
 import { NavigateEvent, Navigation, PreNavigateEvent } from '../navigation';
 import { Route } from './route';
-import { RouteAction, RouteRequest, RouteUpdate } from './route-action';
 import { Router } from './router';
+import { RoutingStage, RoutingStart, RoutingStop } from './routing-stage';
 import { RoutingSupport } from './routing-support.feature';
 
 describe('Router', () => {
@@ -49,19 +49,19 @@ describe('Router', () => {
 
   let router: Router;
   let route: Route;
-  let action: RouteAction | undefined;
+  let stage: RoutingStage | undefined;
 
   beforeEach(() => {
     router = bsContext.get(Router);
     router.read(r => route = r);
-    action = undefined;
-    router.on(a => action = a);
+    stage = undefined;
+    router.on(s => stage = s);
   });
 
   it('is initialized to current route', () => {
     expect(route.url.href).toBe('http://localhost/index');
     expect(route.data).toBe('test');
-    expect(action).toBeUndefined();
+    expect(stage).toBeUndefined();
   });
   it('updates the route after navigation', () => {
     location.it = { url: new URL('/other', route.url), data: 'new' };
@@ -83,12 +83,12 @@ describe('Router', () => {
 
     preNavigate.send(event);
 
-    const request = action as RouteRequest;
+    const start = stage as RoutingStart;
 
-    expect(request.type).toBe('pre-navigate');
-    expect(request.from).toBe(route);
-    expect(request.to.url.href).toBe(event.to.href);
-    expect(request.to.data).toEqual(event.newData);
+    expect(start.action).toBe('pre-navigate');
+    expect(start.from).toBe(route);
+    expect(start.to.url.href).toBe(event.to.href);
+    expect(start.to.data).toEqual(event.newData);
   });
   it('notifies when route reached', () => {
 
@@ -105,11 +105,11 @@ describe('Router', () => {
 
     onNavigate.send(event);
 
-    const update = action as RouteUpdate;
+    const stop = stage as RoutingStop;
 
-    expect(update.type).toBe('navigate');
-    expect(update.to.url.href).toBe(event.to.href);
-    expect(update.to.data).toEqual(event.newData);
+    expect(stop.action).toBe('navigate');
+    expect(stop.to.url.href).toBe(event.to.href);
+    expect(stop.to.data).toEqual(event.newData);
   });
   it('notifies when route aborted', () => {
 
@@ -126,10 +126,10 @@ describe('Router', () => {
 
     dontNavigate.send(event);
 
-    const update = action as RouteUpdate;
+    const stop = stage as RoutingStop;
 
-    expect(update.type).toBe('abort');
-    expect(update.to).toBe(route);
+    expect(stop.action).toBe('abort');
+    expect(stop.to).toBe(route);
   });
 
   describe('[AfterEvent__symbol]', () => {
@@ -160,7 +160,7 @@ describe('Router', () => {
         );
 
         router.on(a => {
-          if (a.type === 'pre-navigate') {
+          if (a.action === 'pre-navigate') {
             a.abort();
           }
         });
