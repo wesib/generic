@@ -112,9 +112,9 @@ export abstract class Navigation implements EventKeeper<[Navigation.Location]> {
    * Then navigates to the `target`, unless the event cancelled.
    * @fires NavigateEvent@wesib:navigate  On window object when navigation succeed.
    *
-   * @returns `true` if navigated successfully, or `false` otherwise.
+   * @returns A promise resolved to `true` if navigated successfully, or to `false` otherwise.
    */
-  abstract navigate(target: Navigation.Target | string | URL): boolean;
+  abstract navigate(target: Navigation.Target | string | URL): Promise<boolean>;
 
   /**
    * Updates the most recent entry of navigation history.
@@ -124,9 +124,9 @@ export abstract class Navigation implements EventKeeper<[Navigation.Location]> {
    * Then navigates to the `target`, unless the event cancelled.
    * @fires NavigateEvent@wesib:navigate  On window object when history updated.
    *
-   * @returns `true` if navigation history updated, or `false` otherwise.
+   * @returns A promise resolved to `true` if navigation history updated, or to `false` otherwise.
    */
-  abstract replace(target: Navigation.Target | string | URL): boolean;
+  abstract replace(target: Navigation.Target | string | URL): Promise<boolean>;
 
 }
 

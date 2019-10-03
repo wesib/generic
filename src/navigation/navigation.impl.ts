@@ -35,6 +35,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     url: new URL(location.href),
     data: history.state,
   }));
+  let next: Promise<boolean> = Promise.resolve(true);
 
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
@@ -83,11 +84,11 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       history.go(delta);
     }
 
-    navigate(target: Navigation_.Target | string | URL): boolean {
+    navigate(target: Navigation_.Target | string | URL) {
       return navigate('pre-navigate', 'navigate', 'pushState', target);
     }
 
-    replace(target: Navigation_.Target | string | URL): boolean {
+    replace(target: Navigation_.Target | string | URL) {
       return navigate('pre-replace', 'replace', 'replaceState', target);
     }
 
@@ -107,33 +108,43 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       action: 'navigate' | 'replace',
       method: 'pushState' | 'replaceState',
       target: Navigation_.Target | string | URL,
-  ): boolean {
-    const { url, data, title = '' } = navigationTargetOf(target);
-    const from = nav.it._url;
-    const to = url != null ? toURL(url) : from;
+  ): Promise<boolean> {
 
-    const init: NavigateEvent.Init<typeof preAction> = {
-      action: preAction,
-      from,
-      to,
-      oldData: nav.it.data,
-      newData: data,
-    };
+    const promise = next = next.then(doNavigate, doNavigate);
 
-    if (!dispatcher.dispatch(new NavigateEvent(PRE_NAVIGATE_EVT, init))) {
-      dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
-      return false; // Navigation cancelled
+    return promise;
+
+    function doNavigate(): boolean {
+
+      const { url, data, title = '' } = navigationTargetOf(target);
+      const from = nav.it._url;
+      const to = url != null ? toURL(url) : from;
+      const init: NavigateEvent.Init<typeof preAction> = {
+        action: preAction,
+        from,
+        to,
+        oldData: nav.it.data,
+        newData: data,
+      };
+
+      if (
+          next !== promise
+          || !dispatcher.dispatch(new NavigateEvent(PRE_NAVIGATE_EVT, init))
+          || next !== promise) {
+        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
+        return false; // Navigation cancelled
+      }
+
+      try {
+        history[method](data, title, url && url.toString());
+      } catch (e) {
+        dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
+        throw e;
+      }
+      nav.it = new NavigationLocation({ url: to, data });
+
+      return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action }));
     }
-
-    try {
-      history[method](data, title, url && url.toString());
-    } catch (e) {
-      dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
-      throw e;
-    }
-    nav.it = new NavigationLocation({ url: to, data });
-
-    return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action }));
   }
 }
 

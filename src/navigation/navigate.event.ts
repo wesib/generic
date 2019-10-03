@@ -65,7 +65,8 @@ export class NavigateEvent<Action extends NavigateEvent.Action = 'navigate' | 'r
 /**
  * Pre-navigation event fired prior to actual navigation or navigation history update.
  *
- * This event can be cancelled in order to prevent the actual navigation or history update.
+ * This event can be cancelled in order to prevent the actual navigation or history update. The navigation is also
+ * cancelled when another navigation initiated by one of this event handlers.
  *
  * @event NavigateEvent#wesib:preNavigate
  * @event NavigateEvent#wesib:dontNavigate

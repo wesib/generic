@@ -1,6 +1,7 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
+import { asis } from 'call-thru';
 import { afterEventFrom } from 'fun-events';
 import { NavigateEvent, PreNavigateEvent } from './navigate.event';
 import { Navigation } from './navigation';
@@ -131,22 +132,22 @@ describe('navigation', () => {
     });
 
     describe('navigate', () => {
-      it('navigates to the target', () => {
-        navigation.navigate({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
+      it('navigates to the target', async () => {
+        await navigation.navigate({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
         expect(mockedHistory.pushState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/other');
         expect(location).toEqual({ url: 'http://localhost/other', data: 'updated' });
       });
-      it('navigates to the target URL', () => {
-        navigation.navigate('/other');
+      it('navigates to the target URL', async () => {
+        await navigation.navigate('/other');
         expect(mockedHistory.pushState).toHaveBeenCalledWith(undefined, '', '/other');
         expect(location).toEqual({ url: 'http://localhost/other' });
       });
-      it('navigates to the same URL', () => {
-        navigation.navigate({ data: 'updated', title: 'new title' });
+      it('navigates to the same URL', async () => {
+        await navigation.navigate({ data: 'updated', title: 'new title' });
         expect(mockedHistory.pushState).toHaveBeenCalledWith('updated', 'new title', undefined);
         expect(location).toEqual({ url: 'http://localhost/index', data: 'updated' });
       });
-      it('sends navigation events', () => {
+      it('sends navigation events', async () => {
 
         const onPreNavigate = jest.fn();
         const onNavigate = jest.fn();
@@ -154,7 +155,7 @@ describe('navigation', () => {
         navigation.preNavigate(onPreNavigate);
         navigation.onNavigate(onNavigate);
 
-        navigation.navigate({ url: '/other', data: 'updated' });
+        await navigation.navigate({ url: '/other', data: 'updated' });
 
         expect(onPreNavigate).toHaveBeenCalledTimes(1);
         expect(onNavigate).toHaveBeenCalledTimes(1);
@@ -176,25 +177,25 @@ describe('navigation', () => {
         expect(navigate.oldData).toBe('initial');
         expect(navigate.newData).toBe('updated');
       });
-      it('does not navigate if pre-navigate event is cancelled', () => {
+      it('does not navigate if pre-navigate event is cancelled', async () => {
         navigation.preNavigate.once(event => event.preventDefault());
-        navigation.navigate('/other');
+        await navigation.navigate('/other');
         expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(2);
         expect(mockedHistory.pushState).not.toHaveBeenCalled();
         expect(location).toEqual({ url: 'http://localhost/index', data: 'initial' });
         expect(mockedWindow.dispatchEvent)
             .toHaveBeenCalledWith(expect.objectContaining({ type: 'wesib:dontNavigate' }));
       });
-      it('informs on navigation cancellation', () => {
+      it('informs on navigation cancellation', async () => {
 
         let dontNavigate!: PreNavigateEvent;
 
         navigation.preNavigate.once(event => event.preventDefault());
         navigation.dontNavigate(event => dontNavigate = event);
-        navigation.navigate('/other');
+        await navigation.navigate('/other');
         expect(dontNavigate.to.href).toEqual('http://localhost/other');
       });
-      it('cancels the failed navigation', () => {
+      it('cancels the failed navigation', async () => {
 
         const error = new Error('failed');
 
@@ -203,28 +204,38 @@ describe('navigation', () => {
         let dontNavigate!: PreNavigateEvent;
 
         navigation.dontNavigate(event => dontNavigate = event);
-        expect(() => navigation.navigate('/other')).toThrow(error);
+        expect(await navigation.navigate('/other').catch(asis)).toBe(error);
         expect(dontNavigate.to.href).toEqual('http://localhost/other');
+      });
+      it('cancels previous navigation when new one initiated', async () => {
+        navigation.preNavigate.once(() => navigation.navigate({ url: '/third', data: 3 }));
+        expect(await navigation.navigate('/other')).toBe(false);
+        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(4);
+        expect(mockedHistory.pushState).toHaveBeenCalledWith(3, '', '/third');
+        expect(mockedHistory.pushState).toHaveBeenCalledTimes(1);
+        expect(location).toEqual({ url: 'http://localhost/third', data: 3 });
+        expect(mockedWindow.dispatchEvent)
+            .toHaveBeenLastCalledWith(expect.objectContaining({ type: 'wesib:navigate' }));
       });
     });
 
     describe('replace', () => {
-      it('replaces location with the target', () => {
-        navigation.replace({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
+      it('replaces location with the target', async () => {
+        await navigation.replace({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
         expect(mockedHistory.replaceState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/other');
         expect(location).toEqual({ url: 'http://localhost/other', data: 'updated' });
       });
-      it('replaces location with the target URL', () => {
-        navigation.replace('/other');
+      it('replaces location with the target URL', async () => {
+        await navigation.replace('/other');
         expect(mockedHistory.replaceState).toHaveBeenCalledWith(undefined, '', '/other');
         expect(location).toEqual({ url: 'http://localhost/other' });
       });
-      it('replaces location with the same URL', () => {
-        navigation.replace({ data: 'updated', title: 'new title' });
+      it('replaces location with the same URL', async () => {
+        await navigation.replace({ data: 'updated', title: 'new title' });
         expect(mockedHistory.replaceState).toHaveBeenCalledWith('updated', 'new title', undefined);
         expect(location).toEqual({ url: 'http://localhost/index', data: 'updated' });
       });
-      it('sends navigation events', () => {
+      it('sends navigation events', async () => {
 
         const onPreNavigate = jest.fn();
         const onNavigate = jest.fn();
@@ -232,7 +243,7 @@ describe('navigation', () => {
         navigation.preNavigate(onPreNavigate);
         navigation.onNavigate(onNavigate);
 
-        navigation.replace({ url: '/other', data: 'updated' });
+        await navigation.replace({ url: '/other', data: 'updated' });
         expect(onPreNavigate).toHaveBeenCalledTimes(1);
         expect(onNavigate).toHaveBeenCalledTimes(1);
 
@@ -253,25 +264,25 @@ describe('navigation', () => {
         expect(navigate.oldData).toBe('initial');
         expect(navigate.newData).toBe('updated');
       });
-      it('does not replace the location if pre-navigate event is cancelled', () => {
+      it('does not replace the location if pre-navigate event is cancelled', async () => {
         navigation.preNavigate.once(event => event.preventDefault());
-        navigation.replace('/other');
+        await navigation.replace('/other');
         expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(2);
         expect(mockedHistory.replaceState).not.toHaveBeenCalled();
         expect(location).toEqual({ url: 'http://localhost/index', data: 'initial' });
         expect(mockedWindow.dispatchEvent)
             .toHaveBeenCalledWith(expect.objectContaining({ type: 'wesib:dontNavigate' }));
       });
-      it('informs on navigation cancellation', () => {
+      it('informs on navigation cancellation', async () => {
 
         let dontNavigate!: PreNavigateEvent;
 
         navigation.preNavigate.once(event => event.preventDefault());
         navigation.dontNavigate(event => dontNavigate = event);
-        navigation.replace('/other');
+        await navigation.replace('/other');
         expect(dontNavigate.to.href).toEqual('http://localhost/other');
       });
-      it('cancels the failed location replacement', () => {
+      it('cancels the failed location replacement', async () => {
 
         const error = new Error('failed');
 
@@ -280,7 +291,7 @@ describe('navigation', () => {
         let dontNavigate!: PreNavigateEvent;
 
         navigation.dontNavigate(event => dontNavigate = event);
-        expect(() => navigation.replace('/other')).toThrow(error);
+        expect(await navigation.replace('/other').catch(asis)).toBe(error);
         expect(dontNavigate.to.href).toEqual('http://localhost/other');
       });
     });
