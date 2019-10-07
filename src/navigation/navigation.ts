@@ -157,6 +157,15 @@ export namespace Navigation {
   }
 
   /**
+   * Navigation target with URL value.
+   */
+  export interface URLTarget extends Target {
+
+    readonly url: URL;
+
+  }
+
+  /**
    * Navigation location. Represents navigation history entry.
    */
   export interface Location {

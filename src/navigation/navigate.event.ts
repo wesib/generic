@@ -43,6 +43,11 @@ export class NavigateEvent<Action extends NavigateEvent.Action = 'navigate' | 'r
   readonly newData: any;
 
   /**
+   * New page title.
+   */
+  readonly title?: string;
+
+  /**
    * Constructs navigation event.
    *
    * @param type  Event type.
@@ -58,6 +63,7 @@ export class NavigateEvent<Action extends NavigateEvent.Action = 'navigate' | 'r
     this._to = init.to.toString();
     this.oldData = init.oldData;
     this.newData = init.newData;
+    this.title = init.title;
   }
 
 }
@@ -122,6 +128,11 @@ export namespace NavigateEvent {
      * New navigation history entry data.
      */
     readonly newData?: any;
+
+    /**
+     * New page title.
+     */
+    readonly title?: string;
 
   }
 
