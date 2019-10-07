@@ -6,7 +6,7 @@ import { AfterEvent, EventKeeper } from 'fun-events';
 import { Navigation } from './navigation';
 
 /**
- * Navigation agent.
+ * Navigation agent signature.
  *
  * The agent is called by navigation method in pre-navigation phase and may alter navigation processing.
  * E.g. change navigation target. For that it should be registered in appropriate context.
@@ -21,10 +21,6 @@ export type NavigationAgent =
  * @param action  Navigation action. Either `pre-navigate`, or `pre-replace`.
  * @param from  Source navigation location.
  * @param to  Navigation target.
- * @param oldData  Old navigation history entry data.
- *
- * @returns An `EventSender` of response object(s). It is returned either to preceding agent in chain, or as a result of
- * [[HttpFetch]] call.
  */
     (
         this: void,
@@ -35,8 +31,8 @@ export type NavigationAgent =
     ) => void;
 
 class NavigationAgentKey
-    extends ContextUpKey<NavigationAgent, NavigationAgent>
-    implements ContextUpRef<NavigationAgent, NavigationAgent, AfterEvent<NavigationAgent[]>> {
+    extends ContextUpKey<NavigationAgent.Combined, NavigationAgent>
+    implements ContextUpRef<NavigationAgent.Combined, NavigationAgent, AfterEvent<NavigationAgent[]>> {
 
   constructor(name: string) {
     super(name);
@@ -45,10 +41,10 @@ class NavigationAgentKey
   grow<Ctx extends ContextValues>(
       opts: ContextValueOpts<
           Ctx,
-          NavigationAgent,
+          NavigationAgent.Combined,
           EventKeeper<NavigationAgent[]> | NavigationAgent,
-          AfterEvent<[NavigationAgent]>>,
-  ): NavigationAgent {
+          AfterEvent<NavigationAgent[]>>,
+  ): NavigationAgent.Combined {
     return (next, action, from, to) => {
 
       const result = opts.byDefault(() => combinedAgent);
@@ -95,10 +91,36 @@ class NavigationAgentKey
 
 }
 
+export namespace NavigationAgent {
+
+  /**
+   * Combined navigation agent signature.
+   *
+   * This is what is available under [[NavigationAgent]] key.
+   */
+  export type Combined =
+  /**
+   * @param next  Either calls the next agent in chain, or applies the final navigation target if this agent is the last
+   * one. Not calling this function effectively prevents navigation.
+   * Accepts an optional [[Navigation.Target]] parameter. The original target will be used instead when omitted.
+   * @param action  Navigation action. Either `pre-navigate`, or `pre-replace`.
+   * @param from  Source navigation location.
+   * @param to  Navigation target.
+   */
+      (
+          this: void,
+          next: (this: void, target: Navigation.URLTarget) => void,
+          action: 'pre-navigate' | 'pre-replace',
+          from: Navigation.Location,
+          to: Navigation.URLTarget,
+      ) => void;
+
+}
+
 /**
  * A key of context value containing an [[NavigationAgent]] instance.
  *
  * The agent returned combines all registered agents into one. If no agent registered it just performs the navigation.
  */
-export const NavigationAgent: ContextUpRef<NavigationAgent, NavigationAgent> =
+export const NavigationAgent: ContextUpRef<NavigationAgent.Combined, NavigationAgent> =
     /**#__PURE__*/ new NavigationAgentKey('navigation-agent');
