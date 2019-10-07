@@ -170,19 +170,19 @@ describe('navigation', () => {
         const preNavigate = onPreNavigate.mock.calls[0][0] as PreNavigateEvent;
         const navigate = onNavigate.mock.calls[0][0] as NavigateEvent;
 
-        expect(preNavigate.from.toString()).toBe('http://localhost/index');
-        expect(preNavigate.to.toString()).toBe('http://localhost/other');
+        expect(preNavigate.from.url.href).toBe('http://localhost/index');
+        expect(preNavigate.to.url.href).toBe('http://localhost/other');
         expect(preNavigate.type).toBe('wesib:preNavigate');
         expect(preNavigate.action).toBe('pre-navigate');
-        expect(preNavigate.oldData).toBe('initial');
-        expect(preNavigate.newData).toBe('updated');
+        expect(preNavigate.from.data).toBe('initial');
+        expect(preNavigate.to.data).toBe('updated');
 
-        expect(navigate.from.toString()).toBe('http://localhost/index');
-        expect(navigate.to.toString()).toBe('http://localhost/other');
+        expect(navigate.from.url.href).toBe('http://localhost/index');
+        expect(navigate.to.url.href).toBe('http://localhost/other');
         expect(navigate.type).toBe('wesib:navigate');
         expect(navigate.action).toBe('navigate');
-        expect(navigate.oldData).toBe('initial');
-        expect(navigate.newData).toBe('updated');
+        expect(navigate.from.data).toBe('initial');
+        expect(navigate.to.data).toBe('updated');
       });
       it('does not navigate if pre-navigate event is cancelled', async () => {
         navigation.preNavigate.once(event => event.preventDefault());
@@ -200,7 +200,7 @@ describe('navigation', () => {
         navigation.preNavigate.once(event => event.preventDefault());
         navigation.dontNavigate(event => dontNavigate = event);
         await navigation.navigate('/other');
-        expect(dontNavigate.to.href).toEqual('http://localhost/other');
+        expect(dontNavigate.to.url.href).toBe('http://localhost/other');
       });
       it('calls agent', async () => {
         expect(await navigation.navigate({ url: '/other', title: 'new title', data: 'new data' })).toBe(true);
@@ -238,7 +238,7 @@ describe('navigation', () => {
 
         navigation.dontNavigate(event => dontNavigate = event);
         expect(await navigation.navigate('/other').catch(asis)).toBe(error);
-        expect(dontNavigate.to.href).toEqual('http://localhost/other');
+        expect(dontNavigate.to.url.href).toBe('http://localhost/other');
       });
       it('cancels previous navigation when the new one initiated', async () => {
         navigation.preNavigate.once(() => navigation.navigate({ url: '/second', data: 3 }));
@@ -299,19 +299,19 @@ describe('navigation', () => {
         const preNavigate = onPreNavigate.mock.calls[0][0] as PreNavigateEvent;
         const navigate = onNavigate.mock.calls[0][0] as NavigateEvent;
 
-        expect(preNavigate.from.toString()).toBe('http://localhost/index');
-        expect(preNavigate.to.toString()).toBe('http://localhost/other');
+        expect(preNavigate.from.url.href).toBe('http://localhost/index');
+        expect(preNavigate.to.url.href).toBe('http://localhost/other');
         expect(preNavigate.type).toBe('wesib:preNavigate');
         expect(preNavigate.action).toBe('pre-replace');
-        expect(preNavigate.oldData).toBe('initial');
-        expect(preNavigate.newData).toBe('updated');
+        expect(preNavigate.from.data).toBe('initial');
+        expect(preNavigate.to.data).toBe('updated');
 
-        expect(navigate.from.toString()).toBe('http://localhost/index');
-        expect(navigate.to.toString()).toBe('http://localhost/other');
+        expect(navigate.from.url.href).toBe('http://localhost/index');
+        expect(navigate.to.url.href).toBe('http://localhost/other');
         expect(navigate.type).toBe('wesib:navigate');
         expect(navigate.action).toBe('replace');
-        expect(navigate.oldData).toBe('initial');
-        expect(navigate.newData).toBe('updated');
+        expect(navigate.from.data).toBe('initial');
+        expect(navigate.to.data).toBe('updated');
       });
       it('does not replace the location if pre-navigate event is cancelled', async () => {
         navigation.preNavigate.once(event => event.preventDefault());
@@ -329,7 +329,7 @@ describe('navigation', () => {
         navigation.preNavigate.once(event => event.preventDefault());
         navigation.dontNavigate(event => dontNavigate = event);
         await navigation.replace('/other');
-        expect(dontNavigate.to.href).toEqual('http://localhost/other');
+        expect(dontNavigate.to.url.href).toBe('http://localhost/other');
       });
       it('cancels the failed location replacement', async () => {
 
@@ -341,7 +341,7 @@ describe('navigation', () => {
 
         navigation.dontNavigate(event => dontNavigate = event);
         expect(await navigation.replace('/other').catch(asis)).toBe(error);
-        expect(dontNavigate.to.href).toEqual('http://localhost/other');
+        expect(dontNavigate.to.url.href).toBe('http://localhost/other');
       });
     });
 
@@ -362,12 +362,12 @@ describe('navigation', () => {
 
         const navigate = onNavigate.mock.calls[0][0] as NavigateEvent;
 
-        expect(navigate.from.toString()).toBe('http://localhost/index');
-        expect(navigate.to.toString()).toBe('http://localhost/revisited');
+        expect(navigate.from.url.href).toBe('http://localhost/index');
+        expect(navigate.to.url.href).toBe('http://localhost/revisited');
         expect(navigate.type).toBe('wesib:navigate');
         expect(navigate.action).toBe('return');
-        expect(navigate.oldData).toBe('initial');
-        expect(navigate.newData).toBe('popped');
+        expect(navigate.from.data).toBe('initial');
+        expect(navigate.to.data).toBe('popped');
       });
       it('updates location', () => {
         mockHref.mockImplementation(() => 'http://localhost/revisited');

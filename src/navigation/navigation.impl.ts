@@ -25,10 +25,9 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
-    const from = nav.it.url;
-    const to = new URL(location.href);
-    const newData = event.state;
-    const oldData = nav.it.data;
+    const from = nav.it;
+    const data = event.state;
+    const to: Navigation_.URLTarget = { url: new URL(location.href), data: data };
 
     dispatcher.dispatch(
         new NavigateEvent(
@@ -37,11 +36,9 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
               action: 'return',
               from,
               to,
-              oldData,
-              newData,
             })
     );
-    nav.it = { url: to, data: newData };
+    nav.it = { url: to.url, data };
   });
 
   class Navigation extends Navigation_ {
@@ -121,12 +118,12 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       const init = res;
 
       try {
-        history[method](init.newData, init.title || '', init.to.toString());
+        history[method](init.to.data, init.to.title || '', init.to.url.toString());
       } catch (e) {
         dispatcher.dispatch(new NavigateEvent(DONT_NAVIGATE_EVT, init));
         throw e;
       }
-      nav.it = { url: init.to, data: init.newData };
+      nav.it = { url: init.to.url, data: init.to.data };
 
       return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action }));
     }
@@ -162,20 +159,11 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
         return false;
       }
 
-      function newEventInit(
-          {
-            url: to,
-            data: newData,
-            title,
-          }: Navigation_.URLTarget,
-      ): NavigateEvent.Init<typeof preAction> {
+      function newEventInit(to: Navigation_.URLTarget): NavigateEvent.Init<typeof preAction> {
         return {
           action: preAction,
-          from: nav.it.url,
+          from: nav.it,
           to,
-          oldData: nav.it.data,
-          newData,
-          title,
         };
       }
     }

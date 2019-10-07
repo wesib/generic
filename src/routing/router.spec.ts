@@ -74,10 +74,8 @@ describe('Router', () => {
         'wesib:preNavigate',
         {
           action: 'pre-navigate',
-          from: route.url,
-          oldData: route.data,
-          to: new URL('/other', route.url),
-          newData: 'new',
+          from: { url: route.url, data: route.data, },
+          to: { url: new URL('/other', route.url), data: 'new', },
         },
     );
 
@@ -87,8 +85,8 @@ describe('Router', () => {
 
     expect(start.action).toBe('pre-navigate');
     expect(start.from).toBe(route);
-    expect(start.to.url.href).toBe(event.to.href);
-    expect(start.to.data).toEqual(event.newData);
+    expect(start.to.url.href).toBe(event.to.url.href);
+    expect(start.to.data).toEqual(event.to.data);
   });
   it('notifies when route reached', () => {
 
@@ -96,10 +94,8 @@ describe('Router', () => {
         'wesib:navigate',
         {
           action: 'navigate',
-          from: route.url,
-          oldData: route.data,
-          to: new URL('/other', route.url),
-          newData: 'new',
+          from: { url: route.url, data: route.data, },
+          to: { url: new URL('/other', route.url), data: 'new', },
         },
     );
 
@@ -108,8 +104,8 @@ describe('Router', () => {
     const stop = stage as RoutingStop;
 
     expect(stop.action).toBe('navigate');
-    expect(stop.to.url.href).toBe(event.to.href);
-    expect(stop.to.data).toEqual(event.newData);
+    expect(stop.to.url.href).toBe(event.to.url.href);
+    expect(stop.to.data).toEqual(event.to.data);
   });
   it('notifies when route aborted', () => {
 
@@ -117,10 +113,8 @@ describe('Router', () => {
         'wesib:dontNavigate',
         {
           action: 'pre-navigate',
-          from: route.url,
-          oldData: route.data,
-          to: new URL('/other', route.url),
-          newData: 'new',
+          from: { url: route.url, data: route.data, },
+          to: { url: new URL('/other', route.url), data: 'new' },
         },
     );
 
@@ -152,10 +146,8 @@ describe('Router', () => {
             'wesib:preNavigate',
             {
               action: 'pre-navigate',
-              from: route.url,
-              oldData: route.data,
-              to: new URL('/other', route.url),
-              newData: 'new',
+              from: { url: route.url, data: route.data, },
+              to: { url: new URL('/other', route.url), data: 'new', },
             },
         );
 

@@ -1,6 +1,8 @@
 /**
  * @module @wesib/generic
  */
+import { Navigation } from './navigation';
+
 /**
  * Navigation event fired by [[Navigation]] service.
  *
@@ -14,38 +16,15 @@ export class NavigateEvent<Action extends NavigateEvent.Action = 'navigate' | 'r
    */
   readonly action: Action;
 
-  private readonly _from: string;
-
-  private readonly _to: string;
+  /**
+   * Source location.
+   */
+  readonly from: Navigation.Location;
 
   /**
-   * Source URL.
+   * Navigation target.
    */
-  get from(): URL {
-    return new URL(this._from);
-  }
-
-  /**
-   * Target URL.
-   */
-  get to(): URL {
-    return new URL(this._to);
-  }
-
-  /**
-   * Old navigation history entry data.
-   */
-  readonly oldData: any;
-
-  /**
-   * New navigation history entry data.
-   */
-  readonly newData: any;
-
-  /**
-   * New page title.
-   */
-  readonly title?: string;
+  readonly to: Navigation.URLTarget;
 
   /**
    * Constructs navigation event.
@@ -59,11 +38,8 @@ export class NavigateEvent<Action extends NavigateEvent.Action = 'navigate' | 'r
   ) {
     super(type, { ...init, cancelable: type === 'wesib:preNavigate' && init.action.substring(0, 4) === 'pre-' });
     this.action = init.action;
-    this._from = init.from.toString();
-    this._to = init.to.toString();
-    this.oldData = init.oldData;
-    this.newData = init.newData;
-    this.title = init.title;
+    this.from = init.from;
+    this.to = init.to;
   }
 
 }
@@ -110,29 +86,14 @@ export namespace NavigateEvent {
     readonly action: A;
 
     /**
-     * Source URL.
+     * Source location.
      */
-    readonly from: URL;
+    readonly from: Navigation.Location;
 
     /**
-     * Target URL.
+     * Navigation target.
      */
-    readonly to: URL;
-
-    /**
-     * Old navigation history entry data.
-     */
-    readonly oldData?: any;
-
-    /**
-     * New navigation history entry data.
-     */
-    readonly newData?: any;
-
-    /**
-     * New page title.
-     */
-    readonly title?: string;
+    readonly to: Navigation.URLTarget;
 
   }
 

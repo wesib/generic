@@ -28,8 +28,8 @@ export class Router extends Router_ {
           action: event.action,
           from: this._route.it,
           to: {
-            url: event.to,
-            data: event.newData,
+            url: event.to.url,
+            data: event.to.data,
           },
           abort() {
             event.preventDefault();
@@ -37,7 +37,7 @@ export class Router extends Router_ {
         }),
     );
     const stop: OnEvent<[RoutingStop]> = navigation.onNavigate.thru_(
-        ({ action, to: url, newData: data }) => ({
+        ({ action, to: { url, data} }) => ({
           action,
           to: {
             url,
