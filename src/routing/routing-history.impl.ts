@@ -23,8 +23,8 @@ export class RoutingHistory {
     return RoutingHistory__key;
   }
 
-  future?: RoutingHistoryEntry;
-  current?: RoutingHistoryEntry;
+  private future?: RoutingHistoryEntry;
+  private current?: RoutingHistoryEntry;
   private readonly _entries = new Map<number, RoutingHistoryEntry>();
   private _lastId = 0;
 
@@ -37,11 +37,17 @@ export class RoutingHistory {
         case 'navigate':
         case 'replace':
         case 'abort':
-          if (this.future) {
-            this.future[stage.action](stage);
+
+          const { future } = this;
+
+          if (future) {
+            this.future = undefined;
+            future[stage.action](stage);
           }
+
           break;
         case 'return':
+          this.future = undefined;
           this._return(stage);
           break;
       }
@@ -56,6 +62,9 @@ export class RoutingHistory {
   }
 
   newEntry({ data }: Navigation.Location): RoutingHistoryEntry {
+    if (this.future) {
+      return this.future;
+    }
 
     const currentId = routingHistoryId(data);
 
@@ -65,7 +74,6 @@ export class RoutingHistory {
   }
 
   navigate(to: RoutingHistoryEntry) {
-    this.future = undefined;
     this._entries.set(to.id, to);
 
     const { current } = this;
@@ -86,7 +94,7 @@ export class RoutingHistory {
   }
 
   replace(by: RoutingHistoryEntry) {
-    this.future = undefined;
+
     this._entries.set(by.id, by);
 
     const current = this.current;

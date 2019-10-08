@@ -29,7 +29,7 @@ export class Router extends Router_ {
     const start: OnEvent<[RoutingStart]> = navigation.preNavigate.thru_(
         event => {
 
-          const future = history.future!;
+          const future = history.newEntry(event.from);
           const stage: RoutingStart = {
             action: event.action,
             from: this._route.it,
