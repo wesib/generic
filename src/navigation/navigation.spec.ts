@@ -1,8 +1,8 @@
 import Mock = jest.Mock;
-import Mocked = jest.Mocked;
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { asis, noop } from 'call-thru';
 import { afterEventFrom } from 'fun-events';
+import { LocationMock } from '../spec/location-mock';
 import { NavigateEvent, PreNavigateEvent } from './navigate.event';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
@@ -11,52 +11,13 @@ import { NavigationSupport } from './navigation-support.feature';
 describe('navigation', () => {
   describe('Navigation', () => {
 
-    let mockedWindow: Mocked<Window>;
-    let mockedLocation: Mocked<Location>;
-    let mockBaseURI: Mock<string, []>;
-    let mockHref: Mock<string, []>;
-    let mockedHistory: Mocked<History>;
-    let mockHistoryLength: Mock<number, []>;
-    let mockState: Mock<string, []>;
+    let locationMock: LocationMock;
 
     beforeEach(() => {
-      mockHref = jest.fn(() => 'http://localhost/index');
-      mockedLocation = {
-        get href() {
-          return mockHref();
-        }
-      } as any;
-      mockState = jest.fn(() => 'initial');
-      mockHistoryLength = jest.fn(() => 13);
-      mockedHistory = {
-        get length() {
-          return mockHistoryLength();
-        },
-        get state() {
-          return mockState();
-        },
-        go: jest.fn(),
-        pushState: jest.fn(),
-        replaceState: jest.fn(),
-      } as any;
-      mockBaseURI = jest.fn(() => 'http://localhost');
-      mockedWindow = {
-        location: mockedLocation,
-        history: mockedHistory,
-        addEventListener: jest.spyOn(window, 'addEventListener'),
-        removeEventListener: jest.spyOn(window, 'removeEventListener'),
-        dispatchEvent: jest.spyOn(window, 'dispatchEvent'),
-        document: {
-          get baseURI() {
-            return mockBaseURI();
-          }
-        },
-      } as any;
+      locationMock = new LocationMock();
     });
     afterEach(() => {
-      mockedWindow.dispatchEvent.mockRestore();
-      mockedWindow.addEventListener.mockRestore();
-      mockedWindow.removeEventListener.mockRestore();
+      locationMock.down();
     });
 
     let navigation: Navigation;
@@ -70,7 +31,7 @@ describe('navigation', () => {
 
       @Feature({
         set: [
-          { a: BootstrapWindow, is: mockedWindow },
+          { a: BootstrapWindow, is: locationMock.window },
           { a: NavigationAgent, is: agent },
         ],
         needs: NavigationSupport,
@@ -88,47 +49,47 @@ describe('navigation', () => {
     let location: { url: string, data: any };
 
     beforeEach(() => {
-      navigation.read(({ url, data }) => location = { url: url.toString(), data });
+      navigation.read(({ url, data }) => location = { url: url.href, data });
     });
 
     it('reads initial location from `Location` and `History`', () => {
       expect(location).toEqual({ url: 'http://localhost/index', data: 'initial' });
-      expect(mockHref).toHaveBeenCalled();
-      expect(mockState).toHaveBeenCalled();
+      expect(locationMock.href).toHaveBeenCalled();
+      expect(locationMock.state).toHaveBeenCalled();
     });
 
     describe('length', () => {
       it('returns history length', () => {
-        expect(navigation.length).toBe(13);
-        expect(mockHistoryLength).toHaveBeenCalled();
+        expect(navigation.length).toBe(1);
+        expect(locationMock.historyLength).toHaveBeenCalled();
       });
     });
 
     describe('go', () => {
       it('calls `History.go(delta)`', () => {
         navigation.go(10);
-        expect(mockedHistory.go).toHaveBeenCalledWith(10);
+        expect(locationMock.history.go).toHaveBeenCalledWith(10);
       });
     });
 
     describe('back', () => {
       it('calls `History.go(-1)`', () => {
         navigation.back();
-        expect(mockedHistory.go).toHaveBeenCalledWith(-1);
+        expect(locationMock.history.go).toHaveBeenCalledWith(-1);
       });
     });
 
     describe('forward', () => {
       it('calls `History.go(1)`', () => {
         navigation.forward();
-        expect(mockedHistory.go).toHaveBeenCalledWith(1);
+        expect(locationMock.history.go).toHaveBeenCalledWith(1);
       });
     });
 
     describe('reload', () => {
       it('calls `History.go()`', () => {
         navigation.reload();
-        expect(mockedHistory.go).toHaveBeenCalledWith(undefined);
+        expect(locationMock.history.go).toHaveBeenCalledWith(undefined);
       });
     });
 
@@ -141,17 +102,17 @@ describe('navigation', () => {
     describe('navigate', () => {
       it('navigates to the target', async () => {
         await navigation.navigate({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
-        expect(mockedHistory.pushState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/other');
+        expect(locationMock.history.pushState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/other');
         expect(location).toEqual({ url: 'http://localhost/other', data: 'updated' });
       });
       it('navigates to the target URL', async () => {
         await navigation.navigate('/other');
-        expect(mockedHistory.pushState).toHaveBeenCalledWith(undefined, '', 'http://localhost/other');
+        expect(locationMock.history.pushState).toHaveBeenCalledWith(undefined, '', 'http://localhost/other');
         expect(location).toEqual({ url: 'http://localhost/other' });
       });
       it('navigates to the same URL', async () => {
         await navigation.navigate({ data: 'updated', title: 'new title' });
-        expect(mockedHistory.pushState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/index');
+        expect(locationMock.history.pushState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/index');
         expect(location).toEqual({ url: 'http://localhost/index', data: 'updated' });
       });
       it('sends navigation events', async () => {
@@ -187,10 +148,10 @@ describe('navigation', () => {
       it('does not navigate if pre-navigate event is cancelled', async () => {
         navigation.preNavigate.once(event => event.preventDefault());
         expect(await navigation.navigate('/other')).toBe(false);
-        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(2);
-        expect(mockedHistory.pushState).not.toHaveBeenCalled();
+        expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(2);
+        expect(locationMock.history.pushState).not.toHaveBeenCalled();
         expect(location).toEqual({ url: 'http://localhost/index', data: 'initial' });
-        expect(mockedWindow.dispatchEvent)
+        expect(locationMock.window.dispatchEvent)
             .toHaveBeenCalledWith(expect.objectContaining({ type: 'wesib:dontNavigate' }));
       });
       it('informs on navigation cancellation', async () => {
@@ -222,17 +183,17 @@ describe('navigation', () => {
         agent.mockImplementation(noop);
         expect(await navigation.navigate({ url: '/other', title: 'new title', data: 'new data' })).toBe(false);
         expect(agent).toHaveBeenCalled();
-        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(1);
-        expect(mockedHistory.pushState).not.toHaveBeenCalled();
+        expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(1);
+        expect(locationMock.history.pushState).not.toHaveBeenCalled();
         expect(location).toEqual({ url: 'http://localhost/index', data: 'initial' });
-        expect(mockedWindow.dispatchEvent)
+        expect(locationMock.window.dispatchEvent)
             .toHaveBeenCalledWith(expect.objectContaining({ type: 'wesib:dontNavigate' }));
       });
       it('cancels the failed navigation', async () => {
 
         const error = new Error('failed');
 
-        mockedHistory.pushState.mockImplementation(() => { throw error; });
+        locationMock.history.pushState.mockImplementation(() => { throw error; });
 
         let dontNavigate!: PreNavigateEvent;
 
@@ -243,11 +204,11 @@ describe('navigation', () => {
       it('cancels previous navigation when the new one initiated', async () => {
         navigation.preNavigate.once(() => navigation.navigate({ url: '/second', data: 3 }));
         expect(await navigation.navigate('/other')).toBe(false);
-        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(4);
-        expect(mockedHistory.pushState).toHaveBeenCalledWith(3, '', 'http://localhost/second');
-        expect(mockedHistory.pushState).toHaveBeenCalledTimes(1);
+        expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
+        expect(locationMock.history.pushState).toHaveBeenCalledWith(3, '', 'http://localhost/second');
+        expect(locationMock.history.pushState).toHaveBeenCalledTimes(1);
         expect(location).toEqual({ url: 'http://localhost/second', data: 3 });
-        expect(mockedWindow.dispatchEvent)
+        expect(locationMock.window.dispatchEvent)
             .toHaveBeenLastCalledWith(expect.objectContaining({ type: 'wesib:navigate' }));
       });
       it('cancels previous navigation when the third one initiated', async () => {
@@ -259,11 +220,11 @@ describe('navigation', () => {
         expect(await other).toBe(false);
         expect(await second).toBe(false);
         expect(await third).toBe(true);
-        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(4);
-        expect(mockedHistory.pushState).toHaveBeenCalledWith(undefined, '', 'http://localhost/third');
-        expect(mockedHistory.pushState).toHaveBeenCalledTimes(1);
+        expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
+        expect(locationMock.history.pushState).toHaveBeenCalledWith(undefined, '', 'http://localhost/third');
+        expect(locationMock.history.pushState).toHaveBeenCalledTimes(1);
         expect(location).toEqual({ url: 'http://localhost/third' });
-        expect(mockedWindow.dispatchEvent)
+        expect(locationMock.window.dispatchEvent)
             .toHaveBeenLastCalledWith(expect.objectContaining({ type: 'wesib:navigate' }));
       });
     });
@@ -271,17 +232,20 @@ describe('navigation', () => {
     describe('replace', () => {
       it('replaces location with the target', async () => {
         await navigation.replace({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
-        expect(mockedHistory.replaceState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/other');
+        expect(locationMock.history.replaceState)
+            .toHaveBeenCalledWith('updated', 'new title', 'http://localhost/other');
         expect(location).toEqual({ url: 'http://localhost/other', data: 'updated' });
       });
       it('replaces location with the target URL', async () => {
         await navigation.replace('/other');
-        expect(mockedHistory.replaceState).toHaveBeenCalledWith(undefined, '', 'http://localhost/other');
+        expect(locationMock.history.replaceState)
+            .toHaveBeenCalledWith(undefined, '', 'http://localhost/other');
         expect(location).toEqual({ url: 'http://localhost/other' });
       });
       it('replaces location with the same URL', async () => {
         await navigation.replace({ data: 'updated', title: 'new title' });
-        expect(mockedHistory.replaceState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/index');
+        expect(locationMock.history.replaceState)
+            .toHaveBeenCalledWith('updated', 'new title', 'http://localhost/index');
         expect(location).toEqual({ url: 'http://localhost/index', data: 'updated' });
       });
       it('sends navigation events', async () => {
@@ -316,10 +280,10 @@ describe('navigation', () => {
       it('does not replace the location if pre-navigate event is cancelled', async () => {
         navigation.preNavigate.once(event => event.preventDefault());
         await navigation.replace('/other');
-        expect(mockedWindow.dispatchEvent).toHaveBeenCalledTimes(2);
-        expect(mockedHistory.replaceState).not.toHaveBeenCalled();
+        expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(2);
+        expect(locationMock.history.replaceState).not.toHaveBeenCalled();
         expect(location).toEqual({ url: 'http://localhost/index', data: 'initial' });
-        expect(mockedWindow.dispatchEvent)
+        expect(locationMock.window.dispatchEvent)
             .toHaveBeenCalledWith(expect.objectContaining({ type: 'wesib:dontNavigate' }));
       });
       it('informs on navigation cancellation', async () => {
@@ -335,7 +299,7 @@ describe('navigation', () => {
 
         const error = new Error('failed');
 
-        mockedHistory.replaceState.mockImplementation(() => { throw error; });
+        locationMock.history.replaceState.mockImplementation(() => { throw error; });
 
         let dontNavigate!: PreNavigateEvent;
 
@@ -354,8 +318,8 @@ describe('navigation', () => {
         navigation.preNavigate(onPreNavigate);
         navigation.onNavigate(onNavigate);
 
-        mockHref.mockImplementation(() => 'http://localhost/revisited');
-        mockedWindow.dispatchEvent(new PopStateEvent('popstate', { state: 'popped' }));
+        locationMock.href.mockImplementation(() => 'http://localhost/revisited');
+        locationMock.window.dispatchEvent(new PopStateEvent('popstate', { state: 'popped' }));
 
         expect(onPreNavigate).not.toHaveBeenCalled();
         expect(onNavigate).toHaveBeenCalledTimes(1);
@@ -370,8 +334,8 @@ describe('navigation', () => {
         expect(navigate.to.data).toBe('popped');
       });
       it('updates location', () => {
-        mockHref.mockImplementation(() => 'http://localhost/revisited');
-        mockedWindow.dispatchEvent(new PopStateEvent('popstate', { state: 'popped' }));
+        locationMock.href.mockImplementation(() => 'http://localhost/revisited');
+        locationMock.window.dispatchEvent(new PopStateEvent('popstate', { state: 'popped' }));
 
         expect(location).toEqual({ url: 'http://localhost/revisited', data: 'popped' });
       });
