@@ -23,13 +23,13 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   const onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage);
   const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
   const onEvent = onEventFromAny<[NavigationEvent]>(onEnter, onLeave, onStay);
-  const nav = trackValue<[Page, number?]>(navHistory.init());
+  const nav = trackValue<[Page, PageEntry?]>([navHistory.init()]);
   const readPage: AfterEvent<[Page]> = nav.read.keep.thru(([page]) => page);
   let next: Promise<any> = Promise.resolve();
 
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
-    const [enterPage, pageId] = navHistory.return(event);
+    const [enterPage, pageId] = navHistory.return(nav.it[1], event);
 
     nav.it = [enterPage.to, pageId];
     dispatcher.dispatch(enterPage);
@@ -108,6 +108,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
     function doNavigate(): boolean {
 
+      let fromEntry: PageEntry | undefined;
       let toPage: TargetPage;
       let toEntry: PageEntry | undefined;
 
@@ -119,7 +120,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           return prepared; // Navigation cancelled
         }
 
-        [toPage, toEntry] = prepared;
+        [fromEntry, toPage, toEntry] = prepared;
 
         history[method](toHistoryState(toPage.data, toEntry.id), toPage.title || '', toPage.url.href);
       } catch (e) {
@@ -127,19 +128,20 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
         throw e;
       }
 
-      const enterPage = navHistory[whenEnter](toPage, toEntry);
+      const enterPage = navHistory[whenEnter](fromEntry, toPage, toEntry);
 
-      nav.it = [enterPage.to, toEntry.id];
+      nav.it = [enterPage.to, toEntry];
 
       return dispatcher.dispatch(enterPage);
     }
 
-    function prepare(): [TargetPage, PageEntry] | false {
+    function prepare(): [PageEntry | undefined, TargetPage, PageEntry] | false {
       if (next !== promise) {
         return stay();
       }
 
-      const [leavePage, toEntry] = navHistory.leave(whenLeave, nav.it[0], nav.it[1], urlTarget);
+      const [fromPage, fromEntry] = nav.it;
+      const [leavePage, toEntry] = navHistory.leave(whenLeave, fromPage, urlTarget);
 
       if (!dispatcher.dispatch(leavePage) || next !== promise) {
         return stay(toEntry);
@@ -154,6 +156,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       }
 
       return [
+        fromEntry,
         {
           url: finalTarget.url,
           title: finalTarget.title,

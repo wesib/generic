@@ -31,7 +31,6 @@ export class NavHistory {
 
   private readonly _location: Location;
   private readonly _history: History;
-  private current?: PageEntry;
   private readonly _entries = new Map<number, PageEntry>();
   private _lastId = 0;
 
@@ -41,29 +40,24 @@ export class NavHistory {
     this._history = window.history;
   }
 
-  init(): [Page, number?] {
+  init(): Page {
 
-    const [data, pageId] = toNavData(this._history.state);
-    const entry = this._entry(pageId);
+    const [data] = toNavData(this._history.state);
 
-    return [
-      {
-        url: new URL(this._location.href),
-        data,
-        get: entry ? request => entry.getParam(request) : noop,
-      },
-      pageId,
-    ];
+    return {
+      url: new URL(this._location.href),
+      data,
+      get: noop,
+    };
   }
 
   leave(
       when: 'pre-open' | 'pre-replace',
       from: Page,
-      fromId: number | undefined,
       to: Navigation.URLTarget,
   ): [LeavePageEvent, PageEntry] {
 
-    const toEntry = this._newEntry(fromId);
+    const toEntry = new PageEntry(this, ++this._lastId);
 
     class LeaveEvent extends LeavePageEvent {
 
@@ -98,29 +92,18 @@ export class NavHistory {
     return pageId != null ? this._entries.get(pageId) : undefined;
   }
 
-  private _newEntry(currentPageId?: number): PageEntry {
-    this.current = currentPageId != null ? this._entries.get(currentPageId) : undefined;
-    return new PageEntry(this, ++this._lastId);
-  }
-
-  open(page: TargetPage, entry: PageEntry): EnterPageEvent {
+  open(fromEntry: PageEntry | undefined, page: TargetPage, entry: PageEntry): EnterPageEvent {
     this._entries.set(entry.id, entry);
-
-    const { current } = this;
-
-    if (current) {
+    if (fromEntry) {
       // Forget all entries starting from next one
-      for (let e = current.next; e; e = e.next) {
+      for (let e = fromEntry.next; e; e = e.next) {
         this._forget(e);
       }
 
-      entry.prev = current;
-      current.next = entry;
-      current.leave();
+      entry.prev = fromEntry;
+      fromEntry.next = entry;
+      fromEntry.leave();
     }
-
-    // Assign current entry
-    this.current = entry;
 
     const enterPage = new EnterPageEvent(
         NavigationEventType.EnterPage,
@@ -141,25 +124,20 @@ export class NavHistory {
     return enterPage;
   }
 
-  replace(page: TargetPage, entry: PageEntry): EnterPageEvent {
+  replace(fromEntry: PageEntry | undefined, page: TargetPage, entry: PageEntry): EnterPageEvent {
     this._entries.set(entry.id, entry);
+    if (fromEntry) {
 
-    const current = this.current;
-
-    if (current) {
-
-      const prev = current.prev;
+      const prev = fromEntry.prev;
 
       if (prev) {
         entry.prev = prev;
         prev.next = entry;
       }
 
-      current.leave();
-      this._forget(current);
+      fromEntry.leave();
+      this._forget(fromEntry);
     }
-
-    this.current = entry;
 
     const enterPage = new EnterPageEvent(
         NavigationEventType.EnterPage,
@@ -198,12 +176,9 @@ export class NavHistory {
     return stay;
   }
 
-  return(popState: PopStateEvent): [EnterPageEvent, number?] {
-
-    const { current } = this;
-
-    if (current) {
-      current.leave();
+  return(fromEntry: PageEntry | undefined, popState: PopStateEvent): [EnterPageEvent, PageEntry?] {
+    if (fromEntry) {
+      fromEntry.leave();
     }
 
     const [data, pageId] = toNavData(popState.state);
@@ -221,12 +196,11 @@ export class NavHistory {
         },
     );
 
-    this.current = entry;
     if (entry) {
       entry.enter(enterPage);
     }
 
-    return [enterPage, pageId];
+    return [enterPage, entry];
   }
 
   private _forget(entry: PageEntry) {
