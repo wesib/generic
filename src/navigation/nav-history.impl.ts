@@ -2,15 +2,9 @@ import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesi
 import { itsEach } from 'a-iterable';
 import { noop } from 'call-thru';
 import { ContextKey__symbol, SingleContextKey } from 'context-values';
-import {
-  EnterPageEvent,
-  LeavePageEvent,
-  Navigation,
-  NavigationEventType,
-  Page,
-  StayOnPageEvent,
-  TargetPage,
-} from '../navigation';
+import { Navigation } from './navigation';
+import { EnterPageEvent, LeavePageEvent, NavigationEventType, StayOnPageEvent } from './navigation.event';
+import { Page, TargetPage } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
 
 const RoutingHistory__key = /*#__PURE__*/ new SingleContextKey<NavHistory>(

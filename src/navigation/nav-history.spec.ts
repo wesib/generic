@@ -1,6 +1,10 @@
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
-import { LeavePageEvent, Navigation, NavigationSupport, Page, PageParam } from '../navigation';
 import { LocationMock } from '../spec/location-mock';
+import { Navigation } from './navigation';
+import { NavigationSupport } from './navigation-support.feature';
+import { LeavePageEvent } from './navigation.event';
+import { Page } from './page';
+import { PageParam } from './page-param';
 import Mocked = jest.Mocked;
 
 describe('navigation', () => {
