@@ -2,8 +2,17 @@
  * @module @wesib/generic
  */
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { AfterEvent, AfterEvent__symbol, EventKeeper, OnDomEvent } from 'fun-events';
-import { NavigateEvent, PreNavigateEvent } from './navigate.event';
+import {
+  AfterEvent,
+  AfterEvent__symbol,
+  EventKeeper,
+  EventSender,
+  OnDomEvent,
+  OnEvent,
+  OnEvent__symbol,
+} from 'fun-events';
+import { EnterPageEvent, LeavePageEvent, NavigationEvent, StayOnPageEvent } from './navigation.event';
+import { Page } from './page';
 
 const Navigation__key = /*#__PURE__*/ new SingleContextKey<Navigation>('navigation');
 
@@ -14,14 +23,16 @@ const Navigation__key = /*#__PURE__*/ new SingleContextKey<Navigation>('navigati
  *
  * Fires additional navigation events the browser does not support natively.
  *
- * Implements an `EventKeeper` interface by sending current navigation locations to registered receivers.
+ * Implements an `EventSender` interface by sending {@link NavigationEvent navigation events} to registered receivers.
+ *
+ * Implements an `EventKeeper` interface by sending current {@link Page page} to registered receivers.
  *
  * Available as bootstrap context value when [[NavigationSupport]] feature is enabled.
  *
  * [History]: https://developer.mozilla.org/en-US/docs/Web/API/History
  * [Location]: https://developer.mozilla.org/en-US/docs/Web/API/Location
  */
-export abstract class Navigation implements EventKeeper<[Navigation.Location]> {
+export abstract class Navigation implements EventSender<[NavigationEvent]>, EventKeeper<[Page]> {
 
   static get [ContextKey__symbol](): ContextKey<Navigation> {
     return Navigation__key;
@@ -33,33 +44,44 @@ export abstract class Navigation implements EventKeeper<[Navigation.Location]> {
   abstract readonly length: number;
 
   /**
-   * An `OnDomEvent` registrar of pre-navigation event receivers.
+   * An `OnDomEvent` registrar of enter page event receivers.
+   */
+  abstract readonly onEnter: OnDomEvent<EnterPageEvent>;
+
+  /**
+   * An `OnDomEvent` registrar of leave page event receivers.
    *
    * These receivers may cancel navigation by calling `preventDefault()` method of received event.
    */
-  abstract readonly preNavigate: OnDomEvent<PreNavigateEvent>;
+  abstract readonly onLeave: OnDomEvent<LeavePageEvent>;
 
   /**
-   * An `OnDomEvent` registrar of navigation event receivers.
-   */
-  abstract readonly onNavigate: OnDomEvent<NavigateEvent>;
-
-  /**
-   * An `OnDomEvent` registrar of navigation cancellation event receivers.
+   * An `OnDomEvent` registrar of stay on page event receivers.
    *
-   * These receivers are informed when navigation has been cancelled by one of pre-navigation event receivers,
-   * or navigation failed due to e.g. invalid URL.
+   * These receivers are informed when navigation has been cancelled by one of leave page event receivers,
+   * navigation failed due to e.g. invalid URL, or when another navigation request initiated before the page left.
    */
-  abstract readonly dontNavigate: OnDomEvent<PreNavigateEvent>;
+  abstract readonly onStay: OnDomEvent<StayOnPageEvent>;
 
   /**
-   * An `AfterEvent` registrar of navigation location receivers.
+   * An `OnEvent` registrar of navigation events receivers.
+   *
+   * The `[OnEvent__symbol]` property is an alias of this one.
+   */
+  abstract readonly on: OnEvent<[NavigationEvent]>;
+
+  get [OnEvent__symbol](): OnEvent<[NavigationEvent]> {
+    return this.on;
+  }
+
+  /**
+   * An `AfterEvent` registrar of current page receivers.
    *
    * The `[AfterEvent__symbol]` property is an alias of this one.
    */
-  abstract readonly read: AfterEvent<[Navigation.Location]>;
+  abstract readonly read: AfterEvent<[Page]>;
 
-  get [AfterEvent__symbol](): AfterEvent<[Navigation.Location]> {
+  get [AfterEvent__symbol](): AfterEvent<[Page]> {
     return this.read;
   }
 
@@ -103,7 +125,7 @@ export abstract class Navigation implements EventKeeper<[Navigation.Location]> {
   }
 
   /**
-   * Navigates to the given navigation `target`.
+   * Opens a page by navigating to the given `target`.
    *
    * Appends an entry to navigation history.
    *
@@ -114,10 +136,10 @@ export abstract class Navigation implements EventKeeper<[Navigation.Location]> {
    *
    * @returns A promise resolved to `true` if navigated successfully, or to `false` otherwise.
    */
-  abstract navigate(target: Navigation.Target | string | URL): Promise<boolean>;
+  abstract open(target: Navigation.Target | string | URL): Promise<boolean>;
 
   /**
-   * Updates the most recent entry of navigation history.
+   * Replaces the most recent entry in navigation history with the given `target`.
    *
    * @param target  Either navigation target or URL to replace the latest history entry with.
    * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually update the history.
@@ -135,7 +157,7 @@ export namespace Navigation {
   /**
    * Navigation target.
    *
-   * This is passed to [[Navigation.assign]] and [[Navigation.replace]] methods.
+   * This is passed to [[Navigation.open]] and [[Navigation.replace]] methods.
    */
   export interface Target {
 
@@ -162,23 +184,6 @@ export namespace Navigation {
   export interface URLTarget extends Target {
 
     readonly url: URL;
-
-  }
-
-  /**
-   * Navigation location. Represents navigation history entry.
-   */
-  export interface Location {
-
-    /**
-     * Current page location URL.
-     */
-    readonly url: URL;
-
-    /**
-     * Current history entry data.
-     */
-    readonly data?: any;
 
   }
 

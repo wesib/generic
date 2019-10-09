@@ -34,7 +34,7 @@ export class RoutingHistory {
   init(router: Router) {
     router.on(stage => {
       switch (stage.action) {
-        case 'navigate':
+        case 'open':
         case 'replace':
         case 'abort':
 
@@ -61,7 +61,7 @@ export class RoutingHistory {
     return id ? this._entries.get(id) : undefined;
   }
 
-  newEntry({ data }: Navigation.Location): RoutingHistoryEntry {
+  newEntry({ data }: Navigation.Target): RoutingHistoryEntry {
     if (this.future) {
       return this.future;
     }
@@ -73,7 +73,7 @@ export class RoutingHistory {
     return this.future = new RoutingHistoryEntry(this, ++this._lastId);
   }
 
-  navigate(to: RoutingHistoryEntry) {
+  open(to: RoutingHistoryEntry) {
     this._entries.set(to.id, to);
 
     const { current } = this;
@@ -173,8 +173,8 @@ export class RoutingHistoryEntry {
     return newHandle.get();
   }
 
-  navigate(stage: RoutingStop) {
-    this._history.navigate(this);
+  open(stage: RoutingStop) {
+    this._history.open(this);
     this.enter(stage);
   }
 

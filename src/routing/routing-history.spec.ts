@@ -61,7 +61,7 @@ describe('routing', () => {
           expect(route.param(param)).toBeUndefined();
         });
         it('is undefined when not provided', async () => {
-          await navigation.navigate('/other');
+          await navigation.open('/other');
           expect(route.param(param)).toBeUndefined();
         });
       });
@@ -72,40 +72,40 @@ describe('routing', () => {
         it('makes parameter available in future route', async () => {
 
           const promise = new Promise<string | undefined>(resolve => router.on.once(stage => {
-            if (stage.action === 'pre-navigate') {
+            if (stage.action === 'pre-open') {
               stage.param(param, 'init');
               resolve(stage.to.param(param));
             }
           }));
 
-          await navigation.navigate('/other');
+          await navigation.open('/other');
 
           expect(await promise).toBe('init');
         });
         it('makes parameter available in navigated route', async () => {
 
           const promise = new Promise<string | undefined>(resolve => router.on(stage => {
-            if (stage.action === 'pre-navigate') {
+            if (stage.action === 'pre-open') {
               stage.param(param, 'init');
-            } else if (stage.action === 'navigate') {
+            } else if (stage.action === 'open') {
               resolve(stage.to.param(param));
             }
           }));
 
-          await navigation.navigate('/other');
+          await navigation.open('/other');
 
           expect(await promise).toBe('init');
           expect(route.param(param)).toBe('init');
         });
         it('refines existing parameter', async () => {
           router.on.once(stage => {
-            if (stage.action === 'pre-navigate') {
+            if (stage.action === 'pre-open') {
               stage.param(param, 'init');
               stage.param(param, 'new');
             }
           });
 
-          await navigation.navigate('/other');
+          await navigation.open('/other');
 
           expect(route.param(param)).toBe('new');
           expect(handle.refine).toHaveBeenCalledWith(expect.anything(), 'new');
@@ -113,7 +113,7 @@ describe('routing', () => {
         });
         it('updates history data', async () => {
           router.on.once(stage => {
-            if (stage.action === 'pre-navigate') {
+            if (stage.action === 'pre-open') {
               stage.param(param, 'init');
               stage.param(param, 'new');
             }
@@ -121,7 +121,7 @@ describe('routing', () => {
 
           const data = { some: 'test' };
 
-          await navigation.navigate({ url: '/other', data });
+          await navigation.open({ url: '/other', data });
 
           expect(route.param(param)).toBe('new');
           expect(route.data).toMatchObject(data);
@@ -131,13 +131,13 @@ describe('routing', () => {
       describe('abort', () => {
         it('aborts parameter assignment', async () => {
           router.on.once(stage => {
-            if (stage.action === 'pre-navigate') {
+            if (stage.action === 'pre-open') {
               stage.param(param, 'init');
               stage.abort();
             }
           });
 
-          await navigation.navigate('/other');
+          await navigation.open('/other');
 
           expect(route.url.href).toBe('http://localhost/index');
           expect(route.param(param)).toBeUndefined();
@@ -149,19 +149,19 @@ describe('routing', () => {
       });
     });
 
-    describe('navigate', () => {
+    describe('open', () => {
       it('forgets unavailable entries', async () => {
-        await navigation.navigate('/other');
+        await navigation.open('/other');
 
         router.on.once(stage => {
-          if (stage.action === 'pre-navigate') {
+          if (stage.action === 'pre-open') {
             stage.param(param, '1');
           }
         });
 
-        await navigation.navigate('/second');
+        await navigation.open('/second');
         navigation.back();
-        await navigation.navigate('/third');
+        await navigation.open('/third');
 
         expect(route.param(param)).toBeUndefined();
         expect(handle.leave).toHaveBeenCalledTimes(1);
@@ -172,12 +172,12 @@ describe('routing', () => {
     describe('replace', () => {
       it('replaces router history entry', async () => {
         router.on.once(stage => {
-          if (stage.action === 'pre-navigate') {
+          if (stage.action === 'pre-open') {
             stage.param(param, 'init');
           }
         });
 
-        await navigation.navigate('/other');
+        await navigation.open('/other');
 
         const [param2, handle2] = newParam();
 
@@ -201,8 +201,8 @@ describe('routing', () => {
         expect(handle2.forget).not.toHaveBeenCalled();
       });
       it('replaces second router history entry', async () => {
-        await navigation.navigate('/first');
-        await navigation.navigate('/other');
+        await navigation.open('/first');
+        await navigation.open('/other');
         router.on.once(stage => {
           if (stage.action === 'pre-replace') {
             stage.param(param, 'updated');
@@ -234,22 +234,22 @@ describe('routing', () => {
     describe('back', () => {
       it('restores previous entry', async () => {
         router.on.once(stage => {
-          if (stage.action === 'pre-navigate') {
+          if (stage.action === 'pre-open') {
             stage.param(param, 'init');
           }
         });
 
-        await navigation.navigate('/other');
+        await navigation.open('/other');
 
         const [param2, handle2] = newParam();
 
         router.on.once(stage => {
-          if (stage.action === 'pre-navigate') {
+          if (stage.action === 'pre-open') {
             stage.param(param2, 'updated');
           }
         });
 
-        await navigation.navigate('/second');
+        await navigation.open('/second');
 
         expect(route.param(param)).toBeUndefined();
         expect(route.param(param2)).toBe('updated');

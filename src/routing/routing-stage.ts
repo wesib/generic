@@ -8,7 +8,7 @@ export type RoutingStage = RoutingStart | RoutingStop;
 
 export interface RoutingStart {
 
-  readonly action: 'pre-navigate' | 'pre-replace';
+  readonly action: 'pre-open' | 'pre-replace';
 
   readonly from: Route;
 
@@ -22,7 +22,7 @@ export interface RoutingStart {
 
 export interface RoutingStop {
 
-  readonly action: 'navigate' | 'replace' | 'return' | 'abort';
+  readonly action: 'open' | 'replace' | 'return' | 'abort';
 
   readonly to: Route;
 

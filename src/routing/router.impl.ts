@@ -26,12 +26,12 @@ export class Router extends Router_ {
 
     this._route = (trackValue() as ValueTracker<Route>).by(route);
 
-    const start: OnEvent<[RoutingStart]> = navigation.preNavigate.thru_(
+    const leave: OnEvent<[RoutingStart]> = navigation.onLeave.thru_(
         event => {
 
           const future = history.newEntry(event.from);
           const stage: RoutingStart = {
-            action: event.action,
+            action: event.when,
             from: this._route.it,
             to: {
               url: event.to.url,
@@ -51,8 +51,8 @@ export class Router extends Router_ {
           return stage;
         },
     );
-    const stop: OnEvent<[RoutingStop]> = navigation.onNavigate.thru_(
-        ({ action, to: { url, data} }) => ({
+    const enter: OnEvent<[RoutingStop]> = navigation.onEnter.thru_(
+        ({ when: action, to: { url, data} }) => ({
           action,
           to: {
             url,
@@ -61,11 +61,11 @@ export class Router extends Router_ {
           },
         }),
     );
-    const abort: OnEvent<[RoutingStop]> = navigation.dontNavigate.thru_(
+    const stay: OnEvent<[RoutingStop]> = navigation.onStay.thru_(
         () => ({ action: 'abort' as const, to: this._route.it })
     );
 
-    this.on = onEventFromAny<[RoutingStage]>(start, stop, abort);
+    this.on = onEventFromAny<[RoutingStage]>(leave, enter, stay);
 
     history.init(this);
 

@@ -1,14 +1,17 @@
 /**
  * @module @wesib/generic
  */
+import { BootstrapWindow } from '@wesib/wesib';
 import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
 import { AfterEvent, EventKeeper } from 'fun-events';
 import { Navigation } from './navigation';
+import { Page, TargetPage } from './page';
+import Target = Navigation.Target;
 
 /**
  * Navigation agent signature.
  *
- * The agent is called by navigation method in pre-navigation phase and may alter navigation processing.
+ * The agent is called by navigation methods when leaving current page and may alter navigation processing.
  * E.g. change navigation target. For that it should be registered in appropriate context.
  *
  * All registered agents are organized into chain. The first agent in chain is called by navigation method.
@@ -18,16 +21,16 @@ export type NavigationAgent =
  * @param next  Either calls the next agent in chain, or applies the final navigation target if this agent is the last
  * one. Not calling this function effectively prevents navigation.
  * Accepts an optional [[Navigation.Target]] parameter. The original target will be used instead when omitted.
- * @param action  Navigation action. Either `pre-navigate`, or `pre-replace`.
- * @param from  Source navigation location.
- * @param to  Navigation target.
+ * @param when  When navigation occurred. Either `pre-open`, or `pre-replace`.
+ * @param from  The page to leave.
+ * @param to  Navigation target page.
  */
     (
         this: void,
-        next: (this: void, target?: Partial<Navigation.URLTarget>) => void,
-        action: 'pre-navigate' | 'pre-replace',
-        from: Navigation.Location,
-        to: Navigation.URLTarget,
+        next: (this: void, target?: Target) => void,
+        when: 'pre-open' | 'pre-replace',
+        from: Page,
+        to: TargetPage,
     ) => void;
 
 class NavigationAgentKey
@@ -45,18 +48,21 @@ class NavigationAgentKey
           EventKeeper<NavigationAgent[]> | NavigationAgent,
           AfterEvent<NavigationAgent[]>>,
   ): NavigationAgent.Combined {
-    return (next, action, from, to) => {
+
+    const { document } = opts.context.get(BootstrapWindow);
+
+    return (next, when, from, to) => {
 
       const result = opts.byDefault(() => combinedAgent);
 
-      return result ? result(next, action, from, to) : next(to);
+      return result ? result(next, when, from, to) : next(to);
     };
 
     function combinedAgent(
         next: (this: void, target: Navigation.URLTarget) => void,
-        action: 'pre-navigate' | 'pre-replace',
-        from: Navigation.Location,
-        to: Navigation.URLTarget,
+        when: 'pre-open' | 'pre-replace',
+        from: Page,
+        to: TargetPage,
     ): void {
 
       let agents!: NavigationAgent[];
@@ -65,7 +71,7 @@ class NavigationAgentKey
 
       return navigate(0, to);
 
-      function navigate(agentIdx: number, agentTo: Navigation.URLTarget): void {
+      function navigate(agentIdx: number, agentTo: TargetPage): void {
 
         const agent = agents[agentIdx];
 
@@ -79,9 +85,16 @@ class NavigationAgentKey
                   url: nextURL = agentTo.url,
                   title: nextTitle = agentTo.title,
                   data: nextData = agentTo.data,
-                }: Partial<Navigation.URLTarget> = agentTo,
-            ) => navigate(agentIdx + 1, { url: nextURL, title: nextTitle, data: nextData }),
-            action,
+                }: Navigation.Target = agentTo,
+            ) => navigate(
+                agentIdx + 1,
+                {
+                  url: new URL(String(nextURL), document.baseURI),
+                  title: nextTitle,
+                  data: nextData,
+                }
+            ),
+            when,
             from,
             agentTo,
         );
@@ -103,16 +116,16 @@ export namespace NavigationAgent {
    * @param next  Either calls the next agent in chain, or applies the final navigation target if this agent is the last
    * one. Not calling this function effectively prevents navigation.
    * Accepts an optional [[Navigation.Target]] parameter. The original target will be used instead when omitted.
-   * @param action  Navigation action. Either `pre-navigate`, or `pre-replace`.
-   * @param from  Source navigation location.
-   * @param to  Navigation target.
+   * @param when  When navigation occurred. Either `pre-open`, or `pre-replace`.
+   * @param from  The page to leave.
+   * @param to  Navigation target page.
    */
       (
           this: void,
           next: (this: void, target: Navigation.URLTarget) => void,
-          action: 'pre-navigate' | 'pre-replace',
-          from: Navigation.Location,
-          to: Navigation.URLTarget,
+          when: 'pre-open' | 'pre-replace',
+          from: Page,
+          to: TargetPage,
       ) => void;
 
 }

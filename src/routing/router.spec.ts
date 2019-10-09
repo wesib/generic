@@ -1,6 +1,6 @@
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { afterEventFrom, EventEmitter, onDomEventBy, onEventFrom, trackValue, ValueTracker } from 'fun-events';
-import { NavigateEvent, Navigation, PreNavigateEvent } from '../navigation';
+import { EnterPageEvent, LeavePageEvent, Navigation, NavigationEventType, Page, StayOnPageEvent } from '../navigation';
 import { Route } from './route';
 import { Router } from './router';
 import { RoutingStage, RoutingStart, RoutingStop } from './routing-stage';
@@ -9,21 +9,21 @@ import { RoutingSupport } from './routing-support.feature';
 describe('Router', () => {
 
   let navigation: Navigation;
-  let preNavigate: EventEmitter<[PreNavigateEvent]>;
-  let onNavigate: EventEmitter<[NavigateEvent]>;
-  let dontNavigate: EventEmitter<[PreNavigateEvent]>;
-  let location: ValueTracker<Navigation.Location>;
+  let onLeave: EventEmitter<[LeavePageEvent]>;
+  let onEnter: EventEmitter<[EnterPageEvent]>;
+  let onStay: EventEmitter<[StayOnPageEvent]>;
+  let location: ValueTracker<Page>;
 
   beforeEach(() => {
-    preNavigate = new EventEmitter();
-    onNavigate = new EventEmitter();
-    dontNavigate = new EventEmitter();
+    onLeave = new EventEmitter();
+    onEnter = new EventEmitter();
+    onStay = new EventEmitter();
     location = trackValue({ url: new URL('http://localhost/index'), data: 'test' });
     navigation = {
       read: location.read,
-      preNavigate: onDomEventBy(preNavigate.on),
-      onNavigate: onDomEventBy(onNavigate.on),
-      dontNavigate: onDomEventBy(dontNavigate.on),
+      onLeave: onDomEventBy(onLeave.on),
+      onEnter: onDomEventBy(onEnter.on),
+      onStay: onDomEventBy(onStay.on),
     } as Navigation;
   });
 
@@ -70,55 +70,53 @@ describe('Router', () => {
   });
   it('notifies when route requested', () => {
 
-    const event = new NavigateEvent(
-        'wesib:preNavigate',
+    const event = new LeavePageEvent(
+        NavigationEventType.LeavePage,
         {
-          action: 'pre-navigate',
+          when: 'pre-open',
           from: { url: route.url, data: route.data, },
           to: { url: new URL('/other', route.url), data: 'new', },
         },
     );
 
-    preNavigate.send(event);
+    onLeave.send(event);
 
     const start = stage as RoutingStart;
 
-    expect(start.action).toBe('pre-navigate');
+    expect(start.action).toBe('pre-open');
     expect(start.from).toBe(route);
     expect(start.to.url.href).toBe(event.to.url.href);
     expect(start.to.data).toEqual(event.to.data);
   });
   it('notifies when route reached', () => {
 
-    const event = new NavigateEvent(
-        'wesib:navigate',
+    const event = new EnterPageEvent(
+        NavigationEventType.EnterPage,
         {
-          action: 'navigate',
-          from: { url: route.url, data: route.data, },
+          when: 'open',
           to: { url: new URL('/other', route.url), data: 'new', },
         },
     );
 
-    onNavigate.send(event);
+    onEnter.send(event);
 
     const stop = stage as RoutingStop;
 
-    expect(stop.action).toBe('navigate');
+    expect(stop.action).toBe('open');
     expect(stop.to.url.href).toBe(event.to.url.href);
     expect(stop.to.data).toEqual(event.to.data);
   });
   it('notifies when route aborted', () => {
 
-    const event = new NavigateEvent(
-        'wesib:dontNavigate',
+    const event = new StayOnPageEvent(
+        NavigationEventType.StayOnPage,
         {
-          action: 'pre-navigate',
           from: { url: route.url, data: route.data, },
           to: { url: new URL('/other', route.url), data: 'new' },
         },
     );
 
-    dontNavigate.send(event);
+    onStay.send(event);
 
     const stop = stage as RoutingStop;
 
@@ -142,21 +140,21 @@ describe('Router', () => {
     describe('abort', () => {
       it('aborts navigation', () => {
 
-        const event = new NavigateEvent(
-            'wesib:preNavigate',
+        const event = new LeavePageEvent(
+            NavigationEventType.LeavePage,
             {
-              action: 'pre-navigate',
+              when: 'pre-open',
               from: { url: route.url, data: route.data, },
               to: { url: new URL('/other', route.url), data: 'new', },
             },
         );
 
         router.on(a => {
-          if (a.action === 'pre-navigate') {
+          if (a.action === 'pre-open') {
             a.abort();
           }
         });
-        preNavigate.send(event);
+        onLeave.send(event);
         expect(event.defaultPrevented).toBe(true);
       });
     });
