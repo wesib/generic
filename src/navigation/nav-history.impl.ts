@@ -88,20 +88,16 @@ export class NavHistory {
     ];
   }
 
-  private _entry(pageId?: number): PageEntry | undefined {
-    return pageId != null ? this._entries.get(pageId) : undefined;
-  }
-
-  open(fromEntry: PageEntry | undefined, page: TargetPage, entry: PageEntry): EnterPageEvent {
-    this._entries.set(entry.id, entry);
+  pushState(fromEntry: PageEntry | undefined, toPage: TargetPage, toEntry: PageEntry): EnterPageEvent {
+    this._entries.set(toEntry.id, toEntry);
     if (fromEntry) {
       // Forget all entries starting from next one
       for (let e = fromEntry.next; e; e = e.next) {
         this._forget(e);
       }
 
-      entry.prev = fromEntry;
-      fromEntry.next = entry;
+      toEntry.prev = fromEntry;
+      fromEntry.next = toEntry;
       fromEntry.leave();
     }
 
@@ -110,29 +106,29 @@ export class NavHistory {
         {
           when: 'open',
           to: {
-            url: page.url,
-            data: page.data,
+            url: toPage.url,
+            data: toPage.data,
             get(request) {
-              return entry.getParam(request);
+              return toEntry.getParam(request);
             },
           },
         },
     );
 
-    entry.enter(enterPage);
+    toEntry.enter(enterPage);
 
     return enterPage;
   }
 
-  replace(fromEntry: PageEntry | undefined, page: TargetPage, entry: PageEntry): EnterPageEvent {
-    this._entries.set(entry.id, entry);
+  replaceState(fromEntry: PageEntry | undefined, toPage: TargetPage, toEntry: PageEntry): EnterPageEvent {
+    this._entries.set(toEntry.id, toEntry);
     if (fromEntry) {
 
       const prev = fromEntry.prev;
 
       if (prev) {
-        entry.prev = prev;
-        prev.next = entry;
+        toEntry.prev = prev;
+        prev.next = toEntry;
       }
 
       fromEntry.leave();
@@ -144,18 +140,23 @@ export class NavHistory {
         {
           when: 'replace',
           to: {
-            url: page.url,
-            data: page.data,
+            url: toPage.url,
+            data: toPage.data,
             get(request) {
-              return entry.getParam(request);
+              return toEntry.getParam(request);
             },
           },
         },
     );
 
-    entry.enter(enterPage);
+    toEntry.enter(enterPage);
 
     return enterPage;
+  }
+
+  private _forget(entry: PageEntry) {
+    this._entries.delete(entry.id);
+    entry.forget();
   }
 
   stay(from: Page, to: Navigation.URLTarget, toEntry: PageEntry | undefined, reason?: any): StayOnPageEvent {
@@ -182,11 +183,11 @@ export class NavHistory {
     }
 
     const [data, pageId] = toNavData(popState.state);
-    const entry = this._entry(pageId);
+    const toEntry = pageId != null ? this._entries.get(pageId) : undefined;
     const to: Page = {
       url: new URL(this._location.href),
       data: data,
-      get: entry ? request => entry.getParam(request) : noop,
+      get: toEntry ? request => toEntry.getParam(request) : noop,
     };
     const enterPage = new EnterPageEvent(
         NavigationEventType.EnterPage,
@@ -196,16 +197,11 @@ export class NavHistory {
         },
     );
 
-    if (entry) {
-      entry.enter(enterPage);
+    if (toEntry) {
+      toEntry.enter(enterPage);
     }
 
-    return [enterPage, entry];
-  }
-
-  private _forget(entry: PageEntry) {
-    this._entries.delete(entry.id);
-    entry.forget();
+    return [enterPage, toEntry];
   }
 
 }

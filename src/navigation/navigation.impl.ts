@@ -66,11 +66,11 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     }
 
     open(target: Navigation_.Target | string | URL) {
-      return navigate('pre-open', 'open', 'pushState', target);
+      return navigate('pre-open', 'pushState', target);
     }
 
     replace(target: Navigation_.Target | string | URL) {
-      return navigate('pre-replace', 'replace', 'replaceState', target);
+      return navigate('pre-replace', 'replaceState', target);
     }
 
   }
@@ -96,7 +96,6 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
   function navigate(
       whenLeave: 'pre-open' | 'pre-replace',
-      whenEnter: 'open' | 'replace',
       method: 'pushState' | 'replaceState',
       target: Navigation_.Target | string | URL,
   ): Promise<boolean> {
@@ -128,7 +127,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
         throw e;
       }
 
-      const enterPage = navHistory[whenEnter](fromEntry, toPage, toEntry);
+      const enterPage = navHistory[method](fromEntry, toPage, toEntry);
 
       nav.it = [enterPage.to, toEntry];
 
