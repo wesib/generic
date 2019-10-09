@@ -1,6 +1,8 @@
 /**
  * @module @wesib/generic
  */
+import { PageParam } from './page-param';
+
 /**
  * Navigated page representation.
  *
@@ -17,6 +19,15 @@ export interface Page {
    * History entry data.
    */
   readonly data?: any;
+
+  /**
+   * Requests this page navigation parameter.
+   *
+   * @param request  Page navigation parameter request.
+   *
+   * @returns Either requested parameter value, or `undefined` if requested parameter is not assigned to the page.
+   */
+  get<T>(request: PageParam.Request<T, unknown>): T | undefined;
 
 }
 

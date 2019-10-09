@@ -1,5 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { DomEventDispatcher, onEventFromAny, trackValue } from 'fun-events';
+import { AfterEvent, DomEventDispatcher, onEventFromAny, trackValue } from 'fun-events';
+import { NAV_PAGE_ID, NavHistory, toHistoryState, toNavData } from './nav-history.impl';
 import { Navigation as Navigation_ } from './navigation';
 import { NavigationAgent } from './navigation-agent';
 import {
@@ -10,37 +11,54 @@ import {
   StayOnPageEvent,
 } from './navigation.event';
 import { Page, TargetPage } from './page';
+import { PageParam } from './page-param';
 
 export function createNavigation(context: BootstrapContext): Navigation_ {
 
   const window = context.get(BootstrapWindow);
   const { document, location, history } = window;
   const dispatcher = new DomEventDispatcher(window);
+  const navHistory = context.get(NavHistory);
   const agent = context.get(NavigationAgent);
   const onEnter = dispatcher.on<EnterPageEvent>(NavigationEventType.EnterPage);
   const onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage);
   const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
   const onEvent = onEventFromAny<[NavigationEvent]>(onEnter, onLeave, onStay);
-  const nav = trackValue<Page>({
-    url: new URL(location.href),
-    data: history.state,
-  });
+  const initNavData = toNavData(history.state);
+  const nav = trackValue<[Page, number?]>([
+    {
+      url: new URL(location.href),
+      data: initNavData[0],
+      get(request) {
+        return getParam(initNavData[1], request);
+      },
+    },
+    initNavData[1],
+  ]);
+  const readPage: AfterEvent<[Page]> = nav.read.keep.thru(([page]) => page);
   let next: Promise<any> = Promise.resolve();
 
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
-    const data = event.state;
-    const to: Page = { url: new URL(location.href), data: data };
-
-    dispatcher.dispatch(
-        new EnterPageEvent(
-            NavigationEventType.EnterPage,
-            {
-              when: 'return',
-              to,
-            })
+    const popNavData = toNavData(event.state);
+    const to: Page = {
+      url: new URL(location.href),
+      data: popNavData[0],
+      get(request) {
+        return getParam(popNavData[1], request);
+      },
+    };
+    const enterPage = new EnterPageEvent(
+        NavigationEventType.EnterPage,
+        {
+          when: 'return',
+          to,
+        },
     );
-    nav.it = to;
+
+    (enterPage as any)[NAV_PAGE_ID] = popNavData[1];
+    dispatcher.dispatch(enterPage);
+    nav.it = [to, popNavData[1]];
   });
 
   class Navigation extends Navigation_ {
@@ -66,7 +84,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     }
 
     get read() {
-      return nav.read;
+      return readPage;
     }
 
     go(delta?: number): void {
@@ -83,13 +101,17 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
   }
 
-  return new Navigation();
+  const navigation = new Navigation();
+
+  navHistory.init(navigation);
+
+  return navigation;
 
   function toURL(url: string | URL | undefined): URL {
     if (typeof url === 'string') {
       return new URL(url, document.baseURI);
     }
-    return url || nav.it.url;
+    return url || nav.it[0].url;
   }
 
   function urlTargetOf(target: Navigation_.Target | string | URL): Navigation_.URLTarget {
@@ -117,6 +139,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     function doNavigate(): boolean {
 
       let targetPage: TargetPage;
+      let pageId: number | undefined;
 
       try {
 
@@ -126,9 +149,9 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           return prepared; // Navigation cancelled
         }
 
-        targetPage = prepared;
+        [targetPage, pageId] = prepared;
 
-        history[method](targetPage.data, targetPage.title || '', targetPage.url.href);
+        history[method](toHistoryState(targetPage.data, pageId), targetPage.title || '', targetPage.url.href);
       } catch (e) {
         stay(e);
         throw e;
@@ -137,9 +160,12 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       const enteredPage: Page = {
         url: targetPage.url,
         data: targetPage.data,
+        get(request) {
+          return targetPage.get(request);
+        },
       };
 
-      nav.it = enteredPage;
+      nav.it = [enteredPage, pageId];
 
       return dispatcher.dispatch(new EnterPageEvent(
           NavigationEventType.EnterPage,
@@ -150,22 +176,37 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       ));
     }
 
-    function prepare(): TargetPage | false {
+    function prepare(): [TargetPage, number?] | false {
       if (next !== promise) {
         return stay();
       }
 
+      const toEntry = navHistory.newEntry(nav.it[1]);
+      const to: TargetPage = {
+        url: urlTarget.url,
+        title: urlTarget.title,
+        data: urlTarget.data,
+        get(request) {
+          return toEntry && toEntry.getParam(request);
+        },
+      };
+
+      class LeavePage extends LeavePageEvent {
+
+        set<T, O>(request: PageParam.Request<T, O>, options: O): this {
+          toEntry.setParam(this, request, options);
+          return this;
+        }
+
+      }
+
       if (
-          !dispatcher.dispatch(new LeavePageEvent(
+          !dispatcher.dispatch(new LeavePage(
               NavigationEventType.LeavePage,
               {
                 when: whenLeave,
-                from: nav.it,
-                to: {
-                  url: urlTarget.url,
-                  title: urlTarget.title,
-                  data: urlTarget.data,
-                },
+                from: nav.it[0],
+                to,
               },
           ))
           || next !== promise) {
@@ -174,29 +215,42 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
       let finalTarget: Navigation_.URLTarget | undefined;
 
-      agent(t => finalTarget = t, whenLeave, nav.it, urlTarget);
+      agent(t => finalTarget = t, whenLeave, nav.it[0], to);
 
       if (!finalTarget) {
         return stay(); // Some agent didn't call `next()`.
       }
 
-      return {
-        url: finalTarget.url,
-        title: finalTarget.title,
-        data: finalTarget.data,
-      };
+      return [
+        {
+          url: finalTarget.url,
+          title: finalTarget.title,
+          data: finalTarget.data,
+          get(request) {
+            return to.get(request);
+          },
+        },
+        toEntry.id,
+      ];
     }
 
     function stay(reason?: any): false {
       dispatcher.dispatch(new StayOnPageEvent(
           NavigationEventType.StayOnPage,
           {
-            from: nav.it,
+            from: nav.it[0],
             to: urlTarget,
             reason,
           },
       ));
       return false;
     }
+  }
+
+  function getParam<T>(pageId: number | undefined, request: PageParam.Request<T, unknown>): T | undefined {
+
+    const entry = navHistory.entry(pageId);
+
+    return entry && entry.getParam(request);
   }
 }

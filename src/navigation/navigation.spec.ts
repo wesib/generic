@@ -3,6 +3,7 @@ import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from 
 import { asis, noop } from 'call-thru';
 import { afterEventFrom, onEventFrom } from 'fun-events';
 import { LocationMock } from '../spec/location-mock';
+import { toHistoryState } from './nav-history.impl';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
 import { NavigationSupport } from './navigation-support.feature';
@@ -108,17 +109,29 @@ describe('navigation', () => {
     describe('open', () => {
       it('navigates to target', async () => {
         await navigation.open({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
-        expect(locationMock.history.pushState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/other');
+        expect(locationMock.history.pushState).toHaveBeenCalledWith(
+            toHistoryState('updated', expect.anything()),
+            'new title',
+            'http://localhost/other',
+        );
         expect(location).toEqual({ url: 'http://localhost/other', data: 'updated' });
       });
       it('navigates to path', async () => {
         await navigation.open('other');
-        expect(locationMock.history.pushState).toHaveBeenCalledWith(undefined, '', 'http://localhost/other');
+        expect(locationMock.history.pushState).toHaveBeenCalledWith(
+            toHistoryState(undefined, expect.anything()),
+            '',
+            'http://localhost/other',
+        );
         expect(location).toEqual({ url: 'http://localhost/other' });
       });
       it('navigates to the same URL', async () => {
         await navigation.open({ data: 'updated', title: 'new title' });
-        expect(locationMock.history.pushState).toHaveBeenCalledWith('updated', 'new title', 'http://localhost/index');
+        expect(locationMock.history.pushState).toHaveBeenCalledWith(
+            toHistoryState('updated', expect.anything()),
+            'new title',
+            'http://localhost/index',
+        );
         expect(location).toEqual({ url: 'http://localhost/index', data: 'updated' });
       });
       it('sends navigation events', async () => {
@@ -182,15 +195,15 @@ describe('navigation', () => {
         expect(agent).toHaveBeenCalledWith(
             expect.any(Function),
             'pre-open',
-            {
+            expect.objectContaining({
               url: new URL('http://localhost/index'),
               data: 'initial',
-            },
-            {
+            }),
+            expect.objectContaining({
               url: new URL('http://localhost/other'),
               title: 'new title',
               data: 'new data',
-            },
+            }),
         );
       });
       it('cancels navigation if agent didn\'t call the next one', async () => {
@@ -221,7 +234,11 @@ describe('navigation', () => {
         navigation.onLeave.once(() => navigation.open({ url: '/second', data: 3 }));
         expect(await navigation.open('/other')).toBe(false);
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
-        expect(locationMock.history.pushState).toHaveBeenCalledWith(3, '', 'http://localhost/second');
+        expect(locationMock.history.pushState).toHaveBeenCalledWith(
+            toHistoryState(3, expect.anything()),
+            '',
+            'http://localhost/second',
+        );
         expect(locationMock.history.pushState).toHaveBeenCalledTimes(1);
         expect(location).toEqual({ url: 'http://localhost/second', data: 3 });
         expect(locationMock.window.dispatchEvent)
@@ -237,7 +254,11 @@ describe('navigation', () => {
         expect(await second).toBe(false);
         expect(await third).toBe(true);
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
-        expect(locationMock.history.pushState).toHaveBeenCalledWith(undefined, '', 'http://localhost/third');
+        expect(locationMock.history.pushState).toHaveBeenCalledWith(
+            toHistoryState(undefined, expect.anything()),
+            '',
+            'http://localhost/third',
+        );
         expect(locationMock.history.pushState).toHaveBeenCalledTimes(1);
         expect(location).toEqual({ url: 'http://localhost/third' });
         expect(locationMock.window.dispatchEvent)
@@ -248,20 +269,29 @@ describe('navigation', () => {
     describe('replace', () => {
       it('replaces location with the target', async () => {
         await navigation.replace({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
-        expect(locationMock.history.replaceState)
-            .toHaveBeenCalledWith('updated', 'new title', 'http://localhost/other');
+        expect(locationMock.history.replaceState).toHaveBeenCalledWith(
+            toHistoryState('updated', expect.anything()),
+            'new title',
+            'http://localhost/other',
+        );
         expect(location).toEqual({ url: 'http://localhost/other', data: 'updated' });
       });
       it('replaces location with the target URL', async () => {
         await navigation.replace('/other');
-        expect(locationMock.history.replaceState)
-            .toHaveBeenCalledWith(undefined, '', 'http://localhost/other');
+        expect(locationMock.history.replaceState).toHaveBeenCalledWith(
+            toHistoryState(undefined, expect.anything()),
+            '',
+            'http://localhost/other',
+        );
         expect(location).toEqual({ url: 'http://localhost/other' });
       });
       it('replaces location with the same URL', async () => {
         await navigation.replace({ data: 'updated', title: 'new title' });
-        expect(locationMock.history.replaceState)
-            .toHaveBeenCalledWith('updated', 'new title', 'http://localhost/index');
+        expect(locationMock.history.replaceState).toHaveBeenCalledWith(
+            toHistoryState('updated', expect.anything()),
+            'new title',
+            'http://localhost/index',
+        );
         expect(location).toEqual({ url: 'http://localhost/index', data: 'updated' });
       });
       it('sends navigation events', async () => {

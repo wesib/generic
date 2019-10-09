@@ -1,3 +1,4 @@
+import { noop } from 'call-thru';
 import { ContextRegistry } from 'context-values';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
@@ -26,13 +27,13 @@ describe('navigation', () => {
     beforeEach(() => {
       mockNavigate = jest.fn();
       when = 'pre-open';
-      from = { url: new URL('http://localhost/index'), data: 'initial' };
-      to = { url: new URL('http://localhost/other'), data: 'updated', title: 'New title' };
+      from = { url: new URL('http://localhost/index'), data: 'initial', get: noop };
+      to = { url: new URL('http://localhost/other'), data: 'updated', title: 'New title', get: noop };
     });
 
     it('performs navigation without agents', () => {
       agent(mockNavigate, when, from, to);
-      expect(mockNavigate).toHaveBeenCalledWith(to);
+      expect(mockNavigate).toHaveBeenCalledWith(expect.objectContaining({ ...to, get: expect.any(Function) }));
     });
     it('performs navigation without agents with `null` fallback value', () => {
       agent = registry.newValues().get(NavigationAgent, { or: null }) as NavigationAgent;
@@ -52,31 +53,47 @@ describe('navigation', () => {
       registry.provide({ a: NavigationAgent, is: next => next() });
 
       agent(mockNavigate, when, from, to);
-      expect(mockNavigate).toHaveBeenCalledWith(to);
+      expect(mockNavigate).toHaveBeenCalledWith({ ...to, get: expect.any(Function) });
     });
     it('updates URL', async () => {
       registry.provide({ a: NavigationAgent, is: next => next({ url: new URL('http://localhost/other') }) });
 
       agent(mockNavigate, when, from, to);
-      expect(mockNavigate).toHaveBeenCalledWith({ ...to, url: new URL('http://localhost/other') });
+      expect(mockNavigate).toHaveBeenCalledWith({
+        ...to,
+        url: new URL('http://localhost/other'),
+        get: expect.any(Function),
+      });
     });
     it('updates URL using path', async () => {
       registry.provide({ a: NavigationAgent, is: next => next({ url: 'other' }) });
 
       agent(mockNavigate, when, from, to);
-      expect(mockNavigate).toHaveBeenCalledWith({ ...to, url: new URL('http://localhost/other') });
+      expect(mockNavigate).toHaveBeenCalledWith({
+        ...to,
+        url: new URL('http://localhost/other'),
+        get: expect.any(Function),
+      });
     });
     it('updates title', async () => {
       registry.provide({ a: NavigationAgent, is: next => next({ title: 'other title' }) });
 
       agent(mockNavigate, when, from, to);
-      expect(mockNavigate).toHaveBeenCalledWith({ ...to, title: 'other title' });
+      expect(mockNavigate).toHaveBeenCalledWith({
+        ...to,
+        title: 'other title',
+        get: expect.any(Function),
+      });
     });
     it('updates data', async () => {
       registry.provide({ a: NavigationAgent, is: next => next({ data: 'other data' }) });
 
       agent(mockNavigate, when, from, to);
-      expect(mockNavigate).toHaveBeenCalledWith({ ...to, data: 'other data' });
+      expect(mockNavigate).toHaveBeenCalledWith({
+        ...to,
+        data: 'other data',
+        get: expect.any(Function),
+      });
     });
   });
 });
