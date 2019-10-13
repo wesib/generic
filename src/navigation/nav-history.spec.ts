@@ -226,7 +226,9 @@ describe('navigation', () => {
   });
 });
 
-export function testPageParam(value: string = ''): [PageParam<string, string>, Mocked<PageParam.Handle<string, string>>] {
+export function testPageParam(
+    value: string = '',
+): [PageParam<string, string>, Mocked<PageParam.Handle<string, string>>] {
 
   const handle: Mocked<PageParam.Handle<string, string>> = {
     get: jest.fn(() => value),
