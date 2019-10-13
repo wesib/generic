@@ -48,34 +48,34 @@ export class NavHistory {
   leave(
       when: 'pre-open' | 'pre-replace',
       from: Page,
-      to: Navigation.URLTarget,
+      toTarget: Navigation.URLTarget,
   ): [LeavePageEvent, PageEntry] {
 
     const toEntry = new PageEntry(this, ++this._lastId);
+    const to: TargetPage = {
+      url: toTarget.url,
+      title: toTarget.title,
+      data: toTarget.data,
+      get(request) {
+        return toEntry.getParam(request);
+      },
+    };
 
     class LeaveEvent extends LeavePageEvent {
 
       set<T, O>(request: PageParam.Request<T, O>, options: O): this {
-        toEntry.setParam(this, request, options);
+        toEntry.setParam(to, request, options);
         return this;
       }
 
     }
-
     return [
       new LeaveEvent(
           NavigationEventType.LeavePage,
           {
             when,
             from,
-            to: {
-              url: to.url,
-              title: to.title,
-              data: to.data,
-              get(request) {
-                return toEntry.getParam(request);
-              },
-            },
+            to,
           },
       ),
       toEntry,
@@ -95,21 +95,22 @@ export class NavHistory {
       fromEntry.leave();
     }
 
+    const to: Page = {
+      url: toPage.url,
+      data: toPage.data,
+      get(request) {
+        return toEntry.getParam(request);
+      },
+    };
     const enterPage = new EnterPageEvent(
         NavigationEventType.EnterPage,
         {
           when: 'open',
-          to: {
-            url: toPage.url,
-            data: toPage.data,
-            get(request) {
-              return toEntry.getParam(request);
-            },
-          },
+          to,
         },
     );
 
-    toEntry.enter(enterPage);
+    toEntry.enter(to);
 
     return enterPage;
   }
@@ -129,21 +130,22 @@ export class NavHistory {
       this._forget(fromEntry);
     }
 
+    const to: Page = {
+      url: toPage.url,
+      data: toPage.data,
+      get(request) {
+        return toEntry.getParam(request);
+      },
+    };
     const enterPage = new EnterPageEvent(
         NavigationEventType.EnterPage,
         {
           when: 'replace',
-          to: {
-            url: toPage.url,
-            data: toPage.data,
-            get(request) {
-              return toEntry.getParam(request);
-            },
-          },
+          to,
         },
     );
 
-    toEntry.enter(enterPage);
+    toEntry.enter(to);
 
     return enterPage;
   }
@@ -165,7 +167,7 @@ export class NavHistory {
     );
 
     if (toEntry) {
-      toEntry.stay(stay);
+      toEntry.stay(from);
     }
 
     return stay;
@@ -192,7 +194,7 @@ export class NavHistory {
     );
 
     if (toEntry) {
-      toEntry.enter(enterPage);
+      toEntry.enter(to);
     }
 
     return [enterPage, toEntry];
@@ -219,29 +221,29 @@ export class PageEntry {
     return handle && handle.get();
   }
 
-  setParam<T, O>(event: LeavePageEvent, request: PageParam.Request<T, O>, options: O): T {
+  setParam<T, O>(page: Page, request: PageParam.Request<T, O>, options: O): T {
 
     const param = request[PageParam__symbol];
     const handle: PageParam.Handle<T, O> | undefined = this._params.get(param);
 
     if (handle) {
-      handle.refine(event, options);
+      handle.refine(page, options);
       return handle.get();
     }
 
-    const newHandle = param.create(event, options);
+    const newHandle = param.create(page, options);
 
     this._params.set(param, newHandle);
 
     return newHandle.get();
   }
 
-  stay(event: StayOnPageEvent) {
-    itsEach(this._params.values(), handle => handle.stay && handle.stay(event));
+  stay(page: Page) {
+    itsEach(this._params.values(), handle => handle.stay && handle.stay(page));
   }
 
-  enter(event: EnterPageEvent) {
-    itsEach(this._params.values(), handle => handle.enter && handle.enter(event));
+  enter(page: Page) {
+    itsEach(this._params.values(), handle => handle.enter && handle.enter(page));
   }
 
   leave() {

@@ -2,7 +2,6 @@ import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from 
 import { LocationMock } from '../spec/location-mock';
 import { Navigation } from './navigation';
 import { NavigationSupport } from './navigation-support.feature';
-import { LeavePageEvent } from './navigation.event';
 import { Page } from './page';
 import { PageParam } from './page-param';
 import Mocked = jest.Mocked;
@@ -276,7 +275,7 @@ function newParam(value: string = ''): [PageParam<string, string>, Mocked<PagePa
 
   const handle: Mocked<PageParam.Handle<string, string>> = {
     get: jest.fn(() => value),
-    refine: jest.fn((_event: LeavePageEvent, newValue: string) => {
+    refine: jest.fn((_page: Page, newValue: string) => {
       value = newValue;
     }),
     enter: jest.fn(),
@@ -286,7 +285,7 @@ function newParam(value: string = ''): [PageParam<string, string>, Mocked<PagePa
   };
 
   class TestParam extends PageParam<string, string> {
-    create(_event: LeavePageEvent, initValue: string): PageParam.Handle<string, string> {
+    create(_page: Page, initValue: string): PageParam.Handle<string, string> {
       value = initValue;
       return handle;
     }

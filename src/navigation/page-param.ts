@@ -1,7 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { EnterPageEvent, LeavePageEvent, StayOnPageEvent } from './navigation.event';
+import { Page } from './page';
 
 /**
  * A key of {@link PageParam.Request page parameter request} property containing requested page parameter.
@@ -35,7 +35,7 @@ export abstract class PageParam<T, O> implements PageParam.Request<T, O> {
    *
    * @returns New page parameter value handle.
    */
-  abstract create(event: LeavePageEvent, options: O): PageParam.Handle<T, O>;
+  abstract create(event: Page, options: O): PageParam.Handle<T, O>;
 
 }
 
@@ -81,12 +81,12 @@ export namespace PageParam {
      * @param event  Leave page event to add parameter to.
      * @param options  Parameter refinement options.
      */
-    refine(event: LeavePageEvent, options: O): void;
+    refine(event: Page, options: O): void;
 
     /**
      * This method is called when the page this parameter created for is entered.
      */
-    enter?(route: EnterPageEvent): void;
+    enter?(route: Page): void;
 
     /**
      * This method is called when the page this parameter created for is left.
@@ -100,7 +100,7 @@ export namespace PageParam {
      *
      * @param event  Stay on page event indicating navigation abort.
      */
-    stay?(event: StayOnPageEvent): void;
+    stay?(event: Page): void;
 
     /**
      * This method is called when the page this parameter is created for is removed from navigation history.
