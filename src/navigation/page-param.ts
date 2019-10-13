@@ -101,9 +101,9 @@ export namespace PageParam {
      *
      * The handle won't be accessed after this method call.
      *
-     * @param page  The page the browser remains at.
+     * @param at  The page the browser remains at.
      */
-    stay?(page: Page): void;
+    stay?(at: Page): void;
 
     /**
      * This method is called when the page this parameter is created for is removed from navigation history.

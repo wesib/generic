@@ -2,7 +2,7 @@ import { noop } from 'call-thru';
 import { ContextRegistry } from 'context-values';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
-import { Page, TargetPage } from './page';
+import { Page } from './page';
 import Mock = jest.Mock;
 
 describe('navigation', () => {
@@ -22,7 +22,7 @@ describe('navigation', () => {
     let mockNavigate: Mock<void, [Navigation.Target?]>;
     let when: 'pre-open' | 'pre-replace';
     let from: Page;
-    let to: TargetPage;
+    let to: Page;
 
     beforeEach(() => {
       mockNavigate = jest.fn();

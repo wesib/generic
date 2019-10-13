@@ -3,7 +3,7 @@ import { itsEach } from 'a-iterable';
 import { ContextKey__symbol, SingleContextKey } from 'context-values';
 import { Navigation } from './navigation';
 import { EnterPageEvent, LeavePageEvent, NavigationEventType, StayOnPageEvent } from './navigation.event';
-import { Page, TargetPage } from './page';
+import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
 
 const RoutingHistory__key = /*#__PURE__*/ new SingleContextKey<NavHistory>(
@@ -22,71 +22,62 @@ export class NavHistory {
     return RoutingHistory__key;
   }
 
+  private readonly _document: Document;
   private readonly _location: Location;
   private readonly _history: History;
   private readonly _entries = new Map<number, PageEntry>();
   private _lastId = 0;
 
   constructor(bsContext: BootstrapContext) {
+
     const window = bsContext.get(BootstrapWindow);
+
+    this._document = window.document;
     this._location = window.location;
     this._history = window.history;
   }
 
-  init(): [Page, PageEntry] {
+  init(): PageEntry {
 
     const [data] = toNavData(this._history.state);
-    const entry = new PageEntry(this, ++this._lastId);
-    const page: Page = {
+    const entry = this.newEntry({
       url: new URL(this._location.href),
       data,
-      get(request) {
-        return entry.get(request);
-      },
-      set(request, options) {
-        entry.set(this, request, options);
-      }
-    };
+      title: this._document.title,
+    });
 
     this._entries.set(entry.id, entry);
-    entry.enter(page, 'init');
+    entry.enter('init');
 
-    return [page, entry];
+    return entry;
+  }
+
+  newEntry(target: Navigation.URLTarget): PageEntry {
+    return new PageEntry(this, ++this._lastId, target);
   }
 
   leave(
       when: 'pre-open' | 'pre-replace',
-      from: Page,
+      fromEntry: PageEntry,
       toTarget: Navigation.URLTarget,
   ): [LeavePageEvent, PageEntry] {
 
-    const toEntry = new PageEntry(this, ++this._lastId);
-    const to: TargetPage = {
-      url: toTarget.url,
-      title: toTarget.title,
-      data: toTarget.data,
-      get(request) {
-        return toEntry.get(request);
-      },
-      set(request, options) {
-        toEntry.set(this, request, options);
-      }
-    };
+    const toEntry = this.newEntry(toTarget);
 
     return [
       new LeavePageEvent(
           NavigationEventType.LeavePage,
           {
             when,
-            from,
-            to,
+            from: fromEntry.page,
+            to: toEntry.page,
           },
       ),
       toEntry,
     ];
   }
 
-  pushState(fromEntry: PageEntry | undefined, toPage: TargetPage, toEntry: PageEntry): EnterPageEvent {
+  pushState(fromEntry: PageEntry | undefined, toEntry: PageEntry): EnterPageEvent {
     this._entries.set(toEntry.id, toEntry);
     if (fromEntry) {
       // Forget all entries starting from next one
@@ -99,30 +90,20 @@ export class NavHistory {
       fromEntry.leave();
     }
 
-    const to: Page = {
-      url: toPage.url,
-      data: toPage.data,
-      get(request) {
-        return toEntry.get(request);
-      },
-      set(request, options) {
-        toEntry.set(this, request, options);
-      }
-    };
     const enterPage = new EnterPageEvent(
         NavigationEventType.EnterPage,
         {
           when: 'open',
-          to,
+          to: toEntry.page,
         },
     );
 
-    toEntry.enter(to, 'open');
+    toEntry.enter('open');
 
     return enterPage;
   }
 
-  replaceState(fromEntry: PageEntry | undefined, toPage: TargetPage, toEntry: PageEntry): EnterPageEvent {
+  replaceState(fromEntry: PageEntry | undefined, toEntry: PageEntry): EnterPageEvent {
     this._entries.set(toEntry.id, toEntry);
     if (fromEntry) {
 
@@ -137,25 +118,15 @@ export class NavHistory {
       this._forget(fromEntry);
     }
 
-    const to: Page = {
-      url: toPage.url,
-      data: toPage.data,
-      get(request) {
-        return toEntry.get(request);
-      },
-      set(request, options) {
-        toEntry.set(this, request, options);
-      }
-    };
     const enterPage = new EnterPageEvent(
         NavigationEventType.EnterPage,
         {
           when: 'replace',
-          to,
+          to: toEntry.page,
         },
     );
 
-    toEntry.enter(to, 'replace');
+    toEntry.enter('replace');
 
     return enterPage;
   }
@@ -165,19 +136,19 @@ export class NavHistory {
     entry.forget();
   }
 
-  stay(from: Page, to: Navigation.URLTarget, toEntry: PageEntry | undefined, reason?: any): StayOnPageEvent {
+  stay(at: PageEntry, to: Navigation.URLTarget, toEntry?: PageEntry, reason?: any): StayOnPageEvent {
 
     const stay = new StayOnPageEvent(
         NavigationEventType.StayOnPage,
         {
-          from,
+          from: at.page,
           to,
           reason,
         },
     );
 
     if (toEntry) {
-      toEntry.stay(from);
+      toEntry.stay(at.page);
     }
 
     return stay;
@@ -195,31 +166,23 @@ export class NavHistory {
     if (existingEntry) {
       toEntry = existingEntry;
     } else {
-      toEntry = new PageEntry(this, ++this._lastId);
+      toEntry = this.newEntry({
+        url: new URL(this._location.href),
+        data,
+        title: this._document.title,
+      });
       this._entries.set(toEntry.id, toEntry);
     }
 
-    const to: Page = {
-      url: new URL(this._location.href),
-      data: data,
-      get(request) {
-        return toEntry.get(request);
-      },
-      set(request, options) {
-        toEntry.set(this, request, options);
-      }
-    };
     const enterPage = new EnterPageEvent(
         NavigationEventType.EnterPage,
         {
           when: 'return',
-          to,
+          to: toEntry.page,
         },
     );
 
-    if (toEntry) {
-      toEntry.enter(to, 'return');
-    }
+    toEntry.enter('return');
 
     return [enterPage, toEntry];
   }
@@ -233,10 +196,29 @@ export class PageEntry {
 
   next?: PageEntry;
   prev?: PageEntry;
+  readonly page: Page;
   private _whenEntered?: 'init' | 'open' | 'replace' | 'return';
   private readonly _params = new Map<PageParam<any, any>, PageParam.Handle<any, any>>();
 
-  constructor(readonly _history: NavHistory, readonly id: number) {
+  constructor(
+      readonly _history: NavHistory,
+      readonly id: number,
+      target: Navigation.URLTarget,
+  ) {
+
+    const entry = this;
+
+    this.page = {
+      url: target.url,
+      title: target.title,
+      data: target.data,
+      get(request) {
+        return entry.get(request);
+      },
+      set(request, options) {
+        entry.set(request, options);
+      }
+    };
   }
 
   get<T>(request: PageParam.Request<T, unknown>): T | undefined {
@@ -246,33 +228,33 @@ export class PageEntry {
     return handle && handle.get();
   }
 
-  set<T, O>(page: Page, request: PageParam.Request<T, O>, options: O): T {
+  set<T, O>(request: PageParam.Request<T, O>, options: O): T {
 
     const param = request[PageParam__symbol];
     const handle: PageParam.Handle<T, O> | undefined = this._params.get(param);
 
     if (handle) {
-      handle.refine(page, options);
+      handle.refine(this.page, options);
       return handle.get();
     }
 
-    const newHandle = param.create(page, options);
+    const newHandle = param.create(this.page, options);
 
     this._params.set(param, newHandle);
     if (this._whenEntered && newHandle.enter) {
-      newHandle.enter(page, this._whenEntered);
+      newHandle.enter(this.page, this._whenEntered);
     }
 
     return newHandle.get();
   }
 
-  stay(page: Page) {
-    itsEach(this._params.values(), handle => handle.stay && handle.stay(page));
+  stay(at: Page) {
+    itsEach(this._params.values(), handle => handle.stay && handle.stay(at));
   }
 
-  enter(page: Page, when: 'init' | 'open' | 'replace' | 'return') {
+  enter(when: 'init' | 'open' | 'replace' | 'return') {
     this._whenEntered = when;
-    itsEach(this._params.values(), handle => handle.enter && handle.enter(page, when));
+    itsEach(this._params.values(), handle => handle.enter && handle.enter(this.page, when));
   }
 
   leave() {

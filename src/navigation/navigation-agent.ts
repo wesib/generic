@@ -5,7 +5,7 @@ import { BootstrapWindow } from '@wesib/wesib';
 import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
 import { AfterEvent, EventKeeper } from 'fun-events';
 import { Navigation } from './navigation';
-import { Page, TargetPage } from './page';
+import { Page } from './page';
 import Target = Navigation.Target;
 
 /**
@@ -30,7 +30,7 @@ export type NavigationAgent =
         next: (this: void, target?: Target) => void,
         when: 'pre-open' | 'pre-replace',
         from: Page,
-        to: TargetPage,
+        to: Page,
     ) => void;
 
 class NavigationAgentKey
@@ -62,7 +62,7 @@ class NavigationAgentKey
         next: (this: void, target: Navigation.URLTarget) => void,
         when: 'pre-open' | 'pre-replace',
         from: Page,
-        to: TargetPage,
+        to: Page,
     ): void {
 
       let agents!: NavigationAgent[];
@@ -71,7 +71,7 @@ class NavigationAgentKey
 
       return navigate(0, to);
 
-      function navigate(agentIdx: number, agentTo: TargetPage): void {
+      function navigate(agentIdx: number, agentTo: Page): void {
 
         const agent = agents[agentIdx];
 
@@ -131,7 +131,7 @@ export namespace NavigationAgent {
           next: (this: void, target: Navigation.URLTarget) => void,
           when: 'pre-open' | 'pre-replace',
           from: Page,
-          to: TargetPage,
+          to: Page,
       ) => void;
 
 }

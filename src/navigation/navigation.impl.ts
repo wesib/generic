@@ -10,7 +10,7 @@ import {
   NavigationEventType,
   StayOnPageEvent,
 } from './navigation.event';
-import { Page, TargetPage } from './page';
+import { Page } from './page';
 
 export function createNavigation(context: BootstrapContext): Navigation_ {
 
@@ -23,18 +23,18 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   const onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage);
   const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
   const onEvent = onEventFromAny<[NavigationEvent]>(onEnter, onLeave, onStay);
-  const nav = trackValue<[Page, PageEntry]>(navHistory.init());
+  const nav = trackValue<PageEntry>(navHistory.init());
 
-  history.replaceState(toHistoryState(history.state, nav.it[1].id), '');
+  history.replaceState(toHistoryState(history.state, nav.it.id), '');
 
-  const readPage: AfterEvent<[Page]> = nav.read.keep.thru(([page]) => page);
+  const readPage: AfterEvent<[Page]> = nav.read.keep.thru(entry => entry.page);
   let next: Promise<any> = Promise.resolve();
 
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
-    const [enterPage, entry] = navHistory.return(nav.it[1], event);
+    const [enterPage, entry] = navHistory.return(nav.it, event);
 
-    nav.it = [enterPage.to, entry];
+    nav.it = entry;
     dispatcher.dispatch(enterPage);
   });
 
@@ -84,7 +84,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     if (typeof url === 'string') {
       return new URL(url, document.baseURI);
     }
-    return url || nav.it[0].url;
+    return url || nav.it.page.url;
   }
 
   function urlTargetOf(target: Navigation_.Target | string | URL): Navigation_.URLTarget {
@@ -111,7 +111,6 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     function doNavigate(): boolean {
 
       let fromEntry: PageEntry | undefined;
-      let toPage: TargetPage;
       let toEntry: PageEntry | undefined;
 
       try {
@@ -122,28 +121,28 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           return prepared; // Navigation cancelled
         }
 
-        [fromEntry, toPage, toEntry] = prepared;
+        [fromEntry, toEntry] = prepared;
 
-        history[method](toHistoryState(toPage.data, toEntry.id), toPage.title || '', toPage.url.href);
+        history[method](toHistoryState(toEntry.page.data, toEntry.id), toEntry.page.title || '', toEntry.page.url.href);
       } catch (e) {
         stay(toEntry, e);
         throw e;
       }
 
-      const enterPage = navHistory[method](fromEntry, toPage, toEntry);
+      const enterPage = navHistory[method](fromEntry, toEntry);
 
-      nav.it = [enterPage.to, toEntry];
+      nav.it = toEntry;
 
       return dispatcher.dispatch(enterPage);
     }
 
-    function prepare(): [PageEntry | undefined, TargetPage, PageEntry] | false {
+    function prepare(): [PageEntry, PageEntry] | false {
       if (next !== promise) {
         return stay();
       }
 
-      const [fromPage, fromEntry] = nav.it;
-      const [leavePage, toEntry] = navHistory.leave(whenLeave, fromPage, urlTarget);
+      const fromEntry = nav.it;
+      const [leavePage, toEntry] = navHistory.leave(whenLeave, fromEntry, urlTarget);
 
       if (!dispatcher.dispatch(leavePage) || next !== promise) {
         return stay(toEntry);
@@ -159,23 +158,12 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
       return [
         fromEntry,
-        {
-          url: finalTarget.url,
-          title: finalTarget.title,
-          data: finalTarget.data,
-          get(request) {
-            return toEntry.get(request);
-          },
-          set(request, options) {
-            toEntry.set(this, request, options);
-          }
-        },
         toEntry,
       ];
     }
 
     function stay(toEntry?: PageEntry, reason?: any): false {
-      dispatcher.dispatch(navHistory.stay(nav.it[0], urlTarget, toEntry, reason));
+      dispatcher.dispatch(navHistory.stay(nav.it, urlTarget, toEntry, reason));
       return false;
     }
   }

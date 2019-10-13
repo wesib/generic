@@ -21,6 +21,11 @@ export interface Page {
   readonly data?: any;
 
   /**
+   * New window title.
+   */
+  readonly title?: string;
+
+  /**
    * Requests this page navigation parameter.
    *
    * @param request  Page navigation parameter request.
@@ -36,17 +41,5 @@ export interface Page {
    * @param options  Parameter assignment option.
    */
   set<T, O>(request: PageParam.Request<T, O>, options: O): void;
-
-}
-
-/**
- * Navigation target page.
- */
-export interface TargetPage extends Page {
-
-  /**
-   * New window title.
-   */
-  readonly title?: string;
 
 }

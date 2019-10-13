@@ -2,7 +2,7 @@
  * @module @wesib/generic
  */
 import { Navigation } from './navigation';
-import { Page, TargetPage } from './page';
+import { Page } from './page';
 
 /**
  * Navigation event.
@@ -105,7 +105,7 @@ export class LeavePageEvent extends Event {
   /**
    * Navigation target page.
    */
-  readonly to: TargetPage;
+  readonly to: Page;
 
   /**
    * Constructs leave page event.
@@ -141,7 +141,7 @@ export interface LeavePageEventInit extends Omit<EventInit, 'cancelable'> {
   /**
    * Navigation target page.
    */
-  readonly to: TargetPage;
+  readonly to: Page;
 
 }
 
