@@ -1,4 +1,5 @@
-import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
+import { BootstrapContext, BootstrapWindow, mergeFunctions } from '@wesib/wesib';
+import { noop } from 'call-thru';
 import { AfterEvent, DomEventDispatcher, onEventFromAny, trackValue } from 'fun-events';
 import { NavHistory, PageEntry } from './nav-history.impl';
 import { Navigation as Navigation_ } from './navigation';
@@ -11,6 +12,7 @@ import {
   StayOnPageEvent,
 } from './navigation.event';
 import { Page } from './page';
+import { PageParam } from './page-param';
 
 export function createNavigation(context: BootstrapContext): Navigation_ {
 
@@ -79,9 +81,27 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       return navigate('pre-replace', 'replace', target);
     }
 
+    with<T, O>(request: PageParam.Request<T, O>, options: O): Navigation_.Parameterized {
+      return withParam(page => page.set(request, options));
+    }
+
   }
 
   return new Navigation();
+
+  function withParam(applyParams: (page: Page) => void): Navigation_.Parameterized {
+    return {
+      with<TT, OO>(request: PageParam.Request<TT, OO>, options: OO): Navigation_.Parameterized {
+        return withParam(mergeFunctions(applyParams, page => page.set(request, options)));
+      },
+      open(target: Navigation_.Target | string | URL) {
+        return navigate('pre-open', 'open', target, applyParams);
+      },
+      replace(target: Navigation_.Target | string | URL) {
+        return navigate('pre-replace', 'replace', target, applyParams);
+      },
+    };
+  }
 
   function toURL(url: string | URL | undefined): URL {
     if (typeof url === 'string') {
@@ -104,6 +124,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       whenLeave: 'pre-open' | 'pre-replace',
       when: 'open' | 'replace',
       target: Navigation_.Target | string | URL,
+      applyParams: (page: Page) => void = noop,
   ): Promise<Page | null> {
 
     const urlTarget = urlTargetOf(target);
@@ -160,6 +181,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           },
       );
 
+      applyParams(toEntry.page);
       if (!dispatcher.dispatch(leavePage) || next !== promise) {
         return stay(toEntry);
       }
@@ -194,5 +216,6 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
       return null;
     }
+
   }
 }

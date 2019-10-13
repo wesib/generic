@@ -13,6 +13,7 @@ import {
 } from 'fun-events';
 import { EnterPageEvent, LeavePageEvent, NavigationEvent, StayOnPageEvent } from './navigation.event';
 import { Page } from './page';
+import { PageParam } from './page-param';
 
 const Navigation__key = /*#__PURE__*/ new SingleContextKey<Navigation>('navigation');
 
@@ -150,9 +151,64 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    */
   abstract replace(target: Navigation.Target | string | URL): Promise<Page | null>;
 
+  /**
+   * Creates parameterized navigation instance and assigns a page parameter to apply to target page.
+   *
+   * @param request  Assigned page parameter request.
+   * @param options  Parameter assignment option.
+   *
+   * @returns New parameterized navigation instance.
+   */
+  abstract with<T, O>(request: PageParam.Request<T, O>, options: O): Navigation.Parameterized;
+
 }
 
 export namespace Navigation {
+
+  /**
+   * Parameterized navigation.
+   *
+   * Allows to assign target page parameters prior to navigating to it.
+   */
+  export interface Parameterized {
+
+    /**
+     * Assigns a page parameter to apply to target page.
+     *
+     * @param request  Assigned page parameter request.
+     * @param options  Parameter assignment option.
+     *
+     * @returns New parameterized navigation instance.
+     */
+    with<T, O>(request: PageParam.Request<T, O>, options: O): Parameterized;
+
+    /**
+     * Opens a page by navigating to the given `target` with provided page parameters.
+     *
+     * Appends an entry to navigation history.
+     *
+     * @param target  Either navigation target or URL to navigate to.
+     * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually navigate.
+     * Then navigates to the `target`, unless the event cancelled.
+     * @fires NavigateEvent@wesib:navigate  On window object when navigation succeed.
+     *
+     * @returns A promise resolved to navigated page, or to `null` otherwise.
+     */
+    open(target: Navigation.Target | string | URL): Promise<Page | null>;
+
+    /**
+     * Replaces the most recent entry in navigation history with the given `target` and provided page parameters.
+     *
+     * @param target  Either navigation target or URL to replace the latest history entry with.
+     * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually update the history.
+     * Then navigates to the `target`, unless the event cancelled.
+     * @fires NavigateEvent@wesib:navigate  On window object when history updated.
+     *
+     * @returns A promise resolved to navigated page, or to `null` otherwise.
+     */
+    replace(target: Navigation.Target | string | URL): Promise<Page | null>;
+
+  }
 
   /**
    * Navigation target.

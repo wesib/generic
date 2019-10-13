@@ -101,30 +101,17 @@ describe('navigation', () => {
           expect(page.get(param)).toBe('init');
         });
         it('refines existing parameter', async () => {
-          navigation.on.once(event => {
-            if (event.when === 'pre-open') {
-              event.to.set(param, 'init');
-              event.to.set(param, 'new');
-            }
-          });
-
-          await navigation.open('/other');
+          await navigation.with(param, 'init').with(param, 'new').open('/other');
 
           expect(page.get(param)).toBe('new');
           expect(handle.refine).toHaveBeenCalledWith(expect.anything(), 'new');
           expect(handle.refine).toHaveBeenCalledTimes(1);
         });
         it('updates history data', async () => {
-          navigation.on.once(event => {
-            if (event.when === 'pre-open') {
-              event.to.set(param, 'init');
-              event.to.set(param, 'new');
-            }
-          });
 
           const data = { some: 'test' };
 
-          await navigation.open({ url: '/other', data });
+          await navigation.with(param, 'init').with(param, 'new').open({ url: '/other', data });
 
           expect(page.get(param)).toBe('new');
           expect(page.data).toMatchObject(data);
@@ -156,14 +143,7 @@ describe('navigation', () => {
     describe('open', () => {
       it('forgets unavailable entries', async () => {
         await navigation.open('/other');
-
-        navigation.on.once(event => {
-          if (event.when === 'pre-open') {
-            event.to.set(param, '1');
-          }
-        });
-
-        await navigation.open('/second');
+        await navigation.with(param, '1').open('/second');
         expect(handle.enter).toHaveBeenCalledWith(page, 'open');
         navigation.back();
         await navigation.open('/third');
@@ -176,23 +156,11 @@ describe('navigation', () => {
 
     describe('replace', () => {
       it('replaces router history entry', async () => {
-        navigation.on.once(event => {
-          if (event.when === 'pre-open') {
-            event.to.set(param, 'init');
-          }
-        });
-
-        await navigation.open('/other');
+        await navigation.with(param, 'init').open('/other');
 
         const [param2, handle2] = newParam();
 
-        navigation.on.once(event => {
-          if (event.when === 'pre-replace') {
-            event.to.set(param2, 'updated');
-          }
-        });
-
-        await navigation.replace('/second');
+        await navigation.with(param2, 'updated').replace('/second');
 
         expect(page.get(param)).toBeUndefined();
         expect(page.get(param2)).toBe('updated');
@@ -209,25 +177,13 @@ describe('navigation', () => {
       it('replaces second router history entry', async () => {
         await navigation.open('/first');
         await navigation.open('/other');
-        navigation.on.once(event => {
-          if (event.when === 'pre-replace') {
-            event.to.set(param, 'updated');
-          }
-        });
-
-        await navigation.replace('/second');
+        await navigation.with(param, 'updated').replace('/second');
 
         expect(page.get(param)).toBe('updated');
         expect(handle.enter).toHaveBeenCalledTimes(1);
       });
       it('replaces non-router history entry', async () => {
-        navigation.on.once(async event => {
-          if (event.when === 'pre-replace') {
-            event.to.set(param, 'init');
-          }
-        });
-
-        await navigation.replace('/other');
+        await navigation.with(param, 'init').replace('/other');
 
         expect(page.get(param)).toBe('init');
         expect(handle.enter).toHaveBeenCalledTimes(1);
@@ -240,23 +196,11 @@ describe('navigation', () => {
 
     describe('back', () => {
       it('restores previous entry', async () => {
-        navigation.on.once(event => {
-          if (event.when === 'pre-open') {
-            event.to.set(param, 'init');
-          }
-        });
-
-        await navigation.open('/other');
+        await navigation.with(param, 'init').open('/other');
 
         const [param2, handle2] = newParam();
 
-        navigation.on.once(event => {
-          if (event.when === 'pre-open') {
-            event.to.set(param2, 'updated');
-          }
-        });
-
-        await navigation.open('/second');
+        await navigation.with(param2, 'updated').open('/second');
 
         expect(page.get(param)).toBeUndefined();
         expect(page.get(param2)).toBe('updated');
