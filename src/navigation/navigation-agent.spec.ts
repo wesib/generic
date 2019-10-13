@@ -1,5 +1,6 @@
 import { noop } from 'call-thru';
 import { ContextRegistry } from 'context-values';
+import { testPageParam } from './nav-history.spec';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
 import { Page } from './page';
@@ -27,8 +28,19 @@ describe('navigation', () => {
     beforeEach(() => {
       mockNavigate = jest.fn();
       when = 'pre-open';
-      from = { url: new URL('http://localhost/index'), data: 'initial', get: noop, set: noop };
-      to = { url: new URL('http://localhost/other'), data: 'updated', title: 'New title', get: noop, set: noop };
+      from = {
+        url: new URL('http://localhost/index'),
+        data: 'initial',
+        get: noop,
+        set: noop,
+      };
+      to = {
+        url: new URL('http://localhost/other'),
+        data: 'updated',
+        title: 'New title',
+        get: jest.fn(),
+        set: jest.fn(),
+      };
     });
 
     it('performs navigation without agents', () => {
@@ -102,6 +114,44 @@ describe('navigation', () => {
         get: expect.any(Function),
         set: expect.any(Function),
       });
+    });
+    it('accesses page parameters', () => {
+
+      const [param] = testPageParam();
+
+      registry.provide({
+        a: NavigationAgent,
+        is: next => next(),
+      });
+      registry.provide({
+        a: NavigationAgent,
+        is: (next, _when, _from, toPage) => {
+          toPage.get(param);
+          return next();
+        },
+      });
+
+      agent(mockNavigate, when, from, to);
+      expect(to.get).toHaveBeenCalledWith(param);
+    });
+    it('updates page parameters', () => {
+
+      const [param] = testPageParam();
+
+      registry.provide({
+        a: NavigationAgent,
+        is: next => next(),
+      });
+      registry.provide({
+        a: NavigationAgent,
+        is: (next, _when, _from, toPage) => {
+          toPage.set(param, 'test');
+          return next();
+        },
+      });
+
+      agent(mockNavigate, when, from, to);
+      expect(to.set).toHaveBeenCalledWith(param, 'test');
     });
   });
 });

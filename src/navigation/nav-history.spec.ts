@@ -48,7 +48,7 @@ describe('navigation', () => {
     let param: PageParam<string, string>;
 
     beforeEach(() => {
-      [param, handle] = newParam();
+      [param, handle] = testPageParam();
     });
 
     describe('Page', () => {
@@ -158,7 +158,7 @@ describe('navigation', () => {
       it('replaces router history entry', async () => {
         await navigation.with(param, 'init').open('/other');
 
-        const [param2, handle2] = newParam();
+        const [param2, handle2] = testPageParam();
 
         await navigation.with(param2, 'updated').replace('/second');
 
@@ -198,7 +198,7 @@ describe('navigation', () => {
       it('restores previous entry', async () => {
         await navigation.with(param, 'init').open('/other');
 
-        const [param2, handle2] = newParam();
+        const [param2, handle2] = testPageParam();
 
         await navigation.with(param2, 'updated').open('/second');
 
@@ -226,7 +226,7 @@ describe('navigation', () => {
   });
 });
 
-function newParam(value: string = ''): [PageParam<string, string>, Mocked<PageParam.Handle<string, string>>] {
+export function testPageParam(value: string = ''): [PageParam<string, string>, Mocked<PageParam.Handle<string, string>>] {
 
   const handle: Mocked<PageParam.Handle<string, string>> = {
     get: jest.fn(() => value),
