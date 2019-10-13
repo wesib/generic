@@ -43,12 +43,12 @@ export class LocationMock {
           self.window.dispatchEvent(new PopStateEvent('popstate', { state: this.state() }));
         }
       }),
-      pushState: jest.fn((newState, _title, url) => {
-        stateData[++index] = [new URL(url, self.baseURI()), newState];
+      pushState: jest.fn((newState, _title, url?) => {
+        stateData[++index] = [url != null ? new URL(url, self.baseURI()) : stateData[index][0], newState];
         stateData.length = index + 1;
       }),
-      replaceState: jest.fn((newState, _title, url) => {
-        stateData[index] = [new URL(url, self.baseURI()), newState];
+      replaceState: jest.fn((newState, _title, url?) => {
+        stateData[index] = [url != null ? new URL(url, self.baseURI()) : stateData[index][0], newState];
       }),
     } as any;
     this.baseURI = jest.fn(() => 'http://localhost');

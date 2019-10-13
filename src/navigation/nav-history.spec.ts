@@ -261,7 +261,7 @@ describe('navigation', () => {
         expect(handle2.forget).not.toHaveBeenCalled();
         expect(handle.enter).toHaveBeenCalledTimes(2);
       });
-      it('returns to non-router history entry', () => {
+      it('returns to initial history entry', () => {
         locationMock.history.pushState('new', '', '/some');
         navigation.back();
         expect(page.url.href).toBe('http://localhost/index');

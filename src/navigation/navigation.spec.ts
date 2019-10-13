@@ -322,6 +322,7 @@ describe('navigation', () => {
         expect(enterPage.to.data).toBe('updated');
       });
       it('does not replace the location if pre-navigate event is cancelled', async () => {
+        locationMock.history.replaceState.mockClear();
         navigation.onLeave.once(event => event.preventDefault());
         await navigation.replace('/other');
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(2);
