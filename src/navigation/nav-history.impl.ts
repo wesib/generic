@@ -223,6 +223,6 @@ function toNavData(state?: any): NavData {
 /**
  * @internal
  */
-export function toHistoryState(data?: any, id?: number): any {
-  return id != null ? { [NAV_DATA_KEY]: [data, id] } : data;
+export function toHistoryState(data: any, id: number): any {
+  return { [NAV_DATA_KEY]: [data, id] };
 }

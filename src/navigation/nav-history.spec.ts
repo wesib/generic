@@ -61,6 +61,13 @@ describe('navigation', () => {
           expect(page.get(param)).toBeUndefined();
         });
       });
+      describe('set', () => {
+        it('assigns parameter value', () => {
+          page.set(param, 'test');
+          expect(page.get(param)).toBe('test');
+          expect(handle.enter).toHaveBeenCalledWith(page, 'init');
+        });
+      });
     });
 
     describe('LeavePageEvent', () => {
@@ -138,6 +145,7 @@ describe('navigation', () => {
           expect(page.url.href).toBe('http://localhost/index');
           expect(page.get(param)).toBeUndefined();
           expect(handle.stay).toHaveBeenCalledTimes(1);
+          expect(handle.stay).toHaveBeenCalledWith(page);
           expect(handle.enter).not.toHaveBeenCalled();
           expect(handle.leave).not.toHaveBeenCalled();
           expect(handle.forget).not.toHaveBeenCalled();
@@ -156,6 +164,7 @@ describe('navigation', () => {
         });
 
         await navigation.open('/second');
+        expect(handle.enter).toHaveBeenCalledWith(page, 'open');
         navigation.back();
         await navigation.open('/third');
 
@@ -192,6 +201,7 @@ describe('navigation', () => {
         expect(handle.leave).toHaveBeenCalledTimes(1);
         expect(handle.forget).toHaveBeenCalledTimes(1);
 
+        expect(handle2.enter).toHaveBeenCalledWith(page, 'replace');
         expect(handle2.enter).toHaveBeenCalledTimes(1);
         expect(handle2.leave).not.toHaveBeenCalled();
         expect(handle2.forget).not.toHaveBeenCalled();
@@ -221,6 +231,7 @@ describe('navigation', () => {
 
         expect(page.get(param)).toBe('init');
         expect(handle.enter).toHaveBeenCalledTimes(1);
+        expect(handle.enter).toHaveBeenCalledWith(page, 'replace');
         expect(handle.leave).not.toHaveBeenCalled();
         expect(handle.stay).not.toHaveBeenCalled();
         expect(handle.forget).not.toHaveBeenCalled();

@@ -134,9 +134,9 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    * Then navigates to the `target`, unless the event cancelled.
    * @fires NavigateEvent@wesib:navigate  On window object when navigation succeed.
    *
-   * @returns A promise resolved to `true` if navigated successfully, or to `false` otherwise.
+   * @returns A promise resolved to navigated page, or to `null` otherwise.
    */
-  abstract open(target: Navigation.Target | string | URL): Promise<boolean>;
+  abstract open(target: Navigation.Target | string | URL): Promise<Page | null>;
 
   /**
    * Replaces the most recent entry in navigation history with the given `target`.
@@ -146,9 +146,9 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    * Then navigates to the `target`, unless the event cancelled.
    * @fires NavigateEvent@wesib:navigate  On window object when history updated.
    *
-   * @returns A promise resolved to `true` if navigation history updated, or to `false` otherwise.
+   * @returns A promise resolved to navigated page, or to `null` otherwise.
    */
-  abstract replace(target: Navigation.Target | string | URL): Promise<boolean>;
+  abstract replace(target: Navigation.Target | string | URL): Promise<Page | null>;
 
 }
 

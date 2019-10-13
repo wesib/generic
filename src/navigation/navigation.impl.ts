@@ -104,14 +104,14 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       whenLeave: 'pre-open' | 'pre-replace',
       when: 'open' | 'replace',
       target: Navigation_.Target | string | URL,
-  ): Promise<boolean> {
+  ): Promise<Page | null> {
 
     const urlTarget = urlTargetOf(target);
     const promise = next = next.then(doNavigate, doNavigate);
 
     return promise;
 
-    function doNavigate(): boolean {
+    function doNavigate(): Page | null {
 
       let fromEntry: PageEntry | undefined;
       let toEntry: PageEntry | undefined;
@@ -133,17 +133,18 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       }
 
       nav.it = toEntry;
-
-      return dispatcher.dispatch(new EnterPageEvent(
+      dispatcher.dispatch(new EnterPageEvent(
           NavigationEventType.EnterPage,
           {
             when,
             to: toEntry.page,
           },
       ));
+
+      return toEntry.page;
     }
 
-    function prepare(): [PageEntry, PageEntry] | false {
+    function prepare(): [PageEntry, PageEntry] | null {
       if (next !== promise) {
         return stay();
       }
@@ -177,7 +178,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       ];
     }
 
-    function stay(toEntry?: PageEntry, reason?: any): false {
+    function stay(toEntry?: PageEntry, reason?: any): null {
       if (toEntry) {
         toEntry.stay(nav.it.page);
       }
@@ -191,7 +192,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           },
       ));
 
-      return false;
+      return null;
     }
   }
 }
