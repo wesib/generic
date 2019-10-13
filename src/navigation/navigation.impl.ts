@@ -23,15 +23,15 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   const onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage);
   const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
   const onEvent = onEventFromAny<[NavigationEvent]>(onEnter, onLeave, onStay);
-  const nav = trackValue<[Page, PageEntry?]>([navHistory.init()]);
+  const nav = trackValue<[Page, PageEntry]>(navHistory.init());
   const readPage: AfterEvent<[Page]> = nav.read.keep.thru(([page]) => page);
   let next: Promise<any> = Promise.resolve();
 
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
-    const [enterPage, pageId] = navHistory.return(nav.it[1], event);
+    const [enterPage, entry] = navHistory.return(nav.it[1], event);
 
-    nav.it = [enterPage.to, pageId];
+    nav.it = [enterPage.to, entry];
     dispatcher.dispatch(enterPage);
   });
 
@@ -161,8 +161,11 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           title: finalTarget.title,
           data: finalTarget.data,
           get(request) {
-            return toEntry.getParam(request);
+            return toEntry.get(request);
           },
+          set(request, options) {
+            toEntry.set(this, request, options);
+          }
         },
         toEntry,
       ];

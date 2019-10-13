@@ -29,6 +29,14 @@ export interface Page {
    */
   get<T>(request: PageParam.Request<T, unknown>): T | undefined;
 
+  /**
+   * Assigns navigation parameter of this page.
+   *
+   * @param request  Assigned page parameter request.
+   * @param options  Parameter assignment option.
+   */
+  set<T, O>(request: PageParam.Request<T, O>, options: O): void;
+
 }
 
 /**

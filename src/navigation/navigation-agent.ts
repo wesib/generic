@@ -95,6 +95,9 @@ class NavigationAgentKey
                   get(request) {
                     return agentTo.get(request);
                   },
+                  set(request, options) {
+                    agentTo.set(request, options);
+                  },
                 },
             ),
             when,

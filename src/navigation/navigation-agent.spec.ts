@@ -27,8 +27,8 @@ describe('navigation', () => {
     beforeEach(() => {
       mockNavigate = jest.fn();
       when = 'pre-open';
-      from = { url: new URL('http://localhost/index'), data: 'initial', get: noop };
-      to = { url: new URL('http://localhost/other'), data: 'updated', title: 'New title', get: noop };
+      from = { url: new URL('http://localhost/index'), data: 'initial', get: noop, set: noop };
+      to = { url: new URL('http://localhost/other'), data: 'updated', title: 'New title', get: noop, set: noop };
     });
 
     it('performs navigation without agents', () => {
@@ -53,7 +53,11 @@ describe('navigation', () => {
       registry.provide({ a: NavigationAgent, is: next => next() });
 
       agent(mockNavigate, when, from, to);
-      expect(mockNavigate).toHaveBeenCalledWith({ ...to, get: expect.any(Function) });
+      expect(mockNavigate).toHaveBeenCalledWith({
+        ...to,
+        get: expect.any(Function),
+        set: expect.any(Function),
+      });
     });
     it('updates URL', async () => {
       registry.provide({ a: NavigationAgent, is: next => next({ url: new URL('http://localhost/other') }) });
@@ -63,6 +67,7 @@ describe('navigation', () => {
         ...to,
         url: new URL('http://localhost/other'),
         get: expect.any(Function),
+        set: expect.any(Function),
       });
     });
     it('updates URL using path', async () => {
@@ -73,6 +78,7 @@ describe('navigation', () => {
         ...to,
         url: new URL('http://localhost/other'),
         get: expect.any(Function),
+        set: expect.any(Function),
       });
     });
     it('updates title', async () => {
@@ -83,6 +89,7 @@ describe('navigation', () => {
         ...to,
         title: 'other title',
         get: expect.any(Function),
+        set: expect.any(Function),
       });
     });
     it('updates data', async () => {
@@ -93,6 +100,7 @@ describe('navigation', () => {
         ...to,
         data: 'other data',
         get: expect.any(Function),
+        set: expect.any(Function),
       });
     });
   });

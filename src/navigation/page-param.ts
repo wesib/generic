@@ -78,15 +78,18 @@ export namespace PageParam {
      * It is called when page parameter is assigned already and can be used to update it. The update logic is is up
      * to implementation.
      *
-     * @param event  Leave page event to add parameter to.
+     * @param page  Target page.
      * @param options  Parameter refinement options.
      */
-    refine(event: Page, options: O): void;
+    refine(page: Page, options: O): void;
 
     /**
      * This method is called when the page this parameter created for is entered.
+     *
+     * @param page  Entered page.
+     * @param when  When the page is entered. Either `init`, `open`, `replace`, or `return`.
      */
-    enter?(route: Page): void;
+    enter?(page: Page, when: 'init' | 'open' | 'replace' | 'return'): void;
 
     /**
      * This method is called when the page this parameter created for is left.
@@ -98,9 +101,9 @@ export namespace PageParam {
      *
      * The handle won't be accessed after this method call.
      *
-     * @param event  Stay on page event indicating navigation abort.
+     * @param page  The page the browser remains at.
      */
-    stay?(event: Page): void;
+    stay?(page: Page): void;
 
     /**
      * This method is called when the page this parameter is created for is removed from navigation history.

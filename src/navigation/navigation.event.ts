@@ -3,7 +3,6 @@
  */
 import { Navigation } from './navigation';
 import { Page, TargetPage } from './page';
-import { PageParam } from './page-param';
 
 /**
  * Navigation event.
@@ -83,14 +82,14 @@ export interface EnterPageEventInit extends Omit<EventInit, 'cancelable'> {
 }
 
 /**
- * An event page fired right before leaving the page in order to navigate to another one.
+ * An event fired right before leaving the page in order to navigate to another one.
  *
  * This event can be cancelled in order to prevent actual navigation or history update. The navigation is also
  * cancelled when another navigation initiated by one of the handlers of this event.
  *
  * @event LeavePageEvent#wesib:leavePage
  */
-export abstract class LeavePageEvent extends Event {
+export class LeavePageEvent extends Event {
 
   /**
    * When navigation event occurred. Either `pre-open` when leaving a page to open a new one, or `pre-replace` when
@@ -120,16 +119,6 @@ export abstract class LeavePageEvent extends Event {
     this.from = init.from;
     this.to = init.to;
   }
-
-  /**
-   * Assigns parameter to target page.
-   *
-   * @param request  Requested page parameter.
-   * @param options  Parameter assignment option.
-   *
-   * @returns `this` instance.
-   */
-  abstract set<T, O>(request: PageParam.Request<T, O>, options: O): this;
 
 }
 

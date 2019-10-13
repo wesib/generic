@@ -64,12 +64,12 @@ describe('navigation', () => {
     });
 
     describe('LeavePageEvent', () => {
-      describe('set', () => {
+      describe('to.set', () => {
         it('makes parameter available in future route', async () => {
 
           const promise = new Promise<string | undefined>(resolve => navigation.on.once(event => {
             if (event.when === 'pre-open') {
-              event.set(param, 'init');
+              event.to.set(param, 'init');
               resolve(event.to.get(param));
             }
           }));
@@ -82,7 +82,7 @@ describe('navigation', () => {
 
           const promise = new Promise<string | undefined>(resolve => navigation.on(event => {
             if (event.when === 'pre-open') {
-              event.set(param, 'init');
+              event.to.set(param, 'init');
             } else if (event.when === 'open') {
               resolve(event.to.get(param));
             }
@@ -96,8 +96,8 @@ describe('navigation', () => {
         it('refines existing parameter', async () => {
           navigation.on.once(event => {
             if (event.when === 'pre-open') {
-              event.set(param, 'init');
-              event.set(param, 'new');
+              event.to.set(param, 'init');
+              event.to.set(param, 'new');
             }
           });
 
@@ -110,8 +110,8 @@ describe('navigation', () => {
         it('updates history data', async () => {
           navigation.on.once(event => {
             if (event.when === 'pre-open') {
-              event.set(param, 'init');
-              event.set(param, 'new');
+              event.to.set(param, 'init');
+              event.to.set(param, 'new');
             }
           });
 
@@ -128,7 +128,7 @@ describe('navigation', () => {
         it('aborts parameter assignment', async () => {
           navigation.on.once(event => {
             if (event.when === 'pre-open') {
-              event.set(param, 'init');
+              event.to.set(param, 'init');
               event.preventDefault();
             }
           });
@@ -151,7 +151,7 @@ describe('navigation', () => {
 
         navigation.on.once(event => {
           if (event.when === 'pre-open') {
-            event.set(param, '1');
+            event.to.set(param, '1');
           }
         });
 
@@ -169,7 +169,7 @@ describe('navigation', () => {
       it('replaces router history entry', async () => {
         navigation.on.once(event => {
           if (event.when === 'pre-open') {
-            event.set(param, 'init');
+            event.to.set(param, 'init');
           }
         });
 
@@ -179,7 +179,7 @@ describe('navigation', () => {
 
         navigation.on.once(event => {
           if (event.when === 'pre-replace') {
-            event.set(param2, 'updated');
+            event.to.set(param2, 'updated');
           }
         });
 
@@ -201,7 +201,7 @@ describe('navigation', () => {
         await navigation.open('/other');
         navigation.on.once(event => {
           if (event.when === 'pre-replace') {
-            event.set(param, 'updated');
+            event.to.set(param, 'updated');
           }
         });
 
@@ -213,7 +213,7 @@ describe('navigation', () => {
       it('replaces non-router history entry', async () => {
         navigation.on.once(async event => {
           if (event.when === 'pre-replace') {
-            event.set(param, 'init');
+            event.to.set(param, 'init');
           }
         });
 
@@ -231,7 +231,7 @@ describe('navigation', () => {
       it('restores previous entry', async () => {
         navigation.on.once(event => {
           if (event.when === 'pre-open') {
-            event.set(param, 'init');
+            event.to.set(param, 'init');
           }
         });
 
@@ -241,7 +241,7 @@ describe('navigation', () => {
 
         navigation.on.once(event => {
           if (event.when === 'pre-open') {
-            event.set(param2, 'updated');
+            event.to.set(param2, 'updated');
           }
         });
 
