@@ -57,4 +57,4 @@ export namespace DomFetchAgent {
  * The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.
  */
 export const DomFetchAgent: ContextUpRef<DomFetchAgent.Combined, DomFetchAgent> =
-    /**#__PURE__*/ new FetchAgentKey<Node[]>('dom-fetch-agent');
+    /*#__PURE__*/ new FetchAgentKey<Node[]>('dom-fetch-agent');

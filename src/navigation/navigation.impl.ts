@@ -1,57 +1,46 @@
-import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { DomEventDispatcher, trackValue } from 'fun-events';
-import { NavigateEvent, PreNavigateEvent } from './navigate.event';
+import { BootstrapContext, BootstrapWindow, mergeFunctions } from '@wesib/wesib';
+import { noop } from 'call-thru';
+import { AfterEvent, DomEventDispatcher, onEventFromAny, trackValue } from 'fun-events';
+import { NavHistory, PageEntry } from './nav-history.impl';
 import { Navigation as Navigation_ } from './navigation';
-
-const PRE_NAVIGATE_EVT = 'wesib:preNavigate';
-const NAVIGATE_EVT = 'wesib:navigate';
-
-class NavigationLocation implements Navigation_.Location {
-
-  readonly _url: URL;
-  readonly data?: any;
-
-  get url(): URL {
-    return new URL(this._url.toString());
-  }
-
-  constructor({ url, data }: Navigation_.Location) {
-    this._url = url;
-    this.data = data;
-  }
-
-}
+import { NavigationAgent } from './navigation-agent';
+import {
+  EnterPageEvent,
+  LeavePageEvent,
+  NavigationEvent,
+  NavigationEventType,
+  StayOnPageEvent,
+} from './navigation.event';
+import { Page } from './page';
+import { PageParam } from './page-param';
 
 export function createNavigation(context: BootstrapContext): Navigation_ {
 
   const window = context.get(BootstrapWindow);
-  const { document, location, history } = window;
+  const { document, history } = window;
   const dispatcher = new DomEventDispatcher(window);
-  const preNavigate = dispatcher.on<PreNavigateEvent>(PRE_NAVIGATE_EVT);
-  const onNavigate = dispatcher.on<NavigateEvent>(NAVIGATE_EVT);
-  const nav = trackValue<NavigationLocation>(new NavigationLocation({
-    url: new URL(location.href),
-    data: history.state,
-  }));
+  const navHistory = context.get(NavHistory);
+  const agent = context.get(NavigationAgent);
+  const onEnter = dispatcher.on<EnterPageEvent>(NavigationEventType.EnterPage);
+  const onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage);
+  const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
+  const onEvent = onEventFromAny<[NavigationEvent]>(onEnter, onLeave, onStay);
+  const nav = trackValue<PageEntry>(navHistory.init());
+  const readPage: AfterEvent<[Page]> = nav.read.keep.thru(entry => entry.page);
+  let next: Promise<any> = Promise.resolve();
+
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
-    const from = nav.it._url;
-    const to = new URL(location.href);
-    const newData = event.state;
-    const oldData = nav.it.data;
+    const entry = navHistory.return(nav.it, event);
 
-    dispatcher.dispatch(
-        new NavigateEvent(
-            NAVIGATE_EVT,
-            {
-              action: 'return',
-              from,
-              to,
-              oldData,
-              newData,
-            })
-    );
-    nav.it = new NavigationLocation({ url: to, data: newData });
+    nav.it = entry;
+    dispatcher.dispatch(new EnterPageEvent(
+        NavigationEventType.EnterPage,
+        {
+          when: 'return',
+          to: entry.page,
+        },
+    ));
   });
 
   class Navigation extends Navigation_ {
@@ -60,82 +49,173 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       return history.length;
     }
 
-    get preNavigate() {
-      return preNavigate;
+    get onEnter() {
+      return onEnter;
     }
 
-    get onNavigate() {
-      return onNavigate;
+    get onLeave() {
+      return onLeave;
+    }
+
+    get onStay() {
+      return onStay;
+    }
+
+    get on() {
+      return onEvent;
     }
 
     get read() {
-      return nav.read;
+      return readPage;
     }
 
     go(delta?: number): void {
       history.go(delta);
     }
 
-    navigate(target: Navigation_.Target | string | URL): boolean {
-
-      const { url, data, title = '' } = navigationTargetOf(target);
-      const from = nav.it._url;
-      const to = url != null ? toURL(url) : from;
-
-      const init: NavigateEvent.Init<'pre-navigate'> = {
-        action: 'pre-navigate',
-        from,
-        to,
-        oldData: nav.it.data,
-        newData: data,
-      };
-
-      if (!dispatcher.dispatch(new NavigateEvent(PRE_NAVIGATE_EVT, init))) {
-        return false; // Navigation cancelled
-      }
-
-      history.pushState(data, title, url && url.toString());
-      nav.it = new NavigationLocation({ url: to, data });
-
-      return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action: 'navigate' }));
+    open(target: Navigation_.Target | string | URL) {
+      return navigate('pre-open', 'open', target);
     }
 
-    replace(target: Navigation_.Target | string | URL): boolean {
+    replace(target: Navigation_.Target | string | URL) {
+      return navigate('pre-replace', 'replace', target);
+    }
 
-      const { url, data, title = '' } = navigationTargetOf(target);
-      const from = nav.it._url;
-      const to = url != null ? toURL(url) : from;
-
-      const init: NavigateEvent.Init<'pre-replace'> = {
-        action: 'pre-replace',
-        from,
-        to,
-        oldData: nav.it.data,
-        newData: data,
-      };
-
-      if (!dispatcher.dispatch(new NavigateEvent(PRE_NAVIGATE_EVT, init))) {
-        return false; // Navigation cancelled
-      }
-
-      history.replaceState(data, title, url && url.toString());
-      nav.it = new NavigationLocation({ url: to, data });
-
-      return dispatcher.dispatch(new NavigateEvent(NAVIGATE_EVT, { ...init, action: 'replace' }));
+    with<T, O>(request: PageParam.Request<T, O>, options: O): Navigation_.Parameterized {
+      return withParam(page => page.set(request, options));
     }
 
   }
 
   return new Navigation();
 
-  function toURL(url: string | URL): URL {
+  function withParam(applyParams: (page: Page) => void): Navigation_.Parameterized {
+    return {
+      with<TT, OO>(request: PageParam.Request<TT, OO>, options: OO): Navigation_.Parameterized {
+        return withParam(mergeFunctions(applyParams, page => page.set(request, options)));
+      },
+      open(target: Navigation_.Target | string | URL) {
+        return navigate('pre-open', 'open', target, applyParams);
+      },
+      replace(target: Navigation_.Target | string | URL) {
+        return navigate('pre-replace', 'replace', target, applyParams);
+      },
+    };
+  }
+
+  function toURL(url: string | URL | undefined): URL {
     if (typeof url === 'string') {
       return new URL(url, document.baseURI);
     }
-    return url;
+    return url || nav.it.page.url;
   }
-}
 
-function navigationTargetOf(target: Navigation_.Target | string | URL): Navigation_.Target {
-  return typeof target === 'string' || target instanceof URL ? { url: target } : target;
+  function urlTargetOf(target: Navigation_.Target | string | URL): Navigation_.URLTarget {
+    if (typeof target === 'string' || target instanceof URL) {
+      return { url: toURL(target) };
+    }
+    if (target.url instanceof URL) {
+      return target as Navigation_.URLTarget;
+    }
+    return { ...target, url: toURL(target.url) };
+  }
+
+  function navigate(
+      whenLeave: 'pre-open' | 'pre-replace',
+      when: 'open' | 'replace',
+      target: Navigation_.Target | string | URL,
+      applyParams: (page: Page) => void = noop,
+  ): Promise<Page | null> {
+
+    const urlTarget = urlTargetOf(target);
+    const promise = next = next.then(doNavigate, doNavigate);
+
+    return promise;
+
+    function doNavigate(): Page | null {
+
+      let fromEntry: PageEntry | undefined;
+      let toEntry: PageEntry | undefined;
+
+      try {
+
+        const prepared = prepare();
+
+        if (!prepared) {
+          return prepared; // Navigation cancelled
+        }
+
+        [fromEntry, toEntry] = prepared;
+
+        navHistory[when](fromEntry, toEntry);
+      } catch (e) {
+        stay(toEntry, e);
+        throw e;
+      }
+
+      nav.it = toEntry;
+      dispatcher.dispatch(new EnterPageEvent(
+          NavigationEventType.EnterPage,
+          {
+            when,
+            to: toEntry.page,
+          },
+      ));
+
+      return toEntry.page;
+    }
+
+    function prepare(): [PageEntry, PageEntry] | null {
+      if (next !== promise) {
+        return stay();
+      }
+
+      const fromEntry = nav.it;
+      const toEntry = navHistory.newEntry(urlTarget);
+      const leavePage = new LeavePageEvent(
+          NavigationEventType.LeavePage,
+          {
+            when: whenLeave,
+            from: fromEntry.page,
+            to: toEntry.page,
+          },
+      );
+
+      applyParams(toEntry.page);
+      if (!dispatcher.dispatch(leavePage) || next !== promise) {
+        return stay(toEntry);
+      }
+
+      let finalTarget: Navigation_.URLTarget | undefined;
+
+      agent(t => finalTarget = t, whenLeave, leavePage.from, leavePage.to);
+
+      if (!finalTarget) {
+        return stay(toEntry); // Some agent didn't call `next()`.
+      }
+
+      return [
+        fromEntry,
+        toEntry,
+      ];
+    }
+
+    function stay(toEntry?: PageEntry, reason?: any): null {
+      if (toEntry) {
+        toEntry.stay(nav.it.page);
+      }
+
+      dispatcher.dispatch(new StayOnPageEvent(
+          NavigationEventType.StayOnPage,
+          {
+            from: nav.it.page,
+            to: urlTarget,
+            reason,
+          },
+      ));
+
+      return null;
+    }
+
+  }
 }
