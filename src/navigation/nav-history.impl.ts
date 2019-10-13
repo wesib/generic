@@ -2,7 +2,6 @@ import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesi
 import { itsEach } from 'a-iterable';
 import { ContextKey__symbol, SingleContextKey } from 'context-values';
 import { Navigation } from './navigation';
-import { EnterPageEvent, LeavePageEvent, NavigationEventType, StayOnPageEvent } from './navigation.event';
 import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
 
@@ -56,28 +55,7 @@ export class NavHistory {
     return new PageEntry(this, ++this._lastId, target);
   }
 
-  leave(
-      when: 'pre-open' | 'pre-replace',
-      fromEntry: PageEntry,
-      toTarget: Navigation.URLTarget,
-  ): [LeavePageEvent, PageEntry] {
-
-    const toEntry = this.newEntry(toTarget);
-
-    return [
-      new LeavePageEvent(
-          NavigationEventType.LeavePage,
-          {
-            when,
-            from: fromEntry.page,
-            to: toEntry.page,
-          },
-      ),
-      toEntry,
-    ];
-  }
-
-  pushState(fromEntry: PageEntry | undefined, toEntry: PageEntry): EnterPageEvent {
+  open(fromEntry: PageEntry, toEntry: PageEntry) {
     this._entries.set(toEntry.id, toEntry);
     if (fromEntry) {
       // Forget all entries starting from next one
@@ -90,20 +68,10 @@ export class NavHistory {
       fromEntry.leave();
     }
 
-    const enterPage = new EnterPageEvent(
-        NavigationEventType.EnterPage,
-        {
-          when: 'open',
-          to: toEntry.page,
-        },
-    );
-
     toEntry.enter('open');
-
-    return enterPage;
   }
 
-  replaceState(fromEntry: PageEntry | undefined, toEntry: PageEntry): EnterPageEvent {
+  replace(fromEntry: PageEntry, toEntry: PageEntry) {
     this._entries.set(toEntry.id, toEntry);
     if (fromEntry) {
 
@@ -118,46 +86,11 @@ export class NavHistory {
       this._forget(fromEntry);
     }
 
-    const enterPage = new EnterPageEvent(
-        NavigationEventType.EnterPage,
-        {
-          when: 'replace',
-          to: toEntry.page,
-        },
-    );
-
     toEntry.enter('replace');
-
-    return enterPage;
   }
 
-  private _forget(entry: PageEntry) {
-    this._entries.delete(entry.id);
-    entry.forget();
-  }
-
-  stay(at: PageEntry, to: Navigation.URLTarget, toEntry?: PageEntry, reason?: any): StayOnPageEvent {
-
-    const stay = new StayOnPageEvent(
-        NavigationEventType.StayOnPage,
-        {
-          from: at.page,
-          to,
-          reason,
-        },
-    );
-
-    if (toEntry) {
-      toEntry.stay(at.page);
-    }
-
-    return stay;
-  }
-
-  return(fromEntry: PageEntry | undefined, popState: PopStateEvent): [EnterPageEvent, PageEntry] {
-    if (fromEntry) {
-      fromEntry.leave();
-    }
+  return(fromEntry: PageEntry, popState: PopStateEvent): PageEntry {
+    fromEntry.leave();
 
     const [data, pageId] = toNavData(popState.state);
     const existingEntry = pageId != null ? this._entries.get(pageId) : undefined;
@@ -174,17 +107,14 @@ export class NavHistory {
       this._entries.set(toEntry.id, toEntry);
     }
 
-    const enterPage = new EnterPageEvent(
-        NavigationEventType.EnterPage,
-        {
-          when: 'return',
-          to: toEntry.page,
-        },
-    );
-
     toEntry.enter('return');
 
-    return [enterPage, toEntry];
+    return toEntry;
+  }
+
+  private _forget(entry: PageEntry) {
+    this._entries.delete(entry.id);
+    entry.forget();
   }
 
 }
