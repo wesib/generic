@@ -47,6 +47,7 @@ export class NavHistory {
 
     this._entries.set(entry.id, entry);
     entry.enter('init');
+    this._history.replaceState(toHistoryState(data, entry.id), '');
 
     return entry;
   }
@@ -56,36 +57,48 @@ export class NavHistory {
   }
 
   open(fromEntry: PageEntry, toEntry: PageEntry) {
-    this._entries.set(toEntry.id, toEntry);
-    if (fromEntry) {
-      // Forget all entries starting from next one
-      for (let e = fromEntry.next; e; e = e.next) {
-        this._forget(e);
-      }
 
-      toEntry.prev = fromEntry;
-      fromEntry.next = toEntry;
-      fromEntry.leave();
+    const { page: { data, title = '', url } } = toEntry;
+
+    this._history.pushState(
+        toHistoryState(data, toEntry.id),
+        title,
+        url.href,
+    );
+
+    this._entries.set(toEntry.id, toEntry);
+    // Forget all entries starting from next one
+    for (let e = fromEntry.next; e; e = e.next) {
+      this._forget(e);
     }
 
+    toEntry.prev = fromEntry;
+    fromEntry.next = toEntry;
+    fromEntry.leave();
     toEntry.enter('open');
   }
 
   replace(fromEntry: PageEntry, toEntry: PageEntry) {
+
+    const { page: { data, title = '', url } } = toEntry;
+
+    this._history.replaceState(
+        toHistoryState(data, toEntry.id),
+        title,
+        url.href,
+    );
+
     this._entries.set(toEntry.id, toEntry);
-    if (fromEntry) {
 
-      const prev = fromEntry.prev;
+    const prev = fromEntry.prev;
 
-      if (prev) {
-        toEntry.prev = prev;
-        prev.next = toEntry;
-      }
-
-      fromEntry.leave();
-      this._forget(fromEntry);
+    if (prev) {
+      toEntry.prev = prev;
+      prev.next = toEntry;
     }
 
+    fromEntry.leave();
+    this._forget(fromEntry);
     toEntry.enter('replace');
   }
 

@@ -1,6 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { AfterEvent, DomEventDispatcher, onEventFromAny, trackValue } from 'fun-events';
-import { NavHistory, PageEntry, toHistoryState } from './nav-history.impl';
+import { NavHistory, PageEntry } from './nav-history.impl';
 import { Navigation as Navigation_ } from './navigation';
 import { NavigationAgent } from './navigation-agent';
 import {
@@ -24,9 +24,6 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
   const onEvent = onEventFromAny<[NavigationEvent]>(onEnter, onLeave, onStay);
   const nav = trackValue<PageEntry>(navHistory.init());
-
-  history.replaceState(toHistoryState(history.state, nav.it.id), '');
-
   const readPage: AfterEvent<[Page]> = nav.read.keep.thru(entry => entry.page);
   let next: Promise<any> = Promise.resolve();
 
@@ -75,11 +72,11 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     }
 
     open(target: Navigation_.Target | string | URL) {
-      return navigate('pre-open', 'open', 'pushState', target);
+      return navigate('pre-open', 'open', target);
     }
 
     replace(target: Navigation_.Target | string | URL) {
-      return navigate('pre-replace', 'replace', 'replaceState', target);
+      return navigate('pre-replace', 'replace', target);
     }
 
   }
@@ -106,7 +103,6 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   function navigate(
       whenLeave: 'pre-open' | 'pre-replace',
       when: 'open' | 'replace',
-      method: 'pushState' | 'replaceState',
       target: Navigation_.Target | string | URL,
   ): Promise<boolean> {
 
@@ -130,13 +126,11 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
         [fromEntry, toEntry] = prepared;
 
-        history[method](toHistoryState(toEntry.page.data, toEntry.id), toEntry.page.title || '', toEntry.page.url.href);
+        navHistory[when](fromEntry, toEntry);
       } catch (e) {
         stay(toEntry, e);
         throw e;
       }
-
-      navHistory[when](fromEntry, toEntry);
 
       nav.it = toEntry;
 
