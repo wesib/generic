@@ -104,7 +104,7 @@ describe('navigation', () => {
           await navigation.with(param, 'init').with(param, 'new').open('/other');
 
           expect(page.get(param)).toBe('new');
-          expect(handle.refine).toHaveBeenCalledWith(expect.anything(), 'new');
+          expect(handle.refine).toHaveBeenCalledWith('new');
           expect(handle.refine).toHaveBeenCalledTimes(1);
         });
         it('updates history data', async () => {
@@ -232,7 +232,7 @@ export function testPageParam(
 
   const handle: Mocked<PageParam.Handle<string, string>> = {
     get: jest.fn(() => value),
-    refine: jest.fn((_page: Page, newValue: string) => {
+    refine: jest.fn(newValue => {
       value = newValue;
     }),
     enter: jest.fn(),

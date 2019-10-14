@@ -53,7 +53,7 @@ export class NavHistory {
   }
 
   newEntry(target: Navigation.URLTarget): PageEntry {
-    return new PageEntry(this, ++this._lastId, target);
+    return new PageEntry(++this._lastId, target);
   }
 
   open(fromEntry: PageEntry, toEntry: PageEntry) {
@@ -144,7 +144,6 @@ export class PageEntry {
   private readonly _params = new Map<PageParam<any, any>, PageParam.Handle<any, any>>();
 
   constructor(
-      readonly _history: NavHistory,
       readonly id: number,
       target: Navigation.URLTarget,
   ) {
@@ -177,7 +176,7 @@ export class PageEntry {
     const handle: PageParam.Handle<T, O> | undefined = this._params.get(param);
 
     if (handle) {
-      handle.refine(this.page, options);
+      handle.refine(options);
       return handle.get();
     }
 

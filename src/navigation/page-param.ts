@@ -30,12 +30,12 @@ export abstract class PageParam<T, O> implements PageParam.Request<T, O> {
    * unless this parameter is assigned already. A {@link PageParam.Handle.refine} method will be called instead
    * in the latter case.
    *
-   * @param event  Leave page event to add parameter to.
+   * @param page  A page to assign navigation parameter to.
    * @param options  Initial parameter options.
    *
    * @returns New page parameter value handle.
    */
-  abstract create(event: Page, options: O): PageParam.Handle<T, O>;
+  abstract create(page: Page, options: O): PageParam.Handle<T, O>;
 
 }
 
@@ -77,10 +77,9 @@ export namespace PageParam {
      * This method is called when {@link Page.set re-assigning page parameter}. It is called when page parameter
      * is assigned already and can be used to update it. The update logic is up to the implementation.
      *
-     * @param page  Target page.
      * @param options  Parameter refinement options.
      */
-    refine(page: Page, options: O): void;
+    refine(options: O): void;
 
     /**
      * This method is called when the page this parameter created for is entered.
