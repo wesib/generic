@@ -140,7 +140,7 @@ export class PageEntry {
   next?: PageEntry;
   prev?: PageEntry;
   readonly page: Page;
-  private _whenEntered?: 'init' | 'open' | 'replace' | 'return';
+  private _current: 0 | 1 = 0;
   private readonly _params = new Map<PageParam<any, any>, PageParam.Handle<any, any>>();
 
   constructor(
@@ -184,8 +184,8 @@ export class PageEntry {
     const newHandle = param.create(this.page, options);
 
     this._params.set(param, newHandle);
-    if (this._whenEntered && newHandle.enter) {
-      newHandle.enter(this.page, this._whenEntered);
+    if (this._current && newHandle.enter) {
+      newHandle.enter(this.page, 'init');
     }
 
     return newHandle.get();
@@ -196,12 +196,12 @@ export class PageEntry {
   }
 
   enter(when: 'init' | 'open' | 'replace' | 'return') {
-    this._whenEntered = when;
+    this._current = 1;
     itsEach(this._params.values(), handle => handle.enter && handle.enter(this.page, when));
   }
 
   leave() {
-    this._whenEntered = undefined;
+    this._current = 0;
     itsEach(this._params.values(), handle => handle.leave && handle.leave());
   }
 
