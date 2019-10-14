@@ -3,7 +3,7 @@ import { EventEmitter, eventInterest, EventInterest, EventReceiver, noEventInter
 import { Page } from '../page';
 import { PageParam } from '../page-param';
 import { PageLoad as PageLoad_ } from './page-load';
-import { PageLoader } from './page-loader';
+import { PageLoader } from './page-loader.impl';
 
 /**
  * @internal
