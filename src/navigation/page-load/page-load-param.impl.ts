@@ -54,8 +54,7 @@ export class PageLoadParam extends PageParam<OnEvent<[PageLoad_]>, EventReceiver
         onPage.send(new PageLoad());
       },
       leave(): void {
-        interest.off();
-        interest = noEventInterest();
+        interest.off('page left');
       }
     };
   }

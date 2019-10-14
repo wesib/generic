@@ -25,7 +25,7 @@
     "a-iterable": "^2.4.4",
     "call-thru": "^2.5.3",
     "context-values": "^2.0.5",
-    "fun-events": "^5.0.6",
+    "fun-events": "^5.0.7",
     "namespace-aliaser": "^2.0.2",
     "style-producer": "^3.2.3"
   },
@@ -45,7 +45,7 @@
     "cross-fetch": "^3.0.4",
     "cssesc": "^3.0.0",
     "fs-extra": "^8.1.0",
-    "fun-events": "^5.0.6",
+    "fun-events": "^5.0.7",
     "gh-pages": "^2.1.1",
     "hyphenate-style-name": "^1.0.3",
     "jest": "^24.9.0",
