@@ -1,4 +1,5 @@
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
+import { noop } from 'call-thru';
 import { LocationMock } from '../spec/location-mock';
 import { Navigation } from './navigation';
 import { NavigationSupport } from './navigation-support.feature';
@@ -152,6 +153,34 @@ describe('navigation', () => {
         expect(handle.leave).toHaveBeenCalledTimes(1);
         expect(handle.forget).toHaveBeenCalledTimes(1);
       });
+      it('transfers parameters', async () => {
+
+        const handle2 = testPageParamHandle({ value: '2' });
+
+        page.set(param, '1');
+        (handle as any).transfer = jest.fn(() => handle2);
+
+        await navigation.open('/other');
+
+        expect(handle.transfer).toHaveBeenCalledWith(page, 'pre-open');
+        expect(page.get(param)).toBe(handle2.get());
+      });
+      it('does not transfer parameters when not supported', async () => {
+        page.set(param, '1');
+
+        await navigation.open('/other');
+
+        expect(page.get(param)).toBeUndefined();
+      });
+      it('does not transfer parameters when nothing to transfer', async () => {
+        page.set(param, '1');
+        (handle as any).transfer = jest.fn(noop);
+
+        await navigation.open('/other');
+
+        expect(handle.transfer).toHaveBeenCalledWith(page, 'pre-open');
+        expect(page.get(param)).toBeUndefined();
+      });
     });
 
     describe('replace', () => {
@@ -192,6 +221,18 @@ describe('navigation', () => {
         expect(handle.stay).not.toHaveBeenCalled();
         expect(handle.forget).not.toHaveBeenCalled();
       });
+      it('transfers parameters', async () => {
+
+        const handle2 = testPageParamHandle({ value: '2' });
+
+        page.set(param, '1');
+        (handle as any).transfer = jest.fn(() => handle2);
+
+        await navigation.replace('/other');
+
+        expect(handle.transfer).toHaveBeenCalledWith(page, 'pre-replace');
+        expect(page.get(param)).toBe(handle2.get());
+      });
     });
 
     describe('back', () => {
@@ -226,24 +267,29 @@ describe('navigation', () => {
   });
 });
 
-export function testPageParam(
-    value: string = '',
-): [PageParam<string, string>, Mocked<PageParam.Handle<string, string>>] {
-
-  const handle: Mocked<PageParam.Handle<string, string>> = {
-    get: jest.fn(() => value),
+function testPageParamHandle(state: { value: string } = { value: '' }): Mocked<PageParam.Handle<string, string>> {
+  return {
+    get: jest.fn(() => state.value),
     refine: jest.fn(newValue => {
-      value = newValue;
+      state.value = newValue;
     }),
     enter: jest.fn(),
     stay: jest.fn(),
     leave: jest.fn(),
     forget: jest.fn(),
   };
+}
+
+export function testPageParam(
+    value = '',
+): [PageParam<string, string>, Mocked<PageParam.Handle<string, string>>] {
+
+  const state = { value };
+  const handle = testPageParamHandle(state);
 
   class TestParam extends PageParam<string, string> {
     create(_page: Page, initValue: string): PageParam.Handle<string, string> {
-      value = initValue;
+      state.value = initValue;
       return handle;
     }
   }

@@ -172,6 +172,9 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
       const fromEntry = nav.it;
       const toEntry = navHistory.newEntry(urlTarget);
+
+      fromEntry.transfer(toEntry, whenLeave);
+
       const leavePage = new LeavePageEvent(
           NavigationEventType.LeavePage,
           {

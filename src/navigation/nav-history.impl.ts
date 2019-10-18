@@ -190,6 +190,19 @@ export class PageEntry {
     return newHandle.get();
   }
 
+  transfer(to: PageEntry, when: 'pre-open' | 'pre-replace') {
+    itsEach(this._params.entries(), ([param, handle]) => {
+      if (handle.transfer) {
+
+        const transferred = handle.transfer(to.page, when);
+
+        if (transferred) {
+          to._params.set(param, transferred);
+        }
+      }
+    });
+  }
+
   stay(at: Page) {
     itsEach(this._params.values(), handle => handle.stay && handle.stay(at));
   }

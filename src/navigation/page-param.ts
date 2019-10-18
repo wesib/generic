@@ -82,6 +82,18 @@ export namespace PageParam {
     refine(options: O): void;
 
     /**
+     * Transfers parameter to target page.
+     *
+     * This is called right before [[LeavePageEvent]] is fired for each parameter handle of current page.
+     *
+     * @param to  A page to transfer parameter to.
+     * @param when  When the transfer happens. Either `pre-open`, or `pre-replace`.
+     *
+     * @returns New parameter handle instance for target page, or `undefined` if nothing to transfer.
+     */
+    transfer?(to: Page, when: 'pre-open' | 'pre-replace'): Handle<T, O> | undefined;
+
+    /**
      * This method is called when the page this parameter created for is entered.
      *
      * @param page  Entered page.
