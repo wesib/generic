@@ -1,31 +1,28 @@
 import { BootstrapContext } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
-import { eventInterest, EventInterest, noEventInterest, OnEvent, onEventBy } from 'fun-events';
+import { eventInterest, EventInterest, noEventInterest, OnEvent } from 'fun-events';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
 import { PageLoadRequest } from './page-load-request';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoader } from './page-loader.impl';
 
-type PageLoadRequestEntry = readonly [PageLoadRequest, boolean];
-
 class PageLoadRequests {
 
-  private readonly _map = new Map<EventInterest, PageLoadRequestEntry[]>();
+  private readonly _map = new Map<EventInterest, PageLoadRequest[]>();
 
   constructor() {
   }
 
-  request(request: PageLoadRequest, transient = false): this {
+  request(request: PageLoadRequest): this {
 
     const { interest } = request;
-    let list = this._map.get(interest);
+    const list = this._map.get(interest);
 
     if (list) {
-      list.push([request, transient]);
+      list.push(request);
     } else {
-      list = [[request, transient]];
-      this._map.set(interest, list);
+      this._map.set(interest, [request]);
       interest.whenDone(() => this._map.delete(interest));
     }
 
@@ -37,33 +34,27 @@ class PageLoadRequests {
     const transferred = new PageLoadRequests();
 
     for (const [interest, list] of this._map.entries()) {
-      transferred._map.set(interest, list.filter(([, transient]) => !transient));
+      transferred._map.set(interest, list);
     }
 
     return transferred;
   }
 
-  handle(load: PageLoader): PageParam.Handle<OnEvent<[PageLoadResponse]>, PageLoadRequest> {
+  handle(load: PageLoader): PageParam.Handle<void, PageLoadRequest> {
 
     const self = this;
     let onLoad: OnEvent<[PageLoadResponse]> | undefined;
     const pageInterest = eventInterest();
     let loadInterest = noEventInterest();
-    const value: OnEvent<[PageLoadResponse]> = onEventBy(receiver => {
-
-      const interest = eventInterest();
-
-      interest.needs(addRequest({ interest: interest, receiver }, true));
-
-      return interest;
-    });
 
     return {
-      get() {
-        return value;
-      },
+      get() {},
       refine(request: PageLoadRequest): void {
-        addRequest(request);
+        self.request(request);
+        if (onLoad) {
+          // Page load is already started. Report the response.
+          loadPage(onLoad, request);
+        }
       },
       transfer() {
         return self.transfer().handle(load);
@@ -77,9 +68,7 @@ class PageLoadRequests {
         const onResponse = onLoad = load(page).share();
 
         loadInterest = eventInterest(() => onLoad = undefined).needs(pageInterest);
-        itsEach(self._map.values(), list => list.forEach(([request]) => {
-          loadPage(onResponse, request);
-        }));
+        itsEach(self._map.values(), list => list.forEach(request => loadPage(onResponse, request)));
       },
       leave(): void {
         loadInterest.off('page left');
@@ -92,17 +81,8 @@ class PageLoadRequests {
       },
     };
 
-    function addRequest(request: PageLoadRequest, transient?: boolean): EventInterest {
-      self.request(request, transient);
-      if (onLoad) {
-        // Page load is already started. Report the response.
-        return loadPage(onLoad, request);
-      }
-      return eventInterest();
-    }
-
     function loadPage(onResponse: OnEvent<[PageLoadResponse]>, { interest, receiver }: PageLoadRequest) {
-      return onResponse(receiver)
+      onResponse(receiver)
           .needs(interest)
           .needs(loadInterest);
     }
@@ -113,7 +93,7 @@ class PageLoadRequests {
 /**
  * @internal
  */
-export class PageLoadParam extends PageParam<OnEvent<[PageLoadResponse]>, PageLoadRequest> {
+export class PageLoadParam extends PageParam<void, PageLoadRequest> {
 
   private readonly _loader: PageLoader;
 
@@ -122,10 +102,7 @@ export class PageLoadParam extends PageParam<OnEvent<[PageLoadResponse]>, PageLo
     this._loader = bsContext.get(PageLoader);
   }
 
-  create(
-      _page: Page,
-      request: PageLoadRequest,
-  ): PageParam.Handle<OnEvent<[PageLoadResponse]>, PageLoadRequest> {
+  create(_page: Page, request: PageLoadRequest) {
     return new PageLoadRequests().request(request).handle(this._loader);
   }
 
