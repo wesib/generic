@@ -4,6 +4,7 @@
 import { ContextUpRef } from 'context-values';
 import { EventSender, OnEvent } from 'fun-events';
 import { FetchAgentKey } from '../../fetch/fetch-agent-key';
+import { PageLoadResponse } from './page-load-response';
 
 /**
  * Page load agent signature.
@@ -19,14 +20,14 @@ export type PageLoadAgent =
  * Accepts an optional `Request` parameter. The original request will be used instead when omitted.
  * @param request  HTTP request.
  *
- * @returns An `EventSender` of loaded document. It is returned either to preceding agent in chain, or as a loaded
+ * @returns An `EventSender` of page load response. It is returned either to preceding agent in chain, or as a loaded
  * document.
  */
     (
         this: void,
-        next: (this: void, request?: Request) => OnEvent<[Document]>,
+        next: (this: void, request?: Request) => OnEvent<[PageLoadResponse]>,
         request: Request,
-    ) => EventSender<[Document]>;
+    ) => EventSender<[PageLoadResponse]>;
 
 export namespace PageLoadAgent {
 
@@ -45,9 +46,9 @@ export namespace PageLoadAgent {
    */
       (
           this: void,
-          next: (this: void, request: Request) => OnEvent<[Document]>,
+          next: (this: void, request: Request) => OnEvent<[PageLoadResponse]>,
           request: Request,
-      ) => OnEvent<[Document]>;
+      ) => OnEvent<[PageLoadResponse]>;
 
 }
 
@@ -57,4 +58,4 @@ export namespace PageLoadAgent {
  * The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.
  */
 export const PageLoadAgent: ContextUpRef<PageLoadAgent.Combined, PageLoadAgent> =
-    /*#__PURE__*/ new FetchAgentKey<[Document]>('page-load-agent');
+    /*#__PURE__*/ new FetchAgentKey<[PageLoadResponse]>('page-load-agent');

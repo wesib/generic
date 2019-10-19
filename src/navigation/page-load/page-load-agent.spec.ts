@@ -1,6 +1,7 @@
 import { ContextRegistry } from 'context-values';
 import { EventEmitter, OnEvent, onEventFrom } from 'fun-events';
 import { PageLoadAgent } from './page-load-agent';
+import { PageLoadResponse } from './page-load-response';
 import Mock = jest.Mock;
 
 describe('navigation', () => {
@@ -18,8 +19,8 @@ describe('navigation', () => {
     });
 
     let request: Request;
-    let mockLoad: Mock<OnEvent<[Document]>, [Request?]>;
-    let emitter: EventEmitter<[Document]>;
+    let mockLoad: Mock<OnEvent<[PageLoadResponse]>, [Request?]>;
+    let emitter: EventEmitter<[PageLoadResponse]>;
 
     beforeEach(() => {
       request = new Request('http://localhost/test');
@@ -38,14 +39,14 @@ describe('navigation', () => {
     });
     it('calls the registered agent', async () => {
 
-      const emitter2 = new EventEmitter<[Document]>();
+      const emitter2 = new EventEmitter<[PageLoadResponse]>();
       const mockAgent = jest.fn(() => emitter2.on);
 
       registry.provide({ a: PageLoadAgent, is: mockAgent });
 
       const response1 = { name: 'document1' } as any;
       const response2 = { name: 'document2' } as any;
-      const response = await new Promise<Document>(resolve => {
+      const response = await new Promise<PageLoadResponse>(resolve => {
         onEventFrom(agent(mockLoad, request)).once(resolve);
         emitter.send(response1);
         emitter2.send(response2);

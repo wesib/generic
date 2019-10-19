@@ -4,6 +4,7 @@ import { EventEmitter, eventInterest, EventInterest, EventReceiver, onEventBy } 
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
+import { PageLoadResponse } from './page-load-response';
 import { PageLoader } from './page-loader.impl';
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
@@ -12,13 +13,11 @@ describe('navigation', () => {
 
   let mockHttpFetch: Mock<ReturnType<HttpFetch>, Parameters<HttpFetch>>;
   let page: Page;
-  let pageInterest: EventInterest;
   let mockResponse: Mocked<Response>;
   let mockResponseHeaders: Mocked<Headers>;
 
   beforeEach(() => {
     page = { url: new URL('http://localhost/test') } as Page;
-    pageInterest = eventInterest();
     mockResponseHeaders = {
       get: jest.fn(),
     } as any;
@@ -100,8 +99,8 @@ describe('navigation', () => {
       expect(interest.done).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
 
-      const node: Element = receiver.mock.calls[0][0];
-      const div: Element = node.querySelector('div') as Element;
+      const document = receiver.mock.calls[0][0]!.document;
+      const div: Element = document.querySelector('div') as Element;
 
       expect(div.ownerDocument).toBeInstanceOf(HTMLDocument);
       expect(div).toBeInstanceOf(HTMLDivElement);
@@ -120,8 +119,8 @@ describe('navigation', () => {
       expect(interest.done).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
 
-      const node: Element = receiver.mock.calls[0][0];
-      const content = node.querySelector('content') as Node;
+      const document = receiver.mock.calls[0][0]!.document;
+      const content = document.querySelector('content') as Node;
 
       expect(content).toBeInstanceOf(Element);
       expect(content).not.toBeInstanceOf(HTMLElement);
@@ -165,13 +164,16 @@ describe('navigation', () => {
     });
     it('calls agent', async () => {
 
-      const newDocument: Document = document.implementation.createHTMLDocument('other');
+      const newResponse: PageLoadResponse = {
+        page,
+        document: document.implementation.createHTMLDocument('other'),
+      };
 
       mockAgent.mockImplementation(() => {
 
-        const emitter = new EventEmitter<[Document]>();
+        const emitter = new EventEmitter<[PageLoadResponse]>();
 
-        Promise.resolve().then(() => emitter.send(newDocument)).then(() => emitter.done());
+        Promise.resolve().then(() => emitter.send(newResponse)).then(() => emitter.done());
 
         return emitter.on;
       });
@@ -180,17 +182,17 @@ describe('navigation', () => {
 
       await loadDocument(receiver);
 
-      expect(receiver).toHaveBeenCalledWith(newDocument);
+      expect(receiver).toHaveBeenCalledWith(newResponse);
       expect(mockHttpFetch).not.toHaveBeenCalled();
     });
 
     function loadDocument(
-        receiver: EventReceiver<[Document]> = noop,
+        receiver: EventReceiver<[PageLoadResponse]> = noop,
         done: (reason?: any) => void = noop,
     ): Promise<EventInterest> {
       return new Promise<EventInterest>(resolve => {
 
-        const interest = loadPage(page, pageInterest)(receiver);
+        const interest = loadPage(page)(receiver);
 
         interest.whenDone(reason => {
           done(reason);

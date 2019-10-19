@@ -1,14 +1,15 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { SingleContextKey } from 'context-values';
-import { EventEmitter, EventInterest, eventInterest, OnEvent, onEventBy } from 'fun-events';
+import { EventEmitter, eventInterest, OnEvent, onEventBy } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
+import { PageLoadResponse } from './page-load-response';
 
 /**
  * @internal
  */
-export type PageLoader = (this: void, page: Page, interest: EventInterest) => OnEvent<[Document]>;
+export type PageLoader = (this: void, page: Page) => OnEvent<[PageLoadResponse]>;
 
 /**
  * @internal
@@ -27,7 +28,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
   const agent = context.get(PageLoadAgent);
   const parser: DOMParser = new (window as any).DOMParser();
 
-  return (page, resultInterest) => {
+  return page => {
 
     const request = new Request(
         page.url.href,
@@ -40,18 +41,21 @@ function newPageLoader(context: BootstrapContext): PageLoader {
 
     return agent(fetch, request);
 
-    function fetch(fetchRequest: Request): OnEvent<[Document]> {
+    function fetch(fetchRequest: Request): OnEvent<[PageLoadResponse]> {
 
       const responseTextEmitter = new EventEmitter<[Response, string]>();
-      const onDocument: OnEvent<[Document]> = responseTextEmitter.on.thru_(
-          (response, text) => parser.parseFromString(text, pageLoadResponseType(response)),
+      const onResponse: OnEvent<[PageLoadResponse]> = responseTextEmitter.on.thru_(
+          (response, text) => ({
+            page,
+            document: parser.parseFromString(text, pageLoadResponseType(response)),
+          }),
       );
 
-      return onEventBy<[Document]>(receiver => {
+      return onEventBy<[PageLoadResponse]>(receiver => {
 
         const interest = eventInterest();
         const responseInterest = httpFetch(fetchRequest)(response => {
-          onDocument(receiver).needs(interest);
+          onResponse(receiver).needs(interest);
           response.text().then(
               text => {
                 interest.needs(responseInterest);
@@ -60,7 +64,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
           ).catch(
               e => interest.off(e),
           );
-        }).needs(resultInterest);
+        });
 
         return interest;
       });
