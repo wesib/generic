@@ -14,32 +14,6 @@ class PageLoadRequests {
   constructor() {
   }
 
-  request(request: PageLoadRequest): this {
-
-    const { interest } = request;
-    const list = this._map.get(interest);
-
-    if (list) {
-      list.push(request);
-    } else {
-      this._map.set(interest, [request]);
-      interest.whenDone(() => this._map.delete(interest));
-    }
-
-    return this;
-  }
-
-  transfer(): PageLoadRequests {
-
-    const transferred = new PageLoadRequests();
-
-    for (const [interest, list] of this._map.entries()) {
-      transferred._map.set(interest, list);
-    }
-
-    return transferred;
-  }
-
   handle(load: PageLoader): PageParam.Handle<void, PageLoadRequest> {
 
     const self = this;
@@ -50,14 +24,14 @@ class PageLoadRequests {
     return {
       get() {},
       refine(request: PageLoadRequest): void {
-        self.request(request);
+        self._add(request);
         if (onLoad) {
           // Page load is already started. Report the response.
           loadPage(onLoad, request);
         }
       },
       transfer() {
-        return self.transfer().handle(load);
+        return self._transfer().handle(load);
       },
       enter(page: Page, when: 'init' | 'open' | 'replace' | 'return'): void {
         if (when === 'init') {
@@ -88,6 +62,30 @@ class PageLoadRequests {
     }
   }
 
+  private _add(request: PageLoadRequest) {
+
+    const { interest } = request;
+    const list = this._map.get(interest);
+
+    if (list) {
+      list.push(request);
+    } else {
+      this._map.set(interest, [request]);
+      interest.whenDone(() => this._map.delete(interest));
+    }
+  }
+
+  private _transfer(): PageLoadRequests {
+
+    const transferred = new PageLoadRequests();
+
+    for (const [interest, list] of this._map.entries()) {
+      transferred._map.set(interest, list);
+    }
+
+    return transferred;
+  }
+
 }
 
 /**
@@ -103,7 +101,12 @@ export class PageLoadParam extends PageParam<void, PageLoadRequest> {
   }
 
   create(_page: Page, request: PageLoadRequest) {
-    return new PageLoadRequests().request(request).handle(this._loader);
+
+    const handle = new PageLoadRequests().handle(this._loader);
+
+    handle.refine(request);
+
+    return handle;
   }
 
 }
