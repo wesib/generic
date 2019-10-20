@@ -1,6 +1,7 @@
 import { BootstrapContext } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
-import { eventInterest, EventInterest, noEventInterest, OnEvent } from 'fun-events';
+import { EventEmitter, eventInterest, EventInterest, noEventInterest, OnEvent } from 'fun-events';
+import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
 import { PageLoadRequest } from './page-load-request';
@@ -11,10 +12,13 @@ class PageLoadRequests {
 
   private readonly _map = new Map<EventInterest, PageLoadRequest[]>();
 
-  constructor() {
-  }
+  constructor(
+      private readonly _navigation: Navigation,
+      private readonly _loader: PageLoader,
+      private readonly _page: Page,
+  ) {}
 
-  handle(load: PageLoader): PageParam.Handle<void, PageLoadRequest> {
+  handle(): PageParam.Handle<void, PageLoadRequest> {
 
     const self = this;
     let onLoad: OnEvent<[PageLoadResponse]> | undefined;
@@ -27,11 +31,11 @@ class PageLoadRequests {
         self._add(request);
         if (onLoad) {
           // Page load is already started. Report the response.
-          loadPage(onLoad, request);
+          requestPage(onLoad, request);
         }
       },
-      transfer() {
-        return self._transfer().handle(load);
+      transfer(to) {
+        return self._transfer(to).handle();
       },
       enter(page: Page, when: 'init' | 'open' | 'replace' | 'return'): void {
         if (when === 'init') {
@@ -39,10 +43,25 @@ class PageLoadRequests {
           return;
         }
 
-        const onResponse = onLoad = load(page).share();
-
         loadInterest = eventInterest(() => onLoad = undefined).needs(pageInterest);
-        itsEach(self._map.values(), list => list.forEach(request => loadPage(onResponse, request)));
+
+        const emitter = new EventEmitter<[PageLoadResponse]>();
+
+        self._loader(page)(response => emitter.send(response)).whenDone(error => {
+          self._navigation.read.once(current => {
+            if (current === self._page) {
+             emitter.send({
+               ok: false as const,
+               page: current,
+               error,
+             });
+            }
+          });
+        }).needs(loadInterest);
+
+        const onResponse = onLoad = emitter.on;
+
+        itsEach(self._map.values(), list => list.forEach(request => requestPage(onResponse, request)));
       },
       leave(): void {
         loadInterest.off('page left');
@@ -55,10 +74,8 @@ class PageLoadRequests {
       },
     };
 
-    function loadPage(onResponse: OnEvent<[PageLoadResponse]>, { interest, receiver }: PageLoadRequest) {
-      onResponse(receiver)
-          .needs(interest)
-          .needs(loadInterest);
+    function requestPage(onResponse: OnEvent<[PageLoadResponse]>, { interest, receiver }: PageLoadRequest) {
+      onResponse(receiver).needs(interest);
     }
   }
 
@@ -75,9 +92,9 @@ class PageLoadRequests {
     }
   }
 
-  private _transfer(): PageLoadRequests {
+  private _transfer(to: Page): PageLoadRequests {
 
-    const transferred = new PageLoadRequests();
+    const transferred = new PageLoadRequests(this._navigation, this._loader, to);
 
     for (const [interest, list] of this._map.entries()) {
       transferred._map.set(interest, list);
@@ -93,16 +110,18 @@ class PageLoadRequests {
  */
 export class PageLoadParam extends PageParam<void, PageLoadRequest> {
 
+  private readonly _navigation: Navigation;
   private readonly _loader: PageLoader;
 
   constructor(bsContext: BootstrapContext) {
     super();
+    this._navigation = bsContext.get(Navigation);
     this._loader = bsContext.get(PageLoader);
   }
 
-  create(_page: Page, request: PageLoadRequest) {
+  create(page: Page, request: PageLoadRequest) {
 
-    const handle = new PageLoadRequests().handle(this._loader);
+    const handle = new PageLoadRequests(this._navigation, this._loader, page).handle();
 
     handle.put(request);
 
