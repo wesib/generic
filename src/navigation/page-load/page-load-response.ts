@@ -3,10 +3,36 @@
  */
 import { Page } from '../page';
 
-export interface PageLoadResponse {
+export type PageLoadResponse = PageLoadResponse.Ok | PageLoadResponse.Failure;
 
-  readonly page: Page;
+export namespace PageLoadResponse {
 
-  readonly document: Document;
+  export interface Ok {
+
+    readonly ok: true;
+
+    readonly page: Page;
+
+    readonly response: Response;
+
+    readonly document: Document;
+
+    readonly error?: undefined;
+
+  }
+
+  export interface Failure {
+
+    readonly ok: false;
+
+    readonly page: Page;
+
+    readonly response?: Response;
+
+    readonly document?: Document;
+
+    readonly error: any;
+
+  }
 
 }

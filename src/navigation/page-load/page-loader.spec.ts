@@ -22,6 +22,7 @@ describe('navigation', () => {
       get: jest.fn(),
     } as any;
     mockResponse = {
+      ok: true,
       text: jest.fn(),
       headers: mockResponseHeaders,
     } as any;
@@ -150,22 +151,38 @@ describe('navigation', () => {
       expect(interest.done).toBe(true);
       expect(done).toHaveBeenCalledWith(error);
     });
-    it('reports parse error', async () => {
-      mockResponse.text.mockImplementation(() => Promise.reject(error));
+    it('reports invalid HTTP response', async () => {
+      (mockResponse as any).ok = false;
+      (mockResponse as any).status = 404;
+      mockResponse.text.mockImplementation(() => Promise.resolve('dhfdfhfhg'));
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const error = new Error('Some error');
       const interest = await loadDocument(receiver, done);
 
-      expect(receiver).not.toHaveBeenCalled();
+      expect(receiver).toHaveBeenCalledWith({ ok: false, page, response: mockResponse, error: mockResponse.status });
       expect(interest.done).toBe(true);
-      expect(done).toHaveBeenCalledWith(error);
+      expect(done).toHaveBeenCalled();
+    });
+    it('reports parse error', async () => {
+      mockResponseHeaders.get.mockImplementation(
+          name => name.toLowerCase() === 'content-type' ? 'application/x-wrong' : null);
+      mockResponse.text.mockImplementation(() => Promise.resolve('dhfdfhfhg'));
+
+      const receiver = jest.fn();
+      const done = jest.fn();
+      const interest = await loadDocument(receiver, done);
+
+      expect(receiver).toHaveBeenCalledWith({ ok: false, page, response: mockResponse, error: expect.any(Object) });
+      expect(interest.done).toBe(true);
+      expect(done).toHaveBeenCalled();
     });
     it('calls agent', async () => {
 
       const newResponse: PageLoadResponse = {
+        ok: true,
         page,
+        response: { name: 'response' } as any,
         document: document.implementation.createHTMLDocument('other'),
       };
 

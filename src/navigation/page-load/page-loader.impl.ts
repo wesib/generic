@@ -45,10 +45,31 @@ function newPageLoader(context: BootstrapContext): PageLoader {
 
       const responseTextEmitter = new EventEmitter<[Response, string]>();
       const onResponse: OnEvent<[PageLoadResponse]> = responseTextEmitter.on.thru_(
-          (response, text) => ({
-            page,
-            document: parser.parseFromString(text, pageLoadResponseType(response)),
-          }),
+          (response, text) => {
+            if (!response.ok) {
+              return {
+                ok: false as const,
+                page,
+                response,
+                error: response.status,
+              };
+            }
+            try {
+              return {
+                ok: true as const,
+                page,
+                response,
+                document: parser.parseFromString(text, pageLoadResponseType(response)),
+              };
+            } catch (error) {
+              return {
+                ok: false as const,
+                page,
+                response,
+                error,
+              };
+            }
+          },
       );
 
       return onEventBy<[PageLoadResponse]>(receiver => {
