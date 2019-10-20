@@ -1,6 +1,6 @@
 import { BootstrapContext } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
-import { EventEmitter, eventInterest, EventInterest, noEventInterest, OnEvent } from 'fun-events';
+import { EventEmitter, eventInterest, EventInterest, noEventInterest, OnEvent, onEventBy } from 'fun-events';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
@@ -45,21 +45,25 @@ class PageLoadRequests {
 
         loadInterest = eventInterest(() => onLoad = undefined).needs(pageInterest);
 
-        const emitter = new EventEmitter<[PageLoadResponse]>();
+        const onResponse = onLoad = onEventBy<[PageLoadResponse]>(responseReceiver => {
 
-        self._loader(page)(response => emitter.send(response)).whenDone(error => {
-          self._navigation.read.once(current => {
-            if (current === self._page) {
-             emitter.send({
-               ok: false as const,
-               page: current,
-               error,
-             });
-            }
-          });
-        }).needs(loadInterest);
+          const emitter = new EventEmitter<[PageLoadResponse]>();
 
-        const onResponse = onLoad = emitter.on;
+          self._loader(page)(response => emitter.send(response)).whenDone(error => {
+            self._navigation.read.once(current => {
+              if (current === self._page) {
+                // Report current page load error as failed load response
+                emitter.send({
+                  ok: false as const,
+                  page: current,
+                  error,
+                });
+              }
+            });
+          }).needs(loadInterest);
+
+          return emitter.on(responseReceiver).whenDone(reason => emitter.done(reason));
+        }).share();
 
         itsEach(self._map.values(), list => list.forEach(request => requestPage(onResponse, request)));
       },
