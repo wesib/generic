@@ -32,14 +32,14 @@ describe('navigation', () => {
         url: new URL('http://localhost/index'),
         data: 'initial',
         get: noop,
-        set: noop,
+        put: noop,
       };
       to = {
         url: new URL('http://localhost/other'),
         data: 'updated',
         title: 'New title',
         get: jest.fn(),
-        set: jest.fn(),
+        put: jest.fn(),
       };
     });
 
@@ -68,7 +68,7 @@ describe('navigation', () => {
       expect(mockNavigate).toHaveBeenCalledWith({
         ...to,
         get: expect.any(Function),
-        set: expect.any(Function),
+        put: expect.any(Function),
       });
     });
     it('updates URL', async () => {
@@ -79,7 +79,7 @@ describe('navigation', () => {
         ...to,
         url: new URL('http://localhost/other'),
         get: expect.any(Function),
-        set: expect.any(Function),
+        put: expect.any(Function),
       });
     });
     it('updates URL using path', async () => {
@@ -90,7 +90,7 @@ describe('navigation', () => {
         ...to,
         url: new URL('http://localhost/other'),
         get: expect.any(Function),
-        set: expect.any(Function),
+        put: expect.any(Function),
       });
     });
     it('updates title', async () => {
@@ -101,7 +101,7 @@ describe('navigation', () => {
         ...to,
         title: 'other title',
         get: expect.any(Function),
-        set: expect.any(Function),
+        put: expect.any(Function),
       });
     });
     it('updates data', async () => {
@@ -112,7 +112,7 @@ describe('navigation', () => {
         ...to,
         data: 'other data',
         get: expect.any(Function),
-        set: expect.any(Function),
+        put: expect.any(Function),
       });
     });
     it('accesses page parameters', () => {
@@ -145,13 +145,13 @@ describe('navigation', () => {
       registry.provide({
         a: NavigationAgent,
         is: (next, _when, _from, toPage) => {
-          toPage.set(param, 'test');
+          toPage.put(param, 'test');
           return next();
         },
       });
 
       agent(mockNavigate, when, from, to);
-      expect(to.set).toHaveBeenCalledWith(param, 'test');
+      expect(to.put).toHaveBeenCalledWith(param, 'test');
     });
   });
 });

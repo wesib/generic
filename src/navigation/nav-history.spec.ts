@@ -62,9 +62,9 @@ describe('navigation', () => {
           expect(page.get(param)).toBeUndefined();
         });
       });
-      describe('set', () => {
+      describe('put', () => {
         it('assigns parameter value', () => {
-          page.set(param, 'test');
+          page.put(param, 'test');
           expect(page.get(param)).toBe('test');
           expect(handle.enter).toHaveBeenCalledWith(page, 'init');
         });
@@ -72,12 +72,12 @@ describe('navigation', () => {
     });
 
     describe('LeavePageEvent', () => {
-      describe('to.set', () => {
+      describe('to.put', () => {
         it('makes parameter available in future route', async () => {
 
           const promise = new Promise<string | undefined>(resolve => navigation.on.once(event => {
             if (event.when === 'pre-open') {
-              event.to.set(param, 'init');
+              event.to.put(param, 'init');
               resolve(event.to.get(param));
             }
           }));
@@ -90,7 +90,7 @@ describe('navigation', () => {
 
           const promise = new Promise<string | undefined>(resolve => navigation.on(event => {
             if (event.when === 'pre-open') {
-              event.to.set(param, 'init');
+              event.to.put(param, 'init');
             } else if (event.when === 'open') {
               resolve(event.to.get(param));
             }
@@ -105,8 +105,8 @@ describe('navigation', () => {
           await navigation.with(param, 'init').with(param, 'new').open('/other');
 
           expect(page.get(param)).toBe('new');
-          expect(handle.refine).toHaveBeenCalledWith('new');
-          expect(handle.refine).toHaveBeenCalledTimes(1);
+          expect(handle.put).toHaveBeenCalledWith('new');
+          expect(handle.put).toHaveBeenCalledTimes(1);
         });
         it('updates history data', async () => {
 
@@ -123,7 +123,7 @@ describe('navigation', () => {
         it('aborts parameter assignment', async () => {
           navigation.on.once(event => {
             if (event.when === 'pre-open') {
-              event.to.set(param, 'init');
+              event.to.put(param, 'init');
               event.preventDefault();
             }
           });
@@ -157,7 +157,7 @@ describe('navigation', () => {
 
         const handle2 = testPageParamHandle({ value: '2' });
 
-        page.set(param, '1');
+        page.put(param, '1');
         (handle as any).transfer = jest.fn(() => handle2);
 
         await navigation.open('/other');
@@ -166,14 +166,14 @@ describe('navigation', () => {
         expect(page.get(param)).toBe(handle2.get());
       });
       it('does not transfer parameters when not supported', async () => {
-        page.set(param, '1');
+        page.put(param, '1');
 
         await navigation.open('/other');
 
         expect(page.get(param)).toBeUndefined();
       });
       it('does not transfer parameters when nothing to transfer', async () => {
-        page.set(param, '1');
+        page.put(param, '1');
         (handle as any).transfer = jest.fn(noop);
 
         await navigation.open('/other');
@@ -225,7 +225,7 @@ describe('navigation', () => {
 
         const handle2 = testPageParamHandle({ value: '2' });
 
-        page.set(param, '1');
+        page.put(param, '1');
         (handle as any).transfer = jest.fn(() => handle2);
 
         await navigation.replace('/other');
@@ -270,7 +270,7 @@ describe('navigation', () => {
 function testPageParamHandle(state: { value: string } = { value: '' }): Mocked<PageParam.Handle<string, string>> {
   return {
     get: jest.fn(() => state.value),
-    refine: jest.fn(newValue => {
+    put: jest.fn(newValue => {
       state.value = newValue;
     }),
     enter: jest.fn(),

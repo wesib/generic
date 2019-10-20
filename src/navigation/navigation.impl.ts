@@ -81,8 +81,8 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       return navigate('pre-replace', 'replace', target);
     }
 
-    with<T, O>(request: PageParam.Request<T, O>, options: O): Navigation_.Parameterized {
-      return withParam(page => page.set(request, options));
+    with<T, I>(request: PageParam.Request<T, I>, input: I): Navigation_.Parameterized {
+      return withParam(page => page.put(request, input));
     }
 
   }
@@ -91,8 +91,8 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
   function withParam(applyParams: (page: Page) => void): Navigation_.Parameterized {
     return {
-      with<TT, OO>(request: PageParam.Request<TT, OO>, options: OO): Navigation_.Parameterized {
-        return withParam(mergeFunctions(applyParams, page => page.set(request, options)));
+      with<TT, II>(request: PageParam.Request<TT, II>, input: II): Navigation_.Parameterized {
+        return withParam(mergeFunctions(applyParams, page => page.put(request, input)));
       },
       open(target: Navigation_.Target | string | URL) {
         return navigate('pre-open', 'open', target, applyParams);

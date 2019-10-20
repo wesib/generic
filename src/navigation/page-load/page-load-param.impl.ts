@@ -23,7 +23,7 @@ class PageLoadRequests {
 
     return {
       get() {},
-      refine(request: PageLoadRequest): void {
+      put(request: PageLoadRequest): void {
         self._add(request);
         if (onLoad) {
           // Page load is already started. Report the response.
@@ -104,7 +104,7 @@ export class PageLoadParam extends PageParam<void, PageLoadRequest> {
 
     const handle = new PageLoadRequests().handle(this._loader);
 
-    handle.refine(request);
+    handle.put(request);
 
     return handle;
   }

@@ -157,8 +157,8 @@ export class PageEntry {
       get(request) {
         return entry.get(request);
       },
-      set(request, options) {
-        entry.set(request, options);
+      put(request, input) {
+        entry.put(request, input);
       }
     };
   }
@@ -170,17 +170,17 @@ export class PageEntry {
     return handle && handle.get();
   }
 
-  set<T, O>(request: PageParam.Request<T, O>, options: O): T {
+  put<T, I>(request: PageParam.Request<T, I>, input: I): T {
 
     const param = request[PageParam__symbol];
-    const handle: PageParam.Handle<T, O> | undefined = this._params.get(param);
+    const handle: PageParam.Handle<T, I> | undefined = this._params.get(param);
 
     if (handle) {
-      handle.refine(options);
+      handle.put(input);
       return handle.get();
     }
 
-    const newHandle = param.create(this.page, options);
+    const newHandle = param.create(this.page, input);
 
     this._params.set(param, newHandle);
     if (this._current && newHandle.enter) {
