@@ -3,7 +3,7 @@
  */
 import { ContextUpRef } from 'context-values';
 import { EventSender, OnEvent } from 'fun-events';
-import { FetchAgentKey } from './fetch-agent-key';
+import { FetchAgentKey } from './fetch-agent-key.impl';
 
 /**
  * HTTP fetch agent signature.
