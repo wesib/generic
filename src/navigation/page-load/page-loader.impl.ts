@@ -79,8 +79,8 @@ function newPageLoader(context: BootstrapContext): PageLoader {
           onResponse(receiver).needs(interest);
           response.text().then(
               text => {
-                interest.needs(responseInterest);
                 responseTextEmitter.send(response, text);
+                interest.needs(responseInterest);
               },
           ).catch(
               e => interest.off(e),

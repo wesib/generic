@@ -33,10 +33,13 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
       if (!onResponse) {
 
         const onLoad = loader(page);
-        const tracker = trackValue<PageLoadResponse>().by(onLoad);
+        const tracker = trackValue<PageLoadResponse>();
+        const trackInterest = onLoad(resp => {
+          tracker.it = resp;
+        });
 
-        ist.whenDone(reason => {
-          tracker.off(reason);
+        ist.needs(trackInterest).whenDone(reason => {
+          trackInterest.off(reason);
           tracker.done(reason);
         });
 
