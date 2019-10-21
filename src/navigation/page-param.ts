@@ -4,7 +4,7 @@
 import { Page } from './page';
 
 /**
- * A key of {@link PageParam.Request page parameter request} property containing requested page parameter.
+ * A key of {@link PageParam.Ref page parameter request} property containing requested page parameter.
  */
 export const PageParam__symbol = /*#__PURE__*/ Symbol('page-param');
 
@@ -17,7 +17,7 @@ export const PageParam__symbol = /*#__PURE__*/ Symbol('page-param');
  * @typeparam T  Parameter value type.
  * @typaparam I  Parameter input type.
  */
-export abstract class PageParam<T, I> implements PageParam.Request<T, I> {
+export abstract class PageParam<T, I> implements PageParam.Ref<T, I> {
 
   get [PageParam__symbol](): this {
     return this;
@@ -42,17 +42,15 @@ export abstract class PageParam<T, I> implements PageParam.Request<T, I> {
 export namespace PageParam {
 
   /**
-   * Page navigation parameter request.
-   *
-   * It is passed to {@link Page.get} method to retrieve corresponding parameter.
+   * Page navigation parameter reference.
    *
    * @typeparam T  Parameter value type.
    * @typaparam I  Parameter input type.
    */
-  export interface Request<T, I> {
+  export interface Ref<T, I> {
 
     /**
-     * Requested page navigation parameter instance.
+     * Referred page navigation parameter instance.
      */
     readonly [PageParam__symbol]: PageParam<T, I>;
 

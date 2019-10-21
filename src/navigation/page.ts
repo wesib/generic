@@ -29,11 +29,11 @@ export interface Page {
    * Requests this page navigation parameter.
    *
    * @typeparam T  Parameter value type.
-   * @param request  Page navigation parameter request.
+   * @param ref  A reference to page navigation parameter to retrieve.
    *
    * @returns Either requested parameter value, or `undefined` if requested parameter is not assigned to the page.
    */
-  get<T>(request: PageParam.Request<T, unknown>): T | undefined;
+  get<T>(ref: PageParam.Ref<T, unknown>): T | undefined;
 
   /**
    * Puts navigation parameter to this page.
@@ -43,9 +43,9 @@ export interface Page {
    *
    * @typeparam T  Parameter value type.
    * @typeparam I  Parameter input type.
-   * @param request  Assigned page parameter request.
+   * @param ref  A reference to page navigation parameter to put.
    * @param input  Parameter input to use when constructing its value.
    */
-  put<T, I>(request: PageParam.Request<T, I>, input: I): void;
+  put<T, I>(ref: PageParam.Ref<T, I>, input: I): void;
 
 }

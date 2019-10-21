@@ -154,25 +154,25 @@ export class PageEntry {
       url: target.url,
       title: target.title,
       data: target.data,
-      get(request) {
-        return entry.get(request);
+      get(ref) {
+        return entry.get(ref);
       },
-      put(request, input) {
-        entry.put(request, input);
+      put(ref, input) {
+        entry.put(ref, input);
       }
     };
   }
 
-  get<T>(request: PageParam.Request<T, unknown>): T | undefined {
+  get<T>(ref: PageParam.Ref<T, unknown>): T | undefined {
 
-    const handle: PageParam.Handle<T, unknown> | undefined = this._params.get(request[PageParam__symbol]);
+    const handle: PageParam.Handle<T, unknown> | undefined = this._params.get(ref[PageParam__symbol]);
 
     return handle && handle.get();
   }
 
-  put<T, I>(request: PageParam.Request<T, I>, input: I): T {
+  put<T, I>(ref: PageParam.Ref<T, I>, input: I): T {
 
-    const param = request[PageParam__symbol];
+    const param = ref[PageParam__symbol];
     const handle: PageParam.Handle<T, I> | undefined = this._params.get(param);
 
     if (handle) {
