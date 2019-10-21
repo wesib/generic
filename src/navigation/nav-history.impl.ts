@@ -1,6 +1,7 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
 import { ContextKey__symbol, SingleContextKey } from 'context-values';
+import { ValueTracker } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
@@ -56,7 +57,11 @@ export class NavHistory {
     return new PageEntry(++this._lastId, target);
   }
 
-  open(fromEntry: PageEntry, toEntry: PageEntry) {
+  open(
+      fromEntry: PageEntry,
+      toEntry: PageEntry,
+      tracker: ValueTracker<PageEntry>,
+  ) {
 
     const { page: { data, title = '', url } } = toEntry;
 
@@ -74,11 +79,16 @@ export class NavHistory {
 
     toEntry.prev = fromEntry;
     fromEntry.next = toEntry;
+    tracker.it = toEntry;
     fromEntry.leave();
     toEntry.enter('open');
   }
 
-  replace(fromEntry: PageEntry, toEntry: PageEntry) {
+  replace(
+      fromEntry: PageEntry,
+      toEntry: PageEntry,
+      tracker: ValueTracker<PageEntry>,
+  ) {
 
     const { page: { data, title = '', url } } = toEntry;
 
@@ -97,12 +107,17 @@ export class NavHistory {
       prev.next = toEntry;
     }
 
+    tracker.it = toEntry;
     fromEntry.leave();
     this._forget(fromEntry);
     toEntry.enter('replace');
   }
 
-  return(fromEntry: PageEntry, popState: PopStateEvent): PageEntry {
+  return(
+      fromEntry: PageEntry,
+      popState: PopStateEvent,
+      tracker: ValueTracker<PageEntry>,
+  ): PageEntry {
     fromEntry.leave();
 
     const [data, pageId] = toNavData(popState.state);
@@ -120,6 +135,7 @@ export class NavHistory {
       this._entries.set(toEntry.id, toEntry);
     }
 
+    tracker.it = toEntry;
     toEntry.enter('return');
 
     return toEntry;

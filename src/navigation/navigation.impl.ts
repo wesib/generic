@@ -31,9 +31,8 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
   dispatcher.on<PopStateEvent>('popstate')(event => {
 
-    const entry = navHistory.return(nav.it, event);
+    const entry = navHistory.return(nav.it, event, nav);
 
-    nav.it = entry;
     dispatcher.dispatch(new EnterPageEvent(
         NavigationEventType.EnterPage,
         {
@@ -147,22 +146,21 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
         [fromEntry, toEntry] = prepared;
 
-        navHistory[when](fromEntry, toEntry);
+        navHistory[when](fromEntry, toEntry, nav);
+
+        dispatcher.dispatch(new EnterPageEvent(
+            NavigationEventType.EnterPage,
+            {
+              when,
+              to: toEntry.page,
+            },
+        ));
+
+        return toEntry.page;
       } catch (e) {
         stay(toEntry, e);
         throw e;
       }
-
-      nav.it = toEntry;
-      dispatcher.dispatch(new EnterPageEvent(
-          NavigationEventType.EnterPage,
-          {
-            when,
-            to: toEntry.page,
-          },
-      ));
-
-      return toEntry.page;
     }
 
     function prepare(): [PageEntry, PageEntry] | null {
