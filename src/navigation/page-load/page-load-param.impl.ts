@@ -4,6 +4,7 @@ import { EventEmitter, eventInterest, EventInterest, noEventInterest, OnEvent, o
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
+import { cachingPageLoader } from './caching-page-loader.impl';
 import { PageLoadRequest } from './page-load-request';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoader } from './page-loader.impl';
@@ -120,7 +121,7 @@ export class PageLoadParam extends PageParam<void, PageLoadRequest> {
   constructor(bsContext: BootstrapContext) {
     super();
     this._navigation = bsContext.get(Navigation);
-    this._loader = bsContext.get(PageLoader);
+    this._loader = cachingPageLoader(bsContext.get(PageLoader));
   }
 
   create(page: Page, request: PageLoadRequest) {
