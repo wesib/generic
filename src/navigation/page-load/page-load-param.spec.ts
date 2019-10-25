@@ -6,10 +6,8 @@ import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
 import { NavigationSupport } from '../navigation-support.feature';
 import { Page } from '../page';
-import { PageParam } from '../page-param';
 import { PageLoadAgent } from './page-load-agent';
-import { PageLoadParam } from './page-load-param';
-import { PageLoadRequest } from './page-load-request';
+import { pageLoadParam } from './page-load-param';
 import { PageLoadResponse } from './page-load-response';
 import Mock = jest.Mock;
 
@@ -39,7 +37,6 @@ describe('navigation', () => {
     let context: BootstrapContext;
     let navigation: Navigation;
     let page: Page;
-    let pageLoadParam: PageParam<void, PageLoadRequest>;
 
     beforeEach(async () => {
       @Feature({
@@ -58,7 +55,6 @@ describe('navigation', () => {
       await new Promise(resolve => bootstrapComponents(TestFeature).whenReady(resolve));
       navigation = context.get(Navigation);
       navigation.read(p => page = p);
-      pageLoadParam = context.get(PageLoadParam);
     });
 
     it('does not load page initial page', () => {
