@@ -10,7 +10,7 @@ export class LocationMock {
   readonly state: Mock<string, []>;
   readonly baseURI: Mock<string, []>;
   readonly window: Mocked<Window>;
-  private eventTarget: HTMLElement;
+  private readonly eventTarget: HTMLElement;
 
   constructor() {
     this.eventTarget = document.body.appendChild(document.createElement('div'));

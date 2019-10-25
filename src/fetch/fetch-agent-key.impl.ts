@@ -31,40 +31,47 @@ export class FetchAgentKey<Res extends any[]>
           EventKeeper<FetchAgent<Res>[]> | FetchAgent<Res>,
           AfterEvent<FetchAgent<Res>[]>>,
   ): CombinedFetchAgent<Res> {
-    return (next, request) => {
 
-      const result = opts.byDefault(() => combinedAgent);
+    let agent!: CombinedFetchAgent<Res>;
 
-      return result ? result(next, request) : next(request);
-    };
+    opts.seed((...agents) => agent = combineFetchAgents(agents));
 
-    function combinedAgent(
-        next: (this: void, request: Request) => OnEvent<Res>,
-        request: Request,
-    ): OnEvent<Res> {
+    const fallback = opts.byDefault(() => (next, request) => agent(next, request));
 
-      let agents!: FetchAgent<Res>[];
-
-      opts.seed.once((...sources) => agents = sources);
-
-      return fetch(0, request);
-
-      function fetch(agentIdx: number, agentRequest: Request): OnEvent<Res> {
-
-        const agent = agents[agentIdx];
-
-        if (!agent) {
-          return next(agentRequest);
-        }
-
-        return onEventFrom(
-            agent(
-                (nextRequest = agentRequest) => fetch(agentIdx + 1, nextRequest),
-                agentRequest,
-            )
-        );
-      }
-    }
+    return fallback || defaultFetchAgent;
   }
 
+}
+
+function defaultFetchAgent<Res extends any[]>(
+    next: (this: void, request: Request) => OnEvent<Res>,
+    request: Request,
+): OnEvent<Res> {
+  return next(request);
+}
+
+/**
+ * @internal
+ */
+export function combineFetchAgents<Res extends any[]>(agents: FetchAgent<Res>[]): CombinedFetchAgent<Res> {
+  return (next, request) => {
+
+    const fetch: (agentIdx: number, agentRequest: Request) => OnEvent<Res> = (agentIdx, agentRequest) => {
+
+      const agent = agents[agentIdx];
+
+      if (!agent) {
+        return next(agentRequest);
+      }
+
+      return onEventFrom(
+          agent(
+              (nextRequest = agentRequest) => fetch(agentIdx + 1, nextRequest),
+              agentRequest,
+          )
+      );
+    };
+
+    return fetch(0, request);
+  };
 }

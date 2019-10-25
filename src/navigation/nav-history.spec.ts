@@ -1,4 +1,5 @@
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
+import { noop } from 'call-thru';
 import { LocationMock } from '../spec/location-mock';
 import { Navigation } from './navigation';
 import { NavigationSupport } from './navigation-support.feature';
@@ -61,9 +62,9 @@ describe('navigation', () => {
           expect(page.get(param)).toBeUndefined();
         });
       });
-      describe('set', () => {
+      describe('put', () => {
         it('assigns parameter value', () => {
-          page.set(param, 'test');
+          page.put(param, 'test');
           expect(page.get(param)).toBe('test');
           expect(handle.enter).toHaveBeenCalledWith(page, 'init');
         });
@@ -71,12 +72,12 @@ describe('navigation', () => {
     });
 
     describe('LeavePageEvent', () => {
-      describe('to.set', () => {
+      describe('to.put', () => {
         it('makes parameter available in future route', async () => {
 
           const promise = new Promise<string | undefined>(resolve => navigation.on.once(event => {
             if (event.when === 'pre-open') {
-              event.to.set(param, 'init');
+              event.to.put(param, 'init');
               resolve(event.to.get(param));
             }
           }));
@@ -89,7 +90,7 @@ describe('navigation', () => {
 
           const promise = new Promise<string | undefined>(resolve => navigation.on(event => {
             if (event.when === 'pre-open') {
-              event.to.set(param, 'init');
+              event.to.put(param, 'init');
             } else if (event.when === 'open') {
               resolve(event.to.get(param));
             }
@@ -104,8 +105,8 @@ describe('navigation', () => {
           await navigation.with(param, 'init').with(param, 'new').open('/other');
 
           expect(page.get(param)).toBe('new');
-          expect(handle.refine).toHaveBeenCalledWith(expect.anything(), 'new');
-          expect(handle.refine).toHaveBeenCalledTimes(1);
+          expect(handle.put).toHaveBeenCalledWith('new');
+          expect(handle.put).toHaveBeenCalledTimes(1);
         });
         it('updates history data', async () => {
 
@@ -122,7 +123,7 @@ describe('navigation', () => {
         it('aborts parameter assignment', async () => {
           navigation.on.once(event => {
             if (event.when === 'pre-open') {
-              event.to.set(param, 'init');
+              event.to.put(param, 'init');
               event.preventDefault();
             }
           });
@@ -151,6 +152,34 @@ describe('navigation', () => {
         expect(page.get(param)).toBeUndefined();
         expect(handle.leave).toHaveBeenCalledTimes(1);
         expect(handle.forget).toHaveBeenCalledTimes(1);
+      });
+      it('transfers parameters', async () => {
+
+        const handle2 = testPageParamHandle({ value: '2' });
+
+        page.put(param, '1');
+        (handle as any).transfer = jest.fn(() => handle2);
+
+        await navigation.open('/other');
+
+        expect(handle.transfer).toHaveBeenCalledWith(page, 'pre-open');
+        expect(page.get(param)).toBe(handle2.get());
+      });
+      it('does not transfer parameters when not supported', async () => {
+        page.put(param, '1');
+
+        await navigation.open('/other');
+
+        expect(page.get(param)).toBeUndefined();
+      });
+      it('does not transfer parameters when nothing to transfer', async () => {
+        page.put(param, '1');
+        (handle as any).transfer = jest.fn(noop);
+
+        await navigation.open('/other');
+
+        expect(handle.transfer).toHaveBeenCalledWith(page, 'pre-open');
+        expect(page.get(param)).toBeUndefined();
       });
     });
 
@@ -192,6 +221,18 @@ describe('navigation', () => {
         expect(handle.stay).not.toHaveBeenCalled();
         expect(handle.forget).not.toHaveBeenCalled();
       });
+      it('transfers parameters', async () => {
+
+        const handle2 = testPageParamHandle({ value: '2' });
+
+        page.put(param, '1');
+        (handle as any).transfer = jest.fn(() => handle2);
+
+        await navigation.replace('/other');
+
+        expect(handle.transfer).toHaveBeenCalledWith(page, 'pre-replace');
+        expect(page.get(param)).toBe(handle2.get());
+      });
     });
 
     describe('back', () => {
@@ -226,24 +267,29 @@ describe('navigation', () => {
   });
 });
 
-export function testPageParam(
-    value: string = '',
-): [PageParam<string, string>, Mocked<PageParam.Handle<string, string>>] {
-
-  const handle: Mocked<PageParam.Handle<string, string>> = {
-    get: jest.fn(() => value),
-    refine: jest.fn((_page: Page, newValue: string) => {
-      value = newValue;
+function testPageParamHandle(state: { value: string } = { value: '' }): Mocked<PageParam.Handle<string, string>> {
+  return {
+    get: jest.fn(() => state.value),
+    put: jest.fn(newValue => {
+      state.value = newValue;
     }),
     enter: jest.fn(),
     stay: jest.fn(),
     leave: jest.fn(),
     forget: jest.fn(),
   };
+}
+
+export function testPageParam(
+    value = '',
+): [PageParam<string, string>, Mocked<PageParam.Handle<string, string>>] {
+
+  const state = { value };
+  const handle = testPageParamHandle(state);
 
   class TestParam extends PageParam<string, string> {
     create(_page: Page, initValue: string): PageParam.Handle<string, string> {
-      value = initValue;
+      state.value = initValue;
       return handle;
     }
   }

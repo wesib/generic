@@ -154,12 +154,14 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
   /**
    * Creates parameterized navigation instance and assigns a page parameter to apply to target page.
    *
-   * @param request  Assigned page parameter request.
-   * @param options  Parameter assignment option.
+   * @typeparam T  Parameter value type.
+   * @typeparam I  Parameter input type.
+   * @param ref  A reference to page navigation parameter to apply.
+   * @param input  Parameter input to use when constructing its value.
    *
    * @returns New parameterized navigation instance.
    */
-  abstract with<T, O>(request: PageParam.Request<T, O>, options: O): Navigation.Parameterized;
+  abstract with<T, I>(ref: PageParam.Ref<T, I>, input: I): Navigation.Parameterized;
 
 }
 
@@ -173,14 +175,16 @@ export namespace Navigation {
   export interface Parameterized {
 
     /**
-     * Assigns a page parameter to apply to target page.
+     * Applies parameter to navigation target page.
      *
-     * @param request  Assigned page parameter request.
-     * @param options  Parameter assignment option.
+     * @typeparam T  Parameter value type.
+     * @typeparam I  Parameter input type.
+     * @param ref  A reference to page navigation parameter to apply.
+     * @param input  Parameter input to use when constructing its value.
      *
      * @returns New parameterized navigation instance.
      */
-    with<T, O>(request: PageParam.Request<T, O>, options: O): Parameterized;
+    with<T, I>(ref: PageParam.Ref<T, I>, input: I): Parameterized;
 
     /**
      * Opens a page by navigating to the given `target` with provided page parameters.

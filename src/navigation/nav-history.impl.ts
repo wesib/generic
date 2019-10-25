@@ -1,6 +1,7 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
 import { ContextKey__symbol, SingleContextKey } from 'context-values';
+import { ValueTracker } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
@@ -27,9 +28,9 @@ export class NavHistory {
   private readonly _entries = new Map<number, PageEntry>();
   private _lastId = 0;
 
-  constructor(bsContext: BootstrapContext) {
+  constructor(private readonly _context: BootstrapContext) {
 
-    const window = bsContext.get(BootstrapWindow);
+    const window = _context.get(BootstrapWindow);
 
     this._document = window.document;
     this._location = window.location;
@@ -53,10 +54,14 @@ export class NavHistory {
   }
 
   newEntry(target: Navigation.URLTarget): PageEntry {
-    return new PageEntry(this, ++this._lastId, target);
+    return new PageEntry(this._context, ++this._lastId, target);
   }
 
-  open(fromEntry: PageEntry, toEntry: PageEntry) {
+  open(
+      fromEntry: PageEntry,
+      toEntry: PageEntry,
+      tracker: ValueTracker<PageEntry>,
+  ) {
 
     const { page: { data, title = '', url } } = toEntry;
 
@@ -74,11 +79,16 @@ export class NavHistory {
 
     toEntry.prev = fromEntry;
     fromEntry.next = toEntry;
+    tracker.it = toEntry;
     fromEntry.leave();
     toEntry.enter('open');
   }
 
-  replace(fromEntry: PageEntry, toEntry: PageEntry) {
+  replace(
+      fromEntry: PageEntry,
+      toEntry: PageEntry,
+      tracker: ValueTracker<PageEntry>,
+  ) {
 
     const { page: { data, title = '', url } } = toEntry;
 
@@ -97,12 +107,17 @@ export class NavHistory {
       prev.next = toEntry;
     }
 
+    tracker.it = toEntry;
     fromEntry.leave();
     this._forget(fromEntry);
     toEntry.enter('replace');
   }
 
-  return(fromEntry: PageEntry, popState: PopStateEvent): PageEntry {
+  return(
+      fromEntry: PageEntry,
+      popState: PopStateEvent,
+      tracker: ValueTracker<PageEntry>,
+  ): PageEntry {
     fromEntry.leave();
 
     const [data, pageId] = toNavData(popState.state);
@@ -120,6 +135,7 @@ export class NavHistory {
       this._entries.set(toEntry.id, toEntry);
     }
 
+    tracker.it = toEntry;
     toEntry.enter('return');
 
     return toEntry;
@@ -144,7 +160,7 @@ export class PageEntry {
   private readonly _params = new Map<PageParam<any, any>, PageParam.Handle<any, any>>();
 
   constructor(
-      readonly _history: NavHistory,
+      private readonly _context: BootstrapContext,
       readonly id: number,
       target: Navigation.URLTarget,
   ) {
@@ -155,33 +171,33 @@ export class PageEntry {
       url: target.url,
       title: target.title,
       data: target.data,
-      get(request) {
-        return entry.get(request);
+      get(ref) {
+        return entry.get(ref);
       },
-      set(request, options) {
-        entry.set(request, options);
+      put(ref, input) {
+        entry.put(ref, input);
       }
     };
   }
 
-  get<T>(request: PageParam.Request<T, unknown>): T | undefined {
+  get<T>(ref: PageParam.Ref<T, unknown>): T | undefined {
 
-    const handle: PageParam.Handle<T, unknown> | undefined = this._params.get(request[PageParam__symbol]);
+    const handle: PageParam.Handle<T, unknown> | undefined = this._params.get(ref[PageParam__symbol]);
 
     return handle && handle.get();
   }
 
-  set<T, O>(request: PageParam.Request<T, O>, options: O): T {
+  put<T, I>(ref: PageParam.Ref<T, I>, input: I): T {
 
-    const param = request[PageParam__symbol];
-    const handle: PageParam.Handle<T, O> | undefined = this._params.get(param);
+    const param = ref[PageParam__symbol];
+    const handle: PageParam.Handle<T, I> | undefined = this._params.get(param);
 
     if (handle) {
-      handle.refine(this.page, options);
+      handle.put(input);
       return handle.get();
     }
 
-    const newHandle = param.create(this.page, options);
+    const newHandle = param.create(this.page, input, this._context);
 
     this._params.set(param, newHandle);
     if (this._current && newHandle.enter) {
@@ -189,6 +205,19 @@ export class PageEntry {
     }
 
     return newHandle.get();
+  }
+
+  transfer(to: PageEntry, when: 'pre-open' | 'pre-replace') {
+    itsEach(this._params.entries(), ([param, handle]) => {
+      if (handle.transfer) {
+
+        const transferred = handle.transfer(to.page, when);
+
+        if (transferred) {
+          to._params.set(param, transferred);
+        }
+      }
+    });
   }
 
   stay(at: Page) {

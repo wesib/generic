@@ -1,10 +1,11 @@
 /**
  * @module @wesib/generic
  */
+import { BootstrapContext } from '@wesib/wesib';
 import { Page } from './page';
 
 /**
- * A key of {@link PageParam.Request page parameter request} property containing requested page parameter.
+ * A key of {@link PageParam.Ref page parameter request} property containing requested page parameter.
  */
 export const PageParam__symbol = /*#__PURE__*/ Symbol('page-param');
 
@@ -15,9 +16,9 @@ export const PageParam__symbol = /*#__PURE__*/ Symbol('page-param');
  * both before and after navigation.
  *
  * @typeparam T  Parameter value type.
- * @typaparam O  Parameter options type.
+ * @typaparam I  Parameter input type.
  */
-export abstract class PageParam<T, O> implements PageParam.Request<T, O> {
+export abstract class PageParam<T, I> implements PageParam.Ref<T, I> {
 
   get [PageParam__symbol](): this {
     return this;
@@ -26,32 +27,34 @@ export abstract class PageParam<T, O> implements PageParam.Request<T, O> {
   /**
    * Creates page parameter handle.
    *
-   * This method is called when {@link Page.set assigning new page parameter}.It is called at most once per request,
-   * unless this parameter is assigned already. A {@link PageParam.Handle.refine} method will be called instead
+   * This method is called when {@link Page.put assigning new page parameter}.It is called at most once per request,
+   * unless this parameter is assigned already. A {@link PageParam.Handle.put} method will be called instead
    * in the latter case.
    *
-   * @param event  Leave page event to add parameter to.
-   * @param options  Initial parameter options.
+   * @param page  A page to assign navigation parameter to.
+   * @param input  Parameter input used to construct its initial value.
+   * @param context  Bootstrap context.
    *
    * @returns New page parameter value handle.
    */
-  abstract create(event: Page, options: O): PageParam.Handle<T, O>;
+  abstract create(page: Page, input: I, context: BootstrapContext): PageParam.Handle<T, I>;
 
 }
 
 export namespace PageParam {
 
   /**
-   * Page navigation parameter request.
+   * Page navigation parameter reference.
    *
-   * It is passed to {@link Page.get} method to retrieve corresponding parameter.
+   * @typeparam T  Parameter value type.
+   * @typaparam I  Parameter input type.
    */
-  export interface Request<T, O> {
+  export interface Ref<T, I> {
 
     /**
-     * Requested page navigation parameter instance.
+     * Referred page navigation parameter instance.
      */
-    readonly [PageParam__symbol]: PageParam<T, O>;
+    readonly [PageParam__symbol]: PageParam<T, I>;
 
   }
 
@@ -61,8 +64,11 @@ export namespace PageParam {
    * Holds and maintains parameter value.
    *
    * Created by {@link PageParam.create} method.
+   *
+   * @typeparam T  Parameter value type.
+   * @typaparam I  Parameter input type.
    */
-  export interface Handle<T, O> {
+  export interface Handle<T, I> {
 
     /**
      * Returns current parameter value.
@@ -72,15 +78,26 @@ export namespace PageParam {
     get(): T;
 
     /**
-     * Refines page parameter value.
+     * Puts page parameter value.
      *
-     * This method is called when {@link Page.set re-assigning page parameter}. It is called when page parameter
+     * This method is called when {@link Page.put re-assigning page parameter}. It is called when page parameter
      * is assigned already and can be used to update it. The update logic is up to the implementation.
      *
-     * @param page  Target page.
-     * @param options  Parameter refinement options.
+     * @param input  Parameter input to use when updating its value.
      */
-    refine(page: Page, options: O): void;
+    put(input: I): void;
+
+    /**
+     * Transfers parameter to target page.
+     *
+     * This is called right before [[LeavePageEvent]] is fired for each parameter handle of current page.
+     *
+     * @param to  A page to transfer parameter to.
+     * @param when  When the transfer happens. Either `pre-open`, or `pre-replace`.
+     *
+     * @returns New parameter handle instance for target page, or `undefined` if nothing to transfer.
+     */
+    transfer?(to: Page, when: 'pre-open' | 'pre-replace'): Handle<T, I> | undefined;
 
     /**
      * This method is called when the page this parameter created for is entered.

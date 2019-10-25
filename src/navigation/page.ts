@@ -28,18 +28,24 @@ export interface Page {
   /**
    * Requests this page navigation parameter.
    *
-   * @param request  Page navigation parameter request.
+   * @typeparam T  Parameter value type.
+   * @param ref  A reference to page navigation parameter to retrieve.
    *
    * @returns Either requested parameter value, or `undefined` if requested parameter is not assigned to the page.
    */
-  get<T>(request: PageParam.Request<T, unknown>): T | undefined;
+  get<T>(ref: PageParam.Ref<T, unknown>): T | undefined;
 
   /**
-   * Assigns navigation parameter of this page.
+   * Puts navigation parameter to this page.
    *
-   * @param request  Assigned page parameter request.
-   * @param options  Parameter assignment option.
+   * The meaning of putting depends on type parameter implementation. This can be e.g. a value assignment, or appending
+   * to the list of values.
+   *
+   * @typeparam T  Parameter value type.
+   * @typeparam I  Parameter input type.
+   * @param ref  A reference to page navigation parameter to put.
+   * @param input  Parameter input to use when constructing its value.
    */
-  set<T, O>(request: PageParam.Request<T, O>, options: O): void;
+  put<T, I>(ref: PageParam.Ref<T, I>, input: I): void;
 
 }
