@@ -234,6 +234,7 @@ describe('navigation', () => {
       it('cancels previous navigation when the new one initiated', async () => {
         navigation.onLeave.once(() => navigation.open({ url: '/second', data: 3 }));
         expect(await navigation.open('/other')).toBeNull();
+        await Promise.resolve(); // await for another navigation to finish
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
             toHistoryState(3, expect.anything()),
