@@ -57,7 +57,7 @@ describe('navigation', () => {
       navigation.read(p => page = p);
     });
 
-    it('does not load page initial page', () => {
+    it('does not load initial page', () => {
       page.put(pageLoadParam, { interest: eventInterest(), receiver });
 
       const response = { ok: true, page } as PageLoadResponse;
@@ -77,7 +77,28 @@ describe('navigation', () => {
       expect(receiver).toHaveBeenCalledWith(response);
       expect(receiver).toHaveBeenCalledTimes(1);
     });
-    it('loads a page when returned to it', async () => {
+    it('reports opened page after parameterized navigation', async () => {
+      await navigation.with(pageLoadParam, { interest: eventInterest(), receiver }).open('/other');
+
+      const response = { ok: true, page } as PageLoadResponse;
+
+      responder.send(response);
+      expect(receiver).toHaveBeenCalledWith(response);
+      expect(receiver).toHaveBeenCalledTimes(1);
+    });
+    it('loads replacement page', async () => {
+      page.put(pageLoadParam, { interest: eventInterest(), receiver });
+
+      await navigation.open('/other');
+      await navigation.replace('./third');
+
+      const response = { ok: true, page } as PageLoadResponse;
+
+      responder.send(response);
+      expect(receiver).toHaveBeenCalledWith(response);
+      expect(receiver).toHaveBeenCalledTimes(1);
+    });
+    it('loads page when returned to it', async () => {
       page.put(pageLoadParam, { interest: eventInterest(), receiver });
 
       await navigation.open('/other');
@@ -122,6 +143,63 @@ describe('navigation', () => {
         page,
         error,
       });
+    });
+    it('reports loaded page to all receivers', async () => {
+
+      const receiver2 = jest.fn();
+
+      page.put(pageLoadParam, { interest: eventInterest(), receiver });
+      page.put(pageLoadParam, { interest: eventInterest(), receiver: receiver2 });
+
+      await navigation.open('/other');
+
+      const response = { ok: true, page } as PageLoadResponse;
+
+      responder.send(response);
+      expect(receiver2).toHaveBeenCalledWith(response);
+      expect(receiver2).toHaveBeenCalledTimes(1);
+    });
+    it('does not report already loaded page', async () => {
+      page.put(pageLoadParam, { interest: eventInterest(), receiver });
+
+      await navigation.open('/other');
+
+      const response = { ok: true, page } as PageLoadResponse;
+
+      responder.send(response);
+
+      const receiver2 = jest.fn();
+
+      page.put(pageLoadParam, { interest: eventInterest(), receiver: receiver2 });
+      expect(receiver2).not.toHaveBeenCalled();
+    });
+    it('does not report to unregistered receivers', async () => {
+
+      const interest = eventInterest();
+      const receiver2 = jest.fn();
+
+      page.put(pageLoadParam, { interest, receiver });
+      page.put(pageLoadParam, { interest, receiver: receiver2 });
+
+      await navigation.open('/other');
+      interest.off();
+
+      const response = { ok: true, page } as PageLoadResponse;
+
+      responder.send(response);
+
+      expect(receiver).not.toHaveBeenCalled();
+      expect(receiver2).not.toHaveBeenCalled();
+    });
+    it('does not load page when navigation cancelled', async () => {
+      navigation.onLeave.once(event => event.preventDefault());
+      await navigation.with(pageLoadParam, { interest: eventInterest(), receiver }).open('/other');
+
+      const response = { ok: true, page } as PageLoadResponse;
+
+      responder.send(response);
+
+      expect(receiver).not.toHaveBeenCalled();
     });
   });
 });
