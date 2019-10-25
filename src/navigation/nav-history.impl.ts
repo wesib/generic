@@ -28,9 +28,9 @@ export class NavHistory {
   private readonly _entries = new Map<number, PageEntry>();
   private _lastId = 0;
 
-  constructor(bsContext: BootstrapContext) {
+  constructor(private readonly _context: BootstrapContext) {
 
-    const window = bsContext.get(BootstrapWindow);
+    const window = _context.get(BootstrapWindow);
 
     this._document = window.document;
     this._location = window.location;
@@ -54,7 +54,7 @@ export class NavHistory {
   }
 
   newEntry(target: Navigation.URLTarget): PageEntry {
-    return new PageEntry(++this._lastId, target);
+    return new PageEntry(this._context, ++this._lastId, target);
   }
 
   open(
@@ -160,6 +160,7 @@ export class PageEntry {
   private readonly _params = new Map<PageParam<any, any>, PageParam.Handle<any, any>>();
 
   constructor(
+      private readonly _context: BootstrapContext,
       readonly id: number,
       target: Navigation.URLTarget,
   ) {
@@ -196,7 +197,7 @@ export class PageEntry {
       return handle.get();
     }
 
-    const newHandle = param.create(this.page, input);
+    const newHandle = param.create(this.page, input, this._context);
 
     this._params.set(param, newHandle);
     if (this._current && newHandle.enter) {
