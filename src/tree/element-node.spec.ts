@@ -9,7 +9,7 @@ import {
 } from '@wesib/wesib';
 import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
-import { AfterEvent__symbol, noEventInterest, ValueTracker } from 'fun-events';
+import { AfterEvent__symbol, noEventSupply, ValueTracker } from 'fun-events';
 import { ObjectMock } from '../spec/mocks';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
@@ -72,11 +72,11 @@ describe('tree', () => {
 
     jest.spyOn(context as any, 'whenOn', 'get').mockReturnValue((listener: (ctx: ComponentContext) => void) => {
       connect = listener;
-      return noEventInterest();
+      return noEventSupply();
     });
     jest.spyOn(context as any, 'whenOff', 'get').mockReturnValue((listener: (ctx: ComponentContext) => void) => {
       disconnect = listener;
-      return noEventInterest();
+      return noEventSupply();
     });
 
     jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
@@ -248,15 +248,15 @@ describe('tree', () => {
 
         const list = node.node.select('test-component');
 
-        const interest1 = list.onUpdate(() => {});
-        const interest2 = list.onUpdate(() => {});
+        const supply1 = list.onUpdate(() => {});
+        const supply2 = list.onUpdate(() => {});
 
         expect(observer.observe).toHaveBeenCalledTimes(1);
 
-        interest1.off();
+        supply1.off();
         expect(observer.disconnect).not.toHaveBeenCalled();
 
-        interest2.off();
+        supply2.off();
         expect(observer.disconnect).toHaveBeenCalled();
       });
       it('handles child removal', () => {
@@ -631,8 +631,8 @@ describe('tree', () => {
         const onUpdate1 = jest.fn();
         const onUpdate2 = jest.fn();
 
-        const interest1 = attribute.on(onUpdate1);
-        const interest2 = attribute.on(onUpdate2);
+        const supply1 = attribute.on(onUpdate1);
+        const supply2 = attribute.on(onUpdate2);
 
         observer.disconnect.mockClear();
 
@@ -643,14 +643,14 @@ describe('tree', () => {
         onUpdate1.mockClear();
         onUpdate2.mockClear();
 
-        interest1.off();
+        supply1.off();
         expect(observer.disconnect).not.toHaveBeenCalled();
 
         setAttribute('attr', value2, value1);
         expect(onUpdate1).not.toHaveBeenCalled();
         expect(onUpdate2).toHaveBeenCalledWith(value2, value1);
 
-        interest2.off();
+        supply2.off();
         expect(observer.disconnect).toHaveBeenCalled();
       });
       it('handles multiple attributes receivers', () => {
@@ -664,8 +664,8 @@ describe('tree', () => {
         const onUpdate1 = jest.fn();
         const onUpdate2 = jest.fn();
 
-        const interest1 = attribute.on(onUpdate1);
-        const interest2 = attribute2.on(onUpdate2);
+        const supply1 = attribute.on(onUpdate1);
+        const supply2 = attribute2.on(onUpdate2);
 
         expect(observer.observe).toHaveBeenCalledWith(
             element,
@@ -686,7 +686,7 @@ describe('tree', () => {
         onUpdate1.mockClear();
         onUpdate2.mockClear();
 
-        interest1.off();
+        supply1.off();
         expect(observer.disconnect).toHaveBeenCalled();
         expect(observer.takeRecords).toHaveBeenCalled();
         expect(observer.observe).toHaveBeenCalledWith(
@@ -700,7 +700,7 @@ describe('tree', () => {
         expect(onUpdate1).not.toHaveBeenCalled();
         expect(onUpdate2).toHaveBeenCalledWith(value3, value2);
 
-        interest2.off();
+        supply2.off();
         expect(observer.disconnect).toHaveBeenCalled();
         expect(observer.takeRecords).not.toHaveBeenCalled();
         expect(observer.observe).not.toHaveBeenCalled();

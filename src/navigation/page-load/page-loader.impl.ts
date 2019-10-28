@@ -1,6 +1,6 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { SingleContextKey } from 'context-values';
-import { EventEmitter, eventInterest, OnEvent, onEventBy } from 'fun-events';
+import { EventEmitter, OnEvent, onEventBy } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
@@ -74,20 +74,18 @@ function newPageLoader(context: BootstrapContext): PageLoader {
 
       return onEventBy<[PageLoadResponse]>(receiver => {
 
-        const interest = eventInterest();
-        const responseInterest = httpFetch(fetchRequest)(response => {
-          onResponse(receiver).needs(interest);
+        const { supply } = receiver;
+        const responseSupply = httpFetch(fetchRequest)(response => {
+          onResponse(receiver);
           response.text().then(
               text => {
                 responseTextEmitter.send(response, text);
-                interest.needs(responseInterest);
+                supply.needs(responseSupply);
               },
           ).catch(
-              e => interest.off(e),
+              e => supply.off(e),
           );
         });
-
-        return interest;
       });
     }
   };

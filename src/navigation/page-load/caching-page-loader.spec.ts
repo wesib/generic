@@ -73,7 +73,7 @@ describe('navigation', () => {
 
       const done1 = jest.fn();
 
-      caching(page)(mockReceiver).whenDone(done1);
+      caching(page)(mockReceiver).whenOff(done1);
       caching(page2)(mockReceiver2);
 
       expect(done1).toHaveBeenCalled();
@@ -85,41 +85,41 @@ describe('navigation', () => {
       expect(mockReceiver2).toHaveBeenCalledWith(response);
       expect(mockReceiver2).toHaveBeenCalledTimes(1);
     });
-    it('aborts page load when all receivers lost their interest', async () => {
+    it('aborts page load when all supplies cut off', async () => {
 
       const loadDone = jest.fn();
 
       mockLoader.mockImplementation(
-          () => onEventBy(receiver => responder.on(receiver).whenDone(loadDone)),
+          () => onEventBy(receiver => responder.on(receiver).whenOff(loadDone)),
       );
 
-      const ist1 = caching(page)(mockReceiver);
-      const ist2 = caching(page)(mockReceiver2);
+      const supply1 = caching(page)(mockReceiver);
+      const supply2 = caching(page)(mockReceiver2);
 
-      ist1.off(1);
+      supply1.off(1);
       await Promise.resolve();
       expect(loadDone).not.toHaveBeenCalled();
-      ist2.off(2);
+      supply2.off(2);
       await Promise.resolve();
       expect(loadDone).toHaveBeenCalledWith(2);
     });
-    it('allows the same page load right after all receivers lost their interest', async () => {
+    it('allows the same page load right after all supplies cut off', async () => {
 
       const loadDone = jest.fn();
 
       mockLoader.mockImplementation(
-          () => onEventBy(receiver => responder.on(receiver).whenDone(loadDone)),
+          () => onEventBy(receiver => responder.on(receiver).whenOff(loadDone)),
       );
 
-      const ist1 = caching(page)(mockReceiver);
+      const supply1 = caching(page)(mockReceiver);
 
-      ist1.off(1);
+      supply1.off(1);
 
-      const ist2 = caching(page)(mockReceiver2);
+      const supply2 = caching(page)(mockReceiver2);
 
       await Promise.resolve();
       expect(loadDone).not.toHaveBeenCalled();
-      expect(ist2.done).toBe(false);
+      expect(supply2.isOff).toBe(false);
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -129,23 +129,23 @@ describe('navigation', () => {
       expect(mockReceiver2).toHaveBeenCalledWith(response);
       expect(mockLoader).toHaveBeenCalledTimes(1);
     });
-    it('reloads the same page after all receivers lost their interest and timeout passed', async () => {
+    it('reloads the same page after all supplies cut off and timeout passed', async () => {
 
       const loadDone = jest.fn();
 
       mockLoader.mockImplementation(
-          () => onEventBy(receiver => responder.on(receiver).whenDone(loadDone)),
+          () => onEventBy(receiver => responder.on(receiver).whenOff(loadDone)),
       );
 
-      const ist1 = caching(page)(mockReceiver);
+      const supply1 = caching(page)(mockReceiver);
 
-      ist1.off(1);
+      supply1.off(1);
       await Promise.resolve();
       expect(loadDone).toHaveBeenCalledWith(1);
 
-      const ist2 = caching(page)(mockReceiver2);
+      const supply2 = caching(page)(mockReceiver2);
 
-      expect(ist2.done).toBe(false);
+      expect(supply2.isOff).toBe(false);
 
       const response = { ok: true, page } as PageLoadResponse;
 

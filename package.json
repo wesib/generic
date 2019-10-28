@@ -21,13 +21,13 @@
   "module": "dist/wesib.generic.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.37",
+    "@wesib/wesib": "^1.0.0-alpha.39",
     "a-iterable": "^2.4.4",
     "call-thru": "^2.5.3",
-    "context-values": "^2.0.5",
-    "fun-events": "^5.0.7",
+    "context-values": "^2.1.0-dev.2",
+    "fun-events": "^7.0.0-dev.2",
     "namespace-aliaser": "^2.0.2",
-    "style-producer": "^3.2.3"
+    "style-producer": "^3.3.0-dev.1"
   },
   "peerDependenciesMeta": {
     "style-producer": {
@@ -37,15 +37,15 @@
   "devDependencies": {
     "@types/jest": "^24.0.20",
     "@types/jsdom": "^12.2.4",
-    "@wesib/wesib": "^1.0.0-alpha.37",
+    "@wesib/wesib": "^1.0.0-alpha.39",
     "a-iterable": "^2.4.4",
     "call-thru": "^2.5.3",
     "codecov": "^3.6.1",
-    "context-values": "^2.0.5",
+    "context-values": "^2.1.0-dev.2",
     "cross-fetch": "^3.0.4",
     "cssesc": "^3.0.0",
     "fs-extra": "^8.1.0",
-    "fun-events": "^5.0.7",
+    "fun-events": "^7.0.0-dev.2",
     "gh-pages": "^2.1.1",
     "hyphenate-style-name": "^1.0.3",
     "jest": "^24.9.0",
@@ -57,12 +57,12 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.24.3",
-    "style-producer": "^3.2.3",
+    "style-producer": "^3.3.0-dev.1",
     "ts-jest": "^24.1.0",
     "tslint": "^5.20.0",
     "typedoc": "^0.15.0",
     "typedoc-plugin-external-module-name": "^2.1.0",
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.1-rc"
   },
   "scripts": {
     "all": "run-p rebuild lint test",

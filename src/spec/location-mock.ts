@@ -1,5 +1,5 @@
-import Mocked = jest.Mocked;
 import Mock = jest.Mock;
+import Mocked = jest.Mocked;
 
 export class LocationMock {
 

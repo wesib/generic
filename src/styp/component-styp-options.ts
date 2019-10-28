@@ -3,7 +3,7 @@
  */
 import { ComponentContext } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { eventInterest, EventInterest, noEventInterest } from 'fun-events';
+import { eventSupply, EventSupply, noEventSupply } from 'fun-events';
 import { lazyStypRules, StypOptions, StypRules } from 'style-producer';
 import { ComponentStyleProducer } from './component-style-producer';
 
@@ -36,28 +36,27 @@ export const ComponentStypOptions = {
    * @param rules  A source of CSS rules to produce stylesheets for.
    * @param options  Production options.
    *
-   * @returns Event interest instance. When this interest is lost (i.e. its `off()` method is called) the produced
-   * stylesheets are removed.
+   * @returns CSS rules supply. Once cut off the produced stylesheets are removed.
    */
   produce(
       context: ComponentContext,
       rules: StypRules.Source,
       options?: ComponentStypOptions,
-  ): EventInterest {
+  ): EventSupply {
 
     const css = lazyStypRules(rules);
     const offline = options && options.offline;
     const produceStyle = context.get(ComponentStyleProducer);
 
-    let cssInterest = noEventInterest();
+    let cssSupply = noEventSupply();
     let doProduceStyle: () => void;
-    const interest = eventInterest(reason => {
+    const supply = eventSupply(reason => {
       doProduceStyle = noop;
-      cssInterest.off(reason);
+      cssSupply.off(reason);
     });
 
     doProduceStyle = () => {
-      cssInterest = produceStyle(css, options).needs(interest);
+      cssSupply = produceStyle(css, options).needs(supply);
     };
 
     switch (offline) {
@@ -66,14 +65,14 @@ export const ComponentStypOptions = {
       break;
     case false:
       context.whenOn(doProduceStyle);
-      context.whenOff(() => cssInterest.off());
+      context.whenOff(() => cssSupply.off());
       break;
     default:
       context.whenOn.once(doProduceStyle);
     }
 
-    context.whenDestroyed(reason => interest.off(reason));
+    context.whenDestroyed(reason => supply.off(reason));
 
-    return interest;
+    return supply;
   }
 };

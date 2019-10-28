@@ -1,6 +1,6 @@
 import { BootstrapContext, BootstrapWindow, mergeFunctions } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { AfterEvent, DomEventDispatcher, onEventFromAny, trackValue } from 'fun-events';
+import { AfterEvent, DomEventDispatcher, onAny, trackValue } from 'fun-events';
 import { NavHistory, PageEntry } from './nav-history.impl';
 import { Navigation as Navigation_ } from './navigation';
 import { NavigationAgent } from './navigation-agent';
@@ -24,7 +24,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   const onEnter = dispatcher.on<EnterPageEvent>(NavigationEventType.EnterPage);
   const onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage);
   const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
-  const onEvent = onEventFromAny<[NavigationEvent]>(onEnter, onLeave, onStay);
+  const onEvent = onAny<[NavigationEvent]>(onEnter, onLeave, onStay);
   const nav = trackValue<PageEntry>(navHistory.init());
   const readPage: AfterEvent<[Page]> = nav.read.keep.thru(entry => entry.page);
   let next: Promise<any> = Promise.resolve();

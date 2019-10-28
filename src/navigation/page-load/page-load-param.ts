@@ -1,6 +1,6 @@
 import { BootstrapContext } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
-import { EventEmitter, eventInterest, EventInterest, noEventInterest, onEventBy } from 'fun-events';
+import { EventEmitter, eventSupply, EventSupply, noEventSupply, onEventBy } from 'fun-events';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
@@ -12,7 +12,7 @@ class PageLoadAbortError extends Error {}
 
 class PageLoadRequests {
 
-  private readonly _map = new Map<EventInterest, PageLoadRequest[]>();
+  private readonly _map = new Map<EventSupply, PageLoadRequest[]>();
 
   constructor(
       private readonly _navigation: Navigation,
@@ -22,8 +22,8 @@ class PageLoadRequests {
   handle(): PageParam.Handle<void, PageLoadRequest> {
 
     const self = this;
-    const pageInterest = eventInterest();
-    let loadInterest = noEventInterest();
+    const pageSupply = eventSupply();
+    let loadSupply = noEventSupply();
 
     return {
       get() {},
@@ -39,13 +39,13 @@ class PageLoadRequests {
           return;
         }
 
-        loadInterest = eventInterest().needs(pageInterest);
+        loadSupply = eventSupply().needs(pageSupply);
 
         const onLoad = onEventBy<[PageLoadResponse]>(responseReceiver => {
 
           const emitter = new EventEmitter<[PageLoadResponse]>();
 
-          self._loader(page)(response => emitter.send(response)).whenDone(error => {
+          self._loader(page)(response => emitter.send(response)).whenOff(error => {
             if (!(error instanceof PageLoadAbortError)) {
               // Report current page load error as failed load response
               emitter.send({
@@ -54,7 +54,7 @@ class PageLoadRequests {
                 error,
               });
             }
-          }).needs(loadInterest);
+          }).needs(loadSupply);
 
           return emitter.on(responseReceiver);
         }).share();
@@ -62,18 +62,18 @@ class PageLoadRequests {
         itsEach(
             self._map.values(),
             list => list.forEach(
-                ({ interest, receiver }) => onLoad(receiver).needs(interest),
+                ({ supply, receiver }) => onLoad(receiver).needs(supply),
             ),
         );
       },
       leave(): void {
-        loadInterest.off(new PageLoadAbortError('page left'));
+        loadSupply.off(new PageLoadAbortError('page left'));
       },
       stay() {
-        pageInterest.off(new PageLoadAbortError('navigation cancelled'));
+        pageSupply.off(new PageLoadAbortError('navigation cancelled'));
       },
       forget() {
-        pageInterest.off(new PageLoadAbortError('page forgotten'));
+        pageSupply.off(new PageLoadAbortError('page forgotten'));
       },
     };
 
@@ -81,14 +81,14 @@ class PageLoadRequests {
 
   private _add(request: PageLoadRequest) {
 
-    const { interest } = request;
-    const list = this._map.get(interest);
+    const { supply } = request;
+    const list = this._map.get(supply);
 
     if (list) {
       list.push(request);
     } else {
-      this._map.set(interest, [request]);
-      interest.whenDone(() => this._map.delete(interest));
+      this._map.set(supply, [request]);
+      supply.whenOff(() => this._map.delete(supply));
     }
   }
 
@@ -96,8 +96,8 @@ class PageLoadRequests {
 
     const transferred = new PageLoadRequests(this._navigation, this._loader);
 
-    for (const [interest, list] of this._map.entries()) {
-      transferred._map.set(interest, list);
+    for (const [supply, list] of this._map.entries()) {
+      transferred._map.set(supply, list);
     }
 
     return transferred;

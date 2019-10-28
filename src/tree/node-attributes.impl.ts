@@ -1,13 +1,5 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import {
-  EventEmitter,
-  EventInterest,
-  EventReceiver,
-  noEventInterest,
-  OnEvent,
-  onEventBy,
-  ValueTracker,
-} from 'fun-events';
+import { EventEmitter, EventReceiver, EventSupply, noEventSupply, OnEvent, onEventBy, ValueTracker } from 'fun-events';
 
 class AttributesObserver {
 
@@ -27,12 +19,12 @@ class AttributesObserver {
     return this._observer = new Observer(mutations => this._update(mutations));
   }
 
-  observe(name: string, receiver: EventReceiver<[string, string | null]>): EventInterest {
+  observe(name: string, receiver: EventReceiver<[string, string | null]>): EventSupply {
 
     const self = this;
     const observer = this.observer;
     const emitter = this._emitter(name);
-    const interest = emitter.on(receiver).whenDone(() => {
+    const supply = emitter.on(receiver).whenOff(() => {
       this._emitters.delete(name);
       observer.disconnect();
       if (this._emitters.size) {
@@ -45,7 +37,7 @@ class AttributesObserver {
     observer.disconnect();
     reconnect();
 
-    return interest;
+    return supply;
 
     function reconnect() {
       self._update(observer.takeRecords());
@@ -90,21 +82,20 @@ class AttributeTracker extends ValueTracker<string | null, string> {
       private readonly _name: string) {
     super();
 
-    let observeInterest = noEventInterest();
+    let observeSupply = noEventSupply();
 
     this.on = onEventBy(receiver => {
       if (!this._updates.size) {
-        observeInterest = this._observer.observe(
+        observeSupply = this._observer.observe(
             _name,
             (newValue, oldValue) => this._updates.send(newValue, oldValue));
       }
 
-      return this._updates.on(receiver).whenDone(reason => {
+      this._updates.on(receiver).whenOff(reason => {
         if (!this._updates.size) {
-          observeInterest.off(reason);
-          observeInterest = noEventInterest();
+          observeSupply.off(reason);
         }
-      }).needs(observeInterest);
+      }).needs(observeSupply);
     });
   }
 

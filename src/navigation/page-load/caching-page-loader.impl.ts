@@ -1,5 +1,5 @@
 import { nextArgs, nextSkip } from 'call-thru';
-import { eventInterest, EventInterest, OnEvent, onEventBy, trackValue } from 'fun-events';
+import { eventSupply, EventSupply, OnEvent, onEventBy, trackValue } from 'fun-events';
 import { Page } from '../page';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoader } from './page-loader.impl';
@@ -12,7 +12,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
   let state: {
     url: string;
     on: OnEvent<[PageLoadResponse]>;
-    ist: EventInterest;
+    sup: EventSupply;
   } | undefined;
 
   return page => {
@@ -23,10 +23,10 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
       if (state.url === url) {
         return state.on;
       }
-      state.ist.off();
+      state.sup.off();
     }
 
-    const ist = eventInterest().whenDone(() => state = undefined);
+    const supply = eventSupply().whenOff(() => state = undefined);
     let onResponse: OnEvent<[PageLoadResponse]> | undefined;
     let numReceivers = 0;
     const on = onEventBy<[PageLoadResponse]>(receiver => {
@@ -34,12 +34,12 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
 
         const onLoad = loader(page);
         const tracker = trackValue<PageLoadResponse>();
-        const trackInterest = onLoad(resp => {
+        const trackSupply = onLoad(resp => {
           tracker.it = resp;
         });
 
-        ist.needs(trackInterest).whenDone(reason => {
-          trackInterest.off(reason);
+        supply.needs(trackSupply).whenOff(reason => {
+          trackSupply.off(reason);
           tracker.done(reason);
         });
 
@@ -51,19 +51,19 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
 
       const currentOnResponse = onResponse;
 
-      return onResponse(receiver).whenDone(reason => {
+      return onResponse(receiver).whenOff(reason => {
         if (!--numReceivers) {
           // Allow to request the same page again
           Promise.resolve().then(() => {
             if (currentOnResponse === onResponse && !numReceivers) {
-              ist.off(reason);
+              supply.off(reason);
             }
           });
         }
       });
     });
 
-    state = { url, on, ist };
+    state = { url, on, sup: supply };
 
     return on;
   };

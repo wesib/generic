@@ -1,10 +1,10 @@
 import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
-import { EventEmitter, noEventInterest, OnEvent, ValueTracker } from 'fun-events';
+import { EventEmitter, noEventSupply, OnEvent, ValueTracker } from 'fun-events';
 
 class PropertyTracker<T> extends ValueTracker<T> {
 
   private readonly _updates = new EventEmitter<[T, T]>();
-  private _interest = noEventInterest();
+  private _supply = noEventSupply();
 
   constructor(
       private readonly _element: any,
@@ -20,9 +20,9 @@ class PropertyTracker<T> extends ValueTracker<T> {
 
     const propertyState = context.get(ComponentState).track(domPropertyPathTo(this._key));
 
-    this._interest = propertyState.onUpdate(
+    this._supply = propertyState.onUpdate(
         (_path, newValue: any, oldValue: any) => this._updates.send(newValue, oldValue)
-    ).whenDone(reason => this._updates.done(reason));
+    ).whenOff(reason => this._updates.done(reason));
   }
 
   get it(): T {
@@ -34,7 +34,7 @@ class PropertyTracker<T> extends ValueTracker<T> {
   }
 
   done(reason?: any): this {
-    this._interest.off(reason);
+    this._supply.off(reason);
     return this;
   }
 

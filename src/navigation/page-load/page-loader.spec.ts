@@ -1,6 +1,6 @@
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { EventEmitter, eventInterest, EventInterest, EventReceiver, onEventBy } from 'fun-events';
+import { EventEmitter, EventReceiver, EventSupply, eventSupply, onEventBy, onPromise } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
@@ -27,19 +27,7 @@ describe('navigation', () => {
       headers: mockResponseHeaders,
     } as any;
 
-    mockHttpFetch = jest.fn((_input, _init?) => onEventBy(receiver => {
-
-      const emitter = new EventEmitter<[Response]>();
-      const interest = emitter.on(receiver);
-
-      Promise.resolve().then(
-          () => emitter.send(mockResponse),
-      ).then(
-          () => interest.off(),
-      );
-
-      return interest;
-    }));
+    mockHttpFetch = jest.fn((_input, _init?) => onPromise(Promise.resolve(mockResponse)));
   });
 
   let bsContext: BootstrapContext;
@@ -94,10 +82,10 @@ describe('navigation', () => {
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
       expect(receiver).toHaveBeenCalled();
-      expect(interest.done).toBe(true);
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
 
       const document = receiver.mock.calls[0][0]!.document;
@@ -114,10 +102,10 @@ describe('navigation', () => {
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
       expect(receiver).toHaveBeenCalled();
-      expect(interest.done).toBe(true);
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
 
       const document = receiver.mock.calls[0][0]!.document;
@@ -133,11 +121,11 @@ describe('navigation', () => {
 
       mockHttpFetch = jest.fn((_input, _init?) => onEventBy(() => {
 
-        const failedInterest = eventInterest();
+        const failedSupply = eventSupply();
 
-        failedInterest.off(error);
+        failedSupply.off(error);
 
-        return failedInterest;
+        return failedSupply;
       }));
 
       const receiver = jest.fn();
@@ -145,10 +133,10 @@ describe('navigation', () => {
 
       mockResponse.text.mockImplementation(() => Promise.reject(error));
 
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
       expect(receiver).not.toHaveBeenCalled();
-      expect(interest.done).toBe(true);
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(error);
     });
     it('reports invalid HTTP response', async () => {
@@ -158,10 +146,10 @@ describe('navigation', () => {
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
       expect(receiver).toHaveBeenCalledWith({ ok: false, page, response: mockResponse, error: mockResponse.status });
-      expect(interest.done).toBe(true);
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalled();
     });
     it('reports parse error', async () => {
@@ -171,10 +159,10 @@ describe('navigation', () => {
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
       expect(receiver).toHaveBeenCalledWith({ ok: false, page, response: mockResponse, error: expect.any(Object) });
-      expect(interest.done).toBe(true);
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalled();
     });
     it('calls agent', async () => {
@@ -206,14 +194,14 @@ describe('navigation', () => {
     function loadDocument(
         receiver: EventReceiver<[PageLoadResponse]> = noop,
         done: (reason?: any) => void = noop,
-    ): Promise<EventInterest> {
-      return new Promise<EventInterest>(resolve => {
+    ): Promise<EventSupply> {
+      return new Promise<EventSupply>(resolve => {
 
-        const interest = loadPage(page)(receiver);
+        const supply = loadPage(page)(receiver);
 
-        interest.whenDone(reason => {
+        supply.whenOff(reason => {
           done(reason);
-          resolve(interest);
+          resolve(supply);
         });
       });
     }

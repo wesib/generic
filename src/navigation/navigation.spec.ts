@@ -1,7 +1,7 @@
 import Mock = jest.Mock;
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { asis, noop } from 'call-thru';
-import { afterEventFrom, onEventFrom } from 'fun-events';
+import { afterSupplied, onSupplied } from 'fun-events';
 import { LocationMock } from '../spec/location-mock';
 import { toHistoryState } from './nav-history.impl';
 import { Navigation } from './navigation';
@@ -96,13 +96,13 @@ describe('navigation', () => {
 
     describe('[AfterEvent__symbol]', () => {
       it('is the same as `read`', () => {
-        expect(afterEventFrom(navigation)).toBe(navigation.read);
+        expect(afterSupplied(navigation)).toBe(navigation.read);
       });
     });
 
     describe('[OnEvent__symbol]', () => {
       it('is the same as `on`', () => {
-        expect(onEventFrom(navigation)).toBe(navigation.on);
+        expect(onSupplied(navigation)).toBe(navigation.on);
       });
     });
 
