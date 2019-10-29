@@ -1,8 +1,8 @@
 /**
  * @module @wesib/generic
  */
-import { BootstrapContext } from '@wesib/wesib';
 import { Page } from './page';
+import { PageParamContext } from './page-param-context';
 
 /**
  * A key of {@link PageParam.Ref page parameter request} property containing requested page parameter.
@@ -33,11 +33,11 @@ export abstract class PageParam<T, I> implements PageParam.Ref<T, I> {
    *
    * @param page  A page to assign navigation parameter to.
    * @param input  Parameter input used to construct its initial value.
-   * @param context  Bootstrap context.
+   * @param context  Page parameter context.
    *
    * @returns New page parameter value handle.
    */
-  abstract create(page: Page, input: I, context: BootstrapContext): PageParam.Handle<T, I>;
+  abstract create(page: Page, input: I, context: PageParamContext): PageParam.Handle<T, I>;
 
 }
 

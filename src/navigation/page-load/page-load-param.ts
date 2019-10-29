@@ -1,4 +1,3 @@
-import { BootstrapContext } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
 import {
   EventEmitter,
@@ -12,6 +11,7 @@ import {
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
+import { PageParamContext } from '../page-param-context';
 import { PageLoadRequest } from './page-load-request';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoader } from './page-loader.impl';
@@ -121,7 +121,7 @@ class PageLoadRequests {
 
 class PageLoadParam extends PageParam<void, PageLoadRequest> {
 
-  create(_page: Page, request: PageLoadRequest, context: BootstrapContext) {
+  create(_page: Page, request: PageLoadRequest, context: PageParamContext) {
 
     const handle = new PageLoadRequests(context.get(Navigation), context.get(PageLoader)).handle();
 

@@ -1,10 +1,11 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
-import { ContextKey__symbol, SingleContextKey } from 'context-values';
+import { ContextKey__symbol, ContextRegistry, SingleContextKey } from 'context-values';
 import { ValueTracker } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
+import { PageParamContext } from './page-param-context';
 
 const RoutingHistory__key = /*#__PURE__*/ new SingleContextKey<NavHistory>(
     'navigation-history',
@@ -197,7 +198,13 @@ export class PageEntry {
       return handle.get();
     }
 
-    const newHandle = param.create(this.page, input, this._context);
+    const registry = new ContextRegistry<ParamContext>(this._context);
+
+    class ParamContext extends PageParamContext {
+      readonly get: PageParamContext['get'] = registry.newValues().get;
+    }
+
+    const newHandle = param.create(this.page, input, new ParamContext());
 
     this._params.set(param, newHandle);
     if (this._current && newHandle.enter) {
