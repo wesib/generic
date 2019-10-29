@@ -1,6 +1,14 @@
 import { BootstrapContext } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
-import { EventEmitter, eventSupply, EventSupply, noEventSupply, onEventBy } from 'fun-events';
+import {
+  EventEmitter,
+  eventReceiver,
+  EventReceiver,
+  eventSupply,
+  EventSupply,
+  noEventSupply,
+  onEventBy,
+} from 'fun-events';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
@@ -12,7 +20,7 @@ class PageLoadAbortError extends Error {}
 
 class PageLoadRequests {
 
-  private readonly _map = new Map<EventSupply, PageLoadRequest[]>();
+  private readonly _map = new Map<EventSupply, PageLoadReq[]>();
 
   constructor(
       private readonly _navigation: Navigation,
@@ -62,7 +70,12 @@ class PageLoadRequests {
         itsEach(
             self._map.values(),
             list => list.forEach(
-                ({ supply, receiver }) => onLoad(receiver).needs(supply),
+                ({ receiver }) => onLoad({
+                  supply: eventSupply().needs(receiver.supply),
+                  receive(context, response): void {
+                    receiver.receive(context, response);
+                  },
+                }),
             ),
         );
       },
@@ -81,13 +94,14 @@ class PageLoadRequests {
 
   private _add(request: PageLoadRequest) {
 
-    const { supply } = request;
+    const req = { ...request, receiver: eventReceiver(request.receiver) };
+    const { supply } = req.receiver;
     const list = this._map.get(supply);
 
     if (list) {
-      list.push(request);
+      list.push(req);
     } else {
-      this._map.set(supply, [request]);
+      this._map.set(supply, [req]);
       supply.whenOff(() => this._map.delete(supply));
     }
   }
@@ -115,6 +129,12 @@ class PageLoadParam extends PageParam<void, PageLoadRequest> {
 
     return handle;
   }
+
+}
+
+interface PageLoadReq extends PageLoadRequest {
+
+  readonly receiver: EventReceiver.Generic<[PageLoadResponse]>;
 
 }
 
