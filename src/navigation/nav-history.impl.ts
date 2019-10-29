@@ -27,20 +27,21 @@ export class NavHistory {
   private readonly _location: Location;
   private readonly _history: History;
   private readonly _entries = new Map<number, PageEntry>();
+  private readonly _uid: string;
   private _lastId = 0;
 
   constructor(private readonly _context: BootstrapContext) {
-
     const window = _context.get(BootstrapWindow);
 
     this._document = window.document;
     this._location = window.location;
     this._history = window.history;
+    this._uid = btoa(String(Math.random()));
   }
 
   init(): PageEntry {
 
-    const [data] = toNavData(this._history.state);
+    const { data } = this._navData(this._history.state);
     const entry = this.newEntry({
       url: new URL(this._location.href),
       data,
@@ -49,7 +50,7 @@ export class NavHistory {
 
     this._entries.set(entry.id, entry);
     entry.enter('init');
-    this._history.replaceState(toHistoryState(data, entry.id), '');
+    this._history.replaceState(this._historyState(data, entry.id), '');
 
     return entry;
   }
@@ -67,7 +68,7 @@ export class NavHistory {
     const { page: { data, title = '', url } } = toEntry;
 
     this._history.pushState(
-        toHistoryState(data, toEntry.id),
+        this._historyState(data, toEntry.id),
         title,
         url.href,
     );
@@ -94,7 +95,7 @@ export class NavHistory {
     const { page: { data, title = '', url } } = toEntry;
 
     this._history.replaceState(
-        toHistoryState(data, toEntry.id),
+        this._historyState(data, toEntry.id),
         title,
         url.href,
     );
@@ -121,7 +122,7 @@ export class NavHistory {
   ): PageEntry {
     fromEntry.leave();
 
-    const [data, pageId] = toNavData(popState.state);
+    const { data, page: pageId } = this._navData(popState.state);
     const existingEntry = pageId != null ? this._entries.get(pageId) : undefined;
     let toEntry: PageEntry;
 
@@ -147,6 +148,52 @@ export class NavHistory {
     entry.forget();
   }
 
+  private _navData(state?: any): PartialNavData {
+    return state == null || typeof state !== 'object' ? { data: state } : state[NAV_DATA_KEY];
+  }
+
+  /**
+   * @internal
+   */
+  private _historyState(data: any, page: number): NavDataEnvelope {
+    return {
+      [NAV_DATA_KEY]: {
+        uid: this._uid,
+        page,
+        data,
+      }
+    };
+  }
+
+}
+
+/**
+ * @internal
+ */
+export interface PartialNavData {
+  uid?: string;
+  page?: number;
+  data: any;
+}
+
+/**
+ * @internal
+ */
+export interface NavData extends PartialNavData {
+  uid: string;
+  page: number;
+}
+
+/**
+ * @internal
+ */
+export const NAV_DATA_KEY = 'wesib:navigation:data' as const;
+
+/**
+ * @internal
+ */
+export interface NavDataEnvelope {
+  [NAV_DATA_KEY]: NavData;
 }
 
 /**
@@ -246,19 +293,4 @@ export class PageEntry {
     this._params.clear();
   }
 
-}
-
-type NavData = [any, number | undefined];
-
-const NAV_DATA_KEY = 'wesib:navigation:data' as const;
-
-function toNavData(state?: any): NavData {
-  return state != null && typeof state === 'object' ? state[NAV_DATA_KEY] : [state];
-}
-
-/**
- * @internal
- */
-export function toHistoryState(data: any, id: number): any {
-  return { [NAV_DATA_KEY]: [data, id] };
 }
