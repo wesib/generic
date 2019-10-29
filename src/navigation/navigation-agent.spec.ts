@@ -29,12 +29,16 @@ describe('navigation', () => {
       mockNavigate = jest.fn();
       when = 'pre-open';
       from = {
+        visited: true,
+        current: true,
         url: new URL('http://localhost/index'),
         data: 'initial',
         get: noop,
         put: noop,
       };
       to = {
+        visited: false,
+        current: true,
         url: new URL('http://localhost/other'),
         data: 'updated',
         title: 'New title',

@@ -92,6 +92,12 @@ class NavigationAgentKey
                   url: new URL(String(nextURL), document.baseURI),
                   title: nextTitle,
                   data: nextData,
+                  get visited() {
+                    return agentTo.visited;
+                  },
+                  get current() {
+                    return agentTo.current;
+                  },
                   get(ref) {
                     return agentTo.get(ref);
                   },
