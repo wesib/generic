@@ -2,8 +2,7 @@ import Mock = jest.Mock;
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { asis, noop } from 'call-thru';
 import { afterSupplied, onSupplied } from 'fun-events';
-import { LocationMock } from '../spec/location-mock';
-import { NAV_DATA_KEY, NavDataEnvelope } from './nav-history.impl';
+import { LocationMock, navHistoryState } from '../spec/location-mock';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
 import { NavigationSupport } from './navigation-support.feature';
@@ -110,7 +109,7 @@ describe('navigation', () => {
       it('navigates to target', async () => {
         await navigation.open({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            historyState('updated'),
+            navHistoryState('updated'),
             'new title',
             'http://localhost/other',
         );
@@ -119,7 +118,7 @@ describe('navigation', () => {
       it('navigates to path', async () => {
         await navigation.open('other');
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            historyState(undefined),
+            navHistoryState(undefined),
             '',
             'http://localhost/other',
         );
@@ -128,7 +127,7 @@ describe('navigation', () => {
       it('navigates to the same URL', async () => {
         await navigation.open({ data: 'updated', title: 'new title' });
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            historyState('updated'),
+            navHistoryState('updated'),
             'new title',
             'http://localhost/index',
         );
@@ -237,7 +236,7 @@ describe('navigation', () => {
         await Promise.resolve(); // await for another navigation to finish
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            historyState(3),
+            navHistoryState(3),
             '',
             'http://localhost/second',
         );
@@ -257,7 +256,7 @@ describe('navigation', () => {
         expect(await third).toMatchObject({ url: new URL('http://localhost/third' )});
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            historyState(undefined),
+            navHistoryState(undefined),
             '',
             'http://localhost/third',
         );
@@ -280,7 +279,7 @@ describe('navigation', () => {
           title: 'new title',
         });
         expect(locationMock.history.replaceState).toHaveBeenCalledWith(
-            historyState('updated'),
+            navHistoryState('updated'),
             'new title',
             'http://localhost/other',
         );
@@ -289,7 +288,7 @@ describe('navigation', () => {
       it('replaces location with the target URL', async () => {
         await navigation.replace('/other');
         expect(locationMock.history.replaceState).toHaveBeenCalledWith(
-            historyState(undefined),
+            navHistoryState(undefined),
             '',
             'http://localhost/other',
         );
@@ -298,7 +297,7 @@ describe('navigation', () => {
       it('replaces location with the same URL', async () => {
         await navigation.replace({ data: 'updated', title: 'new title' });
         expect(locationMock.history.replaceState).toHaveBeenCalledWith(
-            historyState('updated'),
+            navHistoryState('updated'),
             'new title',
             'http://localhost/index',
         );
@@ -399,13 +398,3 @@ describe('navigation', () => {
     });
   });
 });
-
-function historyState(data: any, page: number = expect.anything()): NavDataEnvelope {
-  return {
-    [NAV_DATA_KEY]: {
-      uid: expect.anything(),
-      page,
-      data,
-    }
-  };
-}

@@ -1,6 +1,7 @@
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { LocationMock } from '../spec/location-mock';
+import { LocationMock, navHistoryState } from '../spec/location-mock';
+import { NAV_DATA_KEY, NavDataEnvelope } from './nav-history.impl';
 import { Navigation } from './navigation';
 import { NavigationSupport } from './navigation-support.feature';
 import { Page } from './page';
@@ -237,6 +238,7 @@ describe('navigation', () => {
 
     describe('back', () => {
       it('restores previous entry', async () => {
+        locationMock.history.replaceState.mockClear();
         await navigation.with(param, 'init').open('/other');
 
         const [param2, handle2] = testPageParam();
@@ -256,12 +258,64 @@ describe('navigation', () => {
         expect(handle2.leave).toHaveBeenCalledTimes(1);
         expect(handle2.forget).not.toHaveBeenCalled();
         expect(handle.enter).toHaveBeenCalledTimes(2);
+
+        expect(locationMock.history.replaceState).not.toHaveBeenCalled();
       });
       it('returns to initial history entry', () => {
         locationMock.history.pushState('new', '', '/some');
         navigation.back();
         expect(page.url.href).toBe('http://localhost/index');
         expect(page.data).toBe('initial');
+      });
+
+      describe('to incompatible history entry', () => {
+        it('restores page data', async () => {
+          locationMock.history.replaceState.mockClear();
+
+          const idx = locationMock.history.length - 1;
+
+          await navigation.open('/other');
+
+          const prevData: NavDataEnvelope = locationMock.getState(idx);
+          const incompatibleData: NavDataEnvelope = {
+            [NAV_DATA_KEY]: {
+              ...prevData[NAV_DATA_KEY],
+              uid: 'incompatible',
+              data: 'another',
+            }
+          };
+
+          locationMock.setState(idx, incompatibleData);
+          navigation.back();
+
+          expect(page.url.href).toBe('http://localhost/index');
+          expect(page.data).toBe('another');
+          expect(locationMock.history.replaceState).toHaveBeenCalledWith(navHistoryState('another'), '');
+        });
+        it('transfers back page parameters', async () => {
+
+          const idx = locationMock.history.length - 1;
+          const handle2 = testPageParamHandle({ value: '2' });
+
+          (handle as any).transfer = jest.fn(() => handle2);
+
+          await navigation.with(param, '1').open('/other');
+
+          const prevData: NavDataEnvelope = locationMock.getState(idx);
+          const incompatibleData: NavDataEnvelope = {
+            [NAV_DATA_KEY]: {
+              ...prevData[NAV_DATA_KEY],
+              uid: 'incompatible',
+            }
+          };
+
+          locationMock.setState(idx, incompatibleData);
+          navigation.back();
+
+          expect(page.url.href).toBe('http://localhost/index');
+          expect(page.get(param)).toBe('2');
+          expect(handle.transfer).toHaveBeenCalledWith(page, 'return');
+        });
       });
     });
   });

@@ -41,7 +41,7 @@ export class NavHistory {
 
   init(): PageEntry {
 
-    const { data } = this._navData(this._history.state);
+    const { data } = extractNavData(this._history.state);
     const entry = this.newEntry({
       url: new URL(this._location.href),
       data,
@@ -50,7 +50,7 @@ export class NavHistory {
 
     this._entries.set(entry.id, entry);
     entry.enter('init');
-    this._history.replaceState(this._historyState(data, entry.id), '');
+    this._history.replaceState(this._historyState(entry), '');
 
     return entry;
   }
@@ -65,10 +65,10 @@ export class NavHistory {
       tracker: ValueTracker<PageEntry>,
   ) {
 
-    const { page: { data, title = '', url } } = toEntry;
+    const { page: { title = '', url } } = toEntry;
 
     this._history.pushState(
-        this._historyState(data, toEntry.id),
+        this._historyState(toEntry),
         title,
         url.href,
     );
@@ -92,10 +92,10 @@ export class NavHistory {
       tracker: ValueTracker<PageEntry>,
   ) {
 
-    const { page: { data, title = '', url } } = toEntry;
+    const { page: { title = '', url } } = toEntry;
 
     this._history.replaceState(
-        this._historyState(data, toEntry.id),
+        this._historyState(toEntry),
         title,
         url.href,
     );
@@ -122,19 +122,22 @@ export class NavHistory {
   ): PageEntry {
     fromEntry.leave();
 
-    const { data, page: pageId } = this._navData(popState.state);
-    const existingEntry = pageId != null ? this._entries.get(pageId) : undefined;
+    const { uid, data, page: pageId } = extractNavData(popState.state);
+    const existingEntry = uid === this._uid && pageId != null ? this._entries.get(pageId) : undefined;
     let toEntry: PageEntry;
 
     if (existingEntry) {
       toEntry = existingEntry;
     } else {
+      // Returning to page existed in previous app version
       toEntry = this.newEntry({
         url: new URL(this._location.href),
         data,
         title: this._document.title,
       });
+      fromEntry.transfer(toEntry, 'return');
       this._entries.set(toEntry.id, toEntry);
+      this._history.replaceState(this._historyState(toEntry), '');
     }
 
     tracker.it = toEntry;
@@ -148,19 +151,15 @@ export class NavHistory {
     entry.forget();
   }
 
-  private _navData(state?: any): PartialNavData {
-    return state == null || typeof state !== 'object' ? { data: state } : state[NAV_DATA_KEY];
-  }
-
   /**
    * @internal
    */
-  private _historyState(data: any, page: number): NavDataEnvelope {
+  private _historyState(entry: PageEntry): NavDataEnvelope {
     return {
       [NAV_DATA_KEY]: {
         uid: this._uid,
-        page,
-        data,
+        page: entry.id,
+        data: entry.page.data,
       }
     };
   }
@@ -194,6 +193,10 @@ export const NAV_DATA_KEY = 'wesib:navigation:data' as const;
  */
 export interface NavDataEnvelope {
   [NAV_DATA_KEY]: NavData;
+}
+
+function extractNavData(state?: any): PartialNavData {
+  return state == null || typeof state !== 'object' ? { data: state } : state[NAV_DATA_KEY];
 }
 
 /**
@@ -261,7 +264,7 @@ export class PageEntry {
     return newHandle.get();
   }
 
-  transfer(to: PageEntry, when: 'pre-open' | 'pre-replace') {
+  transfer(to: PageEntry, when: 'return' | 'pre-open' | 'pre-replace') {
     itsEach(this._params.entries(), ([param, handle]) => {
       if (handle.transfer) {
 
