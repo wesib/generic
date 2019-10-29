@@ -124,7 +124,7 @@ export class NavHistory {
 
     fromEntry.leave();
 
-    const { uid, data, page: pageId } = extractNavData(popState.state);
+    const { uid, data, id: pageId } = extractNavData(popState.state);
     const existingEntry = uid === this._uid && pageId != null ? this._entries.get(pageId) : undefined;
     let toEntry: PageEntry;
 
@@ -153,15 +153,12 @@ export class NavHistory {
     entry.forget();
   }
 
-  /**
-   * @internal
-   */
-  private _historyState(entry: PageEntry): NavDataEnvelope {
+  private _historyState({ id, page: { data } }: PageEntry): NavDataEnvelope {
     return {
       [NAV_DATA_KEY]: {
         uid: this._uid,
-        page: entry.id,
-        data: entry.page.data,
+        id,
+        data,
       }
     };
   }
@@ -172,17 +169,17 @@ export class NavHistory {
  * @internal
  */
 export interface PartialNavData {
-  uid?: string;
-  page?: number;
-  data: any;
+  readonly uid?: string;
+  readonly id?: number;
+  readonly data: any;
 }
 
 /**
  * @internal
  */
 export interface NavData extends PartialNavData {
-  uid: string;
-  page: number;
+  readonly uid: string;
+  readonly id: number;
 }
 
 /**
@@ -194,7 +191,7 @@ export const NAV_DATA_KEY = 'wesib:navigation:data' as const;
  * @internal
  */
 export interface NavDataEnvelope {
-  [NAV_DATA_KEY]: NavData;
+  readonly [NAV_DATA_KEY]: NavData;
 }
 
 function extractNavData(state?: any): PartialNavData {

@@ -1,6 +1,6 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
-import { NAV_DATA_KEY, NavDataEnvelope } from '../navigation/nav-history.impl';
+import { NAV_DATA_KEY, NavDataEnvelope, PartialNavData } from '../navigation/nav-history.impl';
 
 export class LocationMock {
 
@@ -89,11 +89,17 @@ export class LocationMock {
 
 }
 
-export function navHistoryState(data: any, page: number = expect.anything()): NavDataEnvelope {
+export function navHistoryState(
+    {
+      id = expect.anything(),
+      uid = expect.anything(),
+      data,
+    }: Partial<PartialNavData>,
+): NavDataEnvelope {
   return {
     [NAV_DATA_KEY]: {
-      uid: expect.anything(),
-      page,
+      uid,
+      id,
       data,
     }
   };

@@ -109,7 +109,7 @@ describe('navigation', () => {
       it('navigates to target', async () => {
         await navigation.open({ url: new URL('http://localhost/other'), data: 'updated', title: 'new title' });
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            navHistoryState('updated'),
+            navHistoryState({ data: 'updated' }),
             'new title',
             'http://localhost/other',
         );
@@ -118,7 +118,7 @@ describe('navigation', () => {
       it('navigates to path', async () => {
         await navigation.open('other');
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            navHistoryState(undefined),
+            navHistoryState({}),
             '',
             'http://localhost/other',
         );
@@ -127,7 +127,7 @@ describe('navigation', () => {
       it('navigates to the same URL', async () => {
         await navigation.open({ data: 'updated', title: 'new title' });
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            navHistoryState('updated'),
+            navHistoryState({ data: 'updated' }),
             'new title',
             'http://localhost/index',
         );
@@ -236,7 +236,7 @@ describe('navigation', () => {
         await Promise.resolve(); // await for another navigation to finish
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            navHistoryState(3),
+            navHistoryState({ data: 3 }),
             '',
             'http://localhost/second',
         );
@@ -256,7 +256,7 @@ describe('navigation', () => {
         expect(await third).toMatchObject({ url: new URL('http://localhost/third' )});
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
-            navHistoryState(undefined),
+            navHistoryState({ data: undefined }),
             '',
             'http://localhost/third',
         );
@@ -279,7 +279,7 @@ describe('navigation', () => {
           title: 'new title',
         });
         expect(locationMock.history.replaceState).toHaveBeenCalledWith(
-            navHistoryState('updated'),
+            navHistoryState({ data: 'updated' }),
             'new title',
             'http://localhost/other',
         );
@@ -288,7 +288,7 @@ describe('navigation', () => {
       it('replaces location with the target URL', async () => {
         await navigation.replace('/other');
         expect(locationMock.history.replaceState).toHaveBeenCalledWith(
-            navHistoryState(undefined),
+            navHistoryState({ data: undefined }),
             '',
             'http://localhost/other',
         );
@@ -297,7 +297,7 @@ describe('navigation', () => {
       it('replaces location with the same URL', async () => {
         await navigation.replace({ data: 'updated', title: 'new title' });
         expect(locationMock.history.replaceState).toHaveBeenCalledWith(
-            navHistoryState('updated'),
+            navHistoryState({ data: 'updated' }),
             'new title',
             'http://localhost/index',
         );

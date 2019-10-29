@@ -290,7 +290,7 @@ describe('navigation', () => {
 
           expect(page.url.href).toBe('http://localhost/index');
           expect(page.data).toBe('another');
-          expect(locationMock.history.replaceState).toHaveBeenCalledWith(navHistoryState('another'), '');
+          expect(locationMock.history.replaceState).toHaveBeenCalledWith(navHistoryState({ data: 'another' }), '');
         });
         it('transfers back page parameters', async () => {
 
