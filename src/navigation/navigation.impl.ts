@@ -29,9 +29,9 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   const readPage: AfterEvent<[Page]> = nav.read.keep.thru(entry => entry.page);
   let next: Promise<any> = Promise.resolve();
 
-  dispatcher.on<PopStateEvent>('popstate')(event => {
+  dispatcher.on<PopStateEvent>('popstate')(popState => {
 
-    const entry = navHistory.return(nav.it, event, nav);
+    const entry = navHistory.return(popState, nav);
 
     dispatcher.dispatch(new EnterPageEvent(
         NavigationEventType.EnterPage,
@@ -133,7 +133,6 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
     function doNavigate(): Page | null {
 
-      let fromEntry: PageEntry | undefined;
       let toEntry: PageEntry | undefined;
 
       try {
@@ -144,9 +143,9 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           return prepared; // Navigation cancelled
         }
 
-        [fromEntry, toEntry] = prepared;
+        toEntry = prepared;
 
-        navHistory[when](fromEntry, toEntry, nav);
+        navHistory[when](toEntry, nav);
 
         dispatcher.dispatch(new EnterPageEvent(
             NavigationEventType.EnterPage,
@@ -163,7 +162,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       }
     }
 
-    function prepare(): [PageEntry, PageEntry] | null {
+    function prepare(): PageEntry | null {
       if (next !== promise) {
         return stay();
       }
@@ -195,10 +194,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
         return stay(toEntry); // Some agent didn't call `next()`.
       }
 
-      return [
-        fromEntry,
-        toEntry,
-      ];
+      return toEntry;
     }
 
     function stay(toEntry?: PageEntry, reason?: any): null {

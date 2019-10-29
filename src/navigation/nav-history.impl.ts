@@ -60,11 +60,11 @@ export class NavHistory {
   }
 
   open(
-      fromEntry: PageEntry,
       toEntry: PageEntry,
       tracker: ValueTracker<PageEntry>,
   ) {
 
+    const fromEntry = tracker.it;
     const { page: { title = '', url } } = toEntry;
 
     this._history.pushState(
@@ -87,11 +87,11 @@ export class NavHistory {
   }
 
   replace(
-      fromEntry: PageEntry,
       toEntry: PageEntry,
       tracker: ValueTracker<PageEntry>,
   ) {
 
+    const fromEntry = tracker.it;
     const { page: { title = '', url } } = toEntry;
 
     this._history.replaceState(
@@ -116,10 +116,12 @@ export class NavHistory {
   }
 
   return(
-      fromEntry: PageEntry,
       popState: PopStateEvent,
       tracker: ValueTracker<PageEntry>,
   ): PageEntry {
+
+    const fromEntry = tracker.it;
+
     fromEntry.leave();
 
     const { uid, data, page: pageId } = extractNavData(popState.state);
