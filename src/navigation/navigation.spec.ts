@@ -7,6 +7,7 @@ import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
 import { NavigationSupport } from './navigation-support.feature';
 import { EnterPageEvent, LeavePageEvent, NavigationEventType, StayOnPageEvent } from './navigation.event';
+import { Page } from './page';
 
 describe('navigation', () => {
   describe('Navigation', () => {
@@ -56,6 +57,12 @@ describe('navigation', () => {
       expect(location).toEqual({ url: 'http://localhost/index', data: 'initial' });
       expect(locationMock.href).toHaveBeenCalled();
       expect(locationMock.state).toHaveBeenCalled();
+    });
+    it('makes initial page current', () => {
+      navigation.read.once(page => {
+        expect(page.current).toBe(true);
+        expect(page.visited).toBe(true);
+      });
     });
 
     describe('length', () => {
@@ -133,10 +140,36 @@ describe('navigation', () => {
         );
         expect(location).toEqual({ url: 'http://localhost/index', data: 'updated' });
       });
+      it('updates current page', async () => {
+
+        let left: Page;
+
+        navigation.read.once(page => left = page);
+        await navigation.open('other');
+
+        navigation.read.once(page => {
+          expect(page.current).toBe(true);
+          expect(page.visited).toBe(true);
+          expect(left.current).toBe(false);
+          expect(left.visited).toBe(true);
+        });
+      });
       it('sends navigation events', async () => {
 
-        const onLeave = jest.fn();
-        const onEnter = jest.fn();
+        let leavePage!: LeavePageEvent;
+        const onLeave = jest.fn((event: LeavePageEvent) => {
+          leavePage = event;
+          expect(leavePage.from.current).toBe(true);
+          expect(leavePage.from.visited).toBe(true);
+          expect(leavePage.to.current).toBe(false);
+          expect(leavePage.to.visited).toBe(false);
+        });
+        let enterPage!: EnterPageEvent;
+        const onEnter = jest.fn((event: EnterPageEvent) => {
+          enterPage = event;
+          expect(enterPage.to.current).toBe(true);
+          expect(enterPage.to.visited).toBe(true);
+        });
         const onEvent = jest.fn();
 
         navigation.onLeave(onLeave);
@@ -147,9 +180,6 @@ describe('navigation', () => {
 
         expect(onLeave).toHaveBeenCalledTimes(1);
         expect(onEnter).toHaveBeenCalledTimes(1);
-
-        const leavePage = onLeave.mock.calls[0][0] as LeavePageEvent;
-        const enterPage = onEnter.mock.calls[0][0] as EnterPageEvent;
 
         expect(onEvent).toHaveBeenCalledWith(leavePage);
         expect(onEvent).toHaveBeenLastCalledWith(enterPage);
@@ -303,10 +333,36 @@ describe('navigation', () => {
         );
         expect(location).toEqual({ url: 'http://localhost/index', data: 'updated' });
       });
+      it('updates current page', async () => {
+
+        let left: Page;
+
+        navigation.read.once(page => left = page);
+        await navigation.replace('other');
+
+        navigation.read.once(page => {
+          expect(page.current).toBe(true);
+          expect(page.visited).toBe(true);
+          expect(left.current).toBe(false);
+          expect(left.visited).toBe(true);
+        });
+      });
       it('sends navigation events', async () => {
 
-        const onLeave = jest.fn();
-        const onEnter = jest.fn();
+        let leavePage!: LeavePageEvent;
+        const onLeave = jest.fn((event: LeavePageEvent) => {
+          leavePage = event;
+          expect(leavePage.from.current).toBe(true);
+          expect(leavePage.from.visited).toBe(true);
+          expect(leavePage.to.current).toBe(false);
+          expect(leavePage.to.visited).toBe(false);
+        });
+        let enterPage!: EnterPageEvent;
+        const onEnter = jest.fn((event: EnterPageEvent) => {
+          enterPage = event;
+          expect(enterPage.to.current).toBe(true);
+          expect(enterPage.to.visited).toBe(true);
+        });
 
         navigation.onLeave(onLeave);
         navigation.onEnter(onEnter);
@@ -314,9 +370,6 @@ describe('navigation', () => {
         await navigation.replace({ url: '/other', data: 'updated' });
         expect(onLeave).toHaveBeenCalledTimes(1);
         expect(onEnter).toHaveBeenCalledTimes(1);
-
-        const leavePage = onLeave.mock.calls[0][0] as LeavePageEvent;
-        const enterPage = onEnter.mock.calls[0][0] as EnterPageEvent;
 
         expect(leavePage.when).toBe('pre-replace');
         expect(leavePage.from.url.href).toBe('http://localhost/index');
@@ -371,7 +424,12 @@ describe('navigation', () => {
       it('sends navigation event', () => {
 
         const onLeave = jest.fn();
-        const onEnter = jest.fn();
+        let enterPage!: EnterPageEvent;
+        const onEnter = jest.fn((event: EnterPageEvent) => {
+          enterPage = event;
+          expect(enterPage.to.current).toBe(true);
+          expect(enterPage.to.visited).toBe(true);
+        });
 
         navigation.onLeave(onLeave);
         navigation.onEnter(onEnter);
@@ -382,12 +440,10 @@ describe('navigation', () => {
         expect(onLeave).not.toHaveBeenCalled();
         expect(onEnter).toHaveBeenCalledTimes(1);
 
-        const enter = onEnter.mock.calls[0][0] as EnterPageEvent;
-
-        expect(enter.when).toBe('return');
-        expect(enter.to.url.href).toBe('http://localhost/revisited');
-        expect(enter.type).toBe(NavigationEventType.EnterPage);
-        expect(enter.to.data).toBe('popped');
+        expect(enterPage.when).toBe('return');
+        expect(enterPage.to.url.href).toBe('http://localhost/revisited');
+        expect(enterPage.type).toBe(NavigationEventType.EnterPage);
+        expect(enterPage.to.data).toBe('popped');
       });
       it('updates location', () => {
         locationMock.href.mockImplementation(() => 'http://localhost/revisited');

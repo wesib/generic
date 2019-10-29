@@ -26,6 +26,9 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
   const onEvent = onAny<[NavigationEvent]>(onEnter, onLeave, onStay);
   const nav = trackValue<PageEntry>(navHistory.init());
+
+  nav.read(nextEntry => nextEntry.apply()); // The very first page entry receiver applies scheduled updates to page
+
   const readPage: AfterEvent<[Page]> = nav.read.keep.thru(entry => entry.page);
   let next: Promise<any> = Promise.resolve();
 

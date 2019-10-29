@@ -26,6 +26,18 @@ export interface Page {
   readonly title?: string;
 
   /**
+   * Whether this page is visited at least one.
+   *
+   * This is `false` for target pages before navigating to them.
+   */
+  readonly visited: boolean;
+
+  /**
+   * Whether the page is the one opened in browser.
+   */
+  readonly current: boolean;
+
+  /**
    * Requests this page navigation parameter.
    *
    * @typeparam T  Parameter value type.

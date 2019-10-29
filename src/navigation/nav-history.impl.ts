@@ -1,5 +1,6 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
+import { noop } from 'call-thru';
 import { ContextKey__symbol, ContextRegistry, SingleContextKey } from 'context-values';
 import { ValueTracker } from 'fun-events';
 import { Navigation } from './navigation';
@@ -49,8 +50,10 @@ export class NavHistory {
     });
 
     this._entries.set(entry.id, entry);
-    entry.enter('init');
-    this._history.replaceState(this._historyState(entry), '');
+    entry.schedule(() => {
+      entry.enter('init');
+      this._history.replaceState(this._historyState(entry), '');
+    });
 
     return entry;
   }
@@ -81,9 +84,11 @@ export class NavHistory {
 
     toEntry.prev = fromEntry;
     fromEntry.next = toEntry;
+    toEntry.schedule(() => {
+      fromEntry.leave();
+      toEntry.enter('open');
+    });
     tracker.it = toEntry;
-    fromEntry.leave();
-    toEntry.enter('open');
   }
 
   replace(
@@ -109,10 +114,12 @@ export class NavHistory {
       prev.next = toEntry;
     }
 
+    toEntry.schedule(() => {
+      fromEntry.leave();
+      this._forget(fromEntry);
+      toEntry.enter('replace');
+    });
     tracker.it = toEntry;
-    fromEntry.leave();
-    this._forget(fromEntry);
-    toEntry.enter('replace');
   }
 
   return(
@@ -142,8 +149,10 @@ export class NavHistory {
       this._history.replaceState(this._historyState(toEntry), '');
     }
 
+    toEntry.schedule(() => {
+      toEntry.enter('return');
+    });
     tracker.it = toEntry;
-    toEntry.enter('return');
 
     return toEntry;
   }
@@ -205,9 +214,10 @@ export class PageEntry {
 
   next?: PageEntry;
   prev?: PageEntry;
+  private _status: PageStatus = PageStatus.New;
   readonly page: Page;
-  private _current: 0 | 1 = 0;
   private readonly _params = new Map<PageParam<any, any>, PageParam.Handle<any, any>>();
+  private _update: () => void = noop;
 
   constructor(
       private readonly _context: BootstrapContext,
@@ -221,6 +231,12 @@ export class PageEntry {
       url: target.url,
       title: target.title,
       data: target.data,
+      get visited() {
+        return !!entry._status;
+      },
+      get current() {
+        return entry._status === PageStatus.Current;
+      },
       get(ref) {
         return entry.get(ref);
       },
@@ -256,7 +272,7 @@ export class PageEntry {
     const newHandle = param.create(this.page, input, new ParamContext());
 
     this._params.set(param, newHandle);
-    if (this._current && newHandle.enter) {
+    if (this.page.current && newHandle.enter) {
       newHandle.enter(this.page, 'init');
     }
 
@@ -281,12 +297,12 @@ export class PageEntry {
   }
 
   enter(when: 'init' | 'open' | 'replace' | 'return') {
-    this._current = 1;
+    this._status = PageStatus.Current;
     itsEach(this._params.values(), handle => handle.enter && handle.enter(this.page, when));
   }
 
   leave() {
-    this._current = 0;
+    this._status = PageStatus.Visited;
     itsEach(this._params.values(), handle => handle.leave && handle.leave());
   }
 
@@ -295,4 +311,22 @@ export class PageEntry {
     this._params.clear();
   }
 
+  schedule(update: () => void) {
+    this._update = update;
+  }
+
+  apply() {
+
+    const update = this._update;
+
+    this._update = noop;
+    update();
+  }
+
+}
+
+const enum PageStatus {
+  New,
+  Visited,
+  Current,
 }
