@@ -77,6 +77,24 @@ describe('navigation', () => {
       // expect(request.credentials).toBe('same-origin');
       expect(request.headers.get('Accept')).toBe('text/html');
     });
+    it('reports document load', async () => {
+      mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
+
+      const receiver = jest.fn();
+      const done = jest.fn();
+      const supply = await loadDocument(receiver, done);
+
+      expect(receiver).toHaveBeenCalledWith({ ok: undefined, page });
+      expect(supply.isOff).toBe(true);
+      expect(done).toHaveBeenCalledWith(undefined);
+
+      const document = receiver.mock.calls[1][0]!.document;
+      const div: Element = document.querySelector('div') as Element;
+
+      expect(div.ownerDocument).toBeInstanceOf(HTMLDocument);
+      expect(div).toBeInstanceOf(HTMLDivElement);
+      expect(div.textContent).toBe('test');
+    });
     it('parses the response as HTML by default', async () => {
       mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
 
@@ -84,11 +102,11 @@ describe('navigation', () => {
       const done = jest.fn();
       const supply = await loadDocument(receiver, done);
 
-      expect(receiver).toHaveBeenCalled();
+      expect(receiver).toHaveBeenLastCalledWith(expect.objectContaining({ ok: true, page }));
       expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
 
-      const document = receiver.mock.calls[0][0]!.document;
+      const document = receiver.mock.calls[1][0]!.document;
       const div: Element = document.querySelector('div') as Element;
 
       expect(div.ownerDocument).toBeInstanceOf(HTMLDocument);
@@ -104,11 +122,11 @@ describe('navigation', () => {
       const done = jest.fn();
       const supply = await loadDocument(receiver, done);
 
-      expect(receiver).toHaveBeenCalled();
+      expect(receiver).toHaveBeenLastCalledWith(expect.objectContaining({ ok: true, page }));
       expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
 
-      const document = receiver.mock.calls[0][0]!.document;
+      const document = receiver.mock.calls[1][0]!.document;
       const content = document.querySelector('content') as Node;
 
       expect(content).toBeInstanceOf(Element);
@@ -135,7 +153,7 @@ describe('navigation', () => {
 
       const supply = await loadDocument(receiver, done);
 
-      expect(receiver).not.toHaveBeenCalled();
+      expect(receiver).not.toHaveBeenLastCalledWith(expect.objectContaining({ ok: undefined, page }));
       expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(error);
     });
@@ -148,7 +166,12 @@ describe('navigation', () => {
       const done = jest.fn();
       const supply = await loadDocument(receiver, done);
 
-      expect(receiver).toHaveBeenCalledWith({ ok: false, page, response: mockResponse, error: mockResponse.status });
+      expect(receiver).toHaveBeenLastCalledWith({
+        ok: false,
+        page,
+        response: mockResponse,
+        error: mockResponse.status,
+      });
       expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalled();
     });
@@ -161,7 +184,12 @@ describe('navigation', () => {
       const done = jest.fn();
       const supply = await loadDocument(receiver, done);
 
-      expect(receiver).toHaveBeenCalledWith({ ok: false, page, response: mockResponse, error: expect.any(Object) });
+      expect(receiver).toHaveBeenLastCalledWith({
+        ok: false,
+        page,
+        response: mockResponse,
+        error: expect.any(Object),
+      });
       expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalled();
     });
@@ -187,7 +215,8 @@ describe('navigation', () => {
 
       await loadDocument(receiver);
 
-      expect(receiver).toHaveBeenCalledWith(newResponse);
+      expect(receiver).toHaveBeenCalledWith({ ok: undefined, page });
+      expect(receiver).toHaveBeenLastCalledWith(newResponse);
       expect(mockHttpFetch).not.toHaveBeenCalled();
     });
 

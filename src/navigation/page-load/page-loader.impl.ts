@@ -1,6 +1,6 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { SingleContextKey } from 'context-values';
-import { EventEmitter, OnEvent, onEventBy } from 'fun-events';
+import { afterThe, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
@@ -39,7 +39,16 @@ function newPageLoader(context: BootstrapContext): PageLoader {
         },
     );
 
-    return agent(fetch, request);
+    return onEventBy(receiver => {
+      afterThe<[PageLoadResponse.Start]>({ page }).once({
+        supply: eventSupply().needs(receiver.supply),
+        receive(ctx, start) {
+          receiver.receive(ctx, start);
+        }
+      });
+
+      agent(fetch, request)(receiver);
+    });
 
     function fetch(fetchRequest: Request): OnEvent<[PageLoadResponse]> {
 
