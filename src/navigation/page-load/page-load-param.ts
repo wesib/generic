@@ -138,4 +138,16 @@ interface PageLoadReq extends PageLoadRequest {
 
 }
 
+/**
+ * Page load parameter.
+ *
+ * Accepts a {@link PageLoadRequest page load request} as input.
+ *
+ * A page load is initiated whenever a page with new address is {@link Navigation.onEnter entered}.
+ *
+ * Page load won't be initiated if:
+ * - page load parameter is not {@link Page.put} added,
+ * - all added {@link PageLoadRequest.receiver response receiver}s supplies are cut off, or
+ * - the entered page address is the the same one as previous one, except the hash,
+ */
 export const pageLoadParam: PageParam<void, PageLoadRequest> = /*#__PURE__*/ new PageLoadParam();
