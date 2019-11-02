@@ -1,10 +1,12 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
-import { ContextKey__symbol, SingleContextKey } from 'context-values';
+import { noop } from 'call-thru';
+import { ContextKey__symbol, ContextRegistry, SingleContextKey } from 'context-values';
 import { ValueTracker } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
+import { PageParamContext } from './page-param-context';
 
 const RoutingHistory__key = /*#__PURE__*/ new SingleContextKey<NavHistory>(
     'navigation-history',
@@ -26,20 +28,21 @@ export class NavHistory {
   private readonly _location: Location;
   private readonly _history: History;
   private readonly _entries = new Map<number, PageEntry>();
+  private readonly _uid: string;
   private _lastId = 0;
 
   constructor(private readonly _context: BootstrapContext) {
-
     const window = _context.get(BootstrapWindow);
 
     this._document = window.document;
     this._location = window.location;
     this._history = window.history;
+    this._uid = btoa(String(Math.random()));
   }
 
   init(): PageEntry {
 
-    const [data] = toNavData(this._history.state);
+    const { data } = extractNavData(this._history.state);
     const entry = this.newEntry({
       url: new URL(this._location.href),
       data,
@@ -47,8 +50,10 @@ export class NavHistory {
     });
 
     this._entries.set(entry.id, entry);
-    entry.enter('init');
-    this._history.replaceState(toHistoryState(data, entry.id), '');
+    entry.schedule(() => {
+      entry.enter('init');
+      this._history.replaceState(this._historyState(entry), '');
+    });
 
     return entry;
   }
@@ -58,15 +63,15 @@ export class NavHistory {
   }
 
   open(
-      fromEntry: PageEntry,
       toEntry: PageEntry,
       tracker: ValueTracker<PageEntry>,
   ) {
 
-    const { page: { data, title = '', url } } = toEntry;
+    const fromEntry = tracker.it;
+    const { page: { title = '', url } } = toEntry;
 
     this._history.pushState(
-        toHistoryState(data, toEntry.id),
+        this._historyState(toEntry),
         title,
         url.href,
     );
@@ -79,21 +84,23 @@ export class NavHistory {
 
     toEntry.prev = fromEntry;
     fromEntry.next = toEntry;
+    toEntry.schedule(() => {
+      fromEntry.leave();
+      toEntry.enter('open');
+    });
     tracker.it = toEntry;
-    fromEntry.leave();
-    toEntry.enter('open');
   }
 
   replace(
-      fromEntry: PageEntry,
       toEntry: PageEntry,
       tracker: ValueTracker<PageEntry>,
   ) {
 
-    const { page: { data, title = '', url } } = toEntry;
+    const fromEntry = tracker.it;
+    const { page: { title = '', url } } = toEntry;
 
     this._history.replaceState(
-        toHistoryState(data, toEntry.id),
+        this._historyState(toEntry),
         title,
         url.href,
     );
@@ -107,36 +114,45 @@ export class NavHistory {
       prev.next = toEntry;
     }
 
+    toEntry.schedule(() => {
+      fromEntry.leave();
+      this._forget(fromEntry);
+      toEntry.enter('replace');
+    });
     tracker.it = toEntry;
-    fromEntry.leave();
-    this._forget(fromEntry);
-    toEntry.enter('replace');
   }
 
   return(
-      fromEntry: PageEntry,
       popState: PopStateEvent,
       tracker: ValueTracker<PageEntry>,
   ): PageEntry {
+
+    const fromEntry = tracker.it;
+
     fromEntry.leave();
 
-    const [data, pageId] = toNavData(popState.state);
-    const existingEntry = pageId != null ? this._entries.get(pageId) : undefined;
+    const { uid, data, id: pageId } = extractNavData(popState.state);
+    const existingEntry = uid === this._uid && pageId != null ? this._entries.get(pageId) : undefined;
     let toEntry: PageEntry;
 
     if (existingEntry) {
       toEntry = existingEntry;
     } else {
+      // Returning to page existed in previous app version
       toEntry = this.newEntry({
         url: new URL(this._location.href),
         data,
         title: this._document.title,
       });
+      fromEntry.transfer(toEntry, 'return');
       this._entries.set(toEntry.id, toEntry);
+      this._history.replaceState(this._historyState(toEntry), '');
     }
 
+    toEntry.schedule(() => {
+      toEntry.enter('return');
+    });
     tracker.it = toEntry;
-    toEntry.enter('return');
 
     return toEntry;
   }
@@ -146,6 +162,49 @@ export class NavHistory {
     entry.forget();
   }
 
+  private _historyState({ id, page: { data } }: PageEntry): NavDataEnvelope {
+    return {
+      [NAV_DATA_KEY]: {
+        uid: this._uid,
+        id,
+        data,
+      }
+    };
+  }
+
+}
+
+/**
+ * @internal
+ */
+export interface PartialNavData {
+  readonly uid?: string;
+  readonly id?: number;
+  readonly data: any;
+}
+
+/**
+ * @internal
+ */
+export interface NavData extends PartialNavData {
+  readonly uid: string;
+  readonly id: number;
+}
+
+/**
+ * @internal
+ */
+export const NAV_DATA_KEY = 'wesib:navigation:data' as const;
+
+/**
+ * @internal
+ */
+export interface NavDataEnvelope {
+  readonly [NAV_DATA_KEY]: NavData;
+}
+
+function extractNavData(state?: any): PartialNavData {
+  return state == null || typeof state !== 'object' ? { data: state } : state[NAV_DATA_KEY];
 }
 
 /**
@@ -155,9 +214,10 @@ export class PageEntry {
 
   next?: PageEntry;
   prev?: PageEntry;
+  private _status: PageStatus = PageStatus.New;
   readonly page: Page;
-  private _current: 0 | 1 = 0;
   private readonly _params = new Map<PageParam<any, any>, PageParam.Handle<any, any>>();
+  private _update: () => void = noop;
 
   constructor(
       private readonly _context: BootstrapContext,
@@ -171,6 +231,12 @@ export class PageEntry {
       url: target.url,
       title: target.title,
       data: target.data,
+      get visited() {
+        return !!entry._status;
+      },
+      get current() {
+        return entry._status === PageStatus.Current;
+      },
       get(ref) {
         return entry.get(ref);
       },
@@ -197,17 +263,23 @@ export class PageEntry {
       return handle.get();
     }
 
-    const newHandle = param.create(this.page, input, this._context);
+    const registry = new ContextRegistry<ParamContext>(this._context);
+
+    class ParamContext extends PageParamContext {
+      readonly get: PageParamContext['get'] = registry.newValues().get;
+    }
+
+    const newHandle = param.create(this.page, input, new ParamContext());
 
     this._params.set(param, newHandle);
-    if (this._current && newHandle.enter) {
+    if (this.page.current && newHandle.enter) {
       newHandle.enter(this.page, 'init');
     }
 
     return newHandle.get();
   }
 
-  transfer(to: PageEntry, when: 'pre-open' | 'pre-replace') {
+  transfer(to: PageEntry, when: 'return' | 'pre-open' | 'pre-replace') {
     itsEach(this._params.entries(), ([param, handle]) => {
       if (handle.transfer) {
 
@@ -225,12 +297,12 @@ export class PageEntry {
   }
 
   enter(when: 'init' | 'open' | 'replace' | 'return') {
-    this._current = 1;
+    this._status = PageStatus.Current;
     itsEach(this._params.values(), handle => handle.enter && handle.enter(this.page, when));
   }
 
   leave() {
-    this._current = 0;
+    this._status = PageStatus.Visited;
     itsEach(this._params.values(), handle => handle.leave && handle.leave());
   }
 
@@ -239,19 +311,22 @@ export class PageEntry {
     this._params.clear();
   }
 
+  schedule(update: () => void) {
+    this._update = update;
+  }
+
+  apply() {
+
+    const update = this._update;
+
+    this._update = noop;
+    update();
+  }
+
 }
 
-type NavData = [any, number | undefined];
-
-const NAV_DATA_KEY = 'wesib:navigation:data' as const;
-
-function toNavData(state?: any): NavData {
-  return state != null && typeof state === 'object' ? state[NAV_DATA_KEY] : [state];
-}
-
-/**
- * @internal
- */
-export function toHistoryState(data: any, id: number): any {
-  return { [NAV_DATA_KEY]: [data, id] };
+const enum PageStatus {
+  New,
+  Visited,
+  Current,
 }

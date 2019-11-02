@@ -1,5 +1,5 @@
 import { ContextRegistry } from 'context-values';
-import { EventEmitter, OnEvent, onEventFrom } from 'fun-events';
+import { EventEmitter, OnEvent, onSupplied } from 'fun-events';
 import { HttpFetchAgent } from './http-fetch-agent';
 import Mock = jest.Mock;
 
@@ -46,7 +46,7 @@ describe('fetch', () => {
       const response1 = new Response('response1');
       const response2 = new Response('response2');
       const response = await new Promise<Response>(resolve => {
-        onEventFrom(agent(mockFetch, request)).once(resolve);
+        onSupplied(agent(mockFetch, request)).once(resolve);
         emitter.send(response1);
         emitter2.send(response2);
       });

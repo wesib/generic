@@ -7,12 +7,12 @@ import { SingleContextKey, SingleContextRef } from 'context-values';
 import {
   AfterEvent,
   AfterEvent__symbol,
-  afterEventOr,
+  afterEventBy,
   EventKeeper,
   EventSender,
   OnEvent,
   OnEvent__symbol,
-  onEventFrom,
+  onSupplied,
   ValueTracker,
 } from 'fun-events';
 
@@ -183,7 +183,7 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
 
   get [AfterEvent__symbol](): AfterEvent<[AIterable<N>]> {
     return this[afterEvent__symbol]
-        || (this[afterEvent__symbol] = afterEventOr<[AIterable<N>]>(this.onUpdate, () => [this]));
+        || (this[afterEvent__symbol] = afterEventBy<[AIterable<N>]>(this.onUpdate, () => [this]));
   }
 
   /**
@@ -204,9 +204,9 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
       return existing;
     }
 
-    const onUpdateFirst: OnEvent<[any]> = onEventFrom(this).thru(itsFirst);
+    const onUpdateFirst: OnEvent<[any]> = onSupplied(this).thru(itsFirst);
 
-    return this[first__symbol] = afterEventOr<[N | undefined]>(onUpdateFirst, () => [itsFirst(this)]);
+    return this[first__symbol] = afterEventBy<[N | undefined]>(onUpdateFirst, () => [itsFirst(this)]);
   }
 
 }

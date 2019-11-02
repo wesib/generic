@@ -1,5 +1,5 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { DomEventDispatcher, EventEmitter, eventInterest, OnEvent, onEventBy } from 'fun-events';
+import { DomEventDispatcher, EventEmitter, EventSupply, eventSupply, OnEvent, onEventBy } from 'fun-events';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
 
@@ -19,18 +19,23 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
     return onEventBy(receiver => {
 
       const responseEmitter = new EventEmitter<[Response]>();
-      const interest = responseEmitter.on(receiver);
-      let result = interest;
+      let supply: EventSupply;
 
       if ('AbortController' in window) {
 
         const abortController = new (window as any).AbortController();
         const { signal } = abortController;
 
-        result = eventInterest(() => interest.off(HttpFetchAborted)).needs(interest);
-        interest.whenDone(reason => {
+        supply = eventSupply(reason => {
           if (reason === HttpFetchAborted) {
             abortController.abort();
+          }
+        });
+        receiver.supply.whenOff(() => supply.off(HttpFetchAborted)).needs(supply);
+        responseEmitter.on({
+          supply,
+          receive(ctx, response) {
+            receiver.receive(ctx, response);
           }
         });
 
@@ -44,16 +49,16 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
         }
 
         request = new Request(request, { signal });
+      } else {
+        supply = responseEmitter.on(receiver);
       }
 
       window.fetch(request)
           .then(response => {
             responseEmitter.send(response);
-            interest.off();
+            supply.off();
           })
-          .catch(reason => interest.off(reason));
-
-      return result;
+          .catch(reason => supply.off(reason));
     });
   }
 }

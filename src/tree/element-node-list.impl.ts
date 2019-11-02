@@ -1,6 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { AIterable, filterIt, itsIterator, itsReduction, overArray } from 'a-iterable';
-import { EventEmitter, eventInterest, onEventBy } from 'fun-events';
+import { EventEmitter, eventSupply, onEventBy } from 'fun-events';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
 
 const WATCH_CHILD_LIST = { childList: true };
@@ -11,19 +11,19 @@ export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> 
   readonly onUpdate = onEventBy<[AIterable<N>]>(listener => {
 
     const firstReceiver = !this._updates.size;
-    const interest = this._updates.on(listener);
+    const supply = this._updates.on(listener);
 
     if (firstReceiver) {
       this._refresh();
       this._observer.observe(this._root, this._init);
     }
 
-    return eventInterest(reason => {
-      interest.off(reason);
+    return eventSupply(reason => {
+      supply.off(reason);
       if (!this._updates.size) {
         this._observer.disconnect();
       }
-    }).needs(interest);
+    }).needs(supply);
   });
 
   private readonly _observer: MutationObserver;

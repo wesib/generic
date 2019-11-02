@@ -1,5 +1,5 @@
 import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
-import { AfterEvent, EventKeeper, EventSender, OnEvent, onEventFrom } from 'fun-events';
+import { AfterEvent, EventKeeper, EventSender, OnEvent, onSupplied } from 'fun-events';
 
 type FetchAgent<Res extends any[]> = (
     this: void,
@@ -64,7 +64,7 @@ export function combineFetchAgents<Res extends any[]>(agents: FetchAgent<Res>[])
         return next(agentRequest);
       }
 
-      return onEventFrom(
+      return onSupplied(
           agent(
               (nextRequest = agentRequest) => fetch(agentIdx + 1, nextRequest),
               agentRequest,

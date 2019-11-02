@@ -1,6 +1,6 @@
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { EventEmitter, eventInterest, EventInterest, EventReceiver, onEventBy } from 'fun-events';
+import { EventEmitter, EventReceiver, EventSupply, eventSupply, onEventBy, onPromise } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
@@ -27,19 +27,7 @@ describe('navigation', () => {
       headers: mockResponseHeaders,
     } as any;
 
-    mockHttpFetch = jest.fn((_input, _init?) => onEventBy(receiver => {
-
-      const emitter = new EventEmitter<[Response]>();
-      const interest = emitter.on(receiver);
-
-      Promise.resolve().then(
-          () => emitter.send(mockResponse),
-      ).then(
-          () => interest.off(),
-      );
-
-      return interest;
-    }));
+    mockHttpFetch = jest.fn((_input, _init?) => onPromise(Promise.resolve(mockResponse)));
   });
 
   let bsContext: BootstrapContext;
@@ -89,18 +77,36 @@ describe('navigation', () => {
       // expect(request.credentials).toBe('same-origin');
       expect(request.headers.get('Accept')).toBe('text/html');
     });
+    it('reports document load', async () => {
+      mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
+
+      const receiver = jest.fn();
+      const done = jest.fn();
+      const supply = await loadDocument(receiver, done);
+
+      expect(receiver).toHaveBeenCalledWith({ ok: undefined, page });
+      expect(supply.isOff).toBe(true);
+      expect(done).toHaveBeenCalledWith(undefined);
+
+      const document = receiver.mock.calls[1][0]!.document;
+      const div: Element = document.querySelector('div') as Element;
+
+      expect(div.ownerDocument).toBeInstanceOf(HTMLDocument);
+      expect(div).toBeInstanceOf(HTMLDivElement);
+      expect(div.textContent).toBe('test');
+    });
     it('parses the response as HTML by default', async () => {
       mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
-      expect(receiver).toHaveBeenCalled();
-      expect(interest.done).toBe(true);
+      expect(receiver).toHaveBeenLastCalledWith(expect.objectContaining({ ok: true, page }));
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
 
-      const document = receiver.mock.calls[0][0]!.document;
+      const document = receiver.mock.calls[1][0]!.document;
       const div: Element = document.querySelector('div') as Element;
 
       expect(div.ownerDocument).toBeInstanceOf(HTMLDocument);
@@ -114,13 +120,13 @@ describe('navigation', () => {
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
-      expect(receiver).toHaveBeenCalled();
-      expect(interest.done).toBe(true);
+      expect(receiver).toHaveBeenLastCalledWith(expect.objectContaining({ ok: true, page }));
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
 
-      const document = receiver.mock.calls[0][0]!.document;
+      const document = receiver.mock.calls[1][0]!.document;
       const content = document.querySelector('content') as Node;
 
       expect(content).toBeInstanceOf(Element);
@@ -133,11 +139,11 @@ describe('navigation', () => {
 
       mockHttpFetch = jest.fn((_input, _init?) => onEventBy(() => {
 
-        const failedInterest = eventInterest();
+        const failedSupply = eventSupply();
 
-        failedInterest.off(error);
+        failedSupply.off(error);
 
-        return failedInterest;
+        return failedSupply;
       }));
 
       const receiver = jest.fn();
@@ -145,10 +151,10 @@ describe('navigation', () => {
 
       mockResponse.text.mockImplementation(() => Promise.reject(error));
 
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
-      expect(receiver).not.toHaveBeenCalled();
-      expect(interest.done).toBe(true);
+      expect(receiver).not.toHaveBeenLastCalledWith(expect.objectContaining({ ok: undefined, page }));
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(error);
     });
     it('reports invalid HTTP response', async () => {
@@ -158,10 +164,15 @@ describe('navigation', () => {
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
-      expect(receiver).toHaveBeenCalledWith({ ok: false, page, response: mockResponse, error: mockResponse.status });
-      expect(interest.done).toBe(true);
+      expect(receiver).toHaveBeenLastCalledWith({
+        ok: false,
+        page,
+        response: mockResponse,
+        error: mockResponse.status,
+      });
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalled();
     });
     it('reports parse error', async () => {
@@ -171,10 +182,15 @@ describe('navigation', () => {
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const interest = await loadDocument(receiver, done);
+      const supply = await loadDocument(receiver, done);
 
-      expect(receiver).toHaveBeenCalledWith({ ok: false, page, response: mockResponse, error: expect.any(Object) });
-      expect(interest.done).toBe(true);
+      expect(receiver).toHaveBeenLastCalledWith({
+        ok: false,
+        page,
+        response: mockResponse,
+        error: expect.any(Object),
+      });
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalled();
     });
     it('calls agent', async () => {
@@ -199,21 +215,22 @@ describe('navigation', () => {
 
       await loadDocument(receiver);
 
-      expect(receiver).toHaveBeenCalledWith(newResponse);
+      expect(receiver).toHaveBeenCalledWith({ ok: undefined, page });
+      expect(receiver).toHaveBeenLastCalledWith(newResponse);
       expect(mockHttpFetch).not.toHaveBeenCalled();
     });
 
     function loadDocument(
         receiver: EventReceiver<[PageLoadResponse]> = noop,
         done: (reason?: any) => void = noop,
-    ): Promise<EventInterest> {
-      return new Promise<EventInterest>(resolve => {
+    ): Promise<EventSupply> {
+      return new Promise<EventSupply>(resolve => {
 
-        const interest = loadPage(page)(receiver);
+        const supply = loadPage(page)(receiver);
 
-        interest.whenDone(reason => {
+        supply.whenOff(reason => {
           done(reason);
-          resolve(interest);
+          resolve(supply);
         });
       });
     }

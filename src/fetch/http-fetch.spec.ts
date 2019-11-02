@@ -1,11 +1,11 @@
+import Mock = jest.Mock;
 import Mocked = jest.Mocked;
+import SpyInstance = jest.SpyInstance;
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { EventInterest, EventReceiver } from 'fun-events';
+import { EventReceiver, EventSupply } from 'fun-events';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
-import Mock = jest.Mock;
-import SpyInstance = jest.SpyInstance;
 
 describe('fetch', () => {
 
@@ -61,11 +61,11 @@ describe('fetch', () => {
 
       const receiver = jest.fn();
       const done = jest.fn();
-      const interest = await fetch(receiver, done);
+      const supply = await fetch(receiver, done);
 
       expect(mockWindow.fetch).toHaveBeenCalledWith(new Request(request, init));
       expect(receiver).toHaveBeenCalledWith(response);
-      expect(interest.done).toBe(true);
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
     });
     it('calls agent', async () => {
@@ -91,10 +91,10 @@ describe('fetch', () => {
 
       mockWindow.fetch.mockImplementation(() => Promise.reject(error));
 
-      const interest = await fetch(receiver, done);
+      const supply = await fetch(receiver, done);
 
       expect(receiver).not.toHaveBeenCalled();
-      expect(interest.done).toBe(true);
+      expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(error);
     });
 
@@ -133,25 +133,25 @@ describe('fetch', () => {
         await fetch();
         expect(mockWindow.fetch).toHaveBeenCalledWith(new Request(request, { signal: abortController.signal }));
       });
-      it('losing interest aborts the fetch', async () => {
+      it('supply cut off aborts the fetch', async () => {
 
         const receiver = jest.fn();
         const done = jest.fn();
-        const interest = httpFetch(request, init)(receiver).whenDone(done);
+        const supply = httpFetch(request, init)(receiver).whenOff(done);
 
-        interest.off();
+        supply.off();
 
         expect(abortSpy).toHaveBeenCalled();
       });
-      it('does not abort controller when interest is not explicitly lost', async () => {
+      it('does not abort controller when supply cut off is not explicit', async () => {
         await fetch();
         expect(abortSpy).not.toHaveBeenCalled();
       });
-      it('does not abort controller when interest is lost when fetch completed', async () => {
+      it('does not abort controller when supply cut off after fetch completed', async () => {
 
-        const interest = await fetch();
+        const supply = await fetch();
 
-        interest.off();
+        supply.off();
 
         expect(abortSpy).not.toHaveBeenCalled();
       });
@@ -179,14 +179,14 @@ describe('fetch', () => {
     function fetch(
         receiver: EventReceiver<[Response]> = noop,
         done: (reason?: any) => void = noop,
-    ): Promise<EventInterest> {
-      return new Promise<EventInterest>(resolve => {
+    ): Promise<EventSupply> {
+      return new Promise<EventSupply>(resolve => {
 
-        const interest = httpFetch(request, init)(receiver);
+        const supply = httpFetch(request, init)(receiver);
 
-        interest.whenDone(reason => {
+        supply.whenOff(reason => {
           done(reason);
-          resolve(interest);
+          resolve(supply);
         });
       });
     }

@@ -2,7 +2,7 @@
  * @module @wesib/generic
  */
 import { SingleContextKey, SingleContextRef } from 'context-values';
-import { EventInterest } from 'fun-events';
+import { EventSupply } from 'fun-events';
 import { StypOptions, StypRules } from 'style-producer';
 
 /**
@@ -14,13 +14,12 @@ export type ComponentStyleProducer =
  * or a result of `StypRuleList.grab()` method call to render only matching ones.
  * @param opts  Production options.
  *
- * @returns Event interest instance. When this interest is lost (i.e. its `off()` method is called) the produced
- * stylesheets are removed.
+ * @returns Styles supply. Once cut off (i.e. its `off()` method is called) the produced stylesheets are removed.
  */
     (
         rules: StypRules,
         opts?: StypOptions,
-    ) => EventInterest;
+    ) => EventSupply;
 
 /**
  * A key of component context value containing a component style producer.

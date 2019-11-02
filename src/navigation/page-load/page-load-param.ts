@@ -1,9 +1,17 @@
-import { BootstrapContext } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
-import { EventEmitter, eventInterest, EventInterest, noEventInterest, onEventBy } from 'fun-events';
+import {
+  EventEmitter,
+  eventReceiver,
+  EventReceiver,
+  eventSupply,
+  EventSupply,
+  noEventSupply,
+  onEventBy,
+} from 'fun-events';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
+import { PageParamContext } from '../page-param-context';
 import { PageLoadRequest } from './page-load-request';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoader } from './page-loader.impl';
@@ -12,7 +20,7 @@ class PageLoadAbortError extends Error {}
 
 class PageLoadRequests {
 
-  private readonly _map = new Map<EventInterest, PageLoadRequest[]>();
+  private readonly _map = new Map<EventSupply, PageLoadReq[]>();
 
   constructor(
       private readonly _navigation: Navigation,
@@ -22,8 +30,8 @@ class PageLoadRequests {
   handle(): PageParam.Handle<void, PageLoadRequest> {
 
     const self = this;
-    const pageInterest = eventInterest();
-    let loadInterest = noEventInterest();
+    const pageSupply = eventSupply();
+    let loadSupply = noEventSupply();
 
     return {
       get() {},
@@ -39,13 +47,13 @@ class PageLoadRequests {
           return;
         }
 
-        loadInterest = eventInterest().needs(pageInterest);
+        loadSupply = eventSupply().needs(pageSupply);
 
         const onLoad = onEventBy<[PageLoadResponse]>(responseReceiver => {
 
           const emitter = new EventEmitter<[PageLoadResponse]>();
 
-          self._loader(page)(response => emitter.send(response)).whenDone(error => {
+          self._loader(page)(response => emitter.send(response)).whenOff(error => {
             if (!(error instanceof PageLoadAbortError)) {
               // Report current page load error as failed load response
               emitter.send({
@@ -54,7 +62,7 @@ class PageLoadRequests {
                 error,
               });
             }
-          }).needs(loadInterest);
+          }).needs(loadSupply);
 
           return emitter.on(responseReceiver);
         }).share();
@@ -62,18 +70,23 @@ class PageLoadRequests {
         itsEach(
             self._map.values(),
             list => list.forEach(
-                ({ interest, receiver }) => onLoad(receiver).needs(interest),
+                ({ receiver }) => onLoad({
+                  supply: eventSupply().needs(receiver.supply),
+                  receive(context, response): void {
+                    receiver.receive(context, response);
+                  },
+                }),
             ),
         );
       },
       leave(): void {
-        loadInterest.off(new PageLoadAbortError('page left'));
+        loadSupply.off(new PageLoadAbortError('page left'));
       },
       stay() {
-        pageInterest.off(new PageLoadAbortError('navigation cancelled'));
+        pageSupply.off(new PageLoadAbortError('navigation cancelled'));
       },
       forget() {
-        pageInterest.off(new PageLoadAbortError('page forgotten'));
+        pageSupply.off(new PageLoadAbortError('page forgotten'));
       },
     };
 
@@ -81,14 +94,15 @@ class PageLoadRequests {
 
   private _add(request: PageLoadRequest) {
 
-    const { interest } = request;
-    const list = this._map.get(interest);
+    const req = { ...request, receiver: eventReceiver(request.receiver) };
+    const { supply } = req.receiver;
+    const list = this._map.get(supply);
 
     if (list) {
-      list.push(request);
+      list.push(req);
     } else {
-      this._map.set(interest, [request]);
-      interest.whenDone(() => this._map.delete(interest));
+      this._map.set(supply, [req]);
+      supply.whenOff(() => this._map.delete(supply));
     }
   }
 
@@ -96,8 +110,8 @@ class PageLoadRequests {
 
     const transferred = new PageLoadRequests(this._navigation, this._loader);
 
-    for (const [interest, list] of this._map.entries()) {
-      transferred._map.set(interest, list);
+    for (const [supply, list] of this._map.entries()) {
+      transferred._map.set(supply, list);
     }
 
     return transferred;
@@ -107,7 +121,7 @@ class PageLoadRequests {
 
 class PageLoadParam extends PageParam<void, PageLoadRequest> {
 
-  create(_page: Page, request: PageLoadRequest, context: BootstrapContext) {
+  create(_page: Page, request: PageLoadRequest, context: PageParamContext) {
 
     const handle = new PageLoadRequests(context.get(Navigation), context.get(PageLoader)).handle();
 
@@ -118,4 +132,22 @@ class PageLoadParam extends PageParam<void, PageLoadRequest> {
 
 }
 
+interface PageLoadReq extends PageLoadRequest {
+
+  readonly receiver: EventReceiver.Generic<[PageLoadResponse]>;
+
+}
+
+/**
+ * Page load parameter.
+ *
+ * Accepts a {@link PageLoadRequest page load request} as input.
+ *
+ * A page load is initiated whenever a page with new address is {@link Navigation.onEnter entered}.
+ *
+ * Page load won't be initiated if:
+ * - page load parameter is not {@link Page.put} added,
+ * - all added {@link PageLoadRequest.receiver response receiver}s supplies are cut off, or
+ * - the entered page address is the the same one as previous one, except the hash,
+ */
 export const pageLoadParam: PageParam<void, PageLoadRequest> = /*#__PURE__*/ new PageLoadParam();

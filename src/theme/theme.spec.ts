@@ -24,7 +24,11 @@ describe('theme', () => {
       });
 
       it('obtains CSS rule reference', () => {
-        expect(ref.read.kept).toEqual([{ $length: StypLength.zero }]);
+
+        const receiver = jest.fn();
+
+        ref.read.once(receiver);
+        expect(receiver).toHaveBeenCalledWith({ $length: StypLength.zero });
       });
     });
 
@@ -56,8 +60,10 @@ describe('theme', () => {
         await bootstrap(StyleFeature);
 
         const rule: StypRule = itsFirst(theme.style(style))!;
+        const receiver = jest.fn();
 
-        expect(rule.read.kept).toEqual([{ $value: 'test' }]);
+        rule.read.once(receiver);
+        expect(receiver).toHaveBeenCalledWith({ $value: 'test' });
 
         function style(_theme: Theme) {
           _theme.root.rules.add({ $: 'test' }, { $value: 'test' });
@@ -135,8 +141,14 @@ describe('theme', () => {
           const rules: StypRule[] = [...theme.style(style1)];
 
           expect(rules).toHaveLength(2);
-          expect(rules[0].read.kept).toEqual([{ $value: 'test1' }]);
-          expect(rules[1].read.kept).toEqual([{ $value: 'test2' }]);
+
+          const receiver1 = jest.fn();
+          const receiver2 = jest.fn();
+
+          rules[0].read.once(receiver1);
+          expect(receiver1).toHaveBeenCalledWith({ $value: 'test1' });
+          rules[1].read.once(receiver2);
+          expect(receiver2).toHaveBeenCalledWith({ $value: 'test2' });
         }
       });
     });

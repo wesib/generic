@@ -1,5 +1,5 @@
 import { ContextRegistry } from 'context-values';
-import { EventEmitter, OnEvent, onEventFrom } from 'fun-events';
+import { EventEmitter, OnEvent, onSupplied } from 'fun-events';
 import { PageLoadAgent } from './page-load-agent';
 import { PageLoadResponse } from './page-load-response';
 import Mock = jest.Mock;
@@ -47,7 +47,7 @@ describe('navigation', () => {
       const response1 = { name: 'document1' } as any;
       const response2 = { name: 'document2' } as any;
       const response = await new Promise<PageLoadResponse>(resolve => {
-        onEventFrom(agent(mockLoad, request)).once(resolve);
+        onSupplied(agent(mockLoad, request)).once(resolve);
         emitter.send(response1);
         emitter2.send(response2);
       });

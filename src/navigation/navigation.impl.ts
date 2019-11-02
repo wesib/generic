@@ -1,6 +1,6 @@
 import { BootstrapContext, BootstrapWindow, mergeFunctions } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { AfterEvent, DomEventDispatcher, onEventFromAny, trackValue } from 'fun-events';
+import { AfterEvent, DomEventDispatcher, onAny, trackValue } from 'fun-events';
 import { NavHistory, PageEntry } from './nav-history.impl';
 import { Navigation as Navigation_ } from './navigation';
 import { NavigationAgent } from './navigation-agent';
@@ -24,14 +24,17 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   const onEnter = dispatcher.on<EnterPageEvent>(NavigationEventType.EnterPage);
   const onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage);
   const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
-  const onEvent = onEventFromAny<[NavigationEvent]>(onEnter, onLeave, onStay);
+  const onEvent = onAny<[NavigationEvent]>(onEnter, onLeave, onStay);
   const nav = trackValue<PageEntry>(navHistory.init());
+
+  nav.read(nextEntry => nextEntry.apply()); // The very first page entry receiver applies scheduled updates to page
+
   const readPage: AfterEvent<[Page]> = nav.read.keep.thru(entry => entry.page);
   let next: Promise<any> = Promise.resolve();
 
-  dispatcher.on<PopStateEvent>('popstate')(event => {
+  dispatcher.on<PopStateEvent>('popstate')(popState => {
 
-    const entry = navHistory.return(nav.it, event, nav);
+    const entry = navHistory.return(popState, nav);
 
     dispatcher.dispatch(new EnterPageEvent(
         NavigationEventType.EnterPage,
@@ -133,7 +136,6 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
     function doNavigate(): Page | null {
 
-      let fromEntry: PageEntry | undefined;
       let toEntry: PageEntry | undefined;
 
       try {
@@ -144,9 +146,9 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           return prepared; // Navigation cancelled
         }
 
-        [fromEntry, toEntry] = prepared;
+        toEntry = prepared;
 
-        navHistory[when](fromEntry, toEntry, nav);
+        navHistory[when](toEntry, nav);
 
         dispatcher.dispatch(new EnterPageEvent(
             NavigationEventType.EnterPage,
@@ -163,7 +165,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       }
     }
 
-    function prepare(): [PageEntry, PageEntry] | null {
+    function prepare(): PageEntry | null {
       if (next !== promise) {
         return stay();
       }
@@ -195,10 +197,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
         return stay(toEntry); // Some agent didn't call `next()`.
       }
 
-      return [
-        fromEntry,
-        toEntry,
-      ];
+      return toEntry;
     }
 
     function stay(toEntry?: PageEntry, reason?: any): null {

@@ -36,7 +36,7 @@ describe('automount', () => {
       readyState: 'interactive',
       addEventListener: jest.fn((event, listener) => {
         if (event === 'DOMContentLoaded') {
-          domContentLoaded = listener;
+          domContentLoaded = () => listener(new Event('DOMContentLoaded'));
         }
       }),
       removeEventListener: jest.fn(),
@@ -105,12 +105,12 @@ describe('automount', () => {
       (mockDocument as any).readyState = 'loading';
 
       await bootstrap(autoMountSupport());
-      expect(mockDocument.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', domContentLoaded, undefined);
+      expect(mockDocument.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function), undefined);
       expect(mockRoot.querySelectorAll).not.toHaveBeenCalled();
 
       domContentLoaded();
       expect(mockRoot.querySelectorAll).toHaveBeenCalled();
-      expect(mockDocument.removeEventListener).toHaveBeenCalledWith('DOMContentLoaded', domContentLoaded);
+      expect(mockDocument.removeEventListener).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
     });
   });
 

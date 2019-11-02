@@ -1,6 +1,6 @@
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { afterEventOf, EventEmitter, eventInterest } from 'fun-events';
+import { afterThe, EventEmitter, eventSupply } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
@@ -58,7 +58,7 @@ describe('navigation', () => {
     });
 
     it('does not load initial page', () => {
-      page.put(pageLoadParam, { interest: eventInterest(), receiver });
+      page.put(pageLoadParam, { receiver });
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -67,7 +67,7 @@ describe('navigation', () => {
       expect(receiver).not.toHaveBeenCalled();
     });
     it('loads opened page', async () => {
-      page.put(pageLoadParam, { interest: eventInterest(), receiver });
+      page.put(pageLoadParam, { receiver });
 
       await navigation.open('/other');
 
@@ -78,7 +78,7 @@ describe('navigation', () => {
       expect(receiver).toHaveBeenCalledTimes(1);
     });
     it('reports opened page after parameterized navigation', async () => {
-      await navigation.with(pageLoadParam, { interest: eventInterest(), receiver }).open('/other');
+      await navigation.with(pageLoadParam, { receiver }).open('/other');
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -87,7 +87,7 @@ describe('navigation', () => {
       expect(receiver).toHaveBeenCalledTimes(1);
     });
     it('loads replacement page', async () => {
-      page.put(pageLoadParam, { interest: eventInterest(), receiver });
+      page.put(pageLoadParam, { receiver });
 
       await navigation.open('/other');
       await navigation.replace('./third');
@@ -99,7 +99,7 @@ describe('navigation', () => {
       expect(receiver).toHaveBeenCalledTimes(1);
     });
     it('loads page when returned to it', async () => {
-      page.put(pageLoadParam, { interest: eventInterest(), receiver });
+      page.put(pageLoadParam, { receiver });
 
       await navigation.open('/other');
       receiver.mockClear();
@@ -121,7 +121,7 @@ describe('navigation', () => {
         @Feature({
           set: {
             a: HttpFetch,
-            is: () => afterEventOf({ ok: true, text: () => reject } as Response),
+            is: () => afterThe({ ok: true, text: () => reject } as Response),
           },
           init(ctx) {
             ctx.whenReady(resolve);
@@ -133,7 +133,7 @@ describe('navigation', () => {
         context.load(MockFetchFeature)(noop);
       });
 
-      page.put(pageLoadParam, { interest: eventInterest(), receiver });
+      page.put(pageLoadParam, { receiver });
 
       await navigation.open('/other');
       await reject.catch(noop);
@@ -148,8 +148,8 @@ describe('navigation', () => {
 
       const receiver2 = jest.fn();
 
-      page.put(pageLoadParam, { interest: eventInterest(), receiver });
-      page.put(pageLoadParam, { interest: eventInterest(), receiver: receiver2 });
+      page.put(pageLoadParam, { receiver });
+      page.put(pageLoadParam, { receiver: receiver2 });
 
       await navigation.open('/other');
 
@@ -160,7 +160,7 @@ describe('navigation', () => {
       expect(receiver2).toHaveBeenCalledTimes(1);
     });
     it('does not report already loaded page', async () => {
-      page.put(pageLoadParam, { interest: eventInterest(), receiver });
+      page.put(pageLoadParam, { receiver });
 
       await navigation.open('/other');
 
@@ -170,19 +170,19 @@ describe('navigation', () => {
 
       const receiver2 = jest.fn();
 
-      page.put(pageLoadParam, { interest: eventInterest(), receiver: receiver2 });
+      page.put(pageLoadParam, { receiver: receiver2 });
       expect(receiver2).not.toHaveBeenCalled();
     });
     it('does not report to unregistered receivers', async () => {
 
-      const interest = eventInterest();
+      const supply = eventSupply();
       const receiver2 = jest.fn();
 
-      page.put(pageLoadParam, { interest, receiver });
-      page.put(pageLoadParam, { interest, receiver: receiver2 });
+      page.put(pageLoadParam, { receiver: { supply, receive: (_, r) => receiver(r) } });
+      page.put(pageLoadParam, { receiver: { supply, receive: (_, r) => receiver2(r) } });
 
       await navigation.open('/other');
-      interest.off();
+      supply.off();
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -193,7 +193,7 @@ describe('navigation', () => {
     });
     it('does not load page when navigation cancelled', async () => {
       navigation.onLeave.once(event => event.preventDefault());
-      await navigation.with(pageLoadParam, { interest: eventInterest(), receiver }).open('/other');
+      await navigation.with(pageLoadParam, { receiver }).open('/other');
 
       const response = { ok: true, page } as PageLoadResponse;
 

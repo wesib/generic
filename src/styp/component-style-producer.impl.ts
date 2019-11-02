@@ -8,7 +8,7 @@ import {
   ShadowContentRoot,
 } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { EventInterest } from 'fun-events';
+import { EventSupply } from 'fun-events';
 import { produceBasicStyle, StypOptions, StypRender, StypRules, StypSelector } from 'style-producer';
 import { ComponentStypRender } from './component-styp-render';
 import { ElementIdClass } from './element-id-class.impl';
@@ -32,7 +32,7 @@ export class ComponentStyleProducer {
       private readonly _produce = produceBasicStyle,
   ) {}
 
-  produce(rules: StypRules, options: StypOptions = {}): EventInterest {
+  produce(rules: StypRules, options: StypOptions = {}): EventSupply {
 
     const context = this._context;
     const shadowRoot = context.get(ShadowContentRoot, { or: null });
