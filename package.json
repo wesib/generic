@@ -29,6 +29,9 @@
     "namespace-aliaser": "^2.0.2",
     "style-producer": "^3.3.0"
   },
+  "dependencies": {
+    "http-header-value": "^1.0.0"
+  },
   "peerDependenciesMeta": {
     "style-producer": {
       "optional": true

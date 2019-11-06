@@ -1,6 +1,7 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { SingleContextKey } from 'context-values';
 import { afterThe, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
+import { hthvParse } from 'http-header-value';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
@@ -68,7 +69,10 @@ function newPageLoader(context: BootstrapContext): PageLoader {
                 ok: true as const,
                 page,
                 response,
-                document: parser.parseFromString(text, pageLoadResponseType(response)),
+                document: parser.parseFromString(
+                    text,
+                    hthvParse(response.headers.get('Content-Type') || 'text/html')[0].v as SupportedType,
+                ),
               };
             } catch (error) {
               return {
@@ -98,16 +102,4 @@ function newPageLoader(context: BootstrapContext): PageLoader {
       });
     }
   };
-}
-
-function pageLoadResponseType(response: Response): SupportedType {
-
-  let contentType = response.headers.get('Content-Type') || 'text/html';
-  const scIdx = contentType.indexOf(';');
-
-  if (scIdx >= 0) {
-    contentType = contentType.substring(0, scIdx);
-  }
-
-  return contentType as SupportedType;
 }
