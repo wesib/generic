@@ -30,7 +30,7 @@
     "style-producer": "^3.3.0"
   },
   "dependencies": {
-    "http-header-value": "^1.0.0"
+    "http-header-value": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "style-producer": {
@@ -55,7 +55,7 @@
     "jest-junit": "^9.0.0",
     "namespace-aliaser": "^2.0.2",
     "npm-run-all": "^4.1.5",
-    "rollup": "^1.26.3",
+    "rollup": "^1.26.4",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
