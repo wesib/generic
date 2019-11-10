@@ -30,7 +30,7 @@
     "style-producer": "^3.3.0"
   },
   "dependencies": {
-    "http-header-value": "^2.0.0"
+    "http-header-value": "^2.0.1"
   },
   "peerDependenciesMeta": {
     "style-producer": {

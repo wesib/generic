@@ -1633,10 +1633,10 @@ html-encoding-sniffer@^1.0.2:
   dependencies:
     whatwg-encoding "^1.0.1"
 
-http-header-value@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/http-header-value/-/http-header-value-2.0.0.tgz#03bc9b1a85ef734bbeadfba073915a965930b503"
-  integrity sha512-JgkP3yJ+ThwhV9p/EacPTpQKh90L3UL6TKT+9z2Fso+cUV93d8sxQes3jvxqLpuPWJPImqyxSVMlDskRjCndpw==
+http-header-value@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/http-header-value/-/http-header-value-2.0.1.tgz#cd254d267d84e191306f9dacc58bbc6378e6f27c"
+  integrity sha512-QXJq8Ay5NS7inPzzlgudU6C+oZ3m4qOIl1mu3Pc/afiwZEUC29fnKykZjXP3XqiMXEMz0apmPFHdZ/8J+AunzA==
 
 http-signature@~1.2.0:
   version "1.2.0"
