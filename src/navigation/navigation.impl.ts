@@ -36,13 +36,30 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
     const entry = navHistory.popState(popState, nav);
 
-    dispatcher.dispatch(new EnterPageEvent(
-        NavigationEventType.EnterPage,
-        {
-          when: popState.state != null ? 'return' : 'enter',
-          to: entry.page,
-        },
-    ));
+    if (entry) {
+      dispatcher.dispatch(new EnterPageEvent(
+          NavigationEventType.EnterPage,
+          {
+            when: popState.state != null ? 'return' : 'enter',
+            to: entry.page,
+          },
+      ));
+    }
+  });
+
+  dispatcher.on('hashchange')(() => {
+
+    const entry = navHistory.hashChange(nav);
+
+    if (entry) {
+      dispatcher.dispatch(new EnterPageEvent(
+          NavigationEventType.EnterPage,
+          {
+            when: 'enter',
+            to: entry.page,
+          },
+      ));
+    }
   });
 
   class Navigation extends Navigation_ {

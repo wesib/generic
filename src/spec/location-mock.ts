@@ -91,7 +91,7 @@ export class LocationMock {
     this.stateData[index][1] = state;
   }
 
-  enter(hash: string, events: ('hashchange' | 'popstate')[] = ['hashchange', 'popstate']) {
+  enter(hash: string, events: readonly ('hashchange' | 'popstate')[] = ['hashchange', 'popstate']) {
 
     const oldURL = this.currentURL;
     const newURL = new URL(hash, oldURL);
@@ -101,7 +101,7 @@ export class LocationMock {
     for (const event of events) {
       switch (event) {
         case 'popstate':
-          this.window.dispatchEvent(new PopStateEvent('popstate', { state: this.currentState }));
+          this.window.dispatchEvent(new PopStateEvent('popstate', { state: null }));
           break;
         case 'hashchange':
           this.window.dispatchEvent(new HashChangeEvent('hashchange', { newURL: newURL.href, oldURL: oldURL.href }));

@@ -147,29 +147,22 @@ export class NavHistory {
   popState(
       popState: PopStateEvent,
       tracker: ValueTracker<PageEntry>,
-  ): PageEntry {
+  ): PageEntry | undefined {
 
-    const fromEntry = tracker.it;
     const { state } = popState;
-    const { uid, data, id: pageId } = extractNavData(state);
-    let toEntry: PageEntry;
 
     if (state == null) {
-      toEntry = this.newEntry({
-        url: new URL(this._location.href),
-        data,
-        title: this._document.title,
-      });
-      // hashchange. Not a return.
-      try {
-        fromEntry.transfer(toEntry, 'enter');
-      } finally {
-        this._history.replaceState(this._historyState(toEntry), '');
-        this._enter('enter', toEntry, tracker);
+      // Hash change
+      if (this._history.state == null) {
+        // Not a return
+        return this._changeHash(tracker);
       }
-
-      return toEntry;
+      return; // Already handled by `hashchange` handler
     }
+
+    const fromEntry = tracker.it;
+    const { uid, data, id: pageId } = extractNavData(state);
+    let toEntry: PageEntry;
 
     const existingEntry = uid === this._uid && pageId != null ? this._entries.get(pageId) : undefined;
 
@@ -200,6 +193,34 @@ export class NavHistory {
     return toEntry;
   }
 
+  public hashChange(tracker: ValueTracker<PageEntry>): PageEntry | void {
+    if (this._history.state == null) {
+      // Not a return
+      return this._changeHash(tracker);
+    }
+    // Otherwise, a `popstate` event is also triggered,
+    // and its handler would do the job (or already did).
+  }
+
+  private _changeHash(tracker: ValueTracker<PageEntry>): PageEntry {
+
+    const fromEntry = tracker.it;
+    const toEntry = this.newEntry({
+      url: new URL(this._location.href),
+      data: null,
+      title: this._document.title,
+    });
+
+    try {
+      fromEntry.transfer(toEntry, 'enter');
+    } finally {
+      this._history.replaceState(this._historyState(toEntry), '');
+      this._enter('enter', toEntry, tracker);
+    }
+
+    return toEntry;
+  }
+
   private _forget(entry: PageEntry) {
     this._entries.delete(entry.id);
     entry.forget();
@@ -211,7 +232,7 @@ export class NavHistory {
         uid: this._uid,
         id,
         data,
-      }
+      },
     };
   }
 
@@ -246,7 +267,7 @@ export interface NavDataEnvelope {
   readonly [NAV_DATA_KEY]: NavData;
 }
 
-function extractNavData(state?: any): PartialNavData {
+function extractNavData(state: any): PartialNavData {
   return state == null || typeof state !== 'object' ? { data: state } : state[NAV_DATA_KEY];
 }
 

@@ -236,15 +236,28 @@ describe('navigation', () => {
       });
     });
 
-    describe('hashchange', () => {
+    describe('hash change with `hashchange`, then `popstate` events', () => {
+      testHashChange('hashchange', 'popstate');
+    });
+
+    describe('hash change with `popstate`, then `hashchange` events', () => {
+      testHashChange('popstate', 'hashchange');
+    });
+
+    describe('hash change with `hashchange` event only (IE)', () => {
+      testHashChange('hashchange');
+    });
+
+    function testHashChange(...events: ('hashchange' | 'popstate')[]) {
       it('enters new page', () => {
-        locationMock.enter('#newhash');
+        locationMock.enter('#newhash', events);
         expect(page.url.href).toBe('http://localhost/index#newhash');
       });
       it('assigns new state', () => {
         locationMock.history.replaceState.mockClear();
-        locationMock.enter('#newhash');
+        locationMock.enter('#newhash', events);
         expect(locationMock.history.replaceState).toHaveBeenCalledWith(navHistoryState({ data: null }), '');
+        expect(locationMock.history.replaceState).toHaveBeenCalledTimes(1);
       });
       it('transfers params to new page', () => {
 
@@ -253,12 +266,12 @@ describe('navigation', () => {
         page.put(param, '1');
         (handle as any).transfer = jest.fn(() => handle2);
 
-        locationMock.enter('#newhash');
+        locationMock.enter('#newhash', events);
         expect(handle.transfer).toHaveBeenCalledWith(page, 'enter');
         expect(handle.leave).toHaveBeenCalled();
         expect(page.get(param)).toBe(handle2.get());
       });
-    });
+    }
 
     describe('back', () => {
       it('restores previous entry', async () => {
