@@ -236,6 +236,30 @@ describe('navigation', () => {
       });
     });
 
+    describe('hashchange', () => {
+      it('enters new page', () => {
+        locationMock.enter('#newhash');
+        expect(page.url.href).toBe('http://localhost/index#newhash');
+      });
+      it('assigns new state', () => {
+        locationMock.history.replaceState.mockClear();
+        locationMock.enter('#newhash');
+        expect(locationMock.history.replaceState).toHaveBeenCalledWith(navHistoryState({ data: null }), '');
+      });
+      it('transfers params to new page', () => {
+
+        const handle2 = testPageParamHandle({ value: '2' });
+
+        page.put(param, '1');
+        (handle as any).transfer = jest.fn(() => handle2);
+
+        locationMock.enter('#newhash');
+        expect(handle.transfer).toHaveBeenCalledWith(page, 'enter');
+        expect(handle.leave).toHaveBeenCalled();
+        expect(page.get(param)).toBe(handle2.get());
+      });
+    });
+
     describe('back', () => {
       it('restores previous entry', async () => {
         locationMock.history.replaceState.mockClear();

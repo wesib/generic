@@ -297,6 +297,43 @@ describe('navigation', () => {
       });
     });
 
+    describe('hashchange', () => {
+      it('navigates to new page', () => {
+        locationMock.enter('#other');
+        expect(location).toEqual({ url: 'http://localhost/index#other', data: null });
+      });
+      it('updates current page', () => {
+
+        let left: Page;
+
+        navigation.read.once(page => left = page);
+        locationMock.enter('#other');
+
+        navigation.read.once(page => {
+          expect(page.current).toBe(true);
+          expect(page.visited).toBe(true);
+          expect(left.current).toBe(false);
+          expect(left.visited).toBe(true);
+        });
+      });
+      it('sends navigation event', () => {
+
+        const onEnter = jest.fn();
+
+        navigation.onEnter(onEnter);
+        locationMock.enter('#other');
+
+        expect(onEnter).toHaveBeenCalledWith(expect.objectContaining({
+          type: NavigationEventType.EnterPage,
+          when: 'enter',
+          to: expect.objectContaining({
+            url: new URL('http://localhost/index#other'),
+            data: null,
+          }),
+        }));
+      });
+    });
+
     describe('replace', () => {
       it('replaces location with the target', async () => {
         expect(await navigation.replace({

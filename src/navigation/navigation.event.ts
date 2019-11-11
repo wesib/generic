@@ -39,10 +39,15 @@ export const enum NavigationEventType {
 export class EnterPageEvent extends Event {
 
   /**
-   * When navigation event occurred. Either `open` when opening a new page, `replace` when replacing navigation history
-   * entry, or `return` when navigated to previously visited entry in navigation history.
+   * When navigation event occurred.
+   *
+   * Can be one of:
+   * - `open` when opening a new page,
+   * - `replace` when replacing navigation history entry,
+   * - `enter` when entering new page by user action (e.g. hashchange event),
+   * - `return` when navigated to previously visited entry in navigation history.
    */
-  readonly when: 'open' | 'replace' | 'return';
+  readonly when: 'open' | 'replace' | 'enter' | 'return';
 
   /**
    * Entered page.
@@ -69,10 +74,15 @@ export class EnterPageEvent extends Event {
 export interface EnterPageEventInit extends Omit<EventInit, 'cancelable'> {
 
   /**
-   * When navigation event occurred. Either `open` when opening a new page, `replace` when replacing navigation history
-   * entry, or `return` when navigated to previously visited entry in navigation history.
+   * When navigation event occurred.
+   *
+   * Can be one of:
+   * - `open` when opening a new page,
+   * - `replace` when replacing navigation history entry,
+   * - `enter` when entering new page by user action (e.g. hashchange event),
+   * - `return` when navigated to previously visited entry in navigation history.
    */
-  readonly when: 'open' | 'replace' | 'return';
+  readonly when: 'open' | 'replace' | 'enter' | 'return';
 
   /**
    * Entered page.

@@ -11,6 +11,7 @@ export class LocationMock {
   readonly state: Mock<string, []>;
   readonly baseURI: Mock<string, []>;
   readonly window: Mocked<Window>;
+  private _index = 0;
   private readonly stateData: [URL, any][];
   private readonly eventTarget: HTMLElement;
 
@@ -18,16 +19,15 @@ export class LocationMock {
     this.eventTarget = document.body.appendChild(document.createElement('div'));
 
     const self = this;
-    let index = 0;
     this.stateData = [[new URL('http://localhost/index'), 'initial']];
 
-    this.href = jest.fn(() => this.stateData[index][0].href);
+    this.href = jest.fn(() => this.currentURL.href);
     this.location = {
       get href() {
         return self.href();
       }
     } as any;
-    this.state = jest.fn(() => this.stateData[index][1]);
+    this.state = jest.fn(() => this.currentState);
     this.historyLength = jest.fn(() => this.stateData.length);
     this.history = {
       get length() {
@@ -38,19 +38,19 @@ export class LocationMock {
       },
       go: jest.fn((delta = 0) => {
 
-        const oldIndex = index;
+        const oldIndex = this._index;
 
-        index = Math.max(0, Math.min(this.stateData.length - 1, oldIndex + delta));
-        if (oldIndex !== index) {
-          self.window.dispatchEvent(new PopStateEvent('popstate', { state: this.state() }));
+        this._index = Math.max(0, Math.min(this.stateData.length - 1, oldIndex + delta));
+        if (oldIndex !== this._index) {
+          this.window.dispatchEvent(new PopStateEvent('popstate', { state: this.state() }));
         }
       }),
       pushState: jest.fn((newState, _title, url?) => {
-        this.stateData[++index] = [url != null ? new URL(url, self.baseURI()) : self.stateData[index][0], newState];
-        this.stateData.length = index + 1;
+        this.stateData[++this._index] = [url != null ? new URL(url, this.baseURI()) : this.currentURL, newState];
+        this.stateData.length = this._index + 1;
       }),
       replaceState: jest.fn((newState, _title, url?) => {
-        this.stateData[index] = [url != null ? new URL(url, self.baseURI()) : self.stateData[index][0], newState];
+        this.stateData[this._index] = [url != null ? new URL(url, this.baseURI()) : this.currentURL, newState];
       }),
     } as any;
     this.baseURI = jest.fn(() => 'http://localhost');
@@ -75,12 +75,39 @@ export class LocationMock {
     } as any;
   }
 
+  get currentURL() {
+    return this.stateData[this._index][0];
+  }
+
+  get currentState() {
+    return this.getState(this._index);
+  }
+
   getState(index: number): any {
     return this.stateData[index][1];
   }
 
   setState(index: number, state: any) {
     this.stateData[index][1] = state;
+  }
+
+  enter(hash: string, events: ('hashchange' | 'popstate')[] = ['hashchange', 'popstate']) {
+
+    const oldURL = this.currentURL;
+    const newURL = new URL(hash, oldURL);
+
+    this.stateData[++this._index] = [newURL, null];
+    this.stateData.length = this._index + 1;
+    for (const event of events) {
+      switch (event) {
+        case 'popstate':
+          this.window.dispatchEvent(new PopStateEvent('popstate', { state: this.currentState }));
+          break;
+        case 'hashchange':
+          this.window.dispatchEvent(new HashChangeEvent('hashchange', { newURL: newURL.href, oldURL: oldURL.href }));
+          break;
+      }
+    }
   }
 
   down() {

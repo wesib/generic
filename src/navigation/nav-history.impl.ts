@@ -67,7 +67,6 @@ export class NavHistory {
       tracker: ValueTracker<PageEntry>,
   ) {
 
-    const fromEntry = tracker.it;
     const { page: { title = '', url } } = toEntry;
 
     this._history.pushState(
@@ -76,19 +75,36 @@ export class NavHistory {
         url.href,
     );
 
-    this._entries.set(toEntry.id, toEntry);
-    // Forget all entries starting from next one
-    for (let e = fromEntry.next; e; e = e.next) {
-      this._forget(e);
-    }
+    this._enter('open', toEntry, tracker);
+  }
 
-    toEntry.prev = fromEntry;
-    fromEntry.next = toEntry;
-    toEntry.schedule(() => {
-      fromEntry.leave();
-      toEntry.enter('open');
-    });
-    tracker.it = toEntry;
+  private _enter(
+      when: 'open' | 'enter',
+      toEntry: PageEntry,
+      tracker: ValueTracker<PageEntry>,
+  ) {
+
+    const fromEntry = tracker.it;
+
+    this._entries.set(toEntry.id, toEntry);
+
+    try {
+      // Forget all entries starting from next one
+      for (let e = fromEntry.next; e; e = e.next) {
+        this._forget(e);
+      }
+    } finally {
+      toEntry.prev = fromEntry;
+      fromEntry.next = toEntry;
+      toEntry.schedule(() => {
+        try {
+          fromEntry.leave();
+        } finally {
+          toEntry.enter(when);
+        }
+      });
+      tracker.it = toEntry;
+    }
   }
 
   replace(
@@ -115,25 +131,47 @@ export class NavHistory {
     }
 
     toEntry.schedule(() => {
-      fromEntry.leave();
-      this._forget(fromEntry);
-      toEntry.enter('replace');
+      try {
+        fromEntry.leave();
+      } finally {
+        try {
+          this._forget(fromEntry);
+        } finally {
+          toEntry.enter('replace');
+        }
+      }
     });
     tracker.it = toEntry;
   }
 
-  return(
+  popState(
       popState: PopStateEvent,
       tracker: ValueTracker<PageEntry>,
   ): PageEntry {
 
     const fromEntry = tracker.it;
-
-    fromEntry.leave();
-
-    const { uid, data, id: pageId } = extractNavData(popState.state);
-    const existingEntry = uid === this._uid && pageId != null ? this._entries.get(pageId) : undefined;
+    const { state } = popState;
+    const { uid, data, id: pageId } = extractNavData(state);
     let toEntry: PageEntry;
+
+    if (state == null) {
+      toEntry = this.newEntry({
+        url: new URL(this._location.href),
+        data,
+        title: this._document.title,
+      });
+      // hashchange. Not a return.
+      try {
+        fromEntry.transfer(toEntry, 'enter');
+      } finally {
+        this._history.replaceState(this._historyState(toEntry), '');
+        this._enter('enter', toEntry, tracker);
+      }
+
+      return toEntry;
+    }
+
+    const existingEntry = uid === this._uid && pageId != null ? this._entries.get(pageId) : undefined;
 
     if (existingEntry) {
       toEntry = existingEntry;
@@ -150,8 +188,13 @@ export class NavHistory {
     }
 
     toEntry.schedule(() => {
-      toEntry.enter('return');
+      try {
+        fromEntry.leave();
+      } finally {
+        toEntry.enter('return');
+      }
     });
+
     tracker.it = toEntry;
 
     return toEntry;
@@ -279,7 +322,7 @@ export class PageEntry {
     return newHandle.get();
   }
 
-  transfer(to: PageEntry, when: 'return' | 'pre-open' | 'pre-replace') {
+  transfer(to: PageEntry, when: 'pre-open' | 'pre-replace' | 'enter' | 'return') {
     itsEach(this._params.entries(), ([param, handle]) => {
       if (handle.transfer) {
 
@@ -296,7 +339,7 @@ export class PageEntry {
     itsEach(this._params.values(), handle => handle.stay && handle.stay(at));
   }
 
-  enter(when: 'init' | 'open' | 'replace' | 'return') {
+  enter(when: 'init' | 'open' | 'replace' | 'enter' | 'return') {
     this._status = PageStatus.Current;
     itsEach(this._params.values(), handle => handle.enter && handle.enter(this.page, when));
   }

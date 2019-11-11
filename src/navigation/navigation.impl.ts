@@ -34,12 +34,12 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
   dispatcher.on<PopStateEvent>('popstate')(popState => {
 
-    const entry = navHistory.return(popState, nav);
+    const entry = navHistory.popState(popState, nav);
 
     dispatcher.dispatch(new EnterPageEvent(
         NavigationEventType.EnterPage,
         {
-          when: 'return',
+          when: popState.state != null ? 'return' : 'enter',
           to: entry.page,
         },
     ));
