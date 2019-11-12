@@ -15,7 +15,7 @@ export class LocationMock {
   private readonly stateData: [URL, any][];
   private readonly eventTarget: HTMLElement;
 
-  constructor() {
+  constructor({ doc }: { doc?: Document } = {}) {
     this.eventTarget = document.body.appendChild(document.createElement('div'));
 
     const self = this;
@@ -67,7 +67,7 @@ export class LocationMock {
       addEventListener: jest.spyOn(win, 'addEventListener'),
       removeEventListener: jest.spyOn(win, 'removeEventListener'),
       dispatchEvent: jest.spyOn(win, 'dispatchEvent'),
-      document: {
+      document: doc || {
         get baseURI() {
           return self.baseURI();
         }
