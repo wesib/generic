@@ -16,10 +16,13 @@ const PageLoadSupport__feature: FeatureDef = {
 /**
  * Page load support feature.
  *
- * Enables default {@link PageLoadAgent page load agents} that:
- * - include scripts from loaded page into main document,
- * - include styles from loaded page into main document,
- * - apply loaded page title to bootstrap window.
+ * Enables default {@link PageLoadAgent page load agents}:
+ * 1. Scripts agent.
+ *    Includes external scripts from loaded page into main document.
+ * 2. Styles agent.
+ *    Replaces main document styles with the ones from loaded page. Unless loaded page has no styles.
+ * 3. Title agent.
+ *    Applies loaded page title to bootstrap window. If there is one.
  */
 export class PageLoadSupport {
 

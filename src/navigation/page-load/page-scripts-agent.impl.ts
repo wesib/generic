@@ -7,21 +7,20 @@ import { PageLoadAgent } from './page-load-agent';
  */
 export function pageScriptsAgent(context: BootstrapContext): PageLoadAgent {
 
-  const head = context.get(BootstrapWindow).document.head;
-  const allScripts = new Set<string>();
+  const doc = context.get(BootstrapWindow).document;
 
   return next => next().thru_(
       response => {
         if (response.ok) {
+
+          const allScripts = new Set<string>(mapIt(
+              externalScripts(doc, overArray(doc.scripts)),
+              ([src]) => src,
+          ));
+
           itsEach(
               filterIt(
-                  mapIt(
-                      filterIt(
-                        overArray(response.document.querySelectorAll('script')),
-                        script => !!script.src,
-                      ),
-                      script => ([new URL(script.src, response.document.baseURI).href, script] as const),
-                  ),
+                  externalScripts(response.document, overArray(response.document.querySelectorAll('script'))),
                   ([src]) => !allScripts.has(src),
               ),
               ([src, script]) => {
@@ -29,12 +28,25 @@ export function pageScriptsAgent(context: BootstrapContext): PageLoadAgent {
                 const clone = script.cloneNode() as HTMLScriptElement;
 
                 clone.src = src;
-                head.appendChild(clone);
+                doc.head.appendChild(clone);
                 allScripts.add(src);
               },
           );
         }
         return response;
       },
+  );
+}
+
+function externalScripts(
+    doc: Document,
+    scripts: Iterable<HTMLScriptElement>,
+): Iterable<readonly [string, HTMLScriptElement]> {
+  return mapIt(
+      filterIt(
+          scripts,
+          script => !!script.src,
+      ),
+      script => [new URL(script.src, doc.baseURI).href, script] as const,
   );
 }
