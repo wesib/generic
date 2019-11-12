@@ -1,10 +1,12 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
+import { itsReduction } from 'a-iterable';
 import { SingleContextKey } from 'context-values';
 import { afterThe, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
-import { hthvParse } from 'http-header-value';
+import { hthvParse, hthvQuote } from 'http-header-value';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
+import { pageLoadRequestsParam } from './page-load-requests.impl';
 import { PageLoadResponse } from './page-load-response';
 
 /**
@@ -52,6 +54,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
     });
 
     function fetch(fetchRequest: Request): OnEvent<[PageLoadResponse]> {
+      fetchRequest = pageFragmentsRequest(page, fetchRequest);
 
       const responseTextEmitter = new EventEmitter<[Response, string]>();
       const onResponse: OnEvent<[PageLoadResponse]> = responseTextEmitter.on.thru_(
@@ -102,4 +105,26 @@ function newPageLoader(context: BootstrapContext): PageLoader {
       });
     }
   };
+}
+
+function pageFragmentsRequest(page: Page, request: Request, ) {
+
+  const fragments = page.get(pageLoadRequestsParam)?.fragments;
+
+  if (!fragments || !fragments.length) {
+     return request;
+  }
+
+  return new Request(
+      request,
+      {
+        headers: {
+          'Accept-Fragment': itsReduction(
+              fragments,
+              (header, fragment) => (header ? header + ', ' : '') + 'id=' + hthvQuote(fragment.id),
+              '',
+          ),
+        },
+      },
+  );
 }

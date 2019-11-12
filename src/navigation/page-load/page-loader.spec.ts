@@ -17,7 +17,10 @@ describe('navigation', () => {
   let mockResponseHeaders: Mocked<Headers>;
 
   beforeEach(() => {
-    page = { url: new URL('http://localhost/test') } as Page;
+    page = {
+      url: new URL('http://localhost/test'),
+      get: noop as any,
+    } as Page;
     mockResponseHeaders = {
       get: jest.fn(),
     } as any;

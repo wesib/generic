@@ -201,5 +201,143 @@ describe('navigation', () => {
 
       expect(receiver).not.toHaveBeenCalled();
     });
+
+    describe('fragments', () => {
+
+      let request: Request;
+      let result: string;
+      let mockFetch: Mock<ReturnType<HttpFetch>, Parameters<HttpFetch>>;
+
+      beforeEach(() => {
+        result = '<body></body>';
+        mockFetch = jest.fn((input, _init?) => {
+          request = input as Request;
+          return afterThe({
+                ok: true,
+                headers: new Headers(),
+                text: () => Promise.resolve(result),
+              } as Response,
+          );
+        });
+      });
+
+      beforeEach(async () => {
+        mockAgent.mockImplementation(next => next());
+
+        await new Promise(resolve => {
+          @Feature({
+            set: { a: HttpFetch, is: mockFetch },
+            init(ctx) {
+              ctx.whenReady(resolve);
+            },
+          })
+          class MockFetchFeature {
+          }
+
+          context.load(MockFetchFeature)(noop);
+        });
+      });
+
+      it('loads requested fragment', async () => {
+        result = `<div id="test-fragment">fragment content</div>`;
+
+        let response!: PageLoadResponse;
+
+        await navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => response = r,
+              fragment: { id: 'test-fragment' } ,
+            },
+        ).open('/other');
+
+        expect(request.headers.get('Accept-Fragment')).toEqual('id=test-fragment');
+        expect(response).toMatchObject({ ok: true, fragment: expect.objectContaining({ id: 'test-fragment' }) });
+      });
+      it('requests non-existing fragment', async () => {
+        result = `<div id="test-fragment">fragment content</div>`;
+
+        let response!: PageLoadResponse;
+
+        await navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => response = r,
+              fragment: { id: 'wrong-fragment' } ,
+            },
+        ).open('/other');
+
+        expect(request.headers.get('Accept-Fragment')).toEqual('id=wrong-fragment');
+        expect(response).toMatchObject({ ok: true, fragment: undefined });
+      });
+      it('loads multiple fragments', async () => {
+        result = `<div id="test-fragment">fragment content</div><div id="test-fragment-2">fragment 2 content</div>`;
+
+        let response1!: PageLoadResponse;
+        let response2!: PageLoadResponse;
+
+        await navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => response1 = r,
+              fragment: { id: 'test-fragment' } ,
+            },
+        ).with(
+            pageLoadParam,
+            {
+              receiver: r => response2 = r,
+              fragment: { id: 'test-fragment-2' } ,
+            },
+        ).open('/other');
+
+        expect(request.headers.get('Accept-Fragment')).toEqual('id=test-fragment, id=test-fragment-2');
+        expect(response1).toMatchObject({ ok: true, fragment: expect.objectContaining({ id: 'test-fragment' }) });
+        expect(response2).toMatchObject({ ok: true, fragment: expect.objectContaining({ id: 'test-fragment-2' }) });
+      });
+      it('requests full document if at least one request contains no fragment', async () => {
+        result = `<div id="test-fragment">fragment content</div>`;
+
+        let response1!: PageLoadResponse;
+        let response2!: PageLoadResponse;
+
+        await navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => response1 = r,
+              fragment: { id: 'test-fragment' } ,
+            },
+        ).with(
+            pageLoadParam,
+            {
+              receiver: r => response2 = r,
+            },
+        ).open('/other');
+
+        expect(request.headers.get('Accept-Fragment')).toBeNull();
+        expect(response1).toMatchObject({ ok: true, fragment: expect.objectContaining({ id: 'test-fragment' }) });
+        expect(response2).toMatchObject({ ok: true });
+        expect((response2 as PageLoadResponse.Ok).fragment).toBeUndefined();
+      });
+      it('reports error', async () => {
+
+        const error = new Error('reason');
+        const reject = Promise.reject<string>(error);
+
+        mockFetch.mockImplementation(() => afterThe({ ok: true, text: () => reject } as Response));
+
+        let response!: PageLoadResponse;
+
+        await navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => response = r,
+              fragment: { id: 'test-fragment' } ,
+            },
+        ).open('/other');
+        await reject.catch(noop);
+
+        expect(response).toMatchObject({ ok: false, error });
+      });
+    });
   });
 });

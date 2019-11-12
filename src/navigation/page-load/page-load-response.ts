@@ -58,6 +58,13 @@ export namespace PageLoadResponse {
     readonly document: Document;
 
     /**
+     * Loaded fragment.
+     *
+     * This is a requested element, if found in the loaded document.
+     */
+    readonly fragment?: Element;
+
+    /**
      * Page load error. Always `undefined`.
      */
     readonly error?: undefined;

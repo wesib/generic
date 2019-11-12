@@ -12,6 +12,17 @@ import { PageLoadResponse } from './page-load-response';
 export interface PageLoadRequest {
 
   /**
+   * Page fragment request.
+   *
+   * When specified, this fragment will be requested by `Accept-Fragment` HTTP request header, and the response will
+   * contain a {@link PageLoadResponse.fragment loaded fragment}.
+   *
+   * When omitted in one of the page load requests, the full document will be requested. I.e. `Accept-Fragment` header
+   * won't be sent in HTTP request.
+   */
+  fragment?: PageFragmentRequest;
+
+  /**
    * Page load events receiver.
    *
    * Will be notified on {@link PageLoadResponse page load response} events whenever page loaded.
@@ -19,5 +30,17 @@ export interface PageLoadRequest {
    * is cut off.
    */
   readonly receiver: EventReceiver<[PageLoadResponse]>;
+
+}
+
+/**
+ * Page fragment request.
+ */
+export interface PageFragmentRequest {
+
+  /**
+   * Requested element identifier.
+   */
+  id: string;
 
 }
