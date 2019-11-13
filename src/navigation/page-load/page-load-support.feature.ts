@@ -6,12 +6,14 @@ import { NavigationSupport } from '../navigation-support.feature';
 import { PageLoadAgent } from './page-load-agent';
 import { pageScriptsAgent } from './page-scripts-agent.impl';
 import { pageStyleAgent } from './page-style-agent.impl';
+import { pageTitleAgent } from './page-title-agent.impl';
 
 const PageLoadSupport__feature: FeatureDef = {
   needs: NavigationSupport,
   set: [
     { a: PageLoadAgent, by: pageScriptsAgent },
     { a: PageLoadAgent, by: pageStyleAgent },
+    { a: PageLoadAgent, by: pageTitleAgent },
   ]
 };
 
