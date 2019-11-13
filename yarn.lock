@@ -399,10 +399,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@wesib/wesib@^1.0.0-alpha.40":
-  version "1.0.0-alpha.40"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.40.tgz#452ee3181811f7d2b78c14552185ad2d15985620"
-  integrity sha512-QMyg2DkxAtLBNLQay3DvzvnEGmkPsphGDY21B92oJpdf3VimARdv6i988a7z86cp1QBo9lenvP0BwmzW3eQ4YQ==
+"@wesib/wesib@^1.0.0-alpha.41":
+  version "1.0.0-alpha.41"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.41.tgz#47e9b581984d7d421f5604abfd8ecfc29066d047"
+  integrity sha512-E5OEL3Gb8F60Ps+zzqH9cQMNdt4adRM3ISvXzqI5PwEo3S4K8tYCIdOuCenseFg9tQa5AIPvilXeMuvz63dZCA==
 
 a-iterable@^2.4.4:
   version "2.4.4"
