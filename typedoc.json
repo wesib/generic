@@ -1,5 +1,5 @@
 {
-  "exclude": ["**/spec/**/*.ts", "**/*.impl.ts"],
+  "exclude": ["**/spec/**/*.ts", "**/*.spec.ts", "**/*.impl.ts"],
   "excludeNotExported": true,
   "mode": "file",
   "name": "Wesib: Generic Components",
