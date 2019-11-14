@@ -71,7 +71,8 @@
 					</div>
 					<p>Expected to be used as a <a href="https://developer.mozilla.org/en-US/docs/Web/API/History">History</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Location">Location</a> APIs replacement.</p>
 					<p>Fires additional navigation events the browser does not support natively.</p>
-					<p>Implements an <code>EventKeeper</code> interface by sending current navigation locations to registered receivers.</p>
+					<p>Implements an <code>EventSender</code> interface by sending <a href="../globals.html#navigationevent">navigation events</a> to registered receivers.</p>
+					<p>Implements an <code>EventKeeper</code> interface by sending current <a href="../interfaces/page.html">page</a> to registered receivers.</p>
 					<p>Available as bootstrap context value when <a href="navigationsupport.html">NavigationSupport</a> feature is enabled.</p>
 				</div>
 			</section>
@@ -86,7 +87,8 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/navigation.location.html" class="tsd-signature-type">Location</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><span class="tsd-signature-type">EventSender</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../globals.html#navigationevent" class="tsd-signature-type">NavigationEvent</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -96,16 +98,19 @@
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-class"><a href="../interfaces/navigation.location.html" class="tsd-kind-icon">Location</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-class"><a href="../interfaces/navigation.parameterized.html" class="tsd-kind-icon">Parameterized</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-class"><a href="../interfaces/navigation.target.html" class="tsd-kind-icon">Target</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-class"><a href="../interfaces/navigation.urltarget.html" class="tsd-kind-icon">URLTarget</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="navigation.html#length" class="tsd-kind-icon">length</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="navigation.html#onnavigate" class="tsd-kind-icon">on<wbr>Navigate</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="navigation.html#prenavigate" class="tsd-kind-icon">pre<wbr>Navigate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="navigation.html#on" class="tsd-kind-icon">on</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="navigation.html#onenter" class="tsd-kind-icon">on<wbr>Enter</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="navigation.html#onleave" class="tsd-kind-icon">on<wbr>Leave</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="navigation.html#onstay" class="tsd-kind-icon">on<wbr>Stay</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="navigation.html#read" class="tsd-kind-icon">read</a></li>
 							</ul>
 						</section>
@@ -122,9 +127,10 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="navigation.html#back" class="tsd-kind-icon">back</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="navigation.html#forward" class="tsd-kind-icon">forward</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="navigation.html#go" class="tsd-kind-icon">go</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="navigation.html#navigate" class="tsd-kind-icon">navigate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="navigation.html#open" class="tsd-kind-icon">open</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="navigation.html#reload" class="tsd-kind-icon">reload</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="navigation.html#replace" class="tsd-kind-icon">replace</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="navigation.html#with" class="tsd-kind-icon">with</a></li>
 							</ul>
 						</section>
 					</div>
@@ -138,7 +144,7 @@
 					<div class="tsd-signature tsd-kind-icon">length<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L33">navigation/navigation.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L45">navigation/navigation.ts:45</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -148,48 +154,81 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="onnavigate" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on<wbr>Navigate</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Navigate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnDomEvent</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/navigateevent.html" class="tsd-signature-type">NavigateEvent</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="on" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on</h3>
+					<div class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../globals.html#navigationevent" class="tsd-signature-type">NavigationEvent</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L45">navigation/navigation.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L72">navigation/navigation.ts:72</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>An <code>OnDomEvent</code> registrar of navigation event receivers.</p>
+							<p>An <code>OnEvent</code> registrar of navigation events receivers.</p>
+						</div>
+						<p>The <code>[OnEvent__symbol]</code> property is an alias of this one.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="onenter" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on<wbr>Enter</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Enter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnDomEvent</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#enterpageevent" class="tsd-signature-type">EnterPageEvent</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L50">navigation/navigation.ts:50</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An <code>OnDomEvent</code> registrar of enter page event receivers.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="prenavigate" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> pre<wbr>Navigate</h3>
-					<div class="tsd-signature tsd-kind-icon">pre<wbr>Navigate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnDomEvent</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#prenavigateevent" class="tsd-signature-type">PreNavigateEvent</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="onleave" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on<wbr>Leave</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Leave<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnDomEvent</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#leavepageevent" class="tsd-signature-type">LeavePageEvent</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L40">navigation/navigation.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L57">navigation/navigation.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>An <code>OnDomEvent</code> registrar of pre-navigation event receivers.</p>
+							<p>An <code>OnDomEvent</code> registrar of leave page event receivers.</p>
 						</div>
 						<p>These receivers may cancel navigation by calling <code>preventDefault()</code> method of received event.</p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="read" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> read</h3>
-					<div class="tsd-signature tsd-kind-icon">read<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/navigation.location.html" class="tsd-signature-type">Location</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="onstay" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on<wbr>Stay</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Stay<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnDomEvent</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#stayonpageevent" class="tsd-signature-type">StayOnPageEvent</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L52">navigation/navigation.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L65">navigation/navigation.ts:65</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>An <code>AfterEvent</code> registrar of navigation location receivers.</p>
+							<p>An <code>OnDomEvent</code> registrar of stay on page event receivers.</p>
+						</div>
+						<p>These receivers are informed when navigation has been cancelled by one of leave page event receivers,
+						navigation failed due to e.g. invalid URL, or when another navigation request initiated before the page left.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="read" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> read</h3>
+					<div class="tsd-signature tsd-kind-icon">read<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L83">navigation/navigation.ts:83</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An <code>AfterEvent</code> registrar of current page receivers.</p>
 						</div>
 						<p>The <code>[AfterEvent__symbol]</code> property is an alias of this one.</p>
 					</div>
@@ -201,16 +240,16 @@
 					<a name="__computed" class="tsd-anchor"></a>
 					<h3>__computed</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __computed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/navigation.location.html" class="tsd-signature-type">Location</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __computed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L54">navigation/navigation.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L85">navigation/navigation.ts:85</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/navigation.location.html" class="tsd-signature-type">Location</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -224,7 +263,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L26">navigation/navigation.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L38">navigation/navigation.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ContextKey</span><span class="tsd-signature-symbol">&lt;</span><a href="navigation.html" class="tsd-signature-type">Navigation</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -244,7 +283,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L63">navigation/navigation.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L94">navigation/navigation.ts:94</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -267,7 +306,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L72">navigation/navigation.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L103">navigation/navigation.ts:103</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -290,7 +329,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L86">navigation/navigation.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L117">navigation/navigation.ts:117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -316,21 +355,21 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="navigate" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> navigate</h3>
+					<a name="open" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> open</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">navigate<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="../interfaces/navigation.target.html" class="tsd-signature-type">Target</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">URL</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">open<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="../interfaces/navigation.target.html" class="tsd-signature-type">Target</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">URL</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L109">navigation/navigation.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L140">navigation/navigation.ts:140</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Navigates to the given navigation <code>target</code>.</p>
+									<p>Opens a page by navigating to the given <code>target</code>.</p>
 								</div>
 								<p>Appends an entry to navigation history.</p>
 								<dl class="tsd-comment-tags">
@@ -352,8 +391,8 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p><code>true</code> if navigated successfully, or <code>false</code> otherwise.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>A promise resolved to navigated page, or to <code>null</code> otherwise.</p>
 						</li>
 					</ul>
 				</section>
@@ -367,7 +406,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L93">navigation/navigation.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L124">navigation/navigation.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -384,18 +423,18 @@
 					<a name="replace" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> replace</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">replace<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="../interfaces/navigation.target.html" class="tsd-signature-type">Target</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">URL</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">replace<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="../interfaces/navigation.target.html" class="tsd-signature-type">Target</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">URL</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/navigation/navigation.ts#L121">navigation/navigation.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L152">navigation/navigation.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Updates the most recent entry of navigation history.</p>
+									<p>Replaces the most recent entry in navigation history with the given <code>target</code>.</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>fires</dt>
@@ -416,8 +455,61 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p><code>true</code> if navigation history updated, or <code>false</code> otherwise.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>A promise resolved to navigated page, or to <code>null</code> otherwise.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="with" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> with</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">with&lt;T, I&gt;<span class="tsd-signature-symbol">(</span>ref<span class="tsd-signature-symbol">: </span><a href="../interfaces/pageparam.ref.html" class="tsd-signature-type">Ref</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/navigation.parameterized.html" class="tsd-signature-type">Parameterized</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/navigation.ts#L164">navigation/navigation.ts:164</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates parameterized navigation instance and assigns a page parameter to apply to target page.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+									<div class="tsd-comment tsd-typography">
+										<p>Parameter value type.</p>
+									</div>
+								</li>
+								<li>
+									<h4>I</h4>
+									<div class="tsd-comment tsd-typography">
+										<p>Parameter input type.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ref: <a href="../interfaces/pageparam.ref.html" class="tsd-signature-type">Ref</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A reference to page navigation parameter to apply.</p>
+									</div>
+								</li>
+								<li>
+									<h5>input: <span class="tsd-signature-type">I</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Parameter input to use when constructing its value.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/navigation.parameterized.html" class="tsd-signature-type">Parameterized</a></h4>
+							<p>New parameterized navigation instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -433,46 +525,34 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class">
-						<a href="automountsupport.html" class="tsd-kind-icon">Auto<wbr>Mount<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="basicstyleproducersupport.html" class="tsd-kind-icon">Basic<wbr>Style<wbr>Producer<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="componenttreesupport.html" class="tsd-kind-icon">Component<wbr>Tree<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="domfetchresult.html" class="tsd-kind-icon">Dom<wbr>Fetch<wbr>Result</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="elementnode.html" class="tsd-kind-icon">Element<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="elementnodelist.html" class="tsd-kind-icon">Element<wbr>Node<wbr>List</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="fetchagentkey.html" class="tsd-kind-icon">Fetch<wbr>Agent<wbr>Key</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
 						<a href="navigation.html" class="tsd-kind-icon">Navigation</a>
 						<ul>
 							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="../interfaces/navigation.location.html" class="tsd-kind-icon">Location</a>
+								<a href="../interfaces/navigation.parameterized.html" class="tsd-kind-icon">Parameterized</a>
 							</li>
 							<li class=" tsd-kind-interface tsd-parent-kind-class">
 								<a href="../interfaces/navigation.target.html" class="tsd-kind-icon">Target</a>
+							</li>
+							<li class=" tsd-kind-interface tsd-parent-kind-class">
+								<a href="../interfaces/navigation.urltarget.html" class="tsd-kind-icon">URLTarget</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="navigation.html#length" class="tsd-kind-icon">length</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="navigation.html#onnavigate" class="tsd-kind-icon">on<wbr>Navigate</a>
+								<a href="navigation.html#on" class="tsd-kind-icon">on</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="navigation.html#prenavigate" class="tsd-kind-icon">pre<wbr>Navigate</a>
+								<a href="navigation.html#onenter" class="tsd-kind-icon">on<wbr>Enter</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="navigation.html#onleave" class="tsd-kind-icon">on<wbr>Leave</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="navigation.html#onstay" class="tsd-kind-icon">on<wbr>Stay</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="navigation.html#read" class="tsd-kind-icon">read</a>
@@ -493,7 +573,7 @@
 								<a href="navigation.html#go" class="tsd-kind-icon">go</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="navigation.html#navigate" class="tsd-kind-icon">navigate</a>
+								<a href="navigation.html#open" class="tsd-kind-icon">open</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="navigation.html#reload" class="tsd-kind-icon">reload</a>
@@ -501,82 +581,13 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="navigation.html#replace" class="tsd-kind-icon">replace</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="navigation.html#with" class="tsd-kind-icon">with</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class">
-						<a href="navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="styleproducersupport.html" class="tsd-kind-icon">Style<wbr>Producer<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="theme.html" class="tsd-kind-icon">Theme</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="themefactory.html" class="tsd-kind-icon">Theme<wbr>Factory</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="themesupport.html" class="tsd-kind-icon">Theme<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/automountconfig.html" class="tsd-kind-icon">Auto<wbr>Mount<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/componentnode.html" class="tsd-kind-icon">Component<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/componentstypoptions.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/mountdef.html" class="tsd-kind-icon">Mount<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#componentstyleproducer" class="tsd-kind-icon">Component<wbr>Style<wbr>Producer</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#componentstyprender" class="tsd-kind-icon">Component<wbr>Styp<wbr>Render</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#domfetch" class="tsd-kind-icon">Dom<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#httpfetch" class="tsd-kind-icon">Http<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-event">
-						<a href="../globals.html#prenavigateevent" class="tsd-kind-icon">Pre<wbr>Navigate<wbr>Event</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#componentnode" class="tsd-kind-icon">Component<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#componentstyleproducer" class="tsd-kind-icon">Component<wbr>Style<wbr>Producer</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#componentstyprender" class="tsd-kind-icon">Component<wbr>Styp<wbr>Render</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#domfetch" class="tsd-kind-icon">Dom<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#httpfetch" class="tsd-kind-icon">Http<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="../globals.html#mount" class="tsd-kind-icon">Mount</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="../globals.html#producestyle" class="tsd-kind-icon">Produce<wbr>Style</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#automountsupport" class="tsd-kind-icon">auto<wbr>Mount<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="../globals.html#componentstypoptions" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="../globals.html#mountdef" class="tsd-kind-icon">Mount<wbr>Def</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

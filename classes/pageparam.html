@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DomFetchResult | Wesib: Generic Components</title>
+	<title>PageParam | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="domfetchresult.html">DomFetchResult</a>
+					<a href="pageparam.html">PageParam</a>
 				</li>
 			</ul>
-			<h1>Class DomFetchResult</h1>
+			<h1>Class PageParam&lt;T, I&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -67,24 +67,45 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>DOM contents fetch result.</p>
+						<p>Page navigation parameter.</p>
 					</div>
-					<p>This is returned from <a href="../globals.html#domfetch">DomFetch</a> function. The actual fetch would be initiated once event receiver is registered,
-					or contents requested to be inserted to document.</p>
+					<p>Can applied before navigation happened (i.e. to <a href="../globals.html#leavepageevent">LeavePageEvent</a>). Then it will be available to the target page
+					both before and after navigation.</p>
+					<dl class="tsd-comment-tags">
+						<dt>typaparam</dt>
+						<dd><p>I  Parameter input type.</p>
+						</dd>
+					</dl>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>T</h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Parameter value type.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>I</h4>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">DomFetchResult</span>
+						<span class="target">PageParam</span>
 					</li>
 				</ul>
 			</section>
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><span class="tsd-signature-type">EventSender</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><a href="../interfaces/pageparam.ref.html" class="tsd-signature-type">Ref</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -92,42 +113,24 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="domfetchresult.html#onnode" class="tsd-kind-icon">on<wbr>Node</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-class tsd-has-type-parameter"><a href="../interfaces/pageparam.handle.html" class="tsd-kind-icon">Handle</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-class tsd-has-type-parameter"><a href="../interfaces/pageparam.ref.html" class="tsd-kind-icon">Ref</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="domfetchresult.html#__computed" class="tsd-kind-icon">__computed</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="pageparam.html#__computed" class="tsd-kind-icon">__computed</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="domfetchresult.html#into" class="tsd-kind-icon">into</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="pageparam.html#create" class="tsd-kind-icon">create</a></li>
 							</ul>
 						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="onnode" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on<wbr>Node</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/fetch/dom-fetch-result.ts#L19">fetch/dom-fetch-result.ts:19</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>An <code>OnEvent</code> registrar of parsed DOM nodes contained in the response.</p>
-						</div>
-						<p>The <code>[OnEvent__symbol]</code> property is an alias of this one.</p>
 					</div>
 				</section>
 			</section>
@@ -137,16 +140,16 @@
 					<a name="__computed" class="tsd-anchor"></a>
 					<h3>__computed</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __computed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __computed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/fetch/dom-fetch-result.ts#L21">fetch/dom-fetch-result.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/page-param.ts#L23">navigation/page-param.ts:23</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -154,35 +157,49 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="into" class="tsd-anchor"></a>
-					<h3>into</h3>
+					<a name="create" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> create</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">into<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Range</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventInterest</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>page<span class="tsd-signature-symbol">: </span><a href="../interfaces/page.html" class="tsd-signature-type">Page</a>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">I</span>, context<span class="tsd-signature-symbol">: </span><a href="pageparamcontext.html" class="tsd-signature-type">PageParamContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/pageparam.handle.html" class="tsd-signature-type">Handle</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/1d9fed3/src/fetch/dom-fetch-result.ts#L34">fetch/dom-fetch-result.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/page-param.ts#L40">navigation/page-param.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Inserts the requested DOM nodes into the given document range.</p>
+									<p>Creates page parameter handle.</p>
 								</div>
-								<p>Replaces the range contents with received DOM nodes.</p>
+								<p>This method is called when <a href="../interfaces/page.html#put">assigning new page parameter</a>.It is called at most once per request,
+									unless this parameter is assigned already. A <a href="../interfaces/pageparam.handle.html#put">PageParam.Handle.put</a> method will be called instead
+								in the latter case.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>target: <span class="tsd-signature-type">Range</span></h5>
+									<h5>page: <a href="../interfaces/page.html" class="tsd-signature-type">Page</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Document range to insert received DOM nodes into.</p>
+										<p>A page to assign navigation parameter to.</p>
+									</div>
+								</li>
+								<li>
+									<h5>input: <span class="tsd-signature-type">I</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Parameter input used to construct its initial value.</p>
+									</div>
+								</li>
+								<li>
+									<h5>context: <a href="pageparamcontext.html" class="tsd-signature-type">PageParamContext</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Page parameter context.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">EventInterest</span></h4>
-							<p>An event interest that aborts the fetch when lost.</p>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/pageparam.handle.html" class="tsd-signature-type">Handle</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>New page parameter value handle.</p>
 						</li>
 					</ul>
 				</section>
@@ -198,117 +215,27 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class">
-						<a href="automountsupport.html" class="tsd-kind-icon">Auto<wbr>Mount<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="basicstyleproducersupport.html" class="tsd-kind-icon">Basic<wbr>Style<wbr>Producer<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="componenttreesupport.html" class="tsd-kind-icon">Component<wbr>Tree<wbr>Support</a>
-					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="domfetchresult.html" class="tsd-kind-icon">Dom<wbr>Fetch<wbr>Result</a>
+					<li class="current tsd-kind-class tsd-has-type-parameter">
+						<a href="pageparam.html" class="tsd-kind-icon">Page<wbr>Param</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="domfetchresult.html#onnode" class="tsd-kind-icon">on<wbr>Node</a>
+							<li class=" tsd-kind-interface tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="../interfaces/pageparam.handle.html" class="tsd-kind-icon">Handle</a>
+							</li>
+							<li class=" tsd-kind-interface tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="../interfaces/pageparam.ref.html" class="tsd-kind-icon">Ref</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="domfetchresult.html#__computed" class="tsd-kind-icon">__computed</a>
+								<a href="pageparam.html#__computed" class="tsd-kind-icon">__computed</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="domfetchresult.html#into" class="tsd-kind-icon">into</a>
+								<a href="pageparam.html#create" class="tsd-kind-icon">create</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class">
-						<a href="elementnode.html" class="tsd-kind-icon">Element<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="elementnodelist.html" class="tsd-kind-icon">Element<wbr>Node<wbr>List</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="fetchagentkey.html" class="tsd-kind-icon">Fetch<wbr>Agent<wbr>Key</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="navigation.html" class="tsd-kind-icon">Navigation</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="styleproducersupport.html" class="tsd-kind-icon">Style<wbr>Producer<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="theme.html" class="tsd-kind-icon">Theme</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="themefactory.html" class="tsd-kind-icon">Theme<wbr>Factory</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="themesupport.html" class="tsd-kind-icon">Theme<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/automountconfig.html" class="tsd-kind-icon">Auto<wbr>Mount<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/componentnode.html" class="tsd-kind-icon">Component<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/componentstypoptions.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/mountdef.html" class="tsd-kind-icon">Mount<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#componentstyleproducer" class="tsd-kind-icon">Component<wbr>Style<wbr>Producer</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#componentstyprender" class="tsd-kind-icon">Component<wbr>Styp<wbr>Render</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#domfetch" class="tsd-kind-icon">Dom<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#httpfetch" class="tsd-kind-icon">Http<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-event">
-						<a href="../globals.html#prenavigateevent" class="tsd-kind-icon">Pre<wbr>Navigate<wbr>Event</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#componentnode" class="tsd-kind-icon">Component<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#componentstyleproducer" class="tsd-kind-icon">Component<wbr>Style<wbr>Producer</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#componentstyprender" class="tsd-kind-icon">Component<wbr>Styp<wbr>Render</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#domfetch" class="tsd-kind-icon">Dom<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#httpfetch" class="tsd-kind-icon">Http<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="../globals.html#mount" class="tsd-kind-icon">Mount</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="../globals.html#producestyle" class="tsd-kind-icon">Produce<wbr>Style</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#automountsupport" class="tsd-kind-icon">auto<wbr>Mount<wbr>Support</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="../globals.html#componentstypoptions" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="../globals.html#mountdef" class="tsd-kind-icon">Mount<wbr>Def</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

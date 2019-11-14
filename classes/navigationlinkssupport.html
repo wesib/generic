@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Raw | Wesib: Generic Components</title>
+	<title>NavigationLinksSupport | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,13 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="componentnode.html">ComponentNode</a>
-				</li>
-				<li>
-					<a href="componentnode.raw.html">Raw</a>
+					<a href="navigationlinkssupport.html">NavigationLinksSupport</a>
 				</li>
 			</ul>
-			<h1>Interface Raw</h1>
+			<h1>Class NavigationLinksSupport</h1>
 		</div>
 	</div>
 </header>
@@ -70,15 +67,31 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Element node representing raw element no bound to any component.</p>
+						<p>Enables navigation links support.</p>
 					</div>
+					<p>Makes elements (e.e anchor tags like <code>&lt;a href=&quot;/some/url&quot;&gt;</code>) within bootstrap root navigate using
+						<a href="navigation.html">navigation service</a>. This is implemented by <code>ElementEnhancer</code>, so either target element
+						should be processed manually (i.e. using <code>ElementAdapter</code>), or some automatic detection should be enabled
+					(e.g. <code>AutoConnectSupport</code> feature).</p>
+					<p>The URL to navigate to can be placed <code>href</code>, <code>b-href</code>, or <code>data-b-href</code> attribute.</p>
+					<p>The following <a href="../globals.html#elementbehaviors">element behaviors</a> recognized:</p>
+					<ul>
+						<li><code>-</code>, <code>-navigation-link</code> - Makes target element act as raw HTML element. I.e. it won&#39;t be enhanced.</li>
+						<li><code>navigation-link:replace</code> - Makes target element <a href="navigation.html#replace">replace target page</a> on click.</li>
+						<li><code>navigation-link:back</code> - Makes target element <a href="navigation.html#back">navigate back to previous page</a> on click.</li>
+						<li><code>navigation-link:forward</code> - Makes target element <a href="navigation.html#forward">navigate forward to next page</a> on click.</li>
+						<li><code>navigation-link</code> - Makes target element <a href="navigation.html#open">open target page</a> on click.</li>
+						<li><code>*</code> - decide automatically whether to enhance element.
+							In this case only element with <code>href</code>, <code>b-href</code>, or <code>data-b-href</code> attribute will be enhanced with
+						<code>navigation-link</code> behavior.</li>
+					</ul>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Raw</span>
+						<span class="target">NavigationLinksSupport</span>
 					</li>
 				</ul>
 			</section>
@@ -87,25 +100,32 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="componentnode.raw.html#context" class="tsd-kind-icon">context</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-static"><a href="navigationlinkssupport.html#__computed" class="tsd-kind-icon">__computed</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="context" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> context</h3>
-					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/tree/element-node.ts#L91">tree/element-node.ts:91</a></li>
-						</ul>
-					</aside>
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
+					<a name="__computed" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> __computed</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __computed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">FeatureDef</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/links/navigation-links-support.feature.ts#L35">navigation/links/navigation-links-support.feature.ts:35</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">FeatureDef</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -121,46 +141,11 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-has-type-parameter">
-						<a href="componentnode.html" class="tsd-kind-icon">Component<wbr>Node</a>
+					<li class="current tsd-kind-class">
+						<a href="navigationlinkssupport.html" class="tsd-kind-icon">Navigation<wbr>Links<wbr>Support</a>
 						<ul>
-							<li class=" tsd-kind-interface tsd-parent-kind-interface">
-								<a href="componentnode.componentselectoropts.html" class="tsd-kind-icon">Component<wbr>Selector<wbr>Opts</a>
-							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-interface">
-								<a href="componentnode.elementselectoropts.html" class="tsd-kind-icon">Element<wbr>Selector<wbr>Opts</a>
-							</li>
-							<li class="current tsd-kind-interface tsd-parent-kind-interface">
-								<a href="componentnode.raw.html" class="tsd-kind-icon">Raw</a>
-								<ul>
-									<li class=" tsd-kind-property tsd-parent-kind-interface">
-										<a href="componentnode.raw.html#context" class="tsd-kind-icon">context</a>
-									</li>
-								</ul>
-							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-interface">
-								<a href="componentnode.selectoropts.html" class="tsd-kind-icon">Selector<wbr>Opts</a>
-							</li>
-							<li class=" tsd-kind-type-alias tsd-parent-kind-interface">
-								<a href="componentnode.html#any" class="tsd-kind-icon">Any</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="componentnode.html#context" class="tsd-kind-icon">context</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="componentnode.html#element" class="tsd-kind-icon">element</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="componentnode.html#parent" class="tsd-kind-icon">parent</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-								<a href="componentnode.html#attribute" class="tsd-kind-icon">attribute</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited">
-								<a href="componentnode.html#property" class="tsd-kind-icon">property</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-								<a href="componentnode.html#select" class="tsd-kind-icon">select</a>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
+								<a href="navigationlinkssupport.html#__computed" class="tsd-kind-icon">__computed</a>
 							</li>
 						</ul>
 					</li>

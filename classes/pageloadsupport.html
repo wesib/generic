@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Raw | Wesib: Generic Components</title>
+	<title>PageLoadSupport | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,13 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="componentnode.html">ComponentNode</a>
-				</li>
-				<li>
-					<a href="componentnode.raw.html">Raw</a>
+					<a href="pageloadsupport.html">PageLoadSupport</a>
 				</li>
 			</ul>
-			<h1>Interface Raw</h1>
+			<h1>Class PageLoadSupport</h1>
 		</div>
 	</div>
 </header>
@@ -70,15 +67,25 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Element node representing raw element no bound to any component.</p>
+						<p>Page load support feature.</p>
 					</div>
+					<p>Enables default <a href="../modules/pageloadagent.html">page load agents</a>:</p>
+					<ol>
+						<li>Scripts agent.
+						Includes external scripts from loaded page into main document.</li>
+						<li>Style agent.
+							Replaces external styles of main document styles with the ones from loaded page.
+						Unless loaded page has no external styles.</li>
+						<li>Title agent.
+						Applies loaded page title to bootstrap window. If there is one.</li>
+					</ol>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Raw</span>
+						<span class="target">PageLoadSupport</span>
 					</li>
 				</ul>
 			</section>
@@ -87,25 +94,32 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="componentnode.raw.html#context" class="tsd-kind-icon">context</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-static"><a href="pageloadsupport.html#__computed" class="tsd-kind-icon">__computed</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="context" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> context</h3>
-					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/tree/element-node.ts#L91">tree/element-node.ts:91</a></li>
-						</ul>
-					</aside>
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
+					<a name="__computed" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> __computed</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __computed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">FeatureDef</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/page-load/page-load-support.feature.ts#L34">navigation/page-load/page-load-support.feature.ts:34</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">FeatureDef</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -121,46 +135,11 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-has-type-parameter">
-						<a href="componentnode.html" class="tsd-kind-icon">Component<wbr>Node</a>
+					<li class="current tsd-kind-class">
+						<a href="pageloadsupport.html" class="tsd-kind-icon">Page<wbr>Load<wbr>Support</a>
 						<ul>
-							<li class=" tsd-kind-interface tsd-parent-kind-interface">
-								<a href="componentnode.componentselectoropts.html" class="tsd-kind-icon">Component<wbr>Selector<wbr>Opts</a>
-							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-interface">
-								<a href="componentnode.elementselectoropts.html" class="tsd-kind-icon">Element<wbr>Selector<wbr>Opts</a>
-							</li>
-							<li class="current tsd-kind-interface tsd-parent-kind-interface">
-								<a href="componentnode.raw.html" class="tsd-kind-icon">Raw</a>
-								<ul>
-									<li class=" tsd-kind-property tsd-parent-kind-interface">
-										<a href="componentnode.raw.html#context" class="tsd-kind-icon">context</a>
-									</li>
-								</ul>
-							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-interface">
-								<a href="componentnode.selectoropts.html" class="tsd-kind-icon">Selector<wbr>Opts</a>
-							</li>
-							<li class=" tsd-kind-type-alias tsd-parent-kind-interface">
-								<a href="componentnode.html#any" class="tsd-kind-icon">Any</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="componentnode.html#context" class="tsd-kind-icon">context</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="componentnode.html#element" class="tsd-kind-icon">element</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="componentnode.html#parent" class="tsd-kind-icon">parent</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-								<a href="componentnode.html#attribute" class="tsd-kind-icon">attribute</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited">
-								<a href="componentnode.html#property" class="tsd-kind-icon">property</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-								<a href="componentnode.html#select" class="tsd-kind-icon">select</a>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
+								<a href="pageloadsupport.html#__computed" class="tsd-kind-icon">__computed</a>
 							</li>
 						</ul>
 					</li>
