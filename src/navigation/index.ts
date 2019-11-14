@@ -1,6 +1,7 @@
 /**
  * @module @wesib/generic
  */
+export * from './links';
 export * from './navigation.event';
 export * from './navigation';
 export * from './navigation-agent';
