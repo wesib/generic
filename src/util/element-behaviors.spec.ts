@@ -37,9 +37,13 @@ describe('util', () => {
       dataBehaviors = 'test2';
       expect(behaviorEntries()).toEqual([['test1', true], ['test2', true]]);
     });
+    it('returns `null` when `-` behaviors disabled', () => {
+      behaviors = '-';
+      expect(elementBehaviors(element)).toBeNull();
+    });
     it('returns `null` when `-` behavior present', () => {
       behaviors = 'second -';
-      expect(behaviorEntries());
+      expect(elementBehaviors(element)).toBeNull();
     });
     it('returns empty map when only `*` behavior present', () => {
       behaviors = '*';

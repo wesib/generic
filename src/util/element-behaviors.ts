@@ -56,13 +56,8 @@ export function elementBehaviors(element: Element): Map<string, string | boolean
       ),
   );
 
-  const raw = behaviors.get('');
+  return behaviors.get('') !== false ? behaviors : null;
 
-  if (raw != null && raw !== false) {
-    return null;
-  }
-
-  return behaviors;
 }
 
 function *elementBehaviorSpecs(behavior: string): Iterable<[string, string | boolean]> {
