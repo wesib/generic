@@ -399,10 +399,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@wesib/wesib@^1.0.0-alpha.41":
-  version "1.0.0-alpha.41"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.41.tgz#47e9b581984d7d421f5604abfd8ecfc29066d047"
-  integrity sha512-E5OEL3Gb8F60Ps+zzqH9cQMNdt4adRM3ISvXzqI5PwEo3S4K8tYCIdOuCenseFg9tQa5AIPvilXeMuvz63dZCA==
+"@wesib/wesib@^1.0.0-alpha.42":
+  version "1.0.0-alpha.42"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.42.tgz#58739e7f6d95e394be1ee831b36cc75d6cdd2578"
+  integrity sha512-wPkla/Oz8cLD81JELi67s3yANWk9irCJXpQImy7AjXqd5JK9ZvjhAdOkgAeYQxty69fcMPc0NtaxwH9+pFq81w==
 
 a-iterable@^2.4.4:
   version "2.4.4"
@@ -1535,9 +1535,9 @@ growly@^1.3.0:
   integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
 
 handlebars@^4.1.2, handlebars@^4.5.1:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.5.1.tgz#8a01c382c180272260d07f2d1aa3ae745715c7ba"
-  integrity sha512-C29UoFzHe9yM61lOsIlCE5/mQVGrnIOrOq7maQl76L7tYPCgC1og0Ajt6uWnX4ZTxBPnjw+CUvawphwCfJgUnA==
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.5.2.tgz#5a4eb92ab5962ca3415ac188c86dc7f784f76a0f"
+  integrity sha512-29Zxv/cynYB7mkT1rVWQnV7mGX6v7H/miQ6dbEpYTKq5eJBN7PsRB+ViYJlcT6JINTSu4dVB9kOqEun78h6Exg==
   dependencies:
     neo-async "^2.6.0"
     optimist "^0.6.1"
