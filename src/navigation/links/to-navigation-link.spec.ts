@@ -43,7 +43,7 @@ describe('navigation', () => {
       element = document.createElement('a');
     });
 
-    it('enhances element with `href` attribute', () => {
+    it('enhances anchor element with `href` attribute', () => {
       adapt(element);
 
       const href = '/target';
@@ -52,7 +52,19 @@ describe('navigation', () => {
       expect(click()).toBe(false);
       expect(mockNavigation.open).toHaveBeenCalledWith(href);
     });
-    it('enhances element with `b-href` attribute', () => {
+    it('enhances any element with `href` attribute', () => {
+      element = document.createElement('div');
+      element.setAttribute('b-a', 'navigation-link');
+
+      const href = '/target';
+
+      element.setAttribute('href', href);
+
+      adapt(element);
+      expect(click()).toBe(false);
+      expect(mockNavigation.open).toHaveBeenCalledWith(href);
+    });
+    it('enhances anchor element with `b-href` attribute', () => {
       adapt(element);
 
       const href = '/target';
@@ -61,7 +73,19 @@ describe('navigation', () => {
       expect(click()).toBe(false);
       expect(mockNavigation.open).toHaveBeenCalledWith(href);
     });
-    it('enhances element with `data-b-href` attribute', () => {
+    it('enhances any element with `b-href` attribute', () => {
+      element = document.createElement('div');
+      element.setAttribute('b-a', 'navigation-link');
+
+      const href = '/target';
+
+      element.setAttribute('b-href', href);
+
+      adapt(element);
+      expect(click()).toBe(false);
+      expect(mockNavigation.open).toHaveBeenCalledWith(href);
+    });
+    it('enhances anchor element with `data-b-href` attribute', () => {
       adapt(element);
 
       const href = '/target';
@@ -70,7 +94,32 @@ describe('navigation', () => {
       expect(click()).toBe(false);
       expect(mockNavigation.open).toHaveBeenCalledWith(href);
     });
-    it('does not open new page by element without attributes', () => {
+    it('enhances eny element with `data-b-href` attribute', () => {
+      element = document.createElement('div');
+      element.setAttribute('b-a', 'navigation-link');
+
+      const href = '/target';
+
+      element.setAttribute('data-b-href', href);
+
+      adapt(element);
+      expect(click()).toBe(false);
+      expect(mockNavigation.open).toHaveBeenCalledWith(href);
+    });
+    it('does not open new page by anchor element without attributes', () => {
+      adapt(element);
+      expect(click()).toBe(false);
+      expect(mockNavigation.open).not.toHaveBeenCalled();
+    });
+    it('does not enhance arbitrary element without behavior', () => {
+      element = document.createElement('div');
+      adapt(element);
+      expect(click()).toBe(true);
+      expect(mockNavigation.open).not.toHaveBeenCalled();
+    });
+    it('does not open new page by arbitrary element without attributes, but with behavior', () => {
+      element = document.createElement('div');
+      element.setAttribute('b-a', 'navigation-link');
       adapt(element);
       expect(click()).toBe(false);
       expect(mockNavigation.open).not.toHaveBeenCalled();

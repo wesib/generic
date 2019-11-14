@@ -22,41 +22,44 @@ export function toNavigationLink(context: BootstrapContext): (element: Element) 
       return element.getAttribute('href') || element.getAttribute('b-href') || element.getAttribute('data-b-href');
     };
 
-    let action: () => void;
-
     const behavior = behaviors.get('navigation-link');
 
-    switch (behavior) {
-      case 'replace':
-        action = () => {
+    if (behavior || element.tagName.toLowerCase() === 'a') {
 
-          const link = href();
+      let action: () => void;
 
-          if (link) {
-            navigation.replace(link);
-          }
-        };
-        break;
-      case 'back':
-        action = () => navigation.back();
-        break;
-      case 'forward':
-        action = () => navigation.forward();
-        break;
-      case false:
-        return;
-      default:
-        action = () => {
+      switch (behavior) {
+        case 'replace':
+          action = () => {
 
-          const link = href();
+            const link = href();
 
-          if (link) {
-            navigation.open(link);
-          }
-        };
-        break;
+            if (link) {
+              navigation.replace(link);
+            }
+          };
+          break;
+        case 'back':
+          action = () => navigation.back();
+          break;
+        case 'forward':
+          action = () => navigation.forward();
+          break;
+        case false:
+          return;
+        default:
+          action = () => {
+
+            const link = href();
+
+            if (link) {
+              navigation.open(link);
+            }
+          };
+          break;
+      }
+
+      new DomEventDispatcher(element).on('click').instead(action);
     }
-
-    new DomEventDispatcher(element).on('click').instead(action);
   };
 }

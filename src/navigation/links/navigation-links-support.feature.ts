@@ -13,12 +13,12 @@ const NavigationLinksSupport__feature: FeatureDef = {
 /**
  * Enables navigation links support.
  *
- * Makes elements (e.e anchor tags like `<a href="/some/url">`) within bootstrap root navigate using
- * {@link Navigation navigation service}. This is implemented by `ElementEnhancer`, so either target element
- * should be processed manually (i.e. using `ElementAdapter`), or some automatic detection should be enabled
- * (e.g. `AutoConnectSupport` feature).
+ * Makes elements (i.e. anchor tags like `<a href="/some/url">` or tags with appropriate behavior attributes)
+ * within bootstrap root navigate using {@link Navigation navigation service}. This is implemented by
+ * `ElementEnhancer`, so either target element should be processed manually (i.e. using `ElementAdapter`),
+ * or some automatic detection should be enabled (e.g. `AutoConnectSupport` feature).
  *
- * The URL to navigate to can be placed `href`, `b-href`, or `data-b-href` attribute.
+ * Target URL can be placed to `href`, `b-href`, or `data-b-href` attribute.
  *
  * The following {@link elementBehaviors element behaviors} recognized:
  * - `-`, `-navigation-link` - Makes target element act as raw HTML element. I.e. it won't be enhanced.
@@ -27,8 +27,6 @@ const NavigationLinksSupport__feature: FeatureDef = {
  * - `navigation-link:forward` - Makes target element {@link Navigation.forward navigate forward to next page} on click.
  * - `navigation-link` - Makes target element {@link Navigation.open open target page} on click.
  * - `*` - decide automatically whether to enhance element.
- *   In this case only element with `href`, `b-href`, or `data-b-href` attribute will be enhanced with
- *   `navigation-link` behavior.
  */
 export class NavigationLinksSupport {
 
