@@ -1,5 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { filterIt, itsEach, mapIt, overArray } from 'a-iterable';
+import { importNode } from '../../util';
 import { PageLoadAgent } from './page-load-agent';
 
 /**
@@ -24,11 +25,7 @@ export function pageScriptsAgent(context: BootstrapContext): PageLoadAgent {
                   ([src]) => !allScripts.has(src),
               ),
               ([src, script]) => {
-
-                const clone = script.cloneNode() as HTMLScriptElement;
-
-                clone.src = src;
-                doc.head.appendChild(clone);
+                importNode(script, doc.head, (_from, to) => to.src = src);
                 allScripts.add(src);
               },
           );

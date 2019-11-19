@@ -1,5 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { itsEach, overArray } from 'a-iterable';
+import { importNode } from '../../util';
 import { PageLoadAgent } from './page-load-agent';
 
 /**
@@ -26,13 +27,11 @@ export function pageStyleAgent(context: BootstrapContext): PageLoadAgent {
         );
         itsEach(
             overArray(styles),
-            style => {
-
-              const clone = style.cloneNode(true) as HTMLLinkElement;
-
-              clone.href = new URL(clone.href, doc.baseURI).href;
-              doc.head.appendChild(clone);
-            },
+            style => importNode(
+                style as HTMLLinkElement,
+                doc.head,
+                (from, to) => to.href = new URL(from.href, doc.baseURI).href,
+            ),
         );
 
         return response;
