@@ -1,4 +1,4 @@
 /**
  * @module @wesib/generic
  */
-export * from './element-behaviors';
+export * from './import-node';
