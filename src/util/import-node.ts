@@ -8,15 +8,15 @@ import { itsEach, overArray } from 'a-iterable';
  *
  * @param from  The node to import.
  * @param to  The node to append imported node to.
- * @param importContent  A function that imports nodes nested in parent elements. [[importNodeContents]] by default.
+ * @param importContent  A function that imports nodes nested in parent element. [[importNodeContents]] by default.
  *
  * @returns Imported node.
  */
-export function importNode(
-    from: Node,
+export function importNode<N extends Node>(
+    from: N,
     to: Node,
-    importContent: (this: void, from: Node, to: Node) => void = importNodeContent,
-): Node {
+    importContent: (this: void, from: N, to: N) => void = importNodeContent,
+): N {
 
   const doc = to.ownerDocument!;
 
@@ -29,12 +29,12 @@ export function importNode(
     return clone;
   } else {
 
-    const element = from as Element;
-    const clone = doc.createElement(element.tagName.toLowerCase());
+    const element = from as Node as Element;
+    const clone = doc.createElement(element.tagName.toLowerCase()) as Node as (Element & N);
 
     element.getAttributeNames().forEach(attr => clone.setAttribute(attr, element.getAttribute(attr)!));
 
-    importContent(element, clone);
+    importContent(from, clone);
     to.appendChild(clone);
 
     return clone;
