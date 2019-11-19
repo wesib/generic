@@ -76,7 +76,7 @@ describe('navigation', () => {
       const request = mockHttpFetch.mock.calls[0][0] as Request;
 
       expect(request.url).toBe('http://localhost/test');
-      // expect(request.mode).toBe('navigate');
+      // expect(request.mode).toBe('same-origin');
       // expect(request.credentials).toBe('same-origin');
       expect(request.headers.get('Accept')).toBe('text/html');
     });

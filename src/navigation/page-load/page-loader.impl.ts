@@ -36,7 +36,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
     const request = new Request(
         page.url.href,
         {
-          mode: 'navigate',
+          mode: 'same-origin',
           credentials: 'same-origin',
           headers: new Headers({ 'Accept': 'text/html' })
         },
