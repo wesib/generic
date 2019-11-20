@@ -81,7 +81,7 @@ describe('navigation', () => {
       // expect(request.credentials).toBe('same-origin');
       expect(request.headers.get('Accept')).toBe('text/html');
     });
-    it('reports document load', async () => {
+    it('reports document load progress', async () => {
       mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
 
       const receiver = jest.fn();
@@ -89,6 +89,13 @@ describe('navigation', () => {
       const supply = await loadDocument(receiver, done);
 
       expect(receiver).toHaveBeenCalledWith({ ok: undefined, page });
+      expect(receiver).toHaveBeenLastCalledWith({
+        ok: true,
+        page,
+        document: expect.any(Document),
+        response: expect.anything(),
+      });
+      expect(receiver).toHaveBeenCalledTimes(2);
       expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalledWith(undefined);
 
@@ -241,7 +248,6 @@ describe('navigation', () => {
 
       await loadDocument(receiver);
 
-      expect(receiver).toHaveBeenCalledWith({ ok: undefined, page });
       expect(receiver).toHaveBeenLastCalledWith(newResponse);
       expect(mockHttpFetch).not.toHaveBeenCalled();
     });

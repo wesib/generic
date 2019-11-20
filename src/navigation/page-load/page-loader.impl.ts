@@ -48,16 +48,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
         },
     );
 
-    return onEventBy(receiver => {
-      afterThe<[PageLoadResponse.Start]>({ page }).once({
-        supply: eventSupply().needs(receiver.supply),
-        receive(ctx, start) {
-          receiver.receive(ctx, start);
-        }
-      });
-
-      agent(fetch, request)(receiver);
-    });
+    return onEventBy(receiver => agent(fetch, request)(receiver));
 
     function fetch(fetchRequest: Request): OnEvent<[PageLoadResponse]> {
       fetchRequest = pageFragmentsRequest(page, fetchRequest);
@@ -97,6 +88,14 @@ function newPageLoader(context: BootstrapContext): PageLoader {
       return onEventBy<[PageLoadResponse]>(receiver => {
 
         const { supply } = receiver;
+
+        afterThe<[PageLoadResponse.Start]>({ page }).once({
+          supply: eventSupply().needs(supply),
+          receive(ctx, start) {
+            receiver.receive(ctx, start);
+          }
+        });
+
         const responseSupply = httpFetch(fetchRequest)(response => {
           onResponse(receiver);
           response.text().then(
