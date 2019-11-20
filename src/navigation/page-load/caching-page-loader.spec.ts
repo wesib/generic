@@ -36,6 +36,18 @@ describe('navigation', () => {
       expect(received).toBe(response);
       expect(mockReceiver).toHaveBeenCalledTimes(1);
     });
+    it('reports page load progress', () => {
+      caching(page)(mockReceiver);
+
+      const response1 = { ok: undefined, page } as PageLoadResponse;
+      const response2 = { ok: true, page } as PageLoadResponse;
+
+      responder.send(response1);
+      responder.send(response2);
+      expect(mockReceiver).toHaveBeenCalledWith(response1);
+      expect(mockReceiver).toHaveBeenLastCalledWith(response2);
+      expect(mockReceiver).toHaveBeenCalledTimes(2);
+    });
     it('receives the same response for the same page', () => {
       caching(page)(mockReceiver);
       caching(page)(mockReceiver2);

@@ -88,6 +88,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
         const onLoad = onEventBy<[PageLoadResponse]>(responseReceiver => {
 
           const emitter = new EventEmitter<[PageLoadResponse]>();
+          const supply = emitter.on(responseReceiver);
 
           self._loader(page)(response => emitter.send(response)).whenOff(error => {
             if (error !== undefined && !(error instanceof PageLoadAbortError)) {
@@ -100,7 +101,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
             }
           }).needs(loadSupply);
 
-          return emitter.on(responseReceiver);
+          return supply;
         }).share();
 
         itsEach(
