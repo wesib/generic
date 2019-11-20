@@ -90,7 +90,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
           const emitter = new EventEmitter<[PageLoadResponse]>();
 
           self._loader(page)(response => emitter.send(response)).whenOff(error => {
-            if (!(error instanceof PageLoadAbortError)) {
+            if (error !== undefined && !(error instanceof PageLoadAbortError)) {
               // Report current page load error as failed load response
               emitter.send({
                 ok: false as const,
