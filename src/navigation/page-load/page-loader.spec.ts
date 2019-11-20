@@ -1,6 +1,6 @@
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { EventEmitter, EventReceiver, EventSupply, eventSupply, onEventBy, onPromise } from 'fun-events';
+import { EventReceiver, EventSupply, eventSupply, onEventBy, onPromise } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
