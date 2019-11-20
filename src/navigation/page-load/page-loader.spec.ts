@@ -227,6 +227,7 @@ describe('navigation', () => {
       expect(request.url).toBe('http://localhost/test?test=updated');
     });
     it('calls agent', async () => {
+      mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
 
       const newResponse: PageLoadResponse = {
         ok: true,
@@ -235,21 +236,16 @@ describe('navigation', () => {
         document: document.implementation.createHTMLDocument('other'),
       };
 
-      mockAgent.mockImplementation(() => {
-
-        const emitter = new EventEmitter<[PageLoadResponse]>();
-
-        Promise.resolve().then(() => emitter.send(newResponse)).then(() => emitter.done());
-
-        return emitter.on;
-      });
+      mockAgent.mockImplementation(next => next().thru_(
+          response => response.ok ? newResponse : response,
+      ));
 
       const receiver = jest.fn();
 
       await loadDocument(receiver);
 
+      expect(receiver).toHaveBeenCalledWith({ ok: undefined, page });
       expect(receiver).toHaveBeenLastCalledWith(newResponse);
-      expect(mockHttpFetch).not.toHaveBeenCalled();
     });
 
     function loadDocument(
