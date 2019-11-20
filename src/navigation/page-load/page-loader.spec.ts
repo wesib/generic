@@ -5,6 +5,7 @@ import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
 import { PageLoadResponse } from './page-load-response';
+import { PageLoadURLModifier } from './page-load-url-modifier';
 import { PageLoader } from './page-loader.impl';
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
@@ -195,6 +196,28 @@ describe('navigation', () => {
       });
       expect(supply.isOff).toBe(true);
       expect(done).toHaveBeenCalled();
+    });
+    it('applies page load URL', async () => {
+      await new Promise(resolve => {
+        @Feature({
+          set: { a: PageLoadURLModifier, is: (url: URL) => url.searchParams.set('test', 'updated') },
+          init(context) {
+            context.whenReady(resolve);
+          }
+        })
+        class PageLoadURLFeature {
+        }
+
+        bsContext.load(PageLoadURLFeature)(noop);
+      });
+
+      mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
+
+      await loadDocument();
+
+      const request = mockHttpFetch.mock.calls[0][0] as Request;
+
+      expect(request.url).toBe('http://localhost/test?test=updated');
     });
     it('calls agent', async () => {
 

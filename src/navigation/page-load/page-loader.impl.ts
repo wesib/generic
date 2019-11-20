@@ -8,6 +8,7 @@ import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
 import { pageLoadRequestsParam } from './page-load-requests.impl';
 import { PageLoadResponse } from './page-load-response';
+import { PageLoadURLModifier } from './page-load-url-modifier';
 
 /**
  * @internal
@@ -28,13 +29,18 @@ function newPageLoader(context: BootstrapContext): PageLoader {
 
   const window = context.get(BootstrapWindow);
   const httpFetch = context.get(HttpFetch);
+  const modifyURL = context.get(PageLoadURLModifier);
   const agent = context.get(PageLoadAgent);
   const parser: DOMParser = new (window as any).DOMParser();
 
   return page => {
 
+    const url = new URL(page.url.href);
+
+    modifyURL(url);
+
     const request = new Request(
-        page.url.href,
+        url.href,
         {
           mode: 'same-origin',
           credentials: 'same-origin',
