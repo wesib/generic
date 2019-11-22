@@ -100,6 +100,10 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       return navigate('pre-replace', 'replace', target);
     }
 
+    update(url: string | URL): Page {
+      return navHistory.update(nav, toURL(url)).page;
+    }
+
     with<T, I>(ref: PageParam.Ref<T, I>, input: I): Navigation_.Parameterized {
       return withParam(page => page.put(ref, input));
     }

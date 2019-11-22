@@ -140,9 +140,9 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
   abstract open(target: Navigation.Target | string | URL): Promise<Page | null>;
 
   /**
-   * Replaces the most recent entry in navigation history with the given `target`.
+   * Replaces current navigation history entry with the given `target`.
    *
-   * @param target  Either navigation target or URL to replace the latest history entry with.
+   * @param target  Either navigation target or URL to replace current history entry with.
    * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually update the history.
    * Then navigates to the `target`, unless the event cancelled.
    * @fires NavigateEvent@wesib:navigate  On window object when history updated.
@@ -150,6 +150,17 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    * @returns A promise resolved to navigated page, or to `null` otherwise.
    */
   abstract replace(target: Navigation.Target | string | URL): Promise<Page | null>;
+
+  /**
+   * Replaces current page URL with the given one.
+   *
+   * Does not alter current page state, and does not trigger any events.
+   *
+   * @param url  An URL to replace the
+   *
+   * @returns Current page with updated URL.
+   */
+  abstract update(url: string | URL): Page;
 
   /**
    * Creates parameterized navigation instance and assigns a page parameter to apply to target page.

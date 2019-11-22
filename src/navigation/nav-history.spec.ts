@@ -236,6 +236,27 @@ describe('navigation', () => {
       });
     });
 
+    describe('update', () => {
+      it('replaces current page URL', () => {
+
+        const updated = navigation.update('other');
+
+        expect(updated.url.href).toBe('http://localhost/other');
+        expect(page).toBe(updated);
+      });
+      it('replaces current page state', () => {
+        navigation.update('other');
+        expect(page.data).toBe('initial');
+        expect(locationMock.history.replaceState)
+            .toHaveBeenCalledWith(navHistoryState({ data: 'initial' }), '', 'http://localhost/other');
+      });
+      it('retains page parameters', () => {
+        page.put(param, '2');
+        navigation.update('other');
+        expect(page.get(param)).toBe('2');
+      });
+    });
+
     describe('hash change with `hashchange`, then `popstate` events', () => {
       testHashChange('hashchange', 'popstate');
     });

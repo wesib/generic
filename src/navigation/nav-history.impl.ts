@@ -202,6 +202,18 @@ export class NavHistory {
     // and its handler would do the job (or already did).
   }
 
+  public update(tracker: ValueTracker<PageEntry>, url: URL): PageEntry {
+
+    const oldEntry = tracker.it;
+    const newEntry = new PageEntry(this._context, ++this._lastId, { ...oldEntry.page, url }, oldEntry);
+
+    this._entries.set(newEntry.id, newEntry);
+    this._history.replaceState(this._historyState(newEntry), '', url.href);
+    this._entries.delete(oldEntry.id);
+
+    return tracker.it = newEntry;
+  }
+
   private _changeHash(tracker: ValueTracker<PageEntry>): PageEntry {
 
     const fromEntry = tracker.it;
@@ -280,14 +292,16 @@ export class PageEntry {
   prev?: PageEntry;
   private _status: PageStatus = PageStatus.New;
   readonly page: Page;
-  private readonly _params = new Map<PageParam<any, any>, PageParam.Handle<any, any>>();
+  private readonly _params: Map<PageParam<any, any>, PageParam.Handle<any, any>>;
   private _update: () => void = noop;
 
   constructor(
       private readonly _context: BootstrapContext,
       readonly id: number,
       target: Navigation.URLTarget,
+      proto?: PageEntry,
   ) {
+    this._params = proto ? proto._params : new Map<PageParam<any, any>, PageParam.Handle<any, any>>();
 
     const entry = this;
 
