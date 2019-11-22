@@ -71,13 +71,13 @@ describe('navigation', () => {
     });
 
     let navigation: Navigation;
-    let replaceSpy: SpyInstance;
+    let updateSpy: SpyInstance;
     let reloadSpy: SpyInstance;
 
     beforeEach(() => {
       navigation = context.get(Navigation);
-      replaceSpy = jest.spyOn(navigation, 'replace');
-      replaceSpy.mockImplementation(() => Promise.resolve());
+      updateSpy = jest.spyOn(navigation, 'update');
+      updateSpy.mockImplementation(() => Promise.resolve());
       reloadSpy = jest.spyOn(navigation, 'reload');
     });
 
@@ -91,27 +91,24 @@ describe('navigation', () => {
     it('does not reload current page if loaded page revision is the same', async () => {
 
       await navigation.with(pageLoadParam, { receiver: noop }).open('/some?q=v');
-      await new Promise(resolve => setTimeout(resolve));
 
-      expect(replaceSpy).not.toHaveBeenCalled();
+      expect(updateSpy).not.toHaveBeenCalled();
       expect(reloadSpy).not.toHaveBeenCalled();
     });
     it('does not reload current page if loaded page revision is empty', async () => {
       responseRev = '';
 
       await navigation.with(pageLoadParam, { receiver: noop }).open('/some?q=v');
-      await new Promise(resolve => setTimeout(resolve));
 
-      expect(replaceSpy).not.toHaveBeenCalled();
+      expect(updateSpy).not.toHaveBeenCalled();
       expect(reloadSpy).not.toHaveBeenCalled();
     });
     it('reloads current page if loaded page revision differs', async () => {
       responseRev = 'updated-rev';
 
       await navigation.with(pageLoadParam, { receiver: noop }).open('/some?q=v');
-      await new Promise(resolve => setTimeout(resolve));
 
-      expect(replaceSpy).toHaveBeenCalledWith(`?q=v&${appRevSearchParam}=${responseRev}`);
+      expect(updateSpy).toHaveBeenCalledWith(`?q=v&${appRevSearchParam}=${responseRev}`);
       expect(reloadSpy).toHaveBeenCalledTimes(1);
     });
   });

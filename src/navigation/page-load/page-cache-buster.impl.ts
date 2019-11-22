@@ -39,7 +39,6 @@ export class PageCacheBuster {
     } else {
 
       const navigation = context.get(Navigation);
-      const reload = () => navigation.reload();
 
       this.urlModifier = afterThe(url => url.searchParams.set(appRevSearchParam, rev));
       this.agent = afterThe((next, request) => {
@@ -53,9 +52,8 @@ export class PageCacheBuster {
               const searchParams = new URLSearchParams(response.page.url.searchParams);
 
               searchParams.set(appRevSearchParam, newRev);
-              Promise.resolve()
-                  .then(() => navigation.replace('?' + searchParams))
-                  .then(reload, reload);
+              navigation.update('?' + searchParams);
+              navigation.reload();
             }
           }
 
