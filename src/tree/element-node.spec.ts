@@ -285,8 +285,7 @@ describe('tree', () => {
         mutate([{ addedNodes: nodeList(), removedNodes: nodeList(c2.element) }]);
 
         expect([...list]).toEqual([c1.node]);
-        expect(onUpdateMock).toHaveBeenCalled();
-        expect([...onUpdateMock.mock.calls[0][0]]).toEqual([c1.node]);
+        expect(onUpdateMock).toHaveBeenCalledWith([], [c2.node]);
       });
       it('ignores irrelevant child removal', () => {
 
@@ -331,8 +330,7 @@ describe('tree', () => {
         mutate([{ addedNodes: nodeList(added.element), removedNodes: nodeList() }]);
 
         expect([...list]).toEqual([c1.node, c2.node, added.node]);
-        expect(onUpdateMock).toHaveBeenCalled();
-        expect([...onUpdateMock.mock.calls[0][0]]).toEqual([c1.node, c2.node, added.node]);
+        expect(onUpdateMock).toHaveBeenCalledWith([added.node], []);
       });
       it('ignores irrelevant child addition', () => {
 
@@ -383,8 +381,10 @@ describe('tree', () => {
 
         const list = node.node.select('test-component');
         const onUpdateMock = jest.fn();
+        const updateMock = jest.fn();
 
         list.onUpdate(onUpdateMock);
+        list.read(updateMock);
 
         expect(onUpdateMock).not.toHaveBeenCalled();
 
@@ -403,8 +403,8 @@ describe('tree', () => {
         const addedNode = mount.context.get(ComponentNode);
 
         expect([...list]).toEqual([c1.node, c2.node, addedNode]);
-        expect(onUpdateMock).toHaveBeenCalled();
-        expect([...onUpdateMock.mock.calls[0][0]]).toEqual([c1.node, c2.node, addedNode]);
+        expect(onUpdateMock).toHaveBeenCalledWith([addedNode], [addedNode]);
+        expect(updateMock).toHaveBeenCalledTimes(2);
       });
       it('ignores irrelevant child mount', async () => {
 

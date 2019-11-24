@@ -155,22 +155,22 @@ export const ComponentNode: SingleContextRef<ComponentNode> =
  *
  * It is an iterable of nodes.
  *
- * Implements an `EventSender` interface by sending list changes.
+ * Implements an `EventSender` interface by sending added and removed nodes arrays.
  *
  * Implements an `EventKeeper` interface by sending updated node list.
  */
 export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
     extends AIterable<N>
-    implements EventSender<[ElementNodeList<N>]>, EventKeeper<[ElementNodeList<N>]> {
+    implements EventSender<[N[], N[]]>, EventKeeper<[ElementNodeList<N>]> {
 
   /**
-   * An `OnEvent` sender of list changes.
+   * An `OnEvent` sender of list changes. Sends arrays of added and removed nodes.
    *
    * The `[OnEvent__symbol]` property is an alias of this one.
    */
-  abstract readonly onUpdate: OnEvent<[ElementNodeList<N>]>;
+  abstract readonly onUpdate: OnEvent<[N[], N[]]>;
 
-  get [OnEvent__symbol](): OnEvent<[ElementNodeList<N>]> {
+  get [OnEvent__symbol](): OnEvent<[N[], N[]]> {
     return this.onUpdate;
   }
 

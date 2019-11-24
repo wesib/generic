@@ -1,5 +1,5 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { AIterable, filterIt, itsFirst, itsIterator, itsReduction, mapIt, overArray } from 'a-iterable';
+import { filterIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from 'a-iterable';
 import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, onEventBy } from 'fun-events';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
 
@@ -19,16 +19,16 @@ export function elementNodeList<N extends ElementNode>(
 
   const Observer: typeof MutationObserver = (bsContext.get(BootstrapWindow) as any).MutationObserver;
   const observer = new Observer(update);
-  const updates = new EventEmitter<[AIterable<N>]>();
+  const updates = new EventEmitter<[N[], N[]]>();
   const init: MutationObserverInit = deep ? WATCH_DEEP : WATCH_CHILD_LIST;
   let cache = new Set<Element>();
   let iterable: Iterable<N> | undefined;
   let nodeList: ElementNodeList;
 
-  const onUpdate = onEventBy<[ElementNodeList]>(listener => {
+  const onUpdate = onEventBy<[N[], N[]]>(receiver => {
 
     const firstReceiver = !updates.size;
-    const supply = updates.on(listener);
+    const supply = updates.on(receiver);
 
     if (firstReceiver) {
       refresh();
@@ -42,7 +42,7 @@ export function elementNodeList<N extends ElementNode>(
       }
     }).needs(supply);
   });
-  const read = afterEventBy<[ElementNodeList]>(onUpdate, () => [nodeList]);
+  const read = afterEventBy<[ElementNodeList]>(onUpdate.thru(() => nodeList), () => [nodeList]);
   const first: AfterEvent<[N?]> = afterSupplied(read).keep.thru(itsFirst);
 
   if (!all) {
@@ -51,7 +51,10 @@ export function elementNodeList<N extends ElementNode>(
       const element = event.target as Element;
 
       if (cache.has(element)) {
-        updates.send(nodeList);
+
+        const node = nodeOf(element) as N;
+
+        updates.send([node], [node]);
       }
     });
   }
@@ -107,53 +110,49 @@ export function elementNodeList<N extends ElementNode>(
 
   function update(mutations: MutationRecord[]) {
 
-    const updated = mutations.reduce(
-        (prev, mutation) => {
+    const added: N[] = [];
+    const removed: N[] = [];
 
-          const hasRemoved = itsReduction(
-              overArray(mutation.removedNodes),
-              (up, removed) => removeNode(removed as Element) || up,
-              prev,
-          );
-
-          return itsReduction(
-              overArray(mutation.addedNodes),
-              (up, added) => addNode(added) || up,
-              hasRemoved,
-          );
-        },
-        false,
-    );
-
-    if (updated) {
-      updates.send(nodeList);
+    mutations.forEach(mutation => {
+      itsEach(
+          filterIt<N | undefined, N>(
+              mapIt(overArray(mutation.removedNodes), removeNode),
+              isPresent,
+          ),
+          node => removed.push(node),
+      );
+      itsEach(
+          filterIt<N | undefined, N>(
+              mapIt(overArray(mutation.addedNodes), addNode),
+              isPresent,
+          ),
+          node => added.push(node),
+      );
+    });
+    if (added.length || removed.length) {
+      updates.send(added, removed);
     }
   }
 
-  function addNode(node: Node): boolean {
+  function addNode(node: Node): N | undefined {
     if (!isElement(node)) {
-      return false;
+      return;
     }
     if (node.matches(selector) && !cache.has(node)) {
       cache.add(node);
-
-      const elementNode = nodeOf(node);
-
-      if (elementNode) {
-        return true;
-      }
+      return nodeOf(node);
     }
-    return false;
+    return;
   }
 
-  function removeNode(node: Node): boolean {
+  function removeNode(node: Node): N | undefined {
     if (!isElement(node)) {
-      return false;
+      return;
     }
     if (!cache.delete(node)) {
-      return false;
+      return;
     }
-    return !!nodeOf(node, true);
+    return nodeOf(node, true);
   }
 
 }
