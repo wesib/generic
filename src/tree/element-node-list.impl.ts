@@ -1,6 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { AIterable, filterIt, itsIterator, itsReduction, mapIt, overArray } from 'a-iterable';
-import { EventEmitter, eventSupply, onEventBy } from 'fun-events';
+import { AIterable, filterIt, itsFirst, itsIterator, itsReduction, mapIt, overArray } from 'a-iterable';
+import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, onEventBy } from 'fun-events';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
 
 const WATCH_CHILD_LIST = { childList: true };
@@ -23,6 +23,27 @@ export function elementNodeList<N extends ElementNode>(
   const init: MutationObserverInit = deep ? WATCH_DEEP : WATCH_CHILD_LIST;
   let cache = new Set<Element>();
   let iterable: Iterable<N> | undefined;
+  let nodeList: ElementNodeList;
+
+  const onUpdate = onEventBy<[ElementNodeList]>(listener => {
+
+    const firstReceiver = !updates.size;
+    const supply = updates.on(listener);
+
+    if (firstReceiver) {
+      refresh();
+      observer.observe(root, init);
+    }
+
+    return eventSupply(reason => {
+      supply.off(reason);
+      if (!updates.size) {
+        observer.disconnect();
+      }
+    }).needs(supply);
+  });
+  const read = afterEventBy<[ElementNodeList]>(onUpdate, () => [nodeList]);
+  const first: AfterEvent<[N?]> = afterSupplied(read).keep.thru(itsFirst);
 
   if (!all) {
     root.addEventListener('wesib:component', event => {
@@ -37,23 +58,17 @@ export function elementNodeList<N extends ElementNode>(
 
   class ElementNodeList extends ElementNodeList_<N> {
 
-    readonly onUpdate = onEventBy<[AIterable<N>]>(listener => {
+    get onUpdate() {
+      return onUpdate;
+    }
 
-      const firstReceiver = !updates.size;
-      const supply = updates.on(listener);
+    get read() {
+      return read;
+    }
 
-      if (firstReceiver) {
-        refresh();
-        observer.observe(root, init);
-      }
-
-      return eventSupply(reason => {
-        supply.off(reason);
-        if (!updates.size) {
-          observer.disconnect();
-        }
-      }).needs(supply);
-    });
+    get first() {
+      return first;
+    }
 
     [Symbol.iterator]() {
       return itsIterator(iterable || (iterable = filterIt<N | undefined, N>(
@@ -67,9 +82,7 @@ export function elementNodeList<N extends ElementNode>(
 
   }
 
-  const nodeList = new ElementNodeList();
-
-  return nodeList;
+  return nodeList = new ElementNodeList();
 
   function elements(): Set<Element> {
     return updates.size ? cache : refresh();

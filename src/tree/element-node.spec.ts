@@ -9,7 +9,7 @@ import {
 } from '@wesib/wesib';
 import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
-import { afterSupplied, noEventSupply, ValueTracker } from 'fun-events';
+import { afterSupplied, noEventSupply, onSupplied, ValueTracker } from 'fun-events';
 import { ObjectMock } from '../spec/mocks';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
@@ -183,6 +183,14 @@ describe('tree', () => {
             expect.objectContaining({ element: span }),
           ]);
         });
+        describe('[OnEvent__symbol]', () => {
+          it('is an alias of `onUpdate`', () => {
+
+            const list = node.node.select('*', { all: true });
+
+            expect(onSupplied(list)).toBe(list.onUpdate);
+          });
+        });
         describe('[AfterEvent__symbol]', () => {
           it('is an alias of `read`', () => {
 
@@ -192,7 +200,7 @@ describe('tree', () => {
           });
         });
         describe('first', () => {
-          it('refers the first node', () => {
+          it('refers to the first node', () => {
 
             const receiver = jest.fn();
 

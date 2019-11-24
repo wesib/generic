@@ -2,17 +2,15 @@
  * @module @wesib/generic
  */
 import { ComponentContext } from '@wesib/wesib';
-import { AIterable, itsFirst } from 'a-iterable';
+import { AIterable } from 'a-iterable';
 import { SingleContextKey, SingleContextRef } from 'context-values';
 import {
   AfterEvent,
   AfterEvent__symbol,
-  afterEventBy,
   EventKeeper,
   EventSender,
   OnEvent,
   OnEvent__symbol,
-  onSupplied,
   ValueTracker,
 } from 'fun-events';
 
@@ -152,72 +150,44 @@ export interface ComponentNode<T extends object = object> extends ElementNode {
 export const ComponentNode: SingleContextRef<ComponentNode> =
     /*#__PURE__*/ new SingleContextKey<ComponentNode>('component-node');
 
-const afterEvent__symbol = /*#__PURE__*/ Symbol('node-list:after-event');
-const first__symbol = /*#__PURE__*/ Symbol('node-list:first');
-
 /**
  * Dynamic list of selected component tree nodes.
  *
- * It is an iterable of nodes. When list updated an `onUpdate` notifies the registered receivers on changes.
- * The list also implements an `EventSender` interface by delegating event receiver registration to `onUpdate`
- * registrar, and an `EventKeeper` interface by notifying the registered event receivers on current node list and all
- * updates to it.
+ * It is an iterable of nodes.
+ *
+ * Implements an `EventSender` interface by sending list changes.
+ *
+ * Implements an `EventKeeper` interface by sending updated node list.
  */
 export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
     extends AIterable<N>
-    implements EventSender<[AIterable<N>]>, EventKeeper<[AIterable<N>]> {
+    implements EventSender<[ElementNodeList<N>]>, EventKeeper<[ElementNodeList<N>]> {
 
   /**
    * An `OnEvent` sender of list changes.
    *
    * The `[OnEvent__symbol]` property is an alias of this one.
    */
-  abstract readonly onUpdate: OnEvent<[AIterable<N>]>;
+  abstract readonly onUpdate: OnEvent<[ElementNodeList<N>]>;
 
-  get [OnEvent__symbol](): OnEvent<[AIterable<N>]> {
+  get [OnEvent__symbol](): OnEvent<[ElementNodeList<N>]> {
     return this.onUpdate;
   }
-
-  /**
-   * @internal
-   */
-  private [afterEvent__symbol]?: AfterEvent<[AIterable<N>]>;
 
   /**
    * An `AfterEvent` keeper of current node list.
    *
    * The `[AfterEvent__symbol]` property is an alias of this one.
    */
-  get read(): AfterEvent<[AIterable<N>]> {
-    return this[afterEvent__symbol]
-        || (this[afterEvent__symbol] = afterEventBy<[AIterable<N>]>(this.onUpdate, () => [this]));
-  }
+  abstract readonly read: AfterEvent<[ElementNodeList<N>]>;
 
-  get [AfterEvent__symbol](): AfterEvent<[AIterable<N>]> {
+  get [AfterEvent__symbol](): AfterEvent<[ElementNodeList<N>]> {
     return this.read;
   }
 
   /**
-   * @internal
+   * An `AfterEvent` keeper of the first node in this list.
    */
-  private [first__symbol]?: AfterEvent<[N?]>;
-
-  /**
-   * A reference to the first node in this list.
-   *
-   * This is an event keeper of first node changes. May also send on `undefined` values when the list is empty.
-   */
-  get first(): AfterEvent<[N?]> {
-
-    const existing = this[first__symbol];
-
-    if (existing) {
-      return existing;
-    }
-
-    const onUpdateFirst: OnEvent<[any]> = onSupplied(this).thru(itsFirst);
-
-    return this[first__symbol] = afterEventBy<[N | undefined]>(onUpdateFirst, () => [itsFirst(this)]);
-  }
+  abstract readonly first: AfterEvent<[N?]>;
 
 }
