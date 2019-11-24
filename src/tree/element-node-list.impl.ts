@@ -1,137 +1,146 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { AIterable, filterIt, itsIterator, itsReduction, overArray } from 'a-iterable';
+import { AIterable, filterIt, itsIterator, itsReduction, mapIt, overArray } from 'a-iterable';
 import { EventEmitter, eventSupply, onEventBy } from 'fun-events';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
 
 const WATCH_CHILD_LIST = { childList: true };
 const WATCH_DEEP = { childList: true, subtree: true };
 
-export class ElementNodeList<N extends ElementNode> extends ElementNodeList_<N> {
+/**
+ * @internal
+ */
+export function elementNodeList<N extends ElementNode>(
+    bsContext: BootstrapContext,
+    root: Element,
+    selector: string,
+    nodeOf: (node: Element, optional?: boolean) => N | undefined,
+    { deep, all }: ElementNode.SelectorOpts,
+): ElementNodeList_<N> {
 
-  readonly onUpdate = onEventBy<[AIterable<N>]>(listener => {
+  const Observer: typeof MutationObserver = (bsContext.get(BootstrapWindow) as any).MutationObserver;
+  const observer = new Observer(update);
+  const updates = new EventEmitter<[AIterable<N>]>();
+  const init: MutationObserverInit = deep ? WATCH_DEEP : WATCH_CHILD_LIST;
+  let cache = new Set<Element>();
+  let iterable: Iterable<N> | undefined;
 
-    const firstReceiver = !this._updates.size;
-    const supply = this._updates.on(listener);
-
-    if (firstReceiver) {
-      this._refresh();
-      this._observer.observe(this._root, this._init);
-    }
-
-    return eventSupply(reason => {
-      supply.off(reason);
-      if (!this._updates.size) {
-        this._observer.disconnect();
-      }
-    }).needs(supply);
-  });
-
-  private readonly _observer: MutationObserver;
-  private readonly _updates = new EventEmitter<[AIterable<N>]>();
-  private readonly _init: MutationObserverInit;
-  private _all: Set<Element> = new Set();
-
-  constructor(
-      bs: BootstrapContext,
-      private readonly _root: Element,
-      private readonly _selector: string,
-      private readonly _nodeOf: (node: Element, optional?: boolean) => N | undefined,
-      { deep, all }: ElementNode.SelectorOpts) {
-    super();
-    this._init = deep ? WATCH_DEEP : WATCH_CHILD_LIST;
-
-    const Observer: typeof MutationObserver = (bs.get(BootstrapWindow) as any).MutationObserver;
-
-    this._observer = new Observer(mutations => this._update(mutations));
-
-    if (!all) {
-      this._listenForMounts();
-    }
-  }
-
-  [Symbol.iterator]() {
-    return itsIterator(AIterable.from(this.all)
-        .map<N | undefined>(element => this._nodeOf(element))
-        .filter<N>(isPresent));
-  }
-
-  get all(): Set<Element> {
-    return this._updates.size ? this._all : this._refresh();
-  }
-
-  private _refresh(): Set<Element> {
-    return this._all = new Set<Element>(this._request());
-  }
-
-  private _request(): Set<Element> {
-    if (this._init.subtree) {
-      return new Set(overArray(this._root.querySelectorAll(this._selector)));
-    }
-    return new Set(
-        filterIt(
-            overArray(this._root.children),
-            item => item.matches(this._selector)));
-  }
-
-  private _listenForMounts() {
-    this._root.addEventListener('wesib:component', event => {
+  if (!all) {
+    root.addEventListener('wesib:component', event => {
 
       const element = event.target as Element;
 
-      if (this._all.has(element)) {
-        this._updates.send(this);
+      if (cache.has(element)) {
+        updates.send(nodeList);
       }
     });
   }
 
-  private _update(mutations: MutationRecord[]) {
+  class ElementNodeList extends ElementNodeList_<N> {
+
+    readonly onUpdate = onEventBy<[AIterable<N>]>(listener => {
+
+      const firstReceiver = !updates.size;
+      const supply = updates.on(listener);
+
+      if (firstReceiver) {
+        refresh();
+        observer.observe(root, init);
+      }
+
+      return eventSupply(reason => {
+        supply.off(reason);
+        if (!updates.size) {
+          observer.disconnect();
+        }
+      }).needs(supply);
+    });
+
+    [Symbol.iterator]() {
+      return itsIterator(iterable || (iterable = filterIt<N | undefined, N>(
+          mapIt(
+              elements(),
+              element => nodeOf(element)
+          ),
+          isPresent,
+      )));
+    }
+
+  }
+
+  const nodeList = new ElementNodeList();
+
+  return nodeList;
+
+  function elements(): Set<Element> {
+    return updates.size ? cache : refresh();
+  }
+
+  function refresh(): Set<Element> {
+    iterable = undefined;
+    return cache = new Set<Element>(request());
+  }
+
+  function request(): Set<Element> {
+    if (deep) {
+      return new Set(overArray(root.querySelectorAll(selector)));
+    }
+    return new Set(
+        filterIt(
+            overArray(root.children),
+            item => item.matches(selector),
+        ),
+    );
+  }
+
+  function update(mutations: MutationRecord[]) {
 
     const updated = mutations.reduce(
         (prev, mutation) => {
 
           const hasRemoved = itsReduction(
               overArray(mutation.removedNodes),
-              (up, removed) => this._removed(removed as Element) || up,
-              prev);
+              (up, removed) => removeNode(removed as Element) || up,
+              prev,
+          );
 
           return itsReduction(
               overArray(mutation.addedNodes),
-              (up, added) => this._added(added) || up,
-              hasRemoved);
+              (up, added) => addNode(added) || up,
+              hasRemoved,
+          );
         },
-        false);
+        false,
+    );
 
     if (updated) {
-      this._updates.send(this);
+      updates.send(nodeList);
     }
   }
 
-  private _added(node: Node): boolean {
+  function addNode(node: Node): boolean {
     if (!isElement(node)) {
       return false;
     }
-    if (node.matches(this._selector) && !this._all.has(node)) {
-      this._all.add(node);
+    if (node.matches(selector) && !cache.has(node)) {
+      cache.add(node);
 
-      const elementNode = this._nodeOf(node);
+      const elementNode = nodeOf(node);
 
       if (elementNode) {
         return true;
       }
     }
-
     return false;
   }
 
-  private _removed(node: Node): boolean {
+  function removeNode(node: Node): boolean {
     if (!isElement(node)) {
       return false;
     }
-    if (!this._all.delete(node)) {
+    if (!cache.delete(node)) {
       return false;
     }
-
-    return !!this._nodeOf(node, true);
+    return !!nodeOf(node, true);
   }
 
 }

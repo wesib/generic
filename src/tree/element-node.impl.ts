@@ -6,8 +6,8 @@ import {
   ElementAdapter,
 } from '@wesib/wesib';
 import { ValueTracker } from 'fun-events';
-import { ComponentNode, ElementNode as ElementNode_ } from './element-node';
-import { ElementNodeList } from './element-node-list.impl';
+import { ComponentNode, ElementNode as ElementNode_, ElementNodeList } from './element-node';
+import { elementNodeList } from './element-node-list.impl';
 import { NodeAttributes } from './node-attributes.impl';
 import { NodeProperties } from './node-properties.impl';
 
@@ -82,14 +82,15 @@ function selectNodes(
   const adapter = bs.get(ElementAdapter);
 
   if (opts.all) {
-    return new ElementNodeList<ElementNode_.Any>(
+    return elementNodeList<ElementNode_.Any>(
         bs,
         root,
         selector,
         (element, optional) => elementNodeOf(bs, element, optional),
-        opts);
+        opts,
+    );
   }
-  return new ElementNodeList<ComponentNode<any>>(
+  return elementNodeList<ComponentNode<any>>(
       bs,
       root,
       selector,
@@ -99,5 +100,6 @@ function selectNodes(
         }
         return undefined;
       },
-      opts);
+      opts,
+  );
 }
