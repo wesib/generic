@@ -71,6 +71,11 @@
 					</div>
 					<p>Enables default <a href="../modules/pageloadagent.html">page load agents</a>:</p>
 					<ol>
+						<li>Page cache busting agent.
+							If <code>&lt;meta name=&quot;wesib-app-rev&quot;&gt;</code> tag is present in initial page, then sends this tag&#39;s content with each page load
+							request as <code>__wesib_app_rev__</code> search parameter. If the loaded page contains the same named meta tag with
+							different content, then reloads the page.
+						This serves both as cache busting technique, and as server-side application updates handler.</li>
 						<li>Scripts agent.
 						Includes external scripts from loaded page into main document.</li>
 						<li>Style agent.
@@ -114,7 +119,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/navigation/page-load/page-load-support.feature.ts#L34">navigation/page-load/page-load-support.feature.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/53535da/src/navigation/page-load/page-load-support.feature.ts#L51">src/navigation/page-load/page-load-support.feature.ts:51</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">FeatureDef</span></h4>

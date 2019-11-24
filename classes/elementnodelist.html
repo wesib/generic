@@ -69,10 +69,9 @@
 					<div class="lead">
 						<p>Dynamic list of selected component tree nodes.</p>
 					</div>
-					<p>It is an iterable of nodes. When list updated an <code>onUpdate</code> notifies the registered receivers on changes.
-						The list also implements an <code>EventSender</code> interface by delegating event receiver registration to <code>onUpdate</code>
-						registrar, and an <code>EventKeeper</code> interface by notifying the registered event receivers on current node list and all
-					updates to it.</p>
+					<p>It is an iterable of nodes.</p>
+					<p>Implements an <code>EventSender</code> interface by sending added and removed nodes arrays.</p>
+					<p>Implements an <code>EventKeeper</code> interface by sending updated node list.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
@@ -100,8 +99,8 @@
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
 					<li><span class="tsd-signature-type">ArrayLikeIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></li>
-					<li><span class="tsd-signature-type">EventSender</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
-					<li><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><span class="tsd-signature-type">EventSender</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -111,14 +110,15 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="elementnodelist.html#first" class="tsd-kind-icon">first</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="elementnodelist.html#onupdate" class="tsd-kind-icon">on<wbr>Update</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="elementnodelist.html#read" class="tsd-kind-icon">read</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="elementnodelist.html#__computed" class="tsd-kind-icon">__computed</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="elementnodelist.html#first" class="tsd-kind-icon">first</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-inherited">
@@ -145,18 +145,50 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="onupdate" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on<wbr>Update</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Update<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="first" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> first</h3>
+					<div class="tsd-signature tsd-kind-icon">first<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/tree/element-node.ts#L173">tree/element-node.ts:173</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/53535da/src/tree/element-node.ts#L191">src/tree/element-node.ts:191</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>An sender of list changes.</p>
+							<p>An <code>AfterEvent</code> keeper of the first node in this list.</p>
 						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="onupdate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on<wbr>Update</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Update<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/53535da/src/tree/element-node.ts#L171">src/tree/element-node.ts:171</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An <code>OnEvent</code> sender of list changes. Sends arrays of added and removed nodes.</p>
+						</div>
+						<p>The <code>[OnEvent__symbol]</code> property is an alias of this one.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="read" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> read</h3>
+					<div class="tsd-signature tsd-kind-icon">read<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/53535da/src/tree/element-node.ts#L182">src/tree/element-node.ts:182</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An <code>AfterEvent</code> keeper of current node list.</p>
+						</div>
+						<p>The <code>[AfterEvent__symbol]</code> property is an alias of this one.</p>
 					</div>
 				</section>
 			</section>
@@ -166,39 +198,16 @@
 					<a name="__computed" class="tsd-anchor"></a>
 					<h3>__computed</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __computed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __computed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/tree/element-node.ts#L184">tree/element-node.ts:184</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/53535da/src/tree/element-node.ts#L184">src/tree/element-node.ts:184</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="first" class="tsd-anchor"></a>
-					<h3>first</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> first<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/b94c64d/src/tree/element-node.ts#L199">tree/element-node.ts:199</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>A reference to the first node in this list.</p>
-								</div>
-								<p>This is an event keeper of first node changes. May also send on <code>undefined</code> values when the list is empty.</p>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -216,7 +225,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.[Symbol.iterator]</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:59</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:59</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Iterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -234,7 +243,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.every</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:71</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:71</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -289,7 +298,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.filter</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:83</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:83</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -334,7 +343,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.filter</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:96</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:96</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -397,7 +406,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.flatMap</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:110</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:110</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -460,7 +469,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.forEach</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:119</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:119</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -512,7 +521,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.map</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:131</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:131</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -574,7 +583,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.reduce</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:144</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:144</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -645,7 +654,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.reverse</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:152</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:152</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -682,7 +691,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:160</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:160</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -731,7 +740,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:161</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:161</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -803,7 +812,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:162</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:162</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -905,7 +914,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:163</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:163</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1037,7 +1046,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:164</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:164</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1199,7 +1208,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:165</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:165</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1391,7 +1400,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:166</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:166</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1613,7 +1622,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:167</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:167</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1865,7 +1874,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:168</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:168</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2147,7 +2156,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:169</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:169</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2459,7 +2468,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:170</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:170</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2801,7 +2810,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:171</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:171</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3173,7 +3182,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.thru</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:172</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:172</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3584,7 +3593,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.from</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:58</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:58</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3624,7 +3633,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.is</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:31</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:31</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3664,7 +3673,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.none</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:22</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:22</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3695,7 +3704,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.of</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:39</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:39</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3725,7 +3734,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from AIterable.of</p>
 								<ul>
-									<li>Defined in /home/lorus/wesib/generic/node_modules/a-iterable/d.ts/a-iterable.d.ts:48</li>
+									<li>Defined in node_modules/a-iterable/d.ts/a-iterable.d.ts:48</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3772,13 +3781,16 @@
 						<a href="elementnodelist.html" class="tsd-kind-icon">Element<wbr>Node<wbr>List</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="elementnodelist.html#first" class="tsd-kind-icon">first</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="elementnodelist.html#onupdate" class="tsd-kind-icon">on<wbr>Update</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="elementnodelist.html#read" class="tsd-kind-icon">read</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="elementnodelist.html#__computed" class="tsd-kind-icon">__computed</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="elementnodelist.html#first" class="tsd-kind-icon">first</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="elementnodelist.html#___iterator" class="tsd-kind-icon">__@iterator</a>
