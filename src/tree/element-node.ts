@@ -168,7 +168,9 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
     implements EventSender<[AIterable<N>]>, EventKeeper<[AIterable<N>]> {
 
   /**
-   * An sender of list changes.
+   * An `OnEvent` sender of list changes.
+   *
+   * The `[OnEvent__symbol]` property is an alias of this one.
    */
   abstract readonly onUpdate: OnEvent<[AIterable<N>]>;
 
@@ -181,9 +183,18 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
    */
   private [afterEvent__symbol]?: AfterEvent<[AIterable<N>]>;
 
-  get [AfterEvent__symbol](): AfterEvent<[AIterable<N>]> {
+  /**
+   * An `AfterEvent` keeper of current node list.
+   *
+   * The `[AfterEvent__symbol]` property is an alias of this one.
+   */
+  get read(): AfterEvent<[AIterable<N>]> {
     return this[afterEvent__symbol]
         || (this[afterEvent__symbol] = afterEventBy<[AIterable<N>]>(this.onUpdate, () => [this]));
+  }
+
+  get [AfterEvent__symbol](): AfterEvent<[AIterable<N>]> {
+    return this.read;
   }
 
   /**
