@@ -163,7 +163,11 @@ function onFragment(
           response => response.ok
               ? {
                 ...response,
-                fragment: response.document.getElementById(fragment.id) || undefined,
+                fragment: (
+                    fragment.tag != null
+                    ? response.document.getElementsByTagName(fragment.tag)[0]
+                    : response.document.getElementById(fragment.id)
+                ) || undefined,
               }
               : response,
       )

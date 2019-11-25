@@ -36,11 +36,38 @@ export interface PageLoadRequest {
 /**
  * Page fragment request.
  */
-export interface PageFragmentRequest {
+export type PageFragmentRequest =
+    | PageFragmentRequest.ById
+    | PageFragmentRequest.ByTag;
+
+export namespace PageFragmentRequest {
 
   /**
-   * Requested element identifier.
+   * A request of page element with the given identifier.
    */
-  id: string;
+  export interface ById {
+
+    /**
+     * Requested element identifier.
+     */
+    id: string;
+
+    tag?: undefined;
+
+  }
+
+  /**
+   * A request of page element with the given tag name.
+   */
+  export interface ByTag {
+
+    id?: undefined;
+
+    /**
+     * Requested element tag name.
+     */
+    tag: string;
+
+  }
 
 }

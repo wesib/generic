@@ -117,7 +117,7 @@ function pageFragmentsRequest(page: Page, request: Request, ) {
   const fragments = page.get(pageLoadRequestsParam)?.fragments;
 
   if (!fragments || !fragments.length) {
-     return request;
+    return request;
   }
 
   return new Request(
@@ -126,7 +126,13 @@ function pageFragmentsRequest(page: Page, request: Request, ) {
         headers: {
           'Accept-Fragment': itsReduction(
               fragments,
-              (header, fragment) => (header ? header + ', ' : '') + 'id=' + hthvQuote(fragment.id),
+              (header, fragment) =>
+                  (header ? header + ', ' : '')
+                  + (
+                      fragment.tag != null
+                          ? 'tag=' + hthvQuote(fragment.tag)
+                          : 'id=' + hthvQuote(fragment.id)
+                  ),
               '',
           ),
         },

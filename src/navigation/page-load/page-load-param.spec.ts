@@ -212,7 +212,8 @@ describe('navigation', () => {
         result = '<body></body>';
         mockFetch = jest.fn((input, _init?) => {
           request = input as Request;
-          return afterThe({
+          return afterThe(
+              {
                 ok: true,
                 headers: new Headers(),
                 text: () => Promise.resolve(result),
@@ -238,7 +239,7 @@ describe('navigation', () => {
         });
       });
 
-      it('loads requested fragment', async () => {
+      it('loads requested fragment by id', async () => {
         result = `<div id="test-fragment">fragment content</div>`;
 
         let response!: PageLoadResponse;
@@ -252,7 +253,29 @@ describe('navigation', () => {
         ).open('/other');
 
         expect(request.headers.get('Accept-Fragment')).toEqual('id=test-fragment');
-        expect(response).toMatchObject({ ok: true, fragment: expect.objectContaining({ id: 'test-fragment' }) });
+        expect(response).toMatchObject({
+          ok: true,
+          fragment: expect.objectContaining({ id: 'test-fragment' }),
+        });
+      });
+      it('loads requested fragment by tag name', async () => {
+        result = `<test-fragment>fragment content</test-fragment>`;
+
+        let response!: PageLoadResponse;
+
+        await navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => response = r,
+              fragment: { tag: 'test-fragment' } ,
+            },
+        ).open('/other');
+
+        expect(request.headers.get('Accept-Fragment')).toEqual('tag=test-fragment');
+        expect(response).toMatchObject({
+          ok: true,
+          fragment: expect.objectContaining({ tagName: 'TEST-FRAGMENT' }),
+        });
       });
       it('requests non-existing fragment', async () => {
         result = `<div id="test-fragment">fragment content</div>`;
@@ -271,7 +294,7 @@ describe('navigation', () => {
         expect(response).toMatchObject({ ok: true, fragment: undefined });
       });
       it('loads multiple fragments', async () => {
-        result = `<div id="test-fragment">fragment content</div><div id="test-fragment-2">fragment 2 content</div>`;
+        result = `<div id="test-fragment">fragment content</div><test-fragment-2>fragment 2 content</test-fragment-2>`;
 
         let response1!: PageLoadResponse;
         let response2!: PageLoadResponse;
@@ -286,13 +309,19 @@ describe('navigation', () => {
             pageLoadParam,
             {
               receiver: r => response2 = r,
-              fragment: { id: 'test-fragment-2' } ,
+              fragment: { tag: 'test-fragment-2' } ,
             },
         ).open('/other');
 
-        expect(request.headers.get('Accept-Fragment')).toEqual('id=test-fragment, id=test-fragment-2');
-        expect(response1).toMatchObject({ ok: true, fragment: expect.objectContaining({ id: 'test-fragment' }) });
-        expect(response2).toMatchObject({ ok: true, fragment: expect.objectContaining({ id: 'test-fragment-2' }) });
+        expect(request.headers.get('Accept-Fragment')).toEqual('id=test-fragment, tag=test-fragment-2');
+        expect(response1).toMatchObject({
+          ok: true,
+          fragment: expect.objectContaining({ id: 'test-fragment' }),
+        });
+        expect(response2).toMatchObject({
+          ok: true,
+          fragment: expect.objectContaining({ tagName: 'TEST-FRAGMENT-2' }),
+        });
       });
       it('requests full document if at least one request contains no fragment', async () => {
         result = `<div id="test-fragment">fragment content</div>`;
