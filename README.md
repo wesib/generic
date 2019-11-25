@@ -1,5 +1,5 @@
-[Wesib]: Generic Components
-==========================
+Wesib: Generic Components
+=========================
 
 [![NPM][npm-image]][npm-url]
 [![CircleCI][ci-image]][ci-url]
