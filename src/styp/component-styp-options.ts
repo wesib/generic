@@ -74,5 +74,5 @@ export const ComponentStypOptions = {
     context.whenDestroyed(reason => supply.off(reason));
 
     return supply;
-  }
+  },
 };

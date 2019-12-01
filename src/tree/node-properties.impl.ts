@@ -21,7 +21,7 @@ class PropertyTracker<T> extends ValueTracker<T> {
     const propertyState = context.get(ComponentState).track(domPropertyPathTo(this._key));
 
     this._supply = propertyState.onUpdate(
-        (_path, newValue: any, oldValue: any) => this._updates.send(newValue, oldValue)
+        (_path, newValue: any, oldValue: any) => this._updates.send(newValue, oldValue),
     ).whenOff(reason => this._updates.done(reason));
   }
 

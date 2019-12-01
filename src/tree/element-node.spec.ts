@@ -92,7 +92,7 @@ describe('tree', () => {
       node,
       get parent() {
         return node.parent;
-      }
+      },
     };
   }
 
@@ -481,7 +481,7 @@ describe('tree', () => {
             elementNode,
             property,
           };
-        }
+        },
       ],
     ])(
         '%s',

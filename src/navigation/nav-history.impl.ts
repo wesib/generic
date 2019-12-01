@@ -320,7 +320,7 @@ export class PageEntry {
       },
       put(ref, input) {
         entry.put(ref, input);
-      }
+      },
     };
   }
 

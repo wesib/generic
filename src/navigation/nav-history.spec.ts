@@ -340,7 +340,7 @@ describe('navigation', () => {
               ...prevData[NAV_DATA_KEY],
               uid: 'incompatible',
               data: 'another',
-            }
+            },
           };
 
           locationMock.setState(idx, incompatibleData);
@@ -364,7 +364,7 @@ describe('navigation', () => {
             [NAV_DATA_KEY]: {
               ...prevData[NAV_DATA_KEY],
               uid: 'incompatible',
-            }
+            },
           };
 
           locationMock.setState(idx, incompatibleData);

@@ -68,7 +68,7 @@ export function combineFetchAgents<Res extends any[]>(agents: FetchAgent<Res>[])
           agent(
               (nextRequest = agentRequest) => fetch(agentIdx + 1, nextRequest),
               agentRequest,
-          )
+          ),
       );
     };
 

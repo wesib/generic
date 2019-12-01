@@ -25,7 +25,7 @@ export function ProduceStyle<T extends ComponentClass>(options?: ComponentStypOp
     <V extends StypRules.Source | (() => StypRules.Source)>(
         target: InstanceType<T>,
         propertyKey: string | symbol,
-        descriptor?: TypedPropertyDescriptor<V>
+        descriptor?: TypedPropertyDescriptor<V>,
     ) => any | void {
   return (target: InstanceType<T>, propertyKey: string | symbol) => {
 

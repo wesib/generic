@@ -52,8 +52,8 @@ describe('automount', () => {
 
     @Component({
       extend: {
-        type: MockElement
-      }
+        type: MockElement,
+      },
     })
     @Mount('test-component')
     class TestComponent {
@@ -84,8 +84,8 @@ describe('automount', () => {
 
       @Component({
         extend: {
-          type: MockElement
-        }
+          type: MockElement,
+        },
       })
       @Mount({
         to: () => true,
@@ -128,7 +128,7 @@ describe('automount', () => {
       set: [
         { a: BootstrapWindow, is: mockWindow },
         { a: BootstrapRoot, is: mockRoot },
-        { a: ElementAdapter, is: mockAdapter }
+        { a: ElementAdapter, is: mockAdapter },
       ],
     })
     class TestFeature {

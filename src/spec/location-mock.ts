@@ -25,7 +25,7 @@ export class LocationMock {
     this.location = {
       get href() {
         return self.href();
-      }
+      },
     } as any;
     this.state = jest.fn(() => this.currentState);
     this.historyLength = jest.fn(() => this.stateData.length);
@@ -70,7 +70,7 @@ export class LocationMock {
       document: doc || {
         get baseURI() {
           return self.baseURI();
-        }
+        },
       },
     } as any;
   }
@@ -128,6 +128,6 @@ export function navHistoryState(
       uid,
       id,
       data,
-    }
+    },
   };
 }

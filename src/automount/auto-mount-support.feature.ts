@@ -73,7 +73,7 @@ function featureDef(config: AutoMountConfig = {}): FeatureDef {
           return (element: any) => mounter.adapt(element);
         },
         with: [AutoMounter],
-      }
+      },
     ],
     init(context) {
       context.whenReady(() => {

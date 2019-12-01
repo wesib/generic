@@ -77,7 +77,7 @@ export function elementNodeList<N extends ElementNode>(
       return itsIterator(iterable || (iterable = filterIt<N | undefined, N>(
           mapIt(
               elements(),
-              element => nodeOf(element)
+              element => nodeOf(element),
           ),
           isPresent,
       )));

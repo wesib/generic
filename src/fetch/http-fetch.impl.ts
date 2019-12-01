@@ -36,7 +36,7 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
           supply,
           receive(ctx, response) {
             receiver.receive(ctx, response);
-          }
+          },
         });
 
         const customSignal = request.signal;

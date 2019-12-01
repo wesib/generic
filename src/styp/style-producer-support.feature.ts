@@ -14,7 +14,7 @@ const StyleProducerSupport__feature: FeatureDef = {
       a: ComponentStyleProducer_,
       by(context: ComponentContext) {
         return new ComponentStyleProducer_(context, produceStyle);
-      }
+      },
     },
     {
       a: ComponentStyleProducer,

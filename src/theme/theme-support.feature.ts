@@ -18,7 +18,7 @@ const ThemeSupport__feature: FeatureDef = {
         return factory.newTheme();
       },
       with: [ThemeFactory],
-    }
+    },
   ],
 };
 

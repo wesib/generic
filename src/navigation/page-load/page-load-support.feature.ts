@@ -26,7 +26,7 @@ const PageLoadSupport__feature: FeatureDef = {
     { a: PageLoadAgent, by: pageScriptsAgent },
     { a: PageLoadAgent, by: pageStyleAgent },
     { a: PageLoadAgent, by: pageTitleAgent },
-  ]
+  ],
 };
 
 /**

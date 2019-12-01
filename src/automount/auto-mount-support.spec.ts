@@ -120,7 +120,7 @@ describe('automount', () => {
       set: [
         { a: BootstrapWindow, is: mockWindow },
         { a: BootstrapRoot, is: mockRoot },
-        { a: ElementAdapter, is: mockAdapter }
+        { a: ElementAdapter, is: mockAdapter },
       ],
     })
     class TestFeature {

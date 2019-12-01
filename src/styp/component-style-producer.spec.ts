@@ -115,7 +115,7 @@ describe('styp', () => {
           by(ctx: ComponentContext) {
             return ctx.element;
           },
-        }
+        },
       });
 
       const rule = cssStyleRule();
@@ -143,7 +143,7 @@ describe('styp', () => {
               };
             },
           },
-        }
+        },
       })
       class TestComponent {
 

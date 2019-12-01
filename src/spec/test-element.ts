@@ -18,7 +18,7 @@ export function testComponentFactory<T extends object>(componentType: Class<T>):
 
     whenDefined(): Promise<void> {
       return Promise.resolve();
-    }
+    },
 
   };
 
@@ -44,7 +44,7 @@ export async function testElement(componentType: Class<any>): Promise<Class<any>
 
     whenDefined(): Promise<void> {
       return Promise.resolve();
-    }
+    },
 
   };
 
@@ -64,8 +64,8 @@ export class MockElement {
 
   readonly dispatchEvent = jest.fn();
   readonly addEventListener = jest.fn();
-  private _target: any;
-  private _attributes: { [name: string]: string | null } = {};
+  private readonly _target: any;
+  private readonly _attributes: { [name: string]: string | null } = {};
 
   constructor() {
     this._target = new.target;

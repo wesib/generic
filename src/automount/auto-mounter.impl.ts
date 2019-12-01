@@ -9,7 +9,7 @@ const AutoMounter__key = /*#__PURE__*/ new SingleContextKey<AutoMounter>('auto-m
  */
 export class AutoMounter {
 
-  private _adapters: ElementAdapter[] = [];
+  private readonly _adapters: ElementAdapter[] = [];
 
   static get [ContextKey__symbol](): ContextKey<AutoMounter> {
     return AutoMounter__key;

@@ -210,7 +210,7 @@ describe('navigation', () => {
           set: { a: PageLoadURLModifier, is: (url: URL) => url.searchParams.set('test', 'updated') },
           init(context) {
             context.whenReady(resolve);
-          }
+          },
         })
         class PageLoadURLFeature {
         }

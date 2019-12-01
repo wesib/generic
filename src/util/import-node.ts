@@ -22,23 +22,22 @@ export function importNode<N extends Node>(
 
   if (from.nodeType !== Node.ELEMENT_NODE) {
 
-    const clone = doc.importNode(from, false);
+    const nodeClone = doc.importNode(from, false);
 
-    to.appendChild(clone);
+    to.appendChild(nodeClone);
 
-    return clone;
-  } else {
-
-    const element = from as Node as Element;
-    const clone = doc.createElement(element.tagName.toLowerCase()) as Node as (Element & N);
-
-    element.getAttributeNames().forEach(attr => clone.setAttribute(attr, element.getAttribute(attr)!));
-
-    importContent(from, clone);
-    to.appendChild(clone);
-
-    return clone;
+    return nodeClone;
   }
+
+  const element = from as Node as Element;
+  const elementClone = doc.createElement(element.tagName.toLowerCase()) as Node as (Element & N);
+
+  element.getAttributeNames().forEach(attr => elementClone.setAttribute(attr, element.getAttribute(attr)!));
+
+  importContent(from, elementClone);
+  to.appendChild(elementClone);
+
+  return elementClone;
 }
 
 /**
