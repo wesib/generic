@@ -10,9 +10,9 @@ import { PageLoader } from './page-loader.impl';
 export function cachingPageLoader(loader: PageLoader): PageLoader {
 
   let state: {
-    url: string;
-    on: OnEvent<[PageLoadResponse]>;
-    sup: EventSupply;
+    readonly url: string;
+    readonly on: OnEvent<[PageLoadResponse]>;
+    readonly sup: EventSupply;
   } | undefined;
 
   return page => {
@@ -26,14 +26,17 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
       state.sup.off();
     }
 
-    let onResponse: OnEvent<[PageLoadResponse]> | undefined;
+    let tracked: {
+      readonly on: OnEvent<[PageLoadResponse]>;
+      num: number;
+    } | undefined;
     const supply = eventSupply().whenOff(() => {
       state = undefined;
-      onResponse = undefined;
+      tracked = undefined;
     });
-    let numReceivers = 0;
+
     const on = onEventBy<[PageLoadResponse]>(receiver => {
-      if (!onResponse) {
+      if (!tracked) {
 
         const onLoad = loader(page);
         const tracker = trackValue<PageLoadResponse>();
@@ -51,19 +54,23 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
           tracker.done(reason);
         });
 
-        onResponse = tracker.read.thru_(
-            response => response ? nextArgs(response) : nextSkip(),
-        );
+        tracked = {
+          on: tracker.read.thru_(
+              response => response ? nextArgs(response) : nextSkip(),
+          ),
+          num: 0,
+        };
       }
-      ++numReceivers;
 
-      const currentOnResponse = onResponse;
+      const requested = tracked;
 
-      return onResponse(receiver).needs(supply).whenOff(reason => {
-        if (!--numReceivers) {
+      ++requested.num;
+
+      return requested.on(receiver).needs(supply).whenOff(reason => {
+        if (!--requested.num) {
           // Allow to request the same page again
           Promise.resolve().then(() => {
-            if (currentOnResponse === onResponse && !numReceivers) {
+            if (!requested.num && requested === tracked) {
               supply.off(reason);
             }
           });
