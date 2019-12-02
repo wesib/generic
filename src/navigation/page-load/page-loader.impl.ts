@@ -69,7 +69,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
                 ok: true as const,
                 page,
                 response,
-                document: parsePageDocument(parser, response, text),
+                document: parsePageDocument(parser, url, response, text),
               };
             } catch (error) {
               return {
@@ -137,7 +137,7 @@ function pageFragmentsRequest(page: Page, request: Request ) {
   );
 }
 
-function parsePageDocument(parser: DOMParser, response: Response, text: string): Document {
+function parsePageDocument(parser: DOMParser, url: URL, response: Response, text: string): Document {
 
   const doc = parser.parseFromString(
       text,
@@ -149,12 +149,12 @@ function parsePageDocument(parser: DOMParser, response: Response, text: string):
     const base = doc.head.querySelector('base');
 
     if (base) {
-      base.href = new URL(base.href, response.url).href;
+      base.href = new URL(base.getAttribute('href')!, url).href;
     } else {
 
       const newBase = doc.createElement('base');
 
-      newBase.href = response.url;
+      newBase.href = url.href;
 
       doc.head.appendChild(newBase);
     }

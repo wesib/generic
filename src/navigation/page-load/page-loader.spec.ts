@@ -126,7 +126,6 @@ describe('navigation', () => {
     });
     it('sets base URI to page URL by default', async () => {
       mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
-      (mockResponse as any).url = 'http://localhost/test';
 
       const receiver = jest.fn();
 
@@ -137,8 +136,8 @@ describe('navigation', () => {
       expect(document.baseURI).toBe('http://localhost/test');
     });
     it('resolves base URI against page URL by default', async () => {
+      (page as any).url = new URL('http://localhost/test/page/index.html');
       mockResponse.text.mockImplementation(() => Promise.resolve('<html><head><base href=".."></head></html>'));
-      (mockResponse as any).url = 'http://localhost/test/page/index.html';
 
       const receiver = jest.fn();
 
