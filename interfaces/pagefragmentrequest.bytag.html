@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>PageFragmentRequest | Wesib: Generic Components</title>
+	<title>ByTag | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="pagefragmentrequest.html">PageFragmentRequest</a>
+					<a href="../modules/pagefragmentrequest.html">PageFragmentRequest</a>
+				</li>
+				<li>
+					<a href="pagefragmentrequest.bytag.html">ByTag</a>
 				</li>
 			</ul>
-			<h1>Interface PageFragmentRequest</h1>
+			<h1>Interface ByTag</h1>
 		</div>
 	</div>
 </header>
@@ -67,7 +70,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Page fragment request.</p>
+						<p>A request of page element with the given tag name.</p>
 					</div>
 				</div>
 			</section>
@@ -75,7 +78,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">PageFragmentRequest</span>
+						<span class="target">ByTag</span>
 					</li>
 				</ul>
 			</section>
@@ -86,7 +89,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="pagefragmentrequest.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="pagefragmentrequest.bytag.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="pagefragmentrequest.bytag.html#tag" class="tsd-kind-icon">tag</a></li>
 							</ul>
 						</section>
 					</div>
@@ -96,16 +100,26 @@
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="id" class="tsd-anchor"></a>
-					<h3>id</h3>
-					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> id</h3>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/53535da/src/navigation/page-load/page-load-request.ts#L44">src/navigation/page-load/page-load-request.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/6cd1a4d/src/navigation/page-load/page-load-request.ts#L64">src/navigation/page-load/page-load-request.ts:64</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="tag" class="tsd-anchor"></a>
+					<h3>tag</h3>
+					<div class="tsd-signature tsd-kind-icon">tag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/6cd1a4d/src/navigation/page-load/page-load-request.ts#L69">src/navigation/page-load/page-load-request.ts:69</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Requested element identifier.</p>
+							<p>Requested element tag name.</p>
 						</div>
 					</div>
 				</section>
@@ -117,17 +131,41 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/navigationagent.html">Navigation<wbr>Agent</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/pagefragmentrequest.html">Page<wbr>Fragment<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/pageloadagent.html">Page<wbr>Load<wbr>Agent</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/pageloadresponse.html">Page<wbr>Load<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/themestyle.html">Theme<wbr>Style</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="pagefragmentrequest.byid.html" class="tsd-kind-icon">By<wbr>Id</a>
+					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="pagefragmentrequest.html" class="tsd-kind-icon">Page<wbr>Fragment<wbr>Request</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="pagefragmentrequest.bytag.html" class="tsd-kind-icon">By<wbr>Tag</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="pagefragmentrequest.html#id" class="tsd-kind-icon">id</a>
+								<a href="pagefragmentrequest.bytag.html#id" class="tsd-kind-icon">id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="pagefragmentrequest.bytag.html#tag" class="tsd-kind-icon">tag</a>
 							</li>
 						</ul>
 					</li>
