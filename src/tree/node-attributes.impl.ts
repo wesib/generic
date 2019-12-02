@@ -1,5 +1,14 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { EventEmitter, EventReceiver, EventSupply, noEventSupply, OnEvent, onEventBy, ValueTracker } from 'fun-events';
+import {
+  EventEmitter,
+  eventReceiver,
+  EventReceiver, eventSupply,
+  EventSupply,
+  noEventSupply,
+  OnEvent,
+  onEventBy,
+  ValueTracker,
+} from 'fun-events';
 
 class AttributesObserver {
 
@@ -24,14 +33,18 @@ class AttributesObserver {
     const self = this;
     const observer = this.observer;
     const emitter = this._emitter(name);
-    const supply = emitter.on(receiver).whenOff(() => {
-      this._emitters.delete(name);
-      observer.disconnect();
-      if (this._emitters.size) {
-        reconnect();
-      } else {
-        this._observer = undefined;
-      }
+    const rcv = eventReceiver(receiver);
+    const supply = emitter.on({
+      supply: eventSupply(() => {
+        this._emitters.delete(name);
+        observer.disconnect();
+        if (this._emitters.size) {
+          reconnect();
+        } else {
+          this._observer = undefined;
+        }
+      }).needs(rcv.supply),
+      receive: (ctx, newValue, oldValue) => rcv.receive(ctx, newValue, oldValue),
     });
 
     observer.disconnect();
@@ -79,7 +92,8 @@ class AttributeTracker extends ValueTracker<string | null, string> {
 
   constructor(
       private readonly _observer: AttributesObserver,
-      private readonly _name: string) {
+      private readonly _name: string,
+  ) {
     super();
 
     let observeSupply = noEventSupply();
@@ -88,14 +102,15 @@ class AttributeTracker extends ValueTracker<string | null, string> {
       if (!this._updates.size) {
         observeSupply = this._observer.observe(
             _name,
-            (newValue, oldValue) => this._updates.send(newValue, oldValue));
+            (newValue, oldValue) => this._updates.send(newValue, oldValue),
+        );
       }
-
+      receiver.supply.needs(observeSupply);
       this._updates.on(receiver).whenOff(reason => {
         if (!this._updates.size) {
           observeSupply.off(reason);
         }
-      }).needs(observeSupply);
+      });
     });
   }
 

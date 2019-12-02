@@ -64,8 +64,10 @@ export const ComponentStypOptions = {
       context.whenReady(doProduceStyle);
       break;
     case false:
-      context.whenOn(doProduceStyle);
-      context.whenOff(() => cssSupply.off());
+      context.whenOn(connectionSupply => {
+        doProduceStyle();
+        cssSupply.needs(connectionSupply);
+      });
       break;
     default:
       context.whenOn.once(doProduceStyle);
