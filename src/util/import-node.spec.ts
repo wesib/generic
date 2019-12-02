@@ -34,6 +34,7 @@ describe('util', () => {
       expect(clone.textContent).toBe('test');
     });
     it('imports element contents with the given import function', () => {
+
       const el = document.createElement('div');
 
       el.innerHTML = '<span>test</span>';
@@ -42,6 +43,21 @@ describe('util', () => {
       expect(clone.ownerDocument).toBe(doc);
       expect(doc.body.contains(clone)).toBe(true);
       expect(clone.childNodes.length).toBe(0);
+    });
+    it('inserts imported element before another one', () => {
+
+      const next = doc.body.appendChild(doc.createTextNode('.second'));
+      const el = document.createElement('div');
+
+      el.innerHTML = '<span>first</span>';
+
+      const clone = importNode(el, doc.body, next);
+
+      expect(clone.ownerDocument).toBe(doc);
+      expect(doc.body.contains(clone)).toBe(true);
+      expect(clone.childNodes.length).toBe(1);
+      expect(clone.childNodes[0].nodeName).toBe('SPAN');
+      expect(doc.body.textContent).toBe('first.second');
     });
   });
 });

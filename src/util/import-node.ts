@@ -15,8 +15,41 @@ import { itsEach, overArray } from 'a-iterable';
 export function importNode<N extends Node>(
     from: N,
     to: Node,
+    importContent?: (this: void, from: N, to: N) => void,
+): N;
+
+/**
+ * Imports DOM node from one document to another and inserts it before the given node.
+ *
+ * @param from  The node to import.
+ * @param to  The node to append imported node to.
+ * @param before  The node to insert imported node before, or `null` to append it to the end of target one.
+ * @param importContent  A function that imports nodes nested in parent element. [[importNodeContents]] by default.
+ *
+ * @returns Imported node.
+ */
+export function importNode<N extends Node>(
+    from: N,
+    to: Node,
+    before?: Node | null,
+    importContent?: (this: void, from: N, to: N) => void,
+): N;
+
+export function importNode<N extends Node>(
+    from: N,
+    to: Node,
+    beforeOrImport?: Node | null | ((this: void, from: N, to: N) => void),
     importContent: (this: void, from: N, to: N) => void = importNodeContent,
 ): N {
+
+  let before: Node | null;
+
+  if (typeof beforeOrImport === 'function') {
+    importContent = beforeOrImport;
+    before = null;
+  } else {
+    before = beforeOrImport || null;
+  }
 
   const doc = to.ownerDocument!;
 
@@ -24,7 +57,7 @@ export function importNode<N extends Node>(
 
     const nodeClone = doc.importNode(from, false);
 
-    to.appendChild(nodeClone);
+    to.insertBefore(nodeClone, before);
 
     return nodeClone;
   }
@@ -35,7 +68,7 @@ export function importNode<N extends Node>(
   element.getAttributeNames().forEach(attr => elementClone.setAttribute(attr, element.getAttribute(attr)!));
 
   importContent(from, elementClone);
-  to.appendChild(elementClone);
+  to.insertBefore(elementClone, before);
 
   return elementClone;
 }
