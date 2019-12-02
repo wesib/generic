@@ -26,8 +26,11 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
       state.sup.off();
     }
 
-    const supply = eventSupply().whenOff(() => state = undefined);
     let onResponse: OnEvent<[PageLoadResponse]> | undefined;
+    const supply = eventSupply().whenOff(() => {
+      state = undefined;
+      onResponse = undefined;
+    });
     let numReceivers = 0;
     const on = onEventBy<[PageLoadResponse]>(receiver => {
       if (!onResponse) {
@@ -36,9 +39,14 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
         const tracker = trackValue<PageLoadResponse>();
         const trackSupply = onLoad(resp => {
           tracker.it = resp;
+        }).whenOff(reason => {
+          // Error drops page cache, unlike successful page load.
+          if (reason != null) {
+            supply.off(reason);
+          }
         });
 
-        supply.needs(trackSupply).whenOff(reason => {
+        supply.whenOff(reason => {
           trackSupply.off(reason);
           tracker.done(reason);
         });
@@ -51,7 +59,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
 
       const currentOnResponse = onResponse;
 
-      return onResponse(receiver).whenOff(reason => {
+      return onResponse(receiver).needs(supply).whenOff(reason => {
         if (!--numReceivers) {
           // Allow to request the same page again
           Promise.resolve().then(() => {
