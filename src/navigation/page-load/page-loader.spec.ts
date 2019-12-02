@@ -124,6 +124,30 @@ describe('navigation', () => {
       expect(div).toBeInstanceOf(HTMLDivElement);
       expect(div.textContent).toBe('test');
     });
+    it('sets base URI to page URL by default', async () => {
+      mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
+      (mockResponse as any).url = 'http://localhost/test';
+
+      const receiver = jest.fn();
+
+      await loadDocument(receiver);
+
+      const document = receiver.mock.calls[1][0]!.document;
+
+      expect(document.baseURI).toBe('http://localhost/test');
+    });
+    it('resolves base URI against page URL by default', async () => {
+      mockResponse.text.mockImplementation(() => Promise.resolve('<html><head><base href=".."></head></html>'));
+      (mockResponse as any).url = 'http://localhost/test/page/index.html';
+
+      const receiver = jest.fn();
+
+      await loadDocument(receiver);
+
+      const document = receiver.mock.calls[1][0]!.document;
+
+      expect(document.baseURI).toBe('http://localhost/test/');
+    });
     it('parses the response accordingly to `Context-Type` header', async () => {
       mockResponseHeaders.get.mockImplementation(_name => 'application/xml; charset=utf-8');
       mockResponse.text.mockImplementation(

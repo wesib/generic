@@ -69,10 +69,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
                 ok: true as const,
                 page,
                 response,
-                document: parser.parseFromString(
-                    text,
-                    hthvParse(response.headers.get('Content-Type') || 'text/html')[0].v as SupportedType,
-                ),
+                document: parsePageDocument(parser, response, text),
               };
             } catch (error) {
               return {
@@ -138,4 +135,30 @@ function pageFragmentsRequest(page: Page, request: Request ) {
         },
       },
   );
+}
+
+function parsePageDocument(parser: DOMParser, response: Response, text: string): Document {
+
+  const doc = parser.parseFromString(
+      text,
+      hthvParse(response.headers.get('Content-Type') || 'text/html')[0].v as SupportedType,
+  );
+
+  if (doc.head) {
+
+    const base = doc.head.querySelector('base');
+
+    if (base) {
+      base.href = new URL(base.href, response.url).href;
+    } else {
+
+      const newBase = doc.createElement('base');
+
+      newBase.href = response.url;
+
+      doc.head.appendChild(newBase);
+    }
+  }
+
+  return doc;
 }
