@@ -108,7 +108,9 @@ describe('navigation', () => {
 
       await navigation.with(pageLoadParam, { receiver: noop }).open('/some?q=v');
 
-      expect(updateSpy).toHaveBeenCalledWith(`?q=v&${appRevSearchParam}=${responseRev}`);
+      expect(updateSpy).toHaveBeenCalled();
+      expect(updateSpy.mock.calls[0][0].href)
+          .toBe(`http://localhost/some?q=v&${appRevSearchParam}=${responseRev}`);
       expect(reloadSpy).toHaveBeenCalledTimes(1);
     });
   });

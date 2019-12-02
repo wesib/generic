@@ -49,10 +49,10 @@ export class PageCacheBuster {
 
             if (newRev && newRev !== rev) {
 
-              const searchParams = new URLSearchParams(response.page.url.searchParams);
+              const url = new URL(response.page.url.href);
 
-              searchParams.set(appRevSearchParam, newRev);
-              navigation.update('?' + searchParams);
+              url.searchParams.set(appRevSearchParam, newRev);
+              navigation.update(url);
               navigation.reload();
             }
           }
