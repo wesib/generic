@@ -1,6 +1,7 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { filterIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from 'a-iterable';
-import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, onEventBy } from 'fun-events';
+import { AIterable, ArrayLikeIterable, filterIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from 'a-iterable';
+import { nextArgs } from 'call-thru';
+import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
 
 const WATCH_CHILD_LIST = { childList: true };
@@ -43,6 +44,17 @@ export function elementNodeList<N extends ElementNode>(
     }).needs(supply);
   });
   const read = afterEventBy<[ElementNodeList]>(onUpdate.thru(() => nodeList), () => [nodeList]);
+  const onTrackUpdate: OnEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> =
+      onUpdate.thru((added, removed) => nextArgs(AIterable.of(added), AIterable.of(removed)));
+  const track = afterEventBy<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>(receiver => {
+
+    const initialEmitter = new EventEmitter<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>();
+
+    initialEmitter.on(receiver);
+    initialEmitter.send(nodeList, AIterable.of([]));
+
+    onTrackUpdate(receiver);
+  });
   const first: AfterEvent<[N?]> = afterSupplied(read).keep.thru(itsFirst);
 
   if (!all) {
@@ -67,6 +79,10 @@ export function elementNodeList<N extends ElementNode>(
 
     get read() {
       return read;
+    }
+
+    get track() {
+      return track;
     }
 
     get first() {

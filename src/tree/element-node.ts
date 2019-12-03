@@ -2,7 +2,7 @@
  * @module @wesib/generic
  */
 import { ComponentContext } from '@wesib/wesib';
-import { AIterable } from 'a-iterable';
+import { AIterable, ArrayLikeIterable } from 'a-iterable';
 import { SingleContextKey, SingleContextRef } from 'context-values';
 import {
   AfterEvent,
@@ -184,6 +184,13 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
   get [AfterEvent__symbol](): AfterEvent<[ElementNodeList<N>]> {
     return this.read;
   }
+
+  /**
+   * An `AfterEvent` keeper of node list changes.
+   *
+   * Sends an iterables of added and removed nodes. Sends current nodes immediately upon receiver registration.
+   */
+  abstract readonly track: AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>;
 
   /**
    * An `AfterEvent` keeper of the first node in this list.

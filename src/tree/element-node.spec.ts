@@ -150,6 +150,7 @@ describe('tree', () => {
       it('selects subtree elements with `deep` option', () => {
         expect([...node.node.select('test-component', { deep: true } )]).toEqual([c1.node, c2.node, c21.node]);
       });
+
       describe('non-component node', () => {
 
         let span: HTMLSpanElement;
@@ -199,6 +200,59 @@ describe('tree', () => {
             expect(afterSupplied(list)).toBe(list.read);
           });
         });
+
+        describe('track', () => {
+          it('sends current node list upon receiver registration', () => {
+
+            const list = node.node.select('*', { all: true });
+            let added1!: ElementNode[];
+            let removed1!: ElementNode[];
+
+            list.track((a, r) => {
+              added1 = [...a];
+              removed1 = [...r];
+            });
+
+            expect(added1).toEqual([
+              c1.node,
+              c2.node,
+              c3.node,
+              expect.objectContaining({ element: span }),
+            ]);
+            expect(removed1).toHaveLength(0);
+
+            let added2!: ElementNode[];
+            let removed2!: ElementNode[];
+
+            list.track((a, r) => {
+              added2 = [...a];
+              removed2 = [...r];
+            });
+
+            expect(added2).toEqual(added1);
+            expect(removed2).toEqual(removed1);
+          });
+          it('sends updates', async () => {
+
+            const list = node.node.select('*', { all: true });
+            let lastAdded!: ElementNode[];
+            let lastRemoved!: ElementNode[];
+
+            list.track((a, r) => {
+              lastAdded = [...a];
+              lastRemoved = [...r];
+            });
+
+            const added = await newComponentNode('added-component');
+
+            node.element.appendChild(added.element);
+            mutate([{ addedNodes: nodeList(added.element), removedNodes: nodeList(c2.element) }]);
+
+            expect(lastAdded).toEqual([added.node]);
+            expect(lastRemoved).toEqual([c2.node]);
+          });
+        });
+
         describe('first', () => {
           it('refers to the first node', () => {
 
@@ -248,6 +302,7 @@ describe('tree', () => {
           });
         });
       });
+
       it('does not observe DOM mutations initially', () => {
         expect(observer.observe).not.toHaveBeenCalled();
       });
@@ -262,8 +317,8 @@ describe('tree', () => {
 
         const list = node.node.select('test-component');
 
-        const supply1 = list.onUpdate(() => {});
-        const supply2 = list.onUpdate(() => {});
+        const supply1 = list.onUpdate(noop);
+        const supply2 = list.onUpdate(noop);
 
         expect(observer.observe).toHaveBeenCalledTimes(1);
 
