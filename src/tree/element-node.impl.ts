@@ -1,5 +1,6 @@
 import {
   BootstrapContext,
+  ComponentClass,
   ComponentContext,
   ComponentContext__symbol,
   ComponentEvent,
@@ -11,7 +12,7 @@ import { elementNodeList } from './element-node-list.impl';
 import { NodeAttributes } from './node-attributes.impl';
 import { NodeProperties } from './node-properties.impl';
 
-const NODE_REF = /*#__PURE__*/ Symbol('element-node');
+const ElementNode__symbol = /*#__PURE__*/ Symbol('element-node');
 
 class ElementNode extends ElementNode_ {
 
@@ -22,7 +23,7 @@ class ElementNode extends ElementNode_ {
     super();
     this._attrs = new NodeAttributes(_bs, element);
     this._props = new NodeProperties(element);
-    (element as any)[NODE_REF] = this;
+    (element as any)[ElementNode__symbol] = this;
 
     const context = (element as any)[ComponentContext__symbol] as ComponentContext<any> | undefined;
 
@@ -44,7 +45,7 @@ class ElementNode extends ElementNode_ {
     return parent != null ? elementNodeOf(this._bs, parent) : null;
   }
 
-  select(selector: string, opts?: ElementNode_.SelectorOpts): ElementNodeList<any> {
+  select(selector: string | ComponentClass<any>, opts?: ElementNode_.SelectorOpts): ElementNodeList<any> {
     return selectNodes(this._bs, this.element, selector, opts);
   }
 
@@ -62,9 +63,12 @@ class ElementNode extends ElementNode_ {
 
 }
 
+/**
+ * @internal
+ */
 export function elementNodeOf(bs: BootstrapContext, element: Element, optional?: boolean): ElementNode_.Any {
 
-  const found: ElementNode_.Any = (element as any)[NODE_REF];
+  const found: ElementNode_.Any = (element as any)[ElementNode__symbol];
 
   if (optional || found) {
     return found;
@@ -76,8 +80,9 @@ export function elementNodeOf(bs: BootstrapContext, element: Element, optional?:
 function selectNodes(
     bs: BootstrapContext,
     root: Element,
-    selector: string,
-    opts: ElementNode_.SelectorOpts = {}): ElementNodeList<any> {
+    selector: string | ComponentClass<any>,
+    opts: ElementNode_.SelectorOpts = {},
+): ElementNodeList<any> {
 
   const adapter = bs.get(ElementAdapter);
 

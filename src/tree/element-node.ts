@@ -1,7 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { ComponentContext } from '@wesib/wesib';
+import { ComponentClass, ComponentContext } from '@wesib/wesib';
 import { AIterable, ArrayLikeIterable } from 'a-iterable';
 import { SingleContextKey, SingleContextRef } from 'context-values';
 import {
@@ -48,11 +48,12 @@ export abstract class ElementNode {
   /**
    * Select component nodes matching the given selector.
    *
-   * @param selector  Simple CSS selector of nested components. E.g. component element name.
+   * @param selector  Simple CSS selector of nested components (e.g. component element name), or component type.
+   * The latter should have custom element name.
    * @param opts  Component selector options.
    */
   abstract select(
-      selector: string,
+      selector: string | ComponentClass<any>,
       opts?: ElementNode.ComponentSelectorOpts,
   ): ElementNodeList<ComponentNode>;
 

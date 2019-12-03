@@ -1,7 +1,8 @@
-import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
+import { BootstrapContext, BootstrapWindow, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
 import { AIterable, ArrayLikeIterable, filterIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from 'a-iterable';
 import { nextArgs } from 'call-thru';
 import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
+import { html__naming } from 'namespace-aliaser';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
 
 const WATCH_CHILD_LIST = { childList: true };
@@ -13,17 +14,47 @@ const WATCH_DEEP = { childList: true, subtree: true };
 export function elementNodeList<N extends ElementNode>(
     bsContext: BootstrapContext,
     root: Element,
-    selector: string,
+    selectorOrType: string | ComponentClass<any>,
     nodeOf: (node: Element, optional?: boolean) => N | undefined,
     { deep, all }: ElementNode.SelectorOpts,
 ): ElementNodeList_<N> {
 
-  const Observer: typeof MutationObserver = (bsContext.get(BootstrapWindow) as any).MutationObserver;
-  const observer = new Observer(update);
   const updates = new EventEmitter<[N[], N[]]>();
   const init: MutationObserverInit = deep ? WATCH_DEEP : WATCH_CHILD_LIST;
   let cache = new Set<Element>();
   let iterable: Iterable<N> | undefined;
+  let selector: string | undefined;
+
+  if (typeof selectorOrType === 'string') {
+    selector = selectorOrType;
+  } else {
+    bsContext.whenDefined(selectorOrType).then(({ elementDef: { name } }) => {
+      if (name) {
+        selector = html__naming.name(name, bsContext.get(DefaultNamespaceAliaser));
+        if (updates.size) {
+
+          const selected = refresh();
+
+          if (selected.size) {
+
+            const added = [
+              ...filterIt<N | undefined, N>(
+                  mapIt(selected, node => nodeOf(node)),
+                  isPresent,
+              ),
+            ];
+
+            if (added.length) {
+              updates.send(added, []);
+            }
+          }
+        }
+      }
+    });
+  }
+
+  const Observer: typeof MutationObserver = (bsContext.get(BootstrapWindow) as any).MutationObserver;
+  const observer = new Observer(update);
   let nodeList: ElementNodeList;
 
   const onUpdate = onEventBy<[N[], N[]]>(receiver => {
@@ -109,17 +140,23 @@ export function elementNodeList<N extends ElementNode>(
 
   function refresh(): Set<Element> {
     iterable = undefined;
-    return cache = new Set<Element>(request());
+    return cache = select();
   }
 
-  function request(): Set<Element> {
+  function select(): Set<Element> {
+
+    const sel = selector;
+
+    if (!sel) {
+      return new Set();
+    }
     if (deep) {
-      return new Set(overArray(root.querySelectorAll(selector)));
+      return new Set(overArray(root.querySelectorAll(sel)));
     }
     return new Set(
         filterIt(
             overArray(root.children),
-            item => item.matches(selector),
+            item => item.matches(sel),
         ),
     );
   }
@@ -154,7 +191,7 @@ export function elementNodeList<N extends ElementNode>(
     if (!isElement(node)) {
       return;
     }
-    if (node.matches(selector) && !cache.has(node)) {
+    if (selector && node.matches(selector) && !cache.has(node)) {
       cache.add(node);
       return nodeOf(node);
     }

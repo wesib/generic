@@ -1,5 +1,6 @@
 import Mock = jest.Mock;
 import {
+  BootstrapContext,
   Component,
   ComponentClass,
   ComponentContext,
@@ -7,9 +8,10 @@ import {
   DomProperty,
   Feature,
 } from '@wesib/wesib';
-import { itsFirst } from 'a-iterable';
+import { itsEmpty, itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
 import { afterSupplied, noEventSupply, onSupplied, ValueTracker } from 'fun-events';
+import { QualifiedName } from 'namespace-aliaser';
 import { ObjectMock } from '../spec/mocks';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
@@ -45,10 +47,13 @@ describe('tree', () => {
     readonly parent: ElementNode | null;
   }
 
-  async function newComponentNode(name = 'div'): Promise<ComponentNodeInfo> {
+  async function newComponentNode(
+      name = 'div',
+      componentName: QualifiedName | null = name,
+  ): Promise<ComponentNodeInfo> {
 
     @Component({
-      name,
+      name: componentName || undefined,
       extend: {
         type: MockElement,
       },
@@ -486,6 +491,82 @@ describe('tree', () => {
 
         expect([...list]).toEqual([c1.node, c2.node]);
         expect(onUpdateMock).not.toHaveBeenCalled();
+      });
+
+      describe('by component type', () => {
+        it('returns empty list initially', async () => {
+
+          const componentNode = await newComponentNode('test-component-2');
+          const list = node.node.select(componentNode.context.componentType);
+          const onUpdateMock = jest.fn();
+
+          list.onUpdate(onUpdateMock);
+          node.element.appendChild(componentNode.element);
+
+          expect(itsEmpty(list)).toBe(true);
+          expect(onUpdateMock).not.toHaveBeenCalled();
+        });
+        it('updates the list when component is defined', async () => {
+
+          const componentNode = await newComponentNode('test-component-2');
+          const list = node.node.select(componentNode.context.componentType);
+
+          node.element.appendChild(componentNode.element);
+          await componentNode.context.get(BootstrapContext).whenDefined(componentNode.context.componentType);
+
+          expect([...list]).toEqual([componentNode.node]);
+        });
+        it('reports an update when component is defined', async () => {
+
+          const componentNode = await newComponentNode('test-component-2');
+          const list = node.node.select(componentNode.context.componentType);
+          const onUpdateMock = jest.fn();
+
+          list.onUpdate(onUpdateMock);
+          node.element.appendChild(componentNode.element);
+          await componentNode.context.get(BootstrapContext).whenDefined(componentNode.context.componentType);
+
+          expect(onUpdateMock).toHaveBeenCalledTimes(1);
+          expect(itsFirst(onUpdateMock.mock.calls[0][0] as Iterable<ComponentNode>)!.element)
+              .toBe(componentNode.element);
+        });
+        it('does not update the list on non-component element addition', async () => {
+
+          const componentNode = await newComponentNode('test-component-2');
+          const list = node.node.select(componentNode.context.componentType);
+          const onUpdateMock = jest.fn();
+
+          list.onUpdate(onUpdateMock);
+          node.element.appendChild(document.createElement('test-component-2'));
+          await componentNode.context.get(BootstrapContext).whenDefined(componentNode.context.componentType);
+
+          expect(itsEmpty(list)).toBe(true);
+          expect(onUpdateMock).not.toHaveBeenCalled();
+        });
+        it('does not update the list on irrelevant element', async () => {
+
+          const componentNode = await newComponentNode('test-component-2');
+          const list = node.node.select(componentNode.context.componentType);
+          const onUpdateMock = jest.fn();
+
+          list.onUpdate(onUpdateMock);
+          await componentNode.context.get(BootstrapContext).whenDefined(componentNode.context.componentType);
+
+          expect(itsEmpty(list)).toBe(true);
+          expect(onUpdateMock).not.toHaveBeenCalled();
+        });
+        it('returns empty list for anonymous component', async () => {
+
+          const componentNode = await newComponentNode('test-component-2', null);
+          const list = node.node.select(componentNode.context.componentType);
+          const onUpdateMock = jest.fn();
+
+          list.onUpdate(onUpdateMock);
+          await componentNode.context.get(BootstrapContext).whenDefined(componentNode.context.componentType);
+
+          expect(itsEmpty(list)).toBe(true);
+          expect(onUpdateMock).not.toHaveBeenCalled();
+        });
       });
     });
 
