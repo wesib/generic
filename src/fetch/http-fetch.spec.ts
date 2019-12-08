@@ -9,7 +9,7 @@ import { HttpFetchAgent } from './http-fetch-agent';
 
 describe('fetch', () => {
 
-  let mockWindow: Mocked<Window>;
+  let mockWindow: Mocked<BootstrapWindow>;
   let request: RequestInfo;
   let init: RequestInit | undefined;
   let response: Response;
@@ -31,10 +31,10 @@ describe('fetch', () => {
     mockAgent = jest.fn((next, _request) => next());
 
     @Feature({
-      set: [
-        { a: BootstrapWindow, is: mockWindow },
-        { a: HttpFetchAgent, is: mockAgent },
-      ],
+      setup(setup) {
+        setup.provide({ a: BootstrapWindow, is: mockWindow });
+        setup.provide({ a: HttpFetchAgent, is: mockAgent });
+      },
     })
     class TestFeature {}
 

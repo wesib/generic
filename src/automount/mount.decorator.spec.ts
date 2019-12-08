@@ -10,16 +10,16 @@ import {
   ElementAdapter,
   Feature,
 } from '@wesib/wesib';
-import { ObjectMock } from '../spec/mocks';
 import { MockElement } from '../spec/test-element';
 import { Mount } from './mount.decorator';
 import Mock = jest.Mock;
+import Mocked = jest.Mocked;
 
 describe('automount', () => {
 
-  let mockWindow: ObjectMock<Window>;
-  let mockDocument: ObjectMock<Document>;
-  let mockObserver: ObjectMock<MutationObserver>;
+  let mockWindow: Mocked<BootstrapWindow>;
+  let mockDocument: Mocked<Document>;
+  let mockObserver: Mocked<MutationObserver>;
   let mockRoot: {
     querySelectorAll: Mock<any[], [string]>;
     addEventListener: Mock;
@@ -125,11 +125,11 @@ describe('automount', () => {
   async function bootstrap(...features: Class[]): Promise<void> {
 
     @Feature({
-      set: [
-        { a: BootstrapWindow, is: mockWindow },
-        { a: BootstrapRoot, is: mockRoot },
-        { a: ElementAdapter, is: mockAdapter },
-      ],
+      setup(setup) {
+        setup.provide({ a: BootstrapWindow, is: mockWindow });
+        setup.provide({ a: BootstrapRoot, is: mockRoot });
+        setup.provide({ a: ElementAdapter, is: mockAdapter });
+      },
     })
     class TestFeature {
     }

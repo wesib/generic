@@ -10,16 +10,16 @@ import { ThemeStyle } from './theme-style';
 
 const ThemeSupport__feature: FeatureDef = {
   needs: BasicStyleProducerSupport,
-  set: [
-    { a: ThemeFactory, as: ThemeFactory_, with: [ThemeStyle] },
-    {
+  setup(setup) {
+    setup.provide({ a: ThemeFactory, as: ThemeFactory_, with: [ThemeStyle] });
+    setup.provide({
       a: Theme,
       by(factory: ThemeFactory) {
         return factory.newTheme();
       },
       with: [ThemeFactory],
-    },
-  ],
+    });
+  },
 };
 
 /**

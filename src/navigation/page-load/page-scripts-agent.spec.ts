@@ -39,10 +39,10 @@ describe('navigation', () => {
 
       @Feature({
         needs: PageLoadSupport,
-        set: [
-          { a: BootstrapWindow, is: locationMock.window },
-          { a: HttpFetch, is: mockFetch },
-        ],
+        setup(setup) {
+          setup.provide({ a: BootstrapWindow, is: locationMock.window });
+          setup.provide({ a: HttpFetch, is: mockFetch });
+        },
       })
       class TestFeature {}
 

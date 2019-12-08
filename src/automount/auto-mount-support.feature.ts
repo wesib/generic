@@ -65,19 +65,18 @@ export function autoMountSupport(config?: AutoMountConfig): Class {
 function featureDef(config: AutoMountConfig = {}): FeatureDef {
   return {
     needs: AutoConnectSupport,
-    set: [
-      { as: AutoMounter },
-      {
+    setup(setup) {
+      setup.provide({ as: AutoMounter });
+      setup.provide({
         a: ElementAdapter,
         by(mounter: AutoMounter): ElementAdapter {
           return (element: any) => mounter.adapt(element);
         },
         with: [AutoMounter],
-      },
-    ],
-    init(context) {
-      context.whenReady(() => {
-        adaptExistingElement(context, config);
+      });
+      setup.whenReady(context => {
+        // Await for mount definition registration
+        Promise.resolve().then(() => adaptExistingElement(context, config));
       });
     },
   };

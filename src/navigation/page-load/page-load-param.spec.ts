@@ -40,10 +40,10 @@ describe('navigation', () => {
 
     beforeEach(async () => {
       @Feature({
-        set: [
-          { a: BootstrapWindow, is: locationMock.window },
-          { a: PageLoadAgent, is: mockAgent },
-        ],
+        setup(setup) {
+          setup.provide({ a: BootstrapWindow, is: locationMock.window });
+          setup.provide({ a: PageLoadAgent, is: mockAgent });
+        },
         needs: NavigationSupport,
         init(ctx) {
           context = ctx;
@@ -119,9 +119,11 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         @Feature({
-          set: {
-            a: HttpFetch,
-            is: () => afterThe({ ok: true, text: () => reject } as Response),
+          setup(setup) {
+            setup.provide({
+              a: HttpFetch,
+              is: () => afterThe({ ok: true, text: () => reject } as Response),
+            });
           },
           init(ctx) {
             ctx.whenReady(resolve);
@@ -130,7 +132,7 @@ describe('navigation', () => {
         class MockFetchFeature {
         }
 
-        context.load(MockFetchFeature)(noop);
+        context.load(MockFetchFeature);
       });
 
       page.put(pageLoadParam, { receiver });
@@ -227,7 +229,9 @@ describe('navigation', () => {
 
         await new Promise(resolve => {
           @Feature({
-            set: { a: HttpFetch, is: mockFetch },
+            setup(setup) {
+              setup.provide({ a: HttpFetch, is: mockFetch });
+            },
             init(ctx) {
               ctx.whenReady(resolve);
             },
@@ -235,7 +239,7 @@ describe('navigation', () => {
           class MockFetchFeature {
           }
 
-          context.load(MockFetchFeature)(noop);
+          context.load(MockFetchFeature);
         });
       });
 

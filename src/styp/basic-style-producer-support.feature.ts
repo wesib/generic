@@ -7,18 +7,16 @@ import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-s
 
 const BasicStyleProducerSupport__feature: FeatureDef = {
   needs: RenderSupport,
-  perComponent: [
-    {
-      as: ComponentStyleProducer_,
-    },
-    {
+  setup(setup) {
+    setup.perComponent({ as: ComponentStyleProducer_ });
+    setup.perComponent({
       a: ComponentStyleProducer,
       by(producer: ComponentStyleProducer_): ComponentStyleProducer {
         return (rules, opts) => producer.produce(rules, opts);
       },
       with: [ComponentStyleProducer_],
-    },
-  ],
+    });
+  },
 };
 
 /**

@@ -31,10 +31,10 @@ describe('navigation', () => {
       agent = jest.fn((next, _action, _from, _to) => next());
 
       @Feature({
-        set: [
-          { a: BootstrapWindow, is: locationMock.window },
-          { a: NavigationAgent, is: agent },
-        ],
+        setup(setup) {
+          setup.provide({ a: BootstrapWindow, is: locationMock.window });
+          setup.provide({ a: NavigationAgent, is: agent });
+        },
         needs: NavigationSupport,
         init(ctx) {
           context = ctx;

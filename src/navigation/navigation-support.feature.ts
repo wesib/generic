@@ -6,7 +6,9 @@ import { Navigation } from './navigation';
 import { createNavigation } from './navigation.impl';
 
 const NavigationSupport__feature: FeatureDef = {
-  set: { a: Navigation, by: createNavigation },
+  setup(setup) {
+    setup.provide({ a: Navigation, by: createNavigation });
+  },
 };
 
 /**

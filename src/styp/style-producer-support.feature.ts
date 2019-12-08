@@ -9,21 +9,21 @@ import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-s
 
 const StyleProducerSupport__feature: FeatureDef = {
   has: BasicStyleProducerSupport,
-  perComponent: [
-    {
+  setup(setup) {
+    setup.perComponent({
       a: ComponentStyleProducer_,
       by(context: ComponentContext) {
         return new ComponentStyleProducer_(context, produceStyle);
       },
-    },
-    {
+    });
+    setup.perComponent({
       a: ComponentStyleProducer,
       by(producer: ComponentStyleProducer_): ComponentStyleProducer {
         return (rules, opts) => producer.produce(rules, opts);
       },
       with: [ComponentStyleProducer_],
-    },
-  ],
+    });
+  },
 };
 
 /**

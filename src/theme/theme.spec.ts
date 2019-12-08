@@ -52,7 +52,9 @@ describe('theme', () => {
 
         @Feature({
           needs: ThemeSupport,
-          set: { a: ThemeStyle, is: style },
+          setup(setup) {
+            setup.provide({ a: ThemeStyle, is: style });
+          },
         })
         class StyleFeature {
         }
@@ -85,10 +87,10 @@ describe('theme', () => {
 
           @Feature({
             needs: ThemeSupport,
-            set: [
-              { a: ThemeStyle, is: style1 },
-              { a: ThemeStyle, is: { style: style1, provide: style2 } },
-            ],
+            setup(setup) {
+              setup.provide({ a: ThemeStyle, is: style1 });
+              setup.provide({ a: ThemeStyle, is: { style: style1, provide: style2 } });
+            },
           })
           class StyleFeature {
           }
@@ -100,10 +102,10 @@ describe('theme', () => {
 
           @Feature({
             needs: ThemeSupport,
-            set: [
-              { a: ThemeStyle, is: { style: style1, provide: style2 } },
-              { a: ThemeStyle, is: style1 },
-            ],
+            setup(setup) {
+              setup.provide({ a: ThemeStyle, is: { style: style1, provide: style2 } });
+              setup.provide({ a: ThemeStyle, is: style1 });
+            },
           })
           class StyleFeature {
           }
@@ -115,9 +117,9 @@ describe('theme', () => {
 
           @Feature({
             needs: ThemeSupport,
-            set: [
-              { a: ThemeStyle, is: { style: style1, provide: style2 } },
-            ],
+            setup(setup) {
+              setup.provide({ a: ThemeStyle, is: { style: style1, provide: style2 } });
+            },
           })
           class StyleFeature {
           }

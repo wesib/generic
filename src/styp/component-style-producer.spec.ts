@@ -56,7 +56,14 @@ describe('styp', () => {
       const mockRender = jest.fn<void, Parameters<StypRender.Function>>(
           (producer, properties) => producer.render(properties));
 
-      await mount(undefined, { perComponent: { a: ComponentStypRender, is: mockRender } });
+      await mount(
+          undefined,
+          {
+            setup(setup) {
+              setup.perComponent({ a: ComponentStypRender, is: mockRender });
+            },
+          },
+      );
       expect(cssStyle().display).toBe('block');
       expect(mockRender).toHaveBeenCalledWith(expect.anything(), { display: 'block' });
     });
@@ -110,11 +117,13 @@ describe('styp', () => {
     });
     it('prepends `:host` CSS rule selector when shadow DOM supported', async () => {
       await mount(undefined, {
-        perComponent: {
-          a: ShadowContentRoot,
-          by(ctx: ComponentContext) {
-            return ctx.element;
-          },
+        setup(setup) {
+          setup.perComponent({
+            a: ShadowContentRoot,
+            by(ctx: ComponentContext) {
+              return ctx.element;
+            },
+          });
         },
       });
 
@@ -132,17 +141,19 @@ describe('styp', () => {
       @Component(def)
       @Feature({
         needs: BasicStyleProducerSupport,
-        set: {
-          a: RenderScheduler,
-          is: {
-            newSchedule(): RenderSchedule {
-              return {
-                schedule(op: () => void) {
-                  op();
-                },
-              };
+        setup(setup) {
+          setup.perDefinition({
+            a: RenderScheduler,
+            is: {
+              newSchedule(): RenderSchedule {
+                return {
+                  schedule(op: () => void) {
+                    op();
+                  },
+                };
+              },
             },
-          },
+          });
         },
       })
       class TestComponent {

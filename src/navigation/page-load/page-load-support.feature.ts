@@ -12,21 +12,21 @@ import { pageTitleAgent } from './page-title-agent.impl';
 
 const PageLoadSupport__feature: FeatureDef = {
   needs: NavigationSupport,
-  set: [
-    {
+  setup(setup) {
+    setup.provide({
       a: PageLoadURLModifier,
       by: (buster: PageCacheBuster) => buster.urlModifier,
       with: [PageCacheBuster],
-    },
-    {
+    });
+    setup.provide({
       a: PageLoadAgent,
       by: (buster: PageCacheBuster) => buster.agent,
       with: [PageCacheBuster],
-    },
-    { a: PageLoadAgent, by: pageScriptsAgent },
-    { a: PageLoadAgent, by: pageStyleAgent },
-    { a: PageLoadAgent, by: pageTitleAgent },
-  ],
+    });
+    setup.provide({ a: PageLoadAgent, by: pageScriptsAgent });
+    setup.provide({ a: PageLoadAgent, by: pageStyleAgent });
+    setup.provide({ a: PageLoadAgent, by: pageTitleAgent });
+  },
 };
 
 /**

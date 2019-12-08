@@ -7,11 +7,13 @@ import { elementNodeOf } from './element-node.impl';
 
 const ComponentTreeSupport__feature: FeatureDef = {
   needs: StateSupport,
-  perComponent: {
-    a: ComponentNode,
-    by(context: ComponentContext) {
-      return elementNodeOf(context.get(BootstrapContext), context.element) as ComponentNode;
-    },
+  setup(setup) {
+    setup.perComponent({
+      a: ComponentNode,
+      by(context: ComponentContext) {
+        return elementNodeOf(context.get(BootstrapContext), context.element) as ComponentNode;
+      },
+    });
   },
 };
 

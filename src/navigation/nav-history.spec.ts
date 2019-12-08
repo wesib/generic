@@ -26,7 +26,9 @@ describe('navigation', () => {
 
       @Feature({
         needs: NavigationSupport,
-        set: { a: BootstrapWindow, is: locationMock.window },
+        setup(setup) {
+          setup.provide({ a: BootstrapWindow, is: locationMock.window });
+        },
       })
       class TestFeature {}
 

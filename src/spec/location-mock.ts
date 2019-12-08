@@ -1,5 +1,6 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
+import { BootstrapWindow } from '@wesib/wesib';
 import { NAV_DATA_KEY, NavDataEnvelope, PartialNavData } from '../navigation/nav-history.impl';
 
 export class LocationMock {
@@ -10,7 +11,7 @@ export class LocationMock {
   readonly historyLength: Mock<number, []>;
   readonly state: Mock<string, []>;
   readonly baseURI: Mock<string, []>;
-  readonly window: Mocked<Window>;
+  readonly window: Mocked<BootstrapWindow>;
   private _index = 0;
   private readonly stateData: [URL, any][];
   private readonly eventTarget: HTMLElement;

@@ -26,8 +26,8 @@ export class PageCacheBuster {
     return PageCacheBuster__key;
   }
 
-  readonly urlModifier: AfterEvent<[PageLoadURLModifier?]>;
-  readonly agent: AfterEvent<[PageLoadAgent?]>;
+  readonly urlModifier: AfterEvent<PageLoadURLModifier[]>;
+  readonly agent: AfterEvent<PageLoadAgent[]>;
 
   constructor(context: BootstrapContext) {
 

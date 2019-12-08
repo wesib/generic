@@ -8,7 +8,9 @@ import {
   Feature,
 } from '@wesib/wesib';
 
-export function testComponentFactory<T extends object>(componentType: Class<T>): Promise<ComponentFactory<T>> {
+export function testComponentFactory<T extends object>(
+    componentType: ComponentClass<T>,
+): Promise<ComponentFactory<T>> {
   ComponentDef.define(componentType);
 
   const customElements: CustomElements = {
@@ -24,14 +26,16 @@ export function testComponentFactory<T extends object>(componentType: Class<T>):
 
   @Feature({
     needs: componentType,
-    set: { a: CustomElements, is: customElements },
+    setup(setup) {
+      setup.provide({ a: CustomElements, is: customElements });
+    },
   })
   class TestFeature {}
 
   return bootstrapComponents(TestFeature).whenDefined(componentType);
 }
 
-export async function testElement(componentType: Class<any>): Promise<Class<any>> {
+export async function testElement(componentType: ComponentClass<any>): Promise<Class<any>> {
   ComponentDef.define(componentType);
 
   let result!: Class;
@@ -49,7 +53,9 @@ export async function testElement(componentType: Class<any>): Promise<Class<any>
   };
 
   @Feature({
-    set: { a: CustomElements, is: customElements },
+    setup(setup) {
+      setup.provide({ a: CustomElements, is: customElements });
+    },
     needs: componentType,
   })
   class TestFeature {

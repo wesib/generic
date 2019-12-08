@@ -41,10 +41,10 @@ describe('navigation', () => {
     mockAgent = jest.fn((next, _request) => next());
 
     @Feature({
-      set: [
-        { a: HttpFetch, is: mockHttpFetch },
-        { a: PageLoadAgent, is: mockAgent },
-      ],
+      setup(setup) {
+        setup.provide({ a: HttpFetch, is: mockHttpFetch });
+        setup.provide({ a: PageLoadAgent, is: mockAgent });
+      },
     })
     class TestFeature {}
 
@@ -230,15 +230,15 @@ describe('navigation', () => {
     it('applies page load URL', async () => {
       await new Promise(resolve => {
         @Feature({
-          set: { a: PageLoadURLModifier, is: (url: URL) => url.searchParams.set('test', 'updated') },
-          init(context) {
-            context.whenReady(resolve);
+          setup(setup) {
+            setup.provide({ a: PageLoadURLModifier, is: (url: URL) => url.searchParams.set('test', 'updated') });
+            setup.whenReady(resolve);
           },
         })
         class PageLoadURLFeature {
         }
 
-        bsContext.load(PageLoadURLFeature)(noop);
+        bsContext.load(PageLoadURLFeature);
       });
 
       mockResponse.text.mockImplementation(() => Promise.resolve('<div>test</div>'));
