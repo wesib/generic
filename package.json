@@ -21,7 +21,7 @@
   "module": "dist/wesib.generic.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.52",
+    "@wesib/wesib": "^1.0.0-alpha.53",
     "a-iterable": "^2.4.4",
     "call-thru": "^2.5.3",
     "context-values": "^2.1.0",
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/jsdom": "^12.2.4",
-    "@wesib/wesib": "^1.0.0-alpha.52",
+    "@wesib/wesib": "^1.0.0-alpha.53",
     "a-iterable": "^2.4.4",
     "call-thru": "^2.5.3",
     "codecov": "^3.6.1",
@@ -63,7 +63,7 @@
     "style-producer": "^3.3.0",
     "ts-jest": "^24.2.0",
     "tslint": "^5.20.1",
-    "typedoc": "^0.15.3",
+    "typedoc": "^0.15.4",
     "typedoc-plugin-external-module-name": "^2.1.0",
     "typescript": "^3.7.3"
   },
