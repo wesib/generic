@@ -1,4 +1,5 @@
 import Mock = jest.Mock;
+import Mocked = jest.Mocked;
 import {
   BootstrapContext,
   Component,
@@ -12,7 +13,6 @@ import { itsEmpty, itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
 import { afterSupplied, noEventSupply, onSupplied, ValueTracker } from 'fun-events';
 import { QualifiedName } from 'namespace-aliaser';
-import { ObjectMock } from '../spec/mocks';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
 import { ComponentNode, ElementNode, ElementNodeList } from './element-node';
@@ -20,7 +20,7 @@ import { ComponentNode, ElementNode, ElementNodeList } from './element-node';
 describe('tree', () => {
 
   let MockMutationObserver: Mock<MutationObserver>;
-  let observer: ObjectMock<MutationObserver>;
+  let observer: Mocked<MutationObserver>;
   let mutate: (records: Partial<MutationRecord>[]) => void = noop;
 
   beforeEach(() => {
