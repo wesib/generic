@@ -1,7 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { ComponentContext, FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
+import { ComponentContext, FeatureDef, FeatureDef__symbol, RenderSupport } from '@wesib/wesib';
 import { produceStyle } from 'style-producer';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStyleProducer } from './component-style-producer';
@@ -9,6 +9,7 @@ import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-s
 
 const StyleProducerSupport__feature: FeatureDef = {
   has: BasicStyleProducerSupport,
+  needs: RenderSupport,
   setup(setup) {
     setup.perComponent({
       a: ComponentStyleProducer_,
