@@ -1,7 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { ComponentClass, ComponentDef, ComponentFactory, ElementAdapter, FeatureContext } from '@wesib/wesib';
+import { BootstrapSetup, ComponentDef, ComponentFactory, ElementAdapter } from '@wesib/wesib';
 import { AutoMountSupport } from './auto-mount-support.feature';
 import { mountAdapter } from './mount-adapter.impl';
 
@@ -24,44 +24,35 @@ export interface MountDef {
 export const MountDef = {
 
   /**
-   * Enhances component definition to mount component to the matching element.
+   * Builds component definition that mounts component to the matching element.
    *
    * The returned component definition enables [[AutoMountSupport]] feature when applied to component.
    *
    * @typeparam T  A type of component.
-   * @param componentType  Component class constructor.
    * @param def  Either component auto-mount definition, matching element selector, or element predicate function.
+   *
+   * @returns New component definition.
    */
-  define<T extends ComponentClass>(
-      componentType: T,
+  componentDef<T extends object>(
       def: MountDef | MountDef['to'],
-  ): T {
+  ): ComponentDef<T> {
 
-    let featureContext: FeatureContext | undefined;
-    let componentFactory: ComponentFactory | undefined;
+    let bsSetup: BootstrapSetup;
 
-    const provideAdapter = () => {
-      if (featureContext && componentFactory) {
-        featureContext.provide({ a: ElementAdapter, is: mountAdapter(componentFactory, def) });
-      }
-    };
-
-    return ComponentDef.define(
-        componentType,
-        {
-          define(definitionContext) {
-            componentFactory = definitionContext.get(ComponentFactory);
-            provideAdapter();
-          },
-          feature: {
-            needs: AutoMountSupport,
-            init(context) {
-              featureContext = context;
-              provideAdapter();
-            },
-          },
+    return {
+      define(context) {
+        bsSetup.provide({
+          a: ElementAdapter,
+          is: mountAdapter(context.get(ComponentFactory), def),
+        });
+      },
+      feature: {
+        needs: AutoMountSupport,
+        setup(setup) {
+          bsSetup = setup;
         },
-    );
+      },
+    };
   },
 
 };

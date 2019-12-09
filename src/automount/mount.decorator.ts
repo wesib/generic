@@ -1,7 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { ComponentClass, TypedClassDecorator } from '@wesib/wesib';
+import { ComponentClass, ComponentDef, TypedClassDecorator } from '@wesib/wesib';
 import { MountDef } from './mount-def';
 
 /**
@@ -17,5 +17,5 @@ import { MountDef } from './mount-def';
  * @returns Component decorator.
  */
 export function Mount<T extends ComponentClass = any>(def: MountDef | MountDef['to']): TypedClassDecorator<T> {
-  return (type: T) => MountDef.define(type, def);
+  return (type: T) => ComponentDef.define(type, MountDef.componentDef(def));
 }
