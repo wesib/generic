@@ -2,7 +2,6 @@
  * @module @wesib/generic
  */
 import {
-  AutoConnectSupport,
   BootstrapRoot,
   BootstrapWindow,
   Class,
@@ -24,7 +23,8 @@ let AutoMountSupport__feature: FeatureDef | undefined;
  *
  * Can be applied directly, or using [[autoMountSupport]] function when custom auto-mount configuration is required.
  *
- * Requires `AutoConnectSupport` feature.
+ * Does not track DOM mutations. To do that either enable `AutoConnectSupport`, or apply `ElementAdapter` to added
+ * elements. E.g. by utilizing `ElementObserver`.
  *
  * Automatically enabled by {@link Mount @Mount} decorator.
  */
@@ -63,7 +63,6 @@ export function autoMountSupport(config?: AutoMountConfig): Class {
 
 function featureDef(config: AutoMountConfig = {}): FeatureDef {
   return {
-    needs: AutoConnectSupport,
     setup(setup) {
       setup.whenReady(context => {
         // Await for mount definition registration

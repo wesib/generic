@@ -1,14 +1,4 @@
-import {
-  ArraySet,
-  AutoConnectSupport,
-  bootstrapComponents,
-  BootstrapRoot,
-  Class,
-  ElementAdapter,
-  Feature,
-  FeatureDef,
-  FeatureDef__symbol,
-} from '@wesib/wesib';
+import { bootstrapComponents, BootstrapRoot, Class, ElementAdapter, Feature, FeatureDef__symbol } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { autoMountSupport, AutoMountSupport } from './auto-mount-support.feature';
 import SpyInstance = jest.SpyInstance;
@@ -61,9 +51,6 @@ describe('automount', () => {
   describe('AutoMountSupport', () => {
     it('caches feature definition', () => {
       expect(AutoMountSupport[FeatureDef__symbol]).toBe(AutoMountSupport[FeatureDef__symbol]);
-    });
-    it('enables `AutoConnectSupport`', () => {
-      expect([...new ArraySet(FeatureDef.of(AutoMountSupport).needs)]).toContain(AutoConnectSupport);
     });
     it('adapts all elements', async () => {
 
