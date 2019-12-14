@@ -1,6 +1,6 @@
-import { BootstrapContext, BootstrapWindow, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
+import { BootstrapContext, BootstrapWindow, ComponentClass, DefaultNamespaceAliaser, isElement } from '@wesib/wesib';
 import { AIterable, ArrayLikeIterable, filterIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from 'a-iterable';
-import { nextArgs } from 'call-thru';
+import { isPresent, nextArgs } from 'call-thru';
 import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
 import { html__naming } from 'namespace-aliaser';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
@@ -208,12 +208,4 @@ export function elementNodeList<N extends ElementNode>(
     return nodeOf(node, true);
   }
 
-}
-
-function isElement(node: Node): node is Element {
-  return node.nodeType === Node.ELEMENT_NODE;
-}
-
-function isPresent<T>(item: T | undefined): item is T {
-  return item != null;
 }

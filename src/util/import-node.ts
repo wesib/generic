@@ -1,6 +1,7 @@
 /**
  * @module @wesib/generic
  */
+import { isElement } from '@wesib/wesib';
 import { itsEach, overArray } from 'a-iterable';
 
 /**
@@ -53,24 +54,22 @@ export function importNode<N extends Node>(
 
   const doc = to.ownerDocument!;
 
-  if (from.nodeType !== Node.ELEMENT_NODE) {
+  if (isElement(from)) {
 
-    const nodeClone = doc.importNode(from, false);
+    const elementClone = doc.createElement(from.tagName.toLowerCase()) as Node as (Element & N);
 
-    to.insertBefore(nodeClone, before);
+    from.getAttributeNames().forEach(attr => elementClone.setAttribute(attr, from.getAttribute(attr)!));
+    importContent(from, elementClone);
+    to.insertBefore(elementClone, before);
 
-    return nodeClone;
+    return elementClone;
   }
 
-  const element = from as Node as Element;
-  const elementClone = doc.createElement(element.tagName.toLowerCase()) as Node as (Element & N);
+  const nodeClone = doc.importNode(from, false);
 
-  element.getAttributeNames().forEach(attr => elementClone.setAttribute(attr, element.getAttribute(attr)!));
+  to.insertBefore(nodeClone, before);
 
-  importContent(from, elementClone);
-  to.insertBefore(elementClone, before);
-
-  return elementClone;
+  return nodeClone;
 }
 
 /**

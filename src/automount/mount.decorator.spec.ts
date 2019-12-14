@@ -1,7 +1,6 @@
 import {
   bootstrapComponents,
   BootstrapRoot,
-  BootstrapWindow,
   Class,
   Component,
   ComponentClass,
@@ -12,37 +11,22 @@ import {
 } from '@wesib/wesib';
 import { MockElement } from '../spec/test-element';
 import { Mount } from './mount.decorator';
-import Mock = jest.Mock;
-import Mocked = jest.Mocked;
 
 describe('automount', () => {
 
-  let mockWindow: Mocked<BootstrapWindow>;
-  let mockDocument: Mocked<Document>;
-  let mockObserver: Mocked<MutationObserver>;
-  let mockRoot: {
-    querySelectorAll: Mock<any[], [string]>;
-    addEventListener: Mock;
-  };
+  let root: Element;
+
+  beforeEach(() => {
+    root = document.createElement('test-root');
+    document.body.appendChild(root);
+  });
+  afterEach(() => {
+    root.remove();
+  });
+
   let mockAdapter: ElementAdapter;
 
   beforeEach(() => {
-    mockObserver = {
-      observe: jest.fn(),
-    } as any;
-    mockDocument = {
-      readyState: 'interactive',
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-    } as any;
-    mockWindow = {
-      MutationObserver: jest.fn(() => mockObserver),
-      document: mockDocument,
-    } as any;
-    mockRoot = {
-      querySelectorAll: jest.fn(_selector => []),
-      addEventListener: jest.fn(),
-    };
     mockAdapter = jest.fn();
   });
 
@@ -65,13 +49,9 @@ describe('automount', () => {
   describe('@Mount', () => {
     it('mounts to matching element', async () => {
 
-      const element = {
-        name: 'element',
-        matches: jest.fn(() => true),
-        dispatchEvent: jest.fn(),
-      };
+      const element = document.createElement('test-component');
 
-      mockRoot.querySelectorAll.mockImplementation(() => [element]);
+      root.appendChild(element);
 
       await bootstrap(componentType);
 
@@ -93,12 +73,9 @@ describe('automount', () => {
       class TestComponent {
       }
 
-      const element = {
-        name: 'element',
-        dispatchEvent: jest.fn(),
-      };
+      const element = document.createElement('element');
 
-      mockRoot.querySelectorAll.mockImplementation(() => [element]);
+      root.appendChild(element);
 
       await bootstrap(TestComponent);
 
@@ -109,16 +86,12 @@ describe('automount', () => {
     });
     it('does not mount to non-matching element', async () => {
 
-      const element: any = {
-        name: 'element',
-        matches: jest.fn(() => false),
-      };
+      const element = document.createElement('element');
 
-      mockRoot.querySelectorAll.mockImplementation(() => [element]);
-
+      root.appendChild(element);
       await bootstrap(componentType);
 
-      expect(element[ComponentContext__symbol]).toBeUndefined();
+      expect((element as any)[ComponentContext__symbol]).toBeUndefined();
     });
   });
 
@@ -126,8 +99,7 @@ describe('automount', () => {
 
     @Feature({
       setup(setup) {
-        setup.provide({ a: BootstrapWindow, is: mockWindow });
-        setup.provide({ a: BootstrapRoot, is: mockRoot });
+        setup.provide({ a: BootstrapRoot, is: root });
         setup.provide({ a: ElementAdapter, is: mockAdapter });
       },
     })
