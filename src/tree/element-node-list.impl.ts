@@ -53,7 +53,7 @@ export function elementNodeList<N extends ElementNode>(
     });
   }
 
-  const Observer: typeof MutationObserver = (bsContext.get(BootstrapWindow) as any).MutationObserver;
+  const Observer = bsContext.get(BootstrapWindow).MutationObserver;
   const observer = new Observer(update);
   let nodeList: ElementNodeList;
 
