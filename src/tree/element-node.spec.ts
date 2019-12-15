@@ -10,7 +10,7 @@ import {
 } from '@wesib/wesib';
 import { itsFirst } from 'a-iterable';
 import { noop } from 'call-thru';
-import { noEventSupply, ValueTracker } from 'fun-events';
+import { ValueTracker } from 'fun-events';
 import { QualifiedName } from 'namespace-aliaser';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
@@ -38,8 +38,6 @@ describe('tree', () => {
   });
 
   interface ComponentNodeInfo {
-    readonly connect: (ctx: ComponentContext) => void;
-    readonly disconnect: (ctx: ComponentContext) => void;
     readonly element: Element;
     readonly context: ComponentContext;
     readonly node: ComponentNode;
@@ -71,26 +69,12 @@ describe('tree', () => {
 
     (element as any)[ComponentContext__symbol] = context;
 
-    let connect: (ctx: ComponentContext) => void = noop;
-    let disconnect: (ctx: ComponentContext) => void = noop;
-
-    jest.spyOn(context as any, 'whenOn', 'get').mockReturnValue((listener: (ctx: ComponentContext) => void) => {
-      connect = listener;
-      return noEventSupply();
-    });
-    jest.spyOn(context as any, 'whenOff', 'get').mockReturnValue((listener: (ctx: ComponentContext) => void) => {
-      disconnect = listener;
-      return noEventSupply();
-    });
-
     jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
     jest.spyOn(context, 'element', 'get').mockReturnValue(element);
 
     const node = context.get(ComponentNode);
 
     return {
-      connect,
-      disconnect,
       element,
       context,
       node,
