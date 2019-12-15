@@ -1,95 +1,100 @@
-import {
-  ArraySet,
-  AutoConnectSupport,
-  bootstrapComponents,
-  BootstrapRoot,
-  BootstrapWindow,
-  Class,
-  ElementAdapter,
-  Feature,
-  FeatureDef,
-  FeatureDef__symbol,
-} from '@wesib/wesib';
+import { bootstrapComponents, BootstrapRoot, Class, ElementAdapter, Feature, FeatureDef__symbol } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { autoMountSupport, AutoMountSupport } from './auto-mount-support.feature';
-import Mock = jest.Mock;
-import Mocked = jest.Mocked;
+import SpyInstance = jest.SpyInstance;
 
 describe('automount', () => {
 
-  let mockWindow: Mocked<BootstrapWindow>;
-  let mockDocument: Mocked<Document>;
+  let root: Element;
+
+  beforeEach(() => {
+    root = document.createElement('test-root');
+    document.body.appendChild(root);
+  });
+  afterEach(() => {
+    root.remove();
+  });
+
   let domContentLoaded: () => void;
-  let mockObserver: Mocked<MutationObserver>;
-  let mockRoot: {
-    querySelectorAll: Mock<any[], [string]>;
-    addEventListener: Mock;
-  };
   let mockAdapter: ElementAdapter;
+
+  let readyStateSpy: SpyInstance;
+  let addEventListenerSpy: SpyInstance;
+  let removeEventListenerSpy: SpyInstance;
+  let mockReadyState: DocumentReadyState;
 
   beforeEach(() => {
     domContentLoaded = noop;
-    mockObserver = {
-      observe: jest.fn(),
-    } as any;
-    mockDocument = {
-      readyState: 'interactive',
-      addEventListener: jest.fn((event, listener) => {
-        if (event === 'DOMContentLoaded') {
-          domContentLoaded = () => listener(new Event('DOMContentLoaded'));
-        }
-      }),
-      removeEventListener: jest.fn(),
-    } as any;
-    mockWindow = {
-      MutationObserver: jest.fn(() => mockObserver),
-      document: mockDocument,
-    } as any;
-    mockRoot = {
-      querySelectorAll: jest.fn(_selector => []),
-      addEventListener: jest.fn(),
-    };
     mockAdapter = jest.fn();
+    mockReadyState = 'interactive';
+    readyStateSpy = jest.spyOn(document, 'readyState', 'get');
+    readyStateSpy.mockImplementation(() => mockReadyState);
+
+    const addEventListener = document.addEventListener;
+
+    addEventListenerSpy = jest.spyOn(document, 'addEventListener');
+    addEventListenerSpy.mockImplementation((event, listener) => {
+      if (event === 'DOMContentLoaded') {
+        domContentLoaded = () => listener(new Event('DOMContentLoaded'));
+      } else {
+        addEventListener(event, listener);
+      }
+    });
+    removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
+  });
+  afterEach(() => {
+    addEventListenerSpy.mockRestore();
+    removeEventListenerSpy.mockRestore();
+    readyStateSpy.mockRestore();
   });
 
   describe('AutoMountSupport', () => {
     it('caches feature definition', () => {
       expect(AutoMountSupport[FeatureDef__symbol]).toBe(AutoMountSupport[FeatureDef__symbol]);
     });
-    it('enables `AutoConnectSupport`', () => {
-      expect([...new ArraySet(FeatureDef.of(AutoMountSupport).needs)]).toContain(AutoConnectSupport);
-    });
     it('adapts all elements', async () => {
+
+      const qsaSpy = jest.spyOn(root, 'querySelectorAll');
+
       await bootstrap(AutoMountSupport);
 
-      expect(mockRoot.querySelectorAll).toHaveBeenCalledWith('*');
+      expect(qsaSpy).toHaveBeenCalledWith('*');
     });
   });
   describe('autoMountSupport', () => {
     it('does not adapt elements when disabled', async () => {
+
+      const qsaSpy = jest.spyOn(root, 'querySelectorAll');
+
       await bootstrap(autoMountSupport({ select: false }));
 
-      expect(mockRoot.querySelectorAll).not.toHaveBeenCalled();
+      expect(qsaSpy).not.toHaveBeenCalled();
     });
     it('adapts all elements when `select` set to `true`', async () => {
+
+      const qsaSpy = jest.spyOn(root, 'querySelectorAll');
+
       await bootstrap(autoMountSupport({ select: true }));
 
-      expect(mockRoot.querySelectorAll).toHaveBeenCalledWith('*');
+      expect(qsaSpy).toHaveBeenCalledWith('*');
     });
     it('selects elements to adapt', async () => {
 
       const selector = 'some';
+      const qsaSpy = jest.spyOn(root, 'querySelectorAll');
 
       await bootstrap(autoMountSupport({ select: selector }));
 
-      expect(mockRoot.querySelectorAll).toHaveBeenCalledWith(selector);
+      expect(qsaSpy).toHaveBeenCalledWith(selector);
     });
     it('adapts selected elements', async () => {
 
-      const element1 = { name: 'element1' };
-      const element2 = { name: 'element2' };
+      const element1 = document.createElement('element-1');
+      const element2 = document.createElement('element-2');
 
-      mockRoot.querySelectorAll.mockImplementation(() => [element1, element2]);
+      element1.appendChild(element2);
+      root.appendChild(element1);
+      await Promise.resolve();
 
       await bootstrap(autoMountSupport());
 
@@ -99,18 +104,20 @@ describe('automount', () => {
     it('does not register DOMContentLoaded listener if document is loaded', async () => {
       await bootstrap(autoMountSupport());
 
-      expect(mockDocument.addEventListener).not.toHaveBeenLastCalledWith('DOMContentLoaded', expect.any(Function));
+      expect(addEventListenerSpy).not.toHaveBeenLastCalledWith('DOMContentLoaded', expect.any(Function));
     });
     it('registers DOMContentLoaded listener if document is not loaded', async () => {
-      (mockDocument as any).readyState = 'loading';
+      mockReadyState = 'loading';
+
+      const qsaSpy = jest.spyOn(root, 'querySelectorAll');
 
       await bootstrap(autoMountSupport());
-      expect(mockDocument.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function), undefined);
-      expect(mockRoot.querySelectorAll).not.toHaveBeenCalled();
+      expect(addEventListenerSpy).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function), undefined);
+      expect(qsaSpy).not.toHaveBeenCalled();
 
       domContentLoaded();
-      expect(mockRoot.querySelectorAll).toHaveBeenCalled();
-      expect(mockDocument.removeEventListener).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
+      expect(root.querySelectorAll).toHaveBeenCalled();
+      expect(removeEventListenerSpy).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
     });
   });
 
@@ -118,8 +125,7 @@ describe('automount', () => {
 
     @Feature({
       setup(setup) {
-        setup.provide({ a: BootstrapWindow, is: mockWindow });
-        setup.provide({ a: BootstrapRoot, is: mockRoot });
+        setup.provide({ a: BootstrapRoot, is: root });
         setup.provide({ a: ElementAdapter, is: mockAdapter });
       },
     })

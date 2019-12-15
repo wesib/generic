@@ -1,12 +1,18 @@
-import { BootstrapContext, BootstrapWindow, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
+import {
+  BootstrapContext,
+  ComponentClass,
+  DefaultNamespaceAliaser,
+  ElementObserver,
+  ElementObserverInit,
+  isElement,
+} from '@wesib/wesib';
 import { AIterable, ArrayLikeIterable, filterIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from 'a-iterable';
-import { nextArgs } from 'call-thru';
+import { isPresent, nextArgs } from 'call-thru';
 import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
 import { html__naming } from 'namespace-aliaser';
 import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
 
-const WATCH_CHILD_LIST = { childList: true };
-const WATCH_DEEP = { childList: true, subtree: true };
+const WATCH_DEEP: ElementObserverInit = { subtree: true };
 
 /**
  * @internal
@@ -20,7 +26,7 @@ export function elementNodeList<N extends ElementNode>(
 ): ElementNodeList_<N> {
 
   const updates = new EventEmitter<[N[], N[]]>();
-  const init: MutationObserverInit = deep ? WATCH_DEEP : WATCH_CHILD_LIST;
+  const init = deep ? WATCH_DEEP : undefined;
   let cache = new Set<Element>();
   let iterable: Iterable<N> | undefined;
   let selector: string | undefined;
@@ -29,6 +35,7 @@ export function elementNodeList<N extends ElementNode>(
     selector = selectorOrType;
   } else {
     bsContext.whenDefined(selectorOrType).then(({ elementDef: { name } }) => {
+      iterable = undefined;
       if (name) {
         selector = html__naming.name(name, bsContext.get(DefaultNamespaceAliaser));
         if (updates.size) {
@@ -53,8 +60,7 @@ export function elementNodeList<N extends ElementNode>(
     });
   }
 
-  const Observer = bsContext.get(BootstrapWindow).MutationObserver;
-  const observer = new Observer(update);
+  const observer = bsContext.get(ElementObserver)(update);
   let nodeList: ElementNodeList;
 
   const onUpdate = onEventBy<[N[], N[]]>(receiver => {
@@ -97,7 +103,7 @@ export function elementNodeList<N extends ElementNode>(
 
         const node = nodeOf(element) as N;
 
-        updates.send([node], [node]);
+        updates.send([node], []);
       }
     });
   }
@@ -208,12 +214,4 @@ export function elementNodeList<N extends ElementNode>(
     return nodeOf(node, true);
   }
 
-}
-
-function isElement(node: Node): node is Element {
-  return node.nodeType === Node.ELEMENT_NODE;
-}
-
-function isPresent<T>(item: T | undefined): item is T {
-  return item != null;
 }
