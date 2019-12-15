@@ -71,7 +71,8 @@
 					</div>
 					<p>Automatically mounts components decorated with <a href="../globals.html#mount">@Mount</a> decorator.</p>
 					<p>Can be applied directly, or using <a href="../globals.html#automountsupport">autoMountSupport</a> function when custom auto-mount configuration is required.</p>
-					<p>Requires <code>AutoConnectSupport</code> feature.</p>
+					<p>Does not track DOM mutations. To do that either enable <code>AutoConnectSupport</code>, or apply <code>ElementAdapter</code> to added
+					elements. E.g. by utilizing <code>ElementObserver</code>.</p>
 					<p>Automatically enabled by <a href="../globals.html#mount">@Mount</a> decorator.</p>
 				</div>
 			</section>
@@ -108,7 +109,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/cadedb9/src/automount/auto-mount-support.feature.ts#L33">src/automount/auto-mount-support.feature.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/508ee63/src/automount/auto-mount-support.feature.ts#L33">src/automount/auto-mount-support.feature.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">FeatureDef</span></h4>
