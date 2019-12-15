@@ -1,6 +1,6 @@
 {
   "name": "@wesib/generic",
-  "version": "1.0.0-alpha.53",
+  "version": "1.0.0-alpha.54",
   "description": "Generic web components",
   "keywords": [
     "web-components",
@@ -21,7 +21,7 @@
   "module": "dist/wesib.generic.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.53",
+    "@wesib/wesib": "^1.0.0-alpha.54",
     "a-iterable": "^2.4.4",
     "call-thru": "^2.5.3",
     "context-values": "^2.1.0",
