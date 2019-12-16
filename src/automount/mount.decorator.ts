@@ -1,7 +1,8 @@
 /**
  * @module @wesib/generic
  */
-import { ComponentClass, ComponentDef, TypedClassDecorator } from '@wesib/wesib';
+import { ComponentClass, ComponentDef, ComponentFactory, ElementAdapter, TypedClassDecorator } from '@wesib/wesib';
+import { AutoMountSupport } from './auto-mount-support.feature';
 import { MountDef } from './mount-def';
 
 /**
@@ -17,5 +18,22 @@ import { MountDef } from './mount-def';
  * @returns Component decorator.
  */
 export function Mount<T extends ComponentClass = any>(def: MountDef | MountDef['to']): TypedClassDecorator<T> {
-  return (type: T) => ComponentDef.define(type, MountDef.componentDef(def));
+  return (type: T) => ComponentDef.define(
+      type,
+      {
+        feature: {
+          needs: AutoMountSupport,
+          setup(bsSetup) {
+            bsSetup.setupDefinition(bsSetup.feature)(defSetup => {
+              defSetup.whenReady(defContext => {
+                bsSetup.provide({
+                  a: ElementAdapter,
+                  is: MountDef.adapter(defContext.get(ComponentFactory), def),
+                });
+              });
+            });
+          },
+        },
+      },
+  );
 }
