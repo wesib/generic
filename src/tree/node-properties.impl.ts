@@ -8,7 +8,8 @@ class PropertyTracker<T> extends ValueTracker<T> {
 
   constructor(
       private readonly _element: any,
-      private readonly _key: PropertyKey) {
+      private readonly _key: PropertyKey,
+  ) {
     super();
   }
 

@@ -78,33 +78,28 @@ export function elementNodeOf(bs: BootstrapContext, element: Element, optional?:
 }
 
 function selectNodes(
-    bs: BootstrapContext,
+    bsContext: BootstrapContext,
     root: Element,
     selector: string | ComponentClass<any>,
     opts: ElementNode_.SelectorOpts = {},
 ): ElementNodeList<any> {
-
-  const adapter = bs.get(ElementAdapter);
-
   if (opts.all) {
     return elementNodeList<ElementNode_.Any>(
-        bs,
+        bsContext,
         root,
         selector,
-        (element, optional) => elementNodeOf(bs, element, optional),
+        (element, optional) => elementNodeOf(bsContext, element, optional),
         opts,
     );
   }
+
+  const adapter = bsContext.get(ElementAdapter);
+
   return elementNodeList<ComponentNode<any>>(
-      bs,
+      bsContext,
       root,
       selector,
-      (element, optional) => {
-        if (adapter(element)) {
-          return elementNodeOf(bs, element, optional) as ComponentNode<any>;
-        }
-        return undefined;
-      },
+      (element, optional) => adapter(element) && elementNodeOf(bsContext, element, optional) as ComponentNode<any>,
       opts,
   );
 }
