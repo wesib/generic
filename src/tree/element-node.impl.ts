@@ -66,15 +66,11 @@ class ElementNode extends ElementNode_ {
 /**
  * @internal
  */
-export function elementNodeOf(bs: BootstrapContext, element: Element, optional?: boolean): ElementNode_.Any {
+export function elementNodeOf(bsContext: BootstrapContext, element: Element, optional?: boolean): ElementNode_.Any {
 
-  const found: ElementNode_.Any = (element as any)[ElementNode__symbol];
+  const existing: ElementNode_.Any = (element as any)[ElementNode__symbol];
 
-  if (optional || found) {
-    return found;
-  }
-
-  return new ElementNode(bs, element) as ElementNode_.Raw;
+  return (existing || optional) ? existing : new ElementNode(bsContext, element);
 }
 
 function selectNodes(
