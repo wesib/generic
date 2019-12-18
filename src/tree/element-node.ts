@@ -53,9 +53,20 @@ export abstract class ElementNode {
    * @param opts  Component selector options.
    */
   abstract select(
-      selector: string | ComponentClass<any>,
+      selector: string,
       opts?: ElementNode.ComponentSelectorOpts,
   ): ElementNodeList<ComponentNode>;
+
+  /**
+   * Select component nodes of the given type.
+   *
+   * @param componentType  Nested component type with custom element name.
+   * @param opts  Component selector options.
+   */
+  abstract select<T extends object>(
+      componentType: ComponentClass<T>,
+      opts?: ElementNode.ComponentSelectorOpts,
+  ): ElementNodeList<ComponentNode<T>>;
 
   /**
    * Returns a value tracker of element's attribute.
@@ -139,7 +150,7 @@ export namespace ElementNode {
 /**
  * Element node representing an element bound to some component.
  */
-export interface ComponentNode<T extends object = object> extends ElementNode {
+export interface ComponentNode<T extends object = any> extends ElementNode {
 
   readonly context: ComponentContext<T>;
 

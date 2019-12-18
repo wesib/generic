@@ -91,11 +91,11 @@ function selectNodes(
 
   const adapter = bsContext.get(ElementAdapter);
 
-  return elementNodeList<ComponentNode<any>>(
+  return elementNodeList<ComponentNode>(
       bsContext,
       root,
       selector,
-      (element, optional) => adapter(element) && elementNodeOf(bsContext, element, optional) as ComponentNode<any>,
+      (element, optional) => adapter(element) && elementNodeOf(bsContext, element, optional) as ComponentNode,
       opts,
   );
 }
