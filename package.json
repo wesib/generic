@@ -38,7 +38,7 @@
     }
   },
   "devDependencies": {
-    "@types/jest": "^24.0.23",
+    "@types/jest": "^24.0.24",
     "@types/jsdom": "^12.2.4",
     "@wesib/wesib": "^1.0.0-alpha.54",
     "a-iterable": "^2.4.4",
@@ -64,7 +64,7 @@
     "style-producer": "^3.3.0",
     "ts-jest": "^24.2.0",
     "tslint": "^5.20.1",
-    "typedoc": "^0.15.4",
+    "typedoc": "^0.15.5",
     "typedoc-plugin-external-module-name": "^2.1.0",
     "typescript": "^3.7.3"
   },
