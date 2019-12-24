@@ -1,9 +1,9 @@
 /**
  * @module @wesib/generic
  */
-import { ComponentContext } from '@wesib/wesib';
 import { EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
+import { ComponentNode } from '../tree';
 
 /**
  * Component input context - a context of user input initiated by component.
@@ -13,11 +13,11 @@ import { InControl } from 'input-aspects';
 export interface ComponentInContext {
 
   /**
-   * A context of component initiating the user input.
+   * Root component node initiating the user input.
    *
-   * This is a component containing the ones participating in user input.
+   * This node contains the ones participating in user input.
    */
-  readonly componentContext: ComponentContext;
+  readonly root: ComponentNode;
 
   /**
    * User input control.

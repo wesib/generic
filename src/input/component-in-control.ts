@@ -5,6 +5,7 @@ import { ComponentContext, DefinitionSetup } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { afterThe, EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
+import { ComponentNode } from '../tree';
 import { ComponentIn } from './component-in';
 import { enableComponentIn } from './enable-component-in';
 
@@ -28,9 +29,9 @@ export class ComponentInControl<Value = any> {
   }
 
   /**
-   * Component context.
+   * Root component node.
    */
-  readonly context: ComponentContext;
+  readonly root: ComponentNode;
 
   /**
    * Sets up component definition to make it contain a component input control instance.
@@ -50,7 +51,7 @@ export class ComponentInControl<Value = any> {
    * @param context  Component context.
    */
   constructor(context: ComponentContext) {
-    this.context = context;
+    this.root = context.get(ComponentNode);
   }
 
   /**
@@ -64,7 +65,7 @@ export class ComponentInControl<Value = any> {
    */
   enable(control: InControl<Value>): EventSupply {
     return enableComponentIn({
-      context: this.context,
+      root: this.root,
       control,
     });
   }
