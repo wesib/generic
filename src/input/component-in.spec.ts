@@ -85,8 +85,8 @@ describe('input', () => {
       it('discovers input participants', () => {
 
         const error: InValidation.Message = { invalid: 'error' };
-        const mockIn = jest.fn<void, Parameters<ComponentIn>>(
-            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply).needs(ctx.supply),
+        const mockIn = jest.fn<EventSupply, Parameters<ComponentIn>>(
+            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply),
         );
 
         componentIns.it = [mockIn];
@@ -104,8 +104,8 @@ describe('input', () => {
       it('disables input participation when component input disabled', () => {
 
         const error: InValidation.Message = { invalid: 'error' };
-        const mockIn = jest.fn<void, Parameters<ComponentIn>>(
-            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply).needs(ctx.supply),
+        const mockIn = jest.fn<EventSupply, Parameters<ComponentIn>>(
+            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply),
         );
 
         componentIns.it = [mockIn];
@@ -119,8 +119,8 @@ describe('input', () => {
       it('disables input participation when participating component removed', async () => {
 
         const error: InValidation.Message = { invalid: 'error' };
-        const mockIn = jest.fn<void, Parameters<ComponentIn>>(
-            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply).needs(ctx.supply),
+        const mockIn = jest.fn<EventSupply, Parameters<ComponentIn>>(
+            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply),
         );
 
         componentIns.it = [mockIn];
@@ -146,8 +146,8 @@ describe('input', () => {
         factory.mountTo(nestedElement);
 
         const error: InValidation.Message = { invalid: 'error' };
-        const mockIn = jest.fn<void, Parameters<ComponentIn>>(
-            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply).needs(ctx.supply),
+        const mockIn = jest.fn<EventSupply, Parameters<ComponentIn>>(
+            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply),
         );
 
         componentIns.it = [mockIn];
@@ -187,8 +187,8 @@ describe('input', () => {
         factory.mountTo(nestedElement);
 
         const error: InValidation.Message = { invalid: 'error' };
-        const mockIn = jest.fn<void, Parameters<ComponentIn>>(
-            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply).needs(ctx.supply),
+        const mockIn = jest.fn<EventSupply, Parameters<ComponentIn>>(
+            ctx => ctx.control.aspect(InValidation).by(afterThe(error)).needs(inSupply),
         );
 
         componentIns.it = [mockIn];
@@ -202,8 +202,8 @@ describe('input', () => {
       it('handles participating component moved inside another one', async () => {
 
         const error1: InValidation.Message = { invalid: 'error 1' };
-        const mockIn = jest.fn<void, Parameters<ComponentIn>>(
-            ctx => ctx.control.aspect(InValidation).by(afterThe(error1)).needs(inSupply).needs(ctx.supply),
+        const mockIn = jest.fn<EventSupply, Parameters<ComponentIn>>(
+            ctx => ctx.control.aspect(InValidation).by(afterThe(error1)).needs(inSupply),
         );
 
         componentIns.it = [mockIn];
@@ -216,7 +216,7 @@ describe('input', () => {
             setup.perComponent({
               a: ComponentIn,
               is: afterThe<ComponentIn[]>(
-                  ctx => ctx.control.aspect(InValidation).by(afterThe(error2)).needs(ctx.supply),
+                  ctx => ctx.control.aspect(InValidation).by(afterThe(error2)),
               ),
             });
           },
@@ -245,8 +245,8 @@ describe('input', () => {
       it('handles participating component become nested inside another one', async () => {
 
         const error1: InValidation.Message = { invalid: 'error 1' };
-        const mockIn = jest.fn<void, Parameters<ComponentIn>>(
-            ctx => ctx.control.aspect(InValidation).by(afterThe(error1)).needs(inSupply).needs(ctx.supply),
+        const mockIn = jest.fn<EventSupply, Parameters<ComponentIn>>(
+            ctx => ctx.control.aspect(InValidation).by(afterThe(error1)).needs(inSupply),
         );
 
         const error2: InValidation.Message = { invalid: 'error 2' };
@@ -256,7 +256,7 @@ describe('input', () => {
             setup.perComponent({
               a: ComponentIn,
               is: afterThe<ComponentIn[]>(
-                  ctx => ctx.control.aspect(InValidation).by(afterThe(error2)).needs(ctx.supply),
+                  ctx => ctx.control.aspect(InValidation).by(afterThe(error2)),
               ),
             });
           },

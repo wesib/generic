@@ -1,7 +1,6 @@
 /**
  * @module @wesib/generic
  */
-import { EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
 import { ComponentNode } from '../tree';
 
@@ -23,12 +22,5 @@ export interface ComponentInContext {
    * User input control.
    */
   readonly control: InControl<any>;
-
-  /**
-   * Participation supply.
-   *
-   * When this supply is cut off the component input should disable its participation in user input.
-   */
-  readonly supply: EventSupply;
 
 }

@@ -89,15 +89,14 @@ export function enableComponentIn(
 
       itsEach(
           ins,
-          participantsSupplier => afterSupplied(participantsSupplier)({
+          participantSupplier => afterSupplied(participantSupplier)({
             supply,
             receive: (_, ...participants) => itsEach(
                 participants,
                 participant => participant({
                   root,
                   control,
-                  supply,
-                }),
+                }).needs(supply),
             ),
           }),
       );

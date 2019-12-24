@@ -2,7 +2,7 @@
  * @module @wesib/generic
  */
 import { MultiContextKey, MultiContextRef } from 'context-values';
-import { EventKeeper } from 'fun-events';
+import { EventKeeper, EventSupply } from 'fun-events';
 import { ComponentInContext } from './component-in-context';
 
 /**
@@ -15,8 +15,10 @@ import { ComponentInContext } from './component-in-context';
 export type ComponentIn =
 /**
  * @param context  A context of component input to participate in.
+ *
+ * @returns A participation supply. When this supply is cut off the participation is disabled.
  */
-    (this: void, context: ComponentInContext) => void;
+    (this: void, context: ComponentInContext) => EventSupply;
 
 /**
  * A key of component context value containing an array of event keepers sending component inputs.
