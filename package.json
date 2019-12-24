@@ -26,6 +26,7 @@
     "call-thru": "^2.5.3",
     "context-values": "^2.1.0",
     "fun-events": "^7.0.2",
+    "input-aspects": "^1.1.0",
     "namespace-aliaser": "^2.0.2",
     "style-producer": "^3.3.0"
   },
@@ -33,6 +34,9 @@
     "http-header-value": "^2.0.1"
   },
   "peerDependenciesMeta": {
+    "input-aspects": {
+      "optional": true
+    },
     "style-producer": {
       "optional": true
     }
@@ -51,6 +55,7 @@
     "fun-events": "^7.0.2",
     "gh-pages": "^2.1.1",
     "hyphenate-style-name": "^1.0.3",
+    "input-aspects": "^1.1.0",
     "jest": "^24.9.0",
     "jest-environment-jsdom-fifteen": "^1.0.2",
     "jest-junit": "^10.0.0",
