@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Theme | Wesib: Generic Components</title>
+	<title>ComponentInControl | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="theme.html">Theme</a>
+					<a href="componentincontrol.html">ComponentInControl</a>
 				</li>
 			</ul>
-			<h1>Class Theme</h1>
+			<h1>Class ComponentInControl&lt;Value&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -67,18 +67,26 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A hierarchy of CSS rules within single root.</p>
+						<p>User input control maintained by component.</p>
 					</div>
-					<p>A component may use it to extract styling information.</p>
-					<p>Current theme is available in bootstrap, definition, or component context. By default, only one theme is declared
-					per bootstrap. But this can be overridden.</p>
+					<p>An instance of this class intended to be constructed available component context. A <a href="componentincontrol.html#setup">setup</a> method can be used for
+					that.</p>
+					<p>To initiate user input, the component should obtain an instance from its context and <a href="componentincontrol.html#enable">enable</a> it.</p>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>Value</h4>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Theme</span>
+						<span class="target">ComponentInControl</span>
 					</li>
 				</ul>
 			</section>
@@ -87,43 +95,85 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="componentincontrol.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="theme.html#root" class="tsd-kind-icon">root</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="componentincontrol.html#root" class="tsd-kind-icon">root</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-static"><a href="theme.html#_contextkey__symbol_" class="tsd-kind-icon">[<wbr>Context<wbr>Key__symbol]</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-static"><a href="componentincontrol.html#_contextkey__symbol_" class="tsd-kind-icon">[<wbr>Context<wbr>Key__symbol]</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="theme.html#ref" class="tsd-kind-icon">ref</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="theme.html#style" class="tsd-kind-icon">style</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="componentincontrol.html#enable" class="tsd-kind-icon">enable</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="componentincontrol.html#setup" class="tsd-kind-icon">setup</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Component<wbr>InControl<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="componentincontrol.html" class="tsd-signature-type">ComponentInControl</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/input/component-in-control.ts#L44">src/input/component-in-control.ts:44</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Constructs component user input control.</p>
+								</div>
+								<p>Normally, a <a href="componentincontrol.html#setup">setup</a> method should be used instead.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>context: <span class="tsd-signature-type">ComponentContext</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Component context.</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="componentincontrol.html" class="tsd-signature-type">ComponentInControl</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="root" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> root</h3>
-					<div class="tsd-signature tsd-kind-icon">root<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StypRule</span></div>
+					<h3>root</h3>
+					<div class="tsd-signature tsd-kind-icon">root<span class="tsd-signature-symbol">:</span> <a href="../interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/theme/theme.ts#L32">src/theme/theme.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/input/component-in-control.ts#L34">src/input/component-in-control.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Root CSS rule.</p>
+							<p>Root component node.</p>
 						</div>
-						<p>All theme styling is represented as rules within this root.</p>
 					</div>
 				</section>
 			</section>
@@ -133,97 +183,88 @@
 					<a name="_contextkey__symbol_" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> [<wbr>Context<wbr>Key__symbol]</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> [ContextKey__symbol]<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ContextKey</span><span class="tsd-signature-symbol">&lt;</span><a href="theme.html" class="tsd-signature-type">Theme</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> [ContextKey__symbol]<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ContextKey</span><span class="tsd-signature-symbol">&lt;</span><a href="componentincontrol.html" class="tsd-signature-type">ComponentInControl</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/theme/theme.ts#L23">src/theme/theme.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/input/component-in-control.ts#L27">src/input/component-in-control.ts:27</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>A key of bootstrap, definition, or component context value containing current theme instance.</p>
+									<p>A key of component context value containing an component input control.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ContextKey</span><span class="tsd-signature-symbol">&lt;</span><a href="theme.html" class="tsd-signature-type">Theme</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ContextKey</span><span class="tsd-signature-symbol">&lt;</span><a href="componentincontrol.html" class="tsd-signature-type">ComponentInControl</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<a name="ref" class="tsd-anchor"></a>
-					<h3>ref</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">ref&lt;T&gt;<span class="tsd-signature-symbol">(</span>referrer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RefStypRule</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypRuleRef</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="enable" class="tsd-anchor"></a>
+					<h3>enable</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">enable<span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventSupply</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/theme/theme.ts#L43">src/theme/theme.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/input/component-in-control.ts#L66">src/input/component-in-control.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Obtains CSS rule reference by its <code>referrer</code>.</p>
+									<p>Enables user input for the given control.</p>
 								</div>
-								<p>This is a helper method that resolves the given <code>referrer</code> against the <code>root</code> CSS rule of this theme.</p>
+								<p>Utilizes <a href="../globals.html#enablecomponentin">enableComponentIn</a> for that.</p>
 							</div>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypProperties</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
-								</li>
-							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>referrer: <span class="tsd-signature-type">RefStypRule</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>control: <span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Target CSS rule referrer.</p>
+										<p>User input control to enable.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StypRuleRef</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>CSS rule reference.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">EventSupply</span></h4>
+							<p>User input supply. The user input is disabled once this supply is cut off.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="style" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> style</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">style<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>styles<span class="tsd-signature-symbol">: </span><a href="../modules/themestyle.html#provider" class="tsd-signature-type">Provider</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypRules</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="setup" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> setup</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">setup<span class="tsd-signature-symbol">(</span>setup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DefinitionSetup</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/theme/theme.ts#L57">src/theme/theme.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/input/component-in-control.ts#L41">src/input/component-in-control.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Obtains a styling for the given theme styles.</p>
+									<p>Sets up component definition to make it contain a component input control instance.</p>
 								</div>
-								<p>This method requests the registered <a href="../modules/themestyle.html">theme styles</a> for CSS rules they provide.
-								If some of the styles are not registered then uses the given style as provider.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>styles: <a href="../modules/themestyle.html#provider" class="tsd-signature-type">Provider</a><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>setup: <span class="tsd-signature-type">DefinitionSetup</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The styles to obtain styling information for.</p>
+										<p>Target component definition setup.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StypRules</span></h4>
-							<p>Dynamically updated CSS rule set containing the requested styling.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -241,20 +282,23 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="theme.html" class="tsd-kind-icon">Theme</a>
+					<li class="current tsd-kind-class tsd-has-type-parameter">
+						<a href="componentincontrol.html" class="tsd-kind-icon">Component<wbr>InControl</a>
 						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="componentincontrol.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="theme.html#root" class="tsd-kind-icon">root</a>
+								<a href="componentincontrol.html#root" class="tsd-kind-icon">root</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-								<a href="theme.html#_contextkey__symbol_" class="tsd-kind-icon">[<wbr>Context<wbr>Key__symbol]</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="theme.html#ref" class="tsd-kind-icon">ref</a>
+								<a href="componentincontrol.html#_contextkey__symbol_" class="tsd-kind-icon">[<wbr>Context<wbr>Key__symbol]</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="theme.html#style" class="tsd-kind-icon">style</a>
+								<a href="componentincontrol.html#enable" class="tsd-kind-icon">enable</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="componentincontrol.html#setup" class="tsd-kind-icon">setup</a>
 							</li>
 						</ul>
 					</li>
