@@ -12,7 +12,7 @@ import { elementNodeList } from './element-node-list.impl';
 import { NodeAttributes } from './node-attributes.impl';
 import { NodeProperties } from './node-properties.impl';
 
-const ElementNode__symbol = /*#__PURE__*/ Symbol('element-node');
+const ElementNode__symbol = (/*#__PURE__*/ Symbol('element-node'));
 
 class ElementNode extends ElementNode_ {
 

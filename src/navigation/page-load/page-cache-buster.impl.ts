@@ -5,12 +5,12 @@ import { Navigation } from '../navigation';
 import { PageLoadAgent } from './page-load-agent';
 import { PageLoadURLModifier } from './page-load-url-modifier';
 
-const PageCacheBuster__key = /*#__PURE__*/ new SingleContextKey<PageCacheBuster>(
+const PageCacheBuster__key = (/*#__PURE__*/ new SingleContextKey<PageCacheBuster>(
     'page-cache-buster',
     {
       byDefault: bootstrapDefault(context => new PageCacheBuster(context)),
     },
-);
+));
 
 /**
  * @internal

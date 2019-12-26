@@ -8,12 +8,12 @@ import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
 import { PageParamContext } from './page-param-context';
 
-const RoutingHistory__key = /*#__PURE__*/ new SingleContextKey<NavHistory>(
+const RoutingHistory__key = (/*#__PURE__*/ new SingleContextKey<NavHistory>(
     'navigation-history',
     {
       byDefault: bootstrapDefault(ctx => new NavHistory(ctx)),
     },
-);
+));
 
 /**
  * @internal

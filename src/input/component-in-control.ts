@@ -9,7 +9,7 @@ import { ComponentNode } from '../tree';
 import { ComponentIn } from './component-in';
 import { enableComponentIn } from './enable-component-in';
 
-const ComponentInControl__key = /*#__PURE__*/ new SingleContextKey<ComponentInControl>('component-in-control');
+const ComponentInControl__key = (/*#__PURE__*/ new SingleContextKey<ComponentInControl>('component-in-control'));
 
 /**
  * User input control maintained by component.

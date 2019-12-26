@@ -18,12 +18,12 @@ export type PageLoader = (this: void, page: Page) => OnEvent<[PageLoadResponse]>
 /**
  * @internal
  */
-export const PageLoader = /*#__PURE__*/ new SingleContextKey<PageLoader>(
+export const PageLoader = (/*#__PURE__*/ new SingleContextKey<PageLoader>(
     'page-loader',
     {
       byDefault: bootstrapDefault(newPageLoader),
     },
-);
+));
 
 function newPageLoader(context: BootstrapContext): PageLoader {
 

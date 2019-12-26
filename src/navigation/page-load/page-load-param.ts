@@ -34,4 +34,4 @@ class PageLoadParam extends PageParam<void, PageLoadRequest> {
  * - all added {@link PageLoadRequest.receiver response receiver}s supplies are cut off, or
  * - the entered page address is the the same one as previous one, except the hash,
  */
-export const pageLoadParam: PageParam<void, PageLoadRequest> = /*#__PURE__*/ new PageLoadParam();
+export const pageLoadParam: PageParam<void, PageLoadRequest> = (/*#__PURE__*/ new PageLoadParam());

@@ -160,7 +160,7 @@ export interface ComponentNode<T extends object = any> extends ElementNode {
  * A key of component context value containing a component node instance.
  */
 export const ComponentNode: SingleContextRef<ComponentNode> =
-    /*#__PURE__*/ new SingleContextKey<ComponentNode>('component-node');
+    (/*#__PURE__*/ new SingleContextKey<ComponentNode>('component-node'));
 
 /**
  * Dynamic list of selected component tree nodes.

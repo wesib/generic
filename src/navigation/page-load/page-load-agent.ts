@@ -58,4 +58,4 @@ export namespace PageLoadAgent {
  * The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.
  */
 export const PageLoadAgent: ContextUpRef<PageLoadAgent.Combined, PageLoadAgent> =
-    /*#__PURE__*/ new FetchAgentKey<[PageLoadResponse]>('page-load-agent');
+    (/*#__PURE__*/ new FetchAgentKey<[PageLoadResponse]>('page-load-agent'));

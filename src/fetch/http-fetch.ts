@@ -34,9 +34,9 @@ export type HttpFetch =
  * A key of bootstrap context value containing an [[HttpFetch]] instance.
  */
 export const HttpFetch: FnContextRef<Parameters<HttpFetch>, ReturnType<HttpFetch>> =
-    /*#__PURE__*/ new FnContextKey<Parameters<HttpFetch>, ReturnType<HttpFetch>>(
-    'http-fetch',
-    {
-      byDefault: bootstrapDefault(newHttpFetch),
-    },
-);
+    (/*#__PURE__*/ new FnContextKey<Parameters<HttpFetch>, ReturnType<HttpFetch>>(
+        'http-fetch',
+        {
+          byDefault: bootstrapDefault(newHttpFetch),
+        },
+    ));

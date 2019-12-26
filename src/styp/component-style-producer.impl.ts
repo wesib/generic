@@ -14,7 +14,7 @@ import { ComponentStypRender } from './component-styp-render';
 import { ElementIdClass } from './element-id-class.impl';
 
 const ComponentStyleProducer__key =
-    /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer:impl');
+    (/*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer:impl'));
 
 const hostSelector: StypSelector.Normalized = [{ e: ':host' }];
 

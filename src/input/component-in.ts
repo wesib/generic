@@ -24,4 +24,4 @@ export type ComponentIn =
  * A key of component context value containing an array of event keepers sending component inputs.
  */
 export const ComponentIn: MultiContextRef<EventKeeper<ComponentIn[]>> =
-    /*#__PURE__*/ new MultiContextKey<EventKeeper<ComponentIn[]>>('component-in');
+    (/*#__PURE__*/ new MultiContextKey<EventKeeper<ComponentIn[]>>('component-in'));

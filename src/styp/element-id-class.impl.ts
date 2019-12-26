@@ -10,17 +10,17 @@ export type ElementIdClass = QualifiedName;
 /**
  * @internal
  */
-export const ElementIdClass__NS = /*#__PURE*/ new NamespaceDef(
+export const ElementIdClass__NS = (/*#__PURE*/ new NamespaceDef(
     'https://wesib.github.io/ns/element-id-class',
     'elic',
     'element-id-class',
-);
+));
 
 /**
  * @internal
  */
 export const ElementIdClass: SingleContextRef<ElementIdClass> =
-    /*#__PURE__*/ new SingleContextKey('unique-element-class', { byDefault: assignElementId });
+    (/*#__PURE__*/ new SingleContextKey('unique-element-class', { byDefault: assignElementId }));
 
 let uniqueClassSeq = 0;
 

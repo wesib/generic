@@ -148,4 +148,4 @@ export namespace NavigationAgent {
  * The agent returned combines all registered agents into one. If no agent registered it just performs the navigation.
  */
 export const NavigationAgent: ContextUpRef<NavigationAgent.Combined, NavigationAgent> =
-    /*#__PURE__*/ new NavigationAgentKey('navigation-agent');
+    (/*#__PURE__*/ new NavigationAgentKey('navigation-agent'));
