@@ -4,13 +4,43 @@
 import { ComponentContext } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { eventSupply, EventSupply, noEventSupply } from 'fun-events';
-import { lazyStypRules, StypOptions, StypRules } from 'style-producer';
+import { lazyStypRules, StypOptions, StypPureSelector, StypRules } from 'style-producer';
 import { ComponentStyleProducer } from './component-style-producer';
 
 /**
  * Component CSS styles production options.
  */
 export interface ComponentStypOptions extends StypOptions {
+
+  /**
+   * Structured CSS selector to use for custom element's host.
+   *
+   * It modifies the selectors of produced CSS rules.
+   *
+   * For custom element with shadow root:
+   * - Replaces root CSS rule selector with `:host(<hostSelector>).
+   * - When `hostSelector` is omitted, then replaces root CSS rule selector with `:host`.
+   * - If CSS rule selector starts with `:host`, then replaces `:host` with `:host(<hostSelector>)`
+   * - If CSS rule selector starts with `:host(<selector>)`, then extends `<selector>` by `hostSelector`.
+   *   I.e. appends CSS classes and sub-selectors to it, and fulfills missing element and identifier selectors.
+   *
+   * For custom element without shadow root either uses provided `hostSelector`, or generates a unique one when omitted.
+   * And additionally:
+   * - Replaces root CSS rule selector it with `hostSelector`.
+   * - If CSS rule selector starts with `:host`, then replaces `:host` with `hostSelector`.
+   * - If CSS rule selector starts with `:host(<selector>), then replaces `:host(<selector>)` with `<selector>` extended
+   *   by `hostSelector`. I.e. appends CSS classes and sub-selectors to it, and fulfills missing element and identifier
+   *   selectors.
+   * - Otherwise prepends CSS rule selector with `hostSelector`.
+   *
+   * This selector should not contain a `:host` sub-selector.
+   */
+  hostSelector?: StypPureSelector.Part | string;
+
+  /**
+   * Root CSS selector is never used for custom elements. A `hostSelector` is applied instead.
+   */
+  rootSelector?: undefined;
 
   /**
    * Whether to produce CSS stylesheets while component is not connected.
@@ -77,4 +107,5 @@ export const ComponentStypOptions = {
 
     return supply;
   },
+
 };
