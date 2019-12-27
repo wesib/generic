@@ -3,7 +3,8 @@
  */
 import { SingleContextKey, SingleContextRef } from 'context-values';
 import { EventSupply } from 'fun-events';
-import { StypOptions, StypRules } from 'style-producer';
+import { StypRules } from 'style-producer';
+import { ComponentStypOptions } from './component-styp-options';
 
 /**
  * Component style producer function interface.
@@ -18,7 +19,7 @@ export type ComponentStyleProducer =
  */
     (
         rules: StypRules,
-        opts?: StypOptions,
+        opts?: ComponentStypOptions,
     ) => EventSupply;
 
 /**
