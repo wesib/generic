@@ -358,7 +358,8 @@ describe('tree', () => {
 
         expect(observer.observe).toHaveBeenCalledWith(
             element,
-            expect.objectContaining({ attributeFilter: ['attr', 'attr2'] }));
+            expect.objectContaining({ attributeFilter: ['attr', 'attr2'] }),
+        );
         observer.disconnect.mockClear();
         observer.takeRecords.mockClear();
         observer.observe.mockClear();
@@ -380,7 +381,8 @@ describe('tree', () => {
         expect(observer.takeRecords).toHaveBeenCalled();
         expect(observer.observe).toHaveBeenCalledWith(
             element,
-            expect.objectContaining({ attributeFilter: ['attr2'] }));
+            expect.objectContaining({ attributeFilter: ['attr2'] }),
+        );
         observer.disconnect.mockClear();
         observer.takeRecords.mockClear();
         observer.observe.mockClear();

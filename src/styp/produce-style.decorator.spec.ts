@@ -54,7 +54,8 @@ describe('styp', () => {
     it('renders styles using component CSS render', async () => {
 
       const mockRender = jest.fn<void, Parameters<StypRender.Function>>(
-          (producer, properties) => producer.render(properties));
+          (producer, properties) => producer.render(properties),
+      );
 
       await mount(
           undefined,

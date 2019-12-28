@@ -111,7 +111,8 @@ class ThemeStyleKey extends SimpleContextKey<ThemeStyle.ById, ThemeStyle> {
             [
               isId ? combineStyles(provider, prevProvider) : combineStyles(prevProvider, provider),
               isId || hasId,
-            ]);
+            ],
+        );
       }
     });
 

@@ -21,12 +21,13 @@ import { ComponentStypOptions } from './component-styp-options';
  *
  * @returns Component property decorator.
  */
-export function ProduceStyle<T extends ComponentClass>(options?: ComponentStypOptions):
-    <V extends StypRules.Source | (() => StypRules.Source)>(
-        target: InstanceType<T>,
-        propertyKey: string | symbol,
-        descriptor?: TypedPropertyDescriptor<V>,
-    ) => any | void {
+export function ProduceStyle<T extends ComponentClass>(
+    options?: ComponentStypOptions,
+): <V extends StypRules.Source | (() => StypRules.Source)>(
+    target: InstanceType<T>,
+    propertyKey: string | symbol,
+    descriptor?: TypedPropertyDescriptor<V>,
+) => any | void {
   return (target: InstanceType<T>, propertyKey: string | symbol) => {
 
     const componentType = target.constructor as T;
@@ -51,6 +52,7 @@ export function ProduceStyle<T extends ComponentClass>(options?: ComponentStypOp
           feature: {
             needs: [BasicStyleProducerSupport],
           },
-        });
+        },
+    );
   };
 }

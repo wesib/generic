@@ -150,7 +150,8 @@ describe('navigation', () => {
     it('parses the response accordingly to `Context-Type` header', async () => {
       mockResponseHeaders.get.mockImplementation(_name => 'application/xml; charset=utf-8');
       mockResponse.text.mockImplementation(
-          () => Promise.resolve('<?xml version="1.0"?><content>test</content>'));
+          () => Promise.resolve('<?xml version="1.0"?><content>test</content>'),
+      );
 
       const receiver = jest.fn();
       const done = jest.fn();
@@ -211,7 +212,8 @@ describe('navigation', () => {
     });
     it('reports parse error', async () => {
       mockResponseHeaders.get.mockImplementation(
-          name => name.toLowerCase() === 'content-type' ? 'application/x-wrong' : null);
+          name => name.toLowerCase() === 'content-type' ? 'application/x-wrong' : null,
+      );
       mockResponse.text.mockImplementation(() => Promise.resolve('dhfdfhfhg'));
 
       const receiver = jest.fn();
