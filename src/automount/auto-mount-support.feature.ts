@@ -31,7 +31,7 @@ let AutoMountSupport__feature: FeatureDef | undefined;
 export class AutoMountSupport {
 
   static get [FeatureDef__symbol](): FeatureDef {
-    return AutoMountSupport__feature || (AutoMountSupport__feature = featureDef());
+    return AutoMountSupport__feature || (AutoMountSupport__feature = autoMountFeatureDef());
   }
 
 }
@@ -48,7 +48,7 @@ export class AutoMountSupport {
 export function autoMountSupport(config?: AutoMountConfig): Class {
 
   const def: FeatureDef = {
-    ...featureDef(config),
+    ...autoMountFeatureDef(config),
     has: AutoMountSupport,
   };
 
@@ -61,7 +61,7 @@ export function autoMountSupport(config?: AutoMountConfig): Class {
   return ConfiguredAutoMountSupport;
 }
 
-function featureDef(config: AutoMountConfig = {}): FeatureDef {
+function autoMountFeatureDef(config: AutoMountConfig = {}): FeatureDef {
   return {
     setup(setup) {
       setup.whenReady(context => {
