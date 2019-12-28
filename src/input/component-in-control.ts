@@ -7,6 +7,7 @@ import { afterThe, EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
 import { ComponentNode, ComponentTreeSupport } from '../tree';
 import { ComponentIn } from './component-in';
+import { ComponentInReceiver } from './component-in-receiver';
 import { enableComponentIn } from './enable-component-in';
 
 const ComponentInControl__key = (/*#__PURE__*/ new SingleContextKey<ComponentInControl>('component-in-control'));
@@ -17,6 +18,7 @@ const ComponentInControl__component: ComponentDef = {
   },
   setup(setup) {
     setup.perComponent({ as: ComponentInControl });
+    setup.perComponent({ a: ComponentInReceiver, via: ComponentInControl });
     setup.perComponent({ a: ComponentIn, is: afterThe() });
   },
 };
@@ -48,7 +50,7 @@ const ComponentInControl__component: ComponentDef = {
  * }
  * ```
  */
-export class ComponentInControl<Value = any> {
+export class ComponentInControl<Value = any> implements ComponentInReceiver {
 
   /**
    * A key of component context value containing an component input control.
@@ -95,7 +97,7 @@ export class ComponentInControl<Value = any> {
    */
   enable(control: InControl<Value>): EventSupply {
     return enableComponentIn({
-      root: this.root,
+      receiver: this,
       control,
     });
   }

@@ -7,6 +7,7 @@ import { afterSupplied, eventSupply, EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
 import { ComponentNode } from '../tree';
 import { ComponentIn } from './component-in';
+import { ComponentInReceiver } from './component-in-receiver';
 
 /**
  * Enables user input in the given component input context.
@@ -14,22 +15,23 @@ import { ComponentIn } from './component-in';
  * Searches for the nested components with {@link ComponentIn component input} in their contexts and enables their
  * participation in user input.
  *
- * @param root  Root component node initiating the user input.
+ * @param receiver  User input receiver.
  * @param control  User input control.
  *
  * @returns User input supply. The user input is disabled once this supply is cut off.
  */
 export function enableComponentIn(
     {
-      root,
+      receiver,
       control,
     }: {
-      root: ComponentNode;
+      receiver: ComponentInReceiver;
       control: InControl<any>;
     },
 ): EventSupply {
 
   const inputSupply = eventSupply();
+  const { root } = receiver;
 
   root.context.whenOn(connectionSupply => {
     connectionSupply.needs(inputSupply);
@@ -94,7 +96,7 @@ export function enableComponentIn(
             receive: (_, ...participants) => itsEach(
                 participants,
                 participant => participant({
-                  root,
+                  receiver,
                   control,
                 }).needs(supply),
             ),

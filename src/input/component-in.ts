@@ -4,7 +4,7 @@
 import { MultiContextKey, MultiContextRef } from 'context-values';
 import { EventKeeper, EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
-import { ComponentNode } from '../tree';
+import { ComponentInReceiver } from './component-in-receiver';
 
 /**
  * Component input.
@@ -43,11 +43,9 @@ export namespace ComponentIn {
   export interface Participation {
 
     /**
-     * Root component node initiating the user input.
-     *
-     * This node contains the ones participating in user input.
+     * User input receiver.
      */
-    readonly root: ComponentNode;
+    readonly receiver: ComponentInReceiver;
 
     /**
      * User input control.

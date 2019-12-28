@@ -2,9 +2,9 @@ import { bootstrapComponents, BootstrapContext, Component, ComponentContext } fr
 import { nextArgs } from 'call-thru';
 import { afterThe, eventSupply, EventSupply, trackValue, ValueTracker } from 'fun-events';
 import { InControl, InValidation, inValue } from 'input-aspects';
-import { ComponentNode } from '../tree';
 import { ComponentIn } from './component-in';
 import { ComponentInControl } from './component-in-control';
+import { ComponentInReceiver } from './component-in-receiver';
 
 describe('input', () => {
   describe('ComponentIn', () => {
@@ -88,7 +88,7 @@ describe('input', () => {
         componentInControl.enable(inputControl);
 
         expect(mockIn).toHaveBeenCalledWith(expect.objectContaining({
-          root: inputContext.get(ComponentNode),
+          receiver: inputContext.get(ComponentInReceiver),
           control: inputControl,
         }));
         expect(mockIn).toHaveBeenCalledTimes(1);
