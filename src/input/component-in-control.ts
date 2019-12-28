@@ -64,7 +64,7 @@ export class ComponentInControl<Value = any> implements ComponentInReceiver {
    *
    * Enables [[ComponentTreeSupport]].
    */
-  static [ComponentDef__symbol](): ComponentDef {
+  static get [ComponentDef__symbol](): ComponentDef {
     return ComponentInControl__component;
   }
 
