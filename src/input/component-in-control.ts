@@ -63,10 +63,8 @@ export class ComponentInControl<Value = any> implements ComponentInReceiver {
    * Component definition that sets up an input control for the component.
    *
    * Enables [[ComponentTreeSupport]].
-   *
-   * @returns Component definition.
    */
-  static get [ComponentDef__symbol](): ComponentDef {
+  static [ComponentDef__symbol](): ComponentDef {
     return ComponentInControl__component;
   }
 
@@ -78,7 +76,8 @@ export class ComponentInControl<Value = any> implements ComponentInReceiver {
   /**
    * Constructs component user input control.
    *
-   * Normally, a [[setup]] method should be used instead.
+   * Normally, an instance should not be constructed directly. The class should be used instead to provide one for
+   * component context. E.g. by passing it to `@Component` decorator.
    *
    * @param context  Component context.
    */

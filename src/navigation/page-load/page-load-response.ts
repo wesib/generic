@@ -6,7 +6,7 @@ import { Page } from '../page';
 /**
  * A response to {@link PageLoadRequest page load request}.
  *
- * Indicates page load status: either is is {@link PageLoadResponse.Start started}, {@link PageLoadResponse.Ok\
+ * Indicates page load status: either is is {@link PageLoadResponse.Start started}, {@link PageLoadResponse.Ok
  * completed successfully}, or {@link PageLoadResponse.Failure failed}.
  */
 export type PageLoadResponse = PageLoadResponse.Start | PageLoadResponse.Ok | PageLoadResponse.Failure;

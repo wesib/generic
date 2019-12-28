@@ -15,7 +15,7 @@ export interface PageLoadRequest {
    * Page fragment request.
    *
    * When specified, this fragment will be requested by `Accept-Fragment` HTTP request header, and the response will
-   * contain a {@link PageLoadResponse.fragment loaded fragment}.
+   * contain a {@link PageLoadResponse.Ok.fragment loaded fragment}.
    *
    * When omitted in one of the page load requests, the full document will be requested. I.e. `Accept-Fragment` header
    * won't be sent in HTTP request.

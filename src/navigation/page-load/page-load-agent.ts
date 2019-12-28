@@ -53,7 +53,7 @@ export namespace PageLoadAgent {
 }
 
 /**
- * A key of context value containing an [[DomFetchAgent]] instance.
+ * A key of context value containing an [[PageLoadAgent]] instance.
  *
  * The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.
  */

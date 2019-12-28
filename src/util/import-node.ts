@@ -9,7 +9,7 @@ import { itsEach, overArray } from 'a-iterable';
  *
  * @param from  The node to import.
  * @param to  The node to append imported node to.
- * @param importContent  A function that imports nodes nested in parent element. [[importNodeContents]] by default.
+ * @param importContent  A function that imports nodes nested in parent element. [[importNodeContent]] by default.
  *
  * @returns Imported node.
  */
@@ -25,7 +25,7 @@ export function importNode<N extends Node>(
  * @param from  The node to import.
  * @param to  The node to append imported node to.
  * @param before  The node to insert imported node before, or `null` to append it to the end of target one.
- * @param importContent  A function that imports nodes nested in parent element. [[importNodeContents]] by default.
+ * @param importContent  A function that imports nodes nested in parent element. [[importNodeContent]] by default.
  *
  * @returns Imported node.
  */
