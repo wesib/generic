@@ -2,7 +2,7 @@ import { bootstrapComponents, BootstrapContext, Component, ComponentContext } fr
 import { nextArgs } from 'call-thru';
 import { afterThe, eventSupply, EventSupply, trackValue, ValueTracker } from 'fun-events';
 import { InControl, InValidation, inValue } from 'input-aspects';
-import { ComponentNode, ComponentTreeSupport } from '../tree';
+import { ComponentNode } from '../tree';
 import { ComponentIn } from './component-in';
 import { ComponentInControl } from './component-in-control';
 
@@ -24,12 +24,7 @@ describe('input', () => {
 
     beforeEach(async () => {
 
-      @Component({
-        feature: {
-          needs: ComponentTreeSupport,
-        },
-        setup: ComponentInControl.setup,
-      })
+      @Component(ComponentInControl)
       class InputComponent {
       }
 

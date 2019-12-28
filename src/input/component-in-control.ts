@@ -1,23 +1,52 @@
 /**
  * @module @wesib/generic
  */
-import { ComponentContext, DefinitionSetup } from '@wesib/wesib';
+import { ComponentContext, ComponentDef, ComponentDef__symbol } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { afterThe, EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
-import { ComponentNode } from '../tree';
+import { ComponentNode, ComponentTreeSupport } from '../tree';
 import { ComponentIn } from './component-in';
 import { enableComponentIn } from './enable-component-in';
 
 const ComponentInControl__key = (/*#__PURE__*/ new SingleContextKey<ComponentInControl>('component-in-control'));
 
+const ComponentInControl__component: ComponentDef = {
+  feature: {
+    needs: ComponentTreeSupport,
+  },
+  setup(setup) {
+    setup.perComponent({ as: ComponentInControl });
+    setup.perComponent({ a: ComponentIn, is: afterThe() });
+  },
+};
+
 /**
  * User input control maintained by component.
  *
- * An instance of this class intended to be constructed available component context. A [[setup]] method can be used for
- * that.
+ * An instance of this class intended to be available in component context. The class can be used as component
+ * definition source for that.
  *
  * To initiate user input, the component should obtain an instance from its context and [[enable]] it.
+ *
+ * Usage example:
+ * ```typescript
+ * @Component(
+ *   'my-component',     // Custom element name
+ *   ComponentInControl, // Provide input control for component
+ * )
+ * class MyComponent {
+ *   constructor(context: ComponentContext) {
+ *
+ *     const control = context.get(ComponentInControl); // Provided input control
+ *
+ *     // Enable input on `#my-element` input element.
+ *     context.get(ComponentNode)
+ *        .select('#my-input', { all: true, deep: true })
+ *        .first.consume(input => input && control.enable(input));
+ *   }
+ * }
+ * ```
  */
 export class ComponentInControl<Value = any> {
 
@@ -29,19 +58,20 @@ export class ComponentInControl<Value = any> {
   }
 
   /**
+   * Component definition that sets up an input control for the component.
+   *
+   * Enables [[ComponentTreeSupport]].
+   *
+   * @returns Component definition.
+   */
+  static get [ComponentDef__symbol](): ComponentDef {
+    return ComponentInControl__component;
+  }
+
+  /**
    * Root component node.
    */
   readonly root: ComponentNode;
-
-  /**
-   * Sets up component definition to make it contain a component input control instance.
-   *
-   * @param setup  Target component definition setup.
-   */
-  static setup(setup: DefinitionSetup): void {
-    setup.perComponent({ as: ComponentInControl });
-    setup.perComponent({ a: ComponentIn, is: afterThe() });
-  }
 
   /**
    * Constructs component user input control.
