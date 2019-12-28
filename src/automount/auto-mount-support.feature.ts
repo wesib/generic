@@ -10,7 +10,7 @@ import {
   FeatureDef,
   FeatureDef__symbol,
 } from '@wesib/wesib';
-import { AIterable, overArray } from 'a-iterable';
+import { itsEach, overArray } from 'a-iterable';
 import { DomEventDispatcher } from 'fun-events';
 import { AutoMountConfig } from './auto-mount-config';
 
@@ -66,13 +66,13 @@ function autoMountFeatureDef(config: AutoMountConfig = {}): FeatureDef {
     setup(setup) {
       setup.whenReady(context => {
         // Await for mount definition registration
-        Promise.resolve().then(() => adaptExistingElement(context, config));
+        Promise.resolve().then(() => mountExistingElements(context, config));
       });
     },
   };
 }
 
-function adaptExistingElement(context: FeatureContext, { select = '*' }: AutoMountConfig) {
+function mountExistingElements(context: FeatureContext, { select = '*' }: AutoMountConfig) {
   if (!select) {
     return; // Initial auto-mount disabled.
   }
@@ -89,7 +89,9 @@ function adaptExistingElement(context: FeatureContext, { select = '*' }: AutoMou
   }
 
   function adapt() {
-    AIterable.from(overArray(root.querySelectorAll(selector)))
-        .forEach(element => adapter(element));
+    itsEach(
+        overArray(root.querySelectorAll(selector)),
+        element => adapter(element),
+    );
   }
 }
