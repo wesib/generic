@@ -3,7 +3,7 @@
  */
 import { ArrayLikeIterable, filterIt, itsEach, mapIt } from 'a-iterable';
 import { isPresent } from 'call-thru';
-import { afterSupplied, EventKeeper, eventSupply, EventSupply } from 'fun-events';
+import { afterSupplied, eventSupply, EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
 import { ComponentNode } from '../tree';
 import { ComponentIn } from './component-in';
@@ -89,7 +89,7 @@ export function enableComponentIn(
 
       itsEach(
           ins,
-          participantSupplier => afterSupplied(participantSupplier)({
+          componentIn => afterSupplied(componentIn)({
             supply,
             receive: (_, ...participants) => itsEach(
                 participants,
@@ -119,7 +119,7 @@ export function enableComponentIn(
 interface ComponentInNode {
 
   readonly node: ComponentNode;
-  readonly ins: readonly EventKeeper<ComponentIn[]>[];
+  readonly ins: readonly ComponentIn[];
   readonly supply: EventSupply;
 
 }
