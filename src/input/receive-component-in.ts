@@ -1,8 +1,7 @@
 /**
  * @module @wesib/generic
  */
-import { ArrayLikeIterable, filterIt, itsEach, mapIt } from 'a-iterable';
-import { isPresent } from 'call-thru';
+import { filterIt, itsEach } from 'a-iterable';
 import { afterSupplied, eventSupply, EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
 import { ComponentNode } from '../tree';
@@ -28,41 +27,40 @@ export function receiveComponentIn(receiver: ComponentInReceiver, control: InCon
   root.context.whenOn(connectionSupply => {
     connectionSupply.needs(inputSupply);
 
-    const map = new Map<ComponentNode, ComponentInNode>();
+    const rcvNodes = new Set<ComponentNode>();
+    const inNodes = new Map<ComponentNode, ComponentInNode>();
 
     root.select('*', { deep: true }).track({
       supply: connectionSupply,
       receive: (_ctx, added, removed) => {
         itsEach(removed, removeInNode);
-        itsEach(addedInNodes(added), participate);
+        itsEach(added, addInNode);
       },
     });
 
-    function addedInNodes(nodes: ArrayLikeIterable<ComponentNode>): Iterable<ComponentInNode> {
-      return filterIt<ComponentInNode | undefined, ComponentInNode>(
-          mapIt(
-              nodes,
-              toInNode,
-          ),
-          isPresent,
-      );
-    }
+    function addInNode(node: ComponentNode): ComponentInNode | undefined {
 
-    function toInNode(node: ComponentNode): ComponentInNode | undefined {
+      const { element } = node;
+      const nodeRcv = node.context.get(ComponentInReceiver, { or: null });
+
+      if (nodeRcv) {
+        // Remove input participants inside new receiver node
+        itsEach(
+            filterIt(inNodes.keys(), n => element.contains(n.element)),
+            removeInNode,
+        );
+        rcvNodes.add(node);
+      }
 
       const ins = node.context.get(ComponentIn, { or: null });
 
       if (!ins) {
-        return;
+        return; // New node is not participating in user input
       }
 
-      const { element } = node;
-
-      for (const n of map.keys()) {
-        if (element.contains(n.element)) {
-          removeInNode(n);
-        } else if (n.element.contains(element)) {
-          return;
+      for (const rcvNode of rcvNodes) {
+        if (rcvNode !== node && rcvNode.element.contains(element)) {
+          return; // Added node is inside another receiver
         }
       }
 
@@ -72,7 +70,8 @@ export function receiveComponentIn(receiver: ComponentInReceiver, control: InCon
         supply: eventSupply().needs(connectionSupply),
       };
 
-      map.set(node, inNode);
+      inNodes.set(node, inNode);
+      participate(inNode);
 
       return inNode;
     }
@@ -97,11 +96,12 @@ export function receiveComponentIn(receiver: ComponentInReceiver, control: InCon
     }
 
     function removeInNode(node: ComponentNode) {
+      rcvNodes.delete(node);
 
-      const inNode = map.get(node);
+      const inNode = inNodes.get(node);
 
       if (inNode) {
-        map.delete(node);
+        inNodes.delete(node);
         inNode.supply.off();
       }
     }

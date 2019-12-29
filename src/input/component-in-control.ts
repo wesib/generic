@@ -3,10 +3,9 @@
  */
 import { ComponentContext, ComponentDef, ComponentDef__symbol } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { afterThe, EventSupply } from 'fun-events';
+import { EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
 import { ComponentNode, ComponentTreeSupport } from '../tree';
-import { ComponentIn } from './component-in';
 import { ComponentInReceiver } from './component-in-receiver';
 import { receiveComponentIn } from './receive-component-in';
 
@@ -19,7 +18,6 @@ const ComponentInControl__component: ComponentDef = {
   setup(setup) {
     setup.perComponent({ as: ComponentInControl });
     setup.perComponent({ a: ComponentInReceiver, via: ComponentInControl });
-    setup.perComponent({ a: ComponentIn, is: afterThe() });
   },
 };
 
