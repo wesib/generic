@@ -45,7 +45,7 @@ const ComponentInControl__component: ComponentDef = {
  *     // Enable input on `#my-element` input element.
  *     context.get(ComponentNode)
  *        .select('#my-input', { all: true, deep: true })
- *        .first.consume(input => input && control.enable(input));
+ *        .first.consume(input => input && control.in(input));
  *   }
  * }
  * ```
