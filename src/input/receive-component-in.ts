@@ -10,7 +10,7 @@ import { ComponentIn } from './component-in';
 import { ComponentInReceiver } from './component-in-receiver';
 
 /**
- * Enables user input in the given component input context.
+ * Starts receiving user input for the given receiver from the given input control.
  *
  * Searches for the nested components with {@link ComponentIn component input} in their contexts and enables their
  * participation in user input.
@@ -20,15 +20,7 @@ import { ComponentInReceiver } from './component-in-receiver';
  *
  * @returns User input supply. The user input is disabled once this supply is cut off.
  */
-export function enableComponentIn(
-    {
-      receiver,
-      control,
-    }: {
-      receiver: ComponentInReceiver;
-      control: InControl<any>;
-    },
-): EventSupply {
+export function receiveComponentIn(receiver: ComponentInReceiver, control: InControl<any>): EventSupply {
 
   const inputSupply = eventSupply();
   const { root } = receiver;

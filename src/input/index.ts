@@ -4,4 +4,4 @@
 export * from './component-in';
 export * from './component-in-control';
 export * from './component-in-receiver';
-export * from './enable-component-in';
+export * from './receive-component-in';

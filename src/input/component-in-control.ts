@@ -8,7 +8,7 @@ import { InControl } from 'input-aspects';
 import { ComponentNode, ComponentTreeSupport } from '../tree';
 import { ComponentIn } from './component-in';
 import { ComponentInReceiver } from './component-in-receiver';
-import { enableComponentIn } from './enable-component-in';
+import { receiveComponentIn } from './receive-component-in';
 
 const ComponentInControl__key = (/*#__PURE__*/ new SingleContextKey<ComponentInControl>('component-in-control'));
 
@@ -86,19 +86,16 @@ export class ComponentInControl<Value = any> implements ComponentInReceiver {
   }
 
   /**
-   * Enables user input for the given control.
+   * Starts receiving user input from the given control.
    *
-   * Utilizes [[enableComponentIn]] for that.
+   * Utilizes [[receiveComponentIn]] for that.
    *
    * @param control  User input control to enable.
    *
    * @returns User input supply. The user input is disabled once this supply is cut off.
    */
-  enable(control: InControl<Value>): EventSupply {
-    return enableComponentIn({
-      receiver: this,
-      control,
-    });
+  in(control: InControl<Value>): EventSupply {
+    return receiveComponentIn(this, control);
   }
 
 }

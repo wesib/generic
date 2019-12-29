@@ -85,7 +85,7 @@ describe('input', () => {
         );
 
         participants.it = [mockIn];
-        componentInControl.enable(inputControl);
+        componentInControl.in(inputControl);
 
         expect(mockIn).toHaveBeenCalledWith(expect.objectContaining({
           receiver: inputContext.get(ComponentInReceiver),
@@ -104,7 +104,7 @@ describe('input', () => {
         );
 
         participants.it = [mockIn];
-        componentInControl.enable(inputControl);
+        componentInControl.in(inputControl);
 
         inSupply.off();
         inputControl.aspect(InValidation).read.once(
@@ -119,7 +119,7 @@ describe('input', () => {
         );
 
         participants.it = [mockIn];
-        componentInControl.enable(inputControl);
+        componentInControl.in(inputControl);
 
         participantElement.remove();
         await Promise.resolve();
@@ -146,7 +146,7 @@ describe('input', () => {
         );
 
         participants.it = [mockIn];
-        componentInControl.enable(inputControl);
+        componentInControl.in(inputControl);
 
         inputControl.aspect(InValidation).read.once(
             result => expect(result.messages('invalid')).toEqual([error]),
@@ -187,7 +187,7 @@ describe('input', () => {
         );
 
         participants.it = [mockIn];
-        componentInControl.enable(inputControl);
+        componentInControl.in(inputControl);
 
         expect(nestedIn).not.toHaveBeenCalled();
         inputControl.aspect(InValidation).read.once(
@@ -202,7 +202,7 @@ describe('input', () => {
         );
 
         participants.it = [mockIn];
-        componentInControl.enable(inputControl);
+        componentInControl.in(inputControl);
 
         const error2: InValidation.Message = { invalid: 'error 2' };
 
@@ -267,7 +267,7 @@ describe('input', () => {
         await Promise.resolve();
 
         participants.it = [mockIn];
-        componentInControl.enable(inputControl);
+        componentInControl.in(inputControl);
 
         inputControl.aspect(InValidation).read.once(
             result => expect(result.messages('invalid')).toEqual([error1]),
