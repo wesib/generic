@@ -45,6 +45,21 @@ export namespace ComponentInElement {
 
   }
 
+  /**
+   * Input control builder function signature.
+   *
+   * Build input control for selected input element.
+   */
+  export type Builder<Ctrl extends InControl<any>> =
+  /**
+   * @typeparam Ctrl  A type of input control.
+   * @param node  Selected input element node.
+   * @param root  A node of component that initiated the user input and containing selected element.
+   *
+   * @returns Input control.
+   */
+      (this: void, node: ElementNode.Any, root: ComponentNode) => Ctrl;
+
 }
 
 /**
@@ -55,7 +70,7 @@ export namespace ComponentInElement {
  *
  * @param selector  Input element selector.
  * @param selectorOpts  Element node selector options. By default selects any matching element within subtree.
- * @param control  A function that constructs input control for selected element node.
+ * @param control  Control builder function for selected element node.
  *
  * @returns A reference to component input element.
  */
@@ -67,7 +82,7 @@ export function componentInElement<Ctrl extends InControl<any>>(
     }: {
       selector: string,
       selectorOpts?: ElementNode.SelectorOpts,
-      control: (node: ElementNode.Any) => Ctrl,
+      control: ComponentInElement.Builder<Ctrl>,
     },
 ): ComponentInElement.Ref<Ctrl> {
 
@@ -111,7 +126,7 @@ export function componentInElement<Ctrl extends InControl<any>>(
       compControl.by(
           root.select(selector, selectorOpts as ElementNode.ElementSelectorOpts)
               .first.tillOff(supply)
-              .thru_(node => node && control(node)),
+              .thru_(node => node && control(node, root)),
       );
       compControl.read.tillOff(supply).consume(
           ctrl => ctrl && inControl.in(ctrl).whenOff(() => compControl.it = undefined),
