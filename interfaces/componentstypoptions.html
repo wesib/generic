@@ -93,11 +93,12 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="componentstypoptions.html#addstylesheet" class="tsd-kind-icon">add<wbr>Style<wbr>Sheet</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="componentstypoptions.html#document" class="tsd-kind-icon">document</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="componentstypoptions.html#hostselector" class="tsd-kind-icon">host<wbr>Selector</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="componentstypoptions.html#nsalias" class="tsd-kind-icon">ns<wbr>Alias</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="componentstypoptions.html#offline" class="tsd-kind-icon">offline</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="componentstypoptions.html#parent" class="tsd-kind-icon">parent</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="componentstypoptions.html#render" class="tsd-kind-icon">render</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="componentstypoptions.html#rootselector" class="tsd-kind-icon">root<wbr>Selector</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="componentstypoptions.html#rootselector" class="tsd-kind-icon">root<wbr>Selector</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="componentstypoptions.html#schedule" class="tsd-kind-icon">schedule</a></li>
 							</ul>
 						</section>
@@ -148,6 +149,41 @@
 						<p><code>window.document</code> by default.</p>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="hostselector" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> host<wbr>Selector</h3>
+					<div class="tsd-signature tsd-kind-icon">host<wbr>Selector<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Part</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/styp/component-styp-options.ts#L38">src/styp/component-styp-options.ts:38</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Structured CSS selector to use for custom element&#39;s host.</p>
+						</div>
+						<p>It modifies the selectors of produced CSS rules.</p>
+						<p>For custom element with shadow root:</p>
+						<ul>
+							<li>Replaces root CSS rule selector with `:host(<hostSelector>).</li>
+							<li>When <code>hostSelector</code> is omitted, then replaces root CSS rule selector with <code>:host</code>.</li>
+							<li>If CSS rule selector starts with <code>:host</code>, then replaces <code>:host</code> with <code>:host(&lt;hostSelector&gt;)</code></li>
+							<li>If CSS rule selector starts with <code>:host(&lt;selector&gt;)</code>, then extends <code>&lt;selector&gt;</code> by <code>hostSelector</code>.
+							I.e. appends CSS classes and sub-selectors to it, and fulfills missing element and identifier selectors.</li>
+						</ul>
+						<p>For custom element without shadow root either uses provided <code>hostSelector</code>, or generates a unique one when omitted.
+						And additionally:</p>
+						<ul>
+							<li>Replaces root CSS rule selector it with <code>hostSelector</code>.</li>
+							<li>If CSS rule selector starts with <code>:host</code>, then replaces <code>:host</code> with <code>hostSelector</code>.</li>
+							<li>If CSS rule selector starts with <code>:host(&lt;selector&gt;), then replaces</code>:host(<selector>)<code>with</code><selector><code>extended
+by</code>hostSelector`. I.e. appends CSS classes and sub-selectors to it, and fulfills missing element and identifier
+							selectors.</li>
+							<li>Otherwise prepends CSS rule selector with <code>hostSelector</code>.</li>
+						</ul>
+						<p>This selector should not contain a <code>:host</code> sub-selector.</p>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="nsalias" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> ns<wbr>Alias</h3>
@@ -171,7 +207,7 @@
 					<div class="tsd-signature tsd-kind-icon">offline<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"always"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/742bbe2/src/styp/component-styp-options.ts#L26">src/styp/component-styp-options.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/styp/component-styp-options.ts#L56">src/styp/component-styp-options.ts:56</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -222,22 +258,20 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="rootselector" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> root<wbr>Selector</h3>
-					<div class="tsd-signature tsd-kind-icon">root<wbr>Selector<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StypSelector</span></div>
+					<div class="tsd-signature tsd-kind-icon">root<wbr>Selector<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from StypOptions.rootSelector</p>
+						<p>Overrides StypOptions.rootSelector</p>
 						<ul>
-							<li>Defined in node_modules/style-producer/d.ts/producer/style-producer.d.ts:102</li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/styp/component-styp-options.ts#L43">src/styp/component-styp-options.ts:43</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A selector to use for root CSS rule.</p>
+							<p>Root CSS selector is never used for custom elements. A <code>hostSelector</code> is applied instead.</p>
 						</div>
-						<p><code>body</code> by default.</p>
-						<p>For custom elements a <code>:host</code> selector would be more appropriate.</p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -286,6 +320,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="componentstypoptions.html#document" class="tsd-kind-icon">document</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="componentstypoptions.html#hostselector" class="tsd-kind-icon">host<wbr>Selector</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="componentstypoptions.html#nsalias" class="tsd-kind-icon">ns<wbr>Alias</a>
 							</li>
@@ -298,7 +335,7 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="componentstypoptions.html#render" class="tsd-kind-icon">render</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 								<a href="componentstypoptions.html#rootselector" class="tsd-kind-icon">root<wbr>Selector</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
