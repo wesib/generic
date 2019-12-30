@@ -1,9 +1,9 @@
 /**
  * @module @wesib/generic
  */
-import { ComponentClass, ComponentContext, ComponentDef, ComponentDef__symbol } from '@wesib/wesib';
+import { ComponentContext, ComponentDef, ComponentDef__symbol } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { AfterEvent, eventSupply, noEventSupply, trackValue, ValueTracker } from 'fun-events';
+import { AfterEvent, trackValue, ValueTracker } from 'fun-events';
 import { InControl, InText } from 'input-aspects';
 import { ComponentNode, ElementNode } from '../tree';
 import { ComponentInControl } from './component-in-control';
@@ -37,13 +37,11 @@ export namespace ComponentInElement {
     readonly [ContextKey__symbol]: ContextKey<ComponentInElement<Ctrl>>;
 
     /**
-     * Builds component definition that attaches input element control to component.
+     * Component definition that attaches input element control to component.
      *
      * Also attaches [[ComponentInControl]] to component.
-     *
-     * @returns Component definition.
      */
-    [ComponentDef__symbol](componentType: ComponentClass): ComponentDef;
+    readonly [ComponentDef__symbol]: ComponentDef;
 
   }
 
@@ -73,33 +71,33 @@ export function componentInElement<Ctrl extends InControl<any>>(
     },
 ): ComponentInElement.Ref<Ctrl> {
 
-  type CompElement = ComponentInElement<Ctrl>;
-  const CompElement = new SingleContextKey<CompElement>('component-in-element:' + selector);
+  type CompInElement = ComponentInElement<Ctrl>;
+  const CompInElement = new SingleContextKey<CompInElement>('component-in-element:' + selector);
 
   type CompControl = ValueTracker<Ctrl | undefined>;
   const CompControl = new SingleContextKey<CompControl>('component-in-element:' + selector + ':control');
 
-  const def: ComponentDef = {
-    define(context) {
-      context.perComponent({ a: CompControl, by: trackValue });
-      context.perComponent({
-        a: CompElement,
-        by: (ctrl: CompControl) => ctrl.read,
-        with: [CompControl],
-      });
-      context.onComponent(enableInput);
-    },
-  };
+  const def = ComponentDef.all(
+      ComponentInControl,
+      {
+        define(context) {
+          context.perComponent({ a: CompControl, by: trackValue });
+          context.perComponent({
+            a: CompInElement,
+            by: (ctrl: CompControl) => ctrl.read,
+            with: [CompControl],
+          });
+          context.onComponent(enableInput);
+        },
+      },
+  );
 
   return {
     get [ContextKey__symbol]() {
-      return CompElement;
+      return CompInElement;
     },
-    [ComponentDef__symbol](componentType) {
-      return ComponentDef.merge(
-          ComponentDef.for(componentType, ComponentInControl),
-          def,
-      );
+    get [ComponentDef__symbol]() {
+      return def;
     },
   };
 
@@ -109,28 +107,15 @@ export function componentInElement<Ctrl extends InControl<any>>(
     const inControl = context.get(ComponentInControl);
     const root = context.get(ComponentNode);
 
-    context.whenOn(onSupply => {
-
-      const supply = eventSupply().needs(onSupply);
-      let inSupply = noEventSupply();
-
-      root.select(selector, selectorOpts as ElementNode.ElementSelectorOpts).first({
-        supply,
-        receive: (_ctx, node) => {
-          compControl.it = node && control(node);
-        },
-      });
-      compControl.read({
-        supply,
-        receive: (_ctx, ctrl) => {
-          inSupply.off();
-          if (ctrl) {
-            inSupply = inControl.in(ctrl)
-                .needs(supply)
-                .whenOff(() => compControl.it = undefined);
-          }
-        },
-      });
+    context.whenOn(supply => {
+      compControl.by(
+          root.select(selector, selectorOpts as ElementNode.ElementSelectorOpts)
+              .first.tillOff(supply)
+              .thru_(node => node && control(node)),
+      );
+      compControl.read.tillOff(supply).consume(
+          ctrl => ctrl && inControl.in(ctrl).whenOff(() => compControl.it = undefined),
+      );
     });
   }
 }
