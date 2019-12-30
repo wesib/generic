@@ -8,9 +8,15 @@ import {
 } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { EventSupply } from 'fun-events';
-import { produceBasicStyle, StypPureSelector, StypRender, StypRules, stypSelector } from 'style-producer';
-import { StypSelector } from 'style-producer/d.ts/selector/selector';
-import { StypSubSelector } from 'style-producer/d.ts/selector/sub-selector';
+import {
+  produceBasicStyle,
+  StypPureSelector,
+  StypRender,
+  StypRules,
+  stypSelector,
+  StypSelector,
+  StypSubSelector,
+} from 'style-producer';
 import { ComponentStypOptions } from './component-styp-options';
 import { ComponentStypRender } from './component-styp-render';
 import { ElementIdClass } from './element-id-class.impl';
