@@ -61,7 +61,7 @@ export function autoMountSupport(config?: AutoMountConfig): Class {
   return ConfiguredAutoMountSupport;
 }
 
-function autoMountFeatureDef(config: AutoMountConfig = {}): FeatureDef {
+function autoMountFeatureDef(config: AutoMountConfig = {}): FeatureDef.Options {
   return {
     setup(setup) {
       setup.whenReady(context => {
