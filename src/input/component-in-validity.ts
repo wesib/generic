@@ -10,7 +10,7 @@ import { ComponentIn } from './component-in';
 /**
  * A validity of user input initiated by component.
  *
- * This is an `AfterEvent` sender of input validation result. Should be nested in {@link ComponentInReceiver user
+ * This is an `AfterEvent` keeper of input validation result. Should be nested in {@link ComponentInReceiver user
  * input receiver}. E.g. by placing [[ComponentInValidity]] to `@Component()` decorator of nested component.
  */
 export type ComponentInValidity = AfterEvent<[InValidation.Result]>;
