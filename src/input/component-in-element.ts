@@ -4,7 +4,7 @@
 import { ComponentClass, ComponentContext, ComponentDef, ComponentDef__symbol } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { AfterEvent, eventSupply, noEventSupply, trackValue, ValueTracker } from 'fun-events';
-import { InControl, inText, InText } from 'input-aspects';
+import { InControl, InText } from 'input-aspects';
 import { ComponentNode, ElementNode } from '../tree';
 import { ComponentInControl } from './component-in-control';
 
@@ -47,28 +47,6 @@ export namespace ComponentInElement {
 
   }
 
-}
-
-/**
- * Creates a reference to {@link ComponentInElement component's text input element control}.
- *
- * The input attached to component by this reference searches for the first `<input>` element in component's content
- * and creates an `InText` control for it.
- *
- * @param selector  Input element selector. `input` by default.
- * @param selectorOpts  Element node selector options. By default selects any matching element within subtree.
- *
- * @returns A reference to component's text input element.
- */
-export function componentInText(
-    {
-      selector = 'input',
-      selectorOpts,
-    }: {
-      selector?: string,
-      selectorOpts?: ElementNode.SelectorOpts,
-    }): ComponentInElement.Ref {
-  return componentInElement({ selector, selectorOpts, control: node => inText(node.element) });
 }
 
 /**
