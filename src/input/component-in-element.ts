@@ -58,7 +58,7 @@ export namespace ComponentInElement {
    *
    * @returns Input control.
    */
-      (this: void, node: ElementNode.Any, root: ComponentNode) => Ctrl;
+      (this: void, node: ElementNode, root: ComponentNode) => Ctrl;
 
 }
 

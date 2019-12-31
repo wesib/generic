@@ -15,24 +15,33 @@ import {
 } from 'fun-events';
 
 /**
- * Component tree node representing arbitrary element.
+ * Arbitrary element node within component tree. Either bound to some component or not.
  */
-export abstract class ElementNode {
+export type ElementNode =
+    | RawElementNode
+    | ComponentNode;
+
+/**
+ * Component tree node representing arbitrary element.
+ *
+ * This is a base interface of all element node implementations.
+ */
+export interface ComponentTreeNode {
 
   /**
    * The element itself.
    */
-  abstract readonly element: any;
+  readonly element: any;
 
   /**
    * A context of component bound to this element, if any.
    */
-  abstract readonly context?: ComponentContext<any>;
+  readonly context?: ComponentContext<any>;
 
   /**
    * Parent element node, or `null` if element has no parent.
    */
-  abstract readonly parent: ElementNode | null;
+  readonly parent: ElementNode | null;
 
   /**
    * Select element nodes matching the given selector.
@@ -40,45 +49,45 @@ export abstract class ElementNode {
    * @param selector  Simple CSS selector of nested components. E.g. component element name.
    * @param opts  Element selector options.
    */
-  abstract select(
+  select(
       selector: string,
       opts: ElementNode.ElementSelectorOpts,
   ): ElementNodeList;
 
   /**
-   * Select component nodes matching the given selector.
+   * Selects component nodes matching the given selector.
    *
    * @param selector  Simple CSS selector of nested components (e.g. component element name), or component type.
    * The latter should have custom element name.
    * @param opts  Component selector options.
    */
-  abstract select(
+  select(
       selector: string,
       opts?: ElementNode.ComponentSelectorOpts,
   ): ElementNodeList<ComponentNode>;
 
   /**
-   * Select component nodes of the given type.
+   * Selects component nodes of the given type.
    *
    * @param componentType  Nested component type with custom element name.
    * @param opts  Component selector options.
    */
-  abstract select<T extends object>(
+  select<T extends object>(
       componentType: ComponentClass<T>,
       opts?: ElementNode.ComponentSelectorOpts,
   ): ElementNodeList<ComponentNode<T>>;
 
   /**
-   * Returns a value tracker of element's attribute.
+   * Tracks element attribute.
    *
    * @param name  Target attribute name.
    *
    * @returns Target attribute's value tracker.
    */
-  abstract attribute(name: string): ValueTracker<string | null, string>;
+  attribute(name: string): ValueTracker<string | null, string>;
 
   /**
-   * Returns a value tracker of element's property.
+   * Tracks element element property.
    *
    * The changes are tracked with `StateTracker`. So it is expected that the target property notifies on its changes
    * with state updater. E.g. when it is defined by `@DomProperty` decorator.
@@ -87,25 +96,20 @@ export abstract class ElementNode {
    *
    * @returns Target property's value tracker.
    */
-  abstract property<V>(key: PropertyKey): ValueTracker<V>;
+  property<V>(key: PropertyKey): ValueTracker<V>;
+
+}
+
+/**
+ * Element node representing raw element not bound to any component.
+ */
+export interface RawElementNode extends ComponentTreeNode {
+
+  readonly context?: undefined;
 
 }
 
 export namespace ElementNode {
-
-  /**
-   * Element node representing raw element no bound to any component.
-   */
-  export interface Raw extends ElementNode {
-
-    readonly context?: undefined;
-
-  }
-
-  /**
-   * Any element node. Either bound to some component or not.
-   */
-  export type Any = Raw | ComponentNode;
 
   /**
    * Element node selector options.
@@ -150,7 +154,7 @@ export namespace ElementNode {
 /**
  * Element node representing an element bound to some component.
  */
-export interface ComponentNode<T extends object = any> extends ElementNode {
+export interface ComponentNode<T extends object = any> extends ComponentTreeNode {
 
   readonly context: ComponentContext<T>;
 
@@ -171,7 +175,7 @@ export const ComponentNode: SingleContextRef<ComponentNode> =
  *
  * Implements an `EventKeeper` interface by sending updated node list.
  */
-export abstract class ElementNodeList<N extends ElementNode = ElementNode.Any>
+export abstract class ElementNodeList<N extends ElementNode = ElementNode>
     extends AIterable<N>
     implements EventSender<[N[], N[]]>, EventKeeper<[ElementNodeList<N>]> {
 

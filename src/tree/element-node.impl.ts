@@ -7,20 +7,19 @@ import {
   ElementAdapter,
 } from '@wesib/wesib';
 import { ValueTracker } from 'fun-events';
-import { ComponentNode, ElementNode as ElementNode_, ElementNodeList } from './element-node';
+import { ComponentTreeNode, ComponentNode, ElementNode as ElementNode_, ElementNodeList } from './element-node';
 import { elementNodeList } from './element-node-list.impl';
 import { NodeAttributes } from './node-attributes.impl';
 import { NodeProperties } from './node-properties.impl';
 
 const ElementNode__symbol = (/*#__PURE__*/ Symbol('element-node'));
 
-class ElementNode extends ElementNode_ {
+class ElementNode implements ComponentTreeNode {
 
   private readonly _attrs: NodeAttributes;
   private readonly _props: NodeProperties;
 
   constructor(private readonly _bs: BootstrapContext, readonly element: Element) {
-    super();
     this._attrs = new NodeAttributes(_bs, element);
     this._props = new NodeProperties(element);
     (element as any)[ElementNode__symbol] = this;
@@ -66,9 +65,9 @@ class ElementNode extends ElementNode_ {
 /**
  * @internal
  */
-export function elementNodeOf(bsContext: BootstrapContext, element: Element, optional?: boolean): ElementNode_.Any {
+export function elementNodeOf(bsContext: BootstrapContext, element: Element, optional?: boolean): ElementNode_ {
 
-  const existing: ElementNode_.Any = (element as any)[ElementNode__symbol];
+  const existing: ElementNode_ = (element as any)[ElementNode__symbol];
 
   return (existing || optional) ? existing : new ElementNode(bsContext, element);
 }
@@ -80,7 +79,7 @@ function selectNodes(
     opts: ElementNode_.SelectorOpts = {},
 ): ElementNodeList<any> {
   if (opts.all) {
-    return elementNodeList<ElementNode_.Any>(
+    return elementNodeList<ElementNode_>(
         bsContext,
         root,
         selector,

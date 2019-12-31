@@ -1,6 +1,6 @@
 import { bootstrapComponents, BootstrapContext, Component, ComponentContext } from '@wesib/wesib';
 import { InControl, inText } from 'input-aspects';
-import { ElementNode } from '../tree';
+import { ComponentNode, ElementNode } from '../tree';
 import { ComponentInElement, componentInElement } from './component-in-element';
 
 describe('input', () => {
@@ -72,7 +72,7 @@ describe('input', () => {
     async function mount<Ctrl extends InControl<any>>(opts: {
       selector: string,
       selectorOpts?: ElementNode.SelectorOpts,
-      control: (node: ElementNode.Any) => Ctrl,
+      control: (node: ElementNode, root: ComponentNode) => Ctrl,
     }): Promise<[ComponentInElement<Ctrl>, ComponentContext]> {
 
       const ref = componentInElement(opts);
