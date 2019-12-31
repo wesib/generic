@@ -2,17 +2,9 @@
  * @module @wesib/generic
  */
 import { ComponentClass, ComponentContext } from '@wesib/wesib';
-import { AIterable, ArrayLikeIterable } from 'a-iterable';
 import { SingleContextKey, SingleContextRef } from 'context-values';
-import {
-  AfterEvent,
-  AfterEvent__symbol,
-  EventKeeper,
-  EventSender,
-  OnEvent,
-  OnEvent__symbol,
-  ValueTracker,
-} from 'fun-events';
+import { ValueTracker } from 'fun-events';
+import { ElementNodeList } from './element-node-list';
 
 /**
  * Arbitrary element node within component tree. Either bound to some component or not.
@@ -44,38 +36,43 @@ export interface ComponentTreeNode {
   readonly parent: ElementNode | null;
 
   /**
-   * Select element nodes matching the given selector.
-   *
-   * @param selector  Simple CSS selector of nested components. E.g. component element name.
-   * @param opts  Element selector options.
-   */
-  select(
-      selector: string,
-      opts: ElementNode.ElementSelectorOpts,
-  ): ElementNodeList;
-
-  /**
    * Selects component nodes matching the given selector.
    *
-   * @param selector  Simple CSS selector of nested components (e.g. component element name), or component type.
-   * The latter should have custom element name.
-   * @param opts  Component selector options.
+   * @param selector  Simple CSS selector of nested components.
+   * @param mode  Component nodes pick mode.
+   *
+   * @returns Dynamically updatable list of matching component nodes.
    */
   select(
       selector: string,
-      opts?: ElementNode.ComponentSelectorOpts,
+      mode?: ComponentPickMode,
   ): ElementNodeList<ComponentNode>;
 
   /**
    * Selects component nodes of the given type.
    *
    * @param componentType  Nested component type with custom element name.
-   * @param opts  Component selector options.
+   * @param mode  Component nodes pick mode.
+   *
+   * @returns Dynamically updatable list of matching component nodes.
    */
   select<T extends object>(
       componentType: ComponentClass<T>,
-      opts?: ElementNode.ComponentSelectorOpts,
+      mode?: ComponentPickMode,
   ): ElementNodeList<ComponentNode<T>>;
+
+  /**
+   * Selects element nodes matching the given selector.
+   *
+   * @param selector  Simple CSS selector of nested elements. E.g. CSS class selector.
+   * @param mode  A mode of node picking from component tree.
+   *
+   * @returns Dynamically updatable list of matching element nodes.
+   */
+  select(
+      selector: string,
+      mode: ElementPickMode,
+  ): ElementNodeList;
 
   /**
    * Tracks element attribute.
@@ -109,48 +106,6 @@ export interface RawElementNode extends ComponentTreeNode {
 
 }
 
-export namespace ElementNode {
-
-  /**
-   * Element node selector options.
-   */
-  export interface SelectorOpts {
-
-    /**
-     * Set to `true` to select arbitrary nodes. Otherwise - select only component nodes.
-     */
-    all?: boolean;
-
-    /**
-     * Set to `true` to select from entire subtree. Otherwise - select from element child nodes only.
-     */
-    deep?: boolean;
-
-  }
-
-  /**
-   * Component node selector options.
-   */
-  export interface ComponentSelectorOpts extends SelectorOpts {
-
-    all?: false;
-
-  }
-
-  /**
-   * Any element node selector options.
-   */
-  export interface ElementSelectorOpts extends SelectorOpts {
-
-    /**
-     * Set to `true` to select arbitrary nodes. Otherwise - select only component nodes.
-     */
-    all: true;
-
-  }
-
-}
-
 /**
  * Element node representing an element bound to some component.
  */
@@ -167,50 +122,27 @@ export const ComponentNode: SingleContextRef<ComponentNode> =
     (/*#__PURE__*/ new SingleContextKey<ComponentNode>('component-node'));
 
 /**
- * Dynamic list of selected component tree nodes.
- *
- * It is an iterable of nodes.
- *
- * Implements an `EventSender` interface by sending added and removed nodes arrays.
- *
- * Implements an `EventKeeper` interface by sending updated node list.
+ * A mode of node picking from component tree.
  */
-export abstract class ElementNodeList<N extends ElementNode = ElementNode>
-    extends AIterable<N>
-    implements EventSender<[N[], N[]]>, EventKeeper<[ElementNodeList<N>]> {
+export interface ElementPickMode {
 
   /**
-   * An `OnEvent` sender of list changes. Sends arrays of added and removed nodes.
-   *
-   * The `[OnEvent__symbol]` property is an alias of this one.
+   * Set to `true` to select arbitrary nodes. Otherwise - select only component nodes.
    */
-  abstract readonly onUpdate: OnEvent<[N[], N[]]>;
-
-  get [OnEvent__symbol](): OnEvent<[N[], N[]]> {
-    return this.onUpdate;
-  }
+  all?: boolean;
 
   /**
-   * An `AfterEvent` keeper of current node list.
-   *
-   * The `[AfterEvent__symbol]` property is an alias of this one.
+   * Set to `true` to select from entire subtree. Otherwise - select from element child nodes only.
    */
-  abstract readonly read: AfterEvent<[ElementNodeList<N>]>;
+  deep?: boolean;
 
-  get [AfterEvent__symbol](): AfterEvent<[ElementNodeList<N>]> {
-    return this.read;
-  }
+}
 
-  /**
-   * An `AfterEvent` keeper of node list changes.
-   *
-   * Sends an iterables of added and removed nodes. Sends current nodes immediately upon receiver registration.
-   */
-  abstract readonly track: AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>;
+/**
+ * A mode that picks component nodes from component tree.
+ */
+export interface ComponentPickMode extends ElementPickMode {
 
-  /**
-   * An `AfterEvent` keeper of the first node in this list.
-   */
-  abstract readonly first: AfterEvent<[N?]>;
+  all?: false;
 
 }

@@ -7,7 +7,8 @@ import {
   ElementAdapter,
 } from '@wesib/wesib';
 import { ValueTracker } from 'fun-events';
-import { ComponentTreeNode, ComponentNode, ElementNode as ElementNode_, ElementNodeList } from './element-node';
+import { ComponentNode, ComponentTreeNode, ElementPickMode, ElementNode as ElementNode_ } from './element-node';
+import { ElementNodeList } from './element-node-list';
 import { elementNodeList } from './element-node-list.impl';
 import { NodeAttributes } from './node-attributes.impl';
 import { NodeProperties } from './node-properties.impl';
@@ -44,8 +45,8 @@ class ElementNode implements ComponentTreeNode {
     return parent != null ? elementNodeOf(this._bs, parent) : null;
   }
 
-  select(selector: string | ComponentClass<any>, opts?: ElementNode_.SelectorOpts): ElementNodeList<any> {
-    return selectNodes(this._bs, this.element, selector, opts);
+  select(selector: string | ComponentClass<any>, mode?: ElementPickMode): ElementNodeList<any> {
+    return selectNodes(this._bs, this.element, selector, mode);
   }
 
   attribute(name: string): ValueTracker<string | null, string> {
@@ -76,15 +77,15 @@ function selectNodes(
     bsContext: BootstrapContext,
     root: Element,
     selector: string | ComponentClass<any>,
-    opts: ElementNode_.SelectorOpts = {},
+    mode: ElementPickMode = {},
 ): ElementNodeList<any> {
-  if (opts.all) {
+  if (mode.all) {
     return elementNodeList<ElementNode_>(
         bsContext,
         root,
         selector,
         (element, optional) => elementNodeOf(bsContext, element, optional),
-        opts,
+        mode,
     );
   }
 
@@ -95,6 +96,6 @@ function selectNodes(
       root,
       selector,
       (element, optional) => adapter(element) && elementNodeOf(bsContext, element, optional) as ComponentNode,
-      opts,
+      mode,
   );
 }

@@ -5,7 +5,7 @@ import { ComponentContext, ComponentDef, ComponentDef__symbol } from '@wesib/wes
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { AfterEvent, trackValue, ValueTracker } from 'fun-events';
 import { InControl, InText } from 'input-aspects';
-import { ComponentNode, ElementNode } from '../tree';
+import { ComponentNode, ElementPickMode, ElementNode } from '../tree';
 import { ComponentInControl } from './component-in-control';
 
 /**
@@ -68,29 +68,29 @@ export namespace ComponentInElement {
  * The input attached to component by this reference searches for the first element matching CSS `selector` in
  * component's content and creates an input control control for it by calling a `control` function.
  *
- * @param selector  Input element selector.
- * @param selectorOpts  Element node selector options. By default selects any matching element within subtree.
- * @param control  Control builder function for selected element node.
+ * @param select  Input element selector.
+ * @param pick  A mode of input element node picking from component tree.
+ * @param build  Control builder function for selected element node.
  *
  * @returns A reference to component input element.
  */
 export function componentInElement<Ctrl extends InControl<any>>(
     {
-      selector,
-      selectorOpts = { all: true, deep: true },
-      control,
+      select,
+      pick = { all: true, deep: true },
+      build,
     }: {
-      selector: string,
-      selectorOpts?: ElementNode.SelectorOpts,
-      control: ComponentInElement.Builder<Ctrl>,
+      select: string,
+      pick?: ElementPickMode,
+      build: ComponentInElement.Builder<Ctrl>,
     },
 ): ComponentInElement.Ref<Ctrl> {
 
   type CompInElement = ComponentInElement<Ctrl>;
-  const CompInElement = new SingleContextKey<CompInElement>('component-in-element:' + selector);
+  const CompInElement = new SingleContextKey<CompInElement>('component-in-element:' + select);
 
   type CompControl = ValueTracker<Ctrl | undefined>;
-  const CompControl = new SingleContextKey<CompControl>('component-in-element:' + selector + ':control');
+  const CompControl = new SingleContextKey<CompControl>('component-in-element:' + select + ':control');
 
   const def = ComponentDef.all(
       ComponentInControl,
@@ -124,9 +124,9 @@ export function componentInElement<Ctrl extends InControl<any>>(
 
     context.whenOn(supply => {
       compControl.by(
-          root.select(selector, selectorOpts as ElementNode.ElementSelectorOpts)
+          root.select(select, pick)
               .first.tillOff(supply)
-              .thru_(node => node && control(node, root)),
+              .thru_(node => node && build(node, root)),
       );
       compControl.read.tillOff(supply).consume(
           ctrl => ctrl && inControl.in(ctrl).whenOff(() => compControl.it = undefined),

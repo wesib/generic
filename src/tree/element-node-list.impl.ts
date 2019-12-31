@@ -10,7 +10,8 @@ import { AIterable, ArrayLikeIterable, filterIt, itsEach, itsFirst, itsIterator,
 import { isPresent, nextArgs } from 'call-thru';
 import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
 import { html__naming } from 'namespace-aliaser';
-import { ElementNode, ElementNodeList as ElementNodeList_ } from './element-node';
+import { ElementPickMode, ElementNode } from './element-node';
+import { ElementNodeList as ElementNodeList_ } from './element-node-list';
 
 const WATCH_DEEP: ElementObserverInit = { subtree: true };
 
@@ -22,7 +23,7 @@ export function elementNodeList<N extends ElementNode>(
     root: Element,
     selectorOrType: string | ComponentClass<any>,
     nodeOf: (node: Element, optional?: boolean) => N | undefined,
-    { deep, all }: ElementNode.SelectorOpts,
+    { deep, all }: ElementPickMode,
 ): ElementNodeList_<N> {
 
   const updates = new EventEmitter<[N[], N[]]>();

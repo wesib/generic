@@ -1,6 +1,6 @@
 import { bootstrapComponents, BootstrapContext, Component, ComponentContext } from '@wesib/wesib';
 import { InControl, inText } from 'input-aspects';
-import { ComponentNode, ElementNode } from '../tree';
+import { ComponentNode, ElementPickMode, ElementNode } from '../tree';
 import { ComponentInElement, componentInElement } from './component-in-element';
 
 describe('input', () => {
@@ -22,8 +22,8 @@ describe('input', () => {
       inElement.appendChild(inputEl);
 
       const [readEl] = await mount({
-        selector: 'input',
-        control: node => inText(node.element),
+        select: 'input',
+        build: node => inText(node.element),
       });
 
       readEl.once(ctrl => {
@@ -38,8 +38,8 @@ describe('input', () => {
       inElement.appendChild(inputEl);
 
       const [readEl] = await mount({
-        selector: 'input',
-        control: node => inText(node.element),
+        select: 'input',
+        build: node => inText(node.element),
       });
 
       inputEl.remove();
@@ -56,8 +56,8 @@ describe('input', () => {
       inElement.appendChild(inputEl);
 
       const [readEl, context] = await mount({
-        selector: 'input',
-        control: node => inText(node.element),
+        select: 'input',
+        build: node => inText(node.element),
       });
 
       inElement.remove();
@@ -70,9 +70,9 @@ describe('input', () => {
     });
 
     async function mount<Ctrl extends InControl<any>>(opts: {
-      selector: string,
-      selectorOpts?: ElementNode.SelectorOpts,
-      control: (node: ElementNode, root: ComponentNode) => Ctrl,
+      select: string,
+      pick?: ElementPickMode,
+      build: (node: ElementNode, root: ComponentNode) => Ctrl,
     }): Promise<[ComponentInElement<Ctrl>, ComponentContext]> {
 
       const ref = componentInElement(opts);

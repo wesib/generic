@@ -12,7 +12,8 @@ import { AIterable, ArrayLikeIterable, itsEmpty } from 'a-iterable';
 import { noop } from 'call-thru';
 import { afterSupplied, onSupplied } from 'fun-events';
 import { ComponentTreeSupport } from './component-tree-support.feature';
-import { ComponentNode, ElementNode, ElementNodeList } from './element-node';
+import { ComponentNode, ElementNode } from './element-node';
+import { ElementNodeList } from './element-node-list';
 import Mock = jest.Mock;
 import SpyInstance = jest.SpyInstance;
 
