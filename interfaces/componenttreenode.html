@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ElementNode | Wesib: Generic Components</title>
+	<title>ComponentTreeNode | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="elementnode.html">ElementNode</a>
+					<a href="componenttreenode.html">ComponentTreeNode</a>
 				</li>
 			</ul>
-			<h1>Class ElementNode</h1>
+			<h1>Interface ComponentTreeNode</h1>
 		</div>
 	</div>
 </header>
@@ -69,19 +69,20 @@
 					<div class="lead">
 						<p>Component tree node representing arbitrary element.</p>
 					</div>
+					<p>This is a base interface of all element node implementations.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ElementNode</span>
+						<span class="target">ComponentTreeNode</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="../interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a>
+								<a href="rawelementnode.html" class="tsd-signature-type">RawElementNode</a>
 							</li>
 							<li>
-								<a href="../interfaces/elementnode.raw.html" class="tsd-signature-type">Raw</a>
+								<a href="componentnode.html" class="tsd-signature-type">ComponentNode</a>
 							</li>
 						</ul>
 					</li>
@@ -92,66 +93,33 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-class"><a href="../interfaces/elementnode.componentselectoropts.html" class="tsd-kind-icon">Component<wbr>Selector<wbr>Opts</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-class"><a href="../interfaces/elementnode.elementselectoropts.html" class="tsd-kind-icon">Element<wbr>Selector<wbr>Opts</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-class"><a href="../interfaces/elementnode.raw.html" class="tsd-kind-icon">Raw</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-class"><a href="../interfaces/elementnode.selectoropts.html" class="tsd-kind-icon">Selector<wbr>Opts</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Type aliases</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-class tsd-is-static"><a href="elementnode.html#any" class="tsd-kind-icon">Any</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="elementnode.html#context" class="tsd-kind-icon">context</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="elementnode.html#element" class="tsd-kind-icon">element</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="elementnode.html#parent" class="tsd-kind-icon">parent</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="componenttreenode.html#context" class="tsd-kind-icon">context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="componenttreenode.html#element" class="tsd-kind-icon">element</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="componenttreenode.html#parent" class="tsd-kind-icon">parent</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="elementnode.html#attribute" class="tsd-kind-icon">attribute</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="elementnode.html#property" class="tsd-kind-icon">property</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="elementnode.html#select" class="tsd-kind-icon">select</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="componenttreenode.html#attribute" class="tsd-kind-icon">attribute</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="componenttreenode.html#property" class="tsd-kind-icon">property</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="componenttreenode.html#select" class="tsd-kind-icon">select</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Type aliases</h2>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-class tsd-is-static">
-					<a name="any" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> Any</h3>
-					<div class="tsd-signature tsd-kind-icon">Any<span class="tsd-signature-symbol">:</span> <a href="../interfaces/elementnode.raw.html" class="tsd-signature-type">Raw</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/tree/element-node.ts#L108">src/tree/element-node.ts:108</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Any element node. Either bound to some component or not.</p>
-						</div>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="context" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagAbstract">Abstract</span> context</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> context</h3>
 					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/tree/element-node.ts#L30">src/tree/element-node.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/917a217/src/tree/element-node.ts#L31">src/tree/element-node.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -160,13 +128,13 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="element" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> element</h3>
+					<h3>element</h3>
 					<div class="tsd-signature tsd-kind-icon">element<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/tree/element-node.ts#L25">src/tree/element-node.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/917a217/src/tree/element-node.ts#L26">src/tree/element-node.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -175,13 +143,13 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="parent" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> parent</h3>
-					<div class="tsd-signature tsd-kind-icon">parent<span class="tsd-signature-symbol">:</span> <a href="elementnode.html" class="tsd-signature-type">ElementNode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<h3>parent</h3>
+					<div class="tsd-signature tsd-kind-icon">parent<span class="tsd-signature-symbol">:</span> <a href="../globals.html#elementnode" class="tsd-signature-type">ElementNode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/tree/element-node.ts#L35">src/tree/element-node.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/917a217/src/tree/element-node.ts#L36">src/tree/element-node.ts:36</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -193,22 +161,22 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="attribute" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> attribute</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<h3>attribute</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">attribute<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueTracker</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/tree/element-node.ts#L78">src/tree/element-node.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/917a217/src/tree/element-node.ts#L84">src/tree/element-node.ts:84</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a value tracker of element&#39;s attribute.</p>
+									<p>Tracks element attribute.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -225,22 +193,22 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="property" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> property</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<h3>property</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 						<li class="tsd-signature tsd-kind-icon">property&lt;V&gt;<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PropertyKey</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueTracker</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/tree/element-node.ts#L90">src/tree/element-node.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/917a217/src/tree/element-node.ts#L96">src/tree/element-node.ts:96</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a value tracker of element&#39;s property.</p>
+									<p>Tracks element element property.</p>
 								</div>
 								<p>The changes are tracked with <code>StateTracker</code>. So it is expected that the target property notifies on its changes
 								with state updater. E.g. when it is defined by <code>@DomProperty</code> decorator.</p>
@@ -265,24 +233,24 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="select" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> select</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">select<span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/elementnode.elementselectoropts.html" class="tsd-signature-type">ElementSelectorOpts</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a></li>
-						<li class="tsd-signature tsd-kind-icon">select<span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/elementnode.componentselectoropts.html" class="tsd-signature-type">ComponentSelectorOpts</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">select&lt;T&gt;<span class="tsd-signature-symbol">(</span>componentType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/elementnode.componentselectoropts.html" class="tsd-signature-type">ComponentSelectorOpts</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<h3>select</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">select<span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, mode<span class="tsd-signature-symbol">?: </span><a href="componentpickmode.html" class="tsd-signature-type">ComponentPickMode</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><a href="componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">select&lt;T&gt;<span class="tsd-signature-symbol">(</span>componentType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, mode<span class="tsd-signature-symbol">?: </span><a href="componentpickmode.html" class="tsd-signature-type">ComponentPickMode</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><a href="componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">select<span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, mode<span class="tsd-signature-symbol">: </span><a href="elementpickmode.html" class="tsd-signature-type">ElementPickMode</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/elementnodelist.html" class="tsd-signature-type">ElementNodeList</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/tree/element-node.ts#L43">src/tree/element-node.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/917a217/src/tree/element-node.ts#L46">src/tree/element-node.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Select element nodes matching the given selector.</p>
+									<p>Selects component nodes matching the given selector.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -290,56 +258,28 @@
 								<li>
 									<h5>selector: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Simple CSS selector of nested components. E.g. component element name.</p>
+										<p>Simple CSS selector of nested components.</p>
 									</div>
 								</li>
 								<li>
-									<h5>opts: <a href="../interfaces/elementnode.elementselectoropts.html" class="tsd-signature-type">ElementSelectorOpts</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> mode: <a href="componentpickmode.html" class="tsd-signature-type">ComponentPickMode</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Element selector options.</p>
+										<p>Component nodes pick mode.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><a href="componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Dynamically updatable list of matching component nodes.</p>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/tree/element-node.ts#L55">src/tree/element-node.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/917a217/src/tree/element-node.ts#L59">src/tree/element-node.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Select component nodes matching the given selector.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>selector: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Simple CSS selector of nested components (e.g. component element name), or component type.
-										The latter should have custom element name.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/elementnode.componentselectoropts.html" class="tsd-signature-type">ComponentSelectorOpts</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Component selector options.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/df16a35/src/tree/element-node.ts#L66">src/tree/element-node.ts:66</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Select component nodes of the given type.</p>
+									<p>Selects component nodes of the given type.</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -357,13 +297,43 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/elementnode.componentselectoropts.html" class="tsd-signature-type">ComponentSelectorOpts</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> mode: <a href="componentpickmode.html" class="tsd-signature-type">ComponentPickMode</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Component selector options.</p>
+										<p>Component nodes pick mode.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/elementnodelist.html" class="tsd-signature-type">ElementNodeList</a><span class="tsd-signature-symbol">&lt;</span><a href="componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Dynamically updatable list of matching component nodes.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/917a217/src/tree/element-node.ts#L72">src/tree/element-node.ts:72</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Selects element nodes matching the given selector.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>selector: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Simple CSS selector of nested elements. E.g. CSS class selector.</p>
+									</div>
+								</li>
+								<li>
+									<h5>mode: <a href="elementpickmode.html" class="tsd-signature-type">ElementPickMode</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A mode of node picking from component tree.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/elementnodelist.html" class="tsd-signature-type">ElementNodeList</a></h4>
+							<p>Dynamically updatable list of matching element nodes.</p>
 						</li>
 					</ul>
 				</section>
@@ -381,41 +351,26 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="elementnode.html" class="tsd-kind-icon">Element<wbr>Node</a>
+					<li class="current tsd-kind-interface">
+						<a href="componenttreenode.html" class="tsd-kind-icon">Component<wbr>Tree<wbr>Node</a>
 						<ul>
-							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="../interfaces/elementnode.componentselectoropts.html" class="tsd-kind-icon">Component<wbr>Selector<wbr>Opts</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="componenttreenode.html#context" class="tsd-kind-icon">context</a>
 							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="../interfaces/elementnode.elementselectoropts.html" class="tsd-kind-icon">Element<wbr>Selector<wbr>Opts</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="componenttreenode.html#element" class="tsd-kind-icon">element</a>
 							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="../interfaces/elementnode.raw.html" class="tsd-kind-icon">Raw</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="componenttreenode.html#parent" class="tsd-kind-icon">parent</a>
 							</li>
-							<li class=" tsd-kind-interface tsd-parent-kind-class">
-								<a href="../interfaces/elementnode.selectoropts.html" class="tsd-kind-icon">Selector<wbr>Opts</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="componenttreenode.html#attribute" class="tsd-kind-icon">attribute</a>
 							</li>
-							<li class=" tsd-kind-type-alias tsd-parent-kind-class tsd-is-static">
-								<a href="elementnode.html#any" class="tsd-kind-icon">Any</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
+								<a href="componenttreenode.html#property" class="tsd-kind-icon">property</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="elementnode.html#context" class="tsd-kind-icon">context</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="elementnode.html#element" class="tsd-kind-icon">element</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="elementnode.html#parent" class="tsd-kind-icon">parent</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="elementnode.html#attribute" class="tsd-kind-icon">attribute</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="elementnode.html#property" class="tsd-kind-icon">property</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="elementnode.html#select" class="tsd-kind-icon">select</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
+								<a href="componenttreenode.html#select" class="tsd-kind-icon">select</a>
 							</li>
 						</ul>
 					</li>
