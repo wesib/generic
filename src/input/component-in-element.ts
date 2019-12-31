@@ -69,7 +69,8 @@ export namespace ComponentInElement {
  * component's content and creates an input control control for it by calling a `control` function.
  *
  * @param select  Input element selector.
- * @param pick  A mode of input element node picking from component tree.
+ * @param pick  A mode of input element node picking from component tree. By default picks any matching element
+ * within subtree.
  * @param build  Control builder function for selected element node.
  *
  * @returns A reference to component input element.
