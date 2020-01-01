@@ -35,7 +35,7 @@ export function ProduceStyle<T extends ComponentClass>(
     ComponentDef.define(
         componentType,
         {
-          define(defContext) {
+          setup(defContext) {
             defContext.whenComponent(componentContext => {
               componentContext.whenReady(({ component }) => {
 

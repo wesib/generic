@@ -96,7 +96,7 @@ export function componentInElement<Ctrl extends InControl<any>>(
   const def = ComponentDef.all(
       ComponentInControl,
       {
-        define(context) {
+        setup(context) {
           context.perComponent({ a: CompControl, by: trackValue });
           context.perComponent({
             a: CompInElement,
