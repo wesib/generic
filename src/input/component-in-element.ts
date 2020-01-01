@@ -103,7 +103,7 @@ export function componentInElement<Ctrl extends InControl<any>>(
             by: (ctrl: CompControl) => ctrl.read,
             with: [CompControl],
           });
-          context.onComponent(enableInput);
+          context.whenComponent(enableInput);
         },
       },
   );

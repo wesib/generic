@@ -36,7 +36,7 @@ export function ProduceStyle<T extends ComponentClass>(
         componentType,
         {
           define(defContext) {
-            defContext.onComponent(componentContext => {
+            defContext.whenComponent(componentContext => {
               componentContext.whenReady(({ component }) => {
 
                 const property = component[propertyKey];
