@@ -8,6 +8,9 @@ import {
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { DomEventDispatcher, EventEmitter, OnEvent, trackValue, ValueTracker } from 'fun-events';
 
+/**
+ * @internal
+ */
 export type HierarchyRoot = ValueTracker<ComponentContext | undefined>;
 
 /**
