@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ComponentInElement | Wesib: Generic Components</title>
+	<title>InputFromNowhere | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="componentinelement.html">ComponentInElement</a>
+					<a href="inputfromnowhere.html">InputFromNowhere</a>
 				</li>
 			</ul>
-			<h1>Module ComponentInElement&lt;Ctrl&gt;</h1>
+			<h1>Interface InputFromNowhere</h1>
 		</div>
 	</div>
 </header>
@@ -67,22 +67,15 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Component input control created for input element.</p>
+						<p>A user input originated from nowhere.</p>
 					</div>
-					<p>This is an <code>AfterEvent</code> keeper of constructed input control, if any.</p>
-					<p>A <a href="../globals.html#componentinelement">componentInElement</a> function call result attaches such control to component.</p>
 				</div>
 			</section>
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
 					<li>
-						<h4>Ctrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>A type of input control. <code>InText</code> by default.</p>
-							</div>
-						</div>
+						<span class="target">InputFromNowhere</span>
 					</li>
 				</ul>
 			</section>
@@ -91,88 +84,25 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/componentinelement.ref.html" class="tsd-kind-icon">Ref</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Type aliases</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="componentinelement.html#builder" class="tsd-kind-icon">Builder</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="inputfromnowhere.html#control" class="tsd-kind-icon">control</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Type aliases</h2>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-					<a name="builder" class="tsd-anchor"></a>
-					<h3>Builder</h3>
-					<div class="tsd-signature tsd-kind-icon">Builder&lt;Ctrl&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="control" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> control</h3>
+					<div class="tsd-signature tsd-kind-icon">control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/087e2c6/src/input/component-in-element.ts#L53">src/input/component-in-element.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/087e2c6/src/input.new/input-from-control.ts#L36">src/input.new/input-from-control.ts:36</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Input control builder function signature.</p>
-						</div>
-						<p>Build input control for selected input element.</p>
-					</div>
-					<h4 class="tsd-type-parameters-title">Type parameters</h4>
-					<ul class="tsd-type-parameters">
-						<li>
-							<h4>Ctrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, node<span class="tsd-signature-symbol">: </span><a href="../globals.html#elementnode" class="tsd-signature-type">ElementNode</a>, root<span class="tsd-signature-symbol">: </span><a href="../interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Ctrl</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<div class="tsd-comment tsd-typography">
-											<dl class="tsd-comment-tags">
-												<dt>typeparam</dt>
-												<dd><p>A type of input control.</p>
-												</dd>
-											</dl>
-										</div>
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>this: <span class="tsd-signature-type">void</span></h5>
-											</li>
-											<li>
-												<h5>node: <a href="../globals.html#elementnode" class="tsd-signature-type">ElementNode</a></h5>
-												<div class="tsd-comment tsd-typography">
-													<div class="lead">
-														<p>Selected input element node.</p>
-													</div>
-												</div>
-											</li>
-											<li>
-												<h5>root: <a href="../interfaces/componentnode.html" class="tsd-signature-type">ComponentNode</a></h5>
-												<div class="tsd-comment tsd-typography">
-													<div class="lead">
-														<p>A node of component that initiated the user input and containing selected element.</p>
-													</div>
-												</div>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Ctrl</span></h4>
-										<p>Input control.</p>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -182,40 +112,22 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-module">
-						<a href="componentin.html">Component<wbr>In</a>
-					</li>
-					<li class="current tsd-kind-module tsd-has-type-parameter">
-						<a href="componentinelement.html">Component<wbr>InElement</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="navigationagent.html">Navigation<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="pagefragmentrequest.html">Page<wbr>Fragment<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="pageloadagent.html">Page<wbr>Load<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="pageloadresponse.html">Page<wbr>Load<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="themestyle.html">Theme<wbr>Style</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/componentinelement.ref.html" class="tsd-kind-icon">Ref</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
+						<a href="inputfromnowhere.html" class="tsd-kind-icon">Input<wbr>From<wbr>Nowhere</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="inputfromnowhere.html#control" class="tsd-kind-icon">control</a>
+							</li>
+						</ul>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="componentinelement.html#builder" class="tsd-kind-icon">Builder</a>
-					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>
