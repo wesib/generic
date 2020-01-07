@@ -24,13 +24,13 @@ export function receiveComponentIn(receiver: ComponentInReceiver, control: InCon
   const inputSupply = eventSupply();
   const { root } = receiver;
 
-  root.context.whenOn(connectionSupply => {
+  root.whenOn(connectionSupply => {
     connectionSupply.needs(inputSupply);
 
     const rcvNodes = new Set<ComponentNode>();
     const inNodes = new Map<ComponentNode, ComponentInNode>();
 
-    root.select('*', { deep: true }).track({
+    root.get(ComponentNode).select('*', { deep: true }).track({
       supply: connectionSupply,
       receive: (_ctx, added, removed) => {
         itsEach(removed, removeInNode);

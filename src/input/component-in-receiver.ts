@@ -1,8 +1,8 @@
 /**
  * @module @wesib/generic
  */
+import { ComponentContext } from '@wesib/wesib';
 import { SingleContextKey, SingleContextRef } from 'context-values';
-import { ComponentNode } from '../tree';
 
 /**
  * A receiver of user input inside component.
@@ -12,11 +12,11 @@ import { ComponentNode } from '../tree';
 export interface ComponentInReceiver {
 
   /**
-   * Root component node initiating the user input.
+   * A context of root component initiating the user input.
    *
-   * This node contains the ones participating in user input.
+   * This component encloses the ones participating in user input.
    */
-  readonly root: ComponentNode;
+  readonly root: ComponentContext;
 
 }
 

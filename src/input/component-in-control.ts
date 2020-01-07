@@ -5,7 +5,7 @@ import { ComponentContext, ComponentDef, ComponentDef__symbol } from '@wesib/wes
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { EventSupply } from 'fun-events';
 import { InControl } from 'input-aspects';
-import { ComponentNode, ComponentTreeSupport } from '../tree';
+import { ComponentTreeSupport } from '../tree';
 import { ComponentInReceiver } from './component-in-receiver';
 import { receiveComponentIn } from './receive-component-in';
 
@@ -27,7 +27,7 @@ const ComponentInControl__component: ComponentDef = {
  * An instance of this class intended to be available in component context. The class can be used as component
  * definition source for that.
  *
- * To initiate user input, the component should obtain an instance from its context and [[enable]] it.
+ * To initiate user input, the component should obtain an instance from its context and {@link in enable}} it.
  *
  * Usage example:
  * ```typescript
@@ -67,9 +67,9 @@ export class ComponentInControl<Value = any> implements ComponentInReceiver {
   }
 
   /**
-   * Root component node.
+   * Root component context.
    */
-  readonly root: ComponentNode;
+  readonly root: ComponentContext;
 
   /**
    * Constructs component user input control.
@@ -77,10 +77,10 @@ export class ComponentInControl<Value = any> implements ComponentInReceiver {
    * Normally, an instance should not be constructed directly. The class should be used instead to provide one for
    * component context. E.g. by passing it to `@Component` decorator.
    *
-   * @param context  Component context.
+   * @param root  Root component context.
    */
-  constructor(context: ComponentContext) {
-    this.root = context.get(ComponentNode);
+  constructor(root: ComponentContext) {
+    this.root = root;
   }
 
   /**
