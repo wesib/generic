@@ -1,11 +1,11 @@
 /**
  * @module @wesib/generic
  */
-import { ComponentContext } from '@wesib/wesib';
+import { BootstrapContext, ComponentContext } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, ContextValues, ContextValueSpec, SingleContextKey } from 'context-values';
 import { AfterEvent, afterEventBy, EventKeeper, eventSupply, trackValue } from 'fun-events';
 import { newHierarchyRegistry } from './hierarchy-registry.impl';
-import { findParentContext, HierarchyUpdates, initHierarchyUpdates } from './hierarchy-updates.impl';
+import { findParentContext, HierarchyRoot, HierarchyUpdates } from './hierarchy-updates.impl';
 
 const HierarchyContext__key = (/*#__PURE__*/ new SingleContextKey<HierarchyContext>(
     'hierarchy-context',
@@ -66,7 +66,7 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
 
 function newHierarchyContext<T extends object>(context: ComponentContext<T>): HierarchyContext<T> {
 
-  const hierarchyRoot = initHierarchyUpdates(context);
+  const hierarchyRoot = context.get(BootstrapContext).get(HierarchyRoot);
   const findParentHierarchy = () => findParentContext(context)?.get(HierarchyContext);
   const up = afterEventBy<[HierarchyContext?]>(
       receiver => {
@@ -75,9 +75,10 @@ function newHierarchyContext<T extends object>(context: ComponentContext<T>): Hi
         const updateParent = () => parentHierarchy.it = findParentHierarchy();
         const rootSupply = eventSupply().needs(receiver.supply);
 
-        hierarchyRoot.read.tillOff(rootSupply).consume(
-            () => context.connected ? hierarchyRoot.read(updateParent) : undefined,
-        );
+        hierarchyRoot.read({
+          supply: rootSupply,
+          receive: () => context.connected && updateParent(),
+        });
         parentHierarchy.read.tillOff(receiver.supply).consume(
             newParent => newParent && rootSupply.off() && newParent.context.get(HierarchyUpdates).on(updateParent),
         );
@@ -85,7 +86,7 @@ function newHierarchyContext<T extends object>(context: ComponentContext<T>): Hi
         context.whenOn({
           supply: receiver.supply,
           receive: (_, onSupply) => {
-            parentHierarchy.it = findParentHierarchy();
+            updateParent();
             onSupply.whenOff(
                 () => Promise.resolve().then(
                     () => context.connected || (parentHierarchy.it = undefined),

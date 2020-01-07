@@ -24,7 +24,7 @@ export const HierarchyRoot = (/*#__PURE__*/ new SingleContextKey<HierarchyRoot>(
         const root: Element = bsContext.get(BootstrapRoot);
 
         new DomEventDispatcher(root).on<ComponentEvent>('wesib:component')(
-            ({ context }: ComponentEvent) => context.get(HierarchyUpdates),
+            ({ context }: ComponentEvent) => context.get(HierarchyUpdates).issue(),
         );
 
         return trackValue();
@@ -50,6 +50,7 @@ export class HierarchyUpdates {
 
   readonly on: OnEvent<[ComponentContext]>;
   readonly send: (this: void) => void;
+  readonly issue: () => void;
 
   constructor(context: ComponentContext) {
 
@@ -58,8 +59,7 @@ export class HierarchyUpdates {
 
     this.on = updates.on;
     this.send = () => updates.send(context);
-
-    context.whenOn(() => {
+    this.issue = () => {
 
       const parent = findParentContext(context);
 
@@ -68,7 +68,7 @@ export class HierarchyUpdates {
       } else {
         hierarchyRoot.it = context;
       }
-    });
+    };
   }
 
 }
@@ -103,16 +103,4 @@ export function findParentContext(of: ComponentContext): ComponentContext | unde
 
     element = parent;
   }
-}
-
-/**
- * @internal
- */
-export function initHierarchyUpdates(context: ComponentContext): HierarchyRoot {
-
-  const root = context.get(BootstrapContext).get(HierarchyRoot);
-
-  context.get(HierarchyUpdates);
-
-  return root;
 }
