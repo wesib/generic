@@ -433,10 +433,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@wesib/wesib@^1.0.0-alpha.61":
-  version "1.0.0-alpha.61"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.61.tgz#d1d702432d022594a30e876cadcddd1aac1d470f"
-  integrity sha512-CvOcYhKAi/Y13+fCG84ffiOEHAyrwGIUkI9qYV/IVHVPqUjesGZ3TTUTjngy0+3kNen5pj3c/GbK9/MU0Ghg+A==
+"@wesib/wesib@^1.0.0-alpha.62":
+  version "1.0.0-alpha.62"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.62.tgz#277cad37f9d2c508312e90e7446ba478d4e42ccd"
+  integrity sha512-dPcIiqM0yQaa6565XxYhXpJVuOl7MWmaxZNxpzMDPi3AxyUK6KVSEXLSWpNWzFIuuboDi0iiEbbO0LWiXWwzqQ==
 
 a-iterable@^2.4.5:
   version "2.4.5"

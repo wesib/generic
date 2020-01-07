@@ -21,7 +21,7 @@
   "module": "dist/wesib.generic.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.61",
+    "@wesib/wesib": "^1.0.0-alpha.62",
     "a-iterable": "^2.4.5",
     "call-thru": "^2.5.4",
     "context-values": "^2.1.1",
@@ -46,7 +46,7 @@
     "@rollup/plugin-node-resolve": "^6.1.0",
     "@types/jest": "^24.0.25",
     "@types/jsdom": "^12.2.4",
-    "@wesib/wesib": "^1.0.0-alpha.61",
+    "@wesib/wesib": "^1.0.0-alpha.62",
     "a-iterable": "^2.4.5",
     "call-thru": "^2.5.4",
     "codecov": "^3.6.1",
