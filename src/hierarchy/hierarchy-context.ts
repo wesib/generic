@@ -3,7 +3,7 @@
  */
 import { ComponentContext } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, ContextValues, ContextValueSpec, SingleContextKey } from 'context-values';
-import { AfterEvent, afterEventBy, EventKeeper, trackValue } from 'fun-events';
+import { AfterEvent, afterEventBy, EventKeeper, eventSupply, trackValue } from 'fun-events';
 import { newHierarchyRegistry } from './hierarchy-registry.impl';
 import { findParentContext, HierarchyUpdates, initHierarchyUpdates } from './hierarchy-updates.impl';
 
@@ -65,18 +65,21 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
 }
 
 function newHierarchyContext<T extends object>(context: ComponentContext<T>): HierarchyContext<T> {
-  initHierarchyUpdates(context);
 
+  const hierarchyRoot = initHierarchyUpdates(context);
   const findParentHierarchy = () => findParentContext(context)?.get(HierarchyContext);
   const up = afterEventBy<[HierarchyContext?]>(
       receiver => {
 
         const parentHierarchy = trackValue<HierarchyContext>();
+        const updateParent = () => parentHierarchy.it = findParentHierarchy();
+        const rootSupply = eventSupply().needs(receiver.supply);
 
+        hierarchyRoot.read.tillOff(rootSupply).consume(
+            () => context.connected ? hierarchyRoot.read(updateParent) : undefined,
+        );
         parentHierarchy.read.tillOff(receiver.supply).consume(
-            newParent => newParent && newParent.context.get(HierarchyUpdates).on(
-                () => parentHierarchy.it = findParentHierarchy(),
-            ),
+            newParent => newParent && rootSupply.off() && newParent.context.get(HierarchyUpdates).on(updateParent),
         );
         parentHierarchy.read(receiver);
         context.whenOn({

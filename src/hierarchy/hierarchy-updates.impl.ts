@@ -6,10 +6,15 @@ import {
   ComponentEvent,
 } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { DomEventDispatcher, EventEmitter, OnEvent } from 'fun-events';
+import { DomEventDispatcher, EventEmitter, OnEvent, trackValue, ValueTracker } from 'fun-events';
 
-const HierarchyInit = (/*#__PURE__*/ new SingleContextKey<0>(
-    'hierarchy-init',
+export type HierarchyRoot = ValueTracker<ComponentContext | undefined>;
+
+/**
+ * @internal
+ */
+export const HierarchyRoot = (/*#__PURE__*/ new SingleContextKey<HierarchyRoot>(
+    'hierarchy-root',
     {
       byDefault: bsContext => {
 
@@ -19,7 +24,7 @@ const HierarchyInit = (/*#__PURE__*/ new SingleContextKey<0>(
             ({ context }: ComponentEvent) => context.get(HierarchyUpdates),
         );
 
-        return 0;
+        return trackValue();
       },
     },
 ));
@@ -46,11 +51,21 @@ export class HierarchyUpdates {
   constructor(context: ComponentContext) {
 
     const updates = new EventEmitter<[ComponentContext]>();
+    const hierarchyRoot = context.get(BootstrapContext).get(HierarchyRoot);
 
     this.on = updates.on;
     this.send = () => updates.send(context);
 
-    context.whenOn(() => findParentContext(context)?.get(HierarchyUpdates).send());
+    context.whenOn(() => {
+
+      const parent = findParentContext(context);
+
+      if (parent) {
+        parent.get(HierarchyUpdates).send();
+      } else {
+        hierarchyRoot.it = context;
+      }
+    });
   }
 
 }
@@ -90,7 +105,11 @@ export function findParentContext(of: ComponentContext): ComponentContext | unde
 /**
  * @internal
  */
-export function initHierarchyUpdates(context: ComponentContext) {
-  context.get(BootstrapContext).get(HierarchyInit);
+export function initHierarchyUpdates(context: ComponentContext): HierarchyRoot {
+
+  const root = context.get(BootstrapContext).get(HierarchyRoot);
+
   context.get(HierarchyUpdates);
+
+  return root;
 }

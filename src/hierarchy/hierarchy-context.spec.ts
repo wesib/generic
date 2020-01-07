@@ -52,8 +52,8 @@ describe('hierarchy', () => {
       );
 
       factory = await bsContext.whenDefined(TestComponent);
-      testContext = factory.mountTo(testElement).context.get(HierarchyContext);
       nestedContext = factory.mountTo(nestedElement).context.get(HierarchyContext);
+      testContext = factory.mountTo(testElement).context.get(HierarchyContext);
     });
 
     describe('up', () => {
@@ -109,10 +109,9 @@ describe('hierarchy', () => {
         context.up.once(upper => expect(upper).toBeUndefined());
       });
       it('updates on intermediate component mount', () => {
+        factory.mountTo(containerElement);
 
-        const context = factory.mountTo(containerElement).context.get(HierarchyContext);
-
-        expect(parent).toBe(context);
+        expect(parent?.context.element.tagName).toBe(containerElement.tagName);
       });
       it('updates on intermediate component mount event though there is no receivers', () => {
         parentSupply.off();
