@@ -6,6 +6,7 @@ import {
   ComponentFactory,
   Feature,
 } from '@wesib/wesib';
+import { MultiContextUpKey, MultiContextUpRef } from 'context-values';
 import { EventSupply } from 'fun-events';
 import { HierarchyContext } from './hierarchy-context';
 
@@ -119,6 +120,48 @@ describe('hierarchy', () => {
         const context = factory.mountTo(containerElement).context.get(HierarchyContext);
 
         nestedContext.up.once(upper => expect(upper).toBe(context));
+      });
+    });
+
+    describe('provide', () => {
+
+      let key: MultiContextUpRef<string>;
+
+      beforeEach(() => {
+        key = new MultiContextUpKey<string>('test');
+      });
+
+      it('makes value available in context', () => {
+        nestedContext.provide({ a: key, is: 'foo' });
+        nestedContext.get(key).once(value => expect(value).toBe('foo'));
+      });
+      it('makes value available in nested context', () => {
+
+        const remove = testContext.provide({ a: key, is: 'foo' });
+
+        nestedContext.provide({ a: key, is: 'bar' });
+        nestedContext.get(key).once((...values) => expect(values).toEqual(['foo', 'bar']));
+
+        remove();
+        nestedContext.get(key).once((...values) => expect(values).toEqual(['bar']));
+
+        testContext.provide({ a: key, is: 'baz' });
+        nestedContext.get(key).once((...values) => expect(values).toEqual(['baz', 'bar']));
+      });
+      it('makes all parent values available in nested context', () => {
+        testContext.provide({ a: key, is: 'foo' });
+        nestedContext.provide({ a: key, is: 'bar' });
+
+        const context = factory.mountTo(containerElement).context.get(HierarchyContext);
+
+        context.provide({ a: key, is: 'baz' });
+        nestedContext.get(key).once((...values) => expect(values).toEqual(['foo', 'baz', 'bar']));
+      });
+      it('makes disconnected component value unavailable in nested context', () => {
+        testContext.provide({ a: key, is: 'foo' });
+        nestedContext.provide({ a: key, is: 'bar' });
+        nestedContext.context.mount!.connected = false;
+        nestedContext.get(key).once((...values) => expect(values).toEqual(['bar']));
       });
     });
   });
