@@ -67,21 +67,37 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
 function newHierarchyContext<T extends object>(context: ComponentContext<T>): HierarchyContext<T> {
 
   const hierarchyRoot = context.get(BootstrapContext).get(HierarchyRoot);
-  const findParentHierarchy = () => findParentContext(context)?.get(HierarchyContext);
   const up = afterEventBy<[HierarchyContext?]>(
       receiver => {
 
         const parentHierarchy = trackValue<HierarchyContext>();
-        const updateParent = () => parentHierarchy.it = findParentHierarchy();
         const rootSupply = eventSupply().needs(receiver.supply);
+        const parentSupply = eventSupply().needs(receiver.supply);
+        const updateParent = () => {
+
+          const parent = findParentContext(context);
+
+          if (parent) {
+
+            const [parentCtx, immediate] = parent;
+
+            parentHierarchy.it = parentCtx.get(HierarchyContext);
+            rootSupply.off();
+            if (immediate) {
+              parentSupply.off();
+            }
+          } else {
+            parentHierarchy.it = undefined;
+          }
+        };
 
         hierarchyRoot.read({
           supply: rootSupply,
           receive: () => context.connected && updateParent(),
         });
-        parentHierarchy.read.tillOff(receiver.supply).consume(
-            newParent => newParent && rootSupply.off() && newParent.context.get(HierarchyUpdates).on(updateParent),
-        );
+        parentHierarchy.read.consume(
+            newParent => newParent && newParent.context.get(HierarchyUpdates).on(updateParent),
+        ).needs(parentSupply);
         parentHierarchy.read(receiver);
         context.whenOn({
           supply: receiver.supply,

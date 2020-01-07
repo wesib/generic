@@ -64,7 +64,7 @@ export class HierarchyUpdates {
       const parent = findParentContext(context);
 
       if (parent) {
-        parent.get(HierarchyUpdates).send();
+        parent[0].get(HierarchyUpdates).send();
       } else {
         hierarchyRoot.it = context;
       }
@@ -76,10 +76,11 @@ export class HierarchyUpdates {
 /**
  * @internal
  */
-export function findParentContext(of: ComponentContext): ComponentContext | undefined {
+export function findParentContext(of: ComponentContext): [ComponentContext, boolean] | undefined {
 
   const root = of.get(BootstrapContext).get(BootstrapRoot);
   let element: Node = of.element;
+  let immediate = true;
 
   if (element === root) {
     return;
@@ -95,12 +96,13 @@ export function findParentContext(of: ComponentContext): ComponentContext | unde
     const ctx: ComponentContext = (parent as any)[ComponentContext__symbol];
 
     if (ctx) {
-      return ctx;
+      return [ctx, immediate];
     }
     if (parent === root) {
       return;
     }
 
+    immediate = false;
     element = parent;
   }
 }
