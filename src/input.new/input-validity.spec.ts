@@ -1,7 +1,7 @@
 import { bootstrapComponents, BootstrapContext, Component, ComponentContext } from '@wesib/wesib';
 import { afterThe } from 'fun-events';
 import { InControl, InValidation, inValue } from 'input-aspects';
-import { receiveInput } from './input-receiver';
+import { inputFromControl } from './input-from-control';
 import { inputValidity } from './input-validity';
 
 describe('input', () => {
@@ -39,7 +39,7 @@ describe('input', () => {
 
     beforeEach(() => {
       control = inValue('test');
-      receiveInput(inputContext, control);
+      inputFromControl(inputContext, control);
       inputValidity(inputContext);
     });
 

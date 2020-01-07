@@ -8,17 +8,17 @@ import { InControl } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 
 /**
- * A receiver of user input.
+ * A user input originated from control.
  *
  * It is meant to be present in root {@link HierarchyContext hierarchy context}. Nested components may access it from
  * their hierarchy contexts to participate in user input.
  *
- * A [[receiveInput]] can be used to initiate user input.
+ * An [[inputFromControl]] function can be used to initiate user input.
  */
-export interface InputReceiver<Value = any> {
+export interface InputFromControl<Value = any> {
 
   /**
-   * Root component context.
+   * Root component context the input is initiated for.
    */
   readonly root: ComponentContext;
 
@@ -29,22 +29,19 @@ export interface InputReceiver<Value = any> {
 
 }
 
-export namespace InputReceiver {
-
-  /**
-   * An absent receiver of user input.
-   */
-  export interface Absent {
-    control?: undefined;
-  }
-
+/**
+ * A user input originated from nowhere.
+ */
+export interface InputFromNowhere {
+  control?: undefined;
 }
 
 /**
- * A key of hierarchy context value containing a user input receiver. Potentially {@link InputReceiver.Absent absent}.
+ * A key of hierarchy context value containing a user input originated from control. Potentially
+ * {@link InputFromNowhere absent}.
  */
-export const InputReceiver: SingleContextUpRef<InputReceiver | InputReceiver.Absent> =
-    (/*#__PURE__*/ new SingleContextUpKey<InputReceiver | InputReceiver.Absent>(
+export const InputFromControl: SingleContextUpRef<InputFromControl | InputFromNowhere> =
+    (/*#__PURE__*/ new SingleContextUpKey<InputFromControl | InputFromNowhere>(
         'input-receiver',
         {
           byDefault: () => ({}),
@@ -52,22 +49,22 @@ export const InputReceiver: SingleContextUpRef<InputReceiver | InputReceiver.Abs
     ));
 
 /**
- * Initiates user input for root component with the given input control.
+ * Initiates user input from the given control for the given root component.
  *
- * Constructs {@link InputReceiver input receiver} and makes it available in `root` component's hierarchy.
+ * Constructs an [[InputFromControl]] instance and makes it available in `root` component's hierarchy.
  *
- * @param root  Root component context.
+ * @param root  Root component context to initiate user input for.
  * @param control  User input control.
  *
  * @returns User input supply. The user input would be stopped once this supply is cut off.
  */
-export function receiveInput<Value>(
+export function inputFromControl<Value>(
     root: ComponentContext,
     control: InControl<Value>,
 ): EventSupply {
 
   const off = root.get(HierarchyContext).provide({
-    a: InputReceiver,
+    a: InputFromControl,
     by: () => ({
       root,
       control,

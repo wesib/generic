@@ -1,5 +1,5 @@
 /**
  * @module @wesib/generic
  */
-export * from './input-receiver';
+export * from './input-from-control';
 export * from './input-validity';
