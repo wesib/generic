@@ -2,18 +2,18 @@ import {
   BootstrapWindow,
   ComponentContext,
   DefaultNamespaceAliaser,
-  RenderSchedule,
-  RenderScheduler, ShadowContentRoot,
+  DefaultRenderScheduler,
+  ShadowContentRoot,
 } from '@wesib/wesib';
 import { ContextRegistry } from 'context-values';
 import { newNamespaceAliaser } from 'namespace-aliaser';
+import { immediateRenderScheduler, newManualRenderScheduler, RenderSchedule, RenderScheduler } from 'render-scheduler';
 import { produceBasicStyle, StypOptions, StypRender, stypRoot, stypSelector, StypSelector } from 'style-producer';
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
 import { ComponentStypOptions } from './component-styp-options';
 import { ElementIdClass, ElementIdClass__NS } from './element-id-class.impl';
 import Mock = jest.Mock;
-import Mocked = jest.Mocked;
 
 describe('styp', () => {
   describe('ComponentStyleProducer', () => {
@@ -41,17 +41,11 @@ describe('styp', () => {
       });
     });
 
-    let mockRenderScheduler: Mocked<RenderScheduler>;
-    let mockRenderSchedule: Mocked<RenderSchedule>;
+    let mockRenderScheduler: Mock<RenderSchedule, Parameters<RenderScheduler>>;
 
     beforeEach(() => {
-      mockRenderScheduler = {
-        newSchedule: jest.fn(() => mockRenderSchedule),
-      };
-      mockRenderSchedule = {
-        schedule: jest.fn(),
-      };
-      registry.provide({ a: RenderScheduler, is: mockRenderScheduler });
+      mockRenderScheduler = jest.fn(immediateRenderScheduler);
+      registry.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
     });
 
     let elementId: ElementIdClass;
@@ -94,6 +88,13 @@ describe('styp', () => {
     });
 
     describe('options', () => {
+      describe('render', () => {
+        it('respects explicit value', () => {
+          produce();
+          expect(mockRender).toHaveBeenCalled();
+        });
+      });
+
       describe('parent', () => {
         it('defaults to bootstrap window document', () => {
 
@@ -141,19 +142,14 @@ describe('styp', () => {
       describe('schedule', () => {
         it('defaults to render scheduler', () => {
           produce();
-
-          const schedule = mockProduceStyle.mock.calls[0][1]!.schedule!;
-          const op = () => {};
-
-          schedule(op);
-          expect(mockRenderSchedule.schedule).toHaveBeenCalledWith(op);
+          expectOptions({ scheduler: mockRenderScheduler });
         });
         it('respects explicit value', () => {
 
-          const schedule = () => {};
+          const scheduler = newManualRenderScheduler();
 
-          produce({ schedule });
-          expectOptions({ schedule });
+          produce({ scheduler });
+          expectOptions({ scheduler });
         });
       });
 
@@ -182,7 +178,7 @@ describe('styp', () => {
 
         const { rules } = stypRoot();
 
-        producer(rules, opts);
+        producer(rules, { ...opts, render: mockRender });
       }
     });
 
@@ -330,9 +326,6 @@ describe('styp', () => {
             rule.rules.self,
             {
               ...opts,
-              schedule(op) {
-                op();
-              },
               render: mockRender,
             },
         );
