@@ -3,12 +3,12 @@ import {
   ComponentContext,
   ComponentDef,
   ComponentMount,
+  DefaultRenderScheduler,
   Feature,
-  RenderSchedule,
-  RenderScheduler,
   ShadowContentRoot,
 } from '@wesib/wesib';
 import { trackValue } from 'fun-events';
+import { immediateRenderScheduler } from 'render-scheduler';
 import { StypProperties, StypRender, stypRoot, StypRules, stypSelectorText } from 'style-producer';
 import { testComponentFactory } from '../spec/test-element';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
@@ -143,17 +143,9 @@ describe('styp', () => {
       @Feature({
         needs: BasicStyleProducerSupport,
         setup(setup) {
-          setup.perDefinition({
-            a: RenderScheduler,
-            is: {
-              newSchedule(): RenderSchedule {
-                return {
-                  schedule(op: () => void) {
-                    op();
-                  },
-                };
-              },
-            },
+          setup.provide({
+            a: DefaultRenderScheduler,
+            is: immediateRenderScheduler,
           });
         },
       })

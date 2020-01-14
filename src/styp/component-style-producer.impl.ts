@@ -3,7 +3,7 @@ import {
   BootstrapWindow,
   ComponentContext,
   DefaultNamespaceAliaser,
-  RenderScheduler,
+  DefaultRenderScheduler,
   ShadowContentRoot,
 } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
@@ -48,17 +48,10 @@ export class ComponentStyleProducer {
       document: options.document || context.get(BootstrapWindow).document,
       parent: options.parent || context.contentRoot,
       rootSelector: [],
-      schedule: options.schedule || buildScheduler(),
+      scheduler: options.scheduler || context.get(DefaultRenderScheduler),
       nsAlias: options.nsAlias || context.get(DefaultNamespaceAliaser),
       render: buildRender(),
     });
-
-    function buildScheduler(): (operation: () => void) => void {
-
-      const scheduler = context.get(RenderScheduler);
-
-      return operation => scheduler.newSchedule().schedule(operation);
-    }
 
     function buildRender(): StypRender | readonly StypRender[] | undefined {
 
