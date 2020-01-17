@@ -10,7 +10,7 @@ import { AIterable, ArrayLikeIterable, filterIt, itsEach, itsFirst, itsIterator,
 import { isPresent, nextArgs } from 'call-thru';
 import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
 import { html__naming } from 'namespace-aliaser';
-import { ElementPickMode, ElementNode } from './element-node';
+import { ElementNode, ElementPickMode } from './element-node';
 import { ElementNodeList as ElementNodeList_ } from './element-node-list';
 
 const WATCH_DEEP: ElementObserverInit = { subtree: true };
@@ -45,12 +45,12 @@ export function elementNodeList<N extends ElementNode>(
 
           if (selected.size) {
 
-            const added = [
-              ...filterIt<N | undefined, N>(
+            const added = Array.from(
+              filterIt<N | undefined, N>(
                   mapIt(selected, node => nodeOf(node)),
                   isPresent,
               ),
-            ];
+            );
 
             if (added.length) {
               updates.send(added, []);

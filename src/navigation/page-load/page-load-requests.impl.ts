@@ -146,7 +146,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
     const transferred = new PageLoadRequests(this._navigation, this._loader);
 
     for (const [supply, list] of this._map.entries()) {
-      transferred._map.set(supply, [...list]);
+      transferred._map.set(supply, Array.from(list));
     }
 
     return transferred;
