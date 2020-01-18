@@ -6,24 +6,43 @@ import {
   Feature,
 } from '@wesib/wesib';
 import { InControl, InNamespaceAliaser, InRenderScheduler, InStyledElement, inValue } from 'input-aspects';
-import { newManualRenderScheduler } from 'render-scheduler';
+import { newManualRenderScheduler, RenderScheduler } from 'render-scheduler';
 import { DefaultInAspects } from './default-in-aspects';
+import Mock = jest.Mock;
 
 describe('input', () => {
   describe('DefaultInAspects', () => {
 
+    let mockRenderScheduler: Mock<ReturnType<RenderScheduler>, Parameters<RenderScheduler>>;
     let context: BootstrapContext;
     let control: InControl<any>;
 
     beforeEach(async () => {
-      context = await new Promise<BootstrapContext>(resolve => bootstrapComponents().whenReady(resolve));
+      mockRenderScheduler = jest.fn(newManualRenderScheduler());
+
+      @Feature({
+        setup(setup) {
+          setup.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
+        },
+      })
+      class TestFeature {}
+
+      context = await new Promise<BootstrapContext>(
+          resolve => bootstrapComponents(TestFeature).whenReady(resolve),
+      );
       context.get(DefaultInAspects)(aspects => {
         control = inValue(13).convert(aspects);
       });
     });
 
-    it('sets `InRenderScheduler` to `DefaultRenderScheduler`', () => {
-      expect(control.aspect(InRenderScheduler)).toBe(context.get(DefaultRenderScheduler));
+    it('delegates `InRenderScheduler` to `DefaultRenderScheduler`', () => {
+
+      const scheduler = control.aspect(InRenderScheduler);
+      const opts = { node: document.createElement('div') };
+
+      scheduler(opts);
+
+      expect(mockRenderScheduler).toHaveBeenLastCalledWith(opts);
     });
     it('sets `InNamespaceAliaser` to `DefaultNamespaceAliaser`', () => {
       expect(control.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));

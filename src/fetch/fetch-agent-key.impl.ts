@@ -1,5 +1,5 @@
 import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
-import { AfterEvent, EventKeeper, EventSender, OnEvent, onSupplied } from 'fun-events';
+import { AfterEvent, afterThe, EventKeeper, EventSender, OnEvent, onSupplied } from 'fun-events';
 
 type FetchAgent<Res extends any[]> = (
     this: void,
@@ -18,10 +18,25 @@ type CombinedFetchAgent<Res extends any[]> = (
  */
 export class FetchAgentKey<Res extends any[]>
     extends ContextUpKey<CombinedFetchAgent<Res>, FetchAgent<Res>>
-    implements ContextUpRef<CombinedFetchAgent<Res>, FetchAgent<Res>, AfterEvent<FetchAgent<Res>[]>> {
+    implements ContextUpRef<CombinedFetchAgent<Res>, FetchAgent<Res>> {
+
+  readonly upKey: ContextUpKey.UpKey<CombinedFetchAgent<Res>, FetchAgent<Res>>;
 
   constructor(name: string) {
     super(name);
+    this.upKey = this.createUpKey(
+        opts => opts.seed.keep.dig(
+            (...agents) => {
+
+              const combined = combineFetchAgents(agents);
+              const fallback = opts.byDefault(
+                  () => afterThe((next, request) => combined(next, request)),
+              );
+
+              return fallback || afterThe<[CombinedFetchAgent<Res>]>(defaultFetchAgent);
+            },
+        ),
+    );
   }
 
   grow<Ctx extends ContextValues>(
@@ -32,17 +47,18 @@ export class FetchAgentKey<Res extends any[]>
           AfterEvent<FetchAgent<Res>[]>>,
   ): CombinedFetchAgent<Res> {
 
-    let agent!: CombinedFetchAgent<Res>;
+    let delegated!: CombinedFetchAgent<Res>;
 
-    opts.seed((...agents) => agent = combineFetchAgents(agents));
+    opts.context.get(this.upKey)(agent => delegated = agent);
 
-    const fallback = opts.byDefault(() => (next, request) => agent(next, request));
-
-    return fallback || defaultFetchAgent;
+    return (next, request) => delegated(next, request);
   }
 
 }
 
+/**
+ * @internal
+ */
 function defaultFetchAgent<Res extends any[]>(
     next: (this: void, request: Request) => OnEvent<Res>,
     request: Request,

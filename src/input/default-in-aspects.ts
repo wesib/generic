@@ -2,8 +2,8 @@
  * @module @wesib/generic
  */
 import { DefaultNamespaceAliaser, DefaultRenderScheduler } from '@wesib/wesib';
-import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
-import { AfterEvent, EventKeeper } from 'fun-events';
+import { ContextKey__symbol, ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
+import { afterAll, AfterEvent, EventKeeper } from 'fun-events';
 import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from 'input-aspects';
 
 /**
@@ -25,6 +25,10 @@ export type DefaultInAspects = AfterEvent<[InConverter.Aspect<any, any>]>;
 class DefaultInAspectsKey
     extends ContextUpKey<AfterEvent<[InConverter.Aspect<any, any>]>, InConverter.Aspect<any, any>> {
 
+  get upKey(): this {
+    return this;
+  }
+
   constructor() {
     super('default-in-aspects');
   }
@@ -37,11 +41,16 @@ class DefaultInAspectsKey
           AfterEvent<InConverter.Aspect<any, any>[]>>,
   ): AfterEvent<[InConverter.Aspect.Factory<any, any>]> {
 
-    const scheduler = opts.context.get(DefaultRenderScheduler);
     const nsAlias = opts.context.get(DefaultNamespaceAliaser);
 
-    return opts.seed.keep.thru(
-        (...fns) => intoConvertedBy(
+    return afterAll({
+      scheduler: opts.context.get(DefaultRenderScheduler[ContextKey__symbol].upKey),
+      fns: opts.seed,
+    }).keep.thru(
+        ({
+            scheduler: [scheduler],
+            fns,
+        }) => intoConvertedBy(
             ...fns,
             InRenderScheduler.to(scheduler),
             InNamespaceAliaser.to(nsAlias),

@@ -3,7 +3,7 @@
  */
 import { BootstrapWindow } from '@wesib/wesib';
 import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
-import { AfterEvent, EventKeeper } from 'fun-events';
+import { AfterEvent, afterThe, EventKeeper } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
 import Target = Navigation.Target;
@@ -33,12 +33,83 @@ export type NavigationAgent =
         to: Page,
     ) => void;
 
+/**
+ * @internal
+ */
 class NavigationAgentKey
     extends ContextUpKey<NavigationAgent.Combined, NavigationAgent>
-    implements ContextUpRef<NavigationAgent.Combined, NavigationAgent, AfterEvent<NavigationAgent[]>> {
+    implements ContextUpRef<NavigationAgent.Combined, NavigationAgent> {
+
+  readonly upKey: ContextUpKey.UpKey<NavigationAgent.Combined, NavigationAgent>;
 
   constructor(name: string) {
     super(name);
+    this.upKey = this.createUpKey(
+        opts => {
+
+          const { document } = opts.context.get(BootstrapWindow);
+
+          return opts.seed.keep.dig(
+              (...agents) => {
+
+                const fallback = opts.byDefault(() => afterThe(combinedAgent));
+
+                return fallback || afterThe(defaultNavigationAgent);
+
+                function combinedAgent(
+                    next: (this: void, target: Navigation.URLTarget) => void,
+                    when: 'pre-open' | 'pre-replace',
+                    from: Page,
+                    to: Page,
+                ): void {
+
+                  return navigate(0, to);
+
+                  function navigate(agentIdx: number, agentTo: Page): void {
+
+                    const agent = agents[agentIdx];
+
+                    if (!agent) {
+                      return next(agentTo);
+                    }
+
+                    agent(
+                        (
+                            {
+                              url: nextURL = agentTo.url,
+                              title: nextTitle = agentTo.title,
+                              data: nextData = agentTo.data,
+                            }: Navigation.Target = agentTo,
+                        ) => navigate(
+                            agentIdx + 1,
+                            {
+                              url: new URL(String(nextURL), document.baseURI),
+                              title: nextTitle,
+                              data: nextData,
+                              get visited() {
+                                return agentTo.visited;
+                              },
+                              get current() {
+                                return agentTo.current;
+                              },
+                              get(ref) {
+                                return agentTo.get(ref);
+                              },
+                              put(ref, input) {
+                                agentTo.put(ref, input);
+                              },
+                            },
+                        ),
+                        when,
+                        from,
+                        agentTo,
+                    );
+                  }
+                }
+              },
+          );
+        },
+    );
   }
 
   grow<Ctx extends ContextValues>(
@@ -49,71 +120,25 @@ class NavigationAgentKey
           AfterEvent<NavigationAgent[]>>,
   ): NavigationAgent.Combined {
 
-    const { document } = opts.context.get(BootstrapWindow);
+    let delegated: NavigationAgent.Combined;
 
-    return (next, when, from, to) => {
+    opts.context.get(this.upKey)(agent => delegated = agent);
 
-      const result = opts.byDefault(() => combinedAgent);
-
-      return result ? result(next, when, from, to) : next(to);
-    };
-
-    function combinedAgent(
-        next: (this: void, target: Navigation.URLTarget) => void,
-        when: 'pre-open' | 'pre-replace',
-        from: Page,
-        to: Page,
-    ): void {
-
-      let agents!: NavigationAgent[];
-
-      opts.seed.once((...sources) => agents = sources);
-
-      return navigate(0, to);
-
-      function navigate(agentIdx: number, agentTo: Page): void {
-
-        const agent = agents[agentIdx];
-
-        if (!agent) {
-          return next(agentTo);
-        }
-
-        agent(
-            (
-                {
-                  url: nextURL = agentTo.url,
-                  title: nextTitle = agentTo.title,
-                  data: nextData = agentTo.data,
-                }: Navigation.Target = agentTo,
-            ) => navigate(
-                agentIdx + 1,
-                {
-                  url: new URL(String(nextURL), document.baseURI),
-                  title: nextTitle,
-                  data: nextData,
-                  get visited() {
-                    return agentTo.visited;
-                  },
-                  get current() {
-                    return agentTo.current;
-                  },
-                  get(ref) {
-                    return agentTo.get(ref);
-                  },
-                  put(ref, input) {
-                    agentTo.put(ref, input);
-                  },
-                },
-            ),
-            when,
-            from,
-            agentTo,
-        );
-      }
-    }
+    return (next, when, from, to) => delegated(next, when, from, to);
   }
 
+}
+
+/**
+ * @internal
+ */
+function defaultNavigationAgent(
+    next: (this: void, target: Navigation.URLTarget) => void,
+    _when: 'pre-open' | 'pre-replace',
+    _from: Page,
+    to: Page,
+): void {
+  next(to);
 }
 
 export namespace NavigationAgent {
