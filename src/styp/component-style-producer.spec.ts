@@ -142,7 +142,14 @@ describe('styp', () => {
       describe('schedule', () => {
         it('defaults to render scheduler', () => {
           produce();
-          expectOptions({ scheduler: mockRenderScheduler });
+          expect(mockProduceStyle).toHaveBeenCalled();
+
+          const scheduler = mockProduceStyle.mock.calls[0][1]!.scheduler!;
+          const options = { window, name: 'options' };
+
+          scheduler(options);
+
+          expect(mockRenderScheduler).toHaveBeenLastCalledWith(options);
         });
         it('respects explicit value', () => {
 
