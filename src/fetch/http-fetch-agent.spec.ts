@@ -36,6 +36,14 @@ describe('fetch', () => {
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
+    it('performs the fetch with fallback agent', () => {
+
+      const mockAgent = jest.fn();
+
+      agent = registry.newValues().get(HttpFetchAgent, { or: mockAgent }) as HttpFetchAgent;
+      agent(mockFetch, request);
+      expect(mockAgent).toHaveBeenCalledWith(expect.anything(), request);
+    });
     it('calls the registered agent', async () => {
 
       const emitter2 = new EventEmitter<[Response]>();

@@ -1,12 +1,18 @@
 import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
 import { AfterEvent, afterThe, EventKeeper, EventSender, OnEvent, onSupplied } from 'fun-events';
 
+/**
+ * @internal
+ */
 type FetchAgent<Res extends any[]> = (
     this: void,
     next: (this: void, request?: Request) => OnEvent<Res>,
     request: Request,
 ) => EventSender<Res>;
 
+/**
+ * @internal
+ */
 type CombinedFetchAgent<Res extends any[]> = (
     this: void,
     next: (this: void, request: Request) => OnEvent<Res>,
@@ -27,13 +33,13 @@ export class FetchAgentKey<Res extends any[]>
     this.upKey = this.createUpKey(
         opts => opts.seed.keep.dig(
             (...agents) => {
+              if (agents.length) {
+                return afterThe(combineFetchAgents(agents));
+              }
 
-              const combined = combineFetchAgents(agents);
-              const fallback = opts.byDefault(
-                  () => afterThe((next, request) => combined(next, request)),
-              );
+              const defaultProvider = () => afterThe(defaultFetchAgent);
 
-              return fallback || afterThe<[CombinedFetchAgent<Res>]>(defaultFetchAgent);
+              return opts.byDefault(defaultProvider) || defaultProvider();
             },
         ),
     );
@@ -49,7 +55,10 @@ export class FetchAgentKey<Res extends any[]>
 
     let delegated!: CombinedFetchAgent<Res>;
 
-    opts.context.get(this.upKey)(agent => delegated = agent);
+    opts.context.get(
+        this.upKey,
+        'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
+    )!(agent => delegated = agent);
 
     return (next, request) => delegated(next, request);
   }
