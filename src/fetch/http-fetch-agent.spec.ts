@@ -32,15 +32,15 @@ describe('fetch', () => {
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('performs the fetch without agents with `null` fallback value', () => {
-      agent = registry.newValues().get(HttpFetchAgent, { or: null }) as HttpFetchAgent;
+      agent = registry.newValues().get(HttpFetchAgent, { or: null })!;
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
-    it('performs the fetch with fallback agent', () => {
+    it('performs the fetch without agents by fallback agent', () => {
 
       const mockAgent = jest.fn();
 
-      agent = registry.newValues().get(HttpFetchAgent, { or: mockAgent }) as HttpFetchAgent;
+      agent = registry.newValues().get(HttpFetchAgent, { or: mockAgent });
       agent(mockFetch, request);
       expect(mockAgent).toHaveBeenCalledWith(expect.anything(), request);
     });
