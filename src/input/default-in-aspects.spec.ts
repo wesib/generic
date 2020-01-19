@@ -5,6 +5,7 @@ import {
   DefaultRenderScheduler,
   Feature,
 } from '@wesib/wesib';
+import { ContextKey__symbol } from 'context-values';
 import { InControl, InNamespaceAliaser, InRenderScheduler, InStyledElement, inValue } from 'input-aspects';
 import { newManualRenderScheduler, RenderScheduler } from 'render-scheduler';
 import { DefaultInAspects } from './default-in-aspects';
@@ -76,6 +77,12 @@ describe('input', () => {
       await new Promise(resolve => context.load(TestFeature).read(({ ready }) => ready && resolve()));
 
       expect(control.aspect(InRenderScheduler)).toBe(scheduler);
+    });
+
+    describe('upKey', () => {
+      it('is the key itself', () => {
+        expect(DefaultInAspects[ContextKey__symbol].upKey).toBe(DefaultInAspects[ContextKey__symbol]);
+      });
     });
   });
 });
