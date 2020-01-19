@@ -13,8 +13,14 @@ import { elementNodeList } from './element-node-list.impl';
 import { NodeAttributes } from './node-attributes.impl';
 import { NodeProperties } from './node-properties.impl';
 
+/**
+ * @internal
+ */
 const ElementNode__symbol = (/*#__PURE__*/ Symbol('element-node'));
 
+/**
+ * @internal
+ */
 class ElementNode implements ComponentTreeNode {
 
   private readonly _attrs: NodeAttributes;
@@ -73,6 +79,9 @@ export function elementNodeOf(bsContext: BootstrapContext, element: Element, opt
   return (existing || optional) ? existing : new ElementNode(bsContext, element);
 }
 
+/**
+ * @internal
+ */
 function selectNodes(
     bsContext: BootstrapContext,
     root: Element,

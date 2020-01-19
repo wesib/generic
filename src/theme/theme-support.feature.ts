@@ -8,6 +8,9 @@ import { ThemeFactory } from './theme-factory';
 import { ThemeFactory as ThemeFactory_ } from './theme-factory.impl';
 import { ThemeStyle } from './theme-style';
 
+/**
+ * @internal
+ */
 const ThemeSupport__feature: FeatureDef = {
   needs: BasicStyleProducerSupport,
   setup(setup) {

@@ -10,6 +10,9 @@ import { pageScriptsAgent } from './page-scripts-agent.impl';
 import { pageStyleAgent } from './page-style-agent.impl';
 import { pageTitleAgent } from './page-title-agent.impl';
 
+/**
+ * @internal
+ */
 const PageLoadSupport__feature: FeatureDef = {
   needs: NavigationSupport,
   setup(setup) {

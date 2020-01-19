@@ -5,6 +5,9 @@ import { BootstrapContext, ComponentContext, FeatureDef, FeatureDef__symbol, Sta
 import { ComponentNode } from './element-node';
 import { elementNodeOf } from './element-node.impl';
 
+/**
+ * @internal
+ */
 const ComponentTreeSupport__feature: FeatureDef = {
   needs: StateSupport,
   setup(setup) {

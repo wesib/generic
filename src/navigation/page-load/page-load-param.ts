@@ -7,6 +7,9 @@ import { PageLoadRequest } from './page-load-request';
 import { PageLoadRequests, pageLoadRequestsParam } from './page-load-requests.impl';
 import { PageLoader } from './page-loader.impl';
 
+/**
+ * @internal
+ */
 class PageLoadParam extends PageParam<void, PageLoadRequest> {
 
   create(page: Page, request: PageLoadRequest, context: PageParamContext) {

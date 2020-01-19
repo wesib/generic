@@ -21,6 +21,9 @@ import { ComponentStypOptions } from './component-styp-options';
 import { ComponentStypRender } from './component-styp-render';
 import { ElementIdClass } from './element-id-class.impl';
 
+/**
+ * @internal
+ */
 const ComponentStyleProducer__key =
     (/*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer:impl'));
 
@@ -71,6 +74,9 @@ export class ComponentStyleProducer {
 
 }
 
+/**
+ * @internal
+ */
 function shadowRender(hostSelector: StypPureSelector.NormalizedPart | undefined): StypRender {
   return {
     order: -100,
@@ -98,6 +104,9 @@ function shadowRender(hostSelector: StypPureSelector.NormalizedPart | undefined)
   };
 }
 
+/**
+ * @internal
+ */
 function noShadowRender(hostSelector: StypPureSelector.NormalizedPart): StypRender {
   return {
     order: -100,
@@ -123,6 +132,9 @@ function noShadowRender(hostSelector: StypPureSelector.NormalizedPart): StypRend
   };
 }
 
+/**
+ * @internal
+ */
 function extractHostSelector(
     selector: StypSelector.Normalized,
 ): [StypSelector.Normalized, StypSelector.Normalized?] {
@@ -152,6 +164,9 @@ function extractHostSelector(
   return [selector];
 }
 
+/**
+ * @internal
+ */
 function extendHostSelector(
     selector: StypSelector.Normalized,
     {

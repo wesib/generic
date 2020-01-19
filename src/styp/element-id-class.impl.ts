@@ -22,8 +22,14 @@ export const ElementIdClass__NS = (/*#__PURE*/ new NamespaceDef(
 export const ElementIdClass: SingleContextRef<ElementIdClass> =
     (/*#__PURE__*/ new SingleContextKey('unique-element-class', { byDefault: assignElementId }));
 
+/**
+ * @internal
+ */
 let uniqueClassSeq = 0;
 
+/**
+ * @internal
+ */
 function assignElementId(contextValues: ContextValues): ElementIdClass {
 
   const aliaser = contextValues.get(DefaultNamespaceAliaser);

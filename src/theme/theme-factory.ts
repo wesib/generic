@@ -4,6 +4,9 @@
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { Theme } from './theme';
 
+/**
+ * @internal
+ */
 const ThemeFactory__key = new SingleContextKey<ThemeFactory>('theme-factory');
 
 export abstract class ThemeFactory {

@@ -1,6 +1,9 @@
 import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
 import { EventEmitter, eventSupply, noEventSupply, OnEvent, ValueTracker } from 'fun-events';
 
+/**
+ * @internal
+ */
 class PropertyTracker<T> extends ValueTracker<T> {
 
   private readonly _updates = new EventEmitter<[T, T]>();

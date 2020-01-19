@@ -15,6 +15,9 @@ import { EnterPageEvent, LeavePageEvent, NavigationEvent, StayOnPageEvent } from
 import { Page } from './page';
 import { PageParam } from './page-param';
 
+/**
+ * @internal
+ */
 const Navigation__key = (/*#__PURE__*/ new SingleContextKey<Navigation>('navigation'));
 
 /**

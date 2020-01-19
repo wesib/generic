@@ -5,6 +5,9 @@ import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { Navigation } from './navigation';
 import { createNavigation } from './navigation.impl';
 
+/**
+ * @internal
+ */
 const NavigationSupport__feature: FeatureDef = {
   setup(setup) {
     setup.provide({ a: Navigation, by: createNavigation });

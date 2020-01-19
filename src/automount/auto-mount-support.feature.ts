@@ -14,6 +14,9 @@ import { itsEach, overArray } from 'a-iterable';
 import { DomEventDispatcher } from 'fun-events';
 import { AutoMountConfig } from './auto-mount-config';
 
+/**
+ * @internal
+ */
 let AutoMountSupport__feature: FeatureDef | undefined;
 
 /**
@@ -61,6 +64,9 @@ export function autoMountSupport(config?: AutoMountConfig): Class {
   return ConfiguredAutoMountSupport;
 }
 
+/**
+ * @internal
+ */
 function autoMountFeatureDef(config: AutoMountConfig = {}): FeatureDef.Options {
   return {
     setup(setup) {
@@ -72,6 +78,9 @@ function autoMountFeatureDef(config: AutoMountConfig = {}): FeatureDef.Options {
   };
 }
 
+/**
+ * @internal
+ */
 function mountExistingElements(context: FeatureContext, { select = '*' }: AutoMountConfig) {
   if (!select) {
     return; // Initial auto-mount disabled.

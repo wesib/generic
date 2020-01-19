@@ -7,6 +7,9 @@ import { BasicStyleProducerSupport } from './basic-style-producer-support.featur
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
 
+/**
+ * @internal
+ */
 const StyleProducerSupport__feature: FeatureDef = {
   has: BasicStyleProducerSupport,
   setup(setup) {

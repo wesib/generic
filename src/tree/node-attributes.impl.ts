@@ -10,6 +10,9 @@ import {
   ValueTracker,
 } from 'fun-events';
 
+/**
+ * @internal
+ */
 class AttributesObserver {
 
   private readonly _emitters = new Map<string, EventEmitter<[string, string | null]>>();
@@ -85,6 +88,9 @@ class AttributesObserver {
 
 }
 
+/**
+ * @internal
+ */
 class AttributeTracker extends ValueTracker<string | null, string> {
 
   private readonly _updates = new EventEmitter<[string, string | null]>();

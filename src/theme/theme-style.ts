@@ -71,6 +71,9 @@ export namespace ThemeStyle {
 
 }
 
+/**
+ * @internal
+ */
 class ThemeStyleKey extends SimpleContextKey<ThemeStyle.ById, ThemeStyle> {
 
   constructor() {
@@ -139,6 +142,9 @@ class ThemeStyleKey extends SimpleContextKey<ThemeStyle.ById, ThemeStyle> {
  */
 export const ThemeStyle: ContextRef<ThemeStyle.ById, ThemeStyle> = new ThemeStyleKey();
 
+/**
+ * @internal
+ */
 function combineStyles(first: ThemeStyle.Provider, second: ThemeStyle.Provider): ThemeStyle.Provider {
   return theme => stypRules(first(theme), second(theme));
 }

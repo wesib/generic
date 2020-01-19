@@ -5,6 +5,9 @@ import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values
 import { RefStypRule, StypProperties, StypRule, StypRuleRef, StypRules } from 'style-producer';
 import { ThemeStyle } from './theme-style';
 
+/**
+ * @internal
+ */
 const Theme__key = new SingleContextKey<Theme>('theme');
 
 /**

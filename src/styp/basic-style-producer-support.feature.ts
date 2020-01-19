@@ -5,6 +5,9 @@ import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
 
+/**
+ * @internal
+ */
 const BasicStyleProducerSupport__feature: FeatureDef = {
   setup(setup) {
     setup.perComponent({ as: ComponentStyleProducer_ });

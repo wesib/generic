@@ -7,6 +7,9 @@ import { AfterEvent, afterEventBy, EventKeeper, eventSupply, trackValue } from '
 import { newHierarchyRegistry } from './hierarchy-registry.impl';
 import { findParentContext, HierarchyRoot, HierarchyUpdates } from './hierarchy-updates.impl';
 
+/**
+ * @internal
+ */
 const HierarchyContext__key = (/*#__PURE__*/ new SingleContextKey<HierarchyContext>(
     'hierarchy-context',
     {
@@ -64,6 +67,9 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
 
 }
 
+/**
+ * @internal
+ */
 function newHierarchyContext<T extends object>(context: ComponentContext<T>): HierarchyContext<T> {
 
   const hierarchyRoot = context.get(BootstrapContext).get(HierarchyRoot);

@@ -13,6 +13,9 @@ import { html__naming } from 'namespace-aliaser';
 import { ElementNode, ElementPickMode } from './element-node';
 import { ElementNodeList as ElementNodeList_ } from './element-node-list';
 
+/**
+ * @internal
+ */
 const WATCH_DEEP: ElementObserverInit = { subtree: true };
 
 /**
