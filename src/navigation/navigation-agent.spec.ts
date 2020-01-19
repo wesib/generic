@@ -52,9 +52,17 @@ describe('navigation', () => {
       expect(mockNavigate).toHaveBeenCalledWith(expect.objectContaining({ ...to, get: expect.any(Function) }));
     });
     it('performs navigation without agents with `null` fallback value', () => {
-      agent = registry.newValues().get(NavigationAgent, { or: null }) as NavigationAgent;
+      agent = registry.newValues().get(NavigationAgent, { or: null })!;
       agent(mockNavigate, when, from, to);
       expect(mockNavigate).toHaveBeenCalledWith(to);
+    });
+    it('performs navigation without agents by fallback one', () => {
+
+      const mockAgent = jest.fn();
+
+      agent = registry.newValues().get(NavigationAgent, { or: mockAgent });
+      agent(mockNavigate, when, from, to);
+      expect(mockAgent).toHaveBeenCalledWith(mockNavigate, when, from, to);
     });
     it('calls the registered agent', async () => {
 

@@ -51,10 +51,13 @@ class NavigationAgentKey
 
           return opts.seed.keep.dig(
               (...agents) => {
+                if (agents.length) {
+                  return afterThe(combinedAgent);
+                }
 
-                const fallback = opts.byDefault(() => afterThe(combinedAgent));
+                const defaultProvider = () => afterThe(defaultNavigationAgent);
 
-                return fallback || afterThe(defaultNavigationAgent);
+                return opts.byDefault(defaultProvider) || defaultProvider();
 
                 function combinedAgent(
                     next: (this: void, target: Navigation.URLTarget) => void,
@@ -122,7 +125,10 @@ class NavigationAgentKey
 
     let delegated: NavigationAgent.Combined;
 
-    opts.context.get(this.upKey)(agent => delegated = agent);
+    opts.context.get(
+        this.upKey,
+        'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
+    )!(agent => delegated = agent);
 
     return (next, when, from, to) => delegated(next, when, from, to);
   }
