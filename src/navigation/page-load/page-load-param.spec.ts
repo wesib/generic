@@ -252,7 +252,7 @@ describe('navigation', () => {
             pageLoadParam,
             {
               receiver: r => response = r,
-              fragment: { id: 'test-fragment' } ,
+              fragment: { id: 'test-fragment' },
             },
         ).open('/other');
 
@@ -271,7 +271,7 @@ describe('navigation', () => {
             pageLoadParam,
             {
               receiver: r => response = r,
-              fragment: { tag: 'test-fragment' } ,
+              fragment: { tag: 'test-fragment' },
             },
         ).open('/other');
 
@@ -290,7 +290,7 @@ describe('navigation', () => {
             pageLoadParam,
             {
               receiver: r => response = r,
-              fragment: { id: 'wrong-fragment' } ,
+              fragment: { id: 'wrong-fragment' },
             },
         ).open('/other');
 
@@ -307,13 +307,13 @@ describe('navigation', () => {
             pageLoadParam,
             {
               receiver: r => response1 = r,
-              fragment: { id: 'test-fragment' } ,
+              fragment: { id: 'test-fragment' },
             },
         ).with(
             pageLoadParam,
             {
               receiver: r => response2 = r,
-              fragment: { tag: 'test-fragment-2' } ,
+              fragment: { tag: 'test-fragment-2' },
             },
         ).open('/other');
 
@@ -337,7 +337,7 @@ describe('navigation', () => {
             pageLoadParam,
             {
               receiver: r => response1 = r,
-              fragment: { id: 'test-fragment' } ,
+              fragment: { id: 'test-fragment' },
             },
         ).with(
             pageLoadParam,
@@ -364,7 +364,7 @@ describe('navigation', () => {
             pageLoadParam,
             {
               receiver: r => response = r,
-              fragment: { id: 'test-fragment' } ,
+              fragment: { id: 'test-fragment' },
             },
         ).open('/other');
         await reject.catch(noop);

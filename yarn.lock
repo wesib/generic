@@ -316,10 +316,10 @@
   dependencies:
     estree-walker "^0.6.1"
 
-"@surol/eslint-config@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@surol/eslint-config/-/eslint-config-1.0.2.tgz#e8045b9b7b71461d338b73b1bdfa0d6ca85a303e"
-  integrity sha512-UjQGX7TDxCvpHPGKd8xFD32tynoebDeAENUSczTJjE7smnNVODKkLISx3N46BjgrtDXPFkfy9cKaPRC+hjQ3ow==
+"@surol/eslint-config@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@surol/eslint-config/-/eslint-config-1.0.3.tgz#33c5576c37ad289293e2f2d84172e601c3cd975c"
+  integrity sha512-zKCz3PFaRO/oQnMe4Zp9QjEp3CW/dT2frfs50dCDJK55p0oeTTh7oHv8oVwjZUqIj0nQ5ofR0QNrAXa5QNO7PA==
 
 "@types/babel__core@^7.1.0":
   version "7.1.3"

@@ -45,7 +45,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.1",
     "@rollup/plugin-node-resolve": "^7.0.0",
-    "@surol/eslint-config": "^1.0.2",
+    "@surol/eslint-config": "^1.0.3",
     "@types/jest": "^24.9.0",
     "@types/jsdom": "^12.2.4",
     "@typescript-eslint/eslint-plugin": "^2.17.0",

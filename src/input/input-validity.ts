@@ -21,7 +21,8 @@ export type InputValidity = AfterEvent<[InValidation.Result]>;
  */
 export function inputValidity(context: ComponentContext): InputValidity {
   return context.get(HierarchyContext).get(InputFromControl).keep.dig(
-      (inputReceiver: InputFromControl | InputFromNowhere) =>
-          inputReceiver.control?.aspect(InValidation) || afterThe(inValidationResult()),
+      (inputReceiver: InputFromControl | InputFromNowhere) => (
+          inputReceiver.control?.aspect(InValidation) || afterThe(inValidationResult())
+      ),
   );
 }

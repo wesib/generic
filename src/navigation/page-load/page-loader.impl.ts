@@ -123,13 +123,11 @@ function pageFragmentsRequest(page: Page, request: Request): Request {
         headers: {
           'Accept-Fragment': itsReduction(
               fragments,
-              (header, fragment) =>
-                  (header ? header + ', ' : '')
-                  + (
-                      fragment.tag != null
-                          ? 'tag=' + hthvQuote(fragment.tag)
-                          : 'id=' + hthvQuote(fragment.id)
-                  ),
+              (header, fragment) => (header ? header + ', ' : '') + (
+                  fragment.tag != null
+                      ? 'tag=' + hthvQuote(fragment.tag)
+                      : 'id=' + hthvQuote(fragment.id)
+              ),
               '',
           ),
         },
