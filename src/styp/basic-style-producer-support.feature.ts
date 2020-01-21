@@ -34,7 +34,7 @@ const BasicStyleProducerSupport__feature: FeatureDef = {
  */
 export class BasicStyleProducerSupport {
 
-  static get [FeatureDef__symbol]() {
+  static get [FeatureDef__symbol](): FeatureDef {
     return BasicStyleProducerSupport__feature;
   }
 

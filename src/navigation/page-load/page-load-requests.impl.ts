@@ -28,6 +28,27 @@ export interface PageLoadReq extends PageLoadRequest {
 
 class PageLoadAbortError extends Error {}
 
+class PageLoadRequestsParam extends PageParam<PageLoadRequests, PageLoadRequests> {
+
+  create(
+      _page: Page,
+      requests: PageLoadRequests,
+  ): PageParam.Handle<PageLoadRequests, PageLoadRequests> {
+    return {
+      get() {
+        return requests;
+      },
+      put: noop,
+    };
+  }
+
+}
+
+/**
+ * @internal
+ */
+export const pageLoadRequestsParam: PageParam<PageLoadRequests, PageLoadRequests> = new PageLoadRequestsParam();
+
 /**
  * @internal
  */
@@ -65,7 +86,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
     let loadSupply = noEventSupply();
 
     return {
-      get() {},
+      get() {/* void */},
       put(request: PageLoadRequest): void {
         self._add(request);
       },
@@ -127,7 +148,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
 
   }
 
-  private _add(request: PageLoadRequest) {
+  private _add(request: PageLoadRequest): void {
 
     const req = { ...request, receiver: eventReceiver(request.receiver) };
     const { supply } = req.receiver;
@@ -173,24 +194,3 @@ function onFragment(
       )
       : onLoad;
 }
-
-class PageLoadRequestsParam extends PageParam<PageLoadRequests, PageLoadRequests> {
-
-  create(
-      _page: Page,
-      requests: PageLoadRequests,
-  ): PageParam.Handle<PageLoadRequests, PageLoadRequests> {
-    return {
-      get() {
-        return requests;
-      },
-      put: noop,
-    };
-  }
-
-}
-
-/**
- * @internal
- */
-export const pageLoadRequestsParam: PageParam<PageLoadRequests, PageLoadRequests> = new PageLoadRequestsParam();

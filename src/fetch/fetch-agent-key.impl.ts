@@ -37,7 +37,7 @@ export class FetchAgentKey<Res extends any[]>
                 return afterThe(combineFetchAgents(agents));
               }
 
-              const defaultProvider = () => afterThe(defaultFetchAgent);
+              const defaultProvider = (): AfterEvent<[CombinedFetchAgent<Res>]> => afterThe(defaultFetchAgent);
 
               return opts.byDefault(defaultProvider) || defaultProvider();
             },

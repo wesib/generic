@@ -1,6 +1,6 @@
 import { noop } from 'call-thru';
 import { ContextRegistry } from 'context-values';
-import { testPageParam } from './nav-history.spec';
+import { testPageParam } from '../spec/test-page-param';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
 import { Page } from './page';
@@ -64,7 +64,7 @@ describe('navigation', () => {
       agent(mockNavigate, when, from, to);
       expect(mockAgent).toHaveBeenCalledWith(mockNavigate, when, from, to);
     });
-    it('calls the registered agent', async () => {
+    it('calls the registered agent', () => {
 
       const mockAgent = jest.fn((next: any) => next());
 
@@ -73,7 +73,7 @@ describe('navigation', () => {
       agent(mockNavigate, when, from, to);
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), when, from, to);
     });
-    it('performs navigation by calling `next`', async () => {
+    it('performs navigation by calling `next`', () => {
       registry.provide({ a: NavigationAgent, is: next => next() });
 
       agent(mockNavigate, when, from, to);
@@ -83,7 +83,7 @@ describe('navigation', () => {
         put: expect.any(Function),
       });
     });
-    it('updates URL', async () => {
+    it('updates URL', () => {
       registry.provide({ a: NavigationAgent, is: next => next({ url: new URL('http://localhost/other') }) });
 
       agent(mockNavigate, when, from, to);
@@ -94,7 +94,7 @@ describe('navigation', () => {
         put: expect.any(Function),
       });
     });
-    it('updates URL using path', async () => {
+    it('updates URL using path', () => {
       registry.provide({ a: NavigationAgent, is: next => next({ url: 'other' }) });
 
       agent(mockNavigate, when, from, to);
@@ -105,7 +105,7 @@ describe('navigation', () => {
         put: expect.any(Function),
       });
     });
-    it('updates title', async () => {
+    it('updates title', () => {
       registry.provide({ a: NavigationAgent, is: next => next({ title: 'other title' }) });
 
       agent(mockNavigate, when, from, to);
@@ -116,7 +116,7 @@ describe('navigation', () => {
         put: expect.any(Function),
       });
     });
-    it('updates data', async () => {
+    it('updates data', () => {
       registry.provide({ a: NavigationAgent, is: next => next({ data: 'other data' }) });
 
       agent(mockNavigate, when, from, to);

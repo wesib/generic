@@ -11,7 +11,7 @@ export class ThemeFactory extends ThemeFactory_ {
     super();
   }
 
-  newTheme() {
+  newTheme(): Theme {
     return new Theme(this._styles);
   }
 

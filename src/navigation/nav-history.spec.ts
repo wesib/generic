@@ -1,6 +1,7 @@
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { LocationMock, navHistoryState } from '../spec/location-mock';
+import { testPageParam, testPageParamHandle } from '../spec/test-page-param';
 import { NAV_DATA_KEY, NavDataEnvelope } from './nav-history.impl';
 import { Navigation } from './navigation';
 import { NavigationSupport } from './navigation-support.feature';
@@ -271,7 +272,7 @@ describe('navigation', () => {
       testHashChange('hashchange');
     });
 
-    function testHashChange(...events: ('hashchange' | 'popstate')[]) {
+    function testHashChange(...events: ('hashchange' | 'popstate')[]): void {
       it('enters new page', () => {
         locationMock.enter('#newhash', events);
         expect(page.url.href).toBe('http://localhost/index#newhash');
@@ -380,33 +381,3 @@ describe('navigation', () => {
     });
   });
 });
-
-function testPageParamHandle(state: { value: string } = { value: '' }): Mocked<PageParam.Handle<string, string>> {
-  return {
-    get: jest.fn(() => state.value),
-    put: jest.fn(newValue => {
-      state.value = newValue;
-    }),
-    enter: jest.fn(),
-    stay: jest.fn(),
-    leave: jest.fn(),
-    forget: jest.fn(),
-  };
-}
-
-export function testPageParam(
-    value = '',
-): [PageParam<string, string>, Mocked<PageParam.Handle<string, string>>] {
-
-  const state = { value };
-  const handle = testPageParamHandle(state);
-
-  class TestParam extends PageParam<string, string> {
-    create(_page: Page, initValue: string): PageParam.Handle<string, string> {
-      state.value = initValue;
-      return handle;
-    }
-  }
-
-  return [new TestParam(), handle];
-}

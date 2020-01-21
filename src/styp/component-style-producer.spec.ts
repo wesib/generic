@@ -95,7 +95,8 @@ describe('styp', () => {
         });
       });
 
-      describe('parent', () => {
+      describe('document', () => {
+        // eslint-disable-next-line jest/expect-expect
         it('defaults to bootstrap window document', () => {
 
           const doc = document.implementation.createHTMLDocument('test');
@@ -105,6 +106,7 @@ describe('styp', () => {
           produce();
           expectOptions({ document: doc });
         });
+        // eslint-disable-next-line jest/expect-expect
         it('respects explicit value', () => {
 
           const doc = document.implementation.createHTMLDocument('test');
@@ -115,10 +117,12 @@ describe('styp', () => {
       });
 
       describe('parent', () => {
+        // eslint-disable-next-line jest/expect-expect
         it('defaults to component content root', () => {
           produce();
           expectOptions({ parent: context.contentRoot });
         });
+        // eslint-disable-next-line jest/expect-expect
         it('respects explicit value', () => {
 
           const parent = document.createElement('content-parent');
@@ -129,10 +133,12 @@ describe('styp', () => {
       });
 
       describe('rootSelector', () => {
+        // eslint-disable-next-line jest/expect-expect
         it('is empty by default', () => {
           produce();
           expectOptions({ rootSelector: [] });
         });
+        // eslint-disable-next-line jest/expect-expect
         it('ignores explicit value', () => {
           produce({ rootSelector: 'some' } as StypOptions as ComponentStypOptions);
           expectOptions({ rootSelector: [] });
@@ -151,6 +157,7 @@ describe('styp', () => {
 
           expect(mockRenderScheduler).toHaveBeenLastCalledWith(options);
         });
+        // eslint-disable-next-line jest/expect-expect
         it('respects explicit value', () => {
 
           const scheduler = newManualRenderScheduler();
@@ -161,10 +168,12 @@ describe('styp', () => {
       });
 
       describe('nsAlias', () => {
+        // eslint-disable-next-line jest/expect-expect
         it('defaults to default namespace alias', () => {
           produce();
           expectOptions({ nsAlias: context.get(DefaultNamespaceAliaser) });
         });
+        // eslint-disable-next-line jest/expect-expect
         it('respects explicit value', () => {
 
           const nsAlias = newNamespaceAliaser();
@@ -174,14 +183,14 @@ describe('styp', () => {
         });
       });
 
-      function expectOptions(opts: StypOptions) {
+      function expectOptions(opts: StypOptions): void {
         expect(mockProduceStyle).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining(opts),
         );
       }
 
-      function produce(opts?: ComponentStypOptions) {
+      function produce(opts?: ComponentStypOptions): void {
 
         const { rules } = stypRoot();
 
@@ -324,7 +333,7 @@ describe('styp', () => {
         });
       });
 
-      function produce(selector: StypSelector, opts?: ComponentStypOptions) {
+      function produce(selector: StypSelector, opts?: ComponentStypOptions): void {
 
         const { rules } = stypRoot();
         const rule = rules.add(selector);

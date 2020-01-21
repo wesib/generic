@@ -79,7 +79,7 @@ function newHierarchyContext<T extends object>(context: ComponentContext<T>): Hi
         const parentHierarchy = trackValue<HierarchyContext>();
         const rootSupply = eventSupply().needs(receiver.supply);
         const parentSupply = eventSupply().needs(receiver.supply);
-        const updateParent = () => {
+        const updateParent = (): void => {
 
           const parent = findParentContext(context);
 
@@ -110,9 +110,11 @@ function newHierarchyContext<T extends object>(context: ComponentContext<T>): Hi
           receive: (_, onSupply) => {
             updateParent();
             onSupply.whenOff(
-                () => Promise.resolve().then(
-                    () => context.connected || (parentHierarchy.it = undefined),
-                ),
+                () => {
+                  Promise.resolve().then(
+                      () => context.connected || (parentHierarchy.it = undefined),
+                  );
+                },
             );
           },
         });
@@ -125,17 +127,17 @@ function newHierarchyContext<T extends object>(context: ComponentContext<T>): Hi
 
     readonly get = values.get;
 
-    get context() {
+    get context(): ComponentContext<T> {
       return context;
     }
 
-    get up() {
+    get up(): AfterEvent<[HierarchyContext?]> {
       return up;
     }
 
     provide<Deps extends any[], Src, Seed>(
         spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src | EventKeeper<Src[]>, Seed>,
-    ) {
+    ): () => void {
       return registry.provide(spec);
     }
 

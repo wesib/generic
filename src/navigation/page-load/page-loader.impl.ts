@@ -44,7 +44,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
         {
           mode: 'same-origin',
           credentials: 'same-origin',
-          headers: new Headers({ 'Accept': 'text/html' }),
+          headers: new Headers({ Accept: 'text/html' }),
         },
     );
 
@@ -109,7 +109,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
   };
 }
 
-function pageFragmentsRequest(page: Page, request: Request ) {
+function pageFragmentsRequest(page: Page, request: Request): Request {
 
   const fragments = page.get(pageLoadRequestsParam)?.fragments;
 

@@ -76,11 +76,11 @@ export class LocationMock {
     } as any;
   }
 
-  get currentURL() {
+  get currentURL(): URL {
     return this.stateData[this._index][0];
   }
 
-  get currentState() {
+  get currentState(): any {
     return this.getState(this._index);
   }
 
@@ -88,11 +88,11 @@ export class LocationMock {
     return this.stateData[index][1];
   }
 
-  setState(index: number, state: any) {
+  setState(index: number, state: any): void {
     this.stateData[index][1] = state;
   }
 
-  enter(hash: string, events: readonly ('hashchange' | 'popstate')[] = ['hashchange', 'popstate']) {
+  enter(hash: string, events: readonly ('hashchange' | 'popstate')[] = ['hashchange', 'popstate']): void {
 
     const oldURL = this.currentURL;
     const newURL = new URL(hash, oldURL);
@@ -111,7 +111,7 @@ export class LocationMock {
     }
   }
 
-  down() {
+  down(): void {
     this.eventTarget.remove();
   }
 

@@ -41,30 +41,33 @@ export class PageCacheBuster {
       const navigation = context.get(Navigation);
 
       this.urlModifier = afterThe(url => url.searchParams.set(appRevSearchParam, rev));
-      this.agent = afterThe((next, request) => {
-        return next(new Request(request.url, request)).thru_(response => {
-          if (response.ok) {
+      this.agent = afterThe(
+          (next, request) => next(new Request(request.url, request))
+              .thru_(
+                  response => {
+                    if (response.ok) {
 
-            const newRev = appRev(response.document);
+                      const newRev = appRev(response.document);
 
-            if (newRev && newRev !== rev) {
+                      if (newRev && newRev !== rev) {
 
-              const url = new URL(response.page.url.href);
+                        const url = new URL(response.page.url.href);
 
-              url.searchParams.set(appRevSearchParam, newRev);
-              navigation.update(url);
-              navigation.reload();
-            }
-          }
+                        url.searchParams.set(appRevSearchParam, newRev);
+                        navigation.update(url);
+                        navigation.reload();
+                      }
+                    }
 
-          return response;
-        });
-      });
+                    return response;
+                  },
+              ),
+      );
     }
   }
 
 }
 
-function appRev(doc: Document) {
+function appRev(doc: Document): string | null | undefined {
   return doc.querySelector('meta[name=wesib-app-rev]')?.getAttribute('content');
 }

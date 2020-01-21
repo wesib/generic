@@ -22,21 +22,21 @@ module.exports = {
     [
       'jest-junit',
       {
-        'suiteName': '@wesib/generic',
-        'outputDirectory': './target/test-results',
-        'classNameTemplate': '{classname}: {title}',
-        'titleTemplate': '{classname}: {title}',
-        'ancestorSeparator': ' › ',
-        'usePathForSuiteName': 'true',
+        suiteName: '@wesib/generic',
+        outputDirectory: './target/test-results',
+        classNameTemplate: '{classname}: {title}',
+        titleTemplate: '{classname}: {title}',
+        ancestorSeparator: ' › ',
+        usePathForSuiteName: 'true',
       },
     ],
   ],
   restoreMocks: true,
-  testEnvironment: "jest-environment-jsdom-fifteen",
+  testEnvironment: 'jest-environment-jsdom-fifteen',
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.spec.json',
     },
   },
-  setupFiles: ['cross-fetch/polyfill']
+  setupFiles: ['cross-fetch/polyfill'],
 };

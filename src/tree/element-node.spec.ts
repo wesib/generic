@@ -98,9 +98,8 @@ describe('tree', () => {
       });
       it('is detected when added to document', async () => {
 
-        let parent: ComponentNodeInfo;
+        const parent = await newComponentNode();
 
-        parent = await newComponentNode();
         parent.element.appendChild(node.element);
 
         expect(node.parent).toMatchObject({
@@ -235,7 +234,8 @@ describe('tree', () => {
               expect(onUpdate).not.toHaveBeenCalledWith(newValue, expect.anything());
             });
           });
-        });
+        },
+    );
 
     describe('attribute', () => {
 
@@ -261,7 +261,7 @@ describe('tree', () => {
         attribute = compNode.attribute('attr');
       });
 
-      function setAttribute(name: string, value: string, oldValue: string) {
+      function setAttribute(name: string, value: string, oldValue: string): void {
         element.setAttribute(name, value);
         mutate([{ type: 'attributes', oldValue, attributeName: name }]);
       }

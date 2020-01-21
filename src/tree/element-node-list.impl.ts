@@ -49,10 +49,10 @@ export function elementNodeList<N extends ElementNode>(
           if (selected.size) {
 
             const added = Array.from(
-              filterIt<N | undefined, N>(
-                  mapIt(selected, node => nodeOf(node)),
-                  isPresent,
-              ),
+                filterIt<N | undefined, N>(
+                    mapIt(selected, node => nodeOf(node)),
+                    isPresent,
+                ),
             );
 
             if (added.length) {
@@ -85,8 +85,9 @@ export function elementNodeList<N extends ElementNode>(
     }).needs(supply);
   });
   const read = afterEventBy<[ElementNodeList]>(onUpdate.thru(() => nodeList), () => [nodeList]);
-  const onTrackUpdate: OnEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> =
-      onUpdate.thru((added, removed) => nextArgs(AIterable.of(added), AIterable.of(removed)));
+  const onTrackUpdate: OnEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> = onUpdate.thru(
+      (added, removed) => nextArgs(AIterable.of(added), AIterable.of(removed)),
+  );
   const track = afterEventBy<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>(receiver => {
 
     const initialEmitter = new EventEmitter<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>();
@@ -114,23 +115,23 @@ export function elementNodeList<N extends ElementNode>(
 
   class ElementNodeList extends ElementNodeList_<N> {
 
-    get onUpdate() {
+    get onUpdate(): OnEvent<[N[], N[]]> {
       return onUpdate;
     }
 
-    get read() {
+    get read(): AfterEvent<[ElementNodeList]> {
       return read;
     }
 
-    get track() {
+    get track(): AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> {
       return track;
     }
 
-    get first() {
+    get first(): AfterEvent<[N?]> {
       return first;
     }
 
-    [Symbol.iterator]() {
+    [Symbol.iterator](): Iterator<N> {
       return itsIterator(iterable || (iterable = filterIt<N | undefined, N>(
           mapIt(
               elements(),
@@ -171,7 +172,7 @@ export function elementNodeList<N extends ElementNode>(
     );
   }
 
-  function update(mutations: MutationRecord[]) {
+  function update(mutations: MutationRecord[]): void {
 
     const added: N[] = [];
     const removed: N[] = [];

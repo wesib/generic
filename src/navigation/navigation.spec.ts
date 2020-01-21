@@ -47,7 +47,7 @@ describe('navigation', () => {
       navigation = context.get(Navigation);
     });
 
-    let location: { url: string, data: any };
+    let location: { url: string; data: any };
 
     beforeEach(() => {
       navigation.read(({ url, data }) => location = { url: url.href, data });
@@ -67,7 +67,7 @@ describe('navigation', () => {
 
     describe('length', () => {
       it('returns history length', () => {
-        expect(navigation.length).toBe(1);
+        expect(navigation).toHaveLength(1);
         expect(locationMock.historyLength).toHaveBeenCalled();
       });
     });
@@ -261,7 +261,9 @@ describe('navigation', () => {
         expect(stayOnPage.reason).toBe(error);
       });
       it('cancels previous navigation when the new one initiated', async () => {
-        navigation.onLeave.once(() => navigation.open({ url: '/second', data: 3 }));
+        navigation.onLeave.once(() => {
+          navigation.open({ url: '/second', data: 3 });
+        });
         expect(await navigation.open('/other')).toBeNull();
         await Promise.resolve(); // await for another navigation to finish
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
@@ -283,7 +285,7 @@ describe('navigation', () => {
 
         expect(await other).toBeNull();
         expect(await second).toBeNull();
-        expect(await third).toMatchObject({ url: new URL('http://localhost/third' )});
+        expect(await third).toMatchObject({ url: new URL('http://localhost/third') });
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(4);
         expect(locationMock.history.pushState).toHaveBeenCalledWith(
             navHistoryState({ data: undefined }),

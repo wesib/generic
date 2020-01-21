@@ -25,7 +25,7 @@ describe('navigation', () => {
     beforeEach(() => {
       request = new Request('http://localhost/test');
       emitter = new EventEmitter();
-      mockLoad = jest.fn((_request?) => emitter.on);
+      mockLoad = jest.fn((_request?: Request) => emitter.on);
     });
 
     it('performs the load without agents registered', () => {
@@ -54,16 +54,17 @@ describe('navigation', () => {
 
       expect(response).toBe(response2);
     });
-    it('performs the load by calling `next`', async () => {
+    it('performs the load by calling `next`', () => {
       registry.provide({ a: PageLoadAgent, is: next => next() });
 
       expect(agent(mockLoad, request)).toBe(emitter.on);
       expect(mockLoad).toHaveBeenCalledWith(request);
     });
-    it('calls the next agent in chain by calling `next`', async () => {
+    it('calls the next agent in chain by calling `next`', () => {
 
-      const mockAgent: Mock<ReturnType<PageLoadAgent>, Parameters<PageLoadAgent>> =
-          jest.fn((next, _request) => next());
+      const mockAgent: Mock<ReturnType<PageLoadAgent>, Parameters<PageLoadAgent>> = jest.fn(
+          (next, _request) => next(),
+      );
 
       registry.provide({ a: PageLoadAgent, is: next => next() });
       registry.provide({ a: PageLoadAgent, is: mockAgent });

@@ -29,7 +29,7 @@ describe('util', () => {
 
       expect(clone.ownerDocument).toBe(doc);
       expect(doc.body.contains(clone)).toBe(true);
-      expect(clone.childNodes.length).toBe(1);
+      expect(clone.childNodes).toHaveLength(1);
       expect(clone.childNodes[0].nodeName).toBe('SPAN');
       expect(clone.textContent).toBe('test');
     });
@@ -42,7 +42,7 @@ describe('util', () => {
       const clone = importNode(el, doc.body, noop);
       expect(clone.ownerDocument).toBe(doc);
       expect(doc.body.contains(clone)).toBe(true);
-      expect(clone.childNodes.length).toBe(0);
+      expect(clone.childNodes).toHaveLength(0);
     });
     it('inserts imported element before another one', () => {
 
@@ -55,7 +55,7 @@ describe('util', () => {
 
       expect(clone.ownerDocument).toBe(doc);
       expect(doc.body.contains(clone)).toBe(true);
-      expect(clone.childNodes.length).toBe(1);
+      expect(clone.childNodes).toHaveLength(1);
       expect(clone.childNodes[0].nodeName).toBe('SPAN');
       expect(doc.body.textContent).toBe('first.second');
     });

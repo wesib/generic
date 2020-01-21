@@ -1,6 +1,6 @@
-import { bootstrapComponents, Class, Feature } from '@wesib/wesib';
+import { bootstrapComponents, BootstrapContext, Class, Feature } from '@wesib/wesib';
 import { itsEmpty, itsFirst } from 'a-iterable';
-import { RefStypRule, StypLength, StypRule, StypRuleRef } from 'style-producer';
+import { RefStypRule, StypLength, StypRule, StypRuleList, StypRuleRef } from 'style-producer';
 import { Theme } from './theme';
 import { ThemeStyle } from './theme-style';
 import { ThemeSupport } from './theme-support.feature';
@@ -44,7 +44,7 @@ describe('theme', () => {
 
         expect([...rules]).toEqual([rule]);
 
-        function style(_theme: Theme) {
+        function style(_theme: Theme): StypRuleList {
           return _theme.root.rules.grab({ $: 'test' });
         }
       });
@@ -67,7 +67,7 @@ describe('theme', () => {
         rule.read.once(receiver);
         expect(receiver).toHaveBeenCalledWith({ $value: 'test' });
 
-        function style(_theme: Theme) {
+        function style(_theme: Theme): StypRuleList {
           _theme.root.rules.add({ $: 'test' }, { $value: 'test' });
           return _theme.root.rules.grab({ $: 'test' });
         }
@@ -77,12 +77,13 @@ describe('theme', () => {
 
         expect(theme.style(style)).toBe(theme.style(style));
 
-        function style(_theme: Theme) {
+        function style(_theme: Theme): StypRuleList {
           return _theme.root.rules.grab({ $: 'test' });
         }
       });
 
       describe('combining', () => {
+        // eslint-disable-next-line jest/expect-expect
         it('combines registered style and extension', async () => {
 
           @Feature({
@@ -98,6 +99,7 @@ describe('theme', () => {
           await bootstrap(StyleFeature);
           checkCombined();
         });
+        // eslint-disable-next-line jest/expect-expect
         it('combines style with extension registered before it', async () => {
 
           @Feature({
@@ -113,6 +115,7 @@ describe('theme', () => {
           await bootstrap(StyleFeature);
           checkCombined();
         });
+        // eslint-disable-next-line jest/expect-expect
         it('combines unregistered style and registered extension', async () => {
 
           @Feature({
@@ -128,17 +131,17 @@ describe('theme', () => {
           checkCombined();
         });
 
-        function style1(_theme: Theme) {
+        function style1(_theme: Theme): StypRuleList {
           _theme.root.rules.add({ $: 'test1' }, { $value: 'test1' });
           return _theme.root.rules.grab({ $: 'test1' });
         }
 
-        function style2(_theme: Theme) {
+        function style2(_theme: Theme): StypRuleList {
           _theme.root.rules.add({ $: 'test2' }, { $value: 'test2' });
           return _theme.root.rules.grab({ $: 'test2' });
         }
 
-        function checkCombined() {
+        function checkCombined(): void {
 
           const rules: StypRule[] = [...theme.style(style1)];
 
@@ -155,7 +158,7 @@ describe('theme', () => {
       });
     });
 
-    async function bootstrap(...features: Class<any>[]) {
+    function bootstrap(...features: Class<any>[]): Promise<BootstrapContext> {
 
       @Feature({
         needs: ThemeSupport,
@@ -166,7 +169,7 @@ describe('theme', () => {
       class TestFeature {
       }
 
-      await new Promise(resolve => bootstrapComponents(TestFeature, ...features).whenReady(resolve));
+      return new Promise(resolve => bootstrapComponents(TestFeature, ...features).whenReady(resolve));
     }
 
   });

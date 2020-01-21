@@ -71,7 +71,7 @@ describe('navigation', () => {
 <body></body>
 </html>`;
       await navigation.with(pageLoadParam, { receiver: noop }).open('/some');
-      expect(doc.scripts.length).toBe(1);
+      expect(doc.scripts).toHaveLength(1);
 
       const script = doc.scripts[0];
 
@@ -101,7 +101,7 @@ describe('navigation', () => {
 
       await navigation.open('/other');
 
-      expect(doc.scripts.length).toBe(2);
+      expect(doc.scripts).toHaveLength(2);
       expect(doc.scripts[0].src).toBe('http://localhost/js/test.js');
       expect(doc.scripts[1].src).toBe('http://localhost/js/test2.js');
     });
@@ -115,7 +115,7 @@ describe('navigation', () => {
 <body></body>
 </html>`;
       await navigation.with(pageLoadParam, { receiver: noop }).open('/some');
-      expect(doc.scripts.length).toBe(0);
+      expect(doc.scripts).toHaveLength(0);
     });
     it('passes error messages through', async () => {
       mockFetch.mockImplementation(() => afterThe({

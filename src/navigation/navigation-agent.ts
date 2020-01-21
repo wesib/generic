@@ -55,7 +55,7 @@ class NavigationAgentKey
                   return afterThe(combinedAgent);
                 }
 
-                const defaultProvider = () => afterThe(defaultNavigationAgent);
+                const defaultProvider = (): AfterEvent<[NavigationAgent.Combined]> => afterThe(defaultNavigationAgent);
 
                 return opts.byDefault(defaultProvider) || defaultProvider();
 
@@ -178,5 +178,6 @@ export namespace NavigationAgent {
  *
  * The agent returned combines all registered agents into one. If no agent registered it just performs the navigation.
  */
-export const NavigationAgent: ContextUpRef<NavigationAgent.Combined, NavigationAgent> =
-    (/*#__PURE__*/ new NavigationAgentKey('navigation-agent'));
+export const NavigationAgent: ContextUpRef<NavigationAgent.Combined, NavigationAgent> = (
+    /*#__PURE__*/ new NavigationAgentKey('navigation-agent')
+);

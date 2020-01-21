@@ -16,7 +16,7 @@ export const PageParam__symbol = (/*#__PURE__*/ Symbol('page-param'));
  * both before and after navigation.
  *
  * @typeparam T  Parameter value type.
- * @typaparam I  Parameter input type.
+ * @typeparam I  Parameter input type.
  */
 export abstract class PageParam<T, I> implements PageParam.Ref<T, I> {
 

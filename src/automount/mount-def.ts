@@ -32,8 +32,7 @@ export const MountDef = {
   adapter(factory: ComponentFactory, def: MountDef | MountDef['to']): ElementAdapter {
 
     const to = typeof def === 'object' ? def.to : def;
-    const matches: (element: Element) => boolean =
-        typeof to === 'function' ? to : element => element.matches(to);
+    const matches: (element: Element) => boolean = typeof to === 'function' ? to : element => element.matches(to);
 
     return (element: Element) => matches(element) ? factory.mountTo(element).context : undefined;
   },

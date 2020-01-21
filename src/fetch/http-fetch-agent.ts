@@ -55,5 +55,6 @@ export namespace HttpFetchAgent {
  *
  * The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.
  */
-export const HttpFetchAgent: ContextUpRef<HttpFetchAgent.Combined, HttpFetchAgent> =
-    (/*#__PURE__*/ new FetchAgentKey<[Response]>('http-fetch-agent'));
+export const HttpFetchAgent: ContextUpRef<HttpFetchAgent.Combined, HttpFetchAgent> = (
+    /*#__PURE__*/ new FetchAgentKey<[Response]>('http-fetch-agent')
+);

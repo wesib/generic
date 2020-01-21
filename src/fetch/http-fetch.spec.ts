@@ -77,7 +77,7 @@ describe('fetch', () => {
 
       const request2 = new Request('http://localhost/test2');
 
-      mockAgent.mockImplementation((next) => next(request2));
+      mockAgent.mockImplementation(next => next(request2));
 
       await fetch();
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), new Request(request, init));
@@ -133,7 +133,7 @@ describe('fetch', () => {
         await fetch();
         expect(mockWindow.fetch).toHaveBeenCalledWith(new Request(request, { signal: abortController.signal }));
       });
-      it('supply cut off aborts the fetch', async () => {
+      it('supply cut off aborts the fetch', () => {
 
         const receiver = jest.fn();
         const done = jest.fn();

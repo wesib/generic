@@ -24,8 +24,9 @@ import { ElementIdClass } from './element-id-class.impl';
 /**
  * @internal
  */
-const ComponentStyleProducer__key =
-    (/*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer:impl'));
+const ComponentStyleProducer__key = (
+    /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer:impl')
+);
 
 /**
  * @internal
@@ -61,8 +62,9 @@ export class ComponentStyleProducer {
       const { render } = options;
       const renders = new ArraySet<StypRender>(render)
           .add(...context.get(ComponentStypRender));
-      const hostSelector =
-          options.hostSelector ? stypSelector(options.hostSelector)[0] as StypPureSelector.NormalizedPart : undefined;
+      const hostSelector = options.hostSelector
+          ? stypSelector(options.hostSelector)[0] as StypPureSelector.NormalizedPart
+          : undefined;
 
       renders.add(shadowRoot
           ? shadowRender(hostSelector)

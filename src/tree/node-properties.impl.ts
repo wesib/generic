@@ -20,7 +20,7 @@ class PropertyTracker<T> extends ValueTracker<T> {
     return this._updates.on;
   }
 
-  bind(context: ComponentContext) {
+  bind(context: ComponentContext): void {
 
     const propertyState = context.get(ComponentState).track(domPropertyPathTo(this._key));
 
@@ -56,7 +56,7 @@ export class NodeProperties {
   constructor(private readonly _element: any) {
   }
 
-  bind(context: ComponentContext) {
+  bind(context: ComponentContext): void {
     this._context = context;
     this._props.forEach(prop => prop.bind(context));
   }

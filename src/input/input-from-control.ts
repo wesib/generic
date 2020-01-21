@@ -40,13 +40,14 @@ export interface InputFromNowhere {
  * A key of hierarchy context value containing a user input originated from control. Potentially
  * {@link InputFromNowhere absent}.
  */
-export const InputFromControl: SingleContextUpRef<InputFromControl | InputFromNowhere> =
-    (/*#__PURE__*/ new SingleContextUpKey<InputFromControl | InputFromNowhere>(
+export const InputFromControl: SingleContextUpRef<InputFromControl | InputFromNowhere> = (
+    /*#__PURE__*/ new SingleContextUpKey<InputFromControl | InputFromNowhere>(
         'input-receiver',
         {
           byDefault: () => ({}),
         },
-    ));
+    )
+);
 
 /**
  * Initiates user input from the given control for the given root component.

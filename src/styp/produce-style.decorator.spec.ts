@@ -137,7 +137,7 @@ describe('styp', () => {
         rules: StypRules.Source = stypRoot({ display: 'block' }),
         def: ComponentDef = { name: 'test-component' },
         options?: ComponentStypOptions,
-    ): Promise<ComponentMount<any>> {
+    ): Promise<ComponentMount> {
 
       @Component(def)
       @Feature({
@@ -152,7 +152,7 @@ describe('styp', () => {
       class TestComponent {
 
         @ProduceStyle(options)
-        get style() {
+        get style(): StypRules.Source {
           return rules;
         }
 

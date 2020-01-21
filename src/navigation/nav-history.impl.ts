@@ -1,15 +1,15 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { itsEach } from 'a-iterable';
 import { noop } from 'call-thru';
-import { ContextKey__symbol, ContextRegistry, SingleContextKey } from 'context-values';
+import { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } from 'context-values';
 import { ValueTracker } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
 import { PageParamContext } from './page-param-context';
 
-const RoutingHistory__key = (/*#__PURE__*/ new SingleContextKey<NavHistory>(
-    'navigation-history',
+const NavHistory__key = (/*#__PURE__*/ new SingleContextKey<NavHistory>(
+    'nav-history',
     {
       byDefault: bootstrapDefault(ctx => new NavHistory(ctx)),
     },
@@ -18,10 +18,43 @@ const RoutingHistory__key = (/*#__PURE__*/ new SingleContextKey<NavHistory>(
 /**
  * @internal
  */
+export const NAV_DATA_KEY = 'wesib:navigation:data' as const;
+
+/**
+ * @internal
+ */
+export interface PartialNavData {
+  readonly uid?: string;
+  readonly id?: number;
+  readonly data: any;
+}
+
+/**
+ * @internal
+ */
+export interface NavData extends PartialNavData {
+  readonly uid: string;
+  readonly id: number;
+}
+
+/**
+ * @internal
+ */
+export interface NavDataEnvelope {
+  readonly [NAV_DATA_KEY]: NavData;
+}
+
+function extractNavData(state: any): PartialNavData {
+  return state == null || typeof state !== 'object' ? { data: state } : state[NAV_DATA_KEY];
+}
+
+/**
+ * @internal
+ */
 export class NavHistory {
 
-  static get [ContextKey__symbol]() {
-    return RoutingHistory__key;
+  static get [ContextKey__symbol](): ContextKey<NavHistory> {
+    return NavHistory__key;
   }
 
   private readonly _document: Document;
@@ -65,7 +98,7 @@ export class NavHistory {
   open(
       toEntry: PageEntry,
       tracker: ValueTracker<PageEntry>,
-  ) {
+  ): void {
 
     const { page: { title = '', url } } = toEntry;
 
@@ -82,7 +115,7 @@ export class NavHistory {
       when: 'open' | 'enter',
       toEntry: PageEntry,
       tracker: ValueTracker<PageEntry>,
-  ) {
+  ): void {
 
     const fromEntry = tracker.it;
 
@@ -110,7 +143,7 @@ export class NavHistory {
   replace(
       toEntry: PageEntry,
       tracker: ValueTracker<PageEntry>,
-  ) {
+  ): void {
 
     const fromEntry = tracker.it;
     const { page: { title = '', url } } = toEntry;
@@ -233,7 +266,7 @@ export class NavHistory {
     return toEntry;
   }
 
-  private _forget(entry: PageEntry) {
+  private _forget(entry: PageEntry): void {
     this._entries.delete(entry.id);
     entry.forget();
   }
@@ -250,37 +283,10 @@ export class NavHistory {
 
 }
 
-/**
- * @internal
- */
-export interface PartialNavData {
-  readonly uid?: string;
-  readonly id?: number;
-  readonly data: any;
-}
-
-/**
- * @internal
- */
-export interface NavData extends PartialNavData {
-  readonly uid: string;
-  readonly id: number;
-}
-
-/**
- * @internal
- */
-export const NAV_DATA_KEY = 'wesib:navigation:data' as const;
-
-/**
- * @internal
- */
-export interface NavDataEnvelope {
-  readonly [NAV_DATA_KEY]: NavData;
-}
-
-function extractNavData(state: any): PartialNavData {
-  return state == null || typeof state !== 'object' ? { data: state } : state[NAV_DATA_KEY];
+const enum PageStatus {
+  New,
+  Visited,
+  Current,
 }
 
 /**
@@ -344,7 +350,9 @@ export class PageEntry {
     const registry = new ContextRegistry<ParamContext>(this._context);
 
     class ParamContext extends PageParamContext {
+
       readonly get: PageParamContext['get'] = registry.newValues().get;
+
     }
 
     const newHandle = param.create(this.page, input, new ParamContext());
@@ -357,7 +365,7 @@ export class PageEntry {
     return newHandle.get();
   }
 
-  transfer(to: PageEntry, when: 'pre-open' | 'pre-replace' | 'enter' | 'return') {
+  transfer(to: PageEntry, when: 'pre-open' | 'pre-replace' | 'enter' | 'return'): void {
     itsEach(this._params.entries(), ([param, handle]) => {
       if (handle.transfer) {
 
@@ -370,30 +378,30 @@ export class PageEntry {
     });
   }
 
-  stay(at: Page) {
+  stay(at: Page): void {
     itsEach(this._params.values(), handle => handle.stay && handle.stay(at));
   }
 
-  enter(when: 'init' | 'open' | 'replace' | 'enter' | 'return') {
+  enter(when: 'init' | 'open' | 'replace' | 'enter' | 'return'): void {
     this._status = PageStatus.Current;
     itsEach(this._params.values(), handle => handle.enter && handle.enter(this.page, when));
   }
 
-  leave() {
+  leave(): void {
     this._status = PageStatus.Visited;
     itsEach(this._params.values(), handle => handle.leave && handle.leave());
   }
 
-  forget() {
+  forget(): void {
     itsEach(this._params.values(), handle => handle.forget && handle.forget());
     this._params.clear();
   }
 
-  schedule(update: () => void) {
+  schedule(update: () => void): void {
     this._update = update;
   }
 
-  apply() {
+  apply(): void {
 
     const update = this._update;
 
@@ -401,10 +409,4 @@ export class PageEntry {
     update();
   }
 
-}
-
-const enum PageStatus {
-  New,
-  Visited,
-  Current,
 }

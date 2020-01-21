@@ -19,5 +19,6 @@ export type PageLoadURLModifier =
  *
  * Does not modify URL by default.
  */
-export const PageLoadURLModifier: ContextUpRef<PageLoadURLModifier, PageLoadURLModifier> =
-    (/*#__PURE__*/ new FnContextKey('page-load-url', { byDefault: valueProvider(noop) }));
+export const PageLoadURLModifier: ContextUpRef<PageLoadURLModifier, PageLoadURLModifier> = (
+    /*#__PURE__*/ new FnContextKey('page-load-url', { byDefault: valueProvider(noop) })
+);

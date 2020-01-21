@@ -56,9 +56,11 @@ export function autoMountSupport(config?: AutoMountConfig): Class {
   };
 
   class ConfiguredAutoMountSupport {
-    static get [FeatureDef__symbol]() {
+
+    static get [FeatureDef__symbol](): FeatureDef {
       return def;
     }
+
   }
 
   return ConfiguredAutoMountSupport;
@@ -81,7 +83,7 @@ function autoMountFeatureDef(config: AutoMountConfig = {}): FeatureDef.Options {
 /**
  * @internal
  */
-function mountExistingElements(context: FeatureContext, { select = '*' }: AutoMountConfig) {
+function mountExistingElements(context: FeatureContext, { select = '*' }: AutoMountConfig): void {
   if (!select) {
     return; // Initial auto-mount disabled.
   }
@@ -90,17 +92,16 @@ function mountExistingElements(context: FeatureContext, { select = '*' }: AutoMo
   const root: Element = context.get(BootstrapRoot);
   const adapter = context.get(ElementAdapter);
   const document = context.get(BootstrapWindow).document;
+  const adapt = (): void => {
+    itsEach(
+        overArray(root.querySelectorAll(selector)),
+        element => adapter(element),
+    );
+  };
 
   if (document.readyState === 'loading') {
     new DomEventDispatcher(document).on('DOMContentLoaded').once(adapt);
   } else {
     adapt();
-  }
-
-  function adapt() {
-    itsEach(
-        overArray(root.querySelectorAll(selector)),
-        element => adapter(element),
-    );
   }
 }

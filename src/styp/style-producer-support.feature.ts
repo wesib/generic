@@ -42,7 +42,7 @@ const StyleProducerSupport__feature: FeatureDef = {
  */
 export class StyleProducerSupport {
 
-  static get [FeatureDef__symbol]() {
+  static get [FeatureDef__symbol](): FeatureDef {
     return StyleProducerSupport__feature;
   }
 

@@ -55,7 +55,7 @@ class AttributesObserver {
 
     return supply;
 
-    function reconnect() {
+    function reconnect(): void {
       self._update(observer.takeRecords());
       observer.observe(self.element, {
         attributes: true,
@@ -65,7 +65,7 @@ class AttributesObserver {
     }
   }
 
-  private _update(mutations: MutationRecord[]) {
+  private _update(mutations: MutationRecord[]): void {
     mutations.forEach(mutation => {
 
       const attributeName = mutation.attributeName as string;

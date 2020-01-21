@@ -12,7 +12,7 @@ import { PageLoader } from './page-loader.impl';
  */
 class PageLoadParam extends PageParam<void, PageLoadRequest> {
 
-  create(page: Page, request: PageLoadRequest, context: PageParamContext) {
+  create(page: Page, request: PageLoadRequest, context: PageParamContext): PageParam.Handle<void, PageLoadRequest> {
 
     const requests = new PageLoadRequests(context.get(Navigation), cachingPageLoader(context.get(PageLoader)));
     const handle = requests.handle();

@@ -43,7 +43,7 @@ describe('tree', () => {
               setup.provide({
                 a: CustomElements,
                 is: {
-                  define() {},
+                  define() {/* do not define */},
                   whenDefined() {
                     return Promise.resolve();
                   },
@@ -313,7 +313,7 @@ describe('tree', () => {
               setup.provide({
                 a: ElementObserver,
                 is: callback => {
-                  elementObserver = newElementObserver!(callback);
+                  elementObserver = newElementObserver(callback);
                   observeSpy = jest.spyOn(elementObserver, 'observe');
                   disconnectSpy = jest.spyOn(elementObserver, 'disconnect');
                   return elementObserver;

@@ -44,11 +44,11 @@ class ElementNode implements ComponentTreeNode {
     return (this.element as any)[ComponentContext__symbol];
   }
 
-  get parent() {
+  get parent(): ElementNode_ | null {
 
-    const parent = this.element.parentElement;
+    const parent = this.element.parentNode;
 
-    return parent != null ? elementNodeOf(this._bs, parent) : null;
+    return parent && elementNodeOf(this._bs, parent as Element);
   }
 
   select(selector: string | ComponentClass<any>, mode?: ElementPickMode): ElementNodeList<any> {
@@ -63,7 +63,7 @@ class ElementNode implements ComponentTreeNode {
     return this._props.get(key);
   }
 
-  private _bind(context: ComponentContext) {
+  private _bind(context: ComponentContext): void {
     this._props.bind(context);
   }
 

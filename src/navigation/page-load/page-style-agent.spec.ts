@@ -77,7 +77,7 @@ describe('navigation', () => {
 
       const styles = documentStyles();
 
-      expect(styles.length).toBe(1);
+      expect(styles).toHaveLength(1);
       expect(styles[0].href).toBe('http://localhost/css/style.css');
     });
     it('replaces document styles with the ones from loaded page', async () => {
@@ -93,7 +93,7 @@ describe('navigation', () => {
 
       const styles = documentStyles();
 
-      expect(styles.length).toBe(1);
+      expect(styles).toHaveLength(1);
       expect(styles[0].href).toBe('http://localhost/css/style2.css');
     });
     it('does not alter document styles if loaded page has no ones', async () => {
@@ -107,7 +107,7 @@ describe('navigation', () => {
 
       const styles = documentStyles();
 
-      expect(styles.length).toBe(1);
+      expect(styles).toHaveLength(1);
       expect(styles[0].href).toBe('http://localhost/css/style1.css');
     });
     it('reuses existing styles', async () => {
@@ -126,7 +126,7 @@ describe('navigation', () => {
 
       const styles = documentStyles(doc.body);
 
-      expect(styles.length).toBe(1);
+      expect(styles).toHaveLength(1);
       expect(styles[0].href).toBe('http://localhost/css/style1.css');
       expect(styles[0]).toBe(oldStyle);
     });
@@ -148,7 +148,7 @@ describe('navigation', () => {
 
       const styles = documentStyles(doc.body);
 
-      expect(styles.length).toBe(2);
+      expect(styles).toHaveLength(2);
       expect(styles[0].href).toBe('http://localhost/css/style2.css');
       expect(styles[0]).toBe(oldStyles[1]);
       expect(styles[1].href).toBe('http://localhost/css/style1.css');
@@ -172,14 +172,14 @@ describe('navigation', () => {
 
       const styles = documentStyles(doc.body);
 
-      expect(styles.length).toBe(3);
+      expect(styles).toHaveLength(3);
       expect(styles[0].href).toBe('http://localhost/css/style1.css');
       expect(styles[1].href).toBe('http://localhost/css/style2.css');
       expect(styles[1]).toBe(oldStyle);
       expect(styles[2].href).toBe('http://localhost/css/style3.css');
     });
 
-    function appendStyle(href: string, parent: Node = doc.head) {
+    function appendStyle(href: string, parent: Node = doc.head): void {
 
       const link = doc.createElement('link');
 
@@ -189,12 +189,12 @@ describe('navigation', () => {
       parent.appendChild(link);
     }
 
-    async function loadHtml(html: string) {
+    async function loadHtml(html: string): Promise<void> {
       responseHtml = html;
       await navigation.with(pageLoadParam, { receiver: noop }).open('/other');
     }
 
-    function documentStyles(parent: Element = doc.head) {
+    function documentStyles(parent: Element = doc.head): NodeListOf<HTMLLinkElement> {
       return parent.querySelectorAll<HTMLLinkElement>('link[rel=stylesheet]');
     }
   });

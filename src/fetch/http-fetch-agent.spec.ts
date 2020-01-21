@@ -61,16 +61,17 @@ describe('fetch', () => {
 
       expect(response).toBe(response2);
     });
-    it('performs the fetch by calling `next`', async () => {
+    it('performs the fetch by calling `next`', () => {
       registry.provide({ a: HttpFetchAgent, is: next => next() });
 
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
-    it('calls the next agent in chain by calling `next`', async () => {
+    it('calls the next agent in chain by calling `next`', () => {
 
-      const mockAgent: Mock<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>> =
-          jest.fn((next, _request) => next());
+      const mockAgent: Mock<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>> = jest.fn(
+          (next, _request) => next(),
+      );
 
       registry.provide({ a: HttpFetchAgent, is: next => next() });
       registry.provide({ a: HttpFetchAgent, is: mockAgent });

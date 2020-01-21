@@ -25,5 +25,6 @@ export type ComponentStyleProducer =
 /**
  * A key of component context value containing a component style producer.
  */
-export const ComponentStyleProducer: SingleContextRef<ComponentStyleProducer> =
-    (/*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer'));
+export const ComponentStyleProducer: SingleContextRef<ComponentStyleProducer> = (
+    /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer')
+);

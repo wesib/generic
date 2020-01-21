@@ -25,7 +25,10 @@ describe('navigation', () => {
       expect(url.href).toBe(href);
     });
     it('applies page load URL modifications', () => {
-      registry.provide({ a: PageLoadURLModifier, is: (u: URL) => u.pathname = '/other'});
+      registry.provide({
+        a: PageLoadURLModifier,
+        is: (u: URL) => u.pathname = '/other',
+      });
       context.get(PageLoadURLModifier)(url);
       expect(url.href).toBe('http://localhost/other?q=v');
     });

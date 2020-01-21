@@ -63,5 +63,6 @@ class DefaultInAspectsKey
 /**
  * A key of bootstrap, definition, or component context containing default input aspects.
  */
-export const DefaultInAspects: ContextUpRef<DefaultInAspects, InConverter.Aspect<any, any>> =
-    (/*#__PURE__*/ new DefaultInAspectsKey());
+export const DefaultInAspects: ContextUpRef<DefaultInAspects, InConverter.Aspect<any, any>> = (
+    /*#__PURE__*/ new DefaultInAspectsKey()
+);

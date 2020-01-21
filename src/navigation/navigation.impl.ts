@@ -1,6 +1,6 @@
 import { BootstrapContext, BootstrapWindow, mergeFunctions } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { AfterEvent, DomEventDispatcher, onAny, trackValue } from 'fun-events';
+import { AfterEvent, DomEventDispatcher, onAny, OnDomEvent, OnEvent, trackValue } from 'fun-events';
 import { NavHistory, PageEntry } from './nav-history.impl';
 import { Navigation as Navigation_ } from './navigation';
 import { NavigationAgent } from './navigation-agent';
@@ -64,27 +64,27 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
   class Navigation extends Navigation_ {
 
-    get length() {
+    get length(): number {
       return history.length;
     }
 
-    get onEnter() {
+    get onEnter(): OnDomEvent<EnterPageEvent> {
       return onEnter;
     }
 
-    get onLeave() {
+    get onLeave(): OnDomEvent<LeavePageEvent> {
       return onLeave;
     }
 
-    get onStay() {
+    get onStay(): OnDomEvent<StayOnPageEvent> {
       return onStay;
     }
 
-    get on() {
+    get on(): OnEvent<[NavigationEvent]> {
       return onEvent;
     }
 
-    get read() {
+    get read(): AfterEvent<[Page]> {
       return readPage;
     }
 
@@ -92,11 +92,11 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       history.go(delta);
     }
 
-    open(target: Navigation_.Target | string | URL) {
+    open(target: Navigation_.Target | string | URL): Promise<Page | null> {
       return navigate('pre-open', 'open', target);
     }
 
-    replace(target: Navigation_.Target | string | URL) {
+    replace(target: Navigation_.Target | string | URL): Promise<Page | null> {
       return navigate('pre-replace', 'replace', target);
     }
 
@@ -157,7 +157,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
     function doNavigate(): Page | null {
 
-      let toEntry: PageEntry | undefined;
+      let toEntry: PageEntry | undefined = undefined;
 
       try {
 

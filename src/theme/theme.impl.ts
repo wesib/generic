@@ -20,7 +20,7 @@ export class Theme extends Theme_ {
 
     return lazyStypRules(...styles.reduce<StypRules[]>(addStyleRules, []));
 
-    function addStyleRules(target: StypRules[], style: ThemeStyle.Provider) {
+    function addStyleRules(target: StypRules[], style: ThemeStyle.Provider): StypRules[] {
 
       const existing = theme._rules.get(style);
 
