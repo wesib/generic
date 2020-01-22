@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module @wesib/generic
  */
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';

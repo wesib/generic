@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module @wesib/generic
  */
 import { ComponentContext } from '@wesib/wesib';

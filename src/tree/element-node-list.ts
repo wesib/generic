@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module @wesib/generic
  */
 import { AIterable, ArrayLikeIterable } from 'a-iterable';

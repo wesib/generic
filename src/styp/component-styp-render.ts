@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module @wesib/generic
  */
 import { MultiContextKey, MultiContextRef } from 'context-values';

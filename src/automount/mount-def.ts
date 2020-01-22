@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module @wesib/generic
  */
 import { ComponentFactory, ElementAdapter } from '@wesib/wesib';

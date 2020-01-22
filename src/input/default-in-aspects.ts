@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module @wesib/generic
  */
 import { DefaultNamespaceAliaser, DefaultRenderScheduler } from '@wesib/wesib';

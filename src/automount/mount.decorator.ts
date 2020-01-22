@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module @wesib/generic
  */
 import { ComponentClass, ComponentDef, ComponentFactory, ElementAdapter, TypedClassDecorator } from '@wesib/wesib';

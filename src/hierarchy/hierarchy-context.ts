@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module @wesib/generic
  */
 import { BootstrapContext, ComponentContext } from '@wesib/wesib';
