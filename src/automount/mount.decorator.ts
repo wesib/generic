@@ -2,12 +2,12 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { ComponentClass, ComponentDef, ComponentFactory, ElementAdapter, TypedClassDecorator } from '@wesib/wesib';
+import { Component, ComponentClass, ComponentDecorator, ComponentFactory, ElementAdapter } from '@wesib/wesib';
 import { AutoMountSupport } from './auto-mount-support.feature';
 import { MountDef } from './mount-def';
 
 /**
- * Creates a decorator causing decorated component to be automatically mounted to the matching element.
+ * Creates a decorator causing decorated component to automatically mount to the matching element.
  *
  * Enables a {@link MountDef.adapter mount adapter} for decorated component.
  *
@@ -16,25 +16,22 @@ import { MountDef } from './mount-def';
  * @typeparam T  A type of decorated component class.
  * @param def  Either component auto-mount definition, matching element selector, or element predicate function.
  *
- * @returns Component decorator.
+ * @returns New component decorator.
  */
-export function Mount<T extends ComponentClass = any>(def: MountDef | MountDef['to']): TypedClassDecorator<T> {
-  return (type: T) => ComponentDef.define(
-      type,
-      {
-        feature: {
-          needs: AutoMountSupport,
-          setup(bsSetup) {
-            bsSetup.setupDefinition(bsSetup.feature)(defSetup => {
-              defSetup.whenReady(defContext => {
-                bsSetup.provide({
-                  a: ElementAdapter,
-                  is: MountDef.adapter(defContext.get(ComponentFactory), def),
-                });
-              });
+export function Mount<T extends ComponentClass = any>(def: MountDef | MountDef['to']): ComponentDecorator<T> {
+  return Component({
+    feature: {
+      needs: AutoMountSupport,
+      setup(bsSetup) {
+        bsSetup.setupDefinition(bsSetup.feature)(defSetup => {
+          defSetup.whenReady(defContext => {
+            bsSetup.provide({
+              a: ElementAdapter,
+              is: MountDef.adapter(defContext.get(ComponentFactory), def),
             });
-          },
-        },
+          });
+        });
       },
-  );
+    },
+  });
 }
