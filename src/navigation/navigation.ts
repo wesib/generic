@@ -3,15 +3,8 @@
  * @module @wesib/generic
  */
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import {
-  AfterEvent,
-  AfterEvent__symbol,
-  EventKeeper,
-  EventSender,
-  OnDomEvent,
-  OnEvent,
-  OnEvent__symbol,
-} from 'fun-events';
+import { AfterEvent, AfterEvent__symbol, EventKeeper, EventSender, OnEvent, OnEvent__symbol } from 'fun-events';
+import { OnDomEvent } from 'fun-events/dom';
 import { EnterPageEvent, LeavePageEvent, NavigationEvent, StayOnPageEvent } from './navigation.event';
 import { Page } from './page';
 import { PageParam } from './page-param';

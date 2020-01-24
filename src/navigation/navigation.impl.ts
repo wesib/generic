@@ -1,6 +1,7 @@
 import { BootstrapContext, BootstrapWindow, mergeFunctions } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { AfterEvent, DomEventDispatcher, onAny, OnDomEvent, OnEvent, trackValue } from 'fun-events';
+import { AfterEvent, onAny, OnEvent, trackValue } from 'fun-events';
+import { DomEventDispatcher, OnDomEvent } from 'fun-events/dom';
 import { NavHistory, PageEntry } from './nav-history.impl';
 import { Navigation as Navigation_ } from './navigation';
 import { NavigationAgent } from './navigation-agent';

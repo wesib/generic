@@ -1,5 +1,6 @@
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { DomEventDispatcher, EventEmitter, EventSupply, eventSupply, OnEvent, onEventBy } from 'fun-events';
+import { EventEmitter, EventSupply, eventSupply, OnEvent, onEventBy } from 'fun-events';
+import { DomEventDispatcher } from 'fun-events/dom';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
 

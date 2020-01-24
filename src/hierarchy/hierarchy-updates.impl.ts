@@ -6,7 +6,8 @@ import {
   ComponentEvent,
 } from '@wesib/wesib';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { DomEventDispatcher, EventEmitter, OnEvent, trackValue, ValueTracker } from 'fun-events';
+import { EventEmitter, OnEvent, trackValue, ValueTracker } from 'fun-events';
+import { DomEventDispatcher } from 'fun-events/dom';
 
 /**
  * @internal

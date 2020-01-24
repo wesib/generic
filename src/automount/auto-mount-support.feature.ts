@@ -12,7 +12,7 @@ import {
   FeatureDef__symbol,
 } from '@wesib/wesib';
 import { itsEach, overArray } from 'a-iterable';
-import { DomEventDispatcher } from 'fun-events';
+import { DomEventDispatcher } from 'fun-events/dom';
 import { AutoMountConfig } from './auto-mount-config';
 
 /**
