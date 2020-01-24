@@ -3,17 +3,17 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Wesib: Generic Components</title>
+	<title>ElementPickMode | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
 <header>
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">Wesib: Generic Components</a>
+					<a href="../index.html" class="title">Wesib: Generic Components</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -51,28 +51,86 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="globals.html">Globals</a>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="../modules/_wesib_generic.html">@wesib/generic</a>
+				</li>
+				<li>
+					<a href="_wesib_generic.elementpickmode.html">ElementPickMode</a>
 				</li>
 			</ul>
-			<h1>Wesib: Generic Components</h1>
+			<h1>Interface ElementPickMode</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>A mode of node picking from component tree.</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">ElementPickMode</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="_wesib_generic.componentpickmode.html" class="tsd-signature-type">ComponentPickMode</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>External modules</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-external-module"><a href="modules/_wesib_generic.html" class="tsd-kind-icon">@wesib/generic</a></li>
-								<li class="tsd-kind-external-module"><a href="modules/_wesib_generic_input.html" class="tsd-kind-icon">@wesib/generic/input</a></li>
-								<li class="tsd-kind-external-module"><a href="modules/_wesib_generic_styp.html" class="tsd-kind-icon">@wesib/generic/styp</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic.elementpickmode.html#all" class="tsd-kind-icon">all</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic.elementpickmode.html#deep" class="tsd-kind-icon">deep</a></li>
 							</ul>
 						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="all" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> all</h3>
+					<div class="tsd-signature tsd-kind-icon">all<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/d98dfef/src/tree/element-node.ts#L134">src/tree/element-node.ts:134</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Set to <code>true</code> to select arbitrary nodes. Otherwise - select only component nodes.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="deep" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> deep</h3>
+					<div class="tsd-signature tsd-kind-icon">deep<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/d98dfef/src/tree/element-node.ts#L139">src/tree/element-node.ts:139</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Set to <code>true</code> to select from entire subtree. Otherwise - select from element child nodes only.</p>
+						</div>
 					</div>
 				</section>
 			</section>
@@ -80,22 +138,37 @@
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals current ">
-						<a href="globals.html"><em>Globals</em></a>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="../modules/_wesib_generic.html">@wesib/generic</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_wesib_generic.html">@wesib/generic</a>
+						<a href="../modules/_wesib_generic_input.html">@wesib/generic/input</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_wesib_generic_input.html">@wesib/generic/input</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_wesib_generic_styp.html">@wesib/generic/styp</a>
+						<a href="../modules/_wesib_generic_styp.html">@wesib/generic/styp</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_wesib_generic.elementpickmode.html" class="tsd-kind-icon">Element<wbr>Pick<wbr>Mode</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_wesib_generic.elementpickmode.html#all" class="tsd-kind-icon">all</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_wesib_generic.elementpickmode.html#deep" class="tsd-kind-icon">deep</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>
@@ -165,7 +238,7 @@
 	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>
