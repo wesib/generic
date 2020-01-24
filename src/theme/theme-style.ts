@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/styp
  */
 import { AIterable } from 'a-iterable';
 import { ContextRef, ContextValueOpts, ContextValues, SimpleContextKey } from 'context-values';

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/input
  */
 import { DefaultNamespaceAliaser, DefaultRenderScheduler } from '@wesib/wesib';
 import { ContextKey__symbol, ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';

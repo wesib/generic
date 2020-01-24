@@ -1,7 +1,13 @@
 {
-  "exclude": ["**/spec/**/*.ts", "**/*.spec.ts", "**/*.impl.ts"],
+  "exclude": [
+    "**/index.ts",
+    "**/main.ts",
+    "**/spec/**/*.ts",
+    "**/*.spec.ts",
+    "**/*.impl.ts"
+  ],
   "excludeNotExported": true,
-  "mode": "file",
+  "mode": "modules",
   "name": "Wesib: Generic Components",
   "out": "./target/typedoc",
   "tsconfig": "tsconfig.main.json"

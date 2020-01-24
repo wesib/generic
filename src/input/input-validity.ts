@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @wesib/generic/input
+ */
 import { ComponentContext } from '@wesib/wesib';
 import { AfterEvent, afterThe } from 'fun-events';
 import { InValidation, inValidationResult } from 'input-aspects';

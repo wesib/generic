@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/styp
  */
 import { ComponentContext } from '@wesib/wesib';
 import { noop } from 'call-thru';

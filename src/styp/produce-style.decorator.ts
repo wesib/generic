@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/styp
  */
 import { ComponentClass, ComponentDef } from '@wesib/wesib';
 import { StypRules } from 'style-producer';

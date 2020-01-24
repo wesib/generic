@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @wesib/generic
+ */
 import { noop, valueProvider } from 'call-thru';
 import { ContextUpRef, FnContextKey } from 'context-values';
 

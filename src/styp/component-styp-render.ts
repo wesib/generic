@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/styp
  */
 import { MultiContextKey, MultiContextRef } from 'context-values';
 import { StypRender } from 'style-producer';

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/styp
  */
 import { SingleContextKey, SingleContextRef } from 'context-values';
 import { EventSupply } from 'fun-events';

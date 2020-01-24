@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/styp
  */
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { Theme } from './theme';

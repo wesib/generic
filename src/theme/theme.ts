@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/styp
  */
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
 import { RefStypRule, StypProperties, StypRule, StypRuleRef, StypRules } from 'style-producer';

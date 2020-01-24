@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/input
  */
 import { ComponentContext } from '@wesib/wesib';
 import { SingleContextUpKey, SingleContextUpRef } from 'context-values';

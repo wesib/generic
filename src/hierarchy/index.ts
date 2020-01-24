@@ -1,5 +1,5 @@
 /**
  * @packageDocumentation
- * @modules @wesib/generic
+ * @module @wesib/generic
  */
 export * from './hierarchy-context';

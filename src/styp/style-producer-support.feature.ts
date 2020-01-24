@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module @wesib/generic/styp
  */
 import { ComponentContext, FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { produceStyle } from 'style-producer';
