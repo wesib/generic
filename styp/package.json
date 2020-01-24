@@ -1,0 +1,5 @@
+{
+  "main": "../dist/wesib.styp.js",
+  "module": "../dist/wesib.styp.mjs",
+  "typings": "index.d.ts"
+}
