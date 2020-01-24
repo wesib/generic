@@ -626,10 +626,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@wesib/wesib@^1.0.0-alpha.68":
-  version "1.0.0-alpha.68"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.68.tgz#0375216f931932ef2b13e2e369c72f6759e4ee83"
-  integrity sha512-MRdfmh6SYLviUZERsK70mZtIGMfBWefYfsI5EJO9zM87eD3VEuLKjRhplGB0NwAFUCSQt2C4NozNqyeolYVzzg==
+"@wesib/wesib@^1.0.0-alpha.69":
+  version "1.0.0-alpha.69"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.69.tgz#633a4a07468d7cb17403816a4164a2d7991983f3"
+  integrity sha512-wB95fOiHVNpnqdNMMfIcAYLVgJm2NkF9VJgOkgi8Pv4/0CiXsa7QAW16HXO3pkfJeQRvLLW7c+AGHak/RrFqVg==
 
 a-iterable@^2.4.5:
   version "2.4.5"
@@ -2167,10 +2167,10 @@ inherits@2:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
-input-aspects@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/input-aspects/-/input-aspects-2.0.2.tgz#7af88cfbea3eaf673b44c3a7b76eb380dc48fb22"
-  integrity sha512-+3qq+sFgymWXkCRRcOU7OR0O+8HIwIxuSOiGHcbvNsMOmiOZX6h1bHae2QvyTPukOl846SLu5AfUObtS99wFkA==
+input-aspects@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/input-aspects/-/input-aspects-2.0.3.tgz#a64e59998db045f96cc34dfd252ebbd4df39f855"
+  integrity sha512-A30sjgkHqI8sZw3ZR0mtxO9H6Zk/90U6poP2ABh/y/QOtbFPGXurpv7i654B099QGV1VN9hIOqYPvyLMhG/vwg==
   dependencies:
     delta-set "^1.1.0"
 
