@@ -6,6 +6,7 @@ module.exports = {
     '!src/spec/**/*.ts',
     '!src/**/*.spec.ts',
     '!src/**/index.ts',
+    '!src/**/main.ts',
     '!**/node_modules/**',
   ],
   coverageDirectory: 'target/coverage',
