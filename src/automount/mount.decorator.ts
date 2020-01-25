@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { Component, ComponentClass, ComponentDecorator, ComponentFactory, ElementAdapter } from '@wesib/wesib';
+import { Class, Component, ComponentClass, ComponentDecorator, ComponentFactory, ElementAdapter } from '@wesib/wesib';
 import { AutoMountSupport } from './auto-mount-support.feature';
 import { MountDef } from './mount-def';
 
@@ -18,7 +18,7 @@ import { MountDef } from './mount-def';
  *
  * @returns New component decorator.
  */
-export function Mount<T extends ComponentClass = any>(def: MountDef | MountDef['to']): ComponentDecorator<T> {
+export function Mount<T extends ComponentClass = Class>(def: MountDef | MountDef['to']): ComponentDecorator<T> {
   return Component({
     feature: {
       needs: AutoMountSupport,
