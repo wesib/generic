@@ -74,6 +74,11 @@ describe('input', () => {
       await Promise.resolve();
 
       expect(ctrl.aspect(InSupply).isOff).toBe(true);
+      context.get(HierarchyContext).get(InputFromControl).once(
+          ({ control }) => {
+            expect(control).toBeUndefined();
+          },
+      );
     });
     it('cuts off provided supply when control unused', async () => {
 
@@ -93,6 +98,11 @@ describe('input', () => {
 
       expect(ctrl.aspect(InSupply).isOff).toBe(false);
       expect(supply.isOff).toBe(true);
+      context.get(HierarchyContext).get(InputFromControl).once(
+          ({ control }) => {
+            expect(control).toBeUndefined();
+          },
+      );
     });
 
     async function newElement(def: UseInputElementDef): Promise<ComponentMount> {
