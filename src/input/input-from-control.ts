@@ -5,7 +5,7 @@
 import { ComponentContext } from '@wesib/wesib';
 import { SingleContextUpKey, SingleContextUpRef } from 'context-values';
 import { eventSupply, EventSupply } from 'fun-events';
-import { InControl } from 'input-aspects';
+import { InControl, InSupply } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 
 /**
@@ -73,5 +73,5 @@ export function inputFromControl<Value>(
     }),
   });
 
-  return eventSupply(off);
+  return eventSupply(off).needs(control.aspect(InSupply));
 }
