@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @wesib/generic/input
+ */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { afterAll, afterThe, EventKeeper, EventSupply } from 'fun-events';
 import { InControl, InConverter, InSupply } from 'input-aspects';
