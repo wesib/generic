@@ -26,7 +26,7 @@
     "call-thru": "^2.5.4",
     "context-values": "^2.2.2",
     "fun-events": "^7.1.1",
-    "input-aspects": "^2.1.0",
+    "input-aspects": "^2.1.1",
     "namespace-aliaser": "^2.0.3",
     "render-scheduler": "^1.0.6",
     "style-producer": "^3.5.1"
@@ -63,7 +63,7 @@
     "fun-events": "^7.1.1",
     "gh-pages": "^2.2.0",
     "hyphenate-style-name": "^1.0.3",
-    "input-aspects": "^2.1.0",
+    "input-aspects": "^2.1.1",
     "jest": "^25.1.0",
     "jest-environment-jsdom-fifteen": "^1.0.2",
     "jest-junit": "^10.0.0",
