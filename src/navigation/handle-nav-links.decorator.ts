@@ -87,6 +87,9 @@ export interface HandleNavLinksDef {
 
 }
 
+/**
+ * @internal
+ */
 function defaultHandleNavLinks(
     {
       event,
