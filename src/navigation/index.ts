@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+export * from './activate-nav-link.decorator';
 export * from './handle-nav-links.decorator';
 export * from './navigation.event';
 export * from './navigation';
