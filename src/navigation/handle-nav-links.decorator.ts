@@ -13,6 +13,7 @@ import { NavigationSupport } from './navigation-support.feature';
  *
  * Enables [[NavigationSupport]] feature.
  *
+ * @typeparam T  A type of decorated component class.
  * @param def  Navigation links handler definition.
  *
  * @returns New component decorator.

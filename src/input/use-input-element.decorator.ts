@@ -15,6 +15,7 @@ import { inputFromControl } from './input-from-control';
  *
  * Enables [[ComponentTreeSupport]] feature.
  *
+ * @typeparam T  A type of decorated component class.
  * @param def  Input element usage definition.
  *
  * @returns New component decorator.
