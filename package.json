@@ -75,7 +75,7 @@
     "rollup-plugin-typescript2": "^0.25.3",
     "style-producer": "^3.5.1",
     "ts-jest": "^25.0.0",
-    "typedoc": "^0.16.8",
+    "typedoc": "^0.16.9",
     "typedoc-plugin-external-module-name": "^3.0.0",
     "typescript": "^3.7.5"
   },
