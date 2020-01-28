@@ -1,6 +1,7 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
 import { BootstrapWindow } from '@wesib/wesib';
+import { noop } from 'call-thru';
 import { NAV_DATA_KEY, NavDataEnvelope, PartialNavData } from '../navigation/nav-history.impl';
 
 export class LocationMock {
@@ -12,9 +13,9 @@ export class LocationMock {
   readonly state: Mock<string, []>;
   readonly baseURI: Mock<string, []>;
   readonly window: Mocked<BootstrapWindow>;
+  readonly down: () => void;
   private _index = 0;
   private readonly stateData: [URL, any][];
-  private readonly eventTarget?: HTMLElement;
 
   constructor(
       {
@@ -27,14 +28,21 @@ export class LocationMock {
   ) {
 
     let mockWindow: Mocked<Window> | undefined;
+    let down: () => void = noop;
 
     if (!win) {
-      this.eventTarget = document.body.appendChild(document.createElement('div'));
+
+      const eventTarget = document.body.appendChild(document.createElement('div'));
+
       mockWindow = win = {
-        addEventListener: this.eventTarget.addEventListener.bind(this.eventTarget),
-        removeEventListener: this.eventTarget.removeEventListener.bind(this.eventTarget),
-        dispatchEvent: this.eventTarget.dispatchEvent.bind(this.eventTarget),
+        addEventListener: eventTarget.addEventListener.bind(eventTarget),
+        removeEventListener: eventTarget.removeEventListener.bind(eventTarget),
+        dispatchEvent: eventTarget.dispatchEvent.bind(eventTarget),
       } as any;
+
+      down = () => {
+        eventTarget.remove();
+      };
     } else {
       mockWindow = undefined;
     }
@@ -91,9 +99,17 @@ export class LocationMock {
       } as any;
     } else {
       this.window = win as Mocked<BootstrapWindow>;
-      jest.spyOn(this.window, 'location', 'get').mockImplementation(() => this.location);
-      jest.spyOn(this.window, 'history', 'get').mockImplementation(() => this.history);
+
+      const locationSpy = jest.spyOn(this.window, 'location', 'get').mockImplementation(() => this.location);
+      const historySpy = jest.spyOn(this.window, 'history', 'get').mockImplementation(() => this.history);
+
+      down = () => {
+        locationSpy.mockReset();
+        historySpy.mockReset();
+      };
     }
+
+    this.down = down;
   }
 
   get currentURL(): URL {
@@ -129,10 +145,6 @@ export class LocationMock {
           break;
       }
     }
-  }
-
-  down(): void {
-    this.eventTarget?.remove();
   }
 
 }
