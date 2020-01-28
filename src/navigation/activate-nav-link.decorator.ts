@@ -10,6 +10,7 @@ import {
   ComponentDecorator,
   DefaultNamespaceAliaser,
   DefaultRenderScheduler,
+  Wesib__NS,
 } from '@wesib/wesib';
 import { nextArgs, noop } from 'call-thru';
 import {
@@ -24,7 +25,6 @@ import {
 } from 'fun-events';
 import { css__naming, QualifiedName } from 'namespace-aliaser';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
-import { Wesib__NS } from '../wesib.ns';
 import { Navigation } from './navigation';
 import { NavigationSupport } from './navigation-support.feature';
 import { Page } from './page';
