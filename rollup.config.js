@@ -56,6 +56,7 @@ export default {
       dir: './dist',
       entryFileNames: '[name].js',
       chunkFileNames: `.[name].js`,
+      hoistTransitiveImports: false,
     },
     {
       format: 'esm',
@@ -63,6 +64,7 @@ export default {
       dir: './dist',
       entryFileNames: '[name].mjs',
       chunkFileNames: `.[name].mjs`,
+      hoistTransitiveImports: false,
     },
   ],
 };
