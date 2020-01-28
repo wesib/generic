@@ -1,6 +1,7 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
 import { BootstrapWindow } from '@wesib/wesib';
+import { noop } from 'call-thru';
 import { NAV_DATA_KEY, NavDataEnvelope, PartialNavData } from '../navigation/nav-history.impl';
 
 export class LocationMock {
@@ -12,12 +13,39 @@ export class LocationMock {
   readonly state: Mock<string, []>;
   readonly baseURI: Mock<string, []>;
   readonly window: Mocked<BootstrapWindow>;
+  readonly down: () => void;
   private _index = 0;
   private readonly stateData: [URL, any][];
-  private readonly eventTarget: HTMLElement;
 
-  constructor({ doc }: { doc?: Document } = {}) {
-    this.eventTarget = document.body.appendChild(document.createElement('div'));
+  constructor(
+      {
+        doc,
+        win,
+      }: {
+        doc?: Document;
+        win?: BootstrapWindow;
+      } = {},
+  ) {
+
+    let mockWindow: Mocked<Window> | undefined;
+    let down: () => void = noop;
+
+    if (!win) {
+
+      const eventTarget = document.body.appendChild(document.createElement('div'));
+
+      mockWindow = win = {
+        addEventListener: eventTarget.addEventListener.bind(eventTarget),
+        removeEventListener: eventTarget.removeEventListener.bind(eventTarget),
+        dispatchEvent: eventTarget.dispatchEvent.bind(eventTarget),
+      } as any;
+
+      down = () => {
+        eventTarget.remove();
+      };
+    } else {
+      mockWindow = undefined;
+    }
 
     const self = this;
     this.stateData = [[new URL('http://localhost/index'), 'initial']];
@@ -56,24 +84,32 @@ export class LocationMock {
     } as any;
     this.baseURI = jest.fn(() => 'http://localhost');
 
-    const win = {
-      addEventListener: this.eventTarget.addEventListener.bind(this.eventTarget),
-      removeEventListener: this.eventTarget.removeEventListener.bind(this.eventTarget),
-      dispatchEvent: this.eventTarget.dispatchEvent.bind(this.eventTarget),
-    };
-
-    this.window = {
-      location: this.location,
-      history: this.history,
-      addEventListener: jest.spyOn(win, 'addEventListener'),
-      removeEventListener: jest.spyOn(win, 'removeEventListener'),
-      dispatchEvent: jest.spyOn(win, 'dispatchEvent'),
-      document: doc || {
-        get baseURI() {
-          return self.baseURI();
+    if (mockWindow) {
+      this.window = {
+        location: this.location,
+        history: this.history,
+        addEventListener: jest.spyOn(mockWindow, 'addEventListener'),
+        removeEventListener: jest.spyOn(mockWindow, 'removeEventListener'),
+        dispatchEvent: jest.spyOn(mockWindow, 'dispatchEvent'),
+        document: doc || {
+          get baseURI() {
+            return self.baseURI();
+          },
         },
-      },
-    } as any;
+      } as any;
+    } else {
+      this.window = win as Mocked<BootstrapWindow>;
+
+      const locationSpy = jest.spyOn(this.window, 'location', 'get').mockImplementation(() => this.location);
+      const historySpy = jest.spyOn(this.window, 'history', 'get').mockImplementation(() => this.history);
+
+      down = () => {
+        locationSpy.mockReset();
+        historySpy.mockReset();
+      };
+    }
+
+    this.down = down;
   }
 
   get currentURL(): URL {
@@ -109,10 +145,6 @@ export class LocationMock {
           break;
       }
     }
-  }
-
-  down(): void {
-    this.eventTarget.remove();
   }
 
 }

@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @wesib/generic/input
+ */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { valueProvider } from 'call-thru';
 import { afterAll, afterThe, EventKeeper, eventSupply } from 'fun-events';
@@ -9,16 +13,17 @@ import { InputFromControl, InputFromNowhere } from './input-from-control';
  * Creates component decorator that adds {@link InputFromControl input control} of decorated component to input control
  * group of enclosing one under the given name.
  *
+ * @typeparam T  A type of decorated component class.
  * @param name  A name to assign to component. This could be either a string, or a function returning name as a string
  * or as its keeper.
  *
  * @returns New component decorator.
  */
 export function SetInputName<T extends ComponentClass = Class>(
-    name: string | ((this: void, context: ComponentContext) => string | EventKeeper<[string?]>),
+    name: string | ((this: void, context: ComponentContext<InstanceType<T>>) => string | EventKeeper<[string?]>),
 ): ComponentDecorator<T> {
 
-  const getName: (context: ComponentContext) => EventKeeper<[string?]> = typeof name === 'string'
+  const getName: (context: ComponentContext<InstanceType<T>>) => EventKeeper<[string?]> = typeof name === 'string'
       ? valueProvider(afterThe(name))
       : context => {
         const result = name(context);

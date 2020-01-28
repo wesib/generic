@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+export * from './include-page.decorator';
 export * from './page-load-param';
 export * from './page-load-request';
 export * from './page-load-response';

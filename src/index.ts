@@ -8,3 +8,4 @@ export * from './hierarchy';
 export * from './navigation';
 export * from './tree';
 export * from './util';
+export * from './wesib.ns';

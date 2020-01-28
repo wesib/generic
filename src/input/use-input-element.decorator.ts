@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @wesib/generic/input
+ */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { afterAll, afterThe, EventKeeper, EventSupply } from 'fun-events';
 import { InControl, InConverter, InSupply } from 'input-aspects';
@@ -11,6 +15,7 @@ import { inputFromControl } from './input-from-control';
  *
  * Enables [[ComponentTreeSupport]] feature.
  *
+ * @typeparam T  A type of decorated component class.
  * @param def  Input element usage definition.
  *
  * @returns New component decorator.
@@ -72,8 +77,10 @@ export function UseInputElement<T extends ComponentClass = Class>(
  * A definition of element to use as an {@link InputFromControl origin of user input}.
  *
  * This is passed to {@link UseInputElement @UseInputElement} decorator.
+ *
+ * @typeparam T  A type of component.
  */
-export interface UseInputElementDef {
+export interface UseInputElementDef<T extends object = any> {
 
   /**
    * CSS selector of input element to use.
@@ -109,7 +116,7 @@ export interface UseInputElementDef {
         aspects,
       }: {
         node: ElementNode;
-        context: ComponentContext;
+        context: ComponentContext<T>;
         aspects: InConverter.Aspect<any, any>;
       },
   ): InControl<any> | EventKeeper<[InControl<any>?, EventSupply?]> | null | undefined;
