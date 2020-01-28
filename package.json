@@ -21,7 +21,7 @@
   "module": "dist/wesib.generic.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "@wesib/wesib": "^1.0.0-alpha.70",
+    "@wesib/wesib": "^1.0.0-alpha.71",
     "a-iterable": "^2.4.5",
     "call-thru": "^2.5.4",
     "context-values": "^2.2.2",
