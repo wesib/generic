@@ -19,7 +19,7 @@ import { NavigationSupport } from './navigation-support.feature';
  * @returns New component decorator.
  */
 export function HandleNavLinks<T extends ComponentClass = Class>(
-    def: HandleNavLinksDef = {},
+    def: HandleNavLinksDef<InstanceType<T>> = {},
 ): ComponentDecorator<T> {
 
   const handle = def.handle ? def.handle.bind(def) : defaultHandleNavLinks;
@@ -50,8 +50,10 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
 
 /**
  * Navigation links handler definition.
+ *
+ * @typeparam T  A type of component.
  */
-export interface HandleNavLinksDef {
+export interface HandleNavLinksDef<T extends object = any> {
 
   /**
    * Type or types of events to handle.
@@ -81,7 +83,7 @@ export interface HandleNavLinksDef {
       }: {
         event: Event;
         navigation: Navigation;
-        context: ComponentContext;
+        context: ComponentContext<T>;
       },
   ): void;
 

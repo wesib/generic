@@ -77,8 +77,10 @@ export function UseInputElement<T extends ComponentClass = Class>(
  * A definition of element to use as an {@link InputFromControl origin of user input}.
  *
  * This is passed to {@link UseInputElement @UseInputElement} decorator.
+ *
+ * @typeparam T  A type of component.
  */
-export interface UseInputElementDef {
+export interface UseInputElementDef<T extends object = any> {
 
   /**
    * CSS selector of input element to use.
@@ -114,7 +116,7 @@ export interface UseInputElementDef {
         aspects,
       }: {
         node: ElementNode;
-        context: ComponentContext;
+        context: ComponentContext<T>;
         aspects: InConverter.Aspect<any, any>;
       },
   ): InControl<any> | EventKeeper<[InControl<any>?, EventSupply?]> | null | undefined;

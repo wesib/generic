@@ -20,10 +20,10 @@ import { InputFromControl, InputFromNowhere } from './input-from-control';
  * @returns New component decorator.
  */
 export function SetInputName<T extends ComponentClass = Class>(
-    name: string | ((this: void, context: ComponentContext) => string | EventKeeper<[string?]>),
+    name: string | ((this: void, context: ComponentContext<InstanceType<T>>) => string | EventKeeper<[string?]>),
 ): ComponentDecorator<T> {
 
-  const getName: (context: ComponentContext) => EventKeeper<[string?]> = typeof name === 'string'
+  const getName: (context: ComponentContext<InstanceType<T>>) => EventKeeper<[string?]> = typeof name === 'string'
       ? valueProvider(afterThe(name))
       : context => {
         const result = name(context);

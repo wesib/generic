@@ -55,7 +55,7 @@ const inactiveNavLink: ActiveNavLink = {
  * @returns New component decorator.
  */
 export function ActivateNavLink<T extends ComponentClass = Class>(
-    def: ActivateNavLinkDef = {},
+    def: ActivateNavLinkDef<InstanceType<T>> = {},
 ): ComponentDecorator<T> {
 
   const { select = 'a', pick = { all: true, deep: true } } = def;
@@ -107,8 +107,10 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
  *
  * Defines a set of element nodes considered to be navigation links. Each matching node is {@link weigh weighed}
  * against {@link Navigation.read current page}, and the link with highest weight is marked [[active]].
+ *
+ * @typeparam T  A type of component.
  */
-export interface ActivateNavLinkDef {
+export interface ActivateNavLinkDef<T extends object = any> {
 
   /**
    * Navigation links CSS selector.
@@ -161,7 +163,7 @@ export interface ActivateNavLinkDef {
       }: {
         node: ElementNode;
         page: Page;
-        context: ComponentContext;
+        context: ComponentContext<T>;
       },
   ): number | EventKeeper<[number]>;
 
@@ -184,7 +186,7 @@ export interface ActivateNavLinkDef {
       }: {
         node: ElementNode;
         page: Page;
-        context: ComponentContext;
+        context: ComponentContext<T>;
       },
   ): void;
 
