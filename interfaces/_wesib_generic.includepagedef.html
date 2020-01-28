@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>NavigationSupport | Wesib: Generic Components</title>
+	<title>IncludePageDef | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../modules/_wesib_generic.html">@wesib/generic</a>
 				</li>
 				<li>
-					<a href="_wesib_generic.navigationsupport.html">NavigationSupport</a>
+					<a href="_wesib_generic.includepagedef.html">IncludePageDef</a>
 				</li>
 			</ul>
-			<h1>Class NavigationSupport</h1>
+			<h1>Interface IncludePageDef&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -70,16 +70,29 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Browser navigation support feature.</p>
+						<p>Page inclusion definition.</p>
 					</div>
-					<p>Makes <a href="_wesib_generic.navigation.html">Navigation</a> available in bootstrap context.</p>
+					<p>Configures <a href="../modules/_wesib_generic.html#includepage">@LoadPage</a> decorator.</p>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A type of component.</p>
+							</div>
+						</div>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">NavigationSupport</span>
+						<span class="target">IncludePageDef</span>
 					</li>
 				</ul>
 			</section>
@@ -88,30 +101,89 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Accessors</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-static"><a href="_wesib_generic.navigationsupport.html#_featuredef__symbol_" class="tsd-kind-icon">[<wbr>Feature<wbr>Def__symbol]</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic.includepagedef.html#fragment" class="tsd-kind-icon">fragment</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_wesib_generic.includepagedef.html#onresponse" class="tsd-kind-icon">on<wbr>Response</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-					<a name="_featuredef__symbol_" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> [<wbr>Feature<wbr>Def__symbol]</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> [FeatureDef__symbol]<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">FeatureDef</span></li>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="fragment" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> fragment</h3>
+					<div class="tsd-signature tsd-kind-icon">fragment<span class="tsd-signature-symbol">:</span> <a href="../modules/_wesib_generic.pagefragmentrequest.html" class="tsd-signature-type">PageFragmentRequest</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/dd4f5a4/src/navigation/page-load/include-page.decorator.ts#L123">src/navigation/page-load/include-page.decorator.ts:123</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Page fragment to include.</p>
+						</div>
+						<p>By default uses custom element identifier if present, or element tag name otherwise.</p>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="onresponse" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Response</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Response<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>range<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Range</span><span class="tsd-signature-symbol">; </span>response<span class="tsd-signature-symbol">: </span><a href="_wesib_generic.pageloadresponse.start.html" class="tsd-signature-type">Start</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.pageloadresponse.ok.html" class="tsd-signature-type">Ok</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.pageloadresponse.failure.html" class="tsd-signature-type">Failure</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/dd4f5a4/src/navigation/navigation-support.feature.ts#L25">src/navigation/navigation-support.feature.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/dd4f5a4/src/navigation/page-load/include-page.decorator.ts#L137">src/navigation/page-load/include-page.decorator.ts:137</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">FeatureDef</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Performs additional actions during page load.</p>
+								</div>
+								<p>This method is called inside page contents render schedule for {@link PageLoadResponse.ok each stage} of page
+								load. At the final stage it is called after loaded page contents included.</p>
+								<p>This method can be used e.g. to indicate the page load progress.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>range<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Range</span><span class="tsd-signature-symbol">; </span>response<span class="tsd-signature-symbol">: </span><a href="_wesib_generic.pageloadresponse.start.html" class="tsd-signature-type">Start</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.pageloadresponse.ok.html" class="tsd-signature-type">Ok</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.pageloadresponse.failure.html" class="tsd-signature-type">Failure</a><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+											<div class="tsd-comment tsd-typography">
+												<p>Decorated component context.</p>
+											</div>
+										</li>
+										<li class="tsd-parameter">
+											<h5>range<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Range</span></h5>
+											<div class="tsd-comment tsd-typography">
+												<p>Document range the loaded page contents going to replace.</p>
+											</div>
+										</li>
+										<li class="tsd-parameter">
+											<h5>response<span class="tsd-signature-symbol">: </span><a href="_wesib_generic.pageloadresponse.start.html" class="tsd-signature-type">Start</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.pageloadresponse.ok.html" class="tsd-signature-type">Ok</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.pageloadresponse.failure.html" class="tsd-signature-type">Failure</a></h5>
+											<div class="tsd-comment tsd-typography">
+												<p>Page load response.</p>
+											</div>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -138,11 +210,14 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_wesib_generic.navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="_wesib_generic.includepagedef.html" class="tsd-kind-icon">Include<wbr>Page<wbr>Def</a>
 						<ul>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-								<a href="_wesib_generic.navigationsupport.html#_featuredef__symbol_" class="tsd-kind-icon">[<wbr>Feature<wbr>Def__symbol]</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_wesib_generic.includepagedef.html#fragment" class="tsd-kind-icon">fragment</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_wesib_generic.includepagedef.html#onresponse" class="tsd-kind-icon">on<wbr>Response</a>
 							</li>
 						</ul>
 					</li>
