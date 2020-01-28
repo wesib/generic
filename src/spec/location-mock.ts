@@ -14,10 +14,30 @@ export class LocationMock {
   readonly window: Mocked<BootstrapWindow>;
   private _index = 0;
   private readonly stateData: [URL, any][];
-  private readonly eventTarget: HTMLElement;
+  private readonly eventTarget?: HTMLElement;
 
-  constructor({ doc }: { doc?: Document } = {}) {
-    this.eventTarget = document.body.appendChild(document.createElement('div'));
+  constructor(
+      {
+        doc,
+        win,
+      }: {
+        doc?: Document;
+        win?: BootstrapWindow;
+      } = {},
+  ) {
+
+    let mockWindow: Mocked<Window> | undefined;
+
+    if (!win) {
+      this.eventTarget = document.body.appendChild(document.createElement('div'));
+      mockWindow = win = {
+        addEventListener: this.eventTarget.addEventListener.bind(this.eventTarget),
+        removeEventListener: this.eventTarget.removeEventListener.bind(this.eventTarget),
+        dispatchEvent: this.eventTarget.dispatchEvent.bind(this.eventTarget),
+      } as any;
+    } else {
+      mockWindow = undefined;
+    }
 
     const self = this;
     this.stateData = [[new URL('http://localhost/index'), 'initial']];
@@ -56,24 +76,24 @@ export class LocationMock {
     } as any;
     this.baseURI = jest.fn(() => 'http://localhost');
 
-    const win = {
-      addEventListener: this.eventTarget.addEventListener.bind(this.eventTarget),
-      removeEventListener: this.eventTarget.removeEventListener.bind(this.eventTarget),
-      dispatchEvent: this.eventTarget.dispatchEvent.bind(this.eventTarget),
-    };
-
-    this.window = {
-      location: this.location,
-      history: this.history,
-      addEventListener: jest.spyOn(win, 'addEventListener'),
-      removeEventListener: jest.spyOn(win, 'removeEventListener'),
-      dispatchEvent: jest.spyOn(win, 'dispatchEvent'),
-      document: doc || {
-        get baseURI() {
-          return self.baseURI();
+    if (mockWindow) {
+      this.window = {
+        location: this.location,
+        history: this.history,
+        addEventListener: jest.spyOn(mockWindow, 'addEventListener'),
+        removeEventListener: jest.spyOn(mockWindow, 'removeEventListener'),
+        dispatchEvent: jest.spyOn(mockWindow, 'dispatchEvent'),
+        document: doc || {
+          get baseURI() {
+            return self.baseURI();
+          },
         },
-      },
-    } as any;
+      } as any;
+    } else {
+      this.window = win as Mocked<BootstrapWindow>;
+      jest.spyOn(this.window, 'location', 'get').mockImplementation(() => this.location);
+      jest.spyOn(this.window, 'history', 'get').mockImplementation(() => this.history);
+    }
   }
 
   get currentURL(): URL {
@@ -112,7 +132,7 @@ export class LocationMock {
   }
 
   down(): void {
-    this.eventTarget.remove();
+    this.eventTarget?.remove();
   }
 
 }
