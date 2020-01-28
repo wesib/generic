@@ -12,13 +12,37 @@ import {
   DefaultRenderScheduler,
 } from '@wesib/wesib';
 import { nextArgs, noop } from 'call-thru';
-import { afterEach, AfterEvent, afterSupplied, afterThe, EventKeeper, eventSupply, EventSupply } from 'fun-events';
+import {
+  afterEach,
+  AfterEvent,
+  afterEventBy,
+  afterSupplied,
+  afterThe,
+  EventKeeper,
+  eventSupply,
+  EventSupply,
+} from 'fun-events';
 import { css__naming, QualifiedName } from 'namespace-aliaser';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
 import { Wesib__NS } from '../wesib.ns';
 import { Navigation } from './navigation';
 import { NavigationSupport } from './navigation-support.feature';
 import { Page } from './page';
+
+/**
+ * @internal
+ */
+interface ActiveNavLink {
+  readonly node?: ElementNode;
+  supply(): EventSupply | undefined;
+}
+
+/**
+ * @internal
+ */
+const inactiveNavLink: ActiveNavLink = {
+  supply: noop,
+};
 
 /**
  * Creates component decorator that marks at most one of navigation links inside decorated component active.
@@ -43,14 +67,14 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
     define(defContext) {
       defContext.whenComponent(context => {
 
-        const activate = navLinkActivator(context, def);
+        const activate = activateNavLink(context, def);
         const weigh = navLinkWeight(def);
         const navigation = context.get(Navigation);
         const componentNode = context.get(ComponentNode);
 
         context.whenOn(connectSupply => {
 
-          let lastActive: readonly [ElementNode, EventSupply] | [] = [];
+          let active: ActiveNavLink = inactiveNavLink;
 
           navigation.read.consume(
               page => componentNode.select(select, pick).read.keep.dig_(
@@ -63,18 +87,12 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
                     const selected = selectActiveNavLink(weights);
 
                     if (!selected) {
-                      lastActive = [];
-                      return;
-                    }
-                    if (selected === lastActive[0]) {
-                      return lastActive[1];
+                      active = inactiveNavLink;
+                    } else if (selected !== active.node) {
+                      active = activate({ node: selected, context, page });
                     }
 
-                    const supply = activate({ node: selected, context, page });
-
-                    lastActive = [selected, supply];
-
-                    return supply;
+                    return active.supply();
                   },
               ),
           ).needs(connectSupply);
@@ -95,7 +113,7 @@ export interface ActivateNavLinkDef {
   /**
    * Navigation links CSS selector.
    *
-   * `a[href]` by default.
+   * `a` by default.
    */
   readonly select?: string;
 
@@ -217,11 +235,26 @@ function navLinkWeight(
 
     const weight = def.weigh!(opts);
 
-    return typeof weight === 'number'
-        ? afterThe(opts.node, weight)
-        : afterSupplied(weight).keep.thru_(
-            weight => nextArgs(opts.node, weight),
-        );
+    if (typeof weight === 'number') {
+      return afterThe(opts.node, weight);
+    }
+
+    let supplier: AfterEvent<NavLinkWeight> = afterSupplied(weight).keep.thru_(
+        weight => nextArgs(opts.node, weight),
+    );
+
+    return afterEventBy<NavLinkWeight>(receiver => {
+      supplier({
+        supply: eventSupply()
+            .needs(receiver.supply)
+            .whenOff(() => {
+              // Fall back to zero weight once the weight supply cut off
+              supplier = afterThe(opts.node, 0);
+              supplier(receiver);
+            }),
+        receive: receiver.receive.bind(receiver),
+      });
+    });
   };
 }
 
@@ -236,7 +269,13 @@ function defaultNavLinkWeight(
 ): AfterEvent<NavLinkWeight> {
 
   const element: Element = node.element;
-  const linkURL = new URL(element.getAttribute('href') || '', element.ownerDocument!.baseURI);
+  const href = element.getAttribute('href');
+
+  if (href == null) {
+    return afterThe(node, -1);
+  }
+
+  const linkURL = new URL(href, element.ownerDocument!.baseURI);
 
   return afterThe(node, calcNavLinkWeight(linkURL, page.url));
 }
@@ -279,7 +318,7 @@ function calcNavLinkWeight(linkURL: URL, pageURL: URL): number {
     return -1;
   }
 
-  return linkURL.pathname.length + 1;
+  return linkURL.pathname.length;
 }
 
 /**
@@ -300,10 +339,7 @@ function navLinkHash2url(url: URL): URL {
   let { hash } = url;
 
   hash = hash.substring(1); // Remove leading `#` symbol
-
-  const firstChar = hash[0];
-
-  if (firstChar !== '/' && firstChar !== '?' && firstChar !== '#') {
+  if (hash[0] !== '/') {
     hash = '/' + hash;
   }
 
@@ -324,10 +360,12 @@ function navLinkSearchParamsWeight(
 
     const pageValues = new Set(pageParams.getAll(key));
 
-    if (!linkParams.getAll(key).every(linkValue => pageValues.has(linkValue))) {
-      weight = -1;
-    } else if (weight >= 0) {
-      weight += 1;
+    if (weight >= 0) {
+      if (linkParams.getAll(key).every(linkValue => pageValues.has(linkValue))) {
+        weight += 1;
+      } else {
+        weight = -1;
+      }
     }
   });
 
@@ -347,10 +385,10 @@ const defaultActiveNavLinkClass: QualifiedName = ['active', Wesib__NS];
 /**
  * @internal
  */
-function navLinkActivator(
+function activateNavLink(
     context: ComponentContext,
     def: ActivateNavLinkDef,
-): (opts: NavLinkOpts) => EventSupply {
+): (opts: NavLinkOpts) => ActiveNavLink {
 
   const scheduler = context.get(DefaultRenderScheduler);
   const { active = defaultActiveNavLinkClass } = def;
@@ -380,6 +418,20 @@ function navLinkActivator(
 
     makeActive(true);
 
-    return eventSupply(() => makeActive(false));
+    let lastSupply: EventSupply | undefined;
+
+    return {
+      node: opts.node,
+      supply(): EventSupply {
+
+        const supply = lastSupply = eventSupply(() => {
+          if (lastSupply === supply) {
+            makeActive(false);
+          }
+        });
+
+        return supply;
+      },
+    };
   };
 }
