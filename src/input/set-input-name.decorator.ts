@@ -7,7 +7,7 @@ import { valueProvider } from 'call-thru';
 import { afterAll, afterThe, EventKeeper, eventSupply } from 'fun-events';
 import { InGroup } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
-import { InputFromControl, InputFromNowhere } from './input-from-control';
+import { InputFromControl, NoInputFromControl } from './input-from-control';
 
 /**
  * Creates component decorator that adds {@link InputFromControl input control} of decorated component to input control
@@ -38,7 +38,7 @@ export function SetInputName<T extends ComponentClass = Class>(
 
         afterAll({
           group: hierarchy.up.keep.dig_(
-              upper => upper ? upper.get(InputFromControl) : afterThe<[InputFromNowhere]>({}),
+              upper => upper ? upper.get(InputFromControl) : afterThe<[NoInputFromControl]>({}),
           ).keep.thru_(
               ({ control }) => control && control.aspect(InGroup),
           ),

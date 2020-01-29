@@ -6,7 +6,7 @@ import { ComponentContext } from '@wesib/wesib';
 import { AfterEvent, afterThe } from 'fun-events';
 import { InValidation, inValidationResult } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
-import { InputFromControl, InputFromNowhere } from './input-from-control';
+import { InputFromControl, NoInputFromControl } from './input-from-control';
 
 /**
  * A validity of user input.
@@ -25,7 +25,7 @@ export type InputValidity = AfterEvent<[InValidation.Result]>;
  */
 export function inputValidity(context: ComponentContext): InputValidity {
   return context.get(HierarchyContext).get(InputFromControl).keep.dig(
-      (inputReceiver: InputFromControl | InputFromNowhere) => (
+      (inputReceiver: InputFromControl | NoInputFromControl) => (
           inputReceiver.control?.aspect(InValidation) || afterThe(inValidationResult())
       ),
   );

@@ -31,18 +31,18 @@ export interface InputFromControl<Value = any> {
 }
 
 /**
- * A user input originated from nowhere.
+ * No user input originated from control.
  */
-export interface InputFromNowhere {
+export interface NoInputFromControl {
   control?: undefined;
 }
 
 /**
  * A key of hierarchy context value containing a user input originated from control. Potentially
- * {@link InputFromNowhere absent}.
+ * {@link NoInputFromControl absent}.
  */
-export const InputFromControl: SingleContextUpRef<InputFromControl | InputFromNowhere> = (
-    /*#__PURE__*/ new SingleContextUpKey<InputFromControl | InputFromNowhere>(
+export const InputFromControl: SingleContextUpRef<InputFromControl | NoInputFromControl> = (
+    /*#__PURE__*/ new SingleContextUpKey<InputFromControl | NoInputFromControl>(
         'input-receiver',
         {
           byDefault: () => ({}),
