@@ -37,7 +37,7 @@ describe('navigation', () => {
       expect(anchor.dispatchEvent(event)).toBe(false);
       expect(mockNavigation.open).toHaveBeenCalledWith('/test');
     });
-    it('does not navigate if anchor href is absent', async () => {
+    it('handles click with default handler if anchor href is absent', async () => {
       await bootstrap();
 
       const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
@@ -45,13 +45,22 @@ describe('navigation', () => {
       expect(anchor.dispatchEvent(event)).toBe(true);
       expect(mockNavigation.open).not.toHaveBeenCalled();
     });
-    it('does not navigate if anchor href has another origin', async () => {
+    it('navigates using default anchor handler if its href has another origin', async () => {
       anchor.href = 'https://localhost.localdomain';
       await bootstrap();
 
       const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
 
       expect(anchor.dispatchEvent(event)).toBe(true);
+      expect(mockNavigation.open).not.toHaveBeenCalled();
+    });
+    it('prevents navigation if href is the same as current page', async () => {
+      anchor.href = baseURI;
+      await bootstrap();
+
+      const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
+
+      expect(anchor.dispatchEvent(event)).toBe(false);
       expect(mockNavigation.open).not.toHaveBeenCalled();
     });
     it('handles expected event', async () => {

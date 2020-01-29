@@ -69,7 +69,8 @@ export interface HandleNavLinksDef<T extends object = any> {
    * it may perform a navigation event.
    *
    * By default handles events on anchor tags. When such tag contains an `href` attribute containing same-origin URL
-   * it {@link Navigation.open opens} a page at this URL instead of default action.
+   * it {@link Navigation.open opens} a page at this URL instead of default action. It also prevents navigation
+   * if URL didn't change.
    *
    * @param event  An event to handle.
    * @param navigation  Navigation service to use.
@@ -117,5 +118,7 @@ function defaultHandleNavLinks(
   }
 
   event.preventDefault();
-  navigation.open(href);
+  if (base.href !== url.href) {
+    navigation.open(href);
+  }
 }
