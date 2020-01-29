@@ -72,7 +72,7 @@
 					<div class="lead">
 						<p>A definition of element to use as an <a href="_wesib_generic_input.inputfromcontrol.html">origin of user input</a>.</p>
 					</div>
-					<p>This is passed to <a href="../modules/_wesib_generic_input.html#useinputelement">@UseInputElement</a> decorator.</p>
+					<p>Configures <a href="../modules/_wesib_generic_input.html#useinputelement">@UseInputElement</a> component decorator.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
@@ -124,7 +124,7 @@
 					<div class="tsd-signature tsd-kind-icon">pick<span class="tsd-signature-symbol">:</span> <a href="_wesib_generic.elementpickmode.html" class="tsd-signature-type">ElementPickMode</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/dd4f5a4/src/input/use-input-element.decorator.ts#L97">src/input/use-input-element.decorator.ts:97</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/50d6725/src/input/use-input-element.decorator.ts#L97">src/input/use-input-element.decorator.ts:97</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -140,7 +140,7 @@
 					<div class="tsd-signature tsd-kind-icon">select<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/dd4f5a4/src/input/use-input-element.decorator.ts#L90">src/input/use-input-element.decorator.ts:90</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/50d6725/src/input/use-input-element.decorator.ts#L90">src/input/use-input-element.decorator.ts:90</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -163,16 +163,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/dd4f5a4/src/input/use-input-element.decorator.ts#L112">src/input/use-input-element.decorator.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/50d6725/src/input/use-input-element.decorator.ts#L112">src/input/use-input-element.decorator.ts:112</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Constructs input control for element node found by <a href="../modules/_wesib_generic_input.html#useinputelement">@UseInputElement</a> decorator.</p>
 								</div>
-								<p>The returned control keeper may send an event supply as a second parameter. This supply will be cut off
-									when input from control become no longer needed. Otherwise the control&#39;s input supply (<code>InSupply</code>) will be cut
-								off instead, and control will become unusable after that.</p>
+								<p>The returned control keeper may send an event supply as a second parameter. This supply will be cut off once
+									the input from control is no longer needed. Otherwise the control&#39;s input supply (<code>InSupply</code>) will be cut off
+								instead, and control would become unusable after that.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -182,7 +182,7 @@
 										<li class="tsd-parameter">
 											<h5>aspects<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Conversion</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">From</span><span class="tsd-signature-symbol">&gt;</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">To</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Conversion</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">To</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span></h5>
 											<div class="tsd-comment tsd-typography">
-												<p>Default input aspect converter. This is a value of <code>DefaultInputAspect</code>.</p>
+												<p>Default input aspect converter. This is a value of [[DefaultInputAspect]].</p>
 											</div>
 										</li>
 										<li class="tsd-parameter">
@@ -230,7 +230,7 @@
 						<a href="_wesib_generic_input.inputfromcontrol.html" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_wesib_generic_input.inputfromnowhere.html" class="tsd-kind-icon">Input<wbr>From<wbr>Nowhere</a>
+						<a href="_wesib_generic_input.noinputfromcontrol.html" class="tsd-kind-icon">No<wbr>Input<wbr>From<wbr>Control</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -250,17 +250,20 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_wesib_generic_input.html#defaultinaspects" class="tsd-kind-icon">Default<wbr>InAspects</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/_wesib_generic_input.html#convertinputdef" class="tsd-kind-icon">Convert<wbr>Input<wbr>Def</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_wesib_generic_input.html#inputvalidity" class="tsd-kind-icon">Input<wbr>Validity</a>
+						<a href="../modules/_wesib_generic_input.html#defaultinaspects" class="tsd-kind-icon">Default<wbr>InAspects</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="../modules/_wesib_generic_input.html#defaultinaspects-1" class="tsd-kind-icon">Default<wbr>InAspects</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="../modules/_wesib_generic_input.html#inputfromcontrol-1" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/_wesib_generic_input.html#convertinput" class="tsd-kind-icon">Convert<wbr>Input</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="../modules/_wesib_generic_input.html#setinputname" class="tsd-kind-icon">Set<wbr>Input<wbr>Name</a>
@@ -270,9 +273,6 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="../modules/_wesib_generic_input.html#inputfromcontrol-2" class="tsd-kind-icon">input<wbr>From<wbr>Control</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="../modules/_wesib_generic_input.html#inputvalidity-1" class="tsd-kind-icon">input<wbr>Validity</a>
 					</li>
 				</ul>
 			</nav>
