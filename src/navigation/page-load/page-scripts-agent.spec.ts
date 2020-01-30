@@ -70,7 +70,14 @@ describe('navigation', () => {
 </head>
 <body></body>
 </html>`;
-      await navigation.with(pageLoadParam, { receiver: noop }).open('/some');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('/some');
+      });
       expect(doc.scripts).toHaveLength(1);
 
       const script = doc.scripts[0];
@@ -87,7 +94,14 @@ describe('navigation', () => {
 </head>
 <body></body>
 </html>`;
-      await navigation.with(pageLoadParam, { receiver: noop }).open('/some');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('/some');
+      });
 
       responseHtml = `
 <html>
@@ -99,7 +113,14 @@ describe('navigation', () => {
 <body></body>
 </html>`;
 
-      await navigation.open('/other');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('/other');
+      });
 
       expect(doc.scripts).toHaveLength(2);
       expect(doc.scripts[0].src).toBe('http://localhost/js/test.js');
@@ -124,9 +145,14 @@ describe('navigation', () => {
         text: () => Promise.resolve(responseHtml),
       } as Response));
 
-      let response!: PageLoadResponse;
-
-      await navigation.with(pageLoadParam, { receiver: r => response = r }).open('/other');
+      const response = await new Promise<PageLoadResponse>(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok === false && resolve(r),
+            },
+        ).open('/other');
+      });
 
       expect(response).toMatchObject({ ok: false });
     });

@@ -192,6 +192,8 @@ describe('navigation', () => {
     async function loadHtml(html: string): Promise<void> {
       responseHtml = html;
       await navigation.with(pageLoadParam, { receiver: noop }).open('/other');
+      await Promise.resolve();
+      await Promise.resolve();
     }
 
     function documentStyles(parent: Element = doc.head): NodeListOf<HTMLLinkElement> {

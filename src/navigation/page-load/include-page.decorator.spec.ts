@@ -6,6 +6,7 @@ import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
 import { IncludePage, IncludePageDef } from './include-page.decorator';
 import { PageLoadAgent } from './page-load-agent';
+import { pageLoadParam } from './page-load-param';
 import Mock = jest.Mock;
 
 describe('navigation', () => {
@@ -52,7 +53,14 @@ describe('navigation', () => {
       const { context } = await bootstrap();
       const navigation = context.get(Navigation);
 
-      await navigation.open('page');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('page');
+      });
 
       expect(element.textContent).toBe('included content');
     });
@@ -66,7 +74,14 @@ describe('navigation', () => {
       const { context } = await bootstrap();
       const navigation = context.get(Navigation);
 
-      await navigation.open('page');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('page');
+      });
 
       expect(element.textContent).toBe('included content');
     });
@@ -78,7 +93,14 @@ describe('navigation', () => {
       const { context } = await bootstrap({ fragment: { tag: 'requested-fragment' } });
       const navigation = context.get(Navigation);
 
-      await navigation.open('page');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('page');
+      });
 
       expect(element.textContent).toBe('included content');
     });
@@ -90,7 +112,14 @@ describe('navigation', () => {
       const { context } = await bootstrap({ fragment: { tag: 'requested-fragment' } });
       const navigation = context.get(Navigation);
 
-      await navigation.open('page');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('page');
+      });
 
       expect(element.childNodes).toHaveLength(0);
     });
@@ -101,7 +130,14 @@ describe('navigation', () => {
       const { context } = await bootstrap({ onResponse });
       const navigation = context.get(Navigation);
 
-      await navigation.open('page');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('page');
+      });
 
       expect(onResponse).toHaveBeenLastCalledWith({
         context,

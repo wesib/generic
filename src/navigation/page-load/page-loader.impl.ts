@@ -1,7 +1,7 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { itsReduction } from 'a-iterable';
 import { SingleContextKey } from 'context-values';
-import { afterThe, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
+import { EventNotifier, onAsync, OnEvent, onEventBy } from 'fun-events';
 import { hthvParse, hthvQuote } from 'http-header-value';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
@@ -53,56 +53,46 @@ function newPageLoader(context: BootstrapContext): PageLoader {
     function fetch(fetchRequest: Request): OnEvent<[PageLoadResponse]> {
       requestPageFragments(page, fetchRequest);
 
-      const responseTextEmitter = new EventEmitter<[Response, string]>();
-      const onResponse: OnEvent<[PageLoadResponse]> = responseTextEmitter.on.thru_(
-          (response, text) => {
-            if (!response.ok) {
-              return {
-                ok: false as const,
-                page,
-                response,
-                error: response.status,
-              };
-            }
-            try {
-              return {
-                ok: true as const,
-                page,
-                response,
-                document: parsePageDocument(parser, url, response, text),
-              };
-            } catch (error) {
-              return {
-                ok: false as const,
-                page,
-                response,
-                error,
-              };
-            }
-          },
-      );
-
       return onEventBy<[PageLoadResponse]>(receiver => {
 
         const { supply } = receiver;
+        const dispatcher = new EventNotifier<[PageLoadResponse]>();
 
-        afterThe<[PageLoadResponse.Start]>({ page }).once({
-          supply: eventSupply().needs(supply),
-          receive(ctx, start) {
-            receiver.receive(ctx, start);
+        dispatcher.on(receiver);
+        dispatcher.send({ page });
+
+        onAsync(httpFetch(fetchRequest).thru_(
+            response => Promise.all([response, response.text()]),
+        ))({
+          supply,
+          receive(_ctx, ...batch) {
+            batch.forEach(([response, text]) => {
+              if (!response.ok) {
+                dispatcher.send({
+                  ok: false as const,
+                  page,
+                  response,
+                  error: response.status,
+                });
+              } else {
+                try {
+                  dispatcher.send({
+                    ok: true as const,
+                    page,
+                    response,
+                    document: parsePageDocument(parser, url, response, text),
+                  });
+                } catch (error) {
+                  dispatcher.send({
+                    ok: false as const,
+                    page,
+                    response,
+                    error,
+                  });
+                }
+              }
+            });
           },
-        });
-
-        const responseSupply = httpFetch(fetchRequest)(response => {
-          onResponse(receiver);
-          response.text().then(
-              text => {
-                responseTextEmitter.send(response, text);
-                supply.needs(responseSupply);
-              },
-          ).catch(
-              e => supply.off(e),
-          );
         });
       });
     }

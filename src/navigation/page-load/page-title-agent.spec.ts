@@ -1,5 +1,4 @@
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
-import { noop } from 'call-thru';
 import { afterThe } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
@@ -68,11 +67,25 @@ describe('navigation', () => {
 <title>New Title</title>
 </head>
 </html>`;
-      await navigation.with(pageLoadParam, { receiver: noop }).open('/some');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('/some');
+      });
       expect(doc.title).toBe('New Title');
     });
     it('does not update page title if absent in loaded document', async () => {
-      await navigation.with(pageLoadParam, { receiver: noop }).open('/some');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('/some');
+      });
       expect(doc.title).toBe('Initial Title');
     });
     it('does not update page title if loaded document has empty title', async () => {
@@ -82,7 +95,14 @@ describe('navigation', () => {
 <title></title>
 </head>
 </html>`;
-      await navigation.with(pageLoadParam, { receiver: noop }).open('/some');
+      await new Promise(resolve => {
+        navigation.with(
+            pageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('/some');
+      });
       expect(doc.title).toBe('Initial Title');
     });
   });

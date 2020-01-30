@@ -139,6 +139,7 @@ describe('navigation', () => {
 
       await navigation.open('/other');
       await reject.catch(noop);
+      await Promise.resolve();
 
       expect(receiver).toHaveBeenCalledWith({
         ok: false,
@@ -246,15 +247,15 @@ describe('navigation', () => {
       it('loads requested fragment by id', async () => {
         result = `<div id="test-fragment">fragment content</div>`;
 
-        let response!: PageLoadResponse;
-
-        await navigation.with(
-            pageLoadParam,
-            {
-              receiver: r => response = r,
-              fragment: { id: 'test-fragment' },
-            },
-        ).open('/other');
+        const response = await new Promise<PageLoadResponse>(resolve => {
+          navigation.with(
+              pageLoadParam,
+              {
+                receiver: r => r.ok && resolve(r),
+                fragment: { id: 'test-fragment' },
+              },
+          ).open('/other');
+        });
 
         expect(request.headers.get('Accept-Fragment')).toEqual('id=test-fragment');
         expect(response).toMatchObject({
@@ -265,15 +266,15 @@ describe('navigation', () => {
       it('loads requested fragment by tag name', async () => {
         result = `<test-fragment>fragment content</test-fragment>`;
 
-        let response!: PageLoadResponse;
-
-        await navigation.with(
-            pageLoadParam,
-            {
-              receiver: r => response = r,
-              fragment: { tag: 'test-fragment' },
-            },
-        ).open('/other');
+        const response = await new Promise<PageLoadResponse>(resolve => {
+          navigation.with(
+              pageLoadParam,
+              {
+                receiver: r => r.ok && resolve(r),
+                fragment: { tag: 'test-fragment' },
+              },
+          ).open('/other');
+        });
 
         expect(request.headers.get('Accept-Fragment')).toEqual('tag=test-fragment');
         expect(response).toMatchObject({
@@ -284,15 +285,15 @@ describe('navigation', () => {
       it('requests non-existing fragment', async () => {
         result = `<div id="test-fragment">fragment content</div>`;
 
-        let response!: PageLoadResponse;
-
-        await navigation.with(
-            pageLoadParam,
-            {
-              receiver: r => response = r,
-              fragment: { id: 'wrong-fragment' },
-            },
-        ).open('/other');
+        const response = await new Promise<PageLoadResponse>(resolve => {
+          navigation.with(
+              pageLoadParam,
+              {
+                receiver: r => r.ok && resolve(r),
+                fragment: { id: 'wrong-fragment' },
+              },
+          ).open('/other');
+        });
 
         expect(request.headers.get('Accept-Fragment')).toEqual('id=wrong-fragment');
         expect(response).toMatchObject({ ok: true, fragment: undefined });
@@ -300,22 +301,27 @@ describe('navigation', () => {
       it('loads multiple fragments', async () => {
         result = `<div id="test-fragment">fragment content</div><test-fragment-2>fragment 2 content</test-fragment-2>`;
 
-        let response1!: PageLoadResponse;
-        let response2!: PageLoadResponse;
+        let resolve1: (response: PageLoadResponse) => void;
+        let resolve2: (response: PageLoadResponse) => void;
+        const promise1 = new Promise<PageLoadResponse>(resolve => resolve1 = resolve);
+        const promise2 = new Promise<PageLoadResponse>(resolve => resolve2 = resolve);
 
-        await navigation.with(
+          navigation.with(
+              pageLoadParam,
+              {
+                receiver: r => r.ok && resolve1(r),
+                fragment: { id: 'test-fragment' },
+              },
+          ).with(
             pageLoadParam,
             {
-              receiver: r => response1 = r,
-              fragment: { id: 'test-fragment' },
-            },
-        ).with(
-            pageLoadParam,
-            {
-              receiver: r => response2 = r,
+              receiver: r => r.ok && resolve2(r),
               fragment: { tag: 'test-fragment-2' },
             },
         ).open('/other');
+
+        const response1 = await promise1;
+        const response2 = await promise2;
 
         expect(request.headers.get('Accept-Fragment')).toEqual('id=test-fragment, tag=test-fragment-2');
         expect(response1).toMatchObject({
@@ -330,21 +336,26 @@ describe('navigation', () => {
       it('requests full document if at least one request contains no fragment', async () => {
         result = `<div id="test-fragment">fragment content</div>`;
 
-        let response1!: PageLoadResponse;
-        let response2!: PageLoadResponse;
+        let resolve1: (response: PageLoadResponse) => void;
+        let resolve2: (response: PageLoadResponse) => void;
+        const promise1 = new Promise<PageLoadResponse>(resolve => resolve1 = resolve);
+        const promise2 = new Promise<PageLoadResponse>(resolve => resolve2 = resolve);
 
         await navigation.with(
             pageLoadParam,
             {
-              receiver: r => response1 = r,
+              receiver: r => r.ok && resolve1(r),
               fragment: { id: 'test-fragment' },
             },
         ).with(
             pageLoadParam,
             {
-              receiver: r => response2 = r,
+              receiver: r => r.ok && resolve2(r),
             },
         ).open('/other');
+
+        const response1 = await promise1;
+        const response2 = await promise2;
 
         expect(request.headers.get('Accept-Fragment')).toBeNull();
         expect(response1).toMatchObject({ ok: true, fragment: expect.objectContaining({ id: 'test-fragment' }) });
@@ -358,16 +369,15 @@ describe('navigation', () => {
 
         mockFetch.mockImplementation(() => afterThe({ ok: true, text: () => reject } as Response));
 
-        let response!: PageLoadResponse;
-
-        await navigation.with(
-            pageLoadParam,
-            {
-              receiver: r => response = r,
-              fragment: { id: 'test-fragment' },
-            },
-        ).open('/other');
-        await reject.catch(noop);
+        const response = await new Promise<PageLoadResponse>(resolve => {
+          navigation.with(
+              pageLoadParam,
+              {
+                receiver: r => r.ok === false && resolve(r),
+                fragment: { id: 'test-fragment' },
+              },
+          ).open('/other');
+        });
 
         expect(response).toMatchObject({ ok: false, error });
       });
