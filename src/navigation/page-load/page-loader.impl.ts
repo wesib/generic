@@ -51,7 +51,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
     return onEventBy(receiver => agent(fetch, request)(receiver));
 
     function fetch(fetchRequest: Request): OnEvent<[PageLoadResponse]> {
-      fetchRequest = pageFragmentsRequest(page, fetchRequest);
+      requestPageFragments(page, fetchRequest);
 
       const responseTextEmitter = new EventEmitter<[Response, string]>();
       const onResponse: OnEvent<[PageLoadResponse]> = responseTextEmitter.on.thru_(
@@ -109,30 +109,24 @@ function newPageLoader(context: BootstrapContext): PageLoader {
   };
 }
 
-function pageFragmentsRequest(page: Page, request: Request): Request {
+function requestPageFragments(page: Page, request: Request): void {
 
   const fragments = page.get(pageLoadRequestsParam)?.fragments;
 
-  if (!fragments || !fragments.length) {
-    return request;
+  if (fragments && fragments.length) {
+    request.headers.set(
+        'Accept-Fragment',
+        itsReduction(
+            fragments,
+            (header, fragment) => (header ? header + ', ' : '') + (
+                fragment.tag != null
+                    ? 'tag=' + hthvQuote(fragment.tag)
+                    : 'id=' + hthvQuote(fragment.id)
+            ),
+            '',
+        ),
+    );
   }
-
-  return new Request(
-      request,
-      {
-        headers: {
-          'Accept-Fragment': itsReduction(
-              fragments,
-              (header, fragment) => (header ? header + ', ' : '') + (
-                  fragment.tag != null
-                      ? 'tag=' + hthvQuote(fragment.tag)
-                      : 'id=' + hthvQuote(fragment.id)
-              ),
-              '',
-          ),
-        },
-      },
-  );
 }
 
 function parsePageDocument(parser: DOMParser, url: URL, response: Response, text: string): Document {
