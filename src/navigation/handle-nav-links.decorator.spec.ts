@@ -1,4 +1,5 @@
 import { bootstrapComponents, ComponentMount, Feature } from '@wesib/wesib';
+import { trackValue, ValueTracker } from 'fun-events';
 import { HandleNavLinks, HandleNavLinksDef } from './handle-nav-links.decorator';
 import { Navigation } from './navigation';
 import Mocked = jest.Mocked;
@@ -6,24 +7,24 @@ import Mocked = jest.Mocked;
 describe('navigation', () => {
   describe('@HandleNavLinks', () => {
 
-    let baseURI: string;
     let element: Element;
     let anchor: HTMLAnchorElement;
 
     beforeEach(() => {
       element = document.body.appendChild(document.createElement('test-element'));
       anchor = element.appendChild(document.createElement('a'));
-      baseURI = 'http://localhost.localdomain:8888';
-      jest.spyOn(document, 'baseURI', 'get').mockImplementation(() => baseURI);
     });
     afterEach(() => {
       element.remove();
     });
 
     let mockNavigation: Mocked<Navigation>;
+    let pageURL: ValueTracker<URL>;
 
     beforeEach(() => {
+      pageURL = trackValue(new URL('http://localhost.localdomain:8888/current-page'));
       mockNavigation = {
+        read: pageURL.read.thru_(url => ({ url })),
         open: jest.fn(),
       } as any;
     });
@@ -55,7 +56,7 @@ describe('navigation', () => {
       expect(mockNavigation.open).not.toHaveBeenCalled();
     });
     it('prevents navigation if href is the same as current page', async () => {
-      anchor.href = baseURI;
+      anchor.href = pageURL.it.href;
       await bootstrap();
 
       const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
@@ -94,6 +95,7 @@ describe('navigation', () => {
       expect(mockHandler).toHaveBeenCalledWith({
         event,
         context,
+        page: expect.objectContaining({ url: pageURL.it }),
         navigation: context.get(Navigation),
       });
     });

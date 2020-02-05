@@ -5,6 +5,7 @@
 import { ArraySet, Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { Navigation } from './navigation';
 import { NavigationSupport } from './navigation-support.feature';
+import { Page } from './page';
 
 /**
  * Creates component decorator that handles events (e.g. clicks) on navigation links.
@@ -36,11 +37,16 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
           const navigation = context.get(Navigation);
 
           events.forEach(eventType => {
-            context.on(eventType)(event => handle({
-              event,
-              context,
-              navigation,
-            })).needs(connectSupply);
+            context.on(eventType)(
+                event => navigation.read.once(
+                    page => handle({
+                      event,
+                      page,
+                      context,
+                      navigation,
+                    }),
+                ),
+            ).needs(connectSupply);
           });
         });
       });
@@ -73,16 +79,19 @@ export interface HandleNavLinksDef<T extends object = any> {
    * if URL didn't change.
    *
    * @param event  An event to handle.
+   * @param page  Current navigation page.
    * @param navigation  Navigation service to use.
    * @param context  Component context.
    */
   handle?(
       {
         event,
+        page,
         navigation,
         context,
       }: {
         event: Event;
+        page: Page;
         navigation: Navigation;
         context: ComponentContext<T>;
       },
@@ -96,9 +105,11 @@ export interface HandleNavLinksDef<T extends object = any> {
 function defaultHandleNavLinks(
     {
       event,
+      page,
       navigation,
     }: {
       event: Event;
+      page: Page;
       navigation: Navigation;
     },
 ): void {
@@ -110,7 +121,7 @@ function defaultHandleNavLinks(
     return;
   }
 
-  const base = new URL(target.ownerDocument!.baseURI);
+  const base = page.url;
   const url = new URL(href, base);
 
   if (url.origin !== base.origin) {
