@@ -1,5 +1,6 @@
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { itsReduction } from 'a-iterable';
+import { nextEach } from 'call-thru';
 import { SingleContextKey } from 'context-values';
 import { EventNotifier, onAsync, OnEvent, onEventBy } from 'fun-events';
 import { hthvParse, hthvQuote } from 'http-header-value';
@@ -55,7 +56,6 @@ function newPageLoader(context: BootstrapContext): PageLoader {
 
       return onEventBy<[PageLoadResponse]>(receiver => {
 
-        const { supply } = receiver;
         const dispatcher = new EventNotifier<[PageLoadResponse]>();
 
         dispatcher.on(receiver);
@@ -63,37 +63,34 @@ function newPageLoader(context: BootstrapContext): PageLoader {
 
         onAsync(httpFetch(fetchRequest).thru_(
             response => Promise.all([response, response.text()]),
-        ))({
-          supply,
-          receive(_ctx, ...batch) {
-            batch.forEach(([response, text]) => {
+        )).thru_(
+            (...batch: [Response, string][]) => nextEach(batch),
+            ([response, text]): PageLoadResponse => {
               if (!response.ok) {
-                dispatcher.send({
+                return {
                   ok: false as const,
                   page,
                   response,
                   error: response.status,
-                });
-              } else {
-                try {
-                  dispatcher.send({
-                    ok: true as const,
-                    page,
-                    response,
-                    document: parsePageDocument(parser, url, response, text),
-                  });
-                } catch (error) {
-                  dispatcher.send({
-                    ok: false as const,
-                    page,
-                    response,
-                    error,
-                  });
-                }
+                };
               }
-            });
-          },
-        });
+              try {
+                return {
+                  ok: true as const,
+                  page,
+                  response,
+                  document: parsePageDocument(parser, url, response, text),
+                };
+              } catch (error) {
+                return {
+                  ok: false as const,
+                  page,
+                  response,
+                  error,
+                };
+              }
+            },
+        )(receiver);
       });
     }
   };
