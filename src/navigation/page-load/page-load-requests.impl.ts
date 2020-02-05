@@ -1,5 +1,5 @@
 import { flatMapIt, itsEach, itsIterator } from 'a-iterable';
-import { asis, noop } from 'call-thru';
+import { noop } from 'call-thru';
 import {
   EventEmitter,
   eventReceiver,
@@ -76,7 +76,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
   }
 
   [Symbol.iterator](): Iterator<PageLoadReq> {
-    return itsIterator(flatMapIt(this._map.values(), asis));
+    return itsIterator(flatMapIt(this._map.values()));
   }
 
   handle(): PageParam.Handle<void, PageLoadRequest> {
