@@ -55,7 +55,7 @@ export default {
       sourcemap: true,
       dir: './dist',
       entryFileNames: '[name].js',
-      chunkFileNames: `.[name].js`,
+      chunkFileNames: `_[name].js`,
       hoistTransitiveImports: false,
     },
     {
@@ -63,7 +63,7 @@ export default {
       sourcemap: true,
       dir: './dist',
       entryFileNames: '[name].mjs',
-      chunkFileNames: `.[name].mjs`,
+      chunkFileNames: `_[name].mjs`,
       hoistTransitiveImports: false,
     },
   ],
