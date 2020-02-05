@@ -7,7 +7,7 @@ import {
   isElement,
 } from '@wesib/wesib';
 import { AIterable, ArrayLikeIterable, filterIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from 'a-iterable';
-import { isPresent, nextArgs } from 'call-thru';
+import { isPresent, nextArg, nextArgs } from 'call-thru';
 import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
 import { html__naming } from 'namespace-aliaser';
 import { ElementNode, ElementPickMode } from './element-node';
@@ -97,7 +97,9 @@ export function elementNodeList<N extends ElementNode>(
 
     onTrackUpdate(receiver);
   });
-  const first: AfterEvent<[N?]> = afterSupplied(read).keep.thru(itsFirst);
+  const first: AfterEvent<[N?]> = afterSupplied(read).keep.thru(
+      list => nextArg(itsFirst(list)),
+  );
 
   if (!all) {
     root.addEventListener('wesib:component', event => {

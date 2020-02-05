@@ -3,7 +3,7 @@
  * @module @wesib/generic/input
  */
 import { ComponentContext } from '@wesib/wesib';
-import { SingleContextUpKey, SingleContextUpRef } from 'context-values';
+import { SingleContextUpKey, SingleContextUpRef } from 'context-values/updatable';
 import { eventSupply, EventSupply } from 'fun-events';
 import { InControl, InSupply } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';

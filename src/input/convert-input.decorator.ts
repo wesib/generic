@@ -3,7 +3,8 @@
  * @module @wesib/generic/input
  */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
-import { afterAll, afterThe, EventKeeper, EventSupply } from 'fun-events';
+import { nextArg, nextArgs, NextCall } from 'call-thru';
+import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from 'fun-events';
 import { InControl, InConverter, InSupply } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { DefaultInAspects } from './default-in-aspects';
@@ -27,25 +28,27 @@ export function ConvertInput<T extends ComponentClass = Class>(
         const { up } = context.get(HierarchyContext);
 
         afterAll({
-          parent: up.keep.dig_(
-              upper => upper ? upper.get(InputFromControl) : afterThe<[NoInputFromControl]>({}),
+          parent: up.keep.thru_(
+              upper => upper ? nextAfterEvent(upper.get(InputFromControl)) : nextArg<NoInputFromControl>({}),
           ),
           aspects: context.get(DefaultInAspects),
-        }).keep.dig_(
+        }).keep.thru_(
             ({
               parent: [control],
               aspects: [aspects],
-            }) => {
+            }): NextCall<OnEventCallChain, [InControl<any>?, EventSupply?]> => {
               if (control.control) {
 
                 const converted = convert({ control, context, aspects });
 
                 if (converted) {
-                  return converted instanceof InControl ? afterThe<[InControl<any>]>(converted) : converted;
+                  return converted instanceof InControl
+                      ? nextArgs(converted)
+                      : nextAfterEvent(converted);
                 }
               }
 
-              return afterThe<[InControl<any>?]>();
+              return nextArgs();
             },
         ).consume(
             (control?: InControl<any> | null, supply?: EventSupply) => {

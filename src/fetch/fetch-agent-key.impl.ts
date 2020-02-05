@@ -1,5 +1,7 @@
-import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
-import { AfterEvent, afterThe, EventKeeper, EventSender, OnEvent, onSupplied } from 'fun-events';
+import { nextArg } from 'call-thru';
+import { ContextValueOpts, ContextValues } from 'context-values';
+import { ContextUpKey, ContextUpRef } from 'context-values/updatable';
+import { AfterEvent, afterThe, EventKeeper, EventSender, nextAfterEvent, OnEvent, onSupplied } from 'fun-events';
 
 /**
  * @internal
@@ -31,15 +33,15 @@ export class FetchAgentKey<Res extends any[]>
   constructor(name: string) {
     super(name);
     this.upKey = this.createUpKey(
-        opts => opts.seed.keep.dig(
+        opts => opts.seed.keep.thru(
             (...agents) => {
               if (agents.length) {
-                return afterThe(combineFetchAgents(agents));
+                return nextArg(combineFetchAgents(agents));
               }
 
               const defaultProvider = (): AfterEvent<[CombinedFetchAgent<Res>]> => afterThe(defaultFetchAgent);
 
-              return opts.byDefault(defaultProvider) || defaultProvider();
+              return nextAfterEvent(opts.byDefault(defaultProvider) || defaultProvider());
             },
         ),
     );

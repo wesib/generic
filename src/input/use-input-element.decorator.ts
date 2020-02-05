@@ -3,7 +3,8 @@
  * @module @wesib/generic/input
  */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
-import { afterAll, afterThe, EventKeeper, EventSupply } from 'fun-events';
+import { nextArgs, NextCall } from 'call-thru';
+import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from 'fun-events';
 import { InControl, InConverter, InSupply } from 'input-aspects';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
@@ -39,21 +40,21 @@ export function UseInputElement<T extends ComponentClass = Class>(
           afterAll({
             node: componentNode.select(select, pick).first,
             aspects: context.get(DefaultInAspects),
-          }).keep.dig(({
+          }).keep.thru(({
             node: [node],
             aspects: [aspects],
-          }) => {
+          }): NextCall<OnEventCallChain, [InControl<any>?, EventSupply?]> => {
             if (!node) {
-              return afterThe();
+              return nextArgs();
             }
 
             const control = def.makeControl({ node, context, aspects });
 
             if (!control) {
-              return afterThe();
+              return nextArgs();
             }
 
-            return control instanceof InControl ? afterThe(control) : control;
+            return control instanceof InControl ? nextArgs(control) : nextAfterEvent(control);
           }).consume(
               (control?: InControl<any>, supply?: EventSupply) => {
                 if (!control) {

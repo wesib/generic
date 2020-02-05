@@ -3,7 +3,7 @@
  * @module @wesib/generic
  */
 import { bootstrapDefault } from '@wesib/wesib';
-import { FnContextKey, FnContextRef } from 'context-values';
+import { FnContextKey, FnContextRef } from 'context-values/updatable';
 import { OnEvent } from 'fun-events';
 import { newHttpFetch } from './http-fetch.impl';
 

@@ -22,6 +22,7 @@ import {
   EventKeeper,
   eventSupply,
   EventSupply,
+  nextAfterEvent,
 } from 'fun-events';
 import { css__naming, QualifiedName } from 'namespace-aliaser';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
@@ -77,10 +78,10 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
           let active: ActiveNavLink = inactiveNavLink;
 
           navigation.read.consume(
-              page => componentNode.select(select, pick).read.keep.dig_(
-                  nodes => afterEach(
+              page => componentNode.select(select, pick).read.keep.thru_(
+                  nodes => nextAfterEvent(afterEach(
                       ...nodes.map(node => weigh({ node, context, page })),
-                  ),
+                  )),
               ).consume(
                   (...weights: NavLinkWeight[]) => {
 

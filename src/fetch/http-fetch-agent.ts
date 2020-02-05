@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { ContextUpRef } from 'context-values';
+import { ContextUpRef } from 'context-values/updatable';
 import { EventSender, OnEvent } from 'fun-events';
 import { FetchAgentKey } from './fetch-agent-key.impl';
 

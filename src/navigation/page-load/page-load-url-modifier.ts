@@ -3,7 +3,7 @@
  * @module @wesib/generic
  */
 import { noop, valueProvider } from 'call-thru';
-import { ContextUpRef, FnContextKey } from 'context-values';
+import { ContextUpRef, FnContextKey } from 'context-values/updatable';
 
 /**
  * A signature of page load URL modifier function.
