@@ -7,10 +7,13 @@ import Mocked = jest.Mocked;
 describe('navigation', () => {
   describe('@HandleNavLinks', () => {
 
+    let baseURI: string;
     let element: Element;
     let anchor: HTMLAnchorElement;
 
     beforeEach(() => {
+      baseURI = 'http://localhost.localdomain:8888/';
+      jest.spyOn(document, 'baseURI', 'get').mockImplementation(() => baseURI);
       element = document.body.appendChild(document.createElement('test-element'));
       anchor = element.appendChild(document.createElement('a'));
     });
@@ -22,7 +25,7 @@ describe('navigation', () => {
     let pageURL: ValueTracker<URL>;
 
     beforeEach(() => {
-      pageURL = trackValue(new URL('http://localhost.localdomain:8888/current-page'));
+      pageURL = trackValue(new URL('current-page', baseURI));
       mockNavigation = {
         read: pageURL.read.thru_(url => ({ url })),
         open: jest.fn(),
@@ -56,7 +59,7 @@ describe('navigation', () => {
       expect(mockNavigation.open).not.toHaveBeenCalled();
     });
     it('prevents navigation if href is the same as current page', async () => {
-      anchor.href = pageURL.it.href;
+      anchor.href = '/current-page';
       await bootstrap();
 
       const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });

@@ -121,15 +121,15 @@ function defaultHandleNavLinks(
     return;
   }
 
-  const base = page.url;
-  const url = new URL(href, base);
+  const pageURL = page.url;
+  const url = new URL(href, target.ownerDocument!.baseURI);
 
-  if (url.origin !== base.origin) {
+  if (url.origin !== pageURL.origin) {
     return; // External link
   }
 
   event.preventDefault();
-  if (base.href !== url.href) {
+  if (pageURL.href !== url.href) {
     navigation.open(href);
   }
 }
