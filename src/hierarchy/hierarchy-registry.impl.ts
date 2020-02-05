@@ -1,5 +1,6 @@
+import { nextArgs } from 'call-thru';
 import { ContextRegistry } from 'context-values';
-import { AfterEvent, afterThe } from 'fun-events';
+import { AfterEvent, nextAfterEvent } from 'fun-events';
 import { HierarchyContext } from './hierarchy-context';
 
 /**
@@ -9,8 +10,8 @@ export function newHierarchyRegistry<T extends object>(
     up: AfterEvent<[HierarchyContext?]>,
 ): ContextRegistry<HierarchyContext<T>> {
   return new ContextRegistry(
-      key => up.keep.dig(
-          upper => ((upper ? upper.get(key) : afterThe()) as any),
+      key => up.keep.thru(
+          upper => upper ? nextAfterEvent(upper.get(key as any)) : nextArgs(),
       ) as any,
   );
 }

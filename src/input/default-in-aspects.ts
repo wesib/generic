@@ -3,7 +3,8 @@
  * @module @wesib/generic/input
  */
 import { DefaultNamespaceAliaser, DefaultRenderScheduler } from '@wesib/wesib';
-import { ContextKey__symbol, ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
+import { ContextKey__symbol, ContextValueOpts, ContextValues } from 'context-values';
+import { ContextUpKey, ContextUpRef } from 'context-values/updatable';
 import { afterAll, AfterEvent, EventKeeper } from 'fun-events';
 import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from 'input-aspects';
 

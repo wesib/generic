@@ -6,7 +6,7 @@ import {
   ComponentFactory,
   Feature,
 } from '@wesib/wesib';
-import { MultiContextUpKey, MultiContextUpRef } from 'context-values';
+import { MultiContextUpKey, MultiContextUpRef } from 'context-values/updatable';
 import { EventSupply } from 'fun-events';
 import { HierarchyContext } from './hierarchy-context';
 

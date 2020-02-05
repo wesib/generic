@@ -3,8 +3,8 @@
  * @module @wesib/generic/input
  */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
-import { valueProvider } from 'call-thru';
-import { afterAll, afterThe, EventKeeper, eventSupply } from 'fun-events';
+import { nextArg, valueProvider } from 'call-thru';
+import { afterAll, afterThe, EventKeeper, eventSupply, nextAfterEvent } from 'fun-events';
 import { InGroup } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { InputFromControl, NoInputFromControl } from './input-from-control';
@@ -37,9 +37,8 @@ export function SetInputName<T extends ComponentClass = Class>(
         const hierarchy = context.get(HierarchyContext);
 
         afterAll({
-          group: hierarchy.up.keep.dig_(
-              upper => upper ? upper.get(InputFromControl) : afterThe<[NoInputFromControl]>({}),
-          ).keep.thru_(
+          group: hierarchy.up.keep.thru_(
+              upper => upper ? nextAfterEvent(upper.get(InputFromControl)) : nextArg<NoInputFromControl>({}),
               ({ control }) => control && control.aspect(InGroup),
           ),
           control: hierarchy.get(InputFromControl),

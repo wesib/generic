@@ -3,8 +3,10 @@
  * @module @wesib/generic
  */
 import { BootstrapWindow } from '@wesib/wesib';
-import { ContextUpKey, ContextUpRef, ContextValueOpts, ContextValues } from 'context-values';
-import { AfterEvent, afterThe, EventKeeper } from 'fun-events';
+import { nextArg } from 'call-thru';
+import { ContextValueOpts, ContextValues } from 'context-values';
+import { ContextUpKey, ContextUpRef } from 'context-values/updatable';
+import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
 import Target = Navigation.Target;
@@ -50,15 +52,15 @@ class NavigationAgentKey
 
           const { document } = opts.context.get(BootstrapWindow);
 
-          return opts.seed.keep.dig(
+          return opts.seed.keep.thru(
               (...agents) => {
                 if (agents.length) {
-                  return afterThe(combinedAgent);
+                  return nextArg(combinedAgent);
                 }
 
                 const defaultProvider = (): AfterEvent<[NavigationAgent.Combined]> => afterThe(defaultNavigationAgent);
 
-                return opts.byDefault(defaultProvider) || defaultProvider();
+                return nextAfterEvent(opts.byDefault(defaultProvider) || defaultProvider());
 
                 function combinedAgent(
                     next: (this: void, target: Navigation.URLTarget) => void,
