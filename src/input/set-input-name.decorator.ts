@@ -4,7 +4,7 @@
  */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { nextArg, valueProvider } from 'call-thru';
-import { afterAll, afterThe, EventKeeper, eventSupply, nextAfterEvent } from 'fun-events';
+import { afterAll, afterThe, EventKeeper, nextAfterEvent } from 'fun-events';
 import { InGroup } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { InputFromControl, NoInputFromControl } from './input-from-control';
@@ -55,12 +55,7 @@ export function SetInputName<T extends ComponentClass = Class>(
                   || group === control) {
                 return;
               }
-
-              const supply = eventSupply(() => group.controls.remove(name));
-
-              group.controls.set(name, control);
-
-              return supply;
+              return group.controls.set(name, control);
             },
         );
       });
