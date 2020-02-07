@@ -1,7 +1,7 @@
 import { bootstrapComponents, BootstrapContext, ComponentMount } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { afterThe, eventSupply } from 'fun-events';
-import { InControl, InElement, InSupply, inText } from 'input-aspects';
+import { afterThe, eventSupply, eventSupplyOf } from 'fun-events';
+import { InControl, InElement, inText } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { InputFromControl } from './input-from-control';
 import { UseInputElement, UseInputElementDef } from './use-input-element.decorator';
@@ -73,7 +73,7 @@ describe('input', () => {
       input.remove();
       await Promise.resolve();
 
-      expect(ctrl.aspect(InSupply).isOff).toBe(true);
+      expect(eventSupplyOf(ctrl).isOff).toBe(true);
       context.get(HierarchyContext).get(InputFromControl).once(
           ({ control }) => {
             expect(control).toBeUndefined();
@@ -96,7 +96,7 @@ describe('input', () => {
       input.remove();
       await Promise.resolve();
 
-      expect(ctrl.aspect(InSupply).isOff).toBe(false);
+      expect(eventSupplyOf(ctrl).isOff).toBe(false);
       expect(supply.isOff).toBe(true);
       context.get(HierarchyContext).get(InputFromControl).once(
           ({ control }) => {

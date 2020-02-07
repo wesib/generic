@@ -2,8 +2,11 @@ import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import {
   EventEmitter,
   eventReceiver,
-  EventReceiver, eventSupply,
+  EventReceiver,
+  eventSupply,
   EventSupply,
+  EventSupply__symbol,
+  eventSupplyOf,
   noEventSupply,
   OnEvent,
   onEventBy,
@@ -120,17 +123,16 @@ class AttributeTracker extends ValueTracker<string | null, string> {
     });
   }
 
+  get [EventSupply__symbol](): EventSupply {
+    return eventSupplyOf(this._updates);
+  }
+
   get it(): string | null {
     return this._observer.element.getAttribute(this._name);
   }
 
   set it(value: string | null) {
     this._observer.element.setAttribute(this._name, value as string);
-  }
-
-  done(reason?: any): this {
-    this._updates.done(reason);
-    return this;
   }
 
 }

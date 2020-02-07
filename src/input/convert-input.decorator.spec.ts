@@ -1,6 +1,6 @@
 import { bootstrapComponents, Component, ComponentContext, ComponentMount } from '@wesib/wesib';
-import { afterSupplied, EventEmitter, eventSupply, EventSupply, trackValue } from 'fun-events';
-import { InControl, InStyledElement, InSupply, inValue } from 'input-aspects';
+import { afterSupplied, EventEmitter, eventSupply, EventSupply, eventSupplyOf, trackValue } from 'fun-events';
+import { InControl, InStyledElement, inValue } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { ConvertInput, ConvertInputDef } from './convert-input.decorator';
 import { InputFromControl, inputFromControl, NoInputFromControl } from './input-from-control';
@@ -65,7 +65,7 @@ describe('input', () => {
 
       converter.it = undefined;
 
-      expect(converted.aspect(InSupply).isOff).toBe(true);
+      expect(eventSupplyOf(converted).isOff).toBe(true);
     });
     it('cuts off provided supply when control unused', async () => {
 
@@ -83,7 +83,7 @@ describe('input', () => {
       converter.send();
 
       expect(supply.isOff).toBe(true);
-      expect(converted.aspect(InSupply).isOff).toBe(false);
+      expect(eventSupplyOf(converted).isOff).toBe(false);
     });
 
     async function bootstrap(

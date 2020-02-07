@@ -4,8 +4,8 @@
  */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { nextArg, nextArgs, NextCall } from 'call-thru';
-import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from 'fun-events';
-import { InControl, InConverter, InSupply } from 'input-aspects';
+import { afterAll, EventKeeper, EventSupply, eventSupplyOf, nextAfterEvent, OnEventCallChain } from 'fun-events';
+import { InControl, InConverter } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { DefaultInAspects } from './default-in-aspects';
 import { inputFromControl, InputFromControl, NoInputFromControl } from './input-from-control';
@@ -58,7 +58,7 @@ export function ConvertInput<T extends ComponentClass = Class>(
 
               const usageSupply = inputFromControl(context, control);
 
-              (supply || control.aspect(InSupply)).needs(usageSupply);
+              (supply || eventSupplyOf(control)).needs(usageSupply);
 
               return usageSupply;
             },
@@ -72,8 +72,8 @@ export function ConvertInput<T extends ComponentClass = Class>(
  * Converter definition of enclosing component's user input control.
  *
  * The returned converted control keeper may send an event supply as a second parameter. This supply will be cut off
- * once the input from converted control is no longer needed. Otherwise the control's input supply (`InSupply`) will
- * be cut off instead, and control would become unusable after that.
+ * once the input from converted control is no longer needed. Otherwise the control's input supply will be cut off
+ * instead, and control would become unusable after that.
  *
  * Configures {@link ConvertInput @ConvertInput} component decorator.
  */

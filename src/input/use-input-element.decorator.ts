@@ -4,8 +4,8 @@
  */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { nextArgs, NextCall } from 'call-thru';
-import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from 'fun-events';
-import { InControl, InConverter, InSupply } from 'input-aspects';
+import { afterAll, EventKeeper, EventSupply, eventSupplyOf, nextAfterEvent, OnEventCallChain } from 'fun-events';
+import { InControl, InConverter } from 'input-aspects';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
 import { inputFromControl } from './input-from-control';
@@ -63,7 +63,7 @@ export function UseInputElement<T extends ComponentClass = Class>(
 
                 const usageSupply = inputFromControl(context, control);
 
-                (supply || control.aspect(InSupply)).needs(usageSupply);
+                (supply || eventSupplyOf(control)).needs(usageSupply);
 
                 return usageSupply;
               },
@@ -101,8 +101,8 @@ export interface UseInputElementDef<T extends object = any> {
    * Constructs input control for element node found by {@link UseInputElement @UseInputElement} decorator.
    *
    * The returned control keeper may send an event supply as a second parameter. This supply will be cut off once
-   * the input from control is no longer needed. Otherwise the control's input supply (`InSupply`) will be cut off
-   * instead, and control would become unusable after that.
+   * the input from control is no longer needed. Otherwise the control's input supply will be cut off instead,
+   * and control would become unusable after that.
    *
    * @param node  Element node to construct input control for.
    * @param context  Component context the `@UseInputElement` decorator is applied to.
