@@ -20,7 +20,7 @@ import { InputToForm, NoInputToForm } from './input-to-form';
  *
  * @returns New component property decorator.
  */
-export function OnSubmit<T extends ComponentClass, Model, Elt extends HTMLElement = HTMLElement>(
+export function OnSubmit<T extends ComponentClass, Model = any, Elt extends HTMLElement = HTMLElement>(
     def: OnSubmitDef = {},
 ): ComponentPropertyDecorator<(form: InputToForm<Model, Elt>, event: Event) => void, T> {
 
