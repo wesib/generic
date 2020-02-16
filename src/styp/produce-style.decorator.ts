@@ -26,10 +26,7 @@ export function ProduceStyle<T extends ComponentClass>(
     options?: ComponentStypOptions,
 ): ComponentPropertyDecorator<
     | StypRules.Source
-    | ((this: InstanceType<T>) =>
-    | StypRule
-    | StypRules
-    | Promise<StypRule | StypRules>),
+    | (() => StypRule | StypRules | Promise<StypRule | StypRules>),
     T> {
   return ComponentProperty(({ get }) => ({
     componentDef: {
@@ -41,9 +38,7 @@ export function ProduceStyle<T extends ComponentClass>(
           context.whenReady(({ component }) => {
 
             const value = get(component);
-            const source = typeof value === 'function'
-                ? value.bind(component) as (() => StypRule | StypRules | Promise<StypRule | StypRules>)
-                : value;
+            const source: StypRules.Source = typeof value === 'function' ? value.bind(component) : value;
 
             ComponentStypOptions.produce(context, source, options);
           });

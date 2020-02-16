@@ -569,10 +569,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@wesib/wesib@^1.0.0-alpha.79":
-  version "1.0.0-alpha.79"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.79.tgz#bc72ac3bfa260be36d479c82f68047b71dffa6e1"
-  integrity sha512-yj+fXnzNxy4PSfUCIK75UriATLVVbpJF92Lb3j5QM4/3iSc47RB1tHGGr5ARhbYHYaLySrifxIAyYQXMXVqimQ==
+"@wesib/wesib@^1.0.0-alpha.80":
+  version "1.0.0-alpha.80"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.80.tgz#edc26f5ae63d516b91bd6c60a67aca96808dd5a0"
+  integrity sha512-YRv7nB2TdK2/Xqfxls+zLZrRPrqLzA1BMSMfoht85tDH/GU8VYG2ywxJztbkwBNag6cnqJKRF+Mh0JrTcOFIvQ==
 
 a-iterable@^2.5.0:
   version "2.5.0"
