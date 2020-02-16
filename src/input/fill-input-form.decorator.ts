@@ -62,8 +62,12 @@ export function FillInputForm<T extends ComponentClass = Class>(
 
                 const fillSupply = inputToForm(context, control, form!);
 
-                eventSupplyOf(form!).needs(control);
-                (supply || eventSupplyOf(control)).needs(fillSupply);
+                if (supply) {
+                  supply.needs(fillSupply);
+                } else {
+                  eventSupplyOf(form!).needs(fillSupply);
+                  eventSupplyOf(control).needs(fillSupply);
+                }
 
                 return fillSupply;
               },
