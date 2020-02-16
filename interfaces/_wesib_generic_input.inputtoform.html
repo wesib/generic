@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>NoInputFromControl | Wesib: Generic Components</title>
+	<title>InputToForm | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../modules/_wesib_generic_input.html">@wesib/generic/input</a>
 				</li>
 				<li>
-					<a href="_wesib_generic_input.noinputfromcontrol.html">NoInputFromControl</a>
+					<a href="_wesib_generic_input.inputtoform.html">InputToForm</a>
 				</li>
 			</ul>
-			<h1>Interface NoInputFromControl</h1>
+			<h1>Interface InputToForm&lt;Model, Elt&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -70,15 +70,42 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>No user input originated from control.</p>
+						<p>A form control to fill by user input.</p>
 					</div>
+					<p>An <a href="../modules/_wesib_generic_input.html#inputtoform-2">inputToForm</a> function can be used to initiate filling the form.</p>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>Model</h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Form model type.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>Elt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A type of HTML form element.</p>
+							</div>
+						</div>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">NoInputFromControl</span>
+						<a href="_wesib_generic_input.inputfromcontrol.html" class="tsd-signature-type">InputFromControl</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">InputToForm</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -89,7 +116,10 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic_input.noinputfromcontrol.html#control" class="tsd-kind-icon">control</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic_input.inputtoform.html#inputfromcontrol" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_wesib_generic_input.inputtoform.html#control" class="tsd-kind-icon">control</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic_input.inputtoform.html#form" class="tsd-kind-icon">form</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_wesib_generic_input.inputtoform.html#root" class="tsd-kind-icon">root</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,14 +128,69 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="control" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> control</h3>
-					<div class="tsd-signature tsd-kind-icon">control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
+					<a name="inputfromcontrol" class="tsd-anchor"></a>
+					<h3>Input<wbr>From<wbr>Control</h3>
+					<div class="tsd-signature tsd-kind-icon">Input<wbr>From<wbr>Control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SingleContextUpRef</span><span class="tsd-signature-symbol">&lt;</span><a href="_wesib_generic_input.inputfromcontrol.html" class="tsd-signature-type">InputFromControl</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic_input.noinputfromcontrol.html" class="tsd-signature-type">NoInputFromControl</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new SingleContextUpKey&lt;InputFromControl | NoInputFromControl&gt;(&#x27;input-from-control&#x27;,{byDefault: () &#x3D;&gt; ({}),},))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/input-from-control.ts#L39">src/input/input-from-control.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/input-from-control.ts#L46">src/input/input-from-control.ts:46</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A key of hierarchy context value containing a user input originated from control. Potentially
+							<a href="_wesib_generic_input.noinputfromcontrol.html">absent</a>.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="control" class="tsd-anchor"></a>
+					<h3>control</h3>
+					<div class="tsd-signature tsd-kind-icon">control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_wesib_generic_input.inputfromcontrol.html">InputFromControl</a>.<a href="_wesib_generic_input.inputfromcontrol.html#control">control</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/input-from-control.ts#L31">src/input/input-from-control.ts:31</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>User input control.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="form" class="tsd-anchor"></a>
+					<h3>form</h3>
+					<div class="tsd-signature tsd-kind-icon">form<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Elt</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/input-to-form.ts#L28">src/input/input-to-form.ts:28</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Input form element control.</p>
+						</div>
+						<p>Unlike input form control this one is not supposed to be submitted. But it contains a <code>&lt;form&gt;</code> element issuing a
+						<code>submit</code> event.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="root" class="tsd-anchor"></a>
+					<h3>root</h3>
+					<div class="tsd-signature tsd-kind-icon">root<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentContext</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_wesib_generic_input.inputfromcontrol.html">InputFromControl</a>.<a href="_wesib_generic_input.inputfromcontrol.html#root">root</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/input-from-control.ts#L26">src/input/input-from-control.ts:26</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Root component context the input is initiated for.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -134,21 +219,30 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="_wesib_generic_input.inputfromcontrol.html" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="_wesib_generic_input.inputtoform.html" class="tsd-kind-icon">Input<wbr>ToForm</a>
-					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_wesib_generic_input.noinputfromcontrol.html" class="tsd-kind-icon">No<wbr>Input<wbr>From<wbr>Control</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="_wesib_generic_input.inputtoform.html" class="tsd-kind-icon">Input<wbr>ToForm</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_wesib_generic_input.noinputfromcontrol.html#control" class="tsd-kind-icon">control</a>
+								<a href="_wesib_generic_input.inputtoform.html#inputfromcontrol" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_wesib_generic_input.inputtoform.html#control" class="tsd-kind-icon">control</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_wesib_generic_input.inputtoform.html#form" class="tsd-kind-icon">form</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_wesib_generic_input.inputtoform.html#root" class="tsd-kind-icon">root</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_wesib_generic_input.noinputfromcontrol.html" class="tsd-kind-icon">No<wbr>Input<wbr>From<wbr>Control</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="_wesib_generic_input.noinputtoform.html" class="tsd-kind-icon">No<wbr>Input<wbr>ToForm</a>
 					</li>

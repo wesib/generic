@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>UseInputElementDef | Wesib: Generic Components</title>
+	<title>FillInputFormDef | Wesib: Generic Components</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../modules/_wesib_generic_input.html">@wesib/generic/input</a>
 				</li>
 				<li>
-					<a href="_wesib_generic_input.useinputelementdef.html">UseInputElementDef</a>
+					<a href="_wesib_generic_input.fillinputformdef.html">FillInputFormDef</a>
 				</li>
 			</ul>
-			<h1>Interface UseInputElementDef&lt;T&gt;</h1>
+			<h1>Interface FillInputFormDef&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -70,9 +70,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A definition of element to use as an <a href="_wesib_generic_input.inputfromcontrol.html">origin of user input</a>.</p>
+						<p>A definition of form element to <a href="_wesib_generic_input.inputtoform.html">fill by user input</a>.</p>
 					</div>
-					<p>Configures <a href="../modules/_wesib_generic_input.html#useinputelement">@UseInputElement</a> component decorator.</p>
+					<p>Configures <a href="../modules/_wesib_generic_input.html#fillinputform">@FillInputForm</a> component decorator.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
@@ -92,7 +92,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">UseInputElementDef</span>
+						<span class="target">FillInputFormDef</span>
 					</li>
 				</ul>
 			</section>
@@ -103,14 +103,14 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic_input.useinputelementdef.html#pick" class="tsd-kind-icon">pick</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic_input.useinputelementdef.html#select" class="tsd-kind-icon">select</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic_input.fillinputformdef.html#pick" class="tsd-kind-icon">pick</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_wesib_generic_input.fillinputformdef.html#select" class="tsd-kind-icon">select</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_wesib_generic_input.useinputelementdef.html#makecontrol" class="tsd-kind-icon">make<wbr>Control</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_wesib_generic_input.fillinputformdef.html#makeform" class="tsd-kind-icon">make<wbr>Form</a></li>
 							</ul>
 						</section>
 					</div>
@@ -124,7 +124,7 @@
 					<div class="tsd-signature tsd-kind-icon">pick<span class="tsd-signature-symbol">:</span> <a href="_wesib_generic.elementpickmode.html" class="tsd-signature-type">ElementPickMode</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/use-input-element.decorator.ts#L98">src/input/use-input-element.decorator.ts:98</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/fill-input-form.decorator.ts#L98">src/input/fill-input-form.decorator.ts:98</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -140,39 +140,40 @@
 					<div class="tsd-signature tsd-kind-icon">select<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/use-input-element.decorator.ts#L91">src/input/use-input-element.decorator.ts:91</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/fill-input-form.decorator.ts#L91">src/input/fill-input-form.decorator.ts:91</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>CSS selector of input element to use.</p>
+							<p>CSS selector of form element to fill.</p>
 						</div>
-						<p><code>input</code> by default.</p>
+						<p><code>form</code> by default.</p>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="makecontrol" class="tsd-anchor"></a>
-					<h3>make<wbr>Control</h3>
+					<a name="makeform" class="tsd-anchor"></a>
+					<h3>make<wbr>Form</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">make<wbr>Control<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>aspects<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Conversion</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">From</span><span class="tsd-signature-symbol">&gt;</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">To</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Conversion</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">To</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">; </span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>node<span class="tsd-signature-symbol">: </span><a href="_wesib_generic.rawelementnode.html" class="tsd-signature-type">RawElementNode</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventSupply</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">make<wbr>Form<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>aspects<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Conversion</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">From</span><span class="tsd-signature-symbol">&gt;</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">To</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Conversion</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">To</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">; </span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>node<span class="tsd-signature-symbol">: </span><a href="_wesib_generic.rawelementnode.html" class="tsd-signature-type">RawElementNode</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventSupply</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/use-input-element.decorator.ts#L113">src/input/use-input-element.decorator.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/870d739/src/input/fill-input-form.decorator.ts#L114">src/input/fill-input-form.decorator.ts:114</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Constructs input control for element node found by <a href="../modules/_wesib_generic_input.html#useinputelement">@UseInputElement</a> decorator.</p>
+									<p>Constructs form control and form element control for element node found by <a href="../modules/_wesib_generic_input.html#fillinputform">@FillInputForm</a>
+									decorator.</p>
 								</div>
-								<p>The returned control keeper may send an event supply as a second parameter. This supply will be cut off once
-									the input from control is no longer needed. Otherwise the control&#39;s input supply will be cut off instead,
-								and control would become unusable after that.</p>
+								<p>The returned control keeper may send an event supply as a third parameter. This supply will be cut off once
+									the form filling is no longer needed. Otherwise the form&#39;s control supply will be cut off instead,
+								and it would become unusable after that.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -188,20 +189,20 @@
 										<li class="tsd-parameter">
 											<h5>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 											<div class="tsd-comment tsd-typography">
-												<p>Component context the <a href="../modules/_wesib_generic_input.html#useinputelement">@UseInputElement</a> decorator is applied to.</p>
+												<p>Component context the <a href="../modules/_wesib_generic_input.html#fillinputform">@FillInputForm</a> decorator is applied to.</p>
 											</div>
 										</li>
 										<li class="tsd-parameter">
 											<h5>node<span class="tsd-signature-symbol">: </span><a href="_wesib_generic.rawelementnode.html" class="tsd-signature-type">RawElementNode</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
 											<div class="tsd-comment tsd-typography">
-												<p>Element node to construct input control for.</p>
+												<p>Element node to construct form element control for.</p>
 											</div>
 										</li>
 									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventSupply</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
-							<p>Either input control, its keeper, or nothing.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventSupply</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+							<p>Either form control and form element control tuple, their keeper, or nothing.</p>
 						</li>
 					</ul>
 				</section>
@@ -226,9 +227,24 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="_wesib_generic_input.fillinputformdef.html" class="tsd-kind-icon">Fill<wbr>Input<wbr>Form<wbr>Def</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_wesib_generic_input.fillinputformdef.html#pick" class="tsd-kind-icon">pick</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_wesib_generic_input.fillinputformdef.html#select" class="tsd-kind-icon">select</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_wesib_generic_input.fillinputformdef.html#makeform" class="tsd-kind-icon">make<wbr>Form</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="_wesib_generic_input.inputfromcontrol.html" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a>
 					</li>
@@ -244,24 +260,9 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="_wesib_generic_input.onsubmitdef.html" class="tsd-kind-icon">On<wbr>Submit<wbr>Def</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="_wesib_generic_input.useinputelementdef.html" class="tsd-kind-icon">Use<wbr>Input<wbr>Element<wbr>Def</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_wesib_generic_input.useinputelementdef.html#pick" class="tsd-kind-icon">pick</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_wesib_generic_input.useinputelementdef.html#select" class="tsd-kind-icon">select</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="_wesib_generic_input.useinputelementdef.html#makecontrol" class="tsd-kind-icon">make<wbr>Control</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="../modules/_wesib_generic_input.html#convertinputdef" class="tsd-kind-icon">Convert<wbr>Input<wbr>Def</a>
 					</li>
