@@ -41,8 +41,8 @@ export interface NoInputToForm {
  * A key of hierarchy context value containing a form element to fill by user input. Potentially
  * {@link NoInputToForm absent}.
  */
-export const InputToForm: SingleContextUpRef<InputToForm | NoInputToForm> = (
-    /*#__PURE__*/ new SingleContextUpKey<InputToForm | NoInputToForm>(
+export const InputToForm: SingleContextUpRef<InputToForm<any, any> | NoInputToForm> = (
+    /*#__PURE__*/ new SingleContextUpKey<InputToForm<any, any> | NoInputToForm>(
         'input-to-form',
         {
           byDefault: () => ({}),
@@ -85,6 +85,8 @@ export function inputToForm<Model, Elt extends HTMLElement>(
     via: InputToForm,
   });
 
-  return eventSupply(off).needs(control);
+  return eventSupply(off)
+      .needs(control)
+      .needs(form);
 }
 

@@ -1,7 +1,7 @@
 import { bootstrapComponents, ComponentMount } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { afterThe, eventSupply, eventSupplyOf } from 'fun-events';
-import { InControl, InElement, InFormElement, inFormElement, InGroup, inGroup, inText } from 'input-aspects';
+import { InControl, InElement, InFormElement, inFormElement, InGroup, inGroup } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { FillInputForm, FillInputFormDef } from './fill-input-form.decorator';
 import { InputFromControl } from './input-from-control';
@@ -27,14 +27,7 @@ describe('input', () => {
 
     it('fills <form> element by default', async () => {
 
-      const { context } = await bootstrap({
-        makeForm({ node }) {
-
-          const group = inGroup<TestData>({});
-
-          return [group, inFormElement(node.element, { form: group })];
-        },
-      });
+      const { context } = await bootstrap();
 
       context.get(HierarchyContext).get(InputToForm).once(
           ({ control, form }) => {
@@ -93,14 +86,7 @@ describe('input', () => {
     });
     it('detaches unused form', async () => {
 
-      const { context } = await bootstrap({
-        makeForm({ node }) {
-
-          const group = inGroup<TestData>({});
-
-          return [group, inFormElement(node.element, { form: group })];
-        },
-      });
+      const { context } = await bootstrap();
 
       let ctrl!: InControl<any>;
       let formCtrl!: InFormElement;
@@ -170,7 +156,14 @@ describe('input', () => {
       );
     });
 
-    async function bootstrap(def: FillInputFormDef): Promise<ComponentMount> {
+    async function bootstrap(def: FillInputFormDef = {
+      makeForm({ node, aspects }) {
+
+        const group = inGroup<TestData>({}, { aspects });
+
+        return [group, inFormElement(node.element, { form: group })];
+      },
+    }): Promise<ComponentMount> {
 
       @FillInputForm(def)
       class TestElement {}
