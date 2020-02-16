@@ -15,6 +15,8 @@ import { HierarchyContext } from '../hierarchy';
  * their hierarchy contexts to participate in user input.
  *
  * An [[inputFromControl]] function can be used to initiate user input.
+ *
+ * @typeparam Value  Input value type.
  */
 export interface InputFromControl<Value = any> {
 
@@ -43,7 +45,7 @@ export interface NoInputFromControl {
  */
 export const InputFromControl: SingleContextUpRef<InputFromControl | NoInputFromControl> = (
     /*#__PURE__*/ new SingleContextUpKey<InputFromControl | NoInputFromControl>(
-        'input-receiver',
+        'input-from-control',
         {
           byDefault: () => ({}),
         },
@@ -55,6 +57,7 @@ export const InputFromControl: SingleContextUpRef<InputFromControl | NoInputFrom
  *
  * Constructs an [[InputFromControl]] instance and makes it available in `root` component's hierarchy.
  *
+ * @typeparam Value  Input value type.
  * @param root  Root component context to initiate user input for.
  * @param control  User input control.
  *

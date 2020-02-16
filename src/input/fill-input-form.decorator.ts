@@ -5,27 +5,26 @@
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { nextArgs, NextCall } from 'call-thru';
 import { afterAll, EventKeeper, EventSupply, eventSupplyOf, nextAfterEvent, OnEventCallChain } from 'fun-events';
-import { InControl, InConverter } from 'input-aspects';
+import { InControl, InConverter, InFormElement } from 'input-aspects';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
-import { inputFromControl } from './input-from-control';
+import { inputToForm } from './input-to-form';
 
 /**
- * Constructs component decorator that finds input element and uses it as an {@link InputFromControl origin of user
- * input}.
+ * Constructs component decorator that finds form element to {@link InputToForm fill by user input}.
  *
  * Enables [[ComponentTreeSupport]] feature.
  *
  * @typeparam T  A type of decorated component class.
- * @param def  Input element usage definition.
+ * @param def  Form element fill definition.
  *
  * @returns New component decorator.
  */
-export function UseInputElement<T extends ComponentClass = Class>(
-    def: UseInputElementDef<InstanceType<T>>,
+export function FillInputForm<T extends ComponentClass = Class>(
+    def: FillInputFormDef<InstanceType<T>>,
 ): ComponentDecorator<T> {
 
-  const { select = 'input', pick = { deep: true, all: true } } = def;
+  const { select = 'form', pick = { deep: true, all: true } } = def;
 
   return Component({
     feature: {
@@ -43,29 +42,30 @@ export function UseInputElement<T extends ComponentClass = Class>(
           }).keep.thru(({
             node: [node],
             aspects: [aspects],
-          }): NextCall<OnEventCallChain, [InControl<any>?, EventSupply?]> => {
+          }): NextCall<OnEventCallChain, [InControl<any>, InFormElement, EventSupply?] | []> => {
             if (!node) {
               return nextArgs();
             }
 
-            const control = def.makeControl({ node, context, aspects });
+            const tuple = def.makeForm({ node, context, aspects });
 
-            if (!control) {
+            if (!tuple) {
               return nextArgs();
             }
 
-            return control instanceof InControl ? nextArgs(control) : nextAfterEvent(control);
+            return Array.isArray(tuple) ? nextArgs(...tuple) : nextAfterEvent(tuple);
           }).tillOff(connectSupply).consume(
-              (control?: InControl<any>, supply?: EventSupply) => {
+              (control?, form?, supply?) => {
                 if (!control) {
                   return;
                 }
 
-                const usageSupply = inputFromControl(context, control);
+                const fillSupply = inputToForm(context, control, form!);
 
-                (supply || eventSupplyOf(control)).needs(usageSupply);
+                eventSupplyOf(form!).needs(control);
+                (supply || eventSupplyOf(control)).needs(fillSupply);
 
-                return usageSupply;
+                return fillSupply;
               },
           );
         });
@@ -75,18 +75,18 @@ export function UseInputElement<T extends ComponentClass = Class>(
 }
 
 /**
- * A definition of element to use as an {@link InputFromControl origin of user input}.
+ * A definition of form element to {@link InputToForm fill by user input}.
  *
- * Configures {@link UseInputElement @UseInputElement} component decorator.
+ * Configures {@link FillInputForm @FillInputForm} component decorator.
  *
  * @typeparam T  A type of component.
  */
-export interface UseInputElementDef<T extends object = any> {
+export interface FillInputFormDef<T extends object = any> {
 
   /**
-   * CSS selector of input element to use.
+   * CSS selector of form element to fill.
    *
-   * `input` by default.
+   * `form` by default.
    */
   readonly select?: string;
 
@@ -98,19 +98,20 @@ export interface UseInputElementDef<T extends object = any> {
   readonly pick?: ElementPickMode;
 
   /**
-   * Constructs input control for element node found by {@link UseInputElement @UseInputElement} decorator.
+   * Constructs form control and form element control for element node found by {@link FillInputForm @FillInputForm}
+   * decorator.
    *
-   * The returned control keeper may send an event supply as a second parameter. This supply will be cut off once
-   * the input from control is no longer needed. Otherwise the control's input supply will be cut off instead,
-   * and control would become unusable after that.
+   * The returned control keeper may send an event supply as a third parameter. This supply will be cut off once
+   * the form filling is no longer needed. Otherwise the form's control supply will be cut off instead,
+   * and it would become unusable after that.
    *
-   * @param node  Element node to construct input control for.
-   * @param context  Component context the {@link UseInputElement @UseInputElement} decorator is applied to.
+   * @param node  Element node to construct form element control for.
+   * @param context  Component context the {@link FillInputForm @FillInputForm} decorator is applied to.
    * @param aspects  Default input aspect converter. This is a value of [[DefaultInputAspect]].
    *
-   * @returns Either input control, its keeper, or nothing.
+   * @returns Either form control and form element control tuple, their keeper, or nothing.
    */
-  makeControl(
+  makeForm(
       {
         node,
         context,
@@ -121,8 +122,8 @@ export interface UseInputElementDef<T extends object = any> {
         aspects: InConverter.Aspect<any, any>;
       },
   ):
-      | InControl<any>
-      | EventKeeper<[InControl<any>?, EventSupply?]>
+      | [InControl<any>, InFormElement]
+      | EventKeeper<[InControl<any>, InFormElement, EventSupply?] | []>
       | null
       | undefined;
 

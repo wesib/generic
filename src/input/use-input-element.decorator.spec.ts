@@ -1,4 +1,4 @@
-import { bootstrapComponents, BootstrapContext, ComponentMount } from '@wesib/wesib';
+import { bootstrapComponents, ComponentMount } from '@wesib/wesib';
 import { noop } from 'call-thru';
 import { afterThe, eventSupply, eventSupplyOf } from 'fun-events';
 import { InControl, InElement, inText } from 'input-aspects';
@@ -22,7 +22,7 @@ describe('input', () => {
 
     it('uses <input> element by default', async () => {
 
-      const { context } = await newElement({
+      const { context } = await bootstrap({
         makeControl: ({ node }) => inText(node.element),
       });
 
@@ -35,7 +35,7 @@ describe('input', () => {
     });
     it('does not use non-matching element', async () => {
 
-      const { context } = await newElement({
+      const { context } = await bootstrap({
         pick: { all: false },
         makeControl: ({ node }) => inText(node.element),
       });
@@ -46,9 +46,9 @@ describe('input', () => {
           },
       );
     });
-    it('does not use element if control is non constructed', async () => {
+    it('does not use element if control is not constructed', async () => {
 
-      const { context } = await newElement({
+      const { context } = await bootstrap({
         makeControl: noop,
       });
 
@@ -60,7 +60,7 @@ describe('input', () => {
     });
     it('detaches unused control', async () => {
 
-      const { context } = await newElement({
+      const { context } = await bootstrap({
         makeControl: ({ node }) => inText(node.element),
       });
 
@@ -83,7 +83,7 @@ describe('input', () => {
     it('cuts off provided supply when control unused', async () => {
 
       const supply = eventSupply();
-      const { context } = await newElement({
+      const { context } = await bootstrap({
         makeControl: ({ node }) => afterThe(inText(node.element), supply),
       });
 
@@ -105,14 +105,12 @@ describe('input', () => {
       );
     });
 
-    async function newElement(def: UseInputElementDef): Promise<ComponentMount> {
+    async function bootstrap(def: UseInputElementDef): Promise<ComponentMount> {
 
       @UseInputElement(def)
       class TestElement {}
 
-      const bsContext = await new Promise<BootstrapContext>(
-          resolve => bootstrapComponents(TestElement).whenReady(resolve),
-      );
+      const bsContext = await new Promise(bootstrapComponents(TestElement).whenReady);
       const factory = await bsContext.whenDefined(TestElement);
 
       return factory.mountTo(element);
