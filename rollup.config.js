@@ -23,7 +23,6 @@ export default {
       tsconfig: 'tsconfig.main.json',
       cacheRoot: 'target/.rts2_cache',
       useTsconfigDeclarationDir: true,
-      objectHashIgnoreUnknownHack: true,
     }),
     nodeResolve(),
     sourcemaps(),
