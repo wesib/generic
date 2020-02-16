@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { ComponentClass, ComponentDef } from '@wesib/wesib';
-import { StypRules } from 'style-producer';
+import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
+import { StypRule, StypRules } from 'style-producer';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypOptions } from './component-styp-options';
 
@@ -24,36 +24,31 @@ import { ComponentStypOptions } from './component-styp-options';
  */
 export function ProduceStyle<T extends ComponentClass>(
     options?: ComponentStypOptions,
-): <V extends StypRules.Source | (() => StypRules.Source)>(
-    target: InstanceType<T>,
-    propertyKey: string | symbol,
-    descriptor?: TypedPropertyDescriptor<V>,
-) => any | void {
-  return (target: InstanceType<T>, propertyKey: string | symbol) => {
+): ComponentPropertyDecorator<
+    | StypRules.Source
+    | ((this: InstanceType<T>) =>
+    | StypRule
+    | StypRules
+    | Promise<StypRule | StypRules>),
+    T> {
+  return ComponentProperty(({ get }) => ({
+    componentDef: {
+      feature: {
+        needs: BasicStyleProducerSupport,
+      },
+      setup(defContext) {
+        defContext.whenComponent(context => {
+          context.whenReady(({ component }) => {
 
-    const componentType = target.constructor as T;
+            const value = get(component);
+            const source = typeof value === 'function'
+                ? value.bind(component) as (() => StypRule | StypRules | Promise<StypRule | StypRules>)
+                : value;
 
-    ComponentDef.define(
-        componentType,
-        {
-          setup(defContext) {
-            defContext.whenComponent(componentContext => {
-              componentContext.whenReady(({ component }) => {
-
-                const property = component[propertyKey];
-
-                ComponentStypOptions.produce(
-                    componentContext,
-                    typeof property === 'function' ? property.bind(component) : property,
-                    options,
-                );
-              });
-            });
-          },
-          feature: {
-            needs: [BasicStyleProducerSupport],
-          },
-        },
-    );
-  };
+            ComponentStypOptions.produce(context, source, options);
+          });
+        });
+      },
+    },
+  }));
 }
