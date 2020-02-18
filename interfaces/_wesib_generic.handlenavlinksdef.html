@@ -109,6 +109,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_wesib_generic.handlenavlinksdef.html#handle" class="tsd-kind-icon">handle</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_wesib_generic.handlenavlinksdef.html#href" class="tsd-kind-icon">href</a></li>
 							</ul>
 						</section>
 					</div>
@@ -122,7 +123,7 @@
 					<div class="tsd-signature tsd-kind-icon">event<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e245188/src/navigation/handle-nav-links.decorator.ts#L69">src/navigation/handle-nav-links.decorator.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/handle-nav-links.decorator.ts#L69">src/navigation/handle-nav-links.decorator.ts:69</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -145,7 +146,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/e245188/src/navigation/handle-nav-links.decorator.ts#L86">src/navigation/handle-nav-links.decorator.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/handle-nav-links.decorator.ts#L86">src/navigation/handle-nav-links.decorator.ts:86</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -172,7 +173,7 @@
 										<li class="tsd-parameter">
 											<h5>event<span class="tsd-signature-symbol">: </span><a href="../modules/_wesib_generic.html#enterpageevent.event" class="tsd-signature-type">Event</a></h5>
 											<div class="tsd-comment tsd-typography">
-												<p>An event to handle.</p>
+												<p>A click event to handle.</p>
 											</div>
 										</li>
 										<li class="tsd-parameter">
@@ -191,6 +192,39 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="href" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> href</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">href<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><a href="../modules/_wesib_generic.html#enterpageevent.event" class="tsd-signature-type">Event</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/handle-nav-links.decorator.ts#L109">src/navigation/handle-nav-links.decorator.ts:109</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Extracts hyper-reference of clicked element.</p>
+								</div>
+								<p>Extracts hyper-reference from <code>href</code> attribute of event target.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>event: <a href="../modules/_wesib_generic.html#enterpageevent.event" class="tsd-signature-type">Event</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A click event to handle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h4>
+							<p>Extracted hyper-reference, or nothing if it can not be extracted. Event will be ignored in this case.</p>
 						</li>
 					</ul>
 				</section>
@@ -225,6 +259,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="_wesib_generic.handlenavlinksdef.html#handle" class="tsd-kind-icon">handle</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_wesib_generic.handlenavlinksdef.html#href" class="tsd-kind-icon">href</a>
 							</li>
 						</ul>
 					</li>
