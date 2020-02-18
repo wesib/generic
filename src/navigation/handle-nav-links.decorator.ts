@@ -124,7 +124,7 @@ function defaultNavLinkHref(event: Event): string | null {
  * @internal
  */
 function defaultHandleNavLinks(
-    { href = defaultNavLinkHref }: HandleNavLinksDef,
+    def: HandleNavLinksDef,
 ): (
     opts: {
       event: Event;
@@ -132,21 +132,24 @@ function defaultHandleNavLinks(
       navigation: Navigation;
     },
 ) => void {
+
+  const getHref = def.href ? def.href.bind(def) : defaultNavLinkHref;
+
   return ({
     event,
     page,
     navigation,
   }) => {
 
-    const targetHref = href(event);
+    const href = getHref(event);
 
-    if (targetHref == null) {
+    if (href == null) {
       return;
     }
 
     const target = event.target as Element;
     const pageURL = page.url;
-    const url = new URL(targetHref, target.ownerDocument!.baseURI);
+    const url = new URL(href, target.ownerDocument!.baseURI);
 
     if (url.origin !== pageURL.origin) {
       return; // External link
@@ -154,7 +157,7 @@ function defaultHandleNavLinks(
 
     event.preventDefault();
     if (pageURL.href !== url.href) {
-      navigation.open(targetHref);
+      navigation.open(href);
     }
   };
 }
