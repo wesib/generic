@@ -66,7 +66,7 @@ export function IncludePage<T extends ComponentClass = Class>(
 
           const range = document.createRange();
 
-          range.selectNodeContents(context.contentRoot as any);
+          range.selectNodeContents(context.contentRoot);
 
           navigation.read.once(page => {
             page.put(
