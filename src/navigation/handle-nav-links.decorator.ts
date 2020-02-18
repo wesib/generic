@@ -23,7 +23,7 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
     def: HandleNavLinksDef<InstanceType<T>> = {},
 ): ComponentDecorator<T> {
 
-  const handle = def.handle ? def.handle.bind(def) : defaultHandleNavLinks;
+  const handle = def.handle ? def.handle.bind(def) : defaultHandleNavLinks(def);
   const events = new ArraySet(def.event || 'click');
 
   return Component({
@@ -78,7 +78,7 @@ export interface HandleNavLinksDef<T extends object = any> {
    * it {@link Navigation.open opens} a page at this URL instead of default action. It also prevents navigation
    * if URL didn't change.
    *
-   * @param event  An event to handle.
+   * @param event  A click event to handle.
    * @param page  Current navigation page.
    * @param navigation  Navigation service to use.
    * @param context  Component context.
@@ -97,39 +97,64 @@ export interface HandleNavLinksDef<T extends object = any> {
       },
   ): void;
 
+  /**
+   * Extracts hyper-reference of clicked element.
+   *
+   * Extracts hyper-reference from `href` attribute of event target.
+   *
+   * @param event  A click event to handle.
+   *
+   * @returns Extracted hyper-reference, or nothing if it can not be extracted. Event will be ignored in this case.
+   */
+  href?(event: Event): string | undefined | null;
+
+}
+
+/**
+ * @internal
+ */
+function defaultNavLinkHref(event: Event): string | null {
+
+  const target = event.target as Element;
+
+  return target.getAttribute('href');
 }
 
 /**
  * @internal
  */
 function defaultHandleNavLinks(
-    {
-      event,
-      page,
-      navigation,
-    }: {
+    { href = defaultNavLinkHref }: HandleNavLinksDef,
+): (
+    opts: {
       event: Event;
       page: Page;
       navigation: Navigation;
     },
-): void {
+) => void {
+  return ({
+    event,
+    page,
+    navigation,
+  }) => {
 
-  const target = event.target as HTMLAnchorElement;
-  const href = target.getAttribute('href');
+    const targetHref = href(event);
 
-  if (href == null) {
-    return;
-  }
+    if (targetHref == null) {
+      return;
+    }
 
-  const pageURL = page.url;
-  const url = new URL(href, target.ownerDocument!.baseURI);
+    const target = event.target as Element;
+    const pageURL = page.url;
+    const url = new URL(targetHref, target.ownerDocument!.baseURI);
 
-  if (url.origin !== pageURL.origin) {
-    return; // External link
-  }
+    if (url.origin !== pageURL.origin) {
+      return; // External link
+    }
 
-  event.preventDefault();
-  if (pageURL.href !== url.href) {
-    navigation.open(href);
-  }
+    event.preventDefault();
+    if (pageURL.href !== url.href) {
+      navigation.open(targetHref);
+    }
+  };
 }

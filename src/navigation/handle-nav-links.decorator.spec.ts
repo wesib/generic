@@ -36,15 +36,24 @@ describe('navigation', () => {
       anchor.href = '/test';
       await bootstrap();
 
-      const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
 
       expect(anchor.dispatchEvent(event)).toBe(false);
       expect(mockNavigation.open).toHaveBeenCalledWith('/test');
     });
+    it('navigates to extracted href instead of default action', async () => {
+      anchor.href = '/test';
+      await bootstrap({ href: () => '/other' });
+
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+
+      expect(anchor.dispatchEvent(event)).toBe(false);
+      expect(mockNavigation.open).toHaveBeenCalledWith('/other');
+    });
     it('handles click with default handler if anchor href is absent', async () => {
       await bootstrap();
 
-      const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
 
       expect(anchor.dispatchEvent(event)).toBe(true);
       expect(mockNavigation.open).not.toHaveBeenCalled();
@@ -53,7 +62,7 @@ describe('navigation', () => {
       anchor.href = 'https://localhost.localdomain';
       await bootstrap();
 
-      const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
 
       expect(anchor.dispatchEvent(event)).toBe(true);
       expect(mockNavigation.open).not.toHaveBeenCalled();
@@ -62,7 +71,7 @@ describe('navigation', () => {
       anchor.href = '/current-page';
       await bootstrap();
 
-      const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
 
       expect(anchor.dispatchEvent(event)).toBe(false);
       expect(mockNavigation.open).not.toHaveBeenCalled();
@@ -71,7 +80,7 @@ describe('navigation', () => {
       anchor.href = '/test';
       await bootstrap({ event: 'test:click' });
 
-      const event = new KeyboardEvent('test:click', { bubbles: true, cancelable: true });
+      const event = new MouseEvent('test:click', { bubbles: true, cancelable: true });
 
       expect(anchor.dispatchEvent(event)).toBe(false);
       expect(mockNavigation.open).toHaveBeenCalledWith('/test');
@@ -80,7 +89,7 @@ describe('navigation', () => {
       anchor.href = '/test';
       await bootstrap({ event: 'test:click' });
 
-      const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
 
       expect(anchor.dispatchEvent(event)).toBe(true);
       expect(mockNavigation.open).not.toHaveBeenCalled();
@@ -92,7 +101,7 @@ describe('navigation', () => {
       anchor.href = '/test';
 
       const { context } = await bootstrap({ handle: mockHandler });
-      const event = new KeyboardEvent('click', { bubbles: true, cancelable: true });
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
 
       anchor.dispatchEvent(event);
       expect(mockHandler).toHaveBeenCalledWith({
