@@ -14,6 +14,7 @@ import {
 import { noop } from 'call-thru';
 import { importNodeContent } from '../../util';
 import { Navigation } from '../navigation';
+import { Page } from '../page';
 import { PageLoadParam } from './page-load-param';
 import { PageFragmentRequest } from './page-load-request';
 import { PageLoadResponse } from './page-load-response';
@@ -38,6 +39,7 @@ export function IncludePage<T extends ComponentClass = Class>(
 ): ComponentDecorator<T> {
 
   const onResponse = def.onResponse ? def.onResponse.bind(def) : noop;
+  const contentKey = def.contentKey ? def.contentKey.bind(def) : defaultPageContentKey;
 
   return Component({
     feature: {
@@ -49,6 +51,7 @@ export function IncludePage<T extends ComponentClass = Class>(
         const document = context.get(BootstrapWindow).document;
         const schedule = context.get(DefaultRenderScheduler)();
         const navigation = context.get(Navigation);
+        let lastPageURL: string | undefined = contentKey(navigation.page);
         const detectFragment = (): PageFragmentRequest => {
 
           const { fragment } = def;
@@ -82,28 +85,44 @@ export function IncludePage<T extends ComponentClass = Class>(
           });
 
           function handleResponse(response: PageLoadResponse): void {
-            if (response.ok) {
-              schedule(() => {
-                range.deleteContents();
 
-                const target = document.createDocumentFragment();
-                const { fragment } = response;
+            const newPageURL = contentKey(response.page);
 
-                if (fragment) {
-                  importNodeContent(fragment, target);
-                  range.insertNode(target);
-                }
-
-                onResponse({ context, range, response });
-              });
-            } else {
-              schedule(() => onResponse({ context, range, response }));
+            if (newPageURL === lastPageURL) {
+              return; // Only hash changed. Do not refresh the page.
             }
+
+            if (!response.ok) {
+              schedule(() => onResponse({ context, range, response }));
+              return;
+            }
+
+            lastPageURL = newPageURL;
+            schedule(() => {
+              range.deleteContents();
+
+              const target = document.createDocumentFragment();
+              const { fragment } = response;
+
+              if (fragment) {
+                importNodeContent(fragment, target);
+                range.insertNode(target);
+              }
+
+              onResponse({ context, range, response });
+            });
           }
         });
       });
     },
   });
+}
+
+/**
+ * @internal
+ */
+function defaultPageContentKey({ url }: Page): string {
+  return new URL('', url).href;
 }
 
 /**
@@ -120,7 +139,20 @@ export interface IncludePageDef<T extends object = any> {
    *
    * By default uses custom element identifier if present, or element tag name otherwise.
    */
-  fragment?: PageFragmentRequest;
+  readonly fragment?: PageFragmentRequest;
+
+  /**
+   * Builds content key for the given page.
+   *
+   * The loaded content will replace already included one only when their content key differ.
+   *
+   * By default uses page URL without hash part as a key. This prevents content refresh when only URL hash changes.
+   *
+   * @param page  Target page. Either loaded or not.
+   *
+   * @returns Content key.
+   */
+  contentKey?(page: Page): any;
 
   /**
    * Performs additional actions during page load.

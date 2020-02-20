@@ -1,4 +1,5 @@
 import { bootstrapComponents, BootstrapWindow, Component, ComponentMount, DefaultRenderScheduler } from '@wesib/wesib';
+import { valueProvider } from 'call-thru';
 import { afterThe } from 'fun-events';
 import { immediateRenderScheduler } from 'render-scheduler';
 import { HttpFetch } from '../../fetch';
@@ -145,6 +146,42 @@ describe('navigation', () => {
         range: expect.any(Range),
       });
       expect(onResponse).toHaveBeenCalledTimes(2);
+    });
+    it('does not refresh included content if only URL hash changed', async () => {
+      html = '<page-content>included content</page-content>';
+
+      const onResponse = jest.fn();
+      const { context } = await bootstrap({ onResponse });
+      const navigation = context.get(Navigation);
+
+      await new Promise(resolve => {
+        navigation.with(
+            PageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open(new URL('#another-hash', navigation.page.url));
+      });
+
+      expect(onResponse).not.toHaveBeenCalled();
+    });
+    it('does not refresh included content if content key did not change', async () => {
+      html = '<page-content>included content</page-content>';
+
+      const onResponse = jest.fn();
+      const { context } = await bootstrap({ onResponse, contentKey: valueProvider('same') });
+      const navigation = context.get(Navigation);
+
+      await new Promise(resolve => {
+        navigation.with(
+            PageLoadParam,
+            {
+              receiver: r => r.ok && resolve(),
+            },
+        ).open('other');
+      });
+
+      expect(onResponse).not.toHaveBeenCalled();
     });
 
     async function bootstrap(def?: IncludePageDef): Promise<ComponentMount> {
