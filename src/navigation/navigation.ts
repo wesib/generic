@@ -199,26 +199,27 @@ export namespace Navigation {
      *
      * Appends an entry to navigation history.
      *
-     * @param target  Either navigation target or URL to navigate to.
+     * @param target  Either navigation target or URL to navigate to. Navigates to current page URL when omitted.
      * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually navigate.
      * Then navigates to the `target`, unless the event cancelled.
      * @fires NavigateEvent@wesib:navigate  On window object when navigation succeed.
      *
      * @returns A promise resolved to navigated page, or to `null` otherwise.
      */
-    open(target: Navigation.Target | string | URL): Promise<Page | null>;
+    open(target?: Navigation.Target | string | URL): Promise<Page | null>;
 
     /**
      * Replaces the most recent entry in navigation history with the given `target` and provided page parameters.
      *
-     * @param target  Either navigation target or URL to replace the latest history entry with.
+     * @param target  Either navigation target or URL to replace the latest history entry with. Navigates to current
+     * page URL when omitted.
      * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually update the history.
      * Then navigates to the `target`, unless the event cancelled.
      * @fires NavigateEvent@wesib:navigate  On window object when history updated.
      *
      * @returns A promise resolved to navigated page, or to `null` otherwise.
      */
-    replace(target: Navigation.Target | string | URL): Promise<Page | null>;
+    replace(target?: Navigation.Target | string | URL): Promise<Page | null>;
 
   }
 

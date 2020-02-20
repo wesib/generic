@@ -47,16 +47,24 @@ describe('navigation', () => {
       expect(target!.url.href).toBe('http://localhost/other#/hash-path');
       expect(target!.get(PageHashURLParam).href).toBe(new URL('/hash-path', page.url.origin).href);
     });
-    it('does not alter target page URL page', async () => {
+    it('does not alter target page URL', async () => {
 
       const target = await navigation.open('/other#hash');
 
       expect(target!.url.href).toBe('http://localhost/other#hash');
       expect(target!.get(PageHashURLParam).href).toBe(new URL('/hash', page.url.origin).href);
     });
-    it('does not alter target page URL page when hash URL set to `null`', async () => {
+    it('does not alter target page URL when set to `null`', async () => {
 
       const target = await navigation.with(PageHashURLParam, null).open('/other#hash');
+
+      expect(target!.url.href).toBe('http://localhost/other#hash');
+      expect(target!.get(PageHashURLParam).href).toBe(new URL('/hash', page.url.origin).href);
+    });
+    it('does not alter target page URL hash when set to `null`', async () => {
+      await navigation.open('/other#hash');
+
+      const target = await navigation.with(PageHashURLParam, null).replace();
 
       expect(target!.url.href).toBe('http://localhost/other#hash');
       expect(target!.get(PageHashURLParam).href).toBe(new URL('/hash', page.url.origin).href);

@@ -120,10 +120,10 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       with<TT, II>(ref: PageParam.Ref<TT, II>, input: II): Navigation_.Parameterized {
         return withParam(mergeFunctions(applyParams, page => page.put(ref, input)));
       },
-      open(target: Navigation_.Target | string | URL) {
+      open(target?: Navigation_.Target | string | URL) {
         return navigate('pre-open', 'open', target, applyParams);
       },
-      replace(target: Navigation_.Target | string | URL) {
+      replace(target?: Navigation_.Target | string | URL) {
         return navigate('pre-replace', 'replace', target, applyParams);
       },
     };
@@ -136,8 +136,8 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     return url || nav.it.page.url;
   }
 
-  function navTargetOf(target: Navigation_.Target | string | URL): NavTarget {
-    if (typeof target === 'string' || target instanceof URL) {
+  function navTargetOf(target?: Navigation_.Target | string | URL): NavTarget {
+    if (target == null || typeof target === 'string' || target instanceof URL) {
       return { url: toURL(target) };
     }
     if (target.url instanceof URL) {
@@ -149,7 +149,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   function navigate(
       whenLeave: 'pre-open' | 'pre-replace',
       when: 'open' | 'replace',
-      target: Navigation_.Target | string | URL,
+      target?: Navigation_.Target | string | URL,
       applyParams: (page: Page) => void = noop,
   ): Promise<Page | null> {
 
