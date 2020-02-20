@@ -24,7 +24,7 @@ import { PageLoadSupport } from './page-load-support.feature';
  *
  * The page is loaded and included whenever it is {@link Navigation.onEnter entered}.
  *
- * Utilizes [[pageLoadParam]] navigation parameter.
+ * Utilizes [[PageLoadParam]] navigation parameter.
  *
  * Enables [[NavigationSupport]] and [[PageLoadSupport]] features.
  *

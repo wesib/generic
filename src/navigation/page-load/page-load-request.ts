@@ -8,7 +8,7 @@ import { PageLoadResponse } from './page-load-response';
 /**
  * Page load request.
  *
- * Accepted as a input of {@link pageLoadParam page load parameter}.
+ * Accepted as a input of {@link PageLoadParam page load parameter}.
  */
 export interface PageLoadRequest {
 
@@ -21,7 +21,7 @@ export interface PageLoadRequest {
    * When omitted in one of the page load requests, the full document will be requested. I.e. `Accept-Fragment` header
    * won't be sent in HTTP request.
    */
-  fragment?: PageFragmentRequest;
+  readonly fragment?: PageFragmentRequest;
 
   /**
    * Page load events receiver.
