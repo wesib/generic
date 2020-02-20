@@ -28,7 +28,7 @@ export interface PageLoadReq extends PageLoadRequest {
 
 class PageLoadAbortError extends Error {}
 
-class PageLoadRequestsParam extends PageParam<PageLoadRequests, PageLoadRequests> {
+class PageLoadRequestsParam$ extends PageParam<PageLoadRequests, PageLoadRequests> {
 
   create(
       _page: Page,
@@ -47,7 +47,7 @@ class PageLoadRequestsParam extends PageParam<PageLoadRequests, PageLoadRequests
 /**
  * @internal
  */
-export const pageLoadRequestsParam: PageParam<PageLoadRequests, PageLoadRequests> = new PageLoadRequestsParam();
+export const PageLoadRequestsParam: PageParam<PageLoadRequests, PageLoadRequests> = new PageLoadRequestsParam$();
 
 /**
  * @internal
@@ -94,7 +94,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
 
         const transferred = self._transfer();
 
-        to.put(pageLoadRequestsParam, transferred);
+        to.put(PageLoadRequestsParam, transferred);
 
         return transferred.handle();
       },

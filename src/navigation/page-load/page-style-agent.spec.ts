@@ -4,7 +4,7 @@ import { afterThe } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
-import { pageLoadParam } from './page-load-param';
+import { PageLoadParam } from './page-load-param';
 import { PageLoadSupport } from './page-load-support.feature';
 import Mock = jest.Mock;
 
@@ -191,7 +191,7 @@ describe('navigation', () => {
 
     async function loadHtml(html: string): Promise<void> {
       responseHtml = html;
-      await navigation.with(pageLoadParam, { receiver: noop }).open('/other');
+      await navigation.with(PageLoadParam, { receiver: noop }).open('/other');
       await Promise.resolve();
       await Promise.resolve();
     }

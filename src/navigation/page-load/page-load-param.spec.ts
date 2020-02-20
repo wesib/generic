@@ -7,7 +7,7 @@ import { Navigation } from '../navigation';
 import { NavigationSupport } from '../navigation-support.feature';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
-import { pageLoadParam } from './page-load-param';
+import { PageLoadParam } from './page-load-param';
 import { PageLoadResponse } from './page-load-response';
 import Mock = jest.Mock;
 
@@ -58,7 +58,7 @@ describe('navigation', () => {
     });
 
     it('does not load initial page', () => {
-      page.put(pageLoadParam, { receiver });
+      page.put(PageLoadParam, { receiver });
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -67,7 +67,7 @@ describe('navigation', () => {
       expect(receiver).not.toHaveBeenCalled();
     });
     it('loads opened page', async () => {
-      page.put(pageLoadParam, { receiver });
+      page.put(PageLoadParam, { receiver });
 
       await navigation.open('/other');
 
@@ -78,7 +78,7 @@ describe('navigation', () => {
       expect(receiver).toHaveBeenCalledTimes(1);
     });
     it('reports opened page after parameterized navigation', async () => {
-      await navigation.with(pageLoadParam, { receiver }).open('/other');
+      await navigation.with(PageLoadParam, { receiver }).open('/other');
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -87,7 +87,7 @@ describe('navigation', () => {
       expect(receiver).toHaveBeenCalledTimes(1);
     });
     it('loads replacement page', async () => {
-      page.put(pageLoadParam, { receiver });
+      page.put(PageLoadParam, { receiver });
 
       await navigation.open('/other');
       await navigation.replace('./third');
@@ -99,7 +99,7 @@ describe('navigation', () => {
       expect(receiver).toHaveBeenCalledTimes(1);
     });
     it('loads page when returned to it', async () => {
-      page.put(pageLoadParam, { receiver });
+      page.put(PageLoadParam, { receiver });
 
       await navigation.open('/other');
       receiver.mockClear();
@@ -135,7 +135,7 @@ describe('navigation', () => {
         context.load(MockFetchFeature);
       });
 
-      page.put(pageLoadParam, { receiver });
+      page.put(PageLoadParam, { receiver });
 
       await navigation.open('/other');
       await reject.catch(noop);
@@ -151,8 +151,8 @@ describe('navigation', () => {
 
       const receiver2 = jest.fn();
 
-      page.put(pageLoadParam, { receiver });
-      page.put(pageLoadParam, { receiver: receiver2 });
+      page.put(PageLoadParam, { receiver });
+      page.put(PageLoadParam, { receiver: receiver2 });
 
       await navigation.open('/other');
 
@@ -163,7 +163,7 @@ describe('navigation', () => {
       expect(receiver2).toHaveBeenCalledTimes(1);
     });
     it('does not report already loaded page', async () => {
-      page.put(pageLoadParam, { receiver });
+      page.put(PageLoadParam, { receiver });
 
       await navigation.open('/other');
 
@@ -173,7 +173,7 @@ describe('navigation', () => {
 
       const receiver2 = jest.fn();
 
-      page.put(pageLoadParam, { receiver: receiver2 });
+      page.put(PageLoadParam, { receiver: receiver2 });
       expect(receiver2).not.toHaveBeenCalled();
     });
     it('does not report to unregistered receivers', async () => {
@@ -181,8 +181,8 @@ describe('navigation', () => {
       const supply = eventSupply();
       const receiver2 = jest.fn();
 
-      page.put(pageLoadParam, { receiver: { supply, receive: (_, r) => receiver(r) } });
-      page.put(pageLoadParam, { receiver: { supply, receive: (_, r) => receiver2(r) } });
+      page.put(PageLoadParam, { receiver: { supply, receive: (_, r) => receiver(r) } });
+      page.put(PageLoadParam, { receiver: { supply, receive: (_, r) => receiver2(r) } });
 
       await navigation.open('/other');
       supply.off();
@@ -196,7 +196,7 @@ describe('navigation', () => {
     });
     it('does not load page when navigation cancelled', async () => {
       navigation.onLeave.once(event => event.preventDefault());
-      await navigation.with(pageLoadParam, { receiver }).open('/other');
+      await navigation.with(PageLoadParam, { receiver }).open('/other');
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -249,7 +249,7 @@ describe('navigation', () => {
 
         const response = await new Promise<PageLoadResponse>(resolve => {
           navigation.with(
-              pageLoadParam,
+              PageLoadParam,
               {
                 receiver: r => r.ok && resolve(r),
                 fragment: { id: 'test-fragment' },
@@ -268,7 +268,7 @@ describe('navigation', () => {
 
         const response = await new Promise<PageLoadResponse>(resolve => {
           navigation.with(
-              pageLoadParam,
+              PageLoadParam,
               {
                 receiver: r => r.ok && resolve(r),
                 fragment: { tag: 'test-fragment' },
@@ -287,7 +287,7 @@ describe('navigation', () => {
 
         const response = await new Promise<PageLoadResponse>(resolve => {
           navigation.with(
-              pageLoadParam,
+              PageLoadParam,
               {
                 receiver: r => r.ok && resolve(r),
                 fragment: { id: 'wrong-fragment' },
@@ -307,13 +307,13 @@ describe('navigation', () => {
         const promise2 = new Promise<PageLoadResponse>(resolve => resolve2 = resolve);
 
           navigation.with(
-              pageLoadParam,
+              PageLoadParam,
               {
                 receiver: r => r.ok && resolve1(r),
                 fragment: { id: 'test-fragment' },
               },
           ).with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve2(r),
               fragment: { tag: 'test-fragment-2' },
@@ -342,13 +342,13 @@ describe('navigation', () => {
         const promise2 = new Promise<PageLoadResponse>(resolve => resolve2 = resolve);
 
         await navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve1(r),
               fragment: { id: 'test-fragment' },
             },
         ).with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve2(r),
             },
@@ -371,7 +371,7 @@ describe('navigation', () => {
 
         const response = await new Promise<PageLoadResponse>(resolve => {
           navigation.with(
-              pageLoadParam,
+              PageLoadParam,
               {
                 receiver: r => r.ok === false && resolve(r),
                 fragment: { id: 'test-fragment' },

@@ -14,7 +14,7 @@ import {
 import { noop } from 'call-thru';
 import { importNodeContent } from '../../util';
 import { Navigation } from '../navigation';
-import { pageLoadParam } from './page-load-param';
+import { PageLoadParam } from './page-load-param';
 import { PageFragmentRequest } from './page-load-request';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoadSupport } from './page-load-support.feature';
@@ -70,7 +70,7 @@ export function IncludePage<T extends ComponentClass = Class>(
 
           navigation.read.once(page => {
             page.put(
-                pageLoadParam,
+                PageLoadParam,
                 {
                   fragment: detectFragment(),
                   receiver: {

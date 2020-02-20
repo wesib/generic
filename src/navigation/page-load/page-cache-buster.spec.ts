@@ -4,7 +4,7 @@ import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
 import { appRevSearchParam } from './page-cache-buster.impl';
-import { pageLoadParam } from './page-load-param';
+import { PageLoadParam } from './page-load-param';
 import { PageLoadSupport } from './page-load-support.feature';
 import Mock = jest.Mock;
 import SpyInstance = jest.SpyInstance;
@@ -83,7 +83,7 @@ describe('navigation', () => {
     it('sends page revision as search parameter', async () => {
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -98,7 +98,7 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -113,7 +113,7 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -128,7 +128,7 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },

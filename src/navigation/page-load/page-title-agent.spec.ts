@@ -3,7 +3,7 @@ import { afterThe } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
-import { pageLoadParam } from './page-load-param';
+import { PageLoadParam } from './page-load-param';
 import { PageLoadSupport } from './page-load-support.feature';
 import Mock = jest.Mock;
 
@@ -69,7 +69,7 @@ describe('navigation', () => {
 </html>`;
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -80,7 +80,7 @@ describe('navigation', () => {
     it('does not update page title if absent in loaded document', async () => {
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -97,7 +97,7 @@ describe('navigation', () => {
 </html>`;
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },

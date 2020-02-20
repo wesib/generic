@@ -8,20 +8,20 @@ import { PageParam } from '../page-param';
 import { PageParamContext } from '../page-param-context';
 import { cachingPageLoader } from './caching-page-loader.impl';
 import { PageLoadRequest } from './page-load-request';
-import { PageLoadRequests, pageLoadRequestsParam } from './page-load-requests.impl';
+import { PageLoadRequests, PageLoadRequestsParam } from './page-load-requests.impl';
 import { PageLoader } from './page-loader.impl';
 
 /**
  * @internal
  */
-class PageLoadParam extends PageParam<void, PageLoadRequest> {
+class PageLoadParam$ extends PageParam<void, PageLoadRequest> {
 
   create(page: Page, request: PageLoadRequest, context: PageParamContext): PageParam.Handle<void, PageLoadRequest> {
 
     const requests = new PageLoadRequests(context.get(Navigation), cachingPageLoader(context.get(PageLoader)));
     const handle = requests.handle();
 
-    page.put(pageLoadRequestsParam, requests);
+    page.put(PageLoadRequestsParam, requests);
     handle.put(request);
 
     return handle;
@@ -41,4 +41,4 @@ class PageLoadParam extends PageParam<void, PageLoadRequest> {
  * - all added {@link PageLoadRequest.receiver response receiver}s supplies are cut off, or
  * - the entered page address is the the same one as previous one, except the hash,
  */
-export const pageLoadParam: PageParam<void, PageLoadRequest> = (/*#__PURE__*/ new PageLoadParam());
+export const PageLoadParam: PageParam<void, PageLoadRequest> = (/*#__PURE__*/ new PageLoadParam$());

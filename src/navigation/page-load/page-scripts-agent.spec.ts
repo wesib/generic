@@ -4,7 +4,7 @@ import { afterThe } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
-import { pageLoadParam } from './page-load-param';
+import { PageLoadParam } from './page-load-param';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoadSupport } from './page-load-support.feature';
 import Mock = jest.Mock;
@@ -72,7 +72,7 @@ describe('navigation', () => {
 </html>`;
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -96,7 +96,7 @@ describe('navigation', () => {
 </html>`;
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -115,7 +115,7 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -135,7 +135,7 @@ describe('navigation', () => {
 </head>
 <body></body>
 </html>`;
-      await navigation.with(pageLoadParam, { receiver: noop }).open('/some');
+      await navigation.with(PageLoadParam, { receiver: noop }).open('/some');
       expect(doc.scripts).toHaveLength(0);
     });
     it('passes error messages through', async () => {
@@ -147,7 +147,7 @@ describe('navigation', () => {
 
       const response = await new Promise<PageLoadResponse>(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok === false && resolve(r),
             },

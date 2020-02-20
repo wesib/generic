@@ -7,7 +7,7 @@ import { hthvParse, hthvQuote } from 'http-header-value';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
-import { pageLoadRequestsParam } from './page-load-requests.impl';
+import { PageLoadRequestsParam } from './page-load-requests.impl';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoadURLModifier } from './page-load-url-modifier';
 
@@ -98,7 +98,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
 
 function requestPageFragments(page: Page, request: Request): void {
 
-  const fragments = page.get(pageLoadRequestsParam)?.fragments;
+  const fragments = page.get(PageLoadRequestsParam)?.fragments;
 
   if (fragments && fragments.length) {
     request.headers.set(

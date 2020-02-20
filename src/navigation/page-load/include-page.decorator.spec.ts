@@ -6,7 +6,7 @@ import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
 import { IncludePage, IncludePageDef } from './include-page.decorator';
 import { PageLoadAgent } from './page-load-agent';
-import { pageLoadParam } from './page-load-param';
+import { PageLoadParam } from './page-load-param';
 import Mock = jest.Mock;
 
 describe('navigation', () => {
@@ -55,7 +55,7 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -76,7 +76,7 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -95,7 +95,7 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -114,7 +114,7 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
@@ -132,7 +132,7 @@ describe('navigation', () => {
 
       await new Promise(resolve => {
         navigation.with(
-            pageLoadParam,
+            PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
