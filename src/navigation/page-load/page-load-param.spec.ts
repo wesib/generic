@@ -3,6 +3,7 @@ import { noop } from 'call-thru';
 import { afterThe, EventEmitter, eventSupply } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
+import { testPageParam } from '../../spec/test-page-param';
 import { Navigation } from '../navigation';
 import { NavigationSupport } from '../navigation-support.feature';
 import { Page } from '../page';
@@ -73,6 +74,16 @@ describe('navigation', () => {
       responder.send(response);
       expect(receiver).toHaveBeenCalledWith(response);
       expect(receiver).toHaveBeenCalledTimes(1);
+    });
+    it('does not load any page when pretending to navigate', () => {
+      page.put(PageLoadParam, { receiver });
+
+      const [param] = testPageParam();
+      navigation.with(param, 'test-value').pretend('/other');
+      const response = { ok: true, page } as PageLoadResponse;
+
+      responder.send(response);
+      expect(receiver).not.toHaveBeenCalled();
     });
     it('reports opened page after parameterized navigation', async () => {
       await navigation.with(PageLoadParam, { receiver }).open('/other');

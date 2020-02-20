@@ -90,7 +90,10 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
       put(request: PageLoadRequest): void {
         self._add(request);
       },
-      transfer(to: Page) {
+      transfer(to: Page, when) {
+        if (when === 'pretend') {
+          return;
+        }
 
         const transferred = self._transfer();
 
