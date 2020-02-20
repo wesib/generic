@@ -9,6 +9,7 @@ export function testPageParamHandle(
     put: jest.fn(newValue => {
       state.value = newValue;
     }),
+    transfer: jest.fn(),
     enter: jest.fn(),
     stay: jest.fn(),
     leave: jest.fn(),

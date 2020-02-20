@@ -3,11 +3,14 @@ import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from 
 import { asis, noop } from 'call-thru';
 import { afterSupplied, onSupplied } from 'fun-events';
 import { LocationMock, navHistoryState } from '../spec/location-mock';
+import { testPageParam } from '../spec/test-page-param';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
 import { NavigationSupport } from './navigation-support.feature';
 import { EnterPageEvent, LeavePageEvent, NavigationEventType, StayOnPageEvent } from './navigation.event';
 import { Page } from './page';
+import { PageParam } from './page-param';
+import Mocked = jest.Mocked;
 
 describe('navigation', () => {
   describe('Navigation', () => {
@@ -453,6 +456,58 @@ describe('navigation', () => {
         expect(stayOnPage.when).toBe('stay');
         expect(stayOnPage.to.url.href).toBe('http://localhost/other');
         expect(stayOnPage.reason).toBe(error);
+      });
+    });
+
+    describe('pretend', () => {
+
+      let param: PageParam<string, string>;
+      let mockHandle: Mocked<PageParam.Handle<string, string>>;
+      let fromPage: Page;
+
+      beforeEach(() => {
+        [param, mockHandle] = testPageParam('test');
+        navigation.read.once(page => fromPage = page);
+      });
+
+      it('builds navigation target', () => {
+        expect(navigation.with(param, 'other').pretend({
+          url: new URL('http://localhost/other'),
+          data: 'updated',
+          title: 'new title',
+        })).toMatchObject({
+          url: new URL('http://localhost/other'),
+          data: 'updated',
+          title: 'new title',
+        });
+      });
+      it('invokes callback', () => {
+
+        const callback = jest.fn((from: Page, to: Page) => {
+          expect(from).toBe(fromPage);
+          expect(to.url.href).toBe(fromPage.url.href);
+          expect(from).not.toBe(to);
+          expect(to.get(param)).toBe('other');
+          return 'cb result';
+        });
+
+        expect(navigation.with(param, 'other').pretend(callback)).toBe('cb result');
+      });
+      it('fails when property application failed', () => {
+
+        const error = new Error('test');
+
+        navigation.read.once(page => page.put(param, 'test'));
+        (mockHandle.transfer as any).mockImplementation(() => { throw error; });
+        expect(() => navigation.with(param, 'other').pretend()).toThrow(error);
+      });
+      it('returns `undefined` when agent prevent navigation', () => {
+        agent.mockImplementation(noop);
+        expect(navigation.with(param, 'other').pretend('/other')).toBeUndefined();
+      });
+      it('cleans up parameters', () => {
+        navigation.with(param, 'other').pretend();
+        expect(mockHandle.stay).toHaveBeenCalledWith(fromPage);
       });
     });
 

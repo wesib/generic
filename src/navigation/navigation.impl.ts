@@ -126,6 +126,32 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       replace(target?: Navigation_.Target | string | URL) {
         return navigate('pre-replace', 'replace', target, applyParams);
       },
+      pretend<T>(
+          targetOrCallback?: Navigation_.Target | string | URL | ((this: void, from: Page, to: Page) => T),
+          callback: (this: void, from: Page, to: Page) => T = (_from, to) => to as unknown as T,
+      ): T | undefined {
+
+        let target: Navigation_.Target | string | URL | undefined;
+
+        if (typeof targetOrCallback === 'function') {
+          callback = targetOrCallback;
+          target = undefined;
+        } else {
+          target = targetOrCallback;
+        }
+
+        const navTarget = navTargetOf(target);
+        const fromEntry = nav.it;
+        const toEntry = newEntry('pretend', fromEntry, navTarget, applyParams);
+
+        try {
+          return applyAgent('pretend', fromEntry, navTarget, toEntry)
+              ? callback(fromEntry.page, toEntry.page)
+              : undefined;
+        } finally {
+          toEntry.stay(nav.it.page);
+        }
+      },
     };
   }
 
@@ -171,9 +197,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
         }
 
         toEntry = prepared;
-
         navHistory[when](toEntry, nav);
-
         dispatcher.dispatch(new EnterPageEvent(
             NavigationEventType.EnterPage,
             {
@@ -195,10 +219,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       }
 
       const fromEntry = nav.it;
-      const toEntry = navHistory.newEntry(navTarget);
-
-      fromEntry.transfer(toEntry, whenLeave);
-
+      const toEntry = newEntry(whenLeave, fromEntry, navTarget, applyParams);
       const leavePage = new LeavePageEvent(
           NavigationEventType.LeavePage,
           {
@@ -208,27 +229,10 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           },
       );
 
-      applyParams(toEntry.page);
-      if (!dispatcher.dispatch(leavePage) || next !== promise) {
+      if (!dispatcher.dispatch(leavePage)
+          || next !== promise
+          || !applyAgent(whenLeave, fromEntry, navTarget, toEntry)) {
         return stay(toEntry);
-      }
-
-      let navigated = false;
-
-      agent(
-          ({ url, data, title }) => {
-            navigated = true;
-            navTarget.url = url;
-            navTarget.data = data;
-            navTarget.title = title;
-          },
-          whenLeave,
-          leavePage.from,
-          leavePage.to,
-      );
-
-      if (!navigated) {
-        return stay(toEntry); // Some agent didn't call `next()`.
       }
 
       return toEntry;
@@ -252,4 +256,49 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     }
 
   }
+
+  function newEntry(
+      whenLeave: 'pretend' | 'pre-open' | 'pre-replace',
+      fromEntry: PageEntry,
+      navTarget: NavTarget,
+      applyParams: (page: Page) => void,
+  ): PageEntry {
+
+    const toEntry = navHistory.newEntry(navTarget);
+
+    try {
+      fromEntry.transfer(toEntry, whenLeave);
+      applyParams(toEntry.page);
+    } catch (e) {
+      toEntry.stay(nav.it.page);
+      throw e;
+    }
+
+    return toEntry;
+  }
+
+  function applyAgent(
+      whenLeave: 'pretend' | 'pre-open' | 'pre-replace',
+      fromEntry: PageEntry,
+      navTarget: NavTarget,
+      toEntry: PageEntry,
+  ): boolean {
+
+    let navigated = false;
+
+    agent(
+        ({ url, data, title }) => {
+          navigated = true;
+          navTarget.url = url;
+          navTarget.data = data;
+          navTarget.title = title;
+        },
+        whenLeave,
+        fromEntry.page,
+        toEntry.page,
+    );
+
+    return navigated;
+  }
+
 }

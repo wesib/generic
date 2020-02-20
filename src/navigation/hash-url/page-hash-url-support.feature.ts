@@ -32,7 +32,7 @@ export class PageHashURLSupport {
 
 function pageHashURLAgent(
     next: (this: void, target?: Navigation.Target) => void,
-    _when: 'pre-open' | 'pre-replace',
+    _when: 'pretend' | 'pre-open' | 'pre-replace',
     _from: Page,
     to: Page,
 ): void {

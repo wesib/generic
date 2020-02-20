@@ -25,14 +25,14 @@ export type NavigationAgent =
  * @param next  Either calls the next agent in chain, or applies the final navigation target if this agent is the last
  * one. Not calling this function effectively prevents navigation.
  * Accepts an optional [[Navigation.Target]] parameter. The original target will be used instead when omitted.
- * @param when  When navigation occurred. Either `pre-open`, or `pre-replace`.
+ * @param when  When navigation occurred. Either `pretend`, `pre-open`, or `pre-replace`.
  * @param from  The page to leave.
  * @param to  Navigation target page.
  */
     (
         this: void,
         next: (this: void, target?: Target) => void,
-        when: 'pre-open' | 'pre-replace',
+        when: 'pretend' | 'pre-open' | 'pre-replace',
         from: Page,
         to: Page,
     ) => void;
@@ -65,7 +65,7 @@ class NavigationAgentKey
 
                 function combinedAgent(
                     next: (this: void, target: Navigation.URLTarget) => void,
-                    when: 'pre-open' | 'pre-replace',
+                    when: 'pretend' | 'pre-open' | 'pre-replace',
                     from: Page,
                     to: Page,
                 ): void {
@@ -144,7 +144,7 @@ class NavigationAgentKey
  */
 function defaultNavigationAgent(
     next: (this: void, target: Navigation.URLTarget) => void,
-    _when: 'pre-open' | 'pre-replace',
+    _when: 'pretend' | 'pre-open' | 'pre-replace',
     _from: Page,
     to: Page,
 ): void {
@@ -163,14 +163,14 @@ export namespace NavigationAgent {
    * @param next  Either calls the next agent in chain, or applies the final navigation target if this agent is the last
    * one. Not calling this function effectively prevents navigation.
    * Accepts an optional [[Navigation.Target]] parameter. The original target will be used instead when omitted.
-   * @param when  When navigation occurred. Either `pre-open`, or `pre-replace`.
+   * @param when  When navigation occurred. Either `pretend`, `pre-open`, or `pre-replace`.
    * @param from  The page to leave.
    * @param to  Navigation target page.
    */
       (
           this: void,
           next: (this: void, target: Navigation.URLTarget) => void,
-          when: 'pre-open' | 'pre-replace',
+          when: 'pretend' | 'pre-open' | 'pre-replace',
           from: Page,
           to: Page,
       ) => void;

@@ -221,6 +221,63 @@ export namespace Navigation {
      */
     replace(target?: Navigation.Target | string | URL): Promise<Page | null>;
 
+    /**
+     * Pretends navigation.
+     *
+     * Prepares navigation and parameters, but does not actually navigate. Instead it calls the provided callback
+     * function.
+     *
+     * This is useful e.g. to build target URL or evaluate target page parameter.
+     *
+     * @param target  Either navigation target or URL to pretend navigation to.
+     * @param callback A callback function receiving two pages as parameters: the page to leave, and the page to open.
+     * The latter one is valid only inside callback, as its parameters will be cleaned up right after callback returns.
+     * The value returned from callback is then returned from this method call. It may be used to collect some data
+     * from target page.
+     *
+     * @returns Either the value returned by callback, or `undefined` when navigation failed.
+     */
+    pretend<T>(
+        target: Navigation.Target | string | URL,
+        callback: (this: void, from: Page, to: Page) => T,
+    ): T | undefined;
+
+    /**
+     * Pretends navigation to the same page.
+     *
+     * Prepares navigation and parameters, but does not actually navigate. Instead it calls the provided callback
+     * function.
+     *
+     * This is useful e.g. to build target URL or evaluate target page parameter.
+     *
+     * @param callback A callback function receiving two pages as parameters: the page to leave, and the page to open.
+     * The latter one is valid only inside callback, as its parameters will be cleaned up right after callback returns.
+     * The value returned from callback is then returned from this method call. It may be used to collect some data
+     * from target page.
+     *
+     * @returns Either the value returned by callback, or `undefined` when navigation failed.
+     */
+    pretend<T>(
+        callback: (this: void, from: Page, to: Page) => T,
+    ): T | undefined;
+
+    /**
+     * Pretends navigation and builds navigation target.
+     *
+     * Prepares navigation and parameters, but does not actually navigate. Instead it calls the provided callback
+     * function.
+     *
+     * This is useful e.g. to build target URL or evaluate target page parameter.
+     *
+     * @param target  Either navigation target or URL to pretend navigation to. Prepends navigation to current page
+     * when omitted.
+     *
+     * @returns Either Navigation target with URL value, or `undefined` when navigation failed.
+     */
+    pretend(
+        target?: Navigation.Target | string | URL,
+    ): URLTarget | undefined;
+
   }
 
   /**

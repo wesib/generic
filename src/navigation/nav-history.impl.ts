@@ -386,7 +386,7 @@ export class PageEntry {
     return handle.get();
   }
 
-  transfer(to: PageEntry, when: 'pre-open' | 'pre-replace' | 'enter' | 'return'): void {
+  transfer(to: PageEntry, when: 'pretend' | 'pre-open' | 'pre-replace' | 'enter' | 'return'): void {
     itsEach(this._params.entries(), ([param, handle]) => {
       if (handle.transfer) {
 
