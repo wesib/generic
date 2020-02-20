@@ -338,11 +338,14 @@ describe('navigation', () => {
 
     describe('replace', () => {
       it('replaces location with the target', async () => {
-        expect(await navigation.replace({
+
+        const newPage = await navigation.replace({
           url: new URL('http://localhost/other'),
           data: 'updated',
           title: 'new title',
-        })).toMatchObject({
+        });
+
+        expect(newPage).toMatchObject({
           url: new URL('http://localhost/other'),
           data: 'updated',
           title: 'new title',
@@ -352,6 +355,7 @@ describe('navigation', () => {
             'new title',
             'http://localhost/other',
         );
+        expect(newPage).toBe(navigation.page);
         expect(location).toEqual({ url: 'http://localhost/other', data: 'updated' });
       });
       it('replaces location with the target URL', async () => {

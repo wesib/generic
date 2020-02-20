@@ -37,6 +37,11 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
   }
 
   /**
+   * Current page.
+   */
+  abstract readonly page: Page;
+
+  /**
    * The number of element in navigation history.
    */
   abstract readonly length: number;

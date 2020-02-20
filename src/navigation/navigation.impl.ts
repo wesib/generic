@@ -67,6 +67,10 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
 
   class Navigation extends Navigation_ {
 
+    get page(): Page {
+      return nav.it.page;
+    }
+
     get length(): number {
       return history.length;
     }
