@@ -63,6 +63,8 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     }
   });
 
+  type NavTarget = { -readonly [K in keyof Navigation_.URLTarget]: Navigation_.URLTarget[K] };
+
   class Navigation extends Navigation_ {
 
     get length(): number {
@@ -134,7 +136,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     return url || nav.it.page.url;
   }
 
-  function urlTargetOf(target: Navigation_.Target | string | URL): Navigation_.URLTarget {
+  function navTargetOf(target: Navigation_.Target | string | URL): NavTarget {
     if (typeof target === 'string' || target instanceof URL) {
       return { url: toURL(target) };
     }
@@ -151,7 +153,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       applyParams: (page: Page) => void = noop,
   ): Promise<Page | null> {
 
-    const urlTarget = urlTargetOf(target);
+    const navTarget = navTargetOf(target);
     const promise = next = next.then(doNavigate, doNavigate);
 
     return promise;
@@ -193,7 +195,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       }
 
       const fromEntry = nav.it;
-      const toEntry = navHistory.newEntry(urlTarget);
+      const toEntry = navHistory.newEntry(navTarget);
 
       fromEntry.transfer(toEntry, whenLeave);
 
@@ -211,11 +213,21 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
         return stay(toEntry);
       }
 
-      let finalTarget: Navigation_.URLTarget | undefined;
+      let navigated = false;
 
-      agent(t => finalTarget = t, whenLeave, leavePage.from, leavePage.to);
+      agent(
+          ({ url, data, title }) => {
+            navigated = true;
+            navTarget.url = url;
+            navTarget.data = data;
+            navTarget.title = title;
+          },
+          whenLeave,
+          leavePage.from,
+          leavePage.to,
+      );
 
-      if (!finalTarget) {
+      if (!navigated) {
         return stay(toEntry); // Some agent didn't call `next()`.
       }
 
@@ -231,7 +243,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
           NavigationEventType.StayOnPage,
           {
             from: nav.it.page,
-            to: urlTarget,
+            to: navTarget,
             reason,
           },
       ));

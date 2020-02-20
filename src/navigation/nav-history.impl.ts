@@ -312,9 +312,15 @@ export class PageEntry {
     const entry = this;
 
     this.page = {
-      url: target.url,
-      title: target.title,
-      data: target.data,
+      get url() {
+        return target.url;
+      },
+      get title() {
+        return target.title;
+      },
+      get data() {
+        return target.data;
+      },
       get visited() {
         return !!entry._status;
       },
