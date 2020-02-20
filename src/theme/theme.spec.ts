@@ -169,7 +169,7 @@ describe('theme', () => {
       class TestFeature {
       }
 
-      return new Promise(resolve => bootstrapComponents(TestFeature, ...features).whenReady(resolve));
+      return new Promise(bootstrapComponents(TestFeature, ...features).whenReady);
     }
 
   });

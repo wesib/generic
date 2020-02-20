@@ -106,6 +106,6 @@ describe('automount', () => {
     class TestFeature {
     }
 
-    await new Promise(resolve => bootstrapComponents(TestFeature, ...features).whenReady(resolve));
+    await new Promise(bootstrapComponents(TestFeature, ...features).whenReady);
   }
 });

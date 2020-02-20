@@ -45,14 +45,11 @@ describe('navigation', () => {
           setup.provide({ a: PageLoadAgent, is: mockAgent });
         },
         needs: NavigationSupport,
-        init(ctx) {
-          context = ctx;
-        },
       })
       class TestFeature {
       }
 
-      await new Promise(resolve => bootstrapComponents(TestFeature).whenReady(resolve));
+      context = await new Promise(bootstrapComponents(TestFeature).whenReady);
       navigation = context.get(Navigation);
       navigation.read(p => page = p);
     });

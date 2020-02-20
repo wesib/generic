@@ -46,13 +46,7 @@ describe('navigation', () => {
       })
       class TestFeature {}
 
-      context = await new Promise(resolve => {
-
-        const bsContext = bootstrapComponents(TestFeature);
-
-        bsContext.whenReady(() => resolve(bsContext));
-      });
-
+      context = await new Promise(bootstrapComponents(TestFeature).whenReady);
     });
 
     let navigation: Navigation;

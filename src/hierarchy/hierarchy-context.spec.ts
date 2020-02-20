@@ -1,11 +1,4 @@
-import {
-  bootstrapComponents,
-  BootstrapContext,
-  BootstrapRoot,
-  Component,
-  ComponentFactory,
-  Feature,
-} from '@wesib/wesib';
+import { bootstrapComponents, BootstrapRoot, Component, ComponentFactory, Feature } from '@wesib/wesib';
 import { MultiContextUpKey, MultiContextUpRef } from 'context-values/updatable';
 import { EventSupply } from 'fun-events';
 import { HierarchyContext } from './hierarchy-context';
@@ -47,9 +40,7 @@ describe('hierarchy', () => {
       class TestFeature {
       }
 
-      const bsContext = await new Promise<BootstrapContext>(
-          resolve => bootstrapComponents(TestFeature).whenReady(resolve),
-      );
+      const bsContext = await new Promise(bootstrapComponents(TestFeature).whenReady);
 
       factory = await bsContext.whenDefined(TestComponent);
       nestedContext = factory.mountTo(nestedElement).context.get(HierarchyContext);

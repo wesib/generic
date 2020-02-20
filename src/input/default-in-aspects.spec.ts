@@ -28,9 +28,7 @@ describe('input', () => {
       })
       class TestFeature {}
 
-      context = await new Promise<BootstrapContext>(
-          resolve => bootstrapComponents(TestFeature).whenReady(resolve),
-      );
+      context = await new Promise(bootstrapComponents(TestFeature).whenReady);
       context.get(DefaultInAspects)(aspects => {
         control = inValue(13).convert(aspects);
       });

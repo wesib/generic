@@ -36,14 +36,11 @@ describe('navigation', () => {
           setup.provide({ a: NavigationAgent, is: agent });
         },
         needs: NavigationSupport,
-        init(ctx) {
-          context = ctx;
-        },
       })
       class TestFeature {
       }
 
-      await new Promise(resolve => bootstrapComponents(TestFeature).whenReady(resolve));
+      context = await new Promise(bootstrapComponents(TestFeature).whenReady);
       navigation = context.get(Navigation);
     });
 
