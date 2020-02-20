@@ -39,7 +39,19 @@ export interface Page {
   readonly current: boolean;
 
   /**
-   * Requests this page navigation parameter.
+   * Requests a page navigation parameter of this page that guaranteed to have value.
+   *
+   * The requested parameter has default value.
+   *
+   * @typeparam T  Parameter value type.
+   * @param ref  A reference to page navigation parameter to retrieve.
+   *
+   * @returns The requested parameter value.
+   */
+  get<T>(ref: PageParam.WithDefaults.Ref<T, unknown>): T;
+
+  /**
+   * Requests arbitrary page navigation parameter of this page.
    *
    * @typeparam T  Parameter value type.
    * @param ref  A reference to page navigation parameter to retrieve.

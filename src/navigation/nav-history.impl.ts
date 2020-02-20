@@ -302,7 +302,7 @@ export class PageEntry {
   private _update: () => void = noop;
 
   constructor(
-      private readonly _context: BootstrapContext,
+      private readonly _bsContext: BootstrapContext,
       readonly id: number,
       target: Navigation.URLTarget,
       proto?: PageEntry,
@@ -321,7 +321,7 @@ export class PageEntry {
       get current() {
         return entry._status === PageStatus.Current;
       },
-      get(ref) {
+      get<T>(ref: PageParam.Ref<T, unknown>): T | undefined {
         return entry.get(ref);
       },
       put(ref, input) {
@@ -332,9 +332,16 @@ export class PageEntry {
 
   get<T>(ref: PageParam.Ref<T, unknown>): T | undefined {
 
-    const handle: PageParam.Handle<T, unknown> | undefined = this._params.get(ref[PageParam__symbol]);
+    const param = ref[PageParam__symbol];
+    const handle: PageParam.Handle<T, unknown> | undefined = this._params.get(param);
 
-    return handle && handle.get();
+    if (handle) {
+      return handle.get();
+    }
+
+    const newHandle = param.byDefault(this.page, this._newContext());
+
+    return newHandle && this._init(param, newHandle);
   }
 
   put<T, I>(ref: PageParam.Ref<T, I>, input: I): T {
@@ -347,7 +354,12 @@ export class PageEntry {
       return handle.get();
     }
 
-    const registry = new ContextRegistry<ParamContext>(this._context);
+    return this._init(param, param.create(this.page, input, this._newContext()));
+  }
+
+  private _newContext(): PageParamContext {
+
+    const registry = new ContextRegistry<ParamContext>(this._bsContext);
 
     class ParamContext extends PageParamContext {
 
@@ -355,14 +367,17 @@ export class PageEntry {
 
     }
 
-    const newHandle = param.create(this.page, input, new ParamContext());
+    return new ParamContext();
+  }
 
-    this._params.set(param, newHandle);
-    if (this.page.current && newHandle.enter) {
-      newHandle.enter(this.page, 'init');
+  private _init<T, I>(param: PageParam<T, I>, handle: PageParam.Handle<T, I>): T {
+    this._params.set(param, handle);
+
+    if (this.page.current && handle.enter) {
+      handle.enter(this.page, 'init');
     }
 
-    return newHandle.get();
+    return handle.get();
   }
 
   transfer(to: PageEntry, when: 'pre-open' | 'pre-replace' | 'enter' | 'return'): void {

@@ -9,6 +9,7 @@ import { ContextUpKey, ContextUpRef } from 'context-values/updatable';
 import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
+import { PageParam } from './page-param';
 import Target = Navigation.Target;
 
 /**
@@ -98,7 +99,7 @@ class NavigationAgentKey
                               get current() {
                                 return agentTo.current;
                               },
-                              get(ref) {
+                              get<T>(ref: PageParam.Ref<T, unknown>): T | undefined {
                                 return agentTo.get(ref);
                               },
                               put(ref, input) {

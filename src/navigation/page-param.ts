@@ -28,7 +28,7 @@ export abstract class PageParam<T, I> implements PageParam.Ref<T, I> {
   /**
    * Creates page parameter handle.
    *
-   * This method is called when {@link Page.put assigning new page parameter}.It is called at most once per request,
+   * This method is called when {@link Page.put assigning new page parameter}. It is called at most once per request,
    * unless this parameter is assigned already. A {@link PageParam.Handle.put} method will be called instead
    * in the latter case.
    *
@@ -40,6 +40,23 @@ export abstract class PageParam<T, I> implements PageParam.Ref<T, I> {
    */
   abstract create(page: Page, input: I, context: PageParamContext): PageParam.Handle<T, I>;
 
+  /**
+   * Creates default page parameter handle.
+   *
+   * This method is called when {@link Page.get requesting page parameter} which value is not present in the page.
+   * The value handle returned is assigned to the page.
+   *
+   * Returns nothing by default.
+   *
+   * @param _page  A page to assign navigation parameter to.
+   * @param _context  Page parameter context.
+   *
+   * @returns New page parameter value handle or nothing if there is no default value.
+   */
+  byDefault(_page: Page, _context: PageParamContext): PageParam.Handle<T, I> | undefined {
+    return;
+  }
+
 }
 
 export namespace PageParam {
@@ -48,7 +65,7 @@ export namespace PageParam {
    * Page navigation parameter reference.
    *
    * @typeparam T  Parameter value type.
-   * @typaparam I  Parameter input type.
+   * @typeparam I  Parameter input type.
    */
   export interface Ref<T, I> {
 
@@ -60,6 +77,37 @@ export namespace PageParam {
   }
 
   /**
+   * Page navigation parameter that has default value.
+   *
+   * @typeparam T  Parameter value type.
+   * @typeparam I  Parameter input type.
+   */
+  export interface WithDefaults<T, I> extends PageParam<T, I> {
+
+    byDefault(page: Page, context: PageParamContext): PageParam.Handle<T, I>;
+
+  }
+
+  export namespace WithDefaults {
+
+    /**
+     * A reference to page navigation parameter that has default value.
+     *
+     * @typeparam T  Parameter value type.
+     * @typeparam I  Parameter input type.
+     */
+    export interface Ref<T, I> {
+
+      /**
+       * Referred page navigation parameter instance.
+       */
+      readonly [PageParam__symbol]: WithDefaults<T, I>;
+
+    }
+
+  }
+
+  /**
    * Page navigation parameter value handle.
    *
    * Holds and maintains parameter value.
@@ -67,7 +115,7 @@ export namespace PageParam {
    * Created by {@link PageParam.create} method.
    *
    * @typeparam T  Parameter value type.
-   * @typaparam I  Parameter input type.
+   * @typeparam I  Parameter input type.
    */
   export interface Handle<T, I> {
 
