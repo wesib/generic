@@ -93,6 +93,7 @@
 								<li class="tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../classes/_wesib_generic.hierarchycontext.html" class="tsd-kind-icon">Hierarchy<wbr>Context</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_wesib_generic.navigation.html" class="tsd-kind-icon">Navigation</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_wesib_generic.navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_wesib_generic.pagehashurlsupport.html" class="tsd-kind-icon">Page<wbr>HashURLSupport</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_wesib_generic.pageloadsupport.html" class="tsd-kind-icon">Page<wbr>Load<wbr>Support</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../classes/_wesib_generic.pageparam.html" class="tsd-kind-icon">Page<wbr>Param</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_wesib_generic.pageparamcontext.html" class="tsd-kind-icon">Page<wbr>Param<wbr>Context</a></li>
@@ -140,9 +141,10 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_wesib_generic.html#componentnode-1" class="tsd-kind-icon">Component<wbr>Node</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_wesib_generic.html#httpfetch-1" class="tsd-kind-icon">Http<wbr>Fetch</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_wesib_generic.html#pagehashurlparam" class="tsd-kind-icon">Page<wbr>HashURLParam</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_wesib_generic.html#pageloadparam" class="tsd-kind-icon">Page<wbr>Load<wbr>Param</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_wesib_generic.html#pageloadurlmodifier-1" class="tsd-kind-icon">Page<wbr>LoadURLModifier</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_wesib_generic.html#pageparam__symbol" class="tsd-kind-icon">Page<wbr>Param__symbol</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_wesib_generic.html#pageloadparam" class="tsd-kind-icon">page<wbr>Load<wbr>Param</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -153,8 +155,10 @@
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_wesib_generic.html#includepage" class="tsd-kind-icon">Include<wbr>Page</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_wesib_generic.html#mount" class="tsd-kind-icon">Mount</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_wesib_generic.html#automountsupport-1" class="tsd-kind-icon">auto<wbr>Mount<wbr>Support</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_wesib_generic.html#gethashurl" class="tsd-kind-icon">get<wbr>HashURL</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_wesib_generic.html#importnode" class="tsd-kind-icon">import<wbr>Node</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_wesib_generic.html#importnodecontent" class="tsd-kind-icon">import<wbr>Node<wbr>Content</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_wesib_generic.html#sethashurl" class="tsd-kind-icon">set<wbr>HashURL</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -174,7 +178,7 @@
 					<div class="tsd-signature tsd-kind-icon">Element<wbr>Node<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_wesib_generic.rawelementnode.html" class="tsd-signature-type">RawElementNode</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_wesib_generic.componentnode.html" class="tsd-signature-type">ComponentNode</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/tree/element-node.ts#L13">src/tree/element-node.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/tree/element-node.ts#L13">src/tree/element-node.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -189,7 +193,7 @@
 					<div class="tsd-signature tsd-kind-icon">Http<wbr>Fetch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RequestInfo</span>, init<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">RequestInit</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/fetch/http-fetch.ts#L25">src/fetch/http-fetch.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/fetch/http-fetch.ts#L25">src/fetch/http-fetch.ts:25</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -253,7 +257,7 @@
 					<div class="tsd-signature tsd-kind-icon">Navigation<wbr>Event<span class="tsd-signature-symbol">:</span> <a href="_wesib_generic.html#leavepageevent" class="tsd-signature-type">LeavePageEvent</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.html#enterpageevent" class="tsd-signature-type">EnterPageEvent</a><span class="tsd-signature-symbol"> | </span><a href="_wesib_generic.html#stayonpageevent" class="tsd-signature-type">StayOnPageEvent</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L11">src/navigation/navigation.event.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L11">src/navigation/navigation.event.ts:11</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -268,7 +272,7 @@
 					<div class="tsd-signature tsd-kind-icon">Page<wbr>LoadURLModifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/page-load/page-load-url-modifier.ts#L15">src/navigation/page-load/page-load-url-modifier.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/page-load/page-load-url-modifier.ts#L15">src/navigation/page-load/page-load-url-modifier.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -320,7 +324,7 @@
 					<div class="tsd-signature tsd-kind-icon">Enter<wbr>Page<wbr>Event<span class="tsd-signature-symbol">:</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L40">src/navigation/navigation.event.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L40">src/navigation/navigation.event.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -338,7 +342,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L56">src/navigation/navigation.event.ts:56</a></li>
+										<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L56">src/navigation/navigation.event.ts:56</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -376,7 +380,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.at_target">AT_TARGET</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5445</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5445</li>
 							</ul>
 						</aside>
 					</section>
@@ -387,7 +391,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.bubbling_phase">BUBBLING_PHASE</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5446</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5446</li>
 							</ul>
 						</aside>
 					</section>
@@ -398,7 +402,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.capturing_phase">CAPTURING_PHASE</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5447</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5447</li>
 							</ul>
 						</aside>
 					</section>
@@ -408,7 +412,7 @@
 						<div class="tsd-signature tsd-kind-icon">Event<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>AT_TARGET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>BUBBLING_PHASE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>CAPTURING_PHASE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>NONE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>prototype<span class="tsd-signature-symbol">: </span><a href="_wesib_generic.html#enterpageevent.event" class="tsd-signature-type">Event</a><span class="tsd-signature-symbol"> }</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5451</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5451</li>
 							</ul>
 						</aside>
 						<div class="tsd-type-declaration">
@@ -423,7 +427,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5452</li>
+													<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5452</li>
 												</ul>
 											</aside>
 											<h4 class="tsd-parameters-title">Parameters</h4>
@@ -464,7 +468,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.none-1">NONE</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5448</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5448</li>
 							</ul>
 						</aside>
 					</section>
@@ -475,7 +479,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.bubbles">bubbles</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5387</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5387</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -491,7 +495,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.cancelbubble">cancelBubble</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5388</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5388</li>
 							</ul>
 						</aside>
 					</section>
@@ -502,7 +506,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.cancelable">cancelable</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5392</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5392</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -518,7 +522,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.composed">composed</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5396</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5396</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -534,7 +538,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.currenttarget">currentTarget</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5400</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5400</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -550,7 +554,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.defaultprevented">defaultPrevented</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5404</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5404</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -566,7 +570,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.eventphase">eventPhase</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5408</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5408</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -582,7 +586,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.istrusted">isTrusted</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5412</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5412</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -598,7 +602,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.returnvalue">returnValue</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5413</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5413</li>
 							</ul>
 						</aside>
 					</section>
@@ -609,7 +613,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.srcelement">srcElement</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5415</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5415</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -626,7 +630,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.target">target</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5419</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5419</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -642,7 +646,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.timestamp">timeStamp</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5423</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5423</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -657,7 +661,7 @@
 						<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_wesib_generic.page.html" class="tsd-signature-type">Page</a></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L56">src/navigation/navigation.event.ts:56</a></li>
+								<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L56">src/navigation/navigation.event.ts:56</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -673,7 +677,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.type">type</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5427</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5427</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -688,7 +692,7 @@
 						<div class="tsd-signature tsd-kind-icon">when<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"open"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"replace"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"enter"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"return"</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L51">src/navigation/navigation.event.ts:51</a></li>
+								<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L51">src/navigation/navigation.event.ts:51</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -715,7 +719,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.composedpath">composedPath</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5431</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5431</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -738,7 +742,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.initevent">initEvent</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5432</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5432</li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -768,7 +772,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.preventdefault">preventDefault</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5436</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5436</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -791,7 +795,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.stopimmediatepropagation">stopImmediatePropagation</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5440</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5440</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -814,7 +818,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.stoppropagation">stopPropagation</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5444</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5444</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -833,7 +837,7 @@
 					<div class="tsd-signature tsd-kind-icon">Leave<wbr>Page<wbr>Event<span class="tsd-signature-symbol">:</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L103">src/navigation/navigation.event.ts:103</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L103">src/navigation/navigation.event.ts:103</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -853,7 +857,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L119">src/navigation/navigation.event.ts:119</a></li>
+										<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L119">src/navigation/navigation.event.ts:119</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -891,7 +895,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.at_target">AT_TARGET</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5445</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5445</li>
 							</ul>
 						</aside>
 					</section>
@@ -902,7 +906,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.bubbling_phase">BUBBLING_PHASE</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5446</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5446</li>
 							</ul>
 						</aside>
 					</section>
@@ -913,7 +917,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.capturing_phase">CAPTURING_PHASE</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5447</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5447</li>
 							</ul>
 						</aside>
 					</section>
@@ -923,7 +927,7 @@
 						<div class="tsd-signature tsd-kind-icon">Event<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>AT_TARGET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>BUBBLING_PHASE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>CAPTURING_PHASE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>NONE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>prototype<span class="tsd-signature-symbol">: </span><a href="_wesib_generic.html#enterpageevent.event" class="tsd-signature-type">Event</a><span class="tsd-signature-symbol"> }</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5451</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5451</li>
 							</ul>
 						</aside>
 						<div class="tsd-type-declaration">
@@ -938,7 +942,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5452</li>
+													<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5452</li>
 												</ul>
 											</aside>
 											<h4 class="tsd-parameters-title">Parameters</h4>
@@ -979,7 +983,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.none-1">NONE</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5448</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5448</li>
 							</ul>
 						</aside>
 					</section>
@@ -990,7 +994,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.bubbles">bubbles</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5387</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5387</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1006,7 +1010,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.cancelbubble">cancelBubble</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5388</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5388</li>
 							</ul>
 						</aside>
 					</section>
@@ -1017,7 +1021,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.cancelable">cancelable</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5392</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5392</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1033,7 +1037,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.composed">composed</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5396</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5396</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1049,7 +1053,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.currenttarget">currentTarget</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5400</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5400</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1065,7 +1069,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.defaultprevented">defaultPrevented</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5404</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5404</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1081,7 +1085,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.eventphase">eventPhase</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5408</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5408</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1096,7 +1100,7 @@
 						<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_wesib_generic.page.html" class="tsd-signature-type">Page</a></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L114">src/navigation/navigation.event.ts:114</a></li>
+								<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L114">src/navigation/navigation.event.ts:114</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1112,7 +1116,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.istrusted">isTrusted</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5412</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5412</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1128,7 +1132,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.returnvalue">returnValue</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5413</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5413</li>
 							</ul>
 						</aside>
 					</section>
@@ -1139,7 +1143,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.srcelement">srcElement</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5415</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5415</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1156,7 +1160,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.target">target</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5419</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5419</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1172,7 +1176,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.timestamp">timeStamp</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5423</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5423</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1187,7 +1191,7 @@
 						<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_wesib_generic.page.html" class="tsd-signature-type">Page</a></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L119">src/navigation/navigation.event.ts:119</a></li>
+								<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L119">src/navigation/navigation.event.ts:119</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1203,7 +1207,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.type">type</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5427</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5427</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1218,7 +1222,7 @@
 						<div class="tsd-signature tsd-kind-icon">when<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"pre-open"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"pre-replace"</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L109">src/navigation/navigation.event.ts:109</a></li>
+								<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L109">src/navigation/navigation.event.ts:109</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1239,7 +1243,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.composedpath">composedPath</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5431</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5431</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1262,7 +1266,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.initevent">initEvent</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5432</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5432</li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1292,7 +1296,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.preventdefault">preventDefault</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5436</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5436</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1315,7 +1319,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.stopimmediatepropagation">stopImmediatePropagation</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5440</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5440</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1338,7 +1342,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.stoppropagation">stopPropagation</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5444</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5444</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1357,7 +1361,7 @@
 					<div class="tsd-signature tsd-kind-icon">Stay<wbr>OnPage<wbr>Event<span class="tsd-signature-symbol">:</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L164">src/navigation/navigation.event.ts:164</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L164">src/navigation/navigation.event.ts:164</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1375,7 +1379,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L186">src/navigation/navigation.event.ts:186</a></li>
+										<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L186">src/navigation/navigation.event.ts:186</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1413,7 +1417,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.at_target">AT_TARGET</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5445</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5445</li>
 							</ul>
 						</aside>
 					</section>
@@ -1424,7 +1428,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.bubbling_phase">BUBBLING_PHASE</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5446</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5446</li>
 							</ul>
 						</aside>
 					</section>
@@ -1435,7 +1439,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.capturing_phase">CAPTURING_PHASE</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5447</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5447</li>
 							</ul>
 						</aside>
 					</section>
@@ -1445,7 +1449,7 @@
 						<div class="tsd-signature tsd-kind-icon">Event<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>AT_TARGET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>BUBBLING_PHASE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>CAPTURING_PHASE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>NONE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>prototype<span class="tsd-signature-symbol">: </span><a href="_wesib_generic.html#enterpageevent.event" class="tsd-signature-type">Event</a><span class="tsd-signature-symbol"> }</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5451</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5451</li>
 							</ul>
 						</aside>
 						<div class="tsd-type-declaration">
@@ -1460,7 +1464,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5452</li>
+													<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5452</li>
 												</ul>
 											</aside>
 											<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1501,7 +1505,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.none-1">NONE</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5448</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5448</li>
 							</ul>
 						</aside>
 					</section>
@@ -1512,7 +1516,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.bubbles">bubbles</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5387</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5387</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1528,7 +1532,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.cancelbubble">cancelBubble</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5388</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5388</li>
 							</ul>
 						</aside>
 					</section>
@@ -1539,7 +1543,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.cancelable">cancelable</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5392</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5392</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1555,7 +1559,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.composed">composed</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5396</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5396</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1571,7 +1575,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.currenttarget">currentTarget</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5400</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5400</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1587,7 +1591,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.defaultprevented">defaultPrevented</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5404</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5404</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1603,7 +1607,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.eventphase">eventPhase</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5408</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5408</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1618,7 +1622,7 @@
 						<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_wesib_generic.page.html" class="tsd-signature-type">Page</a></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L176">src/navigation/navigation.event.ts:176</a></li>
+								<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L176">src/navigation/navigation.event.ts:176</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1634,7 +1638,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.istrusted">isTrusted</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5412</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5412</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1649,7 +1653,7 @@
 						<div class="tsd-signature tsd-kind-icon">reason<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L186">src/navigation/navigation.event.ts:186</a></li>
+								<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L186">src/navigation/navigation.event.ts:186</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1665,7 +1669,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.returnvalue">returnValue</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5413</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5413</li>
 							</ul>
 						</aside>
 					</section>
@@ -1676,7 +1680,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.srcelement">srcElement</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5415</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5415</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1693,7 +1697,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.target">target</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5419</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5419</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1709,7 +1713,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.timestamp">timeStamp</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5423</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5423</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1724,7 +1728,7 @@
 						<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_wesib_generic.navigation.urltarget.html" class="tsd-signature-type">URLTarget</a></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L181">src/navigation/navigation.event.ts:181</a></li>
+								<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L181">src/navigation/navigation.event.ts:181</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1740,7 +1744,7 @@
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.type">type</a></p>
 							<ul>
-								<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5427</li>
+								<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5427</li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1760,7 +1764,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.composedpath">composedPath</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5431</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5431</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1783,7 +1787,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.initevent">initEvent</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5432</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5432</li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1813,7 +1817,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.preventdefault">preventDefault</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5436</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5436</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1836,7 +1840,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.stopimmediatepropagation">stopImmediatePropagation</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5440</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5440</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1859,7 +1863,7 @@
 								<aside class="tsd-sources">
 									<p>Inherited from <a href="_wesib_generic.html#enterpageevent">EnterPageEvent</a>.<a href="_wesib_generic.html#enterpageevent.stoppropagation">stopPropagation</a></p>
 									<ul>
-										<li>Defined in node_modules/typescript/lib/lib.dom.d.ts:5444</li>
+										<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts:5444</li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1881,7 +1885,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/navigation.event.ts#L169">src/navigation/navigation.event.ts:169</a></li>
+										<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/navigation.event.ts#L169">src/navigation/navigation.event.ts:169</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -1903,7 +1907,7 @@
 					<div class="tsd-signature tsd-kind-icon">Component<wbr>Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SingleContextRef</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wesib_generic.componentnode.html" class="tsd-signature-type">ComponentNode</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new SingleContextKey&lt;ComponentNode&gt;(&#x27;component-node&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/tree/element-node.ts#L122">src/tree/element-node.ts:122</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/tree/element-node.ts#L122">src/tree/element-node.ts:122</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1918,7 +1922,7 @@
 					<div class="tsd-signature tsd-kind-icon">Http<wbr>Fetch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FnContextRef</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><a href="_wesib_generic.html#httpfetch" class="tsd-signature-type">HttpFetch</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><a href="_wesib_generic.html#httpfetch" class="tsd-signature-type">HttpFetch</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new FnContextKey&lt;Parameters&lt;HttpFetch&gt;, ReturnType&lt;HttpFetch&gt;&gt;(&#x27;http-fetch&#x27;,{byDefault: bootstrapDefault(newHttpFetch),},))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/fetch/http-fetch.ts#L37">src/fetch/http-fetch.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/fetch/http-fetch.ts#L37">src/fetch/http-fetch.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1928,43 +1932,30 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="pageloadurlmodifier-1" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Page<wbr>LoadURLModifier</h3>
-					<div class="tsd-signature tsd-kind-icon">Page<wbr>LoadURLModifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ContextUpRef</span><span class="tsd-signature-symbol">&lt;</span><a href="_wesib_generic.html#pageloadurlmodifier" class="tsd-signature-type">PageLoadURLModifier</a><span class="tsd-signature-symbol">, </span><a href="_wesib_generic.html#pageloadurlmodifier" class="tsd-signature-type">PageLoadURLModifier</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new FnContextKey(&#x27;page-load-url&#x27;, { byDefault: valueProvider(noop) }))</span></div>
+					<a name="pagehashurlparam" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Page<wbr>HashURLParam</h3>
+					<div class="tsd-signature tsd-kind-icon">Page<wbr>HashURLParam<span class="tsd-signature-symbol">:</span> <a href="_wesib_generic.pageparam.withdefaults.html" class="tsd-signature-type">WithDefaults</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">URL</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">URL</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new PageHashURLParam$())</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/page-load/page-load-url-modifier.ts#L26">src/navigation/page-load/page-load-url-modifier.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/hash-url/page-hash-url-param.ts#L45">src/navigation/hash-url/page-hash-url-param.ts:45</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A key of bootstrap context value containing a page load URL modifier.</p>
+							<p>Page parameter representing its <a href="_wesib_generic.html#gethashurl">hash URL</a>.</p>
 						</div>
-						<p>Does not modify URL by default.</p>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="pageparam__symbol" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Page<wbr>Param__symbol</h3>
-					<div class="tsd-signature tsd-kind-icon">Page<wbr>Param__symbol<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unique symbol</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ Symbol(&#x27;page-param&#x27;))</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/page-param.ts#L11">src/navigation/page-param.ts:11</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>A key of <a href="../interfaces/_wesib_generic.pageparam.ref.html">page parameter request</a> property containing requested page parameter.</p>
-						</div>
+						<p>When <a href="../classes/_wesib_generic.navigation.html#with">set</a> to another value while navigating, the hash of target URL is updated, unless set to
+						<code>null</code> or <code>undefined</code>.</p>
+						<p>Requires <a href="../classes/_wesib_generic.pagehashurlsupport.html">PageHashURLSupport</a> for above to function properly.</p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="pageloadparam" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> page<wbr>Load<wbr>Param</h3>
-					<div class="tsd-signature tsd-kind-icon">page<wbr>Load<wbr>Param<span class="tsd-signature-symbol">:</span> <a href="../classes/_wesib_generic.pageparam.html" class="tsd-signature-type">PageParam</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/_wesib_generic.pageloadrequest.html" class="tsd-signature-type">PageLoadRequest</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new PageLoadParam())</span></div>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Page<wbr>Load<wbr>Param</h3>
+					<div class="tsd-signature tsd-kind-icon">Page<wbr>Load<wbr>Param<span class="tsd-signature-symbol">:</span> <a href="../classes/_wesib_generic.pageparam.html" class="tsd-signature-type">PageParam</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/_wesib_generic.pageloadrequest.html" class="tsd-signature-type">PageLoadRequest</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new PageLoadParam$())</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/page-load/page-load-param.ts#L44">src/navigation/page-load/page-load-param.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/page-load/page-load-param.ts#L44">src/navigation/page-load/page-load-param.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1981,6 +1972,37 @@
 						</ul>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+					<a name="pageloadurlmodifier-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Page<wbr>LoadURLModifier</h3>
+					<div class="tsd-signature tsd-kind-icon">Page<wbr>LoadURLModifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ContextUpRef</span><span class="tsd-signature-symbol">&lt;</span><a href="_wesib_generic.html#pageloadurlmodifier" class="tsd-signature-type">PageLoadURLModifier</a><span class="tsd-signature-symbol">, </span><a href="_wesib_generic.html#pageloadurlmodifier" class="tsd-signature-type">PageLoadURLModifier</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new FnContextKey(&#x27;page-load-url&#x27;, { byDefault: valueProvider(noop) }))</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/page-load/page-load-url-modifier.ts#L26">src/navigation/page-load/page-load-url-modifier.ts:26</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A key of bootstrap context value containing a page load URL modifier.</p>
+						</div>
+						<p>Does not modify URL by default.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+					<a name="pageparam__symbol" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Page<wbr>Param__symbol</h3>
+					<div class="tsd-signature tsd-kind-icon">Page<wbr>Param__symbol<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unique symbol</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ Symbol(&#x27;page-param&#x27;))</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/page-param.ts#L11">src/navigation/page-param.ts:11</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A key of <a href="../interfaces/_wesib_generic.pageparam.ref.html">page parameter request</a> property containing requested page parameter.</p>
+						</div>
+					</div>
+				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
@@ -1994,7 +2016,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/activate-nav-link.decorator.ts#L58">src/navigation/activate-nav-link.decorator.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/activate-nav-link.decorator.ts#L58">src/navigation/activate-nav-link.decorator.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2036,7 +2058,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/handle-nav-links.decorator.ts#L22">src/navigation/handle-nav-links.decorator.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/handle-nav-links.decorator.ts#L22">src/navigation/handle-nav-links.decorator.ts:22</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2079,7 +2101,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/navigation/page-load/include-page.decorator.ts#L36">src/navigation/page-load/include-page.decorator.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/page-load/include-page.decorator.ts#L37">src/navigation/page-load/include-page.decorator.ts:37</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2087,7 +2109,7 @@
 									<p>Creates component decorator that includes page contents into decorated component&#39;s element.</p>
 								</div>
 								<p>The page is loaded and included whenever it is <a href="../classes/_wesib_generic.navigation.html#onenter">entered</a>.</p>
-								<p>Utilizes <a href="_wesib_generic.html#pageloadparam">pageLoadParam</a> navigation parameter.</p>
+								<p>Utilizes <a href="_wesib_generic.html#pageloadparam">PageLoadParam</a> navigation parameter.</p>
 								<p>Enables <a href="../classes/_wesib_generic.navigationsupport.html">NavigationSupport</a> and <a href="../classes/_wesib_generic.pageloadsupport.html">PageLoadSupport</a> features.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2123,7 +2145,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/automount/mount.decorator.ts#L21">src/automount/mount.decorator.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/automount/mount.decorator.ts#L21">src/automount/mount.decorator.ts:21</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2166,7 +2188,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/automount/auto-mount-support.feature.ts#L52">src/automount/auto-mount-support.feature.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/automount/auto-mount-support.feature.ts#L52">src/automount/auto-mount-support.feature.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2189,6 +2211,40 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="gethashurl" class="tsd-anchor"></a>
+					<h3>get<wbr>HashURL</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>HashURL<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/hash-url/hash-url.ts#L16">src/navigation/hash-url/hash-url.ts:16</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Extracts URL contained in the hash of another URL.</p>
+								</div>
+								<p>Extracted hash URL is based on origin of the original URL. Still, it may be absolute one.</p>
+								<p>Input URL is never altered.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url: <span class="tsd-signature-type">URL</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>An URL to extract hash from.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">URL</span></h4>
+							<p>URL extracted from hash.</p>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 					<a name="importnode" class="tsd-anchor"></a>
 					<h3>import<wbr>Node</h3>
@@ -2200,7 +2256,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/util/import-node.ts#L17">src/util/import-node.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/util/import-node.ts#L17">src/util/import-node.ts:17</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2241,7 +2297,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/util/import-node.ts#L33">src/util/import-node.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/util/import-node.ts#L33">src/util/import-node.ts:33</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2297,7 +2353,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/util/import-node.ts#L82">src/util/import-node.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/util/import-node.ts#L82">src/util/import-node.ts:82</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2324,6 +2380,56 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="sethashurl" class="tsd-anchor"></a>
+					<h3>set<wbr>HashURL</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>HashURL<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span>, hashURL<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/navigation/hash-url/hash-url.ts#L39">src/navigation/hash-url/hash-url.ts:39</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates an URL based on original one, but with hash substituted by the given hash URL.</p>
+								</div>
+								<p>The hash URL is substituted as following:</p>
+								<ol>
+									<li>If the hash URL&#39;s origin is not the same as the one of the base one, or if it contains a username,
+									then absolute hash URL is substituted:</li>
+									<li>Otherwise:<ul>
+											<li>pathname is substituted, unless it is equal to <code>/</code> and no hash and search parameters present,</li>
+											<li>search parameters are substituted when at least one present,</li>
+											<li>hash is substituted only when present.</li>
+										</ul>
+									</li>
+								</ol>
+								<p>Input URLs are never altered.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url: <span class="tsd-signature-type">URL</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Base URL.</p>
+									</div>
+								</li>
+								<li>
+									<h5>hashURL: <span class="tsd-signature-type">URL</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Hash URL to substitute.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">URL</span></h4>
+							<p>URL with updated hash.</p>
+						</li>
+					</ul>
+				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Object literals</h2>
@@ -2333,7 +2439,7 @@
 					<div class="tsd-signature tsd-kind-icon">Mount<wbr>Def<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/automount/mount-def.ts#L23">src/automount/mount-def.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/automount/mount-def.ts#L23">src/automount/mount-def.ts:23</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -2346,7 +2452,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/wesib/generic/blob/f888148/src/automount/mount-def.ts#L33">src/automount/mount-def.ts:33</a></li>
+										<li>Defined in <a href="https://github.com/wesib/generic/blob/16f0eab/src/automount/mount-def.ts#L33">src/automount/mount-def.ts:33</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -2416,6 +2522,9 @@
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="../classes/_wesib_generic.navigationsupport.html" class="tsd-kind-icon">Navigation<wbr>Support</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/_wesib_generic.pagehashurlsupport.html" class="tsd-kind-icon">Page<wbr>HashURLSupport</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="../classes/_wesib_generic.pageloadsupport.html" class="tsd-kind-icon">Page<wbr>Load<wbr>Support</a>
@@ -2499,13 +2608,16 @@
 						<a href="_wesib_generic.html#httpfetch-1" class="tsd-kind-icon">Http<wbr>Fetch</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+						<a href="_wesib_generic.html#pagehashurlparam" class="tsd-kind-icon">Page<wbr>HashURLParam</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+						<a href="_wesib_generic.html#pageloadparam" class="tsd-kind-icon">Page<wbr>Load<wbr>Param</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="_wesib_generic.html#pageloadurlmodifier-1" class="tsd-kind-icon">Page<wbr>LoadURLModifier</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="_wesib_generic.html#pageparam__symbol" class="tsd-kind-icon">Page<wbr>Param__symbol</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="_wesib_generic.html#pageloadparam" class="tsd-kind-icon">page<wbr>Load<wbr>Param</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="_wesib_generic.html#activatenavlink" class="tsd-kind-icon">Activate<wbr>Nav<wbr>Link</a>
@@ -2522,11 +2634,17 @@
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_wesib_generic.html#automountsupport-1" class="tsd-kind-icon">auto<wbr>Mount<wbr>Support</a>
 					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_wesib_generic.html#gethashurl" class="tsd-kind-icon">get<wbr>HashURL</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="_wesib_generic.html#importnode" class="tsd-kind-icon">import<wbr>Node</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_wesib_generic.html#importnodecontent" class="tsd-kind-icon">import<wbr>Node<wbr>Content</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_wesib_generic.html#sethashurl" class="tsd-kind-icon">set<wbr>HashURL</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module">
 						<a href="_wesib_generic.html#mountdef-1" class="tsd-kind-icon">Mount<wbr>Def</a>
