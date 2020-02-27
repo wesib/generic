@@ -11,14 +11,14 @@ import { EventSupply } from 'fun-events';
 import {
   produceBasicStyle,
   StypPureSelector,
-  StypRender,
+  StypRenderer,
   StypRules,
   stypSelector,
   StypSelector,
   StypSubSelector,
 } from 'style-producer';
 import { ComponentStypOptions } from './component-styp-options';
-import { ComponentStypRender } from './component-styp-render';
+import { ComponentStypRenderer } from './component-styp-renderer';
 import { ElementIdClass } from './element-id-class.impl';
 
 /**
@@ -54,23 +54,23 @@ export class ComponentStyleProducer {
       rootSelector: [],
       scheduler: options.scheduler || context.get(DefaultRenderScheduler),
       nsAlias: options.nsAlias || context.get(DefaultNamespaceAliaser),
-      render: buildRender(),
+      renderer: buildRenderer(),
     });
 
-    function buildRender(): StypRender | readonly StypRender[] | undefined {
+    function buildRenderer(): StypRenderer | readonly StypRenderer[] | undefined {
 
-      const { render } = options;
-      const renders = new ArraySet<StypRender>(render)
-          .add(...context.get(ComponentStypRender));
+      const { renderer } = options;
+      const renderers = new ArraySet<StypRenderer>(renderer)
+          .add(...context.get(ComponentStypRenderer));
       const hostSelector = options.hostSelector
           ? stypSelector(options.hostSelector)[0] as StypPureSelector.NormalizedPart
           : undefined;
 
-      renders.add(shadowRoot
-          ? shadowRender(hostSelector)
-          : noShadowRender(hostSelector || { c: [context.get(ElementIdClass)] }));
+      renderers.add(shadowRoot
+          ? shadowRenderer(hostSelector)
+          : noShadowRenderer(hostSelector || { c: [context.get(ElementIdClass)] }));
 
-      return renders.value;
+      return renderers.value;
     }
   }
 
@@ -79,7 +79,7 @@ export class ComponentStyleProducer {
 /**
  * @internal
  */
-function shadowRender(hostSelector: StypPureSelector.NormalizedPart | undefined): StypRender {
+function shadowRenderer(hostSelector: StypPureSelector.NormalizedPart | undefined): StypRenderer {
   return {
     order: -100,
     render(producer, properties) {
@@ -109,7 +109,7 @@ function shadowRender(hostSelector: StypPureSelector.NormalizedPart | undefined)
 /**
  * @internal
  */
-function noShadowRender(hostSelector: StypPureSelector.NormalizedPart): StypRender {
+function noShadowRenderer(hostSelector: StypPureSelector.NormalizedPart): StypRenderer {
   return {
     order: -100,
     render(producer, properties) {

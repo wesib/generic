@@ -3,16 +3,16 @@
  * @module @wesib/generic/styp
  */
 import { MultiContextKey, MultiContextRef } from 'context-values';
-import { StypRender } from 'style-producer';
+import { StypRenderer } from 'style-producer';
 
 /**
- * A CSS render that will be enabled by default by [[ComponentStyleProducer]].
+ * A CSS renderer that will be enabled by default by [[ComponentStyleProducer]].
  */
-export type ComponentStypRender = StypRender;
+export type ComponentStypRenderer = StypRenderer;
 
 /**
- * A key of component context value containing component CSS renders.
+ * A key of component context value containing component CSS renderers.
  */
-export const ComponentStypRender: MultiContextRef<ComponentStypRender> = (
-    /*#__PURE__*/ new MultiContextKey<ComponentStypRender>('component-styp-render')
+export const ComponentStypRenderer: MultiContextRef<ComponentStypRenderer> = (
+    /*#__PURE__*/ new MultiContextKey<ComponentStypRenderer>('component-styp-renderer')
 );

@@ -27,7 +27,7 @@ const BasicStyleProducerSupport__feature: FeatureDef = {
  *
  * Depends on [style-producer].
  *
- * Unlike [[StyleProducerSupport]] feature this one does not enable default CSS renders.
+ * Unlike [[StyleProducerSupport]] feature this one does not enable default CSS renderers.
  *
  * It is enabled automatically by {@link ProduceStyle @ProduceStyle} decorator.
  *

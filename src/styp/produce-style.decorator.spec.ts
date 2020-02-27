@@ -9,11 +9,11 @@ import {
 } from '@wesib/wesib';
 import { trackValue } from 'fun-events';
 import { immediateRenderScheduler } from 'render-scheduler';
-import { StypProperties, StypRender, stypRoot, StypRules, stypSelectorText } from 'style-producer';
+import { StypProperties, StypRenderer, stypRoot, StypRules, stypSelectorText } from 'style-producer';
 import { testComponentFactory } from '../spec/test-element';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypOptions } from './component-styp-options';
-import { ComponentStypRender } from './component-styp-render';
+import { ComponentStypRenderer } from './component-styp-renderer';
 import { ElementIdClass } from './element-id-class.impl';
 import { ProduceStyle } from './produce-style.decorator';
 import { StyleProducerSupport } from './style-producer-support.feature';
@@ -51,9 +51,9 @@ describe('styp', () => {
       await mount(undefined, undefined, { offline: 'always' });
       expect(cssStyle().display).toBe('block');
     });
-    it('renders styles using component CSS render', async () => {
+    it('renders styles using component CSS renderer', async () => {
 
-      const mockRender = jest.fn<void, Parameters<StypRender.Function>>(
+      const mockRenderer = jest.fn<void, Parameters<StypRenderer.Function>>(
           (producer, properties) => producer.render(properties),
       );
 
@@ -61,12 +61,12 @@ describe('styp', () => {
           undefined,
           {
             setup(setup) {
-              setup.perComponent({ a: ComponentStypRender, is: mockRender });
+              setup.perComponent({ a: ComponentStypRenderer, is: mockRenderer });
             },
           },
       );
       expect(cssStyle().display).toBe('block');
-      expect(mockRender).toHaveBeenCalledWith(expect.anything(), { display: 'block' });
+      expect(mockRenderer).toHaveBeenCalledWith(expect.anything(), { display: 'block' });
     });
     it('removes styles on disconnection when `offline=false`', async () => {
 

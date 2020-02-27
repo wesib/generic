@@ -8,7 +8,7 @@ import {
 import { ContextRegistry } from 'context-values';
 import { newNamespaceAliaser } from 'namespace-aliaser';
 import { immediateRenderScheduler, newManualRenderScheduler, RenderSchedule, RenderScheduler } from 'render-scheduler';
-import { produceBasicStyle, StypOptions, StypRender, stypRoot, stypSelector, StypSelector } from 'style-producer';
+import { produceBasicStyle, StypOptions, StypRenderer, stypRoot, stypSelector, StypSelector } from 'style-producer';
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
 import { ComponentStypOptions } from './component-styp-options';
@@ -55,12 +55,12 @@ describe('styp', () => {
       registry.provide({ a: ElementIdClass, is: elementId });
     });
 
-    let mockRender: Mock<void, Parameters<StypRender.Function>>;
+    let mockRenderer: Mock<void, Parameters<StypRenderer.Function>>;
     let renderedSelector: StypSelector.Normalized;
 
     beforeEach(() => {
       renderedSelector = undefined!;
-      mockRender = jest.fn((prod, _props) => {
+      mockRenderer = jest.fn((prod, _props) => {
         renderedSelector = prod.selector;
       });
     });
@@ -88,10 +88,10 @@ describe('styp', () => {
     });
 
     describe('options', () => {
-      describe('render', () => {
+      describe('renderer', () => {
         it('respects explicit value', () => {
           produce();
-          expect(mockRender).toHaveBeenCalled();
+          expect(mockRenderer).toHaveBeenCalled();
         });
       });
 
@@ -194,7 +194,7 @@ describe('styp', () => {
 
         const { rules } = stypRoot();
 
-        producer(rules, { ...opts, render: mockRender });
+        producer(rules, { ...opts, renderer: mockRenderer });
       }
     });
 
@@ -342,7 +342,7 @@ describe('styp', () => {
             rule.rules.self,
             {
               ...opts,
-              render: mockRender,
+              renderer: mockRenderer,
             },
         );
       }
