@@ -41,7 +41,7 @@ describe('input', () => {
 
       scheduler(opts);
 
-      expect(mockRenderScheduler).toHaveBeenLastCalledWith(opts);
+      expect(mockRenderScheduler).toHaveBeenLastCalledWith({ window, ...opts });
     });
     it('sets `InNamespaceAliaser` to `DefaultNamespaceAliaser`', () => {
       expect(control.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
