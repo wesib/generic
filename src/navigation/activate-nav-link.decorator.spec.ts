@@ -9,7 +9,7 @@ import {
 import { EventKeeper, trackValue } from 'fun-events';
 import { immediateRenderScheduler } from 'render-scheduler';
 import { LocationMock } from '../spec/location-mock';
-import { ElementNode } from '../tree/element-node';
+import { ElementNode } from '../tree';
 import { ActivateNavLink, ActivateNavLinkDef } from './activate-nav-link.decorator';
 import { Navigation } from './navigation';
 import { Page } from './page';
@@ -147,6 +147,68 @@ describe('navigation', () => {
         await navigation.open('');
 
         expect(link3.classList).toHaveLength(0);
+      });
+      it('moves active nav link after removing active one', async () => {
+
+        const { context } = await bootstrap({ activate });
+        const navigation = context.get(Navigation);
+        const page = await navigation.open('index/path');
+
+        activate.mockClear();
+        link1.remove();
+        await Promise.resolve();
+
+        expect(link2.classList.contains('active@b')).toBe(true);
+        expect(link3.classList).toHaveLength(0);
+        expect(activate).toHaveBeenCalledWith(
+            false,
+            expect.objectContaining({
+              context,
+              node: expect.objectContaining({ element: link1 }),
+            }),
+        );
+        expect(activate).toHaveBeenCalledWith(
+            true,
+            {
+              context,
+              page,
+              node: expect.objectContaining({ element: link2 }),
+            },
+        );
+        expect(activate).toHaveBeenCalledTimes(2);
+      });
+      it('moves active nav link after adding more suitable one', async () => {
+
+        const { context } = await bootstrap({ activate });
+        const navigation = context.get(Navigation);
+        const page = await navigation.open('index?some=other');
+
+        activate.mockClear();
+
+        const link4 = addLink('index?some=other');
+
+        await Promise.resolve();
+
+        expect(link1.classList).toHaveLength(0);
+        expect(link2.classList).toHaveLength(0);
+        expect(link3.classList).toHaveLength(0);
+        expect(link4.classList.contains('active@b')).toBe(true);
+        expect(activate).toHaveBeenCalledWith(
+            false,
+            expect.objectContaining({
+              context,
+              node: expect.objectContaining({ element: link2 }),
+            }),
+        );
+        expect(activate).toHaveBeenCalledWith(
+            true,
+            {
+              context,
+              page,
+              node: expect.objectContaining({ element: link4 }),
+            },
+        );
+        expect(activate).toHaveBeenCalledTimes(2);
       });
     });
 
@@ -325,6 +387,7 @@ describe('navigation', () => {
         const w1 = trackValue(1);
         const w2 = trackValue(2);
         const w3 = trackValue(0);
+
         weigh.mockImplementation(({ node: { element: { href } } }) => {
           if (href.includes('1')) {
             return w1;
