@@ -6,7 +6,17 @@ import {
   ElementObserverInit,
   isElement,
 } from '@wesib/wesib';
-import { AIterable, ArrayLikeIterable, filterIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from 'a-iterable';
+import {
+  AIterable,
+  ArrayLikeIterable,
+  filterIt,
+  flatMapIt,
+  itsEach,
+  itsFirst,
+  itsIterator,
+  mapIt,
+  overArray,
+} from 'a-iterable';
 import { isPresent, nextArg, nextArgs } from 'call-thru';
 import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
 import { html__naming } from 'namespace-aliaser';
@@ -34,6 +44,7 @@ export function elementNodeList<N extends ElementNode>(
   let cache = new Set<Element>();
   let iterable: Iterable<N> | undefined;
   let selector: string | undefined;
+  const overNodes: (nodes: NodeList) => Iterable<Node> = deep ? overNodeSubtree : overArray;
 
   if (typeof selectorOrType === 'string') {
     selector = selectorOrType;
@@ -182,14 +193,14 @@ export function elementNodeList<N extends ElementNode>(
     mutations.forEach(mutation => {
       itsEach(
           filterIt<N | undefined, N>(
-              mapIt(overArray(mutation.removedNodes), removeNode),
+              mapIt(overNodes(mutation.removedNodes), removeNode),
               isPresent,
           ),
           node => removed.push(node),
       );
       itsEach(
           filterIt<N | undefined, N>(
-              mapIt(overArray(mutation.addedNodes), addNode),
+              mapIt(overNodes(mutation.addedNodes), addNode),
               isPresent,
           ),
           node => added.push(node),
@@ -221,4 +232,11 @@ export function elementNodeList<N extends ElementNode>(
     return nodeOf(node, true);
   }
 
+}
+
+function overNodeSubtree(nodes: NodeList): Iterable<Node> {
+  return flatMapIt(
+      overArray(nodes),
+      node => [node, ...overNodeSubtree(node.childNodes)],
+  );
 }

@@ -175,7 +175,7 @@ describe('tree', () => {
         });
       });
 
-      describe('onUpdate', () => {
+      describe('shallow onUpdate', () => {
 
         let e3: Element;
         let list: ElementNodeList;
@@ -216,6 +216,18 @@ describe('tree', () => {
           expect(elementsOf(list)).toEqual([e1, e3]);
           expect(onUpdateMock).not.toHaveBeenCalled();
         });
+        it('ignores nested child addition', async () => {
+
+          const span = document.createElement('span');
+          const e4 = span.appendChild(document.createElement('div'));
+
+          e4.setAttribute('id', '4');
+          rootElement.appendChild(span);
+          await Promise.resolve();
+
+          expect(elementsOf(list)).toEqual([e1, e3]);
+          expect(onUpdateMock).not.toHaveBeenCalled();
+        });
         it('ignores non-element child node addition', async () => {
           rootElement.appendChild(document.createTextNode('text'));
           await Promise.resolve();
@@ -248,6 +260,58 @@ describe('tree', () => {
 
           expect(elementsOf(list)).toEqual([e1, e3]);
           expect(onUpdateMock).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('deep onUpdate', () => {
+
+        let e3: Element;
+        let list: ElementNodeList;
+        let onUpdateMock: Mock<void, [ElementNode[], ElementNode[]]>;
+        let added: Element[];
+        let removed: Element[];
+
+        beforeEach(() => {
+          e3 = e2.appendChild(document.createElement('div'));
+          e3.setAttribute('id', '3');
+          list = rootNode.select('div', { all: true, deep: true });
+          elementsOf(list); // Read first to bind nodes
+          onUpdateMock = jest.fn((a, r) => {
+            added = elementsOf(a);
+            removed = elementsOf(r);
+          });
+          list.onUpdate(onUpdateMock);
+        });
+
+        it('handles nested child addition', async () => {
+
+          const span = document.createElement('span');
+          const e4 = span.appendChild(document.createElement('div'));
+
+          e4.setAttribute('id', '4');
+
+          rootElement.appendChild(span);
+          await Promise.resolve();
+
+          expect(elementsOf(list)).toEqual([e1, e3, e4]);
+          expect(onUpdateMock).toHaveBeenCalled();
+          expect(added).toEqual([e4]);
+        });
+        it('handles nested child removal', async () => {
+          e3.remove();
+          await Promise.resolve();
+
+          expect(elementsOf(list)).toEqual([e1]);
+          expect(onUpdateMock).toHaveBeenCalled();
+          expect(removed).toEqual([e3]);
+        });
+        it('handles subtree removal', async () => {
+          e2.remove();
+          await Promise.resolve();
+
+          expect(elementsOf(list)).toEqual([e1]);
+          expect(onUpdateMock).toHaveBeenCalled();
+          expect(removed).toEqual([e3]);
         });
       });
 
