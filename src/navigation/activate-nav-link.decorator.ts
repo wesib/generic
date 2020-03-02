@@ -26,6 +26,7 @@ import {
 } from 'fun-events';
 import { css__naming, QualifiedName } from 'namespace-aliaser';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
+import { getHashURL } from './hash-url';
 import { Navigation } from './navigation';
 import { NavigationSupport } from './navigation-support.feature';
 import { Page } from './page';
@@ -142,12 +143,13 @@ export interface ActivateNavLinkDef<T extends object = any> {
    * By default:
    * 1. If the link path has neither hash, nor search parameters, then:
    * 1.1. Checks whether page URL path starts with the link's one.
-   * 1.2. If so, then uses link path as weight.
+   * 1.2. If so, then uses link path length as weight.
    * 2. If the link path has search parameters, but has no hash, then requires the page path to be the same as link's
-   *    one, and page search parameters include all of the link's ones. The number of link search parameters is used
-   *    as weight.
+   *    one, and page search parameters include all of the link's ones. The number of link search parameters plus the
+   *    link path length is used as weight.
    * 3. If the link path has a hash, then requires the page path and search parameters to be the same as link's ones,
-   *    and their hashes are treated as `path[?query]`. The weight is calculated by applying steps 1 and 2 to hashes.
+   *    and their hashes are treated as {@link getHashURL URLs}. The weight is calculated by applying steps 1, 2, and 3
+   *    to hash URLs increased by the link path length and the number of search parameters.
    *
    * @param node  Navigation link node to weigh.
    * @param page  Current navigation page.
@@ -299,10 +301,16 @@ function calcNavLinkWeight(linkURL: URL, pageURL: URL): number {
       return -1;
     }
     // Require search parameters to be equal
-    if (navLinkSearchParamsWeight(linkURL, pageURL) < 0 || navLinkSearchParamsWeight(pageURL, linkURL) < 0) {
+
+    const searchParamWeight = navLinkSearchParamsWeight(linkURL, pageURL);
+
+    if (searchParamWeight < 0 || navLinkSearchParamsWeight(pageURL, linkURL) < 0) {
       return -1;
     }
-    return calcNavLinkWeight(navLinkHash2url(linkURL), navLinkHash2url(pageURL));
+
+    return linkURL.pathname.length
+        + searchParamWeight
+        + calcNavLinkWeight(getHashURL(linkURL), getHashURL(pageURL));
   }
 
   const searchParamWeight = navLinkSearchParamsWeight(linkURL, pageURL);
@@ -314,7 +322,7 @@ function calcNavLinkWeight(linkURL: URL, pageURL: URL): number {
     if (linkDir !== pageDir) {
       return -1;
     }
-    return searchParamWeight;
+    return linkURL.pathname.length + searchParamWeight;
   }
 
   if (!pageDir.startsWith(linkDir)) {
@@ -332,21 +340,6 @@ function navLinkPath2dir(url: URL): string {
   const path = url.pathname;
 
   return path.endsWith('/') ? path : path + '/';
-}
-
-/**
- * @internal
- */
-function navLinkHash2url(url: URL): URL {
-
-  let { hash } = url;
-
-  hash = hash.substring(1); // Remove leading `#` symbol
-  if (hash[0] !== '/') {
-    hash = '/' + hash;
-  }
-
-  return new URL(hash, url);
 }
 
 /**
