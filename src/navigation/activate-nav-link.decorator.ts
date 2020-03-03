@@ -35,19 +35,18 @@ import { Page } from './page';
  * @internal
  */
 interface ActiveNavLink {
-  readonly node?: ElementNode;
-  supply(): EventSupply | undefined;
+  supply(): EventSupply;
 }
 
 /**
  * @internal
  */
-const inactiveNavLink: ActiveNavLink = {
-  supply: noop,
-};
+type ActiveNavLinks = Map<ElementNode, ActiveNavLink>;
 
 /**
- * Creates component decorator that marks at most one of navigation links inside decorated component active.
+ * Creates component decorator that marks navigation link(s) inside decorated component active.
+ *
+ * Marks navigation links with highest weight.
  *
  * Enables [[ComponentTreeSupport]], and [[NavigationSupport]] features.
  *
@@ -76,7 +75,7 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
 
         context.whenOn(connectSupply => {
 
-          let active: ActiveNavLink = inactiveNavLink;
+          let active: ActiveNavLinks = new Map();
 
           navigation.read.consume(
               page => componentNode.select(select, pick).read.keep.thru_(
@@ -86,15 +85,29 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
               ).consume(
                   (...weights: NavLinkWeight[]) => {
 
-                    const selected = selectActiveNavLink(weights);
+                    const selected = selectActiveNavLinks(weights);
+                    const newActive: ActiveNavLinks = new Map();
+                    const result = eventSupply();
 
-                    if (!selected) {
-                      active = inactiveNavLink;
-                    } else if (selected !== active.node) {
-                      active = activate({ node: selected, context, page });
-                    }
+                    selected.forEach(node => {
 
-                    return active.supply();
+                      let activeLink: ActiveNavLink;
+                      const existing = active.get(node);
+
+                      if (existing) {
+                        newActive.set(node, existing);
+                        activeLink = existing;
+                      } else {
+                        activeLink = activate({ node, context, page });
+                        newActive.set(node, activeLink);
+                      }
+
+                      activeLink.supply().needs(result);
+                    });
+
+                    active = newActive;
+
+                    return result;
                   },
               ),
           ).needs(connectSupply);
@@ -212,15 +225,17 @@ interface NavLinkOpts {
 /**
  * @internal
  */
-function selectActiveNavLink(weights: NavLinkWeight[]): ElementNode | undefined {
+function selectActiveNavLinks(weights: NavLinkWeight[]): ElementNode[] {
 
   let maxWeight = 0;
-  let active: ElementNode | undefined;
+  let active: ElementNode[] = [];
 
   weights.forEach(([node, weight]) => {
     if (weight > maxWeight) {
       maxWeight = weight;
-      active = node;
+      active = [node];
+    } else if (weight === maxWeight) {
+      active.push(node);
     }
   });
 
@@ -417,7 +432,6 @@ function activateNavLink(
     let lastSupply: EventSupply | undefined;
 
     return {
-      node: opts.node,
       supply(): EventSupply {
 
         const supply = lastSupply = eventSupply(() => {

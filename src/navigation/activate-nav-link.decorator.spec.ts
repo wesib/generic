@@ -67,6 +67,30 @@ describe('navigation', () => {
         );
         expect(activate).toHaveBeenCalledTimes(1);
       });
+      it('activates multiple nav link with longest matching URL', async () => {
+        link3.href = 'index';
+
+        const { context } = await bootstrap({ activate });
+
+        expect(link1.classList).toHaveLength(0);
+        expect(link2.classList.contains('active@b')).toBe(true);
+        expect(link3.classList.contains('active@b')).toBe(true);
+        expect(activate).toHaveBeenCalledWith(
+            true,
+            expect.objectContaining({
+              context,
+              node: expect.objectContaining({ element: link2 }),
+            }),
+        );
+        expect(activate).toHaveBeenCalledWith(
+            true,
+            expect.objectContaining({
+              context,
+              node: expect.objectContaining({ element: link3 }),
+            }),
+        );
+        expect(activate).toHaveBeenCalledTimes(2);
+      });
       it('moves active nav link after navigation', async () => {
 
         const { context } = await bootstrap({ activate });
