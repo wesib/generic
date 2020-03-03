@@ -164,6 +164,8 @@ export interface ActivateNavLinkDef<T extends object = any> {
    *    and their hashes are treated as {@link getHashURL URLs}. The weight is calculated by applying steps 1, 2, and 3
    *    to hash URLs increased by the link path length and the number of search parameters.
    *
+   * Ignores search parameters with names starting and ending with double underscores. Like `__wesib_app_rev__`.
+   *
    * @param node  Navigation link node to weigh.
    * @param page  Current navigation page.
    * @param context  Decorated component context.
@@ -368,19 +370,28 @@ function navLinkSearchParamsWeight(
   let weight = 0;
 
   linkParams.forEach((_value, key) => {
+    if (!isIgnoredSearchParam(key)) {
 
-    const pageValues = new Set(pageParams.getAll(key));
+      const pageValues = new Set(pageParams.getAll(key));
 
-    if (weight >= 0) {
-      if (linkParams.getAll(key).every(linkValue => pageValues.has(linkValue))) {
-        weight += 1;
-      } else {
-        weight = -1;
+      if (weight >= 0) {
+        if (linkParams.getAll(key).every(linkValue => pageValues.has(linkValue))) {
+          weight += 1;
+        } else {
+          weight = -1;
+        }
       }
     }
   });
 
   return weight;
+}
+
+/**
+ * @internal
+ */
+function isIgnoredSearchParam(key: string): boolean {
+  return key.startsWith('__') && key.endsWith('__');
 }
 
 /**

@@ -282,6 +282,18 @@ describe('navigation', () => {
         expect(link2.classList).toHaveLength(0);
         expect(link3.classList).toHaveLength(0);
       });
+      it('ignores double-underscored parameters', async () => {
+        link3.href = 'index?a=1&b=2&__ignore__=1';
+
+        const { context } = await bootstrap();
+        const navigation = context.get(Navigation);
+
+        await navigation.open('index?b=2&a=1&__ignore__=2');
+
+        expect(link1.classList).toHaveLength(0);
+        expect(link2.classList).toHaveLength(0);
+        expect(link3.classList.contains('active@b')).toBe(true);
+      });
       it('activates nav link with the same dir path', async () => {
         link1.href = 'index/?a=1';
 
