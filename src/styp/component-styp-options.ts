@@ -81,10 +81,9 @@ export const ComponentStypOptions = {
 
     let cssSupply = noEventSupply();
     let doProduceStyle: () => void;
-    const supply = eventSupply(reason => {
+    const supply = eventSupply(() => {
       doProduceStyle = noop;
-      cssSupply.off(reason);
-    });
+    }).cuts(cssSupply);
 
     doProduceStyle = () => {
       cssSupply = produceStyle(css, options).needs(supply);

@@ -4,7 +4,7 @@
  */
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { nextArgs, NextCall } from 'call-thru';
-import { afterAll, EventKeeper, EventSupply, eventSupplyOf, nextAfterEvent, OnEventCallChain } from 'fun-events';
+import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from 'fun-events';
 import { InControl, InConverter, InFormElement } from 'input-aspects';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
@@ -65,8 +65,7 @@ export function FillInputForm<T extends ComponentClass = Class>(
                 if (supply) {
                   supply.needs(fillSupply);
                 } else {
-                  eventSupplyOf(form!).needs(fillSupply);
-                  eventSupplyOf(control).needs(fillSupply);
+                  fillSupply.cuts(form!).cuts(control);
                 }
 
                 return fillSupply;

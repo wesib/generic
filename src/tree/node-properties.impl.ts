@@ -1,13 +1,5 @@
 import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
-import {
-  EventEmitter,
-  EventSupply,
-  eventSupply,
-  EventSupply__symbol,
-  eventSupplyOf,
-  OnEvent,
-  ValueTracker,
-} from 'fun-events';
+import { EventEmitter, EventSupply, eventSupply, EventSupply__symbol, OnEvent, ValueTracker } from 'fun-events';
 
 /**
  * @internal
@@ -47,15 +39,14 @@ class PropertyTracker<T> extends ValueTracker<T> {
 
   bind(context: ComponentContext): void {
 
-    const supply = eventSupplyOf(this);
     const propertyState = context.get(ComponentState).track(domPropertyPathTo(this._key));
 
-    supply.needs(
-        propertyState.onUpdate({
-          supply: eventSupply().whenOff(reason => this._updates.done(reason)),
-          receive: (_ctx, _path, newValue: any, oldValue: any) => this._updates.send(newValue, oldValue),
-        }).needs(supply),
-    );
+    propertyState.onUpdate.tillOff(this)({
+      supply: eventSupply()
+          .cuts(this._updates)
+          .cuts(this),
+      receive: (_ctx, _path, newValue: any, oldValue: any) => this._updates.send(newValue, oldValue),
+    });
   }
 
 }

@@ -18,7 +18,7 @@ import {
   overArray,
 } from 'a-iterable';
 import { isPresent, nextArg, nextArgs } from 'call-thru';
-import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, eventSupply, OnEvent, onEventBy } from 'fun-events';
+import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, OnEvent, onEventBy } from 'fun-events';
 import { html__naming } from 'namespace-aliaser';
 import { ElementNode, ElementPickMode } from './element-node';
 import { ElementNodeList as ElementNodeList_ } from './element-node-list';
@@ -88,12 +88,11 @@ export function elementNodeList<N extends ElementNode>(
       observer.observe(root, init);
     }
 
-    return eventSupply(reason => {
-      supply.off(reason);
+    return supply.whenOff(() => {
       if (!updates.size) {
         observer.disconnect();
       }
-    }).needs(supply);
+    });
   });
   const read = afterEventBy<[ElementNodeList]>(onUpdate.thru(() => nodeList), () => [nodeList]);
   const onTrackUpdate: OnEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> = onUpdate.thru(

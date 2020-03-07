@@ -3,7 +3,6 @@
  * @module @wesib/generic/input
  */
 import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
-import { eventSupplyOf } from 'fun-events';
 import { DomEventDispatcher } from 'fun-events/dom';
 import { HierarchyContext } from '../hierarchy';
 import { InputToForm, NoInputToForm } from './input-to-form';
@@ -42,7 +41,7 @@ export function OnSubmit<T extends ComponentClass, Model = any, Elt extends HTML
 
               const submitDispatcher = new DomEventDispatcher(inputToForm.form.element);
 
-              eventSupplyOf(submitDispatcher).needs(supply);
+              supply.cuts(submitDispatcher);
 
               const onSubmit = submitDispatcher.on('submit');
 

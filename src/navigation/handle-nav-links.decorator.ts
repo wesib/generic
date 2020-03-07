@@ -32,21 +32,24 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
     },
     define(defContext) {
       defContext.whenComponent(context => {
-        context.whenOn(connectSupply => {
+        context.whenOn(supply => {
 
           const navigation = context.get(Navigation);
 
           events.forEach(eventType => {
-            context.on(eventType)(
-                event => navigation.read.once(
+            context.on(eventType)({
+              supply,
+              receive(_ctx, event) {
+                navigation.read.once(
                     page => handle({
                       event,
                       page,
                       context,
                       navigation,
                     }),
-                ),
-            ).needs(connectSupply);
+                );
+              },
+            });
           });
         });
       });

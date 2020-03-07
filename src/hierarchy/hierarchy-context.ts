@@ -102,9 +102,9 @@ function newHierarchyContext<T extends object>(context: ComponentContext<T>): Hi
           supply: rootSupply,
           receive: () => context.connected && updateParent(),
         });
-        parentHierarchy.read.consume(
+        parentHierarchy.read.tillOff(parentSupply).consume(
             newParent => newParent && newParent.context.get(HierarchyUpdates).on(updateParent),
-        ).needs(parentSupply);
+        );
         parentHierarchy.read(receiver);
         context.whenOn({
           supply: receiver.supply,

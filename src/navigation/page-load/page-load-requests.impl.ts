@@ -114,16 +114,18 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
           const emitter = new EventEmitter<[PageLoadResponse]>();
           const supply = emitter.on(responseReceiver);
 
-          self._loader(page)(response => emitter.send(response)).whenOff(error => {
-            if (error !== undefined && !(error instanceof PageLoadAbortError)) {
-              // Report current page load error as failed load response
-              emitter.send({
-                ok: false as const,
-                page,
-                error,
+          self._loader(page)
+              .tillOff(loadSupply)(response => emitter.send(response))
+              .whenOff(error => {
+                if (error !== undefined && !(error instanceof PageLoadAbortError)) {
+                  // Report current page load error as failed load response
+                  emitter.send({
+                    ok: false as const,
+                    page,
+                    error,
+                  });
+                }
               });
-            }
-          }).needs(loadSupply);
 
           return supply;
         }).share();
@@ -189,8 +191,8 @@ function onFragment(
                 ...response,
                 fragment: (
                     fragment.tag != null
-                    ? response.document.getElementsByTagName(fragment.tag)[0]
-                    : response.document.getElementById(fragment.id)
+                        ? response.document.getElementsByTagName(fragment.tag)[0]
+                        : response.document.getElementById(fragment.id)
                 ) || undefined,
               }
               : response,

@@ -77,7 +77,7 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
 
           let active: ActiveNavLinks = new Map();
 
-          navigation.read.consume(
+          navigation.read.tillOff(connectSupply).consume(
               page => componentNode.select(select, pick).read.keep.thru_(
                   nodes => nextAfterEvent(afterEach(
                       ...nodes.map(node => weigh({ node, context, page })),
@@ -110,7 +110,7 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
                     return result;
                   },
               ),
-          ).needs(connectSupply);
+          );
         });
       });
     },

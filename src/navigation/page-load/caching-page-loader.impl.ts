@@ -49,10 +49,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
           }
         });
 
-        supply.whenOff(reason => {
-          trackSupply.off(reason);
-          tracker.done(reason);
-        });
+        supply.cuts(trackSupply).cuts(tracker);
 
         tracked = {
           on: tracker.read.thru_(
@@ -66,7 +63,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
 
       ++requested.num;
 
-      return requested.on(receiver).needs(supply).whenOff(reason => {
+      return requested.on.tillOff(supply)(receiver).whenOff(reason => {
         if (!--requested.num) {
           // Allow to request the same page again
           Promise.resolve().then(() => {
