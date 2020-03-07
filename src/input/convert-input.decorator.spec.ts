@@ -102,9 +102,7 @@ describe('input', () => {
       @ConvertInput(convert)
       class ConvertedInput {}
 
-      const bsContext = await new Promise(
-          bootstrapComponents(RootInput, ConvertedInput).whenReady,
-      );
+      const bsContext = await bootstrapComponents(RootInput, ConvertedInput).whenReady;
       const [rootFactory, factory] = await Promise.all(([
         bsContext.whenDefined(RootInput),
         bsContext.whenDefined(ConvertedInput),
@@ -113,9 +111,7 @@ describe('input', () => {
       rootFactory.mountTo(root);
 
       const mount = factory.mountTo(element);
-      const control = await new Promise<InputFromControl | NoInputFromControl>(
-          resolve => mount.context.get(HierarchyContext).get(InputFromControl).once(resolve),
-      );
+      const control = await mount.context.get(HierarchyContext).get(InputFromControl);
 
       return [control as InputFromControl, mount];
     }

@@ -40,7 +40,7 @@ describe('hierarchy', () => {
       class TestFeature {
       }
 
-      const bsContext = await new Promise(bootstrapComponents(TestFeature).whenReady);
+      const bsContext = await bootstrapComponents(TestFeature).whenReady;
 
       factory = await bsContext.whenDefined(TestComponent);
       nestedContext = factory.mountTo(nestedElement).context.get(HierarchyContext);

@@ -158,7 +158,7 @@ describe('theme', () => {
       });
     });
 
-    function bootstrap(...features: Class<any>[]): Promise<BootstrapContext> {
+    async function bootstrap(...features: Class<any>[]): Promise<BootstrapContext> {
 
       @Feature({
         needs: ThemeSupport,
@@ -169,7 +169,7 @@ describe('theme', () => {
       class TestFeature {
       }
 
-      return new Promise(bootstrapComponents(TestFeature, ...features).whenReady);
+      return bootstrapComponents(TestFeature, ...features).whenReady;
     }
 
   });

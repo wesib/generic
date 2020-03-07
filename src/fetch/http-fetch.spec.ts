@@ -38,12 +38,7 @@ describe('fetch', () => {
     })
     class TestFeature {}
 
-    bsContext = await new Promise(resolve => {
-
-      const ctx = bootstrapComponents(TestFeature);
-
-      ctx.whenReady(() => resolve(ctx));
-    });
+    bsContext = await bootstrapComponents(TestFeature).whenReady;
   });
 
   describe('HttpFetch', () => {

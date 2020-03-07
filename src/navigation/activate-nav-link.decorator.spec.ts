@@ -503,7 +503,7 @@ describe('navigation', () => {
       )
       class TestComponent {}
 
-      const bsContext = await new Promise(bootstrapComponents(TestComponent).whenReady);
+      const bsContext = await bootstrapComponents(TestComponent).whenReady;
       const factory = await bsContext.whenDefined(TestComponent);
 
       return factory.mountTo(root);

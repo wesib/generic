@@ -43,7 +43,7 @@ describe('navigation', () => {
       class TestFeature {
       }
 
-      context = await new Promise(bootstrapComponents(TestFeature).whenReady);
+      context = await bootstrapComponents(TestFeature).whenReady;
       navigation = context.get(Navigation);
     });
 
