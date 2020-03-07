@@ -521,7 +521,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^2.22.0":
+"@typescript-eslint/eslint-plugin@~2.22.0":
   version "2.22.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-2.22.0.tgz#218ce6d4aa0244c6a40baba39ca1e021b26bb017"
   integrity sha512-BvxRLaTDVQ3N+Qq8BivLiE9akQLAOUfxNHIEhedOcg8B2+jY8Rc4/D+iVprvuMX1AdezFYautuGDwr9QxqSxBQ==
@@ -541,7 +541,7 @@
     "@typescript-eslint/typescript-estree" "2.22.0"
     eslint-scope "^5.0.0"
 
-"@typescript-eslint/parser@^2.22.0":
+"@typescript-eslint/parser@~2.22.0":
   version "2.22.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-2.22.0.tgz#8eeb6cb6de873f655e64153397d4790898e149d0"
   integrity sha512-FaZKC1X+nvD7qMPqKFUYHz3H0TAioSVFGvG29f796Nc5tBluoqfHgLbSFKsh7mKjRoeTm8J9WX2Wo9EyZWjG7w==
@@ -564,10 +564,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@wesib/wesib@^1.0.0-alpha.95":
-  version "1.0.0-alpha.95"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.95.tgz#a2dcf7bdb5585d59111f4539ec9f5ca2f503c19c"
-  integrity sha512-9bYKQ/mfHicAeqJeGLNjvyLt9GjiO5Lbv+oaB0mcDdW5claH8UjKtj4ZCJdadQNkdMJFgu/p7loLHeXwST6asg==
+"@wesib/wesib@^1.0.0-alpha.96":
+  version "1.0.0-alpha.96"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.96.tgz#e9f7edfe58f1c8648ffb62fd570546eb85b8b7b6"
+  integrity sha512-ytnSac20grN5hAX7Xeupg5yDxXA5/zgOlo1vx9FAgJ9610P2eEri7qx8AEyY/IW17q4mSR5IyNsbC2dDs6uqmw==
 
 a-iterable@^2.5.0:
   version "2.5.0"
