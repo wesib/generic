@@ -241,7 +241,7 @@ describe('tree', () => {
 
       let element: any;
       let compNode: ComponentNode;
-      let attribute: ValueTracker<string | null, string>;
+      let attribute: ValueTracker<string | null>;
 
       beforeEach(async () => {
 
@@ -261,7 +261,7 @@ describe('tree', () => {
         attribute = compNode.attribute('attr');
       });
 
-      function setAttribute(name: string, value: string, oldValue: string): void {
+      function setAttribute(name: string, value: string, oldValue: string | null): void {
         element.setAttribute(name, value);
         mutate([{ type: 'attributes', oldValue, attributeName: name }]);
       }
@@ -286,6 +286,12 @@ describe('tree', () => {
 
         expect(attribute.it).toBe(newValue);
         expect(element.getAttribute('attr')).toBe(newValue);
+      });
+      it('removes attribute value', () => {
+        attribute.it = null;
+
+        expect(attribute.it).toBeNull();
+        expect(element.hasAttribute('attr')).toBe(false);
       });
       it('does not observe attributes mutations initially', () => {
         expect(observer.observe).not.toHaveBeenCalled();

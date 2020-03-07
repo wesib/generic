@@ -80,7 +80,11 @@ export class MockElement {
 
     const value = this._attributes[name];
 
-    return value != null ? value : null;
+    return value ?? null;
+  }
+
+  hasAttribute(name: string): boolean {
+    return this._attributes[name] != null;
   }
 
   setAttribute(name: string, value: string): void {
@@ -96,7 +100,20 @@ export class MockElement {
     }
   }
 
-  attributeChangedCallback(_name: string, _oldValue: string | null, _newValue: string): void {
+  removeAttribute(name: string): void {
+
+    const oldValue = this.getAttribute(name);
+
+    delete this._attributes[name];
+
+    const observedAttributes: string[] = this._target.observedAttributes;
+
+    if (observedAttributes && observedAttributes.includes(name)) {
+      this.attributeChangedCallback(name, oldValue, null);
+    }
+  }
+
+  attributeChangedCallback(_name: string, _oldValue: string | null, _newValue: string | null): void {
     /* attribute changed */
   }
 

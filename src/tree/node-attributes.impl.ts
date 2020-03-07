@@ -18,7 +18,7 @@ import {
  */
 class AttributesObserver {
 
-  private readonly _emitters = new Map<string, EventEmitter<[string, string | null]>>();
+  private readonly _emitters = new Map<string, EventEmitter<[string | null, string | null]>>();
   private _observer?: MutationObserver;
 
   constructor(private readonly _bs: BootstrapContext, readonly element: Element) {
@@ -34,7 +34,7 @@ class AttributesObserver {
     return this._observer = new Observer(mutations => this._update(mutations));
   }
 
-  observe(name: string, receiver: EventReceiver<[string, string | null]>): EventSupply {
+  observe(name: string, receiver: EventReceiver<[string | null, string | null]>): EventSupply {
 
     const self = this;
     const observer = this.observer;
@@ -80,9 +80,9 @@ class AttributesObserver {
     });
   }
 
-  private _emitter(name: string): EventEmitter<[string, string | null]> {
+  private _emitter(name: string): EventEmitter<[string | null, string | null]> {
 
-    const emitter = new EventEmitter<[string, string | null]>();
+    const emitter = new EventEmitter<[string | null, string | null]>();
 
     this._emitters.set(name, emitter);
 
@@ -94,10 +94,10 @@ class AttributesObserver {
 /**
  * @internal
  */
-class AttributeTracker extends ValueTracker<string | null, string> {
+class AttributeTracker extends ValueTracker<string | null> {
 
-  private readonly _updates = new EventEmitter<[string, string | null]>();
-  readonly on: OnEvent<[string, string | null]>;
+  private readonly _updates = new EventEmitter<[string | null, string | null]>();
+  readonly on: OnEvent<[string | null, string | null]>;
 
   constructor(
       private readonly _observer: AttributesObserver,
@@ -132,7 +132,11 @@ class AttributeTracker extends ValueTracker<string | null, string> {
   }
 
   set it(value: string | null) {
-    this._observer.element.setAttribute(this._name, value as string);
+    if (value != null) {
+      this._observer.element.setAttribute(this._name, value);
+    } else {
+      this._observer.element.removeAttribute(this._name);
+    }
   }
 
 }
@@ -149,7 +153,7 @@ export class NodeAttributes {
     this._observer = new AttributesObserver(bs, element);
   }
 
-  get(name: string): ValueTracker<string | null, string> {
+  get(name: string): ValueTracker<string | null> {
 
     const existing = this._attrs.get(name);
 

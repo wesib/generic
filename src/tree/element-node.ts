@@ -78,11 +78,13 @@ export interface ComponentTreeNode {
   /**
    * Tracks element attribute.
    *
+   * `null` attribute value corresponds to its absence. Setting it to `null` removes attribute.
+   *
    * @param name  Target attribute name.
    *
    * @returns Target attribute's value tracker.
    */
-  attribute(name: string): ValueTracker<string | null, string>;
+  attribute(name: string): ValueTracker<string | null>;
 
   /**
    * Tracks element element property.

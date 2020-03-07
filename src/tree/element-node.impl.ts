@@ -55,7 +55,7 @@ class ElementNode implements ComponentTreeNode {
     return selectNodes(this._bs, this.element, selector, mode);
   }
 
-  attribute(name: string): ValueTracker<string | null, string> {
+  attribute(name: string): ValueTracker<string | null> {
     return this._attrs.get(name);
   }
 
