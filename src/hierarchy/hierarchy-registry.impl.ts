@@ -10,7 +10,7 @@ export function newHierarchyRegistry<T extends object>(
     up: AfterEvent<[HierarchyContext?]>,
 ): ContextRegistry<HierarchyContext<T>> {
   return new ContextRegistry(
-      key => up.keep.thru(
+      key => up.keepThru(
           upper => upper ? nextAfterEvent(upper.get(key as any)) : nextArgs(),
       ) as any,
   );

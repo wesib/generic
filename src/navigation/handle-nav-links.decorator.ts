@@ -37,10 +37,10 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
           const navigation = context.get(Navigation);
 
           events.forEach(eventType => {
-            context.on(eventType)({
+            context.on(eventType).to({
               supply,
               receive(_ctx, event) {
-                navigation.read.once(
+                navigation.read().once(
                     page => handle({
                       event,
                       page,

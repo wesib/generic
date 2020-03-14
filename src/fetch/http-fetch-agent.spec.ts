@@ -24,16 +24,16 @@ describe('fetch', () => {
     beforeEach(() => {
       request = new Request('http://localhost/test');
       emitter = new EventEmitter<[Response]>();
-      mockFetch = jest.fn((_request?, _init?) => emitter.on);
+      mockFetch = jest.fn((_request?, _init?) => emitter.on());
     });
 
     it('performs the fetch without agents', () => {
-      expect(agent(mockFetch, request)).toBe(emitter.on);
+      expect(agent(mockFetch, request)).toBe(emitter.on());
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('performs the fetch without agents with `null` fallback value', () => {
       agent = registry.newValues().get(HttpFetchAgent, { or: null })!;
-      expect(agent(mockFetch, request)).toBe(emitter.on);
+      expect(agent(mockFetch, request)).toBe(emitter.on());
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('performs the fetch without agents by fallback agent', () => {
@@ -47,7 +47,7 @@ describe('fetch', () => {
     it('calls the registered agent', async () => {
 
       const emitter2 = new EventEmitter<[Response]>();
-      const mockAgent = jest.fn(() => emitter2.on);
+      const mockAgent = jest.fn(() => emitter2.on());
 
       registry.provide({ a: HttpFetchAgent, is: mockAgent });
 
@@ -64,7 +64,7 @@ describe('fetch', () => {
     it('performs the fetch by calling `next`', () => {
       registry.provide({ a: HttpFetchAgent, is: next => next() });
 
-      expect(agent(mockFetch, request)).toBe(emitter.on);
+      expect(agent(mockFetch, request)).toBe(emitter.on());
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('calls the next agent in chain by calling `next`', () => {
@@ -76,7 +76,7 @@ describe('fetch', () => {
       registry.provide({ a: HttpFetchAgent, is: next => next() });
       registry.provide({ a: HttpFetchAgent, is: mockAgent });
 
-      expect(agent(mockFetch, request)).toBe(emitter.on);
+      expect(agent(mockFetch, request)).toBe(emitter.on());
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });

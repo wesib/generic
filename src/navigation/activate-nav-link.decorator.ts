@@ -77,8 +77,8 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
 
           let active: ActiveNavLinks = new Map();
 
-          navigation.read.tillOff(connectSupply).consume(
-              page => componentNode.select(select, pick).read.keep.thru_(
+          navigation.read().tillOff(connectSupply).consume(
+              page => componentNode.select(select, pick).read().keepThru_(
                   nodes => nextAfterEvent(afterEach(
                       ...nodes.map(node => weigh({ node, context, page })),
                   )),
@@ -261,18 +261,18 @@ function navLinkWeight(
       return afterThe(opts.node, weight);
     }
 
-    let supplier: AfterEvent<NavLinkWeight> = afterSupplied(weight).keep.thru_(
+    let supplier: AfterEvent<NavLinkWeight> = afterSupplied(weight).keepThru_(
         weight => nextArgs(opts.node, weight),
     );
 
     return afterEventBy<NavLinkWeight>(receiver => {
-      supplier({
+      supplier.to({
         supply: eventSupply()
             .needs(receiver.supply)
             .whenOff(() => {
               // Fall back to zero weight once the weight supply cut off
               supplier = afterThe(opts.node, 0);
-              supplier(receiver);
+              supplier.to(receiver);
             }),
         receive: receiver.receive.bind(receiver),
       });

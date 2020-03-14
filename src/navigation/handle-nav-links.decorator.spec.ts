@@ -27,8 +27,8 @@ describe('navigation', () => {
     beforeEach(() => {
       pageURL = trackValue(new URL('current-page', baseURI));
       mockNavigation = {
-        read: pageURL.read.thru_(url => ({ url })),
         open: jest.fn(),
+        read: pageURL.read().thru_(url => ({ url })).F,
       } as any;
     });
 
@@ -122,7 +122,7 @@ describe('navigation', () => {
       })
       class TestComponent {}
 
-      const bsContext = await bootstrapComponents(TestComponent).whenReady;
+      const bsContext = await bootstrapComponents(TestComponent).whenReady();
       const factory = await bsContext.whenDefined(TestComponent);
 
       return factory.mountTo(element);

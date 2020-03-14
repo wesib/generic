@@ -45,7 +45,7 @@ export function OnSubmit<T extends ComponentClass, Model = any, Elt extends HTML
 
               const onSubmit = submitDispatcher.on('submit');
 
-              return (cancel ? onSubmit.instead : onSubmit)(
+              return (cancel ? onSubmit.instead() : onSubmit).to(
                   event => get(component).call(component, inputToForm, event),
               );
             });

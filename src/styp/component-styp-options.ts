@@ -100,7 +100,7 @@ export const ComponentStypOptions = {
       });
       break;
     default:
-      context.whenOn.once(doProduceStyle);
+      context.whenOn().once(doProduceStyle);
     }
 
     context.whenDestroyed(reason => supply.off(reason));

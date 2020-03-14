@@ -32,7 +32,7 @@ describe('navigation', () => {
       class TestFeature {
       }
 
-      context = await bootstrapComponents(TestFeature).whenReady;
+      context = await bootstrapComponents(TestFeature).whenReady();
       navigation = context.get(Navigation);
       navigation.read(p => page = p);
     });

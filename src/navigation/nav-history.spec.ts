@@ -79,7 +79,7 @@ describe('navigation', () => {
       describe('to.put', () => {
         it('makes parameter available in future route', async () => {
 
-          const promise = new Promise<string | undefined>(resolve => navigation.on.once(event => {
+          const promise = new Promise<string | undefined>(resolve => navigation.on().once(event => {
             if (event.when === 'pre-open') {
               event.to.put(param, 'init');
               resolve(event.to.get(param));
@@ -125,7 +125,7 @@ describe('navigation', () => {
 
       describe('preventDefault', () => {
         it('aborts parameter assignment', async () => {
-          navigation.on.once(event => {
+          navigation.on().once(event => {
             if (event.when === 'pre-open') {
               event.to.put(param, 'init');
               event.preventDefault();

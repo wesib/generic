@@ -49,7 +49,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
         },
     );
 
-    return onEventBy(receiver => agent(fetch, request)(receiver));
+    return onEventBy(receiver => agent(fetch, request).to(receiver));
 
     function fetch(fetchRequest: Request): OnEvent<[PageLoadResponse]> {
       requestPageFragments(page, fetchRequest);
@@ -90,7 +90,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
                 };
               }
             },
-        )(receiver);
+        ).to(receiver);
       });
     }
   };

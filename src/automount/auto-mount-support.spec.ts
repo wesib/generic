@@ -132,6 +132,6 @@ describe('automount', () => {
     class TestFeature {
     }
 
-    await bootstrapComponents(TestFeature, ...features).whenReady;
+    await bootstrapComponents(TestFeature, ...features).whenReady();
   }
 });

@@ -53,7 +53,7 @@ class NavigationAgentKey
 
           const { document } = opts.context.get(BootstrapWindow);
 
-          return opts.seed.keep.thru(
+          return opts.seed.keepThru(
               (...agents) => {
                 if (agents.length) {
                   return nextArg(combinedAgent);
@@ -132,7 +132,7 @@ class NavigationAgentKey
     opts.context.get(
         this.upKey,
         'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
-    )!(agent => delegated = agent);
+    )!.to(agent => delegated = agent);
 
     return (next, when, from, to) => delegated(next, when, from, to);
   }

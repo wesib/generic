@@ -71,7 +71,7 @@ export function IncludePage<T extends ComponentClass = Class>(
 
           range.selectNodeContents(context.contentRoot);
 
-          navigation.read.once(page => {
+          navigation.read().once(page => {
             page.put(
                 PageLoadParam,
                 {

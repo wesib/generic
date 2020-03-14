@@ -31,7 +31,7 @@ describe('navigation', () => {
 
     beforeEach(() => {
       responder = new EventEmitter();
-      mockAgent = jest.fn((_next, _request) => responder.on);
+      mockAgent = jest.fn((_next, _request) => responder.on());
       receiver = jest.fn();
     });
 
@@ -50,7 +50,7 @@ describe('navigation', () => {
       class TestFeature {
       }
 
-      context = await bootstrapComponents(TestFeature).whenReady;
+      context = await bootstrapComponents(TestFeature).whenReady();
       navigation = context.get(Navigation);
       navigation.read(p => page = p);
     });
@@ -203,7 +203,7 @@ describe('navigation', () => {
       expect(receiver2).not.toHaveBeenCalled();
     });
     it('does not load page when navigation cancelled', async () => {
-      navigation.onLeave.once(event => event.preventDefault());
+      navigation.onLeave().once(event => event.preventDefault());
       await navigation.with(PageLoadParam, { receiver }).open('/other');
 
       const response = { ok: true, page } as PageLoadResponse;

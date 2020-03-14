@@ -1,4 +1,5 @@
 import Mock = jest.Mock;
+import Mocked = jest.Mocked;
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { asis, noop } from 'call-thru';
 import { afterSupplied, onSupplied } from 'fun-events';
@@ -10,7 +11,6 @@ import { NavigationSupport } from './navigation-support.feature';
 import { EnterPageEvent, LeavePageEvent, NavigationEventType, StayOnPageEvent } from './navigation.event';
 import { Page } from './page';
 import { PageParam } from './page-param';
-import Mocked = jest.Mocked;
 
 describe('navigation', () => {
   describe('Navigation', () => {
@@ -43,7 +43,7 @@ describe('navigation', () => {
       class TestFeature {
       }
 
-      context = await bootstrapComponents(TestFeature).whenReady;
+      context = await bootstrapComponents(TestFeature).whenReady();
       navigation = context.get(Navigation);
     });
 
@@ -59,7 +59,7 @@ describe('navigation', () => {
       expect(locationMock.state).toHaveBeenCalled();
     });
     it('makes initial page current', () => {
-      navigation.read.once(page => {
+      navigation.read().once(page => {
         expect(page.current).toBe(true);
         expect(page.visited).toBe(true);
       });
@@ -102,13 +102,13 @@ describe('navigation', () => {
 
     describe('[AfterEvent__symbol]', () => {
       it('is the same as `read`', () => {
-        expect(afterSupplied(navigation)).toBe(navigation.read);
+        expect(afterSupplied(navigation)).toBe(navigation.read());
       });
     });
 
     describe('[OnEvent__symbol]', () => {
       it('is the same as `on`', () => {
-        expect(onSupplied(navigation)).toBe(navigation.on);
+        expect(onSupplied(navigation)).toBe(navigation.on());
       });
     });
 
@@ -144,10 +144,10 @@ describe('navigation', () => {
 
         let left: Page;
 
-        navigation.read.once(page => left = page);
+        navigation.read().once(page => left = page);
         await navigation.open('other');
 
-        navigation.read.once(page => {
+        navigation.read().once(page => {
           expect(page.current).toBe(true);
           expect(page.visited).toBe(true);
           expect(left.current).toBe(false);
@@ -197,7 +197,7 @@ describe('navigation', () => {
         expect(enterPage.to.data).toBe('updated');
       });
       it('does not navigate if pre-navigate event is cancelled', async () => {
-        navigation.onLeave.once(event => event.preventDefault());
+        navigation.onLeave().once(event => event.preventDefault());
         expect(await navigation.open('/other')).toBeNull();
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(2);
         expect(locationMock.history.pushState).not.toHaveBeenCalled();
@@ -210,7 +210,7 @@ describe('navigation', () => {
         const onEvent = jest.fn();
         let stayOnPage!: StayOnPageEvent;
 
-        navigation.onLeave.once(event => event.preventDefault());
+        navigation.onLeave().once(event => event.preventDefault());
         navigation.onStay(event => stayOnPage = event);
         navigation.on(onEvent);
         await navigation.open('/other');
@@ -261,7 +261,7 @@ describe('navigation', () => {
         expect(stayOnPage.reason).toBe(error);
       });
       it('cancels previous navigation when the new one initiated', async () => {
-        navigation.onLeave.once(() => {
+        navigation.onLeave().once(() => {
           navigation.open({ url: '/second', data: 3 });
         });
         expect(await navigation.open('/other')).toBeNull();
@@ -308,10 +308,10 @@ describe('navigation', () => {
 
         let left: Page;
 
-        navigation.read.once(page => left = page);
+        navigation.read().once(page => left = page);
         locationMock.enter('#other');
 
-        navigation.read.once(page => {
+        navigation.read().once(page => {
           expect(page.current).toBe(true);
           expect(page.visited).toBe(true);
           expect(left.current).toBe(false);
@@ -380,10 +380,10 @@ describe('navigation', () => {
 
         let left: Page;
 
-        navigation.read.once(page => left = page);
+        navigation.read().once(page => left = page);
         await navigation.replace('other');
 
-        navigation.read.once(page => {
+        navigation.read().once(page => {
           expect(page.current).toBe(true);
           expect(page.visited).toBe(true);
           expect(left.current).toBe(false);
@@ -428,7 +428,7 @@ describe('navigation', () => {
       });
       it('does not replace the location if pre-navigate event is cancelled', async () => {
         locationMock.history.replaceState.mockClear();
-        navigation.onLeave.once(event => event.preventDefault());
+        navigation.onLeave().once(event => event.preventDefault());
         await navigation.replace('/other');
         expect(locationMock.window.dispatchEvent).toHaveBeenCalledTimes(2);
         expect(locationMock.history.replaceState).not.toHaveBeenCalled();
@@ -440,7 +440,7 @@ describe('navigation', () => {
 
         let stayOnPage!: StayOnPageEvent;
 
-        navigation.onLeave.once(event => event.preventDefault());
+        navigation.onLeave().once(event => event.preventDefault());
         navigation.onStay(event => stayOnPage = event);
         await navigation.replace('/other');
         expect(stayOnPage.when).toBe('stay');
@@ -471,7 +471,7 @@ describe('navigation', () => {
 
       beforeEach(() => {
         [param, mockHandle] = testPageParam('test');
-        navigation.read.once(page => fromPage = page);
+        navigation.read().once(page => fromPage = page);
       });
 
       it('builds navigation target', () => {
@@ -501,7 +501,7 @@ describe('navigation', () => {
 
         const error = new Error('test');
 
-        navigation.read.once(page => page.put(param, 'test'));
+        navigation.read().once(page => page.put(param, 'test'));
         (mockHandle.transfer as any).mockImplementation(() => { throw error; });
         expect(() => navigation.with(param, 'other').pretend()).toThrow(error);
       });

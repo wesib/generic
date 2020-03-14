@@ -40,7 +40,7 @@ describe('hierarchy', () => {
       class TestFeature {
       }
 
-      const bsContext = await bootstrapComponents(TestFeature).whenReady;
+      const bsContext = await bootstrapComponents(TestFeature).whenReady();
 
       factory = await bsContext.whenDefined(TestComponent);
       nestedContext = factory.mountTo(nestedElement).context.get(HierarchyContext);
@@ -60,13 +60,13 @@ describe('hierarchy', () => {
         expect(parent).toBe(testContext);
       });
       it('resolves to `undefined` for topmost component', () => {
-        testContext.up.once(upper => expect(upper).toBeUndefined());
+        testContext.up().once(upper => expect(upper).toBeUndefined());
       });
       it('resolves to `undefined` for root element', () => {
 
         const rootContext = factory.mountTo(rootElement).context.get(HierarchyContext);
 
-        rootContext.up.once(upper => expect(upper).toBeUndefined());
+        rootContext.up().once(upper => expect(upper).toBeUndefined());
       });
       it('resolves to `undefined` after component disconnection', async () => {
         nestedContext.context.mount!.connected = false;
@@ -87,7 +87,7 @@ describe('hierarchy', () => {
         const element = document.createElement('disconnected-element');
         const context = factory.mountTo(element).context.get(HierarchyContext);
 
-        context.up.once(upper => expect(upper).toBeUndefined());
+        context.up().once(upper => expect(upper).toBeUndefined());
       });
       it('resolves to `undefined` for component without parent', () => {
 
@@ -97,7 +97,7 @@ describe('hierarchy', () => {
 
         mount.connected = true;
 
-        context.up.once(upper => expect(upper).toBeUndefined());
+        context.up().once(upper => expect(upper).toBeUndefined());
       });
       it('updates on intermediate component mount', () => {
         factory.mountTo(containerElement);
@@ -109,7 +109,7 @@ describe('hierarchy', () => {
 
         const context = factory.mountTo(containerElement).context.get(HierarchyContext);
 
-        nestedContext.up.once(upper => expect(upper).toBe(context));
+        nestedContext.up().once(upper => expect(upper).toBe(context));
       });
     });
 

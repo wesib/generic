@@ -25,22 +25,22 @@ describe('navigation', () => {
     beforeEach(() => {
       request = new Request('http://localhost/test');
       emitter = new EventEmitter();
-      mockLoad = jest.fn((_request?: Request) => emitter.on);
+      mockLoad = jest.fn((_request?: Request) => emitter.on());
     });
 
     it('performs the load without agents registered', () => {
-      expect(agent(mockLoad, request)).toBe(emitter.on);
+      expect(agent(mockLoad, request)).toBe(emitter.on());
       expect(mockLoad).toHaveBeenCalledWith(request);
     });
     it('performs the load without agents registered and with `null` fallback value', () => {
       agent = registry.newValues().get(PageLoadAgent, { or: null })!;
-      expect(agent(mockLoad, request)).toBe(emitter.on);
+      expect(agent(mockLoad, request)).toBe(emitter.on());
       expect(mockLoad).toHaveBeenCalledWith(request);
     });
     it('calls the registered agent', async () => {
 
       const emitter2 = new EventEmitter<[PageLoadResponse]>();
-      const mockAgent = jest.fn(() => emitter2.on);
+      const mockAgent = jest.fn(() => emitter2.on());
 
       registry.provide({ a: PageLoadAgent, is: mockAgent });
 
@@ -57,7 +57,7 @@ describe('navigation', () => {
     it('performs the load by calling `next`', () => {
       registry.provide({ a: PageLoadAgent, is: next => next() });
 
-      expect(agent(mockLoad, request)).toBe(emitter.on);
+      expect(agent(mockLoad, request)).toBe(emitter.on());
       expect(mockLoad).toHaveBeenCalledWith(request);
     });
     it('calls the next agent in chain by calling `next`', () => {
@@ -69,7 +69,7 @@ describe('navigation', () => {
       registry.provide({ a: PageLoadAgent, is: next => next() });
       registry.provide({ a: PageLoadAgent, is: mockAgent });
 
-      expect(agent(mockLoad, request)).toBe(emitter.on);
+      expect(agent(mockLoad, request)).toBe(emitter.on());
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request);
       expect(mockLoad).toHaveBeenCalledWith(request);
     });

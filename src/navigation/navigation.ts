@@ -3,8 +3,17 @@
  * @module @wesib/generic
  */
 import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { AfterEvent, AfterEvent__symbol, EventKeeper, EventSender, OnEvent, OnEvent__symbol } from 'fun-events';
-import { OnDomEvent } from 'fun-events/dom';
+import {
+  AfterEvent,
+  AfterEvent__symbol,
+  EventKeeper,
+  EventReceiver,
+  EventSender,
+  EventSupply,
+  OnEvent,
+  OnEvent__symbol,
+} from 'fun-events';
+import { DomEventListener, OnDomEvent } from 'fun-events/dom';
 import { EnterPageEvent, LeavePageEvent, NavigationEvent, StayOnPageEvent } from './navigation.event';
 import { Page } from './page';
 import { PageParam } from './page-param';
@@ -47,45 +56,102 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
   abstract readonly length: number;
 
   /**
-   * An `OnDomEvent` registrar of enter page event receivers.
+   * Build an `OnDomEvent` sender of {@link EnterPageEvent enter page events}.
+   *
+   * @returns An `OnDomEvent` sender of {@link EnterPageEvent enter page events}.
    */
-  abstract readonly onEnter: OnDomEvent<EnterPageEvent>;
+  abstract onEnter(): OnDomEvent<EnterPageEvent>;
 
   /**
-   * An `OnDomEvent` registrar of leave page event receivers.
+   * Starts sending {@link EnterPageEvent enter page events} to the given `listener`.
    *
-   * These receivers may cancel navigation by calling `preventDefault()` method of received event.
+   * @param listener  Target listener of {@link EnterPageEvent enter page events}.
+   *
+   * @returns {@link EnterPageEvent Enter page events} supply.
    */
-  abstract readonly onLeave: OnDomEvent<LeavePageEvent>;
+  abstract onEnter(listener: DomEventListener<EnterPageEvent>): EventSupply;
 
   /**
-   * An `OnDomEvent` registrar of stay on page event receivers.
+   * Builds an `OnDomEvent` sender of {@link LeavePageEvent leave page events}.
    *
-   * These receivers are informed when navigation has been cancelled by one of leave page event receivers,
+   * The registered listener may cancel navigation by calling `preventDefault()` method of received event.
+   *
+   * @returns `OnDomEvent` sender of {@link LeavePageEvent leave page events}.
+   */
+  abstract onLeave(): OnDomEvent<LeavePageEvent>;
+
+  /**
+   * Starts sending {@link LeavePageEvent leave page events} to the given `listener`.
+   *
+   * The registered listener may cancel navigation by calling `preventDefault()` method of received event.
+   *
+   * @param listener  Target listener of {@link LeavePageEvent leave page events}.
+   *
+   * @returns {@link LeavePageEvent Leave page events} supply.
+   */
+  abstract onLeave(listener: DomEventListener<LeavePageEvent>): EventSupply;
+
+  /**
+   * Builds an `OnDomEvent` {@link StayOnPageEvent stay on page events}.
+   *
+   * The registered listener is informed when navigation has been cancelled by one of leave page event receivers,
    * navigation failed due to e.g. invalid URL, or when another navigation request initiated before the page left.
+   *
+   * @returns `OnDomEvent` sender of {@link StayOnPageEvent stay on page events}.
    */
-  abstract readonly onStay: OnDomEvent<StayOnPageEvent>;
+  abstract onStay(): OnDomEvent<StayOnPageEvent>;
 
   /**
-   * An `OnEvent` registrar of navigation events receivers.
+   * Starts sending {@link StayOnPageEvent stay on page events} to the given `listener`.
+   *
+   * @param listener  Target listener of {@link StayOnPageEvent stay on page events}.
+   *
+   * @returns {@link StayOnPageEvent Stay on page events} supply.
+   */
+  abstract onStay(listener: DomEventListener<StayOnPageEvent>): EventSupply;
+
+  /**
+   * Builds an `OnEvent` sender of {@link NavigationEvent navigation events}.
    *
    * The `[OnEvent__symbol]` property is an alias of this one.
+   *
+   * @returns `OnEvent` sender of {@link NavigationEvent navigation events}.
    */
-  abstract readonly on: OnEvent<[NavigationEvent]>;
+  abstract on(): OnEvent<[NavigationEvent]>;
 
-  get [OnEvent__symbol](): OnEvent<[NavigationEvent]> {
-    return this.on;
+  /**
+   * Starts sending of {@link NavigationEvent navigation events} to the given `receiver`.
+   *
+   * @param receiver  Target receiver of {@link NavigationEvent navigation events}.
+   *
+   * @returns {@link NavigationEvent Navigation events} supply.
+   */
+  abstract on(receiver: EventReceiver<[NavigationEvent]>): EventSupply;
+
+  [OnEvent__symbol](): OnEvent<[NavigationEvent]> {
+    return this.on();
   }
 
   /**
-   * An `AfterEvent` registrar of current page receivers.
+   * Builds an `AfterEvent` keeper of {@link page current page}.
    *
    * The `[AfterEvent__symbol]` property is an alias of this one.
+   *
+   * @returns An `AfterEvent` keeper of {@link page current page}.
    */
-  abstract readonly read: AfterEvent<[Page]>;
+  abstract read(): AfterEvent<[Page]>;
 
-  get [AfterEvent__symbol](): AfterEvent<[Page]> {
-    return this.read;
+  /**
+   * Starts sending {@link page current page} and updates to the given `receiver.
+   *
+   * @param receiver  Target receiver of {@link page current page}.
+   *
+   * @returns {@link page Current page} supply.
+   */
+  abstract read(receiver: EventReceiver<[Page]>): EventSupply;
+
+  [AfterEvent__symbol](): AfterEvent<[Page]> {
+    return this.read();
   }
 
   /**
@@ -158,7 +224,7 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    *
    * Does not alter current page state, and does not trigger any events.
    *
-   * @param url  An URL to replace the
+   * @param url  An URL to replace the the current one with.
    *
    * @returns Current page with updated URL.
    */
