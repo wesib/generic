@@ -1,6 +1,13 @@
 import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
-import { EventEmitter, EventSupply, EventSupply__symbol, eventSupplyOf, OnEvent, ValueTracker } from 'fun-events';
-import { EventReceiver } from 'fun-events/d.ts/base';
+import {
+  EventEmitter,
+  EventReceiver,
+  EventSupply,
+  EventSupply__symbol,
+  eventSupplyOf,
+  OnEvent,
+  ValueTracker,
+} from 'fun-events';
 
 /**
  * @internal
