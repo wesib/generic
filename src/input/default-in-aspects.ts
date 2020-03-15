@@ -48,7 +48,7 @@ class DefaultInAspectsKey
     return afterAll({
       scheduler: opts.context.get(DefaultRenderScheduler[ContextKey__symbol].upKey),
       fns: opts.seed,
-    }).keep.thru(
+    }).keepThru(
         ({
             scheduler: [scheduler],
             fns,

@@ -1,9 +1,9 @@
 import { BootstrapContext, BootstrapWindow, mergeFunctions } from '@wesib/wesib';
 import { noop } from 'call-thru';
-import { AfterEvent, onAny, OnEvent, trackValue } from 'fun-events';
-import { DomEventDispatcher, OnDomEvent } from 'fun-events/dom';
+import { AfterEvent, EventReceiver, EventSupply, onAny, OnEvent, trackValue } from 'fun-events';
+import { DomEventDispatcher, DomEventListener, OnDomEvent } from 'fun-events/dom';
 import { NavHistory, PageEntry } from './nav-history.impl';
-import { Navigation as Navigation_ } from './navigation';
+import { Navigation as Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
 import {
   EnterPageEvent,
@@ -15,25 +15,20 @@ import {
 import { Page } from './page';
 import { PageParam } from './page-param';
 
-export function createNavigation(context: BootstrapContext): Navigation_ {
+export function createNavigation(context: BootstrapContext): Navigation {
 
   const window = context.get(BootstrapWindow);
   const { document, history } = window;
   const dispatcher = new DomEventDispatcher(window);
   const navHistory = context.get(NavHistory);
   const agent = context.get(NavigationAgent);
-  const onEnter = dispatcher.on<EnterPageEvent>(NavigationEventType.EnterPage);
-  const onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage);
-  const onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
-  const onEvent = onAny<[NavigationEvent]>(onEnter, onLeave, onStay);
   const nav = trackValue<PageEntry>(navHistory.init());
 
   nav.read(nextEntry => nextEntry.apply()); // The very first page entry receiver applies scheduled updates to page
 
-  const readPage: AfterEvent<[Page]> = nav.read.keep.thru(entry => entry.page);
   let next: Promise<any> = Promise.resolve();
 
-  dispatcher.on<PopStateEvent>('popstate')(popState => {
+  dispatcher.on<PopStateEvent>('popstate').to(popState => {
 
     const entry = navHistory.popState(popState, nav);
 
@@ -48,7 +43,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     }
   });
 
-  dispatcher.on('hashchange')(() => {
+  dispatcher.on('hashchange').to(() => {
 
     const entry = navHistory.hashChange(nav);
 
@@ -63,9 +58,9 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     }
   });
 
-  type NavTarget = { -readonly [K in keyof Navigation_.URLTarget]: Navigation_.URLTarget[K] };
+  type NavTarget = { -readonly [K in keyof Navigation.URLTarget]: Navigation.URLTarget[K] };
 
-  class Navigation extends Navigation_ {
+  class Navigation$ extends Navigation {
 
     get page(): Page {
       return nav.it.page;
@@ -75,35 +70,52 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       return history.length;
     }
 
-    get onEnter(): OnDomEvent<EnterPageEvent> {
-      return onEnter;
+    onEnter(): OnDomEvent<EnterPageEvent>;
+    onEnter(listener: DomEventListener<EnterPageEvent>): EventSupply;
+    onEnter(listener?: DomEventListener<EnterPageEvent>): OnDomEvent<EnterPageEvent> | EventSupply {
+      return (this.onEnter = dispatcher.on<EnterPageEvent>(NavigationEventType.EnterPage).F)(listener);
     }
 
-    get onLeave(): OnDomEvent<LeavePageEvent> {
-      return onLeave;
+    onLeave(): OnDomEvent<LeavePageEvent>;
+    onLeave(listener: DomEventListener<LeavePageEvent>): EventSupply;
+    onLeave(listener?: DomEventListener<LeavePageEvent>): OnDomEvent<LeavePageEvent> | EventSupply {
+      return (this.onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage).F)(listener);
     }
 
-    get onStay(): OnDomEvent<StayOnPageEvent> {
-      return onStay;
+    onStay(): OnDomEvent<StayOnPageEvent>;
+    onStay(listener: DomEventListener<StayOnPageEvent>): EventSupply;
+    onStay(listener?: DomEventListener<StayOnPageEvent>): OnDomEvent<StayOnPageEvent> | EventSupply {
+      return (this.onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage).F)(listener);
     }
 
-    get on(): OnEvent<[NavigationEvent]> {
-      return onEvent;
+    /**
+     * Builds an `OnEvent` sender of {@link NavigationEvent navigation events}.
+     *
+     * The `[OnEvent__symbol]` property is an alias of this one.
+     *
+     * @returns `OnEvent` sender of {@link NavigationEvent navigation events}.
+     */
+    on(): OnEvent<[NavigationEvent]>;
+    on(receiver: EventReceiver<[NavigationEvent]>): EventSupply;
+    on(receiver?: EventReceiver<[NavigationEvent]>): OnEvent<[NavigationEvent]> | EventSupply {
+      return (this.on = onAny<[NavigationEvent]>(this.onEnter(), this.onLeave(), this.onStay()).F)(receiver);
     }
 
-    get read(): AfterEvent<[Page]> {
-      return readPage;
+    read(): AfterEvent<[Page]>;
+    read(receiver: EventReceiver<[Page]>): EventSupply;
+    read(receiver?: EventReceiver<[Page]>): AfterEvent<[Page]> | EventSupply {
+      return (this.read = nav.read().keepThru(entry => entry.page).F)(receiver);
     }
 
     go(delta?: number): void {
       history.go(delta);
     }
 
-    open(target: Navigation_.Target | string | URL): Promise<Page | null> {
+    open(target: Navigation.Target | string | URL): Promise<Page | null> {
       return navigate('pre-open', 'open', target);
     }
 
-    replace(target: Navigation_.Target | string | URL): Promise<Page | null> {
+    replace(target: Navigation.Target | string | URL): Promise<Page | null> {
       return navigate('pre-replace', 'replace', target);
     }
 
@@ -111,31 +123,31 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
       return navHistory.update(nav, toURL(url)).page;
     }
 
-    with<T, I>(ref: PageParam.Ref<T, I>, input: I): Navigation_.Parameterized {
+    with<T, I>(ref: PageParam.Ref<T, I>, input: I): Navigation.Parameterized {
       return withParam(page => page.put(ref, input));
     }
 
   }
 
-  return new Navigation();
+  return new Navigation$();
 
-  function withParam(applyParams: (page: Page) => void): Navigation_.Parameterized {
+  function withParam(applyParams: (page: Page) => void): Navigation.Parameterized {
     return {
-      with<TT, II>(ref: PageParam.Ref<TT, II>, input: II): Navigation_.Parameterized {
+      with<TT, II>(ref: PageParam.Ref<TT, II>, input: II): Navigation.Parameterized {
         return withParam(mergeFunctions(applyParams, page => page.put(ref, input)));
       },
-      open(target?: Navigation_.Target | string | URL) {
+      open(target?: Navigation.Target | string | URL) {
         return navigate('pre-open', 'open', target, applyParams);
       },
-      replace(target?: Navigation_.Target | string | URL) {
+      replace(target?: Navigation.Target | string | URL) {
         return navigate('pre-replace', 'replace', target, applyParams);
       },
       pretend<T>(
-          targetOrCallback?: Navigation_.Target | string | URL | ((this: void, from: Page, to: Page) => T),
+          targetOrCallback?: Navigation.Target | string | URL | ((this: void, from: Page, to: Page) => T),
           callback: (this: void, from: Page, to: Page) => T = (_from, to) => to as unknown as T,
       ): T | undefined {
 
-        let target: Navigation_.Target | string | URL | undefined;
+        let target: Navigation.Target | string | URL | undefined;
 
         if (typeof targetOrCallback === 'function') {
           callback = targetOrCallback;
@@ -166,12 +178,12 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
     return url || nav.it.page.url;
   }
 
-  function navTargetOf(target?: Navigation_.Target | string | URL): NavTarget {
+  function navTargetOf(target?: Navigation.Target | string | URL): NavTarget {
     if (target == null || typeof target === 'string' || target instanceof URL) {
       return { url: toURL(target) };
     }
     if (target.url instanceof URL) {
-      return target as Navigation_.URLTarget;
+      return target as Navigation.URLTarget;
     }
     return { ...target, url: toURL(target.url) };
   }
@@ -179,7 +191,7 @@ export function createNavigation(context: BootstrapContext): Navigation_ {
   function navigate(
       whenLeave: 'pre-open' | 'pre-replace',
       when: 'open' | 'replace',
-      target?: Navigation_.Target | string | URL,
+      target?: Navigation.Target | string | URL,
       applyParams: (page: Page) => void = noop,
   ): Promise<Page | null> {
 

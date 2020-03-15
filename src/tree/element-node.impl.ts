@@ -7,7 +7,7 @@ import {
   ElementAdapter,
 } from '@wesib/wesib';
 import { ValueTracker } from 'fun-events';
-import { ComponentNode, ComponentTreeNode, ElementPickMode, ElementNode as ElementNode_ } from './element-node';
+import { ComponentNode, ComponentTreeNode, ElementNode, ElementPickMode } from './element-node';
 import { ElementNodeList } from './element-node-list';
 import { elementNodeList } from './element-node-list.impl';
 import { NodeAttributes } from './node-attributes.impl';
@@ -21,7 +21,7 @@ const ElementNode__symbol = (/*#__PURE__*/ Symbol('element-node'));
 /**
  * @internal
  */
-class ElementNode implements ComponentTreeNode {
+class ElementNode$ implements ComponentTreeNode {
 
   private readonly _attrs: NodeAttributes;
   private readonly _props: NodeProperties;
@@ -44,7 +44,7 @@ class ElementNode implements ComponentTreeNode {
     return (this.element as any)[ComponentContext__symbol];
   }
 
-  get parent(): ElementNode_ | null {
+  get parent(): ElementNode | null {
 
     const parent = this.element.parentNode;
 
@@ -72,11 +72,11 @@ class ElementNode implements ComponentTreeNode {
 /**
  * @internal
  */
-export function elementNodeOf(bsContext: BootstrapContext, element: Element, optional?: boolean): ElementNode_ {
+export function elementNodeOf(bsContext: BootstrapContext, element: Element, optional?: boolean): ElementNode {
 
-  const existing: ElementNode_ = (element as any)[ElementNode__symbol];
+  const existing: ElementNode = (element as any)[ElementNode__symbol];
 
-  return (existing || optional) ? existing : new ElementNode(bsContext, element);
+  return (existing || optional) ? existing : new ElementNode$(bsContext, element);
 }
 
 /**
@@ -89,7 +89,7 @@ function selectNodes(
     mode: ElementPickMode = {},
 ): ElementNodeList<any> {
   if (mode.all) {
-    return elementNodeList<ElementNode_>(
+    return elementNodeList<ElementNode>(
         bsContext,
         root,
         selector,

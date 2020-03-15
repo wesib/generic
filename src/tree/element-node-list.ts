@@ -3,7 +3,16 @@
  * @module @wesib/generic
  */
 import { AIterable, ArrayLikeIterable } from 'a-iterable';
-import { AfterEvent, AfterEvent__symbol, EventKeeper, EventSender, OnEvent, OnEvent__symbol } from 'fun-events';
+import {
+  AfterEvent,
+  AfterEvent__symbol,
+  EventKeeper,
+  EventReceiver,
+  EventSender,
+  EventSupply,
+  OnEvent,
+  OnEvent__symbol,
+} from 'fun-events';
 import { ElementNode } from './element-node';
 
 /**
@@ -20,37 +29,83 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode>
     implements EventSender<[N[], N[]]>, EventKeeper<[ElementNodeList<N>]> {
 
   /**
-   * An `OnEvent` sender of list changes. Sends arrays of added and removed nodes.
+   * Builds an `OnEvent` sender of this list changes.
    *
    * The `[OnEvent__symbol]` property is an alias of this one.
+   *
+   * @returns An `OnEvent` sender of added an removed node arrays.
    */
-  abstract readonly onUpdate: OnEvent<[N[], N[]]>;
+  abstract onUpdate(): OnEvent<[N[], N[]]>;
 
-  get [OnEvent__symbol](): OnEvent<[N[], N[]]> {
-    return this.onUpdate;
+  /**
+   * Starts sending this list changes to the given `receiver`
+   *
+   * @param receiver  Target receiver of added an removed node arrays.
+   *
+   * @returns List changes supply.
+   */
+  abstract onUpdate(receiver: EventReceiver<[N[], N[]]>): EventSupply;
+
+  [OnEvent__symbol](): OnEvent<[N[], N[]]> {
+    return this.onUpdate();
   }
 
   /**
-   * An `AfterEvent` keeper of current node list.
+   * Builds an `AfterEvent` keeper of current node list.
    *
    * The `[AfterEvent__symbol]` property is an alias of this one.
+   *
+   * @returns An `AfterEvent` keeper of this list.
    */
-  abstract readonly read: AfterEvent<[ElementNodeList<N>]>;
+  abstract read(): AfterEvent<[ElementNodeList<N>]>;
 
-  get [AfterEvent__symbol](): AfterEvent<[ElementNodeList<N>]> {
-    return this.read;
+  /**
+   * Starts sending current node list and updates to the given `receiver`.
+   *
+   * @param receiver  Target receiver of this node list.
+   *
+   * @returns Node list supply.
+   */
+  abstract read(receiver: EventReceiver<[ElementNodeList<N>]>): EventSupply;
+
+  [AfterEvent__symbol](): AfterEvent<[ElementNodeList<N>]> {
+    return this.read();
   }
 
   /**
-   * An `AfterEvent` keeper of node list changes.
+   * Builds an `AfterEvent` keeper of tracked list changes.
    *
-   * Sends an iterables of added and removed nodes. Sends current nodes immediately upon receiver registration.
+   * Sends current nodes immediately upon receiver registration as added ones.
+   *
+   * @returns An `AfterEvent` sender of iterables of added and removed nodes.
    */
-  abstract readonly track: AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>;
+  abstract track(): AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>;
 
   /**
-   * An `AfterEvent` keeper of the first node in this list.
+   * Starts sending tracked list changes to the given `receiver`.
+   *
+   * Sends current nodes immediately upon receiver registration as added ones.
+   *
+   * @param receiver  Target receiver of iterables of added and removed nodes.
+   *
+   * @returns Tracked list changes supply.
    */
-  abstract readonly first: AfterEvent<[N?]>;
+  abstract track(receiver: EventReceiver<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>): EventSupply;
+
+  /**
+   * Builds an `AfterEvent` keeper of the first node in this list.
+   *
+   * @returns `AfterEvent` keeper of either the first node, or `undefined` when the list is empty.
+   */
+  abstract first(): AfterEvent<[N?]>;
+
+  /**
+   * Starts sending the first node of this list and updates to the given `receiver`.
+   *
+   * @param receiver  Target receiver of either the first node, or `undefined` when the list is empty.
+   *
+   * @returns The first node supply.
+   */
+  abstract first(receiver: EventReceiver<[N?]>): EventSupply;
 
 }

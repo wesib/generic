@@ -3,8 +3,15 @@
  * @module @wesib/generic
  */
 import { BootstrapContext, ComponentContext } from '@wesib/wesib';
-import { ContextKey, ContextKey__symbol, ContextValues, ContextValueSpec, SingleContextKey } from 'context-values';
-import { AfterEvent, afterEventBy, EventKeeper, eventSupply, trackValue } from 'fun-events';
+import {
+  ContextKey,
+  ContextKey__symbol,
+  ContextRegistry,
+  ContextValues,
+  ContextValueSpec,
+  SingleContextKey,
+} from 'context-values';
+import { AfterEvent, afterEventBy, EventKeeper, EventReceiver, EventSupply, eventSupply, trackValue } from 'fun-events';
 import { newHierarchyRegistry } from './hierarchy-registry.impl';
 import { findParentContext, HierarchyRoot, HierarchyUpdates } from './hierarchy-updates.impl';
 
@@ -14,7 +21,7 @@ import { findParentContext, HierarchyRoot, HierarchyUpdates } from './hierarchy-
 const HierarchyContext__key = (/*#__PURE__*/ new SingleContextKey<HierarchyContext>(
     'hierarchy-context',
     {
-      byDefault: context => newHierarchyContext(context.get(ComponentContext)),
+      byDefault: context => new HierarchyContext$(context.get(ComponentContext)),
     },
 ));
 
@@ -42,11 +49,24 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
   abstract readonly context: ComponentContext<T>;
 
   /**
-   * An `AfterEvent` keeper of enclosing component's hierarchy context.
+   * Builds an `AfterEvent` keeper of enclosing component's hierarchy context.
    *
    * May send `undefined` when component is outside of hierarchy. E.g. when it is disconnected.
+   *
+   * @returns An `AfterEvent` of enclosing hierarcy context.
    */
-  abstract readonly up: AfterEvent<[HierarchyContext?]>;
+  abstract up(): AfterEvent<[HierarchyContext?]>;
+
+  /**
+   * Starts sending enclosing component's hierarchy context and updates to the given `receiver`
+   *
+   * May send `undefined` when component is outside of hierarchy. E.g. when it is disconnected.
+   *
+   * @param receiver  Target receiver of enclosing hierarchy context.
+   *
+   * @returns Enclosing hierarchy context supply.
+   */
+  abstract up(receiver: EventReceiver<[HierarchyContext?]>): EventSupply;
 
   /**
    * Provides hierarchy context value.
@@ -68,81 +88,75 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
 
 }
 
-/**
- * @internal
- */
-function newHierarchyContext<T extends object>(context: ComponentContext<T>): HierarchyContext<T> {
+class HierarchyContext$<T extends object> extends HierarchyContext<T> {
 
-  const hierarchyRoot = context.get(BootstrapContext).get(HierarchyRoot);
-  const up = afterEventBy<[HierarchyContext?]>(
-      receiver => {
+  private readonly _registry: ContextRegistry<HierarchyContext<T>>;
+  readonly get: HierarchyContext<T>['get'];
 
-        const parentHierarchy = trackValue<HierarchyContext>();
-        const rootSupply = eventSupply().needs(receiver.supply);
-        const parentSupply = eventSupply().needs(receiver.supply);
-        const updateParent = (): void => {
+  constructor(readonly context: ComponentContext<T>) {
+    super();
 
-          const parent = findParentContext(context);
+    const registry = this._registry = newHierarchyRegistry<T>(this.up());
 
-          if (parent) {
-
-            const [parentCtx, immediate] = parent;
-
-            parentHierarchy.it = parentCtx.get(HierarchyContext);
-            rootSupply.off();
-            if (immediate) {
-              parentSupply.off();
-            }
-          } else {
-            parentHierarchy.it = undefined;
-          }
-        };
-
-        hierarchyRoot.read({
-          supply: rootSupply,
-          receive: () => context.connected && updateParent(),
-        });
-        parentHierarchy.read.tillOff(parentSupply).consume(
-            newParent => newParent && newParent.context.get(HierarchyUpdates).on(updateParent),
-        );
-        parentHierarchy.read(receiver);
-        context.whenOn({
-          supply: receiver.supply,
-          receive: (_, onSupply) => {
-            updateParent();
-            onSupply.whenOff(
-                () => {
-                  Promise.resolve().then(
-                      () => context.connected || (parentHierarchy.it = undefined),
-                  );
-                },
-            );
-          },
-        });
-      },
-  ).share();
-  const registry = newHierarchyRegistry<T>(up);
-  const values = registry.newValues();
-
-  class HierarchyCtx extends HierarchyContext<T> {
-
-    readonly get = values.get;
-
-    get context(): ComponentContext<T> {
-      return context;
-    }
-
-    get up(): AfterEvent<[HierarchyContext?]> {
-      return up;
-    }
-
-    provide<Deps extends any[], Src, Seed>(
-        spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src | EventKeeper<Src[]>, Seed>,
-    ): () => void {
-      return registry.provide(spec);
-    }
-
+    this.get = registry.newValues().get;
   }
 
-  return new HierarchyCtx();
+  provide<Deps extends any[], Src, Seed>(
+      spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src | EventKeeper<Src[]>, Seed>,
+  ): () => void {
+    return this._registry.provide(spec);
+  }
+
+  up(): AfterEvent<[HierarchyContext?]>;
+  up(receiver: EventReceiver<[HierarchyContext?]>): EventSupply;
+  up(receiver?: EventReceiver<[HierarchyContext?]>): AfterEvent<[HierarchyContext?]> | EventSupply {
+    return (this.up = afterEventBy<[HierarchyContext?]>(
+        receiver => {
+
+          const parentHierarchy = trackValue<HierarchyContext>();
+          const rootSupply = eventSupply().needs(receiver.supply);
+          const parentSupply = eventSupply().needs(receiver.supply);
+          const updateParent = (): void => {
+
+            const parent = findParentContext(this.context);
+
+            if (parent) {
+
+              const [parentCtx, immediate] = parent;
+
+              parentHierarchy.it = parentCtx.get(HierarchyContext);
+              rootSupply.off();
+              if (immediate) {
+                parentSupply.off();
+              }
+            } else {
+              parentHierarchy.it = undefined;
+            }
+          };
+
+          this.context.get(BootstrapContext).get(HierarchyRoot).read({
+            supply: rootSupply,
+            receive: () => this.context.connected && updateParent(),
+          });
+          parentHierarchy.read().tillOff(parentSupply).consume(
+              newParent => newParent && newParent.context.get(HierarchyUpdates).on.to(updateParent),
+          );
+          parentHierarchy.read(receiver);
+          this.context.whenOn({
+            supply: receiver.supply,
+            receive: (_, onSupply) => {
+              updateParent();
+              onSupply.whenOff(
+                  () => {
+                    Promise.resolve().then(
+                        () => this.context.connected || (parentHierarchy.it = undefined),
+                    );
+                  },
+              );
+            },
+          });
+        },
+    ).share().F)(receiver);
+  }
+
 }

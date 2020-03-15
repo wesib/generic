@@ -38,7 +38,7 @@ describe('fetch', () => {
     })
     class TestFeature {}
 
-    bsContext = await bootstrapComponents(TestFeature).whenReady;
+    bsContext = await bootstrapComponents(TestFeature).whenReady();
   });
 
   describe('HttpFetch', () => {
@@ -132,7 +132,7 @@ describe('fetch', () => {
 
         const receiver = jest.fn();
         const done = jest.fn();
-        const supply = httpFetch(request, init)(receiver).whenOff(done);
+        const supply = httpFetch(request, init).to(receiver).whenOff(done);
 
         supply.off();
 
@@ -177,7 +177,7 @@ describe('fetch', () => {
     ): Promise<EventSupply> {
       return new Promise<EventSupply>(resolve => {
 
-        const supply = httpFetch(request, init)(receiver);
+        const supply = httpFetch(request, init).to(receiver);
 
         supply.whenOff(reason => {
           done(reason);

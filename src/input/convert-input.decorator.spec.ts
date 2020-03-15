@@ -102,7 +102,7 @@ describe('input', () => {
       @ConvertInput(convert)
       class ConvertedInput {}
 
-      const bsContext = await bootstrapComponents(RootInput, ConvertedInput).whenReady;
+      const bsContext = await bootstrapComponents(RootInput, ConvertedInput).whenReady();
       const [rootFactory, factory] = await Promise.all(([
         bsContext.whenDefined(RootInput),
         bsContext.whenDefined(ConvertedInput),

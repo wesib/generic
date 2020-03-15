@@ -33,7 +33,7 @@ export class FetchAgentKey<Res extends any[]>
   constructor(name: string) {
     super(name);
     this.upKey = this.createUpKey(
-        opts => opts.seed.keep.thru(
+        opts => opts.seed.keepThru(
             (...agents) => {
               if (agents.length) {
                 return nextArg(combineFetchAgents(agents));
@@ -60,7 +60,7 @@ export class FetchAgentKey<Res extends any[]>
     opts.context.get(
         this.upKey,
         'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
-    )!(agent => delegated = agent);
+    )!.to(agent => delegated = agent);
 
     return (next, request) => delegated(next, request);
   }

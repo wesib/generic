@@ -28,8 +28,8 @@ describe('input', () => {
       })
       class TestFeature {}
 
-      context = await bootstrapComponents(TestFeature).whenReady;
-      context.get(DefaultInAspects)(aspects => {
+      context = await bootstrapComponents(TestFeature).whenReady();
+      context.get(DefaultInAspects).to(aspects => {
         control = inValue(13).convert(aspects);
       });
     });

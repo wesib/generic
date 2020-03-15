@@ -37,7 +37,7 @@ export function SetInputName<T extends ComponentClass = Class>(
         const hierarchy = context.get(HierarchyContext);
 
         afterAll({
-          group: hierarchy.up.keep.thru_(
+          group: hierarchy.up().keepThru_(
               upper => upper ? nextAfterEvent(upper.get(InputFromControl)) : nextArg<NoInputFromControl>({}),
               ({ control }) => control && control.aspect(InGroup),
           ),

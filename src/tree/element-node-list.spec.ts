@@ -71,7 +71,7 @@ describe('tree', () => {
 
         const list = rootNode.select('*', { all: true });
 
-        expect(onSupplied(list)).toBe(list.onUpdate);
+        expect(onSupplied(list)).toBe(list.onUpdate());
       });
     });
     describe('[AfterEvent__symbol]', () => {
@@ -79,7 +79,7 @@ describe('tree', () => {
 
         const list = rootNode.select('*', { all: true });
 
-        expect(afterSupplied(list)).toBe(list.read);
+        expect(afterSupplied(list)).toBe(list.read());
       });
     });
 
@@ -394,6 +394,7 @@ describe('tree', () => {
         });
 
         it('does not observe DOM mutations initially', () => {
+          list.onUpdate();
           expect(observeSpy).not.toHaveBeenCalled();
         });
         it('observes DOM mutations', () => {

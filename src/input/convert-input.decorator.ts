@@ -28,11 +28,11 @@ export function ConvertInput<T extends ComponentClass = Class>(
         const { up } = context.get(HierarchyContext);
 
         afterAll({
-          parent: up.keep.thru_(
+          parent: up().keepThru_(
               upper => upper ? nextAfterEvent(upper.get(InputFromControl)) : nextArg<NoInputFromControl>({}),
           ),
           aspects: context.get(DefaultInAspects),
-        }).keep.thru_(
+        }).keepThru_(
             ({
               parent: [control],
               aspects: [aspects],

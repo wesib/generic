@@ -23,7 +23,7 @@ export function Mount<T extends ComponentClass = Class>(def: MountDef | MountDef
     feature: {
       needs: AutoMountSupport,
       setup(bsSetup) {
-        bsSetup.setupDefinition(bsSetup.feature)(defSetup => {
+        bsSetup.setupDefinition(bsSetup.feature).to(defSetup => {
           defSetup.whenReady(defContext => {
             bsSetup.provide({
               a: ElementAdapter,

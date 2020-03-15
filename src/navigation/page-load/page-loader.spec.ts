@@ -48,7 +48,7 @@ describe('navigation', () => {
     })
     class TestFeature {}
 
-    bsContext = await bootstrapComponents(TestFeature).whenReady;
+    bsContext = await bootstrapComponents(TestFeature).whenReady();
   });
 
   describe('PageLoader', () => {
@@ -274,7 +274,7 @@ describe('navigation', () => {
     ): Promise<EventSupply> {
       return new Promise<EventSupply>(resolve => {
 
-        const supply = loadPage(page)(receiver);
+        const supply = loadPage(page).to(receiver);
 
         supply.whenOff(reason => {
           done(reason);

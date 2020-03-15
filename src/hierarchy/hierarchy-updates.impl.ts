@@ -24,7 +24,7 @@ export const HierarchyRoot = (/*#__PURE__*/ new SingleContextKey<HierarchyRoot>(
 
         const root: Element = bsContext.get(BootstrapRoot);
 
-        new DomEventDispatcher(root).on<ComponentEvent>('wesib:component')(
+        new DomEventDispatcher(root).on<ComponentEvent>('wesib:component').to(
             ({ context }: ComponentEvent) => context.get(HierarchyUpdates).issue(),
         );
 
@@ -58,7 +58,7 @@ export class HierarchyUpdates {
     const updates = new EventEmitter<[ComponentContext]>();
     const hierarchyRoot = context.get(BootstrapContext).get(HierarchyRoot);
 
-    this.on = updates.on;
+    this.on = updates.on();
     this.send = () => updates.send(context);
     this.issue = () => {
 

@@ -1,5 +1,13 @@
 import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
-import { EventEmitter, EventSupply, eventSupply, EventSupply__symbol, OnEvent, ValueTracker } from 'fun-events';
+import {
+  EventEmitter,
+  EventReceiver,
+  EventSupply,
+  EventSupply__symbol,
+  eventSupplyOf,
+  OnEvent,
+  ValueTracker,
+} from 'fun-events';
 
 /**
  * @internal
@@ -7,7 +15,6 @@ import { EventEmitter, EventSupply, eventSupply, EventSupply__symbol, OnEvent, V
 class PropertyTracker<T> extends ValueTracker<T> {
 
   private readonly _updates = new EventEmitter<[T, T]>();
-  private readonly _supply = eventSupply();
 
   constructor(
       private readonly _element: any,
@@ -16,12 +23,8 @@ class PropertyTracker<T> extends ValueTracker<T> {
     super();
   }
 
-  get on(): OnEvent<[T, T]> {
-    return this._updates.on;
-  }
-
   get [EventSupply__symbol](): EventSupply {
-    return this._supply;
+    return eventSupplyOf(this._updates);
   }
 
   get it(): T {
@@ -32,19 +35,18 @@ class PropertyTracker<T> extends ValueTracker<T> {
     this._element[this._key] = value;
   }
 
-  done(reason?: any): this {
-    this._supply.off(reason);
-    return this;
+  on(): OnEvent<[T, T]>;
+  on(receiver: EventReceiver<[T, T]>): EventSupply;
+  on(receiver?: EventReceiver<[T, T]>): OnEvent<[T, T]> | EventSupply {
+    return (this.on = this._updates.on().F)(receiver);
   }
 
   bind(context: ComponentContext): void {
 
     const propertyState = context.get(ComponentState).track(domPropertyPathTo(this._key));
 
-    propertyState.onUpdate.tillOff(this)({
-      supply: eventSupply()
-          .cuts(this._updates)
-          .cuts(this),
+    propertyState.onUpdate().to({
+      supply: eventSupplyOf(this),
       receive: (_ctx, _path, newValue: any, oldValue: any) => this._updates.send(newValue, oldValue),
     });
   }

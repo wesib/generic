@@ -37,9 +37,9 @@ export function FillInputForm<T extends ComponentClass = Class>(
 
         context.whenOn(connectSupply => {
           afterAll({
-            node: componentNode.select(select, pick).first,
+            node: componentNode.select(select, pick).first(),
             aspects: context.get(DefaultInAspects),
-          }).keep.thru(({
+          }).keepThru(({
             node: [node],
             aspects: [aspects],
           }): NextCall<OnEventCallChain, [InControl<any>, InFormElement, EventSupply?] | []> => {

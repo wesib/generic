@@ -564,10 +564,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@wesib/wesib@^1.0.0-alpha.96":
-  version "1.0.0-alpha.96"
-  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.96.tgz#e9f7edfe58f1c8648ffb62fd570546eb85b8b7b6"
-  integrity sha512-ytnSac20grN5hAX7Xeupg5yDxXA5/zgOlo1vx9FAgJ9610P2eEri7qx8AEyY/IW17q4mSR5IyNsbC2dDs6uqmw==
+"@wesib/wesib@^1.0.0-alpha.98":
+  version "1.0.0-alpha.98"
+  resolved "https://registry.yarnpkg.com/@wesib/wesib/-/wesib-1.0.0-alpha.98.tgz#e97669016af584789a5c3c8123458ab3a8787324"
+  integrity sha512-sbhymGYXzbXJTImJ3gmUkflOfez+Vc/B7WCNwD5SRWFsiQgbv0oeNJ2bdyouipZbVcFTaycIcFr1bh4fBcb3GA==
 
 a-iterable@^2.5.0:
   version "2.5.0"
@@ -1107,10 +1107,10 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-context-values@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/context-values/-/context-values-2.3.1.tgz#2e71db73a2f60a97742011d1b760bdf0d651a827"
-  integrity sha512-K+RLNqwEyWeMV1/WzMtwzLPZrkIenD58opYxD9y0FaKIDP0aPlMgm3BwpCSaxJN+BPAf3M3PR5XBvolgGLL8KA==
+context-values@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/context-values/-/context-values-2.4.0.tgz#483365c0afd7083f1a218701cb1ce219fbfb636a"
+  integrity sha512-6e72gvdx3mcfp/bIMy/MYcLP03VZSxa0xkFQrJfqWteUfyNgK9WBdYRBEVzxMuqS7ahIlv0GwNZYuO3fVx4mAg==
 
 convert-source-map@^1.4.0, convert-source-map@^1.6.0, convert-source-map@^1.7.0:
   version "1.7.0"
@@ -1774,10 +1774,10 @@ fsevents@^2.1.2, fsevents@~2.1.2:
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.1.2.tgz#4c0a1fb34bc68e543b4b82a9ec392bfbda840805"
   integrity sha512-R4wDiBwZ0KzpgOWetKDug1FZcYhqYnUYKtfZYt4mD5SBz76q0KR4Q9o7GIPamsVPGmW3EYPPJ0dOOjvx32ldZA==
 
-fun-events@^7.5.0:
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/fun-events/-/fun-events-7.5.0.tgz#b3b57a196ddcfcdf0a4b89dca3a8cd737200c5f5"
-  integrity sha512-+Sy50ha3izucjkQhdCN7F4CQa9TpLamzp1OvJvVDZ0NcVD9ZMW1NYkg4SdCZIxrTFHLUHFOAFYJgVOHquDmhFQ==
+fun-events@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/fun-events/-/fun-events-9.0.0.tgz#7356f83908d9f092180fb18b96fd45bab1cd4f34"
+  integrity sha512-lAjjoblCzIc0Vv+ZD89CaBrFDaeLCQzsxU1x+l898cNQivFJvVnKQ0nceMpkVII5B4lrg+hH6WoWRYT0N8QUnA==
 
 function-bind@^1.1.1:
   version "1.1.1"
@@ -2097,10 +2097,10 @@ inherits@2:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
-input-aspects@^2.5.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/input-aspects/-/input-aspects-2.5.1.tgz#c4f3f8b13969f71782043e747122344c66e1af68"
-  integrity sha512-/57witYT+qgmy0IGHr5fQGfmhh4MAI0F1pA+7R0yUEzVMgt7mQErBRcfbl0vki/6/B8dpsq4UAiZNwQEbjiLGA==
+input-aspects@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/input-aspects/-/input-aspects-3.0.0.tgz#ab313814a2b93fb1e24b13c25c6d610d7e82532f"
+  integrity sha512-JYPn4qYWaMJ2drrG2UYKCpgRltqYR8J6L25nJqTZw9vFXceVBUXmqBOomsEEJguXLHuN0Uft8rb24hqL477ahQ==
   dependencies:
     delta-set "^1.1.0"
 
@@ -4272,10 +4272,10 @@ stubs@^3.0.0:
   resolved "https://registry.yarnpkg.com/stubs/-/stubs-3.0.0.tgz#e8d2ba1fa9c90570303c030b6900f7d5f89abe5b"
   integrity sha1-6NK6H6nJBXAwPAMLaQD31fiavls=
 
-style-producer@^3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/style-producer/-/style-producer-3.7.0.tgz#4daad6a8dfacdffec49eb4d5d5fb8d8c1a921c1e"
-  integrity sha512-x6WKwEkuaKv8lECkdlMa5wska/lwbwrGRA4w9kIcRhtXQasSn2YtR7xRj2/YvPgYaCzltC3ED01f+WHQUiAszA==
+style-producer@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/style-producer/-/style-producer-4.0.0.tgz#a2125700603efb6045005c317d5d764c8a26accc"
+  integrity sha512-K6y+sVtY1/l8P24v/570SOEZGI9/VB7+Q19TanWpIlz9OgK3ZtMlHUYZ29odraEULz8UHswob9CRtB6D0rOGQA==
   dependencies:
     cssesc "^3.0.0"
     hyphenate-style-name "^1.0.3"

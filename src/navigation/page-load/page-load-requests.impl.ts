@@ -115,7 +115,8 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
           const supply = emitter.on(responseReceiver);
 
           self._loader(page)
-              .tillOff(loadSupply)(response => emitter.send(response))
+              .tillOff(loadSupply)
+              .to(response => emitter.send(response))
               .whenOff(error => {
                 if (error !== undefined && !(error instanceof PageLoadAbortError)) {
                   // Report current page load error as failed load response
@@ -132,7 +133,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
 
         itsEach(
             self,
-            ({ fragment, receiver }) => onFragment(onLoad, fragment)({
+            ({ fragment, receiver }) => onFragment(onLoad, fragment).to({
               supply: eventSupply().needs(receiver.supply),
               receive(context, response): void {
                 receiver.receive(context, response);

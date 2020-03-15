@@ -40,7 +40,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
 
         const onLoad = loader(page);
         const tracker = trackValue<PageLoadResponse>();
-        const trackSupply = onLoad(resp => {
+        const trackSupply = onLoad.to(resp => {
           tracker.it = resp;
         }).whenOff(reason => {
           // Error drops page cache, unlike successful page load.
@@ -52,7 +52,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
         supply.cuts(trackSupply).cuts(tracker);
 
         tracked = {
-          on: tracker.read.thru_(
+          on: tracker.read().thru_(
               response => response ? nextArgs(response) : nextSkip(),
           ),
           num: 0,
@@ -63,7 +63,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
 
       ++requested.num;
 
-      return requested.on.tillOff(supply)(receiver).whenOff(reason => {
+      return requested.on.tillOff(supply).to(receiver).whenOff(reason => {
         if (!--requested.num) {
           // Allow to request the same page again
           Promise.resolve().then(() => {

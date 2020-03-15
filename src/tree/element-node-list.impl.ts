@@ -17,11 +17,21 @@ import {
   mapIt,
   overArray,
 } from 'a-iterable';
-import { isPresent, nextArg, nextArgs } from 'call-thru';
-import { AfterEvent, afterEventBy, afterSupplied, EventEmitter, OnEvent, onEventBy } from 'fun-events';
+import { isPresent, nextArg, nextArgs, valuesProvider } from 'call-thru';
+import {
+  AfterEvent,
+  afterEventBy,
+  afterSent,
+  afterSupplied,
+  EventEmitter,
+  EventReceiver,
+  EventSupply,
+  OnEvent,
+  onEventBy,
+} from 'fun-events';
 import { html__naming } from 'namespace-aliaser';
 import { ElementNode, ElementPickMode } from './element-node';
-import { ElementNodeList as ElementNodeList_ } from './element-node-list';
+import { ElementNodeList } from './element-node-list';
 
 /**
  * @internal
@@ -37,7 +47,7 @@ export function elementNodeList<N extends ElementNode>(
     selectorOrType: string | ComponentClass<any>,
     nodeOf: (node: Element, optional?: boolean) => N | undefined,
     { deep, all }: ElementPickMode,
-): ElementNodeList_<N> {
+): ElementNodeList<N> {
 
   const updates = new EventEmitter<[N[], N[]]>();
   const init = deep ? WATCH_DEEP : undefined;
@@ -75,42 +85,6 @@ export function elementNodeList<N extends ElementNode>(
     });
   }
 
-  const observer = bsContext.get(ElementObserver)(update);
-  let nodeList: ElementNodeList;
-
-  const onUpdate = onEventBy<[N[], N[]]>(receiver => {
-
-    const firstReceiver = !updates.size;
-    const supply = updates.on(receiver);
-
-    if (firstReceiver) {
-      refresh();
-      observer.observe(root, init);
-    }
-
-    return supply.whenOff(() => {
-      if (!updates.size) {
-        observer.disconnect();
-      }
-    });
-  });
-  const read = afterEventBy<[ElementNodeList]>(onUpdate.thru(() => nodeList), () => [nodeList]);
-  const onTrackUpdate: OnEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> = onUpdate.thru(
-      (added, removed) => nextArgs(AIterable.of(added), AIterable.of(removed)),
-  );
-  const track = afterEventBy<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>(receiver => {
-
-    const initialEmitter = new EventEmitter<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>();
-
-    initialEmitter.on(receiver);
-    initialEmitter.send(nodeList, AIterable.of([]));
-
-    onTrackUpdate(receiver);
-  });
-  const first: AfterEvent<[N?]> = afterSupplied(read).keep.thru(
-      list => nextArg(itsFirst(list)),
-  );
-
   if (!all) {
     root.addEventListener('wesib:component', event => {
 
@@ -125,22 +99,68 @@ export function elementNodeList<N extends ElementNode>(
     });
   }
 
-  class ElementNodeList extends ElementNodeList_<N> {
+  class ElementNodeList$ extends ElementNodeList<N> {
 
-    get onUpdate(): OnEvent<[N[], N[]]> {
-      return onUpdate;
+    onUpdate(): OnEvent<[N[], N[]]>;
+    onUpdate(receiver: EventReceiver<[N[], N[]]>): EventSupply;
+    onUpdate(receiver?: EventReceiver<[N[], N[]]>): OnEvent<[N[], N[]]> | EventSupply {
+
+      const observer = bsContext.get(ElementObserver)(update);
+
+      return (this.onUpdate = onEventBy<[N[], N[]]>(receiver => {
+
+        const firstReceiver = !updates.size;
+        const supply = updates.on(receiver);
+
+        if (firstReceiver) {
+          refresh();
+          observer.observe(root, init);
+        }
+
+        return supply.whenOff(() => {
+          if (!updates.size) {
+            observer.disconnect();
+          }
+        });
+      }).F)(receiver);
     }
 
-    get read(): AfterEvent<[ElementNodeList]> {
-      return read;
+    read(): AfterEvent<[ElementNodeList<N>]>;
+    read(receiver: EventReceiver<[ElementNodeList<N>]>): EventSupply;
+    read(receiver?: EventReceiver<[ElementNodeList<N>]>): AfterEvent<[ElementNodeList<N>]> | EventSupply {
+      return (this.read = afterSent<[ElementNodeList<N>]>(
+          this.onUpdate().thru(() => this),
+          valuesProvider(this),
+      ).F)(receiver);
     }
 
-    get track(): AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> {
-      return track;
+    track(): AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>;
+    track(receiver: EventReceiver<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>): EventSupply;
+    track(
+        receiver?: EventReceiver<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>,
+    ): AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> | EventSupply {
+
+      const onTrackUpdate: OnEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> = this.onUpdate().thru(
+          (added, removed) => nextArgs(AIterable.of(added), AIterable.of(removed)),
+      );
+
+      return (this.track = afterEventBy<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>(receiver => {
+
+        const initialEmitter = new EventEmitter<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>();
+
+        initialEmitter.on(receiver);
+        initialEmitter.send(this, AIterable.of([]));
+
+        onTrackUpdate.to(receiver);
+      }).F)(receiver);
     }
 
-    get first(): AfterEvent<[N?]> {
-      return first;
+    first(): AfterEvent<[N?]>;
+    first(receiver: EventReceiver<[N?]>): EventSupply;
+    first(receiver?: EventReceiver<[N?]>): AfterEvent<[N?]> | EventSupply {
+      return (this.first = afterSupplied(this.read()).keepThru(
+          list => nextArg<N | undefined>(itsFirst(list)),
+      ).F)(receiver);
     }
 
     [Symbol.iterator](): Iterator<N> {
@@ -155,7 +175,7 @@ export function elementNodeList<N extends ElementNode>(
 
   }
 
-  return nodeList = new ElementNodeList();
+  return new ElementNodeList$();
 
   function elements(): Set<Element> {
     return updates.size ? cache : refresh();

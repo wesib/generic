@@ -97,30 +97,12 @@ class AttributesObserver {
 class AttributeTracker extends ValueTracker<string | null> {
 
   private readonly _updates = new EventEmitter<[string | null, string | null]>();
-  readonly on: OnEvent<[string | null, string | null]>;
 
   constructor(
       private readonly _observer: AttributesObserver,
       private readonly _name: string,
   ) {
     super();
-
-    let observeSupply = noEventSupply();
-
-    this.on = onEventBy(receiver => {
-      if (!this._updates.size) {
-        observeSupply = this._observer.observe(
-            _name,
-            (newValue, oldValue) => this._updates.send(newValue, oldValue),
-        );
-      }
-      receiver.supply.needs(observeSupply);
-      this._updates.on(receiver).whenOff(reason => {
-        if (!this._updates.size) {
-          observeSupply.off(reason);
-        }
-      });
-    });
   }
 
   get [EventSupply__symbol](): EventSupply {
@@ -137,6 +119,28 @@ class AttributeTracker extends ValueTracker<string | null> {
     } else {
       this._observer.element.removeAttribute(this._name);
     }
+  }
+
+  on(): OnEvent<[string | null, string | null]>;
+  on(receiver: EventReceiver<[string | null, string | null]>): EventSupply;
+  on(receiver?: EventReceiver<[string | null, string | null]>): OnEvent<[string | null, string | null]> | EventSupply {
+
+    let observeSupply = noEventSupply();
+
+    return (this.on = onEventBy(receiver => {
+      if (!this._updates.size) {
+        observeSupply = this._observer.observe(
+            this._name,
+            (newValue, oldValue) => this._updates.send(newValue, oldValue),
+        );
+      }
+      receiver.supply.needs(observeSupply);
+      this._updates.on(receiver).whenOff(reason => {
+        if (!this._updates.size) {
+          observeSupply.off(reason);
+        }
+      });
+    }).F)(receiver);
   }
 
 }
