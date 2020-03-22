@@ -1,3 +1,5 @@
+import { EventKeeper, trackValue } from '@proc7ts/fun-events';
+import { immediateRenderScheduler } from '@proc7ts/render-scheduler';
 import {
   bootstrapComponents,
   BootstrapWindow,
@@ -6,8 +8,6 @@ import {
   ComponentMount,
   DefaultRenderScheduler,
 } from '@wesib/wesib';
-import { EventKeeper, trackValue } from 'fun-events';
-import { immediateRenderScheduler } from 'render-scheduler';
 import { LocationMock } from '../spec/location-mock';
 import { ElementNode } from '../tree';
 import { ActivateNavLink, ActivateNavLinkDef } from './activate-nav-link.decorator';

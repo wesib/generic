@@ -1,12 +1,4 @@
 import {
-  BootstrapContext,
-  ComponentClass,
-  DefaultNamespaceAliaser,
-  ElementObserver,
-  ElementObserverInit,
-  isElement,
-} from '@wesib/wesib';
-import {
   AIterable,
   ArrayLikeIterable,
   filterIt,
@@ -16,8 +8,8 @@ import {
   itsIterator,
   mapIt,
   overArray,
-} from 'a-iterable';
-import { isPresent, nextArg, nextArgs, valuesProvider } from 'call-thru';
+} from '@proc7ts/a-iterable';
+import { isPresent, nextArg, nextArgs, valuesProvider } from '@proc7ts/call-thru';
 import {
   AfterEvent,
   afterEventBy,
@@ -28,8 +20,16 @@ import {
   EventSupply,
   OnEvent,
   onEventBy,
-} from 'fun-events';
-import { html__naming } from 'namespace-aliaser';
+} from '@proc7ts/fun-events';
+import { html__naming } from '@proc7ts/namespace-aliaser';
+import {
+  BootstrapContext,
+  ComponentClass,
+  DefaultNamespaceAliaser,
+  ElementObserver,
+  ElementObserverInit,
+  isElement,
+} from '@wesib/wesib';
 import { ElementNode, ElementPickMode } from './element-node';
 import { ElementNodeList } from './element-node-list';
 

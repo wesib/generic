@@ -1,7 +1,7 @@
+import { noop } from '@proc7ts/call-thru';
+import { AfterEvent, EventReceiver, EventSupply, onAny, OnEvent, trackValue } from '@proc7ts/fun-events';
+import { DomEventDispatcher, DomEventListener, OnDomEvent } from '@proc7ts/fun-events/dom';
 import { BootstrapContext, BootstrapWindow, mergeFunctions } from '@wesib/wesib';
-import { noop } from 'call-thru';
-import { AfterEvent, EventReceiver, EventSupply, onAny, OnEvent, trackValue } from 'fun-events';
-import { DomEventDispatcher, DomEventListener, OnDomEvent } from 'fun-events/dom';
 import { NavHistory, PageEntry } from './nav-history.impl';
 import { Navigation as Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';

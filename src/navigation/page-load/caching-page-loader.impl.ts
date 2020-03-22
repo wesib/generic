@@ -1,5 +1,5 @@
-import { nextArgs, nextSkip } from 'call-thru';
-import { eventSupply, EventSupply, OnEvent, onEventBy, trackValue } from 'fun-events';
+import { nextArgs, nextSkip } from '@proc7ts/call-thru';
+import { eventSupply, EventSupply, OnEvent, onEventBy, trackValue } from '@proc7ts/fun-events';
 import { Page } from '../page';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoader } from './page-loader.impl';

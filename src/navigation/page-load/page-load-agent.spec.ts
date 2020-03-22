@@ -1,5 +1,5 @@
-import { ContextRegistry } from 'context-values';
-import { EventEmitter, OnEvent, onSupplied } from 'fun-events';
+import { ContextRegistry } from '@proc7ts/context-values';
+import { EventEmitter, OnEvent, onSupplied } from '@proc7ts/fun-events';
 import { PageLoadAgent } from './page-load-agent';
 import { PageLoadResponse } from './page-load-response';
 import Mock = jest.Mock;

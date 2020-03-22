@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { MultiContextKey, MultiContextRef } from 'context-values';
-import { StypRenderer } from 'style-producer';
+import { MultiContextKey, MultiContextRef } from '@proc7ts/context-values';
+import { StypRenderer } from '@proc7ts/style-producer';
 
 /**
  * A CSS renderer that will be enabled by default by [[ComponentStyleProducer]].

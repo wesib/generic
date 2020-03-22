@@ -1,3 +1,4 @@
+import { ValueTracker } from '@proc7ts/fun-events';
 import {
   BootstrapContext,
   ComponentClass,
@@ -6,7 +7,6 @@ import {
   ComponentEvent,
   ElementAdapter,
 } from '@wesib/wesib';
-import { ValueTracker } from 'fun-events';
 import { ComponentNode, ComponentTreeNode, ElementNode, ElementPickMode } from './element-node';
 import { ElementNodeList } from './element-node-list';
 import { elementNodeList } from './element-node-list.impl';

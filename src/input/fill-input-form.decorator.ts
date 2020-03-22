@@ -2,10 +2,10 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { nextArgs, NextCall } from '@proc7ts/call-thru';
+import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from '@proc7ts/fun-events';
+import { InControl, InConverter, InFormElement } from '@proc7ts/input-aspects';
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
-import { nextArgs, NextCall } from 'call-thru';
-import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from 'fun-events';
-import { InControl, InConverter, InFormElement } from 'input-aspects';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
 import { inputToForm } from './input-to-form';

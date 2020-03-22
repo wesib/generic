@@ -1,6 +1,6 @@
+import { EventEmitter, EventSupply, eventSupply, OnEvent, onEventBy } from '@proc7ts/fun-events';
+import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { EventEmitter, EventSupply, eventSupply, OnEvent, onEventBy } from 'fun-events';
-import { DomEventDispatcher } from 'fun-events/dom';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
 

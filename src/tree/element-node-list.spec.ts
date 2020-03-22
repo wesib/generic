@@ -1,3 +1,6 @@
+import { AIterable, ArrayLikeIterable, itsEmpty } from '@proc7ts/a-iterable';
+import { noop } from '@proc7ts/call-thru';
+import { afterSupplied, onSupplied } from '@proc7ts/fun-events';
 import {
   bootstrapComponents,
   BootstrapContext,
@@ -8,9 +11,6 @@ import {
   ElementObserver,
   Feature,
 } from '@wesib/wesib';
-import { AIterable, ArrayLikeIterable, itsEmpty } from 'a-iterable';
-import { noop } from 'call-thru';
-import { afterSupplied, onSupplied } from 'fun-events';
 import { ComponentTreeSupport } from './component-tree-support.feature';
 import { ComponentNode, ElementNode } from './element-node';
 import { ElementNodeList } from './element-node-list';

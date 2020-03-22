@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { AIterable, ArrayLikeIterable } from 'a-iterable';
+import { AIterable, ArrayLikeIterable } from '@proc7ts/a-iterable';
 import {
   AfterEvent,
   AfterEvent__symbol,
@@ -12,7 +12,7 @@ import {
   EventSupply,
   OnEvent,
   OnEvent__symbol,
-} from 'fun-events';
+} from '@proc7ts/fun-events';
 import { ElementNode } from './element-node';
 
 /**

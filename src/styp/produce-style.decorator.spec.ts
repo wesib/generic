@@ -1,3 +1,6 @@
+import { trackValue } from '@proc7ts/fun-events';
+import { immediateRenderScheduler } from '@proc7ts/render-scheduler';
+import { StypProperties, StypRenderer, stypRoot, StypRules, stypSelectorText } from '@proc7ts/style-producer';
 import {
   Component,
   ComponentContext,
@@ -7,9 +10,6 @@ import {
   Feature,
   ShadowContentRoot,
 } from '@wesib/wesib';
-import { trackValue } from 'fun-events';
-import { immediateRenderScheduler } from 'render-scheduler';
-import { StypProperties, StypRenderer, stypRoot, StypRules, stypSelectorText } from 'style-producer';
 import { testComponentFactory } from '../spec/test-element';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypOptions } from './component-styp-options';

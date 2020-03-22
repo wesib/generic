@@ -1,6 +1,6 @@
+import { itsEmpty, itsFirst } from '@proc7ts/a-iterable';
+import { RefStypRule, StypLength, StypRule, StypRuleList, StypRuleRef } from '@proc7ts/style-producer';
 import { bootstrapComponents, BootstrapContext, Class, Feature } from '@wesib/wesib';
-import { itsEmpty, itsFirst } from 'a-iterable';
-import { RefStypRule, StypLength, StypRule, StypRuleList, StypRuleRef } from 'style-producer';
 import { Theme } from './theme';
 import { ThemeStyle } from './theme-style';
 import { ThemeSupport } from './theme-support.feature';

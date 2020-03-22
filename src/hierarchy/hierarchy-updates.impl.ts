@@ -1,3 +1,6 @@
+import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
+import { EventEmitter, OnEvent, trackValue, ValueTracker } from '@proc7ts/fun-events';
+import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
 import {
   BootstrapContext,
   BootstrapRoot,
@@ -5,9 +8,6 @@ import {
   ComponentContext__symbol,
   ComponentEvent,
 } from '@wesib/wesib';
-import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { EventEmitter, OnEvent, trackValue, ValueTracker } from 'fun-events';
-import { DomEventDispatcher } from 'fun-events/dom';
 
 /**
  * @internal

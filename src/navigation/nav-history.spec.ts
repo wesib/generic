@@ -1,5 +1,5 @@
+import { noop } from '@proc7ts/call-thru';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
-import { noop } from 'call-thru';
 import { LocationMock, navHistoryState } from '../spec/location-mock';
 import { testPageParam, testPageParamHandle } from '../spec/test-page-param';
 import { NAV_DATA_KEY, NavDataEnvelope } from './nav-history.impl';

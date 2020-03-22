@@ -1,8 +1,8 @@
+import { itsEach } from '@proc7ts/a-iterable';
+import { noop } from '@proc7ts/call-thru';
+import { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } from '@proc7ts/context-values';
+import { ValueTracker } from '@proc7ts/fun-events';
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
-import { itsEach } from 'a-iterable';
-import { noop } from 'call-thru';
-import { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } from 'context-values';
-import { ValueTracker } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';

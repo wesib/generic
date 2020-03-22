@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
+import { ValueTracker } from '@proc7ts/fun-events';
 import { ComponentClass, ComponentContext } from '@wesib/wesib';
-import { SingleContextKey, SingleContextRef } from 'context-values';
-import { ValueTracker } from 'fun-events';
 import { ElementNodeList } from './element-node-list';
 
 /**

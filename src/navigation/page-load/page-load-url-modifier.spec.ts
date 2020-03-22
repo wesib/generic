@@ -1,4 +1,4 @@
-import { ContextRegistry, ContextValues } from 'context-values';
+import { ContextRegistry, ContextValues } from '@proc7ts/context-values';
 import { PageLoadURLModifier } from './page-load-url-modifier';
 
 describe('navigation', () => {

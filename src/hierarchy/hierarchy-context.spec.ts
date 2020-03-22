@@ -1,6 +1,6 @@
+import { MultiContextUpKey, MultiContextUpRef } from '@proc7ts/context-values/updatable';
+import { EventSupply } from '@proc7ts/fun-events';
 import { bootstrapComponents, BootstrapRoot, Component, ComponentFactory, Feature } from '@wesib/wesib';
-import { MultiContextUpKey, MultiContextUpRef } from 'context-values/updatable';
-import { EventSupply } from 'fun-events';
 import { HierarchyContext } from './hierarchy-context';
 
 describe('hierarchy', () => {

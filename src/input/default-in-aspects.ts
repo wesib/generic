@@ -2,11 +2,11 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { ContextKey__symbol, ContextValueOpts, ContextValues } from '@proc7ts/context-values';
+import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
+import { afterAll, AfterEvent, EventKeeper } from '@proc7ts/fun-events';
+import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from '@proc7ts/input-aspects';
 import { DefaultNamespaceAliaser, DefaultRenderScheduler } from '@wesib/wesib';
-import { ContextKey__symbol, ContextValueOpts, ContextValues } from 'context-values';
-import { ContextUpKey, ContextUpRef } from 'context-values/updatable';
-import { afterAll, AfterEvent, EventKeeper } from 'fun-events';
-import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from 'input-aspects';
 
 /**
  * Default input aspects.

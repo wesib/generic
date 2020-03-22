@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
+import { produceStyle } from '@proc7ts/style-producer';
 import { ComponentContext, FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
-import { produceStyle } from 'style-producer';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';

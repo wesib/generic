@@ -1,7 +1,15 @@
-import { nextArg } from 'call-thru';
-import { ContextValueOpts, ContextValues } from 'context-values';
-import { ContextUpKey, ContextUpRef } from 'context-values/updatable';
-import { AfterEvent, afterThe, EventKeeper, EventSender, nextAfterEvent, OnEvent, onSupplied } from 'fun-events';
+import { nextArg } from '@proc7ts/call-thru';
+import { ContextValueOpts, ContextValues } from '@proc7ts/context-values';
+import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
+import {
+  AfterEvent,
+  afterThe,
+  EventKeeper,
+  EventSender,
+  nextAfterEvent,
+  OnEvent,
+  onSupplied,
+} from '@proc7ts/fun-events';
 
 /**
  * @internal

@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import {
   AfterEvent,
   AfterEvent__symbol,
@@ -12,8 +12,8 @@ import {
   EventSupply,
   OnEvent,
   OnEvent__symbol,
-} from 'fun-events';
-import { DomEventListener, OnDomEvent } from 'fun-events/dom';
+} from '@proc7ts/fun-events';
+import { DomEventListener, OnDomEvent } from '@proc7ts/fun-events/dom';
 import { EnterPageEvent, LeavePageEvent, NavigationEvent, StayOnPageEvent } from './navigation.event';
 import { Page } from './page';
 import { PageParam } from './page-param';

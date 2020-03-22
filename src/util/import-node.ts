@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { itsEach, overArray } from '@proc7ts/a-iterable';
 import { isElement } from '@wesib/wesib';
-import { itsEach, overArray } from 'a-iterable';
 
 /**
  * Imports DOM node from one document to another.

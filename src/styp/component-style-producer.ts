@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { SingleContextKey, SingleContextRef } from 'context-values';
-import { EventSupply } from 'fun-events';
-import { StypRules } from 'style-producer';
+import { SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
+import { EventSupply } from '@proc7ts/fun-events';
+import { StypRules } from '@proc7ts/style-producer';
 import { ComponentStypOptions } from './component-styp-options';
 
 /**

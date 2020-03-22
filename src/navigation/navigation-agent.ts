@@ -2,11 +2,11 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { nextArg } from '@proc7ts/call-thru';
+import { ContextValueOpts, ContextValues } from '@proc7ts/context-values';
+import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
+import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
 import { BootstrapWindow } from '@wesib/wesib';
-import { nextArg } from 'call-thru';
-import { ContextValueOpts, ContextValues } from 'context-values';
-import { ContextUpKey, ContextUpRef } from 'context-values/updatable';
-import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from 'fun-events';
 import { Navigation } from './navigation';
 import { Page } from './page';
 import { PageParam } from './page-param';

@@ -1,4 +1,3 @@
-import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
 import {
   EventEmitter,
   EventReceiver,
@@ -7,7 +6,8 @@ import {
   eventSupplyOf,
   OnEvent,
   ValueTracker,
-} from 'fun-events';
+} from '@proc7ts/fun-events';
+import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
 
 /**
  * @internal

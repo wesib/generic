@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
+import { StypRule, StypRules } from '@proc7ts/style-producer';
 import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
-import { StypRule, StypRules } from 'style-producer';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypOptions } from './component-styp-options';
 

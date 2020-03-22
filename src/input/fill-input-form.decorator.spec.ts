@@ -1,7 +1,7 @@
+import { noop } from '@proc7ts/call-thru';
+import { afterThe, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
+import { InControl, InElement, InFormElement, inFormElement, InGroup, inGroup } from '@proc7ts/input-aspects';
 import { bootstrapComponents, ComponentMount } from '@wesib/wesib';
-import { noop } from 'call-thru';
-import { afterThe, eventSupply, eventSupplyOf } from 'fun-events';
-import { InControl, InElement, InFormElement, inFormElement, InGroup, inGroup } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { FillInputForm, FillInputFormDef } from './fill-input-form.decorator';
 import { InputFromControl } from './input-from-control';

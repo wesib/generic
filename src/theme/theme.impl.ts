@@ -1,4 +1,4 @@
-import { lazyStypRules, stypRoot, StypRule, StypRules } from 'style-producer';
+import { lazyStypRules, stypRoot, StypRule, StypRules } from '@proc7ts/style-producer';
 import { Theme as Theme_ } from './theme';
 import { ThemeStyle } from './theme-style';
 

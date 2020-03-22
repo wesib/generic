@@ -1,6 +1,6 @@
+import { noop } from '@proc7ts/call-thru';
+import { afterThe, EventEmitter, eventSupply } from '@proc7ts/fun-events';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
-import { noop } from 'call-thru';
-import { afterThe, EventEmitter, eventSupply } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { testPageParam } from '../../spec/test-page-param';

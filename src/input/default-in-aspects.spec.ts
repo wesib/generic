@@ -1,3 +1,6 @@
+import { ContextKey__symbol } from '@proc7ts/context-values';
+import { InControl, InNamespaceAliaser, InRenderScheduler, InStyledElement, inValue } from '@proc7ts/input-aspects';
+import { newManualRenderScheduler, RenderScheduler } from '@proc7ts/render-scheduler';
 import {
   bootstrapComponents,
   BootstrapContext,
@@ -5,9 +8,6 @@ import {
   DefaultRenderScheduler,
   Feature,
 } from '@wesib/wesib';
-import { ContextKey__symbol } from 'context-values';
-import { InControl, InNamespaceAliaser, InRenderScheduler, InStyledElement, inValue } from 'input-aspects';
-import { newManualRenderScheduler, RenderScheduler } from 'render-scheduler';
 import { DefaultInAspects } from './default-in-aspects';
 import Mock = jest.Mock;
 

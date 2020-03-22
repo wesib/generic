@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { AIterable } from 'a-iterable';
-import { ContextRef, ContextValueOpts, ContextValues, SimpleContextKey } from 'context-values';
-import { stypRules, StypRules } from 'style-producer';
+import { AIterable } from '@proc7ts/a-iterable';
+import { ContextRef, ContextValueOpts, ContextValues, SimpleContextKey } from '@proc7ts/context-values';
+import { stypRules, StypRules } from '@proc7ts/style-producer';
 import { Theme } from './theme';
 
 /**

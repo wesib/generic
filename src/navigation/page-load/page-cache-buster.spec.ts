@@ -1,5 +1,5 @@
+import { afterThe } from '@proc7ts/fun-events';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
-import { afterThe } from 'fun-events';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';

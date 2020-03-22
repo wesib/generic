@@ -1,6 +1,6 @@
-import { nextArgs } from 'call-thru';
-import { ContextRegistry } from 'context-values';
-import { AfterEvent, nextAfterEvent } from 'fun-events';
+import { nextArgs } from '@proc7ts/call-thru';
+import { ContextRegistry } from '@proc7ts/context-values';
+import { AfterEvent, nextAfterEvent } from '@proc7ts/fun-events';
 import { HierarchyContext } from './hierarchy-context';
 
 /**

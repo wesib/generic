@@ -1,4 +1,3 @@
-import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import {
   EventEmitter,
   eventReceiver,
@@ -11,7 +10,8 @@ import {
   OnEvent,
   onEventBy,
   ValueTracker,
-} from 'fun-events';
+} from '@proc7ts/fun-events';
+import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 
 /**
  * @internal

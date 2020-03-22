@@ -1,5 +1,5 @@
+import { itsEach, itsFirst, overArray } from '@proc7ts/a-iterable';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { itsEach, itsFirst, overArray } from 'a-iterable';
 import { importNode } from '../../util';
 import { PageLoadAgent } from './page-load-agent';
 

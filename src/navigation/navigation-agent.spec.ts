@@ -1,5 +1,5 @@
-import { noop } from 'call-thru';
-import { ContextRegistry } from 'context-values';
+import { noop } from '@proc7ts/call-thru';
+import { ContextRegistry } from '@proc7ts/context-values';
 import { testPageParam } from '../spec/test-page-param';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';

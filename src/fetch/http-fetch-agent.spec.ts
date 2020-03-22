@@ -1,5 +1,5 @@
-import { ContextRegistry } from 'context-values';
-import { EventEmitter, OnEvent, onSupplied } from 'fun-events';
+import { ContextRegistry } from '@proc7ts/context-values';
+import { EventEmitter, OnEvent, onSupplied } from '@proc7ts/fun-events';
 import { HttpFetchAgent } from './http-fetch-agent';
 import Mock = jest.Mock;
 

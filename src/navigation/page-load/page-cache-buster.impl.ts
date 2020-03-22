@@ -1,6 +1,6 @@
+import { ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
+import { AfterEvent, afterThe } from '@proc7ts/fun-events';
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
-import { ContextKey__symbol, SingleContextKey } from 'context-values';
-import { AfterEvent, afterThe } from 'fun-events';
 import { Navigation } from '../navigation';
 import { PageLoadAgent } from './page-load-agent';
 import { PageLoadURLModifier } from './page-load-url-modifier';

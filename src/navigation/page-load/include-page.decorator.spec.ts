@@ -1,7 +1,7 @@
+import { valueProvider } from '@proc7ts/call-thru';
+import { afterThe } from '@proc7ts/fun-events';
+import { immediateRenderScheduler } from '@proc7ts/render-scheduler';
 import { bootstrapComponents, BootstrapWindow, Component, ComponentMount, DefaultRenderScheduler } from '@wesib/wesib';
-import { valueProvider } from 'call-thru';
-import { afterThe } from 'fun-events';
-import { immediateRenderScheduler } from 'render-scheduler';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';

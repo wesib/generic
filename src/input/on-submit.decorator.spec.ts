@@ -1,6 +1,6 @@
+import { noop } from '@proc7ts/call-thru';
+import { inFormElement, InGroup, inGroup } from '@proc7ts/input-aspects';
 import { bootstrapComponents, ComponentMount } from '@wesib/wesib';
-import { noop } from 'call-thru';
-import { inFormElement, InGroup, inGroup } from 'input-aspects';
 import { FillInputForm, FillInputFormDef } from './fill-input-form.decorator';
 import { InputToForm } from './input-to-form';
 import { OnSubmit, OnSubmitDef } from './on-submit.decorator';

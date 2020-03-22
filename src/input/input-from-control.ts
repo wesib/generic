@@ -2,10 +2,10 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { SingleContextUpKey, SingleContextUpRef } from '@proc7ts/context-values/updatable';
+import { eventSupply, EventSupply } from '@proc7ts/fun-events';
+import { InControl } from '@proc7ts/input-aspects';
 import { ComponentContext } from '@wesib/wesib';
-import { SingleContextUpKey, SingleContextUpRef } from 'context-values/updatable';
-import { eventSupply, EventSupply } from 'fun-events';
-import { InControl } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 
 /**

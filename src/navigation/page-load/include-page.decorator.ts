@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { noop } from '@proc7ts/call-thru';
 import {
   BootstrapWindow,
   Class,
@@ -11,7 +12,6 @@ import {
   ComponentDecorator,
   DefaultRenderScheduler,
 } from '@wesib/wesib';
-import { noop } from 'call-thru';
 import { importNodeContent } from '../../util';
 import { Navigation } from '../navigation';
 import { Page } from '../page';

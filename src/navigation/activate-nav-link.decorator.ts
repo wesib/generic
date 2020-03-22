@@ -2,17 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import {
-  Class,
-  Component,
-  ComponentClass,
-  ComponentContext,
-  ComponentDecorator,
-  DefaultNamespaceAliaser,
-  DefaultRenderScheduler,
-  Wesib__NS,
-} from '@wesib/wesib';
-import { nextArgs, noop } from 'call-thru';
+import { nextArgs, noop } from '@proc7ts/call-thru';
 import {
   afterEach,
   AfterEvent,
@@ -23,8 +13,18 @@ import {
   eventSupply,
   EventSupply,
   nextAfterEvent,
-} from 'fun-events';
-import { css__naming, QualifiedName } from 'namespace-aliaser';
+} from '@proc7ts/fun-events';
+import { css__naming, QualifiedName } from '@proc7ts/namespace-aliaser';
+import {
+  Class,
+  Component,
+  ComponentClass,
+  ComponentContext,
+  ComponentDecorator,
+  DefaultNamespaceAliaser,
+  DefaultRenderScheduler,
+  Wesib__NS,
+} from '@wesib/wesib';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
 import { getHashURL } from './hash-url';
 import { Navigation } from './navigation';

@@ -1,3 +1,19 @@
+import { ContextRegistry } from '@proc7ts/context-values';
+import { newNamespaceAliaser } from '@proc7ts/namespace-aliaser';
+import {
+  immediateRenderScheduler,
+  newManualRenderScheduler,
+  RenderSchedule,
+  RenderScheduler,
+} from '@proc7ts/render-scheduler';
+import {
+  produceBasicStyle,
+  StypOptions,
+  StypRenderer,
+  stypRoot,
+  stypSelector,
+  StypSelector,
+} from '@proc7ts/style-producer';
 import {
   BootstrapWindow,
   ComponentContext,
@@ -5,10 +21,6 @@ import {
   DefaultRenderScheduler,
   ShadowContentRoot,
 } from '@wesib/wesib';
-import { ContextRegistry } from 'context-values';
-import { newNamespaceAliaser } from 'namespace-aliaser';
-import { immediateRenderScheduler, newManualRenderScheduler, RenderSchedule, RenderScheduler } from 'render-scheduler';
-import { produceBasicStyle, StypOptions, StypRenderer, stypRoot, stypSelector, StypSelector } from 'style-producer';
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
 import { ComponentStypOptions } from './component-styp-options';

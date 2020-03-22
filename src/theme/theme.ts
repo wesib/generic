@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { RefStypRule, StypProperties, StypRule, StypRuleRef, StypRules } from 'style-producer';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
+import { RefStypRule, StypProperties, StypRule, StypRuleRef, StypRules } from '@proc7ts/style-producer';
 import { ThemeStyle } from './theme-style';
 
 /**

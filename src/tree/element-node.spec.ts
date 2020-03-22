@@ -1,5 +1,9 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
+import { itsFirst } from '@proc7ts/a-iterable';
+import { noop } from '@proc7ts/call-thru';
+import { ValueTracker } from '@proc7ts/fun-events';
+import { QualifiedName } from '@proc7ts/namespace-aliaser';
 import {
   Component,
   ComponentClass,
@@ -8,10 +12,6 @@ import {
   DomProperty,
   Feature,
 } from '@wesib/wesib';
-import { itsFirst } from 'a-iterable';
-import { noop } from 'call-thru';
-import { ValueTracker } from 'fun-events';
-import { QualifiedName } from 'namespace-aliaser';
 import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
 import { ComponentNode, ElementNode } from './element-node';

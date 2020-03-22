@@ -1,8 +1,8 @@
+import { itsReduction } from '@proc7ts/a-iterable';
+import { nextEach } from '@proc7ts/call-thru';
+import { SingleContextKey } from '@proc7ts/context-values';
+import { EventNotifier, onAsync, OnEvent, onEventBy } from '@proc7ts/fun-events';
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
-import { itsReduction } from 'a-iterable';
-import { nextEach } from 'call-thru';
-import { SingleContextKey } from 'context-values';
-import { EventNotifier, onAsync, OnEvent, onEventBy } from 'fun-events';
 import { hthvParse, hthvQuote } from 'http-header-value';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';

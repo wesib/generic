@@ -2,10 +2,10 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { nextArg, valueProvider } from '@proc7ts/call-thru';
+import { afterAll, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
+import { InGroup } from '@proc7ts/input-aspects';
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
-import { nextArg, valueProvider } from 'call-thru';
-import { afterAll, afterThe, EventKeeper, nextAfterEvent } from 'fun-events';
-import { InGroup } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { InputFromControl, NoInputFromControl } from './input-from-control';
 

@@ -2,6 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { itsEach, overArray } from '@proc7ts/a-iterable';
+import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
 import {
   BootstrapRoot,
   BootstrapWindow,
@@ -11,8 +13,6 @@ import {
   FeatureDef,
   FeatureDef__symbol,
 } from '@wesib/wesib';
-import { itsEach, overArray } from 'a-iterable';
-import { DomEventDispatcher } from 'fun-events/dom';
 import { AutoMountConfig } from './auto-mount-config';
 
 /**

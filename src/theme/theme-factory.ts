@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import { Theme } from './theme';
 
 /**

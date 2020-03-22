@@ -1,13 +1,5 @@
-import {
-  ArraySet,
-  BootstrapWindow,
-  ComponentContext,
-  DefaultNamespaceAliaser,
-  DefaultRenderScheduler,
-  ShadowContentRoot,
-} from '@wesib/wesib';
-import { ContextKey, ContextKey__symbol, SingleContextKey } from 'context-values';
-import { EventSupply } from 'fun-events';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
+import { EventSupply } from '@proc7ts/fun-events';
 import {
   produceBasicStyle,
   StypPureSelector,
@@ -16,7 +8,15 @@ import {
   stypSelector,
   StypSelector,
   StypSubSelector,
-} from 'style-producer';
+} from '@proc7ts/style-producer';
+import {
+  ArraySet,
+  BootstrapWindow,
+  ComponentContext,
+  DefaultNamespaceAliaser,
+  DefaultRenderScheduler,
+  ShadowContentRoot,
+} from '@wesib/wesib';
 import { ComponentStypOptions } from './component-styp-options';
 import { ComponentStypRenderer } from './component-styp-renderer';
 import { ElementIdClass } from './element-id-class.impl';

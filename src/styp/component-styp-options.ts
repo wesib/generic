@@ -2,10 +2,10 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
+import { noop } from '@proc7ts/call-thru';
+import { eventSupply, EventSupply, noEventSupply } from '@proc7ts/fun-events';
+import { lazyStypRules, StypOptions, StypPureSelector, StypRules } from '@proc7ts/style-producer';
 import { ComponentContext } from '@wesib/wesib';
-import { noop } from 'call-thru';
-import { eventSupply, EventSupply, noEventSupply } from 'fun-events';
-import { lazyStypRules, StypOptions, StypPureSelector, StypRules } from 'style-producer';
 import { ComponentStyleProducer } from './component-style-producer';
 
 /**

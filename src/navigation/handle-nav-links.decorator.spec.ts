@@ -1,5 +1,5 @@
+import { trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { bootstrapComponents, ComponentMount, Feature } from '@wesib/wesib';
-import { trackValue, ValueTracker } from 'fun-events';
 import { HandleNavLinks, HandleNavLinksDef } from './handle-nav-links.decorator';
 import { Navigation } from './navigation';
 import Mocked = jest.Mocked;

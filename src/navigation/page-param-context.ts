@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { ContextValues } from 'context-values';
+import { ContextValues } from '@proc7ts/context-values';
 
 /**
  * Page parameter context.

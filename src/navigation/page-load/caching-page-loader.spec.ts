@@ -1,4 +1,4 @@
-import { EventEmitter, onEventBy } from 'fun-events';
+import { EventEmitter, onEventBy } from '@proc7ts/fun-events';
 import { Page } from '../page';
 import { cachingPageLoader } from './caching-page-loader.impl';
 import { PageLoadResponse } from './page-load-response';

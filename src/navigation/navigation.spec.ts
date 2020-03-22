@@ -1,8 +1,8 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
+import { asis, noop } from '@proc7ts/call-thru';
+import { afterSupplied, onSupplied } from '@proc7ts/fun-events';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
-import { asis, noop } from 'call-thru';
-import { afterSupplied, onSupplied } from 'fun-events';
 import { LocationMock, navHistoryState } from '../spec/location-mock';
 import { testPageParam } from '../spec/test-page-param';
 import { Navigation } from './navigation';

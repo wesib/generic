@@ -1,6 +1,6 @@
+import { ContextValues, SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
+import { css__naming, html__naming, NamespaceDef, QualifiedName } from '@proc7ts/namespace-aliaser';
 import { ComponentContext, DefaultNamespaceAliaser, ElementDef } from '@wesib/wesib';
-import { ContextValues, SingleContextKey, SingleContextRef } from 'context-values';
-import { css__naming, html__naming, NamespaceDef, QualifiedName } from 'namespace-aliaser';
 
 /**
  * @internal

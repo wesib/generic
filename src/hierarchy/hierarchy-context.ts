@@ -2,7 +2,6 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { BootstrapContext, ComponentContext } from '@wesib/wesib';
 import {
   ContextKey,
   ContextKey__symbol,
@@ -10,8 +9,17 @@ import {
   ContextValues,
   ContextValueSpec,
   SingleContextKey,
-} from 'context-values';
-import { AfterEvent, afterEventBy, EventKeeper, EventReceiver, EventSupply, eventSupply, trackValue } from 'fun-events';
+} from '@proc7ts/context-values';
+import {
+  AfterEvent,
+  afterEventBy,
+  EventKeeper,
+  EventReceiver,
+  EventSupply,
+  eventSupply,
+  trackValue,
+} from '@proc7ts/fun-events';
+import { BootstrapContext, ComponentContext } from '@wesib/wesib';
 import { newHierarchyRegistry } from './hierarchy-registry.impl';
 import { findParentContext, HierarchyRoot, HierarchyUpdates } from './hierarchy-updates.impl';
 

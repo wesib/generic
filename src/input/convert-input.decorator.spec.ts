@@ -1,6 +1,6 @@
+import { afterSupplied, EventEmitter, eventSupply, EventSupply, eventSupplyOf, trackValue } from '@proc7ts/fun-events';
+import { InControl, InStyledElement, inValue } from '@proc7ts/input-aspects';
 import { bootstrapComponents, Component, ComponentContext, ComponentMount } from '@wesib/wesib';
-import { afterSupplied, EventEmitter, eventSupply, EventSupply, eventSupplyOf, trackValue } from 'fun-events';
-import { InControl, InStyledElement, inValue } from 'input-aspects';
 import { HierarchyContext } from '../hierarchy';
 import { ConvertInput, ConvertInputDef } from './convert-input.decorator';
 import { InputFromControl, inputFromControl, NoInputFromControl } from './input-from-control';

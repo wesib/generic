@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
 import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
-import { DomEventDispatcher } from 'fun-events/dom';
 import { HierarchyContext } from '../hierarchy';
 import { InputToForm, NoInputToForm } from './input-to-form';
 
