@@ -68,9 +68,8 @@ describe('tree', () => {
     const element: Element = document.createElement(name);
 
     (element as any)[ComponentContext__symbol] = context;
-
     jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
-    jest.spyOn(context, 'element', 'get').mockReturnValue(element);
+    (context as any).element = element;
 
     const node = context.get(ComponentNode);
 

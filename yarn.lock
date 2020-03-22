@@ -874,7 +874,7 @@ __metadata:
     "@types/jsdom": ^16.1.0
     "@typescript-eslint/eslint-plugin": ~2.24.0
     "@typescript-eslint/parser": ~2.24.0
-    "@wesib/wesib": ^1.0.0-alpha.98
+    "@wesib/wesib": ^1.0.0-alpha.99
     codecov: ^3.6.5
     cross-fetch: ^3.0.4
     cssesc: ^3.0.0
@@ -904,7 +904,7 @@ __metadata:
     "@proc7ts/namespace-aliaser": ^2.0.3
     "@proc7ts/render-scheduler": ^1.1.0
     "@proc7ts/style-producer": ^4.0.0
-    "@wesib/wesib": ^1.0.0-alpha.98
+    "@wesib/wesib": ^1.0.0-alpha.99
   peerDependenciesMeta:
     "@proc7ts/input-aspects":
       optional: true
@@ -913,17 +913,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@wesib/wesib@npm:^1.0.0-alpha.98":
-  version: 1.0.0-alpha.98
-  resolution: "@wesib/wesib@npm:1.0.0-alpha.98"
+"@wesib/wesib@npm:^1.0.0-alpha.99":
+  version: 1.0.0-alpha.99
+  resolution: "@wesib/wesib@npm:1.0.0-alpha.99"
   peerDependencies:
-    a-iterable: ^2.5.0
-    call-thru: ^3.0.0
-    context-values: ^2.4.0
-    fun-events: ^9.0.0
-    namespace-aliaser: ^2.0.3
-    render-scheduler: ^1.1.0
-  checksum: 2/1aa8de0b3867bc19095abaa55d62c3ab23a6376e52da80835136e223c9199b26e0912636d8d8c6b179b8d93a9cd03f7fe06ffd14f67c89e89de16f260a92e324
+    "@proc7ts/a-iterable": ^2.5.1
+    "@proc7ts/call-thru": ^3.0.0
+    "@proc7ts/context-values": ^2.4.0
+    "@proc7ts/fun-events": ^9.0.0
+    "@proc7ts/namespace-aliaser": ^2.0.3
+    "@proc7ts/render-scheduler": ^1.1.0
+  checksum: 2/1d842e5dd9c9833f18c28e1847db65d474687cbd0152baf3889ba7871813563e10878bad27f5a5646d622546ee8977b16c87d7d0823cae0aa648ee5f0c824317
   languageName: node
   linkType: hard
 
