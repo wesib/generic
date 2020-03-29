@@ -73,11 +73,11 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
         const navigation = context.get(Navigation);
         const componentNode = context.get(ComponentNode);
 
-        context.whenOn(connectSupply => {
+        context.whenConnected(() => {
 
           let active: ActiveNavLinks = new Map();
 
-          navigation.read().tillOff(connectSupply).consume(
+          navigation.read().tillOff(context).consume(
               page => componentNode.select(select, pick).read().keepThru_(
                   nodes => nextAfterEvent(afterEach(
                       ...nodes.map(node => weigh({ node, context, page })),

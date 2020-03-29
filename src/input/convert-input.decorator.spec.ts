@@ -103,14 +103,14 @@ describe('input', () => {
       class ConvertedInput {}
 
       const bsContext = await bootstrapComponents(RootInput, ConvertedInput).whenReady();
-      const [rootFactory, factory] = await Promise.all(([
+      const [rootDefContext, defContext] = await Promise.all(([
         bsContext.whenDefined(RootInput),
         bsContext.whenDefined(ConvertedInput),
       ]));
 
-      rootFactory.mountTo(root);
+      rootDefContext.mountTo(root);
 
-      const mount = factory.mountTo(element);
+      const mount = defContext.mountTo(element);
       const control = await mount.context.get(HierarchyContext).get(InputFromControl);
 
       return [control as InputFromControl, mount];

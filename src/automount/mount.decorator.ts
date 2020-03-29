@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { Class, Component, ComponentClass, ComponentDecorator, ComponentFactory, ElementAdapter } from '@wesib/wesib';
+import { Class, Component, ComponentClass, ComponentDecorator, ElementAdapter } from '@wesib/wesib';
 import { AutoMountSupport } from './auto-mount-support.feature';
 import { MountDef } from './mount-def';
 
@@ -27,7 +27,7 @@ export function Mount<T extends ComponentClass = Class>(def: MountDef | MountDef
           defSetup.whenReady(defContext => {
             bsSetup.provide({
               a: ElementAdapter,
-              is: MountDef.adapter(defContext.get(ComponentFactory), def),
+              is: MountDef.adapter(defContext, def),
             });
           });
         });

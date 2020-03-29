@@ -35,7 +35,7 @@ export function FillInputForm<T extends ComponentClass = Class>(
 
         const componentNode = context.get(ComponentNode);
 
-        context.whenOn(connectSupply => {
+        context.whenConnected(() => {
           afterAll({
             node: componentNode.select(select, pick).first(),
             aspects: context.get(DefaultInAspects),
@@ -54,7 +54,7 @@ export function FillInputForm<T extends ComponentClass = Class>(
             }
 
             return Array.isArray(tuple) ? nextArgs(...tuple) : nextAfterEvent(tuple);
-          }).tillOff(connectSupply).consume(
+          }).consume(
               (control?, form?, supply?) => {
                 if (!control) {
                   return;

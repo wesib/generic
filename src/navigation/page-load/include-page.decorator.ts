@@ -3,6 +3,7 @@
  * @module @wesib/generic
  */
 import { noop } from '@proc7ts/call-thru';
+import { eventSupply } from '@proc7ts/fun-events';
 import {
   BootstrapWindow,
   Class,
@@ -65,7 +66,7 @@ export function IncludePage<T extends ComponentClass = Class>(
           return id ? { id } : { tag };
         };
 
-        context.whenOn(supply => {
+        context.whenConnected(() => {
 
           const range = document.createRange();
 
@@ -77,7 +78,7 @@ export function IncludePage<T extends ComponentClass = Class>(
                 {
                   fragment: detectFragment(),
                   receiver: {
-                    supply,
+                    supply: eventSupply().needs(context),
                     receive: (_ctx, response) => handleResponse(response),
                   },
                 },

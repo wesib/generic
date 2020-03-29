@@ -17,6 +17,9 @@ import {
   EventReceiver,
   EventSupply,
   eventSupply,
+  EventSupply__symbol,
+  eventSupplyOf,
+  EventSupplyPeer,
   trackValue,
 } from '@proc7ts/fun-events';
 import { BootstrapContext, ComponentContext } from '@wesib/wesib';
@@ -42,7 +45,7 @@ const HierarchyContext__key = (/*#__PURE__*/ new SingleContextKey<HierarchyConte
  *
  * @typeparam T  A type of component.
  */
-export abstract class HierarchyContext<T extends object = any> extends ContextValues {
+export abstract class HierarchyContext<T extends object = any> extends ContextValues implements EventSupplyPeer {
 
   /**
    * A key of component context value containing its hierarchy context instance.
@@ -55,6 +58,10 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
    * Component context.
    */
   abstract readonly context: ComponentContext<T>;
+
+  get [EventSupply__symbol](): EventSupply {
+    return eventSupplyOf(this.context);
+  }
 
   /**
    * Builds an `AfterEvent` keeper of enclosing component's hierarchy context.
@@ -112,7 +119,12 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
   provide<Deps extends any[], Src, Seed>(
       spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src | EventKeeper<Src[]>, Seed>,
   ): () => void {
-    return this._registry.provide(spec);
+
+    const off = this._registry.provide(spec);
+
+    eventSupplyOf(this).whenOff(off);
+
+    return off;
   }
 
   up(): AfterEvent<[HierarchyContext?]>;
@@ -121,9 +133,16 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
     return (this.up = afterEventBy<[HierarchyContext?]>(
         receiver => {
 
+          const { supply } = receiver;
+
+          supply.needs(this);
+
           const parentHierarchy = trackValue<HierarchyContext>();
-          const rootSupply = eventSupply().needs(receiver.supply);
-          const parentSupply = eventSupply().needs(receiver.supply);
+
+          supply.cuts(parentHierarchy);
+
+          const rootSupply = eventSupply().needs(supply);
+          const parentSupply = eventSupply().needs(supply);
           const updateParent = (): void => {
 
             const parent = findParentContext(this.context);
@@ -150,18 +169,9 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
               newParent => newParent && newParent.context.get(HierarchyUpdates).on.to(updateParent),
           );
           parentHierarchy.read(receiver);
-          this.context.whenOn({
-            supply: receiver.supply,
-            receive: (_, onSupply) => {
-              updateParent();
-              onSupply.whenOff(
-                  () => {
-                    Promise.resolve().then(
-                        () => this.context.connected || (parentHierarchy.it = undefined),
-                    );
-                  },
-              );
-            },
+          this.context.whenConnected({
+            supply,
+            receive: updateParent,
           });
         },
     ).share().F)(receiver);

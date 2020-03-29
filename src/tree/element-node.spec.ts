@@ -12,7 +12,7 @@ import {
   DomProperty,
   Feature,
 } from '@wesib/wesib';
-import { MockElement, testComponentFactory, testElement } from '../spec/test-element';
+import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { ComponentTreeSupport } from './component-tree-support.feature';
 import { ComponentNode, ElementNode } from './element-node';
 
@@ -141,9 +141,9 @@ describe('tree', () => {
 
           const elementNode = itsFirst(root.node.select('test-component', { all: true }))!;
           const property = elementNode.property<string>('property');
-          const factory = await testComponentFactory(TestComponent);
+          const defContext = await testDefinition(TestComponent);
 
-          const mount = factory.mountTo(element);
+          const mount = defContext.mountTo(element);
 
           expect(mount.context.element).toBe(element);
           expect(mount.context.get(ComponentNode)).toBe(elementNode);

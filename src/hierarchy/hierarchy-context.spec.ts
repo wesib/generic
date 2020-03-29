@@ -1,6 +1,6 @@
 import { MultiContextUpKey, MultiContextUpRef } from '@proc7ts/context-values/updatable';
-import { EventSupply } from '@proc7ts/fun-events';
-import { bootstrapComponents, BootstrapRoot, Component, ComponentFactory, Feature } from '@wesib/wesib';
+import { EventSupply, eventSupplyOf } from '@proc7ts/fun-events';
+import { bootstrapComponents, BootstrapRoot, Component, DefinitionContext, Feature } from '@wesib/wesib';
 import { HierarchyContext } from './hierarchy-context';
 
 describe('hierarchy', () => {
@@ -21,7 +21,7 @@ describe('hierarchy', () => {
       rootElement.remove();
     });
 
-    let factory: ComponentFactory;
+    let defContext: DefinitionContext;
     let testContext: HierarchyContext;
     let nestedContext: HierarchyContext;
 
@@ -42,9 +42,9 @@ describe('hierarchy', () => {
 
       const bsContext = await bootstrapComponents(TestFeature).whenReady();
 
-      factory = await bsContext.whenDefined(TestComponent);
-      nestedContext = factory.mountTo(nestedElement).context.get(HierarchyContext);
-      testContext = factory.mountTo(testElement).context.get(HierarchyContext);
+      defContext = await bsContext.whenDefined(TestComponent);
+      nestedContext = defContext.mountTo(nestedElement).context.get(HierarchyContext);
+      testContext = defContext.mountTo(testElement).context.get(HierarchyContext);
     });
 
     describe('up', () => {
@@ -64,50 +64,47 @@ describe('hierarchy', () => {
       });
       it('resolves to `undefined` for root element', () => {
 
-        const rootContext = factory.mountTo(rootElement).context.get(HierarchyContext);
+        const rootContext = defContext.mountTo(rootElement).context.get(HierarchyContext);
 
         rootContext.up().once(upper => expect(upper).toBeUndefined());
       });
-      it('resolves to `undefined` after component disconnection', async () => {
-        nestedContext.context.mount!.connected = false;
-        expect(parent).toBeDefined();
-        await Promise.resolve();
-        expect(parent).toBeUndefined();
-      });
-      it('resolves to parent after component reconnection', async () => {
-        nestedContext.context.mount!.connected = false;
-        expect(parent).toBe(testContext);
-        await Promise.resolve();
-        expect(parent).toBeUndefined();
-        nestedContext.context.mount!.connected = true;
-        expect(parent).toBe(testContext);
+      it('is destroyed after component disconnection', () => {
+
+        const reason = 'test';
+
+        nestedContext.context.destroy(reason);
+
+        const whenOff = jest.fn();
+
+        eventSupplyOf(nestedContext).whenOff(whenOff);
+        expect(whenOff).toHaveBeenCalledWith(reason);
       });
       it('resolves to `undefined` for initially disconnected component', () => {
 
         const element = document.createElement('disconnected-element');
-        const context = factory.mountTo(element).context.get(HierarchyContext);
+        const context = defContext.mountTo(element).context.get(HierarchyContext);
 
         context.up().once(upper => expect(upper).toBeUndefined());
       });
       it('resolves to `undefined` for component without parent', () => {
 
         const element = document.createElement('disconnected-element');
-        const mount = factory.mountTo(element);
+        const mount = defContext.mountTo(element);
         const context = mount.context.get(HierarchyContext);
 
-        mount.connected = true;
+        mount.connect();
 
         context.up().once(upper => expect(upper).toBeUndefined());
       });
       it('updates on intermediate component mount', () => {
-        factory.mountTo(containerElement);
+        defContext.mountTo(containerElement);
 
         expect(parent?.context.element.tagName).toBe(containerElement.tagName);
       });
       it('updates on intermediate component mount event though there is no receivers', () => {
         parentSupply.off();
 
-        const context = factory.mountTo(containerElement).context.get(HierarchyContext);
+        const context = defContext.mountTo(containerElement).context.get(HierarchyContext);
 
         nestedContext.up().once(upper => expect(upper).toBe(context));
       });
@@ -142,7 +139,7 @@ describe('hierarchy', () => {
         testContext.provide({ a: key, is: 'foo' });
         nestedContext.provide({ a: key, is: 'bar' });
 
-        const context = factory.mountTo(containerElement).context.get(HierarchyContext);
+        const context = defContext.mountTo(containerElement).context.get(HierarchyContext);
 
         context.provide({ a: key, is: 'baz' });
         nestedContext.get(key).once((...values) => expect(values).toEqual(['foo', 'baz', 'bar']));
@@ -150,7 +147,7 @@ describe('hierarchy', () => {
       it('makes disconnected component value unavailable in nested context', () => {
         testContext.provide({ a: key, is: 'foo' });
         nestedContext.provide({ a: key, is: 'bar' });
-        nestedContext.context.mount!.connected = false;
+        nestedContext.context.destroy();
         nestedContext.get(key).once((...values) => expect(values).toEqual(['bar']));
       });
     });

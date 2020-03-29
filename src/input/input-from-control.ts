@@ -76,5 +76,7 @@ export function inputFromControl<Value>(
     }),
   });
 
-  return eventSupply(off).needs(control);
+  return eventSupply(off)
+      .needs(root)
+      .needs(control);
 }

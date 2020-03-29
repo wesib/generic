@@ -64,22 +64,7 @@ export function elementNodeList<N extends ElementNode>(
       if (name) {
         selector = html__naming.name(name, bsContext.get(DefaultNamespaceAliaser));
         if (updates.size) {
-
-          const selected = refresh();
-
-          if (selected.size) {
-
-            const added = Array.from(
-                filterIt<N | undefined, N>(
-                    mapIt(selected, node => nodeOf(node)),
-                    isPresent,
-                ),
-            );
-
-            if (added.length) {
-              updates.send(added, []);
-            }
-          }
+          refresh(); // Update cache when there are receivers
         }
       }
     });
@@ -120,6 +105,7 @@ export function elementNodeList<N extends ElementNode>(
         return supply.whenOff(() => {
           if (!updates.size) {
             observer.disconnect();
+            clearCache(); // clear cache as there is no more receivers
           }
         });
       }).F)(receiver);
@@ -181,9 +167,21 @@ export function elementNodeList<N extends ElementNode>(
     return updates.size ? cache : refresh();
   }
 
+  function clearCache(): void {
+    iterable = undefined;
+    cache.clear();
+  }
+
   function refresh(): Set<Element> {
     iterable = undefined;
-    return cache = select();
+
+    const list = select();
+
+    if (updates.size) {
+      cache = list; // cache is for receivers only
+    }
+
+    return list;
   }
 
   function select(): Set<Element> {

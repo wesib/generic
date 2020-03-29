@@ -77,9 +77,9 @@ describe('input', () => {
       }
 
       const bsContext = await bootstrapComponents(TestElement).whenReady();
-      const factory = await bsContext.whenDefined(TestElement);
+      const defContext = await bsContext.whenDefined(TestElement);
 
-      return factory.mountTo(element);
+      return defContext.mountTo(element);
     }
   });
 });

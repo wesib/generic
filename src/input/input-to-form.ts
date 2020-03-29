@@ -86,6 +86,7 @@ export function inputToForm<Model, Elt extends HTMLElement>(
   });
 
   return eventSupply(off)
+      .needs(root)
       .needs(control)
       .needs(form);
 }

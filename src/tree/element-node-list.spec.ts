@@ -6,8 +6,8 @@ import {
   BootstrapContext,
   Component,
   ComponentClass,
-  ComponentFactory,
   CustomElements,
+  DefinitionContext,
   ElementObserver,
   Feature,
 } from '@wesib/wesib';
@@ -35,7 +35,7 @@ describe('tree', () => {
 
     beforeEach(async () => {
 
-      const factory = await new Promise<ComponentFactory>(resolve => {
+      const defContext = await new Promise<DefinitionContext>(resolve => {
         @Component({
           feature: {
             needs: ComponentTreeSupport,
@@ -63,7 +63,7 @@ describe('tree', () => {
         bsContext = bootstrapComponents(TestRootComponent);
       });
 
-      rootNode = factory.mountTo(rootElement).context.get(ComponentNode);
+      rootNode = defContext.mountTo(rootElement).context.get(ComponentNode);
     });
 
     describe('[OnEvent__symbol]', () => {
@@ -434,8 +434,8 @@ describe('tree', () => {
         rootElement.append(e1, e2, e3);
       });
 
-      let factory1: ComponentFactory;
-      let factory2: ComponentFactory;
+      let defContext1: DefinitionContext;
+      let defContext2: DefinitionContext;
       let n1: ComponentNode;
       let n3: ComponentNode;
 
@@ -455,12 +455,12 @@ describe('tree', () => {
 
         await new Promise(resolve => bsContext.load(Component2).read(({ ready }) => ready && resolve()));
 
-        factory1 = await bsContext.whenDefined(Component1);
-        factory2 = await bsContext.whenDefined(Component2);
+        defContext1 = await bsContext.whenDefined(Component1);
+        defContext2 = await bsContext.whenDefined(Component2);
 
-        n1 = factory1.mountTo(e1).context.get(ComponentNode);
-        factory2.mountTo(e2).context.get(ComponentNode);
-        n3 = factory1.mountTo(e3).context.get(ComponentNode);
+        n1 = defContext1.mountTo(e1).context.get(ComponentNode);
+        defContext2.mountTo(e2).context.get(ComponentNode);
+        n3 = defContext1.mountTo(e3).context.get(ComponentNode);
       });
 
       describe('by selector', () => {
@@ -490,7 +490,7 @@ describe('tree', () => {
 
             e4.setAttribute('id', '4');
 
-            const n4 = factory1.mountTo(e4).context.get(ComponentNode);
+            const n4 = defContext1.mountTo(e4).context.get(ComponentNode);
 
             rootElement.appendChild(e4);
             await Promise.resolve();
@@ -518,7 +518,7 @@ describe('tree', () => {
             rootElement.appendChild(e4);
             await Promise.resolve();
 
-            const n4 = factory1.mountTo(e4).context.get(ComponentNode);
+            const n4 = defContext1.mountTo(e4).context.get(ComponentNode);
 
             expect([...list]).toEqual([n1, n3, n4]);
             expect(onUpdateMock).toHaveBeenCalledWith([n4], []);
@@ -532,7 +532,7 @@ describe('tree', () => {
             rootElement.appendChild(e4);
             await Promise.resolve();
 
-            factory2.mountTo(e4).context.get(ComponentNode);
+            defContext2.mountTo(e4).context.get(ComponentNode);
 
             expect([...list]).toEqual([n1, n3]);
             expect(onUpdateMock).not.toHaveBeenCalled();
@@ -541,15 +541,6 @@ describe('tree', () => {
       });
 
       describe('by component type', () => {
-
-        let e4: Element;
-
-        beforeEach(async () => {
-          e4 = document.createElement('component-3');
-          e4.setAttribute('id', '4');
-          rootElement.appendChild(e4);
-          await Promise.resolve();
-        });
 
         let cType: ComponentClass;
 
@@ -562,35 +553,46 @@ describe('tree', () => {
           await new Promise(resolve => bsContext.load(Component3).read(({ ready }) => ready && resolve()));
         });
 
-        let factory4: ComponentFactory;
-        let n4: ComponentNode;
+        async function addNamedComponent(): Promise<ComponentNode> {
 
-        beforeEach(async () => {
-          factory4 = await bsContext.whenDefined(cType);
-          n4 = factory4.mountTo(e4).context.get(ComponentNode);
-        });
+          const e4 = document.createElement('component-3');
 
-        it('updates the list when component is defined', async () => {
+          e4.setAttribute('id', '4');
+          rootElement.appendChild(e4);
+
+          await Promise.resolve();
+
+          const defContext4 = await bsContext.whenDefined(cType);
+
+          return defContext4.mountTo(e4).context.get(ComponentNode);
+        }
+
+        it('updates the list', async () => {
 
           const list = rootNode.select(cType);
 
           expect([...list]).toHaveLength(0);
-          await bsContext.whenDefined(cType);
+
+          const n4 = await addNamedComponent();
+
           expect([...list]).toEqual([n4]);
         });
-        it('reports update when component is defined', async () => {
+        it('reports update', async () => {
 
           const onUpdate = jest.fn();
           const list = rootNode.select(cType);
 
           list.onUpdate(onUpdate);
 
-          await bsContext.whenDefined(cType);
+          const n4 = await addNamedComponent();
 
-          expect([...list]).toEqual([n4]);
           expect(onUpdate).toHaveBeenCalledWith([n4], []);
+          expect([...list]).toEqual([n4]);
         });
         it('does not report update when no elements match', async () => {
+
+          const { element: e4 } = await addNamedComponent();
+
           e4.remove();
           await Promise.resolve();
 
@@ -605,6 +607,9 @@ describe('tree', () => {
           expect(onUpdate).not.toHaveBeenCalled();
         });
         it('does not report update of non-component node', async () => {
+
+          const { element: e4 } = await addNamedComponent();
+
           e4.remove();
 
           const e5 = rootElement.appendChild(document.createElement('component-3'));

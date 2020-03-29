@@ -1,16 +1,15 @@
+import { OnEvent } from '@proc7ts/fun-events';
 import {
   bootstrapComponents,
   Class,
   ComponentClass,
   ComponentDef,
-  ComponentFactory,
   CustomElements,
+  DefinitionContext,
   Feature,
 } from '@wesib/wesib';
 
-export function testComponentFactory<T extends object>(
-    componentType: ComponentClass<T>,
-): Promise<ComponentFactory<T>> {
+export function testDefinition<T extends object>(componentType: ComponentClass<T>): OnEvent<[DefinitionContext<T>]> {
   ComponentDef.define(componentType);
 
   const customElements: CustomElements = {
@@ -34,7 +33,7 @@ export function testComponentFactory<T extends object>(
   return bootstrapComponents(TestFeature).whenDefined(componentType);
 }
 
-export async function testElement(componentType: ComponentClass<any>): Promise<Class<any>> {
+export async function testElement(componentType: ComponentClass<any>): Promise<Class> {
   ComponentDef.define(componentType);
 
   let result!: Class;

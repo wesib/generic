@@ -43,7 +43,7 @@ export function UseInputElement<T extends ComponentClass = Class>(
 
         const componentNode = context.get(ComponentNode);
 
-        context.whenOn(connectSupply => {
+        context.whenConnected(() => {
           afterAll({
             node: componentNode.select(select, pick).first(),
             aspects: context.get(DefaultInAspects),
@@ -62,7 +62,7 @@ export function UseInputElement<T extends ComponentClass = Class>(
             }
 
             return control instanceof InControl ? nextArgs(control) : nextAfterEvent(control);
-          }).tillOff(connectSupply).consume(
+          }).consume(
               (control?: InControl<any>, supply?: EventSupply) => {
                 if (!control) {
                   return;

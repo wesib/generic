@@ -504,9 +504,9 @@ describe('navigation', () => {
       class TestComponent {}
 
       const bsContext = await bootstrapComponents(TestComponent).whenReady();
-      const factory = await bsContext.whenDefined(TestComponent);
+      const defContext = await bsContext.whenDefined(TestComponent);
 
-      return factory.mountTo(root);
+      return defContext.mountTo(root);
     }
   });
 });

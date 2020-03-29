@@ -47,14 +47,12 @@ export interface ComponentStypOptions extends StypOptions {
    * Whether to produce CSS stylesheets while component is not connected.
    *
    * Can be one of:
-   * - `true` - to produce stylesheets when first connected and update them even if component is disconnected after
-   *   that. This is the default, as stylesheet updates is expected to be rare operation.
+   * - `true` - to produce stylesheets immediately upon component readiness and update after that. This is the default,
+   *   as stylesheet updates is expected to be rare operation.
    * - `false` - to produce stylesheet whenever component is connected and remove them once disconnected.
    *   This is a good choice if stylesheets are small and updated frequently.
-   * - `always` - to produce stylesheets immediately upon component readiness and update them offline after that.
-   *   This is the right choice if component needs a stylesheet ready before it is added to the document.
    */
-  offline?: boolean | 'always';
+  offline?: boolean;
 
 }
 
@@ -76,34 +74,24 @@ export const ComponentStypOptions = {
   ): EventSupply {
 
     const css = lazyStypRules(rules);
-    const offline = options && options.offline;
+    const { offline = true } = options || {};
     const produceStyle = context.get(ComponentStyleProducer);
 
     let cssSupply = noEventSupply();
     let doProduceStyle: () => void;
     const supply = eventSupply(() => {
       doProduceStyle = noop;
-    }).cuts(cssSupply);
+    }).needs(context).cuts(cssSupply);
 
     doProduceStyle = () => {
       cssSupply = produceStyle(css, options).needs(supply);
     };
 
-    switch (offline) {
-    case 'always':
+    if (offline) {
       context.whenReady(doProduceStyle);
-      break;
-    case false:
-      context.whenOn(connectionSupply => {
-        doProduceStyle();
-        cssSupply.needs(connectionSupply);
-      });
-      break;
-    default:
-      context.whenOn().once(doProduceStyle);
+    } else {
+      context.whenConnected(doProduceStyle);
     }
-
-    context.whenDestroyed(reason => supply.off(reason));
 
     return supply;
   },

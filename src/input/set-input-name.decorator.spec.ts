@@ -91,8 +91,8 @@ describe('input', () => {
 
         constructor(context: ComponentContext) {
           if (createGroup) {
-            context.whenOn(connectSupply => {
-              inputFromControl(context, group).needs(connectSupply);
+            context.whenConnected(() => {
+              inputFromControl(context, group);
             });
           }
         }
@@ -106,8 +106,8 @@ describe('input', () => {
 
         constructor(context: ComponentContext) {
           if (createControl) {
-            context.whenOn(connectSupply => {
-              inputFromControl(context, control).needs(connectSupply);
+            context.whenConnected(() => {
+              inputFromControl(context, control);
             });
           }
         }

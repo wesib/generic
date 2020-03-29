@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { eventSupplyOf } from '@proc7ts/fun-events';
 import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
 import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
@@ -29,7 +30,7 @@ export function OnSubmit<T extends ComponentClass, Model = any, Elt extends HTML
     componentDef: {
       define(defContext) {
         defContext.whenComponent(context => {
-          context.whenOn(supply => {
+          context.whenConnected(() => {
 
             const hierarchy = context.get(HierarchyContext);
             const { component } = context;
@@ -41,7 +42,7 @@ export function OnSubmit<T extends ComponentClass, Model = any, Elt extends HTML
 
               const submitDispatcher = new DomEventDispatcher(inputToForm.form.element);
 
-              supply.cuts(submitDispatcher);
+              eventSupplyOf(submitDispatcher).needs(context);
 
               const onSubmit = submitDispatcher.on('submit');
 

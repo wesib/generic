@@ -202,9 +202,9 @@ describe('navigation', () => {
       class PageContent {}
 
       const bsContext = await bootstrapComponents(PageContent).whenReady();
-      const factory = await bsContext.whenDefined(PageContent);
+      const defContext = await bsContext.whenDefined(PageContent);
 
-      return factory.mountTo(element);
+      return defContext.mountTo(element);
     }
 
   });
