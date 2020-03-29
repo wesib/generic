@@ -170,7 +170,7 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
           );
           parentHierarchy.read(receiver);
           this.context.whenConnected({
-            supply,
+            supply: eventSupply().needs(supply),
             receive: updateParent,
           });
         },
