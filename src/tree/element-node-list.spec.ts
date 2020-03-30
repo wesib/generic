@@ -545,17 +545,17 @@ describe('tree', () => {
         let cType: ComponentClass;
 
         beforeEach(async () => {
-          @Component('component-3')
-          class Component3 {}
+          @Component('named-component')
+          class NamedComponent {}
 
-          cType = Component3;
+          cType = NamedComponent;
 
-          await new Promise(resolve => bsContext.load(Component3).read(({ ready }) => ready && resolve()));
+          await new Promise(resolve => bsContext.load(NamedComponent).read(({ ready }) => ready && resolve()));
         });
 
         async function addNamedComponent(): Promise<ComponentNode> {
 
-          const e4 = document.createElement('component-3');
+          const e4 = document.createElement('named-component');
 
           e4.setAttribute('id', '4');
           rootElement.appendChild(e4);
@@ -591,11 +591,6 @@ describe('tree', () => {
         });
         it('does not report update when no elements match', async () => {
 
-          const { element: e4 } = await addNamedComponent();
-
-          e4.remove();
-          await Promise.resolve();
-
           const onUpdate = jest.fn();
           const list = rootNode.select(cType);
 
@@ -608,11 +603,7 @@ describe('tree', () => {
         });
         it('does not report update of non-component node', async () => {
 
-          const { element: e4 } = await addNamedComponent();
-
-          e4.remove();
-
-          const e5 = rootElement.appendChild(document.createElement('component-3'));
+          const e5 = rootElement.appendChild(document.createElement('named-component'));
 
           e5.setAttribute('id', '5');
 

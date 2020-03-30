@@ -64,7 +64,25 @@ export function elementNodeList<N extends ElementNode>(
       if (name) {
         selector = html__naming.name(name, bsContext.get(DefaultNamespaceAliaser));
         if (updates.size) {
-          refresh(); // Update cache when there are receivers
+          // Refresh selection after component name resolution.
+          // This is needed  when new document loaded.
+
+          const selected = refresh();
+
+          if (selected.size) {
+
+            const added = Array.from(
+                filterIt<N | undefined, N>(
+                    mapIt(selected, node => nodeOf(node)),
+                    isPresent,
+                ),
+            );
+
+            /* istanbul ignore if. Can not test native custom element */
+            if (added.length) {
+              updates.send(added, []);
+            }
+          }
         }
       }
     });
