@@ -43,17 +43,6 @@ export interface ComponentStypOptions extends StypOptions {
    */
   rootSelector?: undefined;
 
-  /**
-   * Whether to produce CSS stylesheets while component is not connected.
-   *
-   * Can be one of:
-   * - `true` - to produce stylesheets immediately upon component readiness and update after that. This is the default,
-   *   as stylesheet updates is expected to be rare operation.
-   * - `false` - to produce stylesheet whenever component is connected and remove them once disconnected.
-   *   This is a good choice if stylesheets are small and updated frequently.
-   */
-  offline?: boolean;
-
 }
 
 export const ComponentStypOptions = {
@@ -74,7 +63,6 @@ export const ComponentStypOptions = {
   ): EventSupply {
 
     const css = lazyStypRules(rules);
-    const { offline = true } = options || {};
     const produceStyle = context.get(ComponentStyleProducer);
 
     let cssSupply = noEventSupply();
@@ -87,11 +75,7 @@ export const ComponentStypOptions = {
       cssSupply = produceStyle(css, options).needs(supply);
     };
 
-    if (offline) {
-      context.whenReady(doProduceStyle);
-    } else {
-      context.whenConnected(doProduceStyle);
-    }
+    context.whenConnected(doProduceStyle);
 
     return supply;
   },

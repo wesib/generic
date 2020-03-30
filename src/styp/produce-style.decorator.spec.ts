@@ -39,16 +39,6 @@ describe('styp', () => {
       await mount(stypRoot({ display: 'block' }).rules);
       expect(cssStyle().display).toBe('block');
     });
-    it('renders styles on connection when offline=false', async () => {
-      element = document.createElement('online-element');
-
-      const mnt = await mount(stypRoot({ display: 'block' }).rules, undefined, { offline: false });
-
-      expect(element.querySelectorAll('style')).toHaveLength(0);
-      document.body.appendChild(element);
-      mnt.checkConnected();
-      expect(cssStyle().display).toBe('block');
-    });
     it('renders styles with StyleProducerSupport', async () => {
       await mount(stypRoot({ display: 'block' }).rules, { feature: { needs: StyleProducerSupport } });
       expect(cssStyle().display).toBe('block');
