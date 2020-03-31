@@ -21,6 +21,7 @@ import {
   eventSupplyOf,
   EventSupplyPeer,
   trackValue,
+  ValueTracker,
 } from '@proc7ts/fun-events';
 import { BootstrapContext, ComponentContext } from '@wesib/wesib';
 import { newHierarchyRegistry } from './hierarchy-registry.impl';
@@ -117,12 +118,15 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
 
 class HierarchyContext$<T extends object> extends HierarchyContext<T> {
 
-  private readonly _parent = trackValue<HierarchyContext>();
+  private readonly _parent: ValueTracker<HierarchyContext | undefined>;
   private readonly _registry: ContextRegistry<HierarchyContext<T>>;
   readonly get: HierarchyContext<T>['get'];
 
   constructor(readonly context: ComponentContext<T>) {
     super();
+    this._parent = trackValue<HierarchyContext>();
+    eventSupplyOf(context).cuts(this._parent);
+    context.whenConnected(() => this._parent.done());
 
     const registry = this._registry = newHierarchyRegistry<T>(this.up());
 
@@ -152,9 +156,7 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
 
           const parentHierarchy = trackValue<HierarchyContext>();
 
-          if (!this.context.connected) {
-            parentHierarchy.by(this._parent);
-          }
+          parentHierarchy.by(this._parent);
           supply.cuts(parentHierarchy);
 
           const rootSupply = eventSupply().needs(supply);
@@ -187,10 +189,7 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
           parentHierarchy.read(receiver);
           this.context.whenConnected({
             supply: eventSupply().needs(supply),
-            receive() {
-              parentHierarchy.byNone();
-              updateParent();
-            },
+            receive: updateParent,
           });
         },
     ).share().F)(receiver);
