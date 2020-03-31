@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { noop } from '@proc7ts/call-thru';
 import {
   ContextKey,
   ContextKey__symbol,
@@ -124,9 +125,10 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
 
   constructor(readonly context: ComponentContext<T>) {
     super();
-    this._parent = trackValue<HierarchyContext>();
-    eventSupplyOf(context).cuts(this._parent);
-    context.whenConnected(() => this._parent.done());
+
+    const parent = this._parent = trackValue<HierarchyContext>();
+
+    context.whenConnected(noop).cuts(parent);
 
     const registry = this._registry = newHierarchyRegistry<T>(this.up());
 
