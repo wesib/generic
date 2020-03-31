@@ -29,7 +29,7 @@
     "@proc7ts/namespace-aliaser": "^2.0.3",
     "@proc7ts/render-scheduler": "^1.1.0",
     "@proc7ts/style-producer": "^4.0.0",
-    "@wesib/wesib": "^1.0.0-alpha.99"
+    "@wesib/wesib": "^1.0.0-alpha.100"
   },
   "dependencies": {
     "@proc7ts/http-header-value": "^2.0.2"
@@ -58,7 +58,7 @@
     "@types/jsdom": "^16.2.0",
     "@typescript-eslint/eslint-plugin": "~2.26.0",
     "@typescript-eslint/parser": "~2.26.0",
-    "@wesib/wesib": "^1.0.0-alpha.99",
+    "@wesib/wesib": "^1.0.0-alpha.100",
     "codecov": "^3.6.5",
     "cross-fetch": "^3.0.4",
     "cssesc": "^3.0.0",
