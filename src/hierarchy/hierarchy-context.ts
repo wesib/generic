@@ -84,6 +84,18 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
   abstract up(receiver: EventReceiver<[HierarchyContext?]>): EventSupply;
 
   /**
+   * Assigns enclosing component to use by default.
+   *
+   * The provided component will be treated as enclosing one until component element connected. After that the real
+   * enclosing component will be used instead.
+   *
+   * @param enclosing  Enclosing component's context to assign, or nothing to remove one.
+   *
+   * @returns `this` instance.
+   */
+  abstract inside(enclosing?: ComponentContext): this;
+
+  /**
    * Provides hierarchy context value.
    *
    * The provided value will be available in context itself, as well as in all nested hierarchy contexts.
@@ -105,6 +117,7 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
 
 class HierarchyContext$<T extends object> extends HierarchyContext<T> {
 
+  private readonly _parent = trackValue<HierarchyContext>();
   private readonly _registry: ContextRegistry<HierarchyContext<T>>;
   readonly get: HierarchyContext<T>['get'];
 
@@ -139,6 +152,9 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
 
           const parentHierarchy = trackValue<HierarchyContext>();
 
+          if (!this.context.connected) {
+            parentHierarchy.by(this._parent);
+          }
           supply.cuts(parentHierarchy);
 
           const rootSupply = eventSupply().needs(supply);
@@ -171,10 +187,18 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
           parentHierarchy.read(receiver);
           this.context.whenConnected({
             supply: eventSupply().needs(supply),
-            receive: updateParent,
+            receive() {
+              parentHierarchy.byNone();
+              updateParent();
+            },
           });
         },
     ).share().F)(receiver);
+  }
+
+  inside(enclosing?: ComponentContext): this {
+    this._parent.it = enclosing && enclosing.get(HierarchyContext);
+    return this;
   }
 
 }
