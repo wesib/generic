@@ -36,7 +36,7 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
 
           const navigation = context.get(Navigation);
 
-          events.forEach(eventType => {
+          for (const eventType of events) {
             context.on(eventType).to(event => {
               navigation.read().once(
                   page => handle({
@@ -47,7 +47,7 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
                   }),
               );
             });
-          });
+          }
         });
       });
     },
