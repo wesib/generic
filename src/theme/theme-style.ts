@@ -2,8 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { AIterable } from '@proc7ts/a-iterable';
-import { ContextRef, ContextValueOpts, ContextValues, SimpleContextKey } from '@proc7ts/context-values';
+import { ContextRef, ContextValueOpts, ContextValues, IterativeContextKey } from '@proc7ts/context-values';
 import { stypRules, StypRules } from '@proc7ts/style-producer';
 import { Theme } from './theme';
 
@@ -75,19 +74,19 @@ export namespace ThemeStyle {
 /**
  * @internal
  */
-class ThemeStyleKey extends SimpleContextKey<ThemeStyle.ById, ThemeStyle> {
+class ThemeStyleKey extends IterativeContextKey<ThemeStyle.ById, ThemeStyle> {
 
   constructor() {
     super('theme-style');
   }
 
   grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, ThemeStyle.ById, ThemeStyle, AIterable<ThemeStyle>>,
+      opts: ContextValueOpts<Ctx, ThemeStyle.ById, ThemeStyle, Iterable<ThemeStyle>>,
   ): ThemeStyle.ById | null | undefined {
 
     const providers = new Map<ThemeStyle.Provider, [ThemeStyle.Provider, boolean]>();
 
-    opts.seed.forEach(style => {
+    for (const style of opts.seed) {
 
       let key: ThemeStyle.Provider;
       let provider: ThemeStyle.Provider;
@@ -118,7 +117,7 @@ class ThemeStyleKey extends SimpleContextKey<ThemeStyle.ById, ThemeStyle> {
             ],
         );
       }
-    });
+    }
 
     return providers.size ? byId : opts.byDefault(() => byId);
 
