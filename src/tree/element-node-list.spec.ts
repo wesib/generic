@@ -1,4 +1,4 @@
-import { AIterable, ArrayLikeIterable, itsEmpty } from '@proc7ts/a-iterable';
+import { itsEmpty, mapIt } from '@proc7ts/a-iterable';
 import { noop } from '@proc7ts/call-thru';
 import { afterSupplied, onSupplied } from '@proc7ts/fun-events';
 import {
@@ -639,8 +639,8 @@ describe('tree', () => {
       });
     });
 
-    function elementsOf(nodes: ArrayLikeIterable<ElementNode> | ElementNode[]): Element[] {
-      return [...AIterable.of(nodes).map(node => node.element)];
+    function elementsOf(nodes: Iterable<ElementNode>): Element[] {
+      return Array.from(mapIt(nodes, node => node.element));
     }
   });
 });

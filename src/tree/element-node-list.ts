@@ -2,7 +2,6 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { AIterable, ArrayLikeIterable } from '@proc7ts/a-iterable';
 import {
   AfterEvent,
   AfterEvent__symbol,
@@ -25,8 +24,7 @@ import { ElementNode } from './element-node';
  * Implements an `EventKeeper` interface by sending updated node list.
  */
 export abstract class ElementNodeList<N extends ElementNode = ElementNode>
-    extends AIterable<N>
-    implements EventSender<[N[], N[]]>, EventKeeper<[ElementNodeList<N>]> {
+    implements Iterable<N>, EventSender<[N[], N[]]>, EventKeeper<[ElementNodeList<N>]> {
 
   /**
    * Builds an `OnEvent` sender of this list changes.
@@ -45,6 +43,8 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode>
    * @returns List changes supply.
    */
   abstract onUpdate(receiver: EventReceiver<[N[], N[]]>): EventSupply;
+
+  abstract [Symbol.iterator](): Iterator<N>;
 
   [OnEvent__symbol](): OnEvent<[N[], N[]]> {
     return this.onUpdate();
@@ -77,20 +77,20 @@ export abstract class ElementNodeList<N extends ElementNode = ElementNode>
    *
    * Sends current nodes immediately upon receiver registration as added ones.
    *
-   * @returns An `AfterEvent` sender of iterables of added and removed nodes.
+   * @returns An `AfterEvent` sender of arrays of added and removed nodes.
    */
-  abstract track(): AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>;
+  abstract track(): AfterEvent<[readonly N[], readonly N[]]>;
 
   /**
    * Starts sending tracked list changes to the given `receiver`.
    *
    * Sends current nodes immediately upon receiver registration as added ones.
    *
-   * @param receiver  Target receiver of iterables of added and removed nodes.
+   * @param receiver  Target receiver of arrays of added and removed nodes.
    *
    * @returns Tracked list changes supply.
    */
-  abstract track(receiver: EventReceiver<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>): EventSupply;
+  abstract track(receiver: EventReceiver<[readonly N[], readonly N[]]>): EventSupply;
 
   /**
    * Builds an `AfterEvent` keeper of the first node in this list.

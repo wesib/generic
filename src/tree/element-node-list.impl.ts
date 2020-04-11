@@ -1,15 +1,5 @@
-import {
-  AIterable,
-  ArrayLikeIterable,
-  filterIt,
-  flatMapIt,
-  itsEach,
-  itsFirst,
-  itsIterator,
-  mapIt,
-  overArray,
-} from '@proc7ts/a-iterable';
-import { isPresent, nextArg, nextArgs, valuesProvider } from '@proc7ts/call-thru';
+import { filterIt, flatMapIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from '@proc7ts/a-iterable';
+import { isPresent, nextArg, valuesProvider } from '@proc7ts/call-thru';
 import {
   AfterEvent,
   afterEventBy,
@@ -138,24 +128,22 @@ export function elementNodeList<N extends ElementNode>(
       ).F)(receiver);
     }
 
-    track(): AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>;
-    track(receiver: EventReceiver<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>): EventSupply;
+    track(): AfterEvent<[readonly N[], readonly N[]]>;
+    track(receiver: EventReceiver<[readonly N[], readonly N[]]>): EventSupply;
     track(
-        receiver?: EventReceiver<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>,
-    ): AfterEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> | EventSupply {
+        receiver?: EventReceiver<[readonly N[], readonly N[]]>,
+    ): AfterEvent<[readonly N[], readonly N[]]> | EventSupply {
 
-      const onTrackUpdate: OnEvent<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]> = this.onUpdate().thru(
-          (added, removed) => nextArgs(AIterable.of(added), AIterable.of(removed)),
-      );
+      const onUpdate: OnEvent<[readonly N[], readonly N[]]> = this.onUpdate();
 
-      return (this.track = afterEventBy<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>(receiver => {
+      return (this.track = afterEventBy<[readonly N[], readonly N[]]>(receiver => {
 
-        const initialEmitter = new EventEmitter<[ArrayLikeIterable<N>, ArrayLikeIterable<N>]>();
+        const initialEmitter = new EventEmitter<[readonly N[], readonly N[]]>();
 
         initialEmitter.on(receiver);
-        initialEmitter.send(this, AIterable.of([]));
+        initialEmitter.send(Array.from(this), []);
 
-        onTrackUpdate.to(receiver);
+        onUpdate.to(receiver);
       }).F)(receiver);
     }
 

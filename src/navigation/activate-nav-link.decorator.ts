@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { mapIt } from '@proc7ts/a-iterable';
 import { nextArgs, noop } from '@proc7ts/call-thru';
 import {
   afterEach,
@@ -80,7 +81,7 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
           navigation.read().tillOff(context).consume(
               page => componentNode.select(select, pick).read().keepThru_(
                   nodes => nextAfterEvent(afterEach(
-                      ...nodes.map(node => weigh({ node, context, page })),
+                      ...mapIt(nodes, node => weigh({ node, context, page })),
                   )),
               ).consume(
                   (...weights: NavLinkWeight[]) => {
