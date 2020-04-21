@@ -1,4 +1,5 @@
 import { ContextRegistry } from '@proc7ts/context-values';
+import { eventSupply, EventSupply, EventSupply__symbol, trackValue } from '@proc7ts/fun-events';
 import { newNamespaceAliaser } from '@proc7ts/namespace-aliaser';
 import {
   immediateRenderScheduler,
@@ -8,11 +9,11 @@ import {
 } from '@proc7ts/render-scheduler';
 import {
   produceBasicStyle,
-  StypOptions,
+  StypFormatConfig,
   StypRenderer,
   stypRoot,
-  stypSelector,
   StypSelector,
+  stypSelector,
 } from '@proc7ts/style-producer';
 import {
   BootstrapWindow,
@@ -22,84 +23,166 @@ import {
   ShadowContentRoot,
 } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
-import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
-import { ComponentStypOptions } from './component-styp-options';
+import { ComponentStypDomFormat } from './component-styp-dom.format';
+import { ComponentStypFormatConfig } from './component-styp-format';
 import { ElementIdClass, ElementIdClass__NS } from './element-id-class.impl';
 import Mock = jest.Mock;
 
 describe('styp', () => {
-  describe('ComponentStyleProducer', () => {
 
-    let registry: ContextRegistry<ComponentContext>;
-    let context: ComponentContext;
+  let done: EventSupply;
+
+  beforeEach(() => {
+    done = eventSupply();
+  });
+  afterEach(() => {
+    done.off();
+  });
+
+  let registry: ContextRegistry<ComponentContext>;
+  let context: jest.Mocked<ComponentContext>;
+
+  beforeEach(() => {
+    registry = new ContextRegistry();
+
+    const values = registry.newValues();
+    const connected = trackValue<ComponentContext>();
+
+    context = {
+      [EventSupply__symbol]: eventSupply(),
+      whenConnected: connected.read().F,
+      get: values.get,
+      contentRoot: document.createElement('content-root'),
+    } as any;
+    connected.it = context;
+
+    registry.provide({ a: ComponentContext, is: context });
+  });
+
+  beforeEach(() => {
+    registry.provide({
+      a: DefaultNamespaceAliaser,
+      is: newNamespaceAliaser(),
+    });
+  });
+
+  let mockRenderScheduler: Mock<RenderSchedule, Parameters<RenderScheduler>>;
+
+  beforeEach(() => {
+    mockRenderScheduler = jest.fn(immediateRenderScheduler);
+    registry.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
+  });
+
+  let elementId: ElementIdClass;
+
+  beforeEach(() => {
+    elementId = ['test-element-id', ElementIdClass__NS];
+    registry.provide({ a: ElementIdClass, is: elementId });
+  });
+
+  let mockRenderer: Mock<void, Parameters<StypRenderer.Function>>;
+  let renderedSelector: StypSelector.Normalized;
+
+  beforeEach(() => {
+    renderedSelector = undefined!;
+    mockRenderer = jest.fn((prod, _props) => {
+      renderedSelector = prod.selector;
+    });
+  });
+
+  let mockProduceStyle: Mock<ReturnType<typeof produceBasicStyle>, Parameters<typeof produceBasicStyle>>;
+
+  beforeEach(() => {
+    mockProduceStyle = jest.fn(produceBasicStyle);
+    registry.provide({
+      a: ComponentStyleProducer,
+      is: mockProduceStyle,
+    });
+  });
+
+  describe('ComponentStypDomFormat', () => {
+
+    let format: ComponentStypDomFormat;
 
     beforeEach(() => {
-      registry = new ContextRegistry();
-
-      const values = registry.newValues();
-
-      context = {
-        get: values.get,
-        contentRoot: document.createElement('content-root'),
-      } as any;
-
-      registry.provide({ a: ComponentContext, is: context });
+      format = new ComponentStypDomFormat(context);
     });
 
-    beforeEach(() => {
-      registry.provide({
-        a: DefaultNamespaceAliaser,
-        is: newNamespaceAliaser(),
+    describe('config', () => {
+      describe('document', () => {
+        it('defaults to bootstrap window document', () => {
+
+          const doc = document.implementation.createHTMLDocument('test');
+
+          registry.provide({ a: BootstrapWindow, is: { document: doc } as BootstrapWindow });
+
+          expect(format.config()).toMatchObject({ document: doc });
+        });
+        it('respects explicit value', () => {
+
+          const doc = document.implementation.createHTMLDocument('test');
+
+          expect(format.config({ document: doc })).toMatchObject({ document: doc });
+        });
       });
-    });
 
-    let mockRenderScheduler: Mock<RenderSchedule, Parameters<RenderScheduler>>;
+      describe('parent', () => {
+        it('defaults to component content root', () => {
+          expect(format.config()).toMatchObject({ parent: context.contentRoot });
+        });
+        it('respects explicit value', () => {
 
-    beforeEach(() => {
-      mockRenderScheduler = jest.fn(immediateRenderScheduler);
-      registry.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
-    });
+          const parent = document.createElement('content-parent');
 
-    let elementId: ElementIdClass;
-
-    beforeEach(() => {
-      elementId = ['test-element-id', ElementIdClass__NS];
-      registry.provide({ a: ElementIdClass, is: elementId });
-    });
-
-    let mockRenderer: Mock<void, Parameters<StypRenderer.Function>>;
-    let renderedSelector: StypSelector.Normalized;
-
-    beforeEach(() => {
-      renderedSelector = undefined!;
-      mockRenderer = jest.fn((prod, _props) => {
-        renderedSelector = prod.selector;
-      });
-    });
-
-    let producer: ComponentStyleProducer;
-    let mockProduceStyle: Mock<ReturnType<typeof produceBasicStyle>, Parameters<typeof produceBasicStyle>>;
-
-    beforeEach(() => {
-      mockProduceStyle = jest.fn(produceBasicStyle);
-      registry.provide({
-        a: ComponentStyleProducer_,
-        by(ctx: ComponentContext) {
-          return new ComponentStyleProducer_(ctx, mockProduceStyle);
-        },
-      });
-      registry.provide({
-        a: ComponentStyleProducer,
-        by(prod: ComponentStyleProducer_): ComponentStyleProducer {
-          return (rules, opts) => prod.produce(rules, opts);
-        },
-        with: [ComponentStyleProducer_],
+          expect(format.config({ parent })).toMatchObject(parent);
+        });
       });
 
-      producer = context.get(ComponentStyleProducer);
-    });
+      describe('rootSelector', () => {
+        it('is empty by default', () => {
+          expect(format.config()).toMatchObject({ rootSelector: [] });
+        });
+        it('ignores explicit value', () => {
+          expect(format.config({
+            rootSelector: 'some',
+          } as StypFormatConfig as ComponentStypFormatConfig)).toMatchObject({
+            rootSelector: [],
+          });
+        });
+      });
 
-    describe('options', () => {
+      describe('scheduler', () => {
+        it('defaults to render scheduler', () => {
+          produce();
+          expect(mockProduceStyle).toHaveBeenCalled();
+
+          const scheduler = mockProduceStyle.mock.calls[0][1]!.scheduler!;
+          const config = { window, name: 'options' };
+
+          scheduler(config);
+
+          expect(mockRenderScheduler).toHaveBeenCalled();
+        });
+        it('respects explicit value', () => {
+
+          const scheduler = newManualRenderScheduler();
+
+          expect(format.config({ scheduler })).toMatchObject({ scheduler });
+        });
+      });
+
+      describe('nsAlias', () => {
+        it('defaults to default namespace alias', () => {
+          expect(format.config()).toMatchObject({ nsAlias: context.get(DefaultNamespaceAliaser) });
+        });
+        it('respects explicit value', () => {
+
+          const nsAlias = newNamespaceAliaser();
+
+          expect(format.config({ nsAlias })).toMatchObject({ nsAlias });
+        });
+      });
+
       describe('renderer', () => {
         it('respects explicit value', () => {
           produce();
@@ -107,106 +190,14 @@ describe('styp', () => {
         });
       });
 
-      describe('document', () => {
-        // eslint-disable-next-line jest/expect-expect
-        it('defaults to bootstrap window document', () => {
-
-          const doc = document.implementation.createHTMLDocument('test');
-
-          registry.provide({ a: BootstrapWindow, is: { document: doc } as BootstrapWindow });
-
-          produce();
-          expectOptions({ document: doc });
-        });
-        // eslint-disable-next-line jest/expect-expect
-        it('respects explicit value', () => {
-
-          const doc = document.implementation.createHTMLDocument('test');
-
-          produce({ document: doc });
-          expectOptions({ document: doc });
-        });
-      });
-
-      describe('parent', () => {
-        // eslint-disable-next-line jest/expect-expect
-        it('defaults to component content root', () => {
-          produce();
-          expectOptions({ parent: context.contentRoot });
-        });
-        // eslint-disable-next-line jest/expect-expect
-        it('respects explicit value', () => {
-
-          const parent = document.createElement('content-parent');
-
-          produce({ parent });
-          expectOptions({ parent });
-        });
-      });
-
-      describe('rootSelector', () => {
-        // eslint-disable-next-line jest/expect-expect
-        it('is empty by default', () => {
-          produce();
-          expectOptions({ rootSelector: [] });
-        });
-        // eslint-disable-next-line jest/expect-expect
-        it('ignores explicit value', () => {
-          produce({ rootSelector: 'some' } as StypOptions as ComponentStypOptions);
-          expectOptions({ rootSelector: [] });
-        });
-      });
-
-      describe('schedule', () => {
-        it('defaults to render scheduler', () => {
-          produce();
-          expect(mockProduceStyle).toHaveBeenCalled();
-
-          const scheduler = mockProduceStyle.mock.calls[0][1]!.scheduler!;
-          const options = { window, name: 'options' };
-
-          scheduler(options);
-
-          expect(mockRenderScheduler).toHaveBeenLastCalledWith(options);
-        });
-        // eslint-disable-next-line jest/expect-expect
-        it('respects explicit value', () => {
-
-          const scheduler = newManualRenderScheduler();
-
-          produce({ scheduler });
-          expectOptions({ scheduler });
-        });
-      });
-
-      describe('nsAlias', () => {
-        // eslint-disable-next-line jest/expect-expect
-        it('defaults to default namespace alias', () => {
-          produce();
-          expectOptions({ nsAlias: context.get(DefaultNamespaceAliaser) });
-        });
-        // eslint-disable-next-line jest/expect-expect
-        it('respects explicit value', () => {
-
-          const nsAlias = newNamespaceAliaser();
-
-          produce({ nsAlias });
-          expectOptions({ nsAlias });
-        });
-      });
-
-      function expectOptions(opts: StypOptions): void {
-        expect(mockProduceStyle).toHaveBeenCalledWith(
-            expect.anything(),
-            expect.objectContaining(opts),
-        );
-      }
-
-      function produce(opts?: ComponentStypOptions): void {
-
-        const { rules } = stypRoot();
-
-        producer(rules, { ...opts, renderer: mockRenderer });
+      function produce(config: ComponentStypFormatConfig = {}): void {
+        format.produce(
+            stypRoot({ font: 'serif' }).rules,
+            {
+              ...config,
+              renderer: mockRenderer,
+            },
+        ).needs(done);
       }
     });
 
@@ -345,18 +336,18 @@ describe('styp', () => {
         });
       });
 
-      function produce(selector: StypSelector, opts?: ComponentStypOptions): void {
+      function produce(selector: StypSelector, config?: ComponentStypFormatConfig): void {
 
         const { rules } = stypRoot();
         const rule = rules.add(selector);
 
-        producer(
+        format.produce(
             rule.rules.self,
             {
-              ...opts,
+              ...config,
               renderer: mockRenderer,
             },
-        );
+        ).needs(done);
       }
     });
   });

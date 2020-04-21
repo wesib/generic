@@ -12,7 +12,7 @@ import {
 } from '@wesib/wesib';
 import { testDefinition } from '../spec/test-element';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
-import { ComponentStypOptions } from './component-styp-options';
+import { ComponentStypFormatConfig } from './component-styp-format';
 import { ComponentStypRenderer } from './component-styp-renderer';
 import { ElementIdClass } from './element-id-class.impl';
 import { ProduceStyle } from './produce-style.decorator';
@@ -118,7 +118,7 @@ describe('styp', () => {
     async function mount(
         rules: StypRules.Source = stypRoot({ display: 'block' }),
         def: ComponentDef = { name: 'test-component' },
-        options?: ComponentStypOptions,
+        config?: ComponentStypFormatConfig,
     ): Promise<ComponentMount> {
 
       @Component(def)
@@ -133,7 +133,7 @@ describe('styp', () => {
       })
       class TestComponent {
 
-        @ProduceStyle(options)
+        @ProduceStyle(config)
         get style(): StypRules.Source {
           return rules;
         }

@@ -3,10 +3,11 @@
  * @module @wesib/generic/styp
  */
 import { produceStyle } from '@proc7ts/style-producer';
-import { ComponentContext, FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
+import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStyleProducer } from './component-style-producer';
-import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
+import { ComponentStypFormat } from './component-styp-format';
+import { ComponentStypObjectFormat } from './component-styp-object.format';
 
 /**
  * @internal
@@ -14,18 +15,10 @@ import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-s
 const StyleProducerSupport__feature: FeatureDef = {
   has: BasicStyleProducerSupport,
   setup(setup) {
+    setup.perComponent({ a: ComponentStyleProducer, is: produceStyle });
     setup.perComponent({
-      a: ComponentStyleProducer_,
-      by(context: ComponentContext) {
-        return new ComponentStyleProducer_(context, produceStyle);
-      },
-    });
-    setup.perComponent({
-      a: ComponentStyleProducer,
-      by(producer: ComponentStyleProducer_): ComponentStyleProducer {
-        return (rules, opts) => producer.produce(rules, opts);
-      },
-      with: [ComponentStyleProducer_],
+      a: ComponentStypFormat,
+      as: ComponentStypObjectFormat,
     });
   },
 };

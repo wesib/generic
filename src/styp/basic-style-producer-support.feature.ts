@@ -2,22 +2,21 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
+import { produceBasicStyle } from '@proc7ts/style-producer';
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
-import { ComponentStyleProducer as ComponentStyleProducer_ } from './component-style-producer.impl';
+import { ComponentStypFormat } from './component-styp-format';
+import { ComponentStypObjectFormat } from './component-styp-object.format';
 
 /**
  * @internal
  */
 const BasicStyleProducerSupport__feature: FeatureDef = {
   setup(setup) {
-    setup.perComponent({ as: ComponentStyleProducer_ });
+    setup.perComponent({ a: ComponentStyleProducer, is: produceBasicStyle });
     setup.perComponent({
-      a: ComponentStyleProducer,
-      by(producer: ComponentStyleProducer_): ComponentStyleProducer {
-        return (rules, opts) => producer.produce(rules, opts);
-      },
-      with: [ComponentStyleProducer_],
+      a: ComponentStypFormat,
+      as: ComponentStypObjectFormat,
     });
   },
 };

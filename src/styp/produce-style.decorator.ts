@@ -5,7 +5,7 @@
 import { StypRule, StypRules } from '@proc7ts/style-producer';
 import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
-import { ComponentStypOptions } from './component-styp-options';
+import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
 
 /**
  * A decorator of component property returning CSS rules to produce.
@@ -15,15 +15,15 @@ import { ComponentStypOptions } from './component-styp-options';
  *
  * This decorator automatically enables [[BasicStyleProducerSupport]] feature.
  *
- * Utilizes [[ComponentStypOptions.produce]] function to produce CSS stylesheets.
+ * Produces CSS using {@link ComponentStypFormat component style production format}.
  *
  * @typeparam T  A type of decorated component class.
- * @param options  Non-mandatory CSS style production options.
+ * @param config  Non-mandatory component style production format config.
  *
  * @returns Component property decorator.
  */
 export function ProduceStyle<T extends ComponentClass>(
-    options?: ComponentStypOptions,
+    config?: ComponentStypFormatConfig,
 ): ComponentPropertyDecorator<
     | StypRules.Source
     | (() => StypRule | StypRules | Promise<StypRule | StypRules>),
@@ -39,8 +39,9 @@ export function ProduceStyle<T extends ComponentClass>(
 
             const value = get(component);
             const source: StypRules.Source = typeof value === 'function' ? value.bind(component) : value;
+            const format = context.get(ComponentStypFormat);
 
-            ComponentStypOptions.produce(context, source, options);
+            format.produce(source, config);
           });
         });
       },
