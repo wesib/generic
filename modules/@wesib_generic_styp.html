@@ -78,6 +78,9 @@
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/@wesib_generic_styp.BasicStyleProducerSupport.html" class="tsd-kind-icon">Basic<wbr>Style<wbr>Producer<wbr>Support</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/@wesib_generic_styp.ComponentStypDomFormat.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Dom<wbr>Format</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/@wesib_generic_styp.ComponentStypFormat.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Format</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/@wesib_generic_styp.ComponentStypObjectFormat.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Object<wbr>Format</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/@wesib_generic_styp.StyleProducerSupport.html" class="tsd-kind-icon">Style<wbr>Producer<wbr>Support</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/@wesib_generic_styp.Theme.html" class="tsd-kind-icon">Theme</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/@wesib_generic_styp.ThemeFactory.html" class="tsd-kind-icon">Theme<wbr>Factory</a></li>
@@ -87,7 +90,7 @@
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/@wesib_generic_styp.ComponentStypOptions.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/@wesib_generic_styp.ComponentStypFormatConfig.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Format<wbr>Config</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -108,12 +111,7 @@
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="@wesib_generic_styp.html#ProduceStyle" class="tsd-kind-icon">Produce<wbr>Style</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Object literals</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-object-literal tsd-parent-kind-module"><a href="@wesib_generic_styp.html#ComponentStypOptions-1" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="@wesib_generic_styp.html#componentStypDomFormatConfig" class="tsd-kind-icon">component<wbr>Styp<wbr>Dom<wbr>Format<wbr>Config</a></li>
 							</ul>
 						</section>
 					</div>
@@ -124,15 +122,15 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="ComponentStyleProducer" class="tsd-anchor"></a>
 					<h3>Component<wbr>Style<wbr>Producer</h3>
-					<div class="tsd-signature tsd-kind-icon">Component<wbr>Style<wbr>Producer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>rules<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypRules</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/@wesib_generic_styp.ComponentStypOptions.html" class="tsd-signature-type">ComponentStypOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">EventSupply</span></div>
+					<div class="tsd-signature tsd-kind-icon">Component<wbr>Style<wbr>Producer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>rules<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypRules</span>, format<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypFormat</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">EventSupply</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/62e8576/src/styp/component-style-producer.ts#L13">wesib/generic/src/styp/component-style-producer.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/23863b6/src/styp/component-style-producer.ts#L12">wesib/generic/src/styp/component-style-producer.ts:12</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Component style producer function interface.</p>
+							<p>Component style producer signature.</p>
 						</div>
 					</div>
 					<div class="tsd-type-declaration">
@@ -140,7 +138,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>rules<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypRules</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/@wesib_generic_styp.ComponentStypOptions.html" class="tsd-signature-type">ComponentStypOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventSupply</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>rules<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypRules</span>, format<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypFormat</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventSupply</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -158,10 +156,10 @@
 												</div>
 											</li>
 											<li>
-												<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/@wesib_generic_styp.ComponentStypOptions.html" class="tsd-signature-type">ComponentStypOptions</a></h5>
+												<h5>format: <span class="tsd-signature-type">StypFormat</span></h5>
 												<div class="tsd-comment tsd-typography">
 													<div class="lead">
-														<p>Production options.</p>
+														<p>Style production format.</p>
 													</div>
 												</div>
 											</li>
@@ -180,12 +178,12 @@
 					<div class="tsd-signature tsd-kind-icon">Component<wbr>Styp<wbr>Renderer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StypRenderer</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/62e8576/src/styp/component-styp-renderer.ts#L11">wesib/generic/src/styp/component-styp-renderer.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/23863b6/src/styp/component-styp-renderer.ts#L11">wesib/generic/src/styp/component-styp-renderer.ts:11</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A CSS renderer that will be enabled by default by <a href="@wesib_generic_styp.html#ComponentStyleProducer">ComponentStyleProducer</a>.</p>
+							<p>A CSS renderer that will be enabled by default by <a href="../classes/@wesib_generic_styp.ComponentStypFormat.html">component style production format</a>.</p>
 						</div>
 					</div>
 				</section>
@@ -198,7 +196,7 @@
 					<div class="tsd-signature tsd-kind-icon">Component<wbr>Style<wbr>Producer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SingleContextRef</span><span class="tsd-signature-symbol">&lt;</span><a href="@wesib_generic_styp.html#ComponentStyleProducer" class="tsd-signature-type">ComponentStyleProducer</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new SingleContextKey&lt;ComponentStyleProducer&gt;(&#x27;component-style-producer&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/62e8576/src/styp/component-style-producer.ts#L29">wesib/generic/src/styp/component-style-producer.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/23863b6/src/styp/component-style-producer.ts#L28">wesib/generic/src/styp/component-style-producer.ts:28</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -213,7 +211,7 @@
 					<div class="tsd-signature tsd-kind-icon">Component<wbr>Styp<wbr>Renderer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">MultiContextRef</span><span class="tsd-signature-symbol">&lt;</span><a href="@wesib_generic_styp.html#ComponentStypRenderer" class="tsd-signature-type">ComponentStypRenderer</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new MultiContextKey&lt;ComponentStypRenderer&gt;(&#x27;component-styp-renderer&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/62e8576/src/styp/component-styp-renderer.ts#L16">wesib/generic/src/styp/component-styp-renderer.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/23863b6/src/styp/component-styp-renderer.ts#L16">wesib/generic/src/styp/component-styp-renderer.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -229,13 +227,13 @@
 					<a name="ProduceStyle" class="tsd-anchor"></a>
 					<h3>Produce<wbr>Style</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">Produce<wbr>Style&lt;T&gt;<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/@wesib_generic_styp.ComponentStypOptions.html" class="tsd-signature-type">ComponentStypOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentPropertyDecorator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StypRules.Source</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">StypRule</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">StypRules</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StypRule</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">StypRules</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">Produce<wbr>Style&lt;T&gt;<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">?: </span><a href="../interfaces/@wesib_generic_styp.ComponentStypFormatConfig.html" class="tsd-signature-type">ComponentStypFormatConfig</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentPropertyDecorator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StypRules.Source</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">StypRule</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">StypRules</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StypRule</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">StypRules</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/62e8576/src/styp/produce-style.decorator.ts#L25">wesib/generic/src/styp/produce-style.decorator.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/23863b6/src/styp/produce-style.decorator.ts#L25">wesib/generic/src/styp/produce-style.decorator.ts:25</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -245,7 +243,7 @@
 								<p>Decorated property value should either contain a CSS rules source of type <code>StypRules.Source</code> or be a method
 								returning it.</p>
 								<p>This decorator automatically enables <a href="../classes/@wesib_generic_styp.BasicStyleProducerSupport.html">BasicStyleProducerSupport</a> feature.</p>
-								<p>Utilizes <a href="@wesib_generic_styp.html#ComponentStypOptions-1.produce">ComponentStypOptions.produce</a> function to produce CSS stylesheets.</p>
+								<p>Produces CSS using <a href="../classes/@wesib_generic_styp.ComponentStypFormat.html">component style production format</a>.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -259,9 +257,9 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/@wesib_generic_styp.ComponentStypOptions.html" class="tsd-signature-type">ComponentStypOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> config: <a href="../interfaces/@wesib_generic_styp.ComponentStypFormatConfig.html" class="tsd-signature-type">ComponentStypFormatConfig</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Non-mandatory CSS style production options.</p>
+										<p>Non-mandatory component style production format config.</p>
 									</div>
 								</li>
 							</ul>
@@ -270,62 +268,43 @@
 						</li>
 					</ul>
 				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Object literals</h2>
-				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-module">
-					<a name="ComponentStypOptions-1" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Component<wbr>Styp<wbr>Options</h3>
-					<div class="tsd-signature tsd-kind-icon">Component<wbr>Styp<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/62e8576/src/styp/component-styp-options.ts#L48">wesib/generic/src/styp/component-styp-options.ts:48</a></li>
-						</ul>
-					</aside>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
-						<a name="ComponentStypOptions-1.produce" class="tsd-anchor"></a>
-						<h3>produce</h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
-							<li class="tsd-signature tsd-kind-icon">produce<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span>, rules<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypRules.Source</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/@wesib_generic_styp.ComponentStypOptions.html" class="tsd-signature-type">ComponentStypOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventSupply</span></li>
-						</ul>
-						<ul class="tsd-descriptions">
-							<li class="tsd-description">
-								<aside class="tsd-sources">
-									<ul>
-										<li>Defined in <a href="https://github.com/wesib/generic/blob/62e8576/src/styp/component-styp-options.ts#L59">wesib/generic/src/styp/component-styp-options.ts:59</a></li>
-									</ul>
-								</aside>
-								<div class="tsd-comment tsd-typography">
-									<div class="lead">
-										<p>Produces and dynamically updates component&#39;s CSS stylesheets based on the given CSS rules.</p>
-									</div>
-								</div>
-								<h4 class="tsd-parameters-title">Parameters</h4>
-								<ul class="tsd-parameters">
-									<li>
-										<h5>context: <span class="tsd-signature-type">ComponentContext</span></h5>
-										<div class="tsd-comment tsd-typography">
-											<p>Target component context.</p>
-										</div>
-									</li>
-									<li>
-										<h5>rules: <span class="tsd-signature-type">StypRules.Source</span></h5>
-										<div class="tsd-comment tsd-typography">
-											<p>A source of CSS rules to produce stylesheets for.</p>
-										</div>
-									</li>
-									<li>
-										<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/@wesib_generic_styp.ComponentStypOptions.html" class="tsd-signature-type">ComponentStypOptions</a></h5>
-										<div class="tsd-comment tsd-typography">
-											<p>Production options.</p>
-										</div>
-									</li>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="componentStypDomFormatConfig" class="tsd-anchor"></a>
+					<h3>component<wbr>Styp<wbr>Dom<wbr>Format<wbr>Config</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">component<wbr>Styp<wbr>Dom<wbr>Format<wbr>Config<span class="tsd-signature-symbol">(</span>format<span class="tsd-signature-symbol">: </span><a href="../classes/@wesib_generic_styp.ComponentStypFormat.html" class="tsd-signature-type">ComponentStypFormat</a>, config<span class="tsd-signature-symbol">?: </span><a href="../interfaces/@wesib_generic_styp.ComponentStypFormatConfig.html" class="tsd-signature-type">ComponentStypFormatConfig</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">StypDomFormatConfig</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypDomFormatConfig</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/23863b6/src/styp/component-styp-dom.format.ts#L89">wesib/generic/src/styp/component-styp-dom.format.ts:89</a></li>
 								</ul>
-								<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">EventSupply</span></h4>
-								<p>CSS rules supply. Once cut off the produced stylesheets are removed.</p>
-							</li>
-						</ul>
-					</section>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Builds configuration of DOM style production format.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>format: <a href="../classes/@wesib_generic_styp.ComponentStypFormat.html" class="tsd-signature-type">ComponentStypFormat</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Target component style production format.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> config: <a href="../interfaces/@wesib_generic_styp.ComponentStypFormatConfig.html" class="tsd-signature-type">ComponentStypFormatConfig</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">StypDomFormatConfig</span><span class="tsd-signature-symbol"> = {}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Original component style production format configuration.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StypDomFormatConfig</span></h4>
+							<p>Configuration of DOM style production format.</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -352,6 +331,15 @@
 						<a href="../classes/@wesib_generic_styp.BasicStyleProducerSupport.html" class="tsd-kind-icon">Basic<wbr>Style<wbr>Producer<wbr>Support</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/@wesib_generic_styp.ComponentStypDomFormat.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Dom<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/@wesib_generic_styp.ComponentStypFormat.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/@wesib_generic_styp.ComponentStypObjectFormat.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Object<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="../classes/@wesib_generic_styp.StyleProducerSupport.html" class="tsd-kind-icon">Style<wbr>Producer<wbr>Support</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
@@ -364,7 +352,7 @@
 						<a href="../classes/@wesib_generic_styp.ThemeSupport.html" class="tsd-kind-icon">Theme<wbr>Support</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/@wesib_generic_styp.ComponentStypOptions.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a>
+						<a href="../interfaces/@wesib_generic_styp.ComponentStypFormatConfig.html" class="tsd-kind-icon">Component<wbr>Styp<wbr>Format<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="@wesib_generic_styp.html#ComponentStyleProducer" class="tsd-kind-icon">Component<wbr>Style<wbr>Producer</a>
@@ -381,8 +369,8 @@
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@wesib_generic_styp.html#ProduceStyle" class="tsd-kind-icon">Produce<wbr>Style</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-parent-kind-module">
-						<a href="@wesib_generic_styp.html#ComponentStypOptions-1" class="tsd-kind-icon">Component<wbr>Styp<wbr>Options</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="@wesib_generic_styp.html#componentStypDomFormatConfig" class="tsd-kind-icon">component<wbr>Styp<wbr>Dom<wbr>Format<wbr>Config</a>
 					</li>
 				</ul>
 			</nav>
