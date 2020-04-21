@@ -46,15 +46,15 @@ describe('styp', () => {
     registry = new ContextRegistry();
 
     const values = registry.newValues();
-    const connected = trackValue<ComponentContext>();
+    const ready = trackValue<ComponentContext>();
 
     context = {
       [EventSupply__symbol]: eventSupply(),
-      whenConnected: connected.read().F,
+      whenReady: ready.read().F,
       get: values.get,
       contentRoot: document.createElement('content-root'),
     } as any;
-    connected.it = context;
+    ready.it = context;
 
     registry.provide({ a: ComponentContext, is: context });
   });

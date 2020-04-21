@@ -2,7 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { stypDomFormat, StypDomFormatConfig, StypFormat } from '@proc7ts/style-producer';
+import { EventSupply, eventSupply } from '@proc7ts/fun-events';
+import { stypDomFormat, StypDomFormatConfig, StypFormat, StypRules } from '@proc7ts/style-producer';
 import { BootstrapWindow, ComponentContext, DefaultNamespaceAliaser, DefaultRenderScheduler } from '@wesib/wesib';
 import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
 
@@ -37,6 +38,23 @@ export class ComponentStypDomFormat extends ComponentStypFormat {
   ) {
     super();
     this.offline = offline;
+  }
+
+  produce(rules: StypRules.Source, config?: ComponentStypFormatConfig): EventSupply {
+
+    const producer = this.newProducer(rules, config);
+    const supply = eventSupply();
+    const doProduce = (): void => {
+      producer().needs(supply).cuts(supply);
+    };
+
+    if (this.offline) {
+      this.context.whenReady(doProduce);
+    } else {
+      this.context.whenConnected(doProduce);
+    }
+
+    return supply;
   }
 
   format(config?: ComponentStypFormatConfig & StypDomFormatConfig): StypFormat {

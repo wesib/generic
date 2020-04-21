@@ -12,7 +12,8 @@ import {
 } from '@wesib/wesib';
 import { testDefinition } from '../spec/test-element';
 import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
-import { ComponentStypFormatConfig } from './component-styp-format';
+import { ComponentStypDomFormat } from './component-styp-dom.format';
+import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
 import { ComponentStypRenderer } from './component-styp-renderer';
 import { ElementIdClass } from './element-id-class.impl';
 import { ProduceStyle } from './produce-style.decorator';
@@ -64,11 +65,63 @@ describe('styp', () => {
       expect(cssStyle().display).toBe('block');
       expect(mockRenderer).toHaveBeenCalledWith(expect.anything(), { display: 'block' });
     });
+    it('renders styles using DOM format', async () => {
+
+      let produceSpy!: jest.SpyInstance;
+
+      await mount(
+          stypRoot({ display: 'block' }).rules,
+          {
+            setup(setup) {
+              setup.perComponent({
+                a: ComponentStypFormat,
+                by(context: ComponentContext) {
+
+                  const format = new ComponentStypDomFormat(context);
+
+                  produceSpy = jest.spyOn(format, 'produce');
+
+                  return format;
+                },
+              });
+            },
+          },
+      );
+
+      expect(produceSpy).toHaveBeenCalled();
+      expect(cssStyle().display).toBe('block');
+    });
+    it('renders styles using non-offline DOM format', async () => {
+
+      let produceSpy!: jest.SpyInstance;
+
+      await mount(
+          stypRoot({ display: 'block' }).rules,
+          {
+            setup(setup) {
+              setup.perComponent({
+                a: ComponentStypFormat,
+                by(context: ComponentContext) {
+
+                  const format = new ComponentStypDomFormat(context, { offline: false });
+
+                  produceSpy = jest.spyOn(format, 'produce');
+
+                  return format;
+                },
+              });
+            },
+          },
+      );
+
+      expect(produceSpy).toHaveBeenCalled();
+      expect(cssStyle().display).toBe('block');
+    });
     it('removes styles on component destruction', async () => {
 
-      const mnt = await mount();
+      const { context } = await mount();
 
-      mnt.context.destroy();
+      context.destroy();
       expect(element.querySelectorAll('style')).toHaveLength(0);
     });
     it('updates style', async () => {

@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { noop } from '@proc7ts/call-thru';
+import { valueProvider } from '@proc7ts/call-thru';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
-import { EventSupply, eventSupply, noEventSupply } from '@proc7ts/fun-events';
+import { EventSupply, eventSupply } from '@proc7ts/fun-events';
 import { NamespaceAliaser } from '@proc7ts/namespace-aliaser';
 import { RenderScheduler } from '@proc7ts/render-scheduler';
 import {
@@ -108,7 +108,7 @@ export abstract class ComponentStypFormat {
   /**
    * Produces and dynamically updates component's CSS stylesheets based on the given CSS rules.
    *
-   * Utilizes {@link ComponentStyleProducer}.
+   * Utilizes {@link newProducer component's producer function}.
    *
    * @param rules  A source of CSS rules to produce stylesheets for.
    * @param config  Style production format configuration.
@@ -120,22 +120,46 @@ export abstract class ComponentStypFormat {
       config?: ComponentStypFormatConfig,
   ): EventSupply {
 
-    const css = lazyStypRules(rules);
-    const produceStyle = this.context.get(ComponentStyleProducer);
+    const producer = this.newProducer(rules, config);
+    const supply = eventSupply();
 
-    let cssSupply = noEventSupply();
-    let doProduceStyle: () => void;
-    const supply = eventSupply(() => {
-      doProduceStyle = noop;
-    }).needs(this.context).cuts(cssSupply);
-
-    doProduceStyle = () => {
-      cssSupply = produceStyle(css, this.format(config)).needs(supply);
-    };
-
-    this.context.whenConnected(doProduceStyle);
+    this.context.whenConnected(() => {
+      producer().needs(supply).cuts(supply);
+    });
 
     return supply;
+  }
+
+  /**
+   * Creates component's CSS stylesheets producer based on the given CSS rules.
+   *
+   * Utilizes {@link ComponentStyleProducer}.
+   *
+   * @param rules  A source of CSS rules to produce stylesheets for.
+   * @param config  Style production format configuration.
+   *
+   * @returns CSS rules producer function returning CSS rules supply. Once it cut off the produced stylesheets are
+   * removed.
+   */
+  newProducer(
+      rules: StypRules.Source,
+      config?: ComponentStypFormatConfig,
+  ): (this: void) => EventSupply {
+
+    const css = lazyStypRules(rules);
+    let producer: () => EventSupply;
+    const supply = eventSupply(() => {
+      producer = valueProvider(supply);
+    }).needs(this.context);
+
+    producer = () => {
+
+      const produceStyle = this.context.get(ComponentStyleProducer);
+
+      return produceStyle(css, this.format(config)).needs(supply).cuts(supply);
+    };
+
+    return () => producer();
   }
 
   /**
