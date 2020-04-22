@@ -4,7 +4,7 @@
  */
 import { valueProvider } from '@proc7ts/call-thru';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
-import { EventSupply, eventSupply } from '@proc7ts/fun-events';
+import { EventSupply, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
 import { NamespaceAliaser } from '@proc7ts/namespace-aliaser';
 import { RenderScheduler } from '@proc7ts/render-scheduler';
 import {
@@ -138,8 +138,7 @@ export abstract class ComponentStypFormat {
    * @param rules  A source of CSS rules to produce stylesheets for.
    * @param config  Style production format configuration.
    *
-   * @returns CSS rules producer function returning CSS rules supply. Once it cut off the produced stylesheets are
-   * removed.
+   * @returns CSS rules producer function returning CSS rules supply. Once cut off the produced stylesheets are removed.
    */
   newProducer(
       rules: StypRules.Source,
@@ -148,16 +147,20 @@ export abstract class ComponentStypFormat {
 
     const css = lazyStypRules(rules);
     let producer: () => EventSupply;
-    const supply = eventSupply(() => {
-      producer = valueProvider(supply);
-    }).needs(this.context);
+    const componentSupply = eventSupplyOf(this.context);
 
     producer = () => {
 
       const produceStyle = this.context.get(ComponentStyleProducer);
 
-      return produceStyle(css, this.format(config)).needs(supply).cuts(supply);
+      return produceStyle(css, this.format(config)).needs(componentSupply);
     };
+
+    // In case the component destroyed already, the producer will be reassigned here _before_ return.
+    componentSupply.whenOff(() => {
+      // Prevent style production once component destroyed.
+      producer = valueProvider(componentSupply);
+    });
 
     return () => producer();
   }
