@@ -15,7 +15,7 @@ import { ComponentStypObjectFormat } from './component-styp-object.format';
 const StyleProducerSupport__feature: FeatureDef = {
   has: BasicStyleProducerSupport,
   setup(setup) {
-    setup.perComponent({ a: ComponentStyleProducer, is: produceStyle });
+    setup.provide({ a: ComponentStyleProducer, is: produceStyle });
     setup.perComponent({
       a: ComponentStypFormat,
       as: ComponentStypObjectFormat,

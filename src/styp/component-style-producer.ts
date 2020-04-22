@@ -23,7 +23,7 @@ export type ComponentStyleProducer =
     ) => EventSupply;
 
 /**
- * A key of component context value containing a component style producer.
+ * A key of bootstrap, definition, or component context value containing a component style producer.
  */
 export const ComponentStyleProducer: SingleContextRef<ComponentStyleProducer> = (
     /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer')

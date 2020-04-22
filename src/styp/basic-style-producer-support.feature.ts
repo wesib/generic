@@ -13,7 +13,7 @@ import { ComponentStypObjectFormat } from './component-styp-object.format';
  */
 const BasicStyleProducerSupport__feature: FeatureDef = {
   setup(setup) {
-    setup.perComponent({ a: ComponentStyleProducer, is: produceBasicStyle });
+    setup.provide({ a: ComponentStyleProducer, is: produceBasicStyle });
     setup.perComponent({
       a: ComponentStypFormat,
       as: ComponentStypObjectFormat,
