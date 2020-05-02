@@ -49,7 +49,9 @@ export class ComponentStypDomFormat extends ComponentStypFormat {
     };
 
     if (this.offline) {
-      this.context.whenReady(doProduce);
+      this.context.whenReady(() => {
+        Promise.resolve().then(doProduce);
+      });
     } else {
       this.context.whenConnected(doProduce);
     }
