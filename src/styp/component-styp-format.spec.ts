@@ -152,8 +152,8 @@ describe('styp', () => {
       });
 
       describe('scheduler', () => {
-        it('defaults to render scheduler', () => {
-          produce();
+        it('defaults to render scheduler', async () => {
+          await produce();
           expect(mockProduceStyle).toHaveBeenCalled();
 
           const scheduler = mockProduceStyle.mock.calls[0][1]!.scheduler!;
@@ -184,13 +184,13 @@ describe('styp', () => {
       });
 
       describe('renderer', () => {
-        it('respects explicit value', () => {
-          produce();
+        it('respects explicit value', async () => {
+          await produce();
           expect(mockRenderer).toHaveBeenCalled();
         });
       });
 
-      function produce(config: ComponentStypFormatConfig = {}): void {
+      async function produce(config: ComponentStypFormatConfig = {}): Promise<void> {
         format.produce(
             stypRoot({ font: 'serif' }).rules,
             {
@@ -198,6 +198,7 @@ describe('styp', () => {
               renderer: mockRenderer,
             },
         ).needs(done);
+        await Promise.resolve(); // Ensure style rendering scheduled
       }
     });
 
@@ -211,24 +212,24 @@ describe('styp', () => {
           registry.provide({ a: ShadowContentRoot, is: shadowRoot });
         });
 
-        it('replaces root selector with `:host` by default', () => {
-          produce([]);
+        it('replaces root selector with `:host` by default', async () => {
+          await produce([]);
           expect(renderedSelector).toEqual([{ u: [[':', 'host']] }]);
         });
-        it('retains arbitrary selector by default', () => {
-          produce([{ e: 'test-element' }]);
+        it('retains arbitrary selector by default', async () => {
+          await produce([{ e: 'test-element' }]);
           expect(renderedSelector).toEqual([{ e: 'test-element' }]);
         });
-        it('retains arbitrary selector when host selector specified', () => {
-          produce([{ e: 'test-element' }], { hostSelector: { c: 'host-class' } });
+        it('retains arbitrary selector when host selector specified', async () => {
+          await produce([{ e: 'test-element' }], { hostSelector: { c: 'host-class' } });
           expect(renderedSelector).toEqual([{ e: 'test-element' }]);
         });
-        it('replaces `:host` selector with host one', () => {
-          produce([{ u: [':', 'host'] }, { e: 'nested-element' }], { hostSelector: { c: 'host-class' } });
+        it('replaces `:host` selector with host one', async () => {
+          await produce([{ u: [':', 'host'] }, { e: 'nested-element' }], { hostSelector: { c: 'host-class' } });
           expect(renderedSelector).toEqual([{ u: [[':', 'host', [{ c: ['host-class'] }]]] }, { e: 'nested-element' }]);
         });
-        it('extends `:host(selector)` selector with host one', () => {
-          produce(
+        it('extends `:host(selector)` selector with host one', async () => {
+          await produce(
               [{ u: [':', 'host', { c: 'test-class' }] }, { e: 'nested-element' }],
               { hostSelector: { c: 'host-class' } },
           );
@@ -240,103 +241,103 @@ describe('styp', () => {
       });
 
       describe('without shadow DOM', () => {
-        it('replaces root selector with ID class by default', () => {
-          produce([]);
+        it('replaces root selector with ID class by default', async () => {
+          await produce([]);
           expect(renderedSelector).toEqual([{ c: [elementId] }]);
         });
-        it('replaces root selector with normalized explicit host selector', () => {
+        it('replaces root selector with normalized explicit host selector', async () => {
 
           const hostSelector = { e: 'host-element', c: 'some' };
 
-          produce([], { hostSelector });
+          await produce([], { hostSelector });
           expect(renderedSelector).toEqual(stypSelector(hostSelector));
         });
-        it('replaces `:host` with host selector', () => {
-          produce({ u: [':', 'host'] });
+        it('replaces `:host` with host selector', async () => {
+          await produce({ u: [':', 'host'] });
           expect(renderedSelector).toEqual([{ c: [elementId] }]);
         });
 
-        it('assigns element to `:host` selector', () => {
-          produce({ u: [':', 'host'] }, { hostSelector: { e: 'host-element' } });
+        it('assigns element to `:host` selector', async () => {
+          await produce({ u: [':', 'host'] }, { hostSelector: { e: 'host-element' } });
           expect(renderedSelector).toEqual([{ e: 'host-element' }]);
         });
-        it('retains element from `:host(element)` selector', () => {
-          produce({ u: [':', 'host', { e: 'test-element' }] }, { hostSelector: { e: 'host-element' } });
+        it('retains element from `:host(element)` selector', async () => {
+          await produce({ u: [':', 'host', { e: 'test-element' }] }, { hostSelector: { e: 'host-element' } });
           expect(renderedSelector).toEqual([{ e: 'test-element' }]);
         });
-        it('retains element and namespace from `:host(ns|element) selector', () => {
-          produce({ u: [':', 'host', { ns: 'test-ns' }] }, { hostSelector: { e: 'host-element' } });
+        it('retains element and namespace from `:host(ns|element) selector', async () => {
+          await produce({ u: [':', 'host', { ns: 'test-ns' }] }, { hostSelector: { e: 'host-element' } });
           expect(renderedSelector).toEqual([{ ns: 'test-ns' }]);
         });
 
-        it('assigns ID to `:host` selector', () => {
-          produce({ u: [':', 'host'] }, { hostSelector: { i: 'host-id' } });
+        it('assigns ID to `:host` selector', async () => {
+          await produce({ u: [':', 'host'] }, { hostSelector: { i: 'host-id' } });
           expect(renderedSelector).toEqual([{ i: 'host-id' }]);
         });
-        it('retains ID from `:host(#id)` selector', () => {
-          produce({ u: [':', 'host', { i: 'test-id' }] }, { hostSelector: { i: 'host-id' } });
+        it('retains ID from `:host(#id)` selector', async () => {
+          await produce({ u: [':', 'host', { i: 'test-id' }] }, { hostSelector: { i: 'host-id' } });
           expect(renderedSelector).toEqual([{ i: 'test-id' }]);
         });
 
-        it('appends class to `:host(.class)` selector', () => {
-          produce({ u: [':', 'host', { c: 'test-class' }] });
+        it('appends class to `:host(.class)` selector', async () => {
+          await produce({ u: [':', 'host', { c: 'test-class' }] });
           expect(renderedSelector).toEqual([{ c: ['test-class', elementId] }]);
         });
-        it('retains class of `:host(.class) selector', () => {
-          produce({ u: [':', 'host', { c: 'test-class' }] }, { hostSelector: {} });
+        it('retains class of `:host(.class) selector', async () => {
+          await produce({ u: [':', 'host', { c: 'test-class' }] }, { hostSelector: {} });
           expect(renderedSelector).toEqual([{ c: ['test-class'] }]);
         });
 
-        it('appends sub-selector to `:host([attr])` selector', () => {
-          produce({ u: [':', 'host', { u: ['test-attr'] }] }, { hostSelector: { u: ['::', 'after'] } });
+        it('appends sub-selector to `:host([attr])` selector', async () => {
+          await produce({ u: [':', 'host', { u: ['test-attr'] }] }, { hostSelector: { u: ['::', 'after'] } });
           expect(renderedSelector).toEqual([{ u: [['test-attr'], ['::', 'after']] }]);
         });
-        it('retains sub-selector from `:host([attr])` selector', () => {
-          produce({ u: [':', 'host', { u: ['test-attr'] }] }, { hostSelector: {} });
+        it('retains sub-selector from `:host([attr])` selector', async () => {
+          await produce({ u: [':', 'host', { u: ['test-attr'] }] }, { hostSelector: {} });
           expect(renderedSelector).toEqual([{ u: [['test-attr']] }]);
         });
-        it('assigns sub-selector to `:host` selector', () => {
-          produce({ u: [':', 'host'] }, { hostSelector: { u: ['::', 'after'] } });
+        it('assigns sub-selector to `:host` selector', async () => {
+          await produce({ u: [':', 'host'] }, { hostSelector: { u: ['::', 'after'] } });
           expect(renderedSelector).toEqual([{ u: [['::', 'after']] }]);
         });
 
-        it('appends suffix to `:host(.raw)` selector', () => {
-          produce({ u: [':', 'host', '.test-suffix'] }, { hostSelector: { s: '.host-suffix' } });
+        it('appends suffix to `:host(.raw)` selector', async () => {
+          await produce({ u: [':', 'host', '.test-suffix'] }, { hostSelector: { s: '.host-suffix' } });
           expect(renderedSelector).toEqual([{ s: '.test-suffix.host-suffix' }]);
         });
-        it('retains suffix from `:host(.raw)` selector', () => {
-          produce({ u: [':', 'host', '.test-suffix'] }, { hostSelector: {} });
+        it('retains suffix from `:host(.raw)` selector', async () => {
+          await produce({ u: [':', 'host', '.test-suffix'] }, { hostSelector: {} });
           expect(renderedSelector).toEqual([{ s: '.test-suffix' }]);
         });
-        it('assigns suffix to `:host` selector', () => {
-          produce({ u: [':', 'host'] }, { hostSelector: { s: '.host-suffix' } });
+        it('assigns suffix to `:host` selector', async () => {
+          await produce({ u: [':', 'host'] }, { hostSelector: { s: '.host-suffix' } });
           expect(renderedSelector).toEqual([{ s: '.host-suffix' }]);
         });
 
-        it('retains qualifiers from `:host` selector', () => {
-          produce({ u: [':', 'host'], $: '@test' });
+        it('retains qualifiers from `:host` selector', async () => {
+          await produce({ u: [':', 'host'], $: '@test' });
           expect(renderedSelector).toEqual([{ c: [elementId], $: ['@test'] }]);
         });
-        it('retains nested `:host` selectors', () => {
-          produce([{ u: [':', 'host'] }, { e: 'test-element' }]);
+        it('retains nested `:host` selectors', async () => {
+          await produce([{ u: [':', 'host'] }, { e: 'test-element' }]);
           expect(renderedSelector).toEqual([{ c: [elementId] }, { e: 'test-element' }]);
         });
 
-        it('prefixes combinator with host selector', () => {
-          produce(['>', { e: 'test-element' }]);
+        it('prefixes combinator with host selector', async () => {
+          await produce(['>', { e: 'test-element' }]);
           expect(renderedSelector).toEqual([{ c: [elementId] }, '>', { e: 'test-element' }]);
         });
-        it('prefixes arbitrary selector with host one', () => {
-          produce([{ e: 'test-element' }]);
+        it('prefixes arbitrary selector with host one', async () => {
+          await produce([{ e: 'test-element' }]);
           expect(renderedSelector).toEqual([{ c: [elementId] }, { e: 'test-element' }]);
         });
-        it('prefixes arbitrary sub-selector with host selector', () => {
-          produce([{ u: ['test-attr'] }]);
+        it('prefixes arbitrary sub-selector with host selector', async () => {
+          await produce([{ u: ['test-attr'] }]);
           expect(renderedSelector).toEqual([{ c: [elementId] }, { u: [['test-attr']] }]);
         });
       });
 
-      function produce(selector: StypSelector, config?: ComponentStypFormatConfig): void {
+      async function produce(selector: StypSelector, config?: ComponentStypFormatConfig): Promise<void> {
 
         const { rules } = stypRoot();
         const rule = rules.add(selector);
@@ -348,6 +349,8 @@ describe('styp', () => {
               renderer: mockRenderer,
             },
         ).needs(done);
+
+        await Promise.resolve(); // Ensure style rendering scheduled
       }
     });
   });
