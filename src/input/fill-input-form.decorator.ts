@@ -110,7 +110,7 @@ export interface FillInputFormDef<T extends object = any> {
    *
    * @param node  Element node to construct form element control for.
    * @param context  Component context the {@link FillInputForm @FillInputForm} decorator is applied to.
-   * @param aspects  Default input aspect converter. This is a value of [[DefaultInputAspect]].
+   * @param aspects  Default input aspect converter. This is a value of [[DefaultInAspects]].
    *
    * @returns Either form control and form element control tuple, their keeper, or nothing.
    */

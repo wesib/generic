@@ -10,7 +10,7 @@ import { Page } from './page';
 /**
  * Creates component decorator that handles events (e.g. clicks) on navigation links.
  *
- * Such events would lead to {@link @Navigation navigation actions} instead of default ones.
+ * Such events would lead to {@link Navigation navigation actions} instead of default ones.
  *
  * Enables [[NavigationSupport]] feature.
  *

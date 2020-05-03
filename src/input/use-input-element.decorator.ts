@@ -113,7 +113,7 @@ export interface UseInputElementDef<T extends object = any> {
    *
    * @param node  Element node to construct input control for.
    * @param context  Component context the {@link UseInputElement @UseInputElement} decorator is applied to.
-   * @param aspects  Default input aspect converter. This is a value of [[DefaultInputAspect]].
+   * @param aspects  Default input aspect converter. This is a value of [[DefaultInAspects]].
    *
    * @returns Either input control, its keeper, or nothing.
    */

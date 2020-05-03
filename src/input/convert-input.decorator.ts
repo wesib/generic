@@ -88,7 +88,7 @@ export type ConvertInputDef<T extends object = any> =
 /**
  * @param control  Enclosing component's user input to convert.
  * @param context  Decorated component context.
- * @param aspects  Default input aspect converter. This is a value of [[DefaultInputAspect]].
+ * @param aspects  Default input aspect converter. This is a value of [[DefaultInAspects]].
  *
  * @returns Either input control, its keeper, or nothing.
  */

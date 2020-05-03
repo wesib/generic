@@ -158,7 +158,7 @@ export interface IncludePageDef<T extends object = any> {
   /**
    * Performs additional actions during page load.
    *
-   * This method is called inside page contents render schedule for {@link PageLoadResponse.ok each stage} of page
+   * This method is called inside page contents render schedule for {@link PageLoadResponse each stage} of page
    * load. At the final stage it is called after loaded page contents included.
    *
    * This method can be used e.g. to indicate the page load progress.
