@@ -123,7 +123,7 @@ export abstract class ComponentStypFormat {
     const producer = this.newProducer(rules, config);
     const supply = eventSupply();
 
-    this.context.whenConnected(() => {
+    this.context.whenSettled(() => {
       producer().needs(supply).cuts(supply);
     });
 

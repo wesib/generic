@@ -91,7 +91,7 @@ describe('styp', () => {
       expect(produceSpy).toHaveBeenCalled();
       expect(cssStyle().display).toBe('block');
     });
-    it('renders styles using non-offline DOM format', async () => {
+    it('(when: connected) renders styles using DOM format', async () => {
 
       let produceSpy!: jest.SpyInstance;
 
@@ -103,7 +103,7 @@ describe('styp', () => {
                 a: ComponentStypFormat,
                 by(context: ComponentContext) {
 
-                  const format = new ComponentStypDomFormat(context, { offline: false });
+                  const format = new ComponentStypDomFormat(context, { when: 'connected' });
 
                   produceSpy = jest.spyOn(format, 'produce');
 
@@ -117,12 +117,24 @@ describe('styp', () => {
       expect(produceSpy).toHaveBeenCalled();
       expect(cssStyle().display).toBe('block');
     });
-    it('removes styles on component destruction', async () => {
+    it('does not remove styles on component destruction', async () => {
 
-      const { context } = await mount();
+      const { context } = await mount(
+          () => stypRoot({ display: 'block' }).rules,
+          {
+            name: 'text-component',
+            setup(setup) {
+              setup.perComponent({ a: ComponentStypFormat, as: ComponentStypDomFormat });
+            },
+          },
+      );
 
       context.destroy();
-      expect(element.querySelectorAll('style')).toHaveLength(0);
+      expect(element.querySelector('style')!.textContent).toContain(
+          '{\n'
+          + '  display: block;\n'
+          + '}',
+      );
     });
     it('updates style', async () => {
 

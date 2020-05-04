@@ -39,7 +39,7 @@ export class ComponentStypObjectFormat extends ComponentStypFormat {
    * @returns Configuration of CSS object model production format.
    */
   config(config?: ComponentStypFormatConfig & StypObjectFormatConfig): StypObjectFormatConfig {
-    return componentStypDomFormatConfig(this, config);
+    return componentStypDomFormatConfig(this, config, { when: 'connected' });
   }
 
 }
