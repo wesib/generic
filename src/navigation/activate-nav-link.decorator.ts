@@ -23,7 +23,7 @@ import {
   ComponentContext,
   ComponentDecorator,
   DefaultNamespaceAliaser,
-  DefaultRenderScheduler,
+  ElementRenderScheduler,
   Wesib__NS,
 } from '@wesib/wesib';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
@@ -49,7 +49,7 @@ type ActiveNavLinks = Map<ElementNode, ActiveNavLink>;
  *
  * Marks navigation links with highest weight.
  *
- * Enables [[ComponentTreeSupport]], and [[NavigationSupport]] features.
+ * Enables [[ComponentTreeSupport]] and [[NavigationSupport]] features.
  *
  * @typeparam T  A type of decorated component class.
  * @param def  Navigation link activation definition.
@@ -413,7 +413,7 @@ function activateNavLink(
     def: ActivateNavLinkDef,
 ): (opts: NavLinkOpts) => ActiveNavLink {
 
-  const scheduler = context.get(DefaultRenderScheduler);
+  const scheduler = context.get(ElementRenderScheduler);
   const { active = defaultActiveNavLinkClass } = def;
   const activeClass = css__naming.name(active, context.get(DefaultNamespaceAliaser));
   const activate = def.activate ? def.activate.bind(def) : noop;

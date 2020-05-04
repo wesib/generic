@@ -11,7 +11,8 @@ import {
   ComponentClass,
   ComponentContext,
   ComponentDecorator,
-  DefaultRenderScheduler,
+  ElementRenderScheduler,
+  StateSupport,
 } from '@wesib/wesib';
 import { importNodeContent } from '../../util';
 import { Navigation } from '../navigation';
@@ -28,7 +29,7 @@ import { PageLoadSupport } from './page-load-support.feature';
  *
  * Utilizes [[PageLoadParam]] navigation parameter.
  *
- * Enables [[NavigationSupport]] and [[PageLoadSupport]] features.
+ * Enables [[StateSupport]], [[NavigationSupport]], and [[PageLoadSupport]] features.
  *
  * @typeparam T  A type of decorated component class.
  * @param def  Page inclusion definition.
@@ -44,13 +45,13 @@ export function IncludePage<T extends ComponentClass = Class>(
 
   return Component({
     feature: {
-      needs: PageLoadSupport,
+      needs: [PageLoadSupport, StateSupport],
     },
     define(context) {
       context.whenComponent(context => {
 
         const document = context.get(BootstrapWindow).document;
-        const schedule = context.get(DefaultRenderScheduler)();
+        const schedule = context.get(ElementRenderScheduler)();
         const navigation = context.get(Navigation);
         let lastPageURL: string | undefined = contentKey(navigation.page);
         const detectFragment = (): PageFragmentRequest => {

@@ -63,7 +63,7 @@ export interface ComponentStypFormatConfig extends StypFormatConfig {
    *
    * Creates a render schedule per rule.
    *
-   * `DefaultRenderScheduler` is used when omitted.
+   * `ElementRenderScheduler` is used when omitted.
    */
   readonly scheduler?: RenderScheduler;
 
