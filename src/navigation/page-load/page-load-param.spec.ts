@@ -255,14 +255,14 @@ describe('navigation', () => {
       it('loads requested fragment by id', async () => {
         result = `<div id="test-fragment">fragment content</div>`;
 
-        const response = await new Promise<PageLoadResponse>(resolve => {
+        const response = await new Promise<PageLoadResponse>((resolve, reject) => {
           navigation.with(
               PageLoadParam,
               {
                 receiver: r => r.ok && resolve(r),
                 fragment: { id: 'test-fragment' },
               },
-          ).open('/other');
+          ).open('/other').catch(reject);
         });
 
         expect(request.headers.get('Accept-Fragment')).toEqual('id=test-fragment');
@@ -274,14 +274,14 @@ describe('navigation', () => {
       it('loads requested fragment by tag name', async () => {
         result = `<test-fragment>fragment content</test-fragment>`;
 
-        const response = await new Promise<PageLoadResponse>(resolve => {
+        const response = await new Promise<PageLoadResponse>((resolve, reject) => {
           navigation.with(
               PageLoadParam,
               {
                 receiver: r => r.ok && resolve(r),
                 fragment: { tag: 'test-fragment' },
               },
-          ).open('/other');
+          ).open('/other').catch(reject);
         });
 
         expect(request.headers.get('Accept-Fragment')).toEqual('tag=test-fragment');
@@ -293,14 +293,14 @@ describe('navigation', () => {
       it('requests non-existing fragment', async () => {
         result = `<div id="test-fragment">fragment content</div>`;
 
-        const response = await new Promise<PageLoadResponse>(resolve => {
+        const response = await new Promise<PageLoadResponse>((resolve, reject) => {
           navigation.with(
               PageLoadParam,
               {
                 receiver: r => r.ok && resolve(r),
                 fragment: { id: 'wrong-fragment' },
               },
-          ).open('/other');
+          ).open('/other').catch(reject);
         });
 
         expect(request.headers.get('Accept-Fragment')).toEqual('id=wrong-fragment');
@@ -314,13 +314,13 @@ describe('navigation', () => {
         const promise1 = new Promise<PageLoadResponse>(resolve => resolve1 = resolve);
         const promise2 = new Promise<PageLoadResponse>(resolve => resolve2 = resolve);
 
-          navigation.with(
-              PageLoadParam,
-              {
-                receiver: r => r.ok && resolve1(r),
-                fragment: { id: 'test-fragment' },
-              },
-          ).with(
+        await navigation.with(
+            PageLoadParam,
+            {
+              receiver: r => r.ok && resolve1(r),
+              fragment: { id: 'test-fragment' },
+            },
+        ).with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve2(r),
@@ -377,14 +377,14 @@ describe('navigation', () => {
 
         mockFetch.mockImplementation(() => afterThe({ ok: true, text: () => reject } as Response));
 
-        const response = await new Promise<PageLoadResponse>(resolve => {
+        const response = await new Promise<PageLoadResponse>((resolve, reject) => {
           navigation.with(
               PageLoadParam,
               {
                 receiver: r => r.ok === false && resolve(r),
                 fragment: { id: 'test-fragment' },
               },
-          ).open('/other');
+          ).open('/other').catch(reject);
         });
 
         expect(response).toMatchObject({ ok: false, error });

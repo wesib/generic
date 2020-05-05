@@ -35,7 +35,7 @@ describe('tree', () => {
 
     beforeEach(async () => {
 
-      const defContext = await new Promise<DefinitionContext>(resolve => {
+      const defContext = await new Promise<DefinitionContext>((resolve, reject) => {
         @Component({
           feature: {
             needs: ComponentTreeSupport,
@@ -52,7 +52,7 @@ describe('tree', () => {
             },
             init(context) {
               context.whenReady(() => {
-                context.whenDefined(TestRootComponent).then(resolve);
+                context.whenDefined(TestRootComponent).then(resolve, reject);
               });
             },
           },
@@ -394,6 +394,7 @@ describe('tree', () => {
         });
 
         it('does not observe DOM mutations initially', () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           list.onUpdate();
           expect(observeSpy).not.toHaveBeenCalled();
         });

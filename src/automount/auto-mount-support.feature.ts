@@ -75,7 +75,9 @@ function autoMountFeatureDef(config: AutoMountConfig = {}): FeatureDef.Options {
     setup(setup) {
       setup.whenReady(context => {
         // Await for mount definition registration
-        Promise.resolve().then(() => mountExistingElements(context, config));
+        Promise.resolve()
+            .then(() => mountExistingElements(context, config))
+            .catch(console.error);
       });
     },
   };

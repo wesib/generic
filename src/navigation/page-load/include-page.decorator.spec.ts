@@ -54,13 +54,13 @@ describe('navigation', () => {
       const { context } = await bootstrap();
       const navigation = context.get(Navigation);
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('page');
+        ).open('page').catch(reject);
       });
 
       expect(element.textContent).toBe('included content');
@@ -75,13 +75,13 @@ describe('navigation', () => {
       const { context } = await bootstrap();
       const navigation = context.get(Navigation);
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('page');
+        ).open('page').catch(reject);
       });
 
       expect(element.textContent).toBe('included content');
@@ -94,13 +94,13 @@ describe('navigation', () => {
       const { context } = await bootstrap({ fragment: { tag: 'requested-fragment' } });
       const navigation = context.get(Navigation);
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('page');
+        ).open('page').catch(reject);
       });
 
       expect(element.textContent).toBe('included content');
@@ -113,13 +113,13 @@ describe('navigation', () => {
       const { context } = await bootstrap({ fragment: { tag: 'requested-fragment' } });
       const navigation = context.get(Navigation);
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('page');
+        ).open('page').catch(reject);
       });
 
       expect(element.childNodes).toHaveLength(0);
@@ -131,13 +131,13 @@ describe('navigation', () => {
       const { context } = await bootstrap({ onResponse });
       const navigation = context.get(Navigation);
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('page');
+        ).open('page').catch(reject);
       });
 
       expect(onResponse).toHaveBeenLastCalledWith({
@@ -154,13 +154,13 @@ describe('navigation', () => {
       const { context } = await bootstrap({ onResponse });
       const navigation = context.get(Navigation);
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open(new URL('#another-hash', navigation.page.url));
+        ).open(new URL('#another-hash', navigation.page.url)).catch(reject);
       });
 
       expect(onResponse).not.toHaveBeenCalled();
@@ -172,13 +172,13 @@ describe('navigation', () => {
       const { context } = await bootstrap({ onResponse, contentKey: valueProvider('same') });
       const navigation = context.get(Navigation);
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('other');
+        ).open('other').catch(reject);
       });
 
       expect(onResponse).not.toHaveBeenCalled();

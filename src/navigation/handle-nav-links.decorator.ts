@@ -157,7 +157,7 @@ function defaultHandleNavLinks(
 
     event.preventDefault();
     if (pageURL.href !== url.href) {
-      navigation.open(href);
+      navigation.open(href).catch(console.error);
     }
   };
 }

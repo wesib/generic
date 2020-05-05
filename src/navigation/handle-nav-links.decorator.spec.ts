@@ -27,7 +27,7 @@ describe('navigation', () => {
     beforeEach(() => {
       pageURL = trackValue(new URL('current-page', baseURI));
       mockNavigation = {
-        open: jest.fn(),
+        open: jest.fn(() => Promise.resolve()),
         read: pageURL.read().thru_(url => ({ url })).F,
       } as any;
     });

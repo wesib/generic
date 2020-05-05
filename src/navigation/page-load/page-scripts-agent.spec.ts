@@ -5,7 +5,6 @@ import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
 import { PageLoadParam } from './page-load-param';
-import { PageLoadResponse } from './page-load-response';
 import { PageLoadSupport } from './page-load-support.feature';
 import Mock = jest.Mock;
 
@@ -64,13 +63,13 @@ describe('navigation', () => {
 </head>
 <body></body>
 </html>`;
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/some');
+        ).open('/some').catch(reject);
       });
       expect(doc.scripts).toHaveLength(1);
 
@@ -88,13 +87,13 @@ describe('navigation', () => {
 </head>
 <body></body>
 </html>`;
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/some');
+        ).open('/some').catch(reject);
       });
 
       responseHtml = `
@@ -107,13 +106,13 @@ describe('navigation', () => {
 <body></body>
 </html>`;
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/other');
+        ).open('/other').catch(reject);
       });
 
       expect(doc.scripts).toHaveLength(2);
@@ -139,13 +138,13 @@ describe('navigation', () => {
         text: () => Promise.resolve(responseHtml),
       } as Response));
 
-      const response = await new Promise<PageLoadResponse>(resolve => {
+      const response = await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok === false && resolve(r),
             },
-        ).open('/other');
+        ).open('/other').catch(reject);
       });
 
       expect(response).toMatchObject({ ok: false });

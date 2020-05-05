@@ -75,13 +75,13 @@ describe('navigation', () => {
     });
 
     it('sends page revision as search parameter', async () => {
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/some?q=v');
+        ).open('/some?q=v').catch(reject);
       });
 
       const request = mockFetch.mock.calls[0][0] as Request;
@@ -90,13 +90,13 @@ describe('navigation', () => {
     });
     it('does not reload current page if loaded page revision is the same', async () => {
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/some?q=v');
+        ).open('/some?q=v').catch(reject);
       });
 
       expect(updateSpy).not.toHaveBeenCalled();
@@ -105,13 +105,13 @@ describe('navigation', () => {
     it('does not reload current page if loaded page revision is empty', async () => {
       responseRev = '';
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/some?q=v');
+        ).open('/some?q=v').catch(reject);
       });
 
       expect(updateSpy).not.toHaveBeenCalled();
@@ -120,13 +120,13 @@ describe('navigation', () => {
     it('reloads current page if loaded page revision differs', async () => {
       responseRev = 'updated-rev';
 
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/some?q=v');
+        ).open('/some?q=v').catch(reject);
       });
 
       expect(updateSpy).toHaveBeenCalled();

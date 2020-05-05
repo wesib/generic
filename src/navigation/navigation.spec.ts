@@ -262,7 +262,7 @@ describe('navigation', () => {
       });
       it('cancels previous navigation when the new one initiated', async () => {
         navigation.onLeave().once(() => {
-          navigation.open({ url: '/second', data: 3 });
+          navigation.open({ url: '/second', data: 3 }).catch(noop);
         });
         expect(await navigation.open('/other')).toBeNull();
         await Promise.resolve(); // await for another navigation to finish

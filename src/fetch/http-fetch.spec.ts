@@ -157,17 +157,25 @@ describe('fetch', () => {
         customController = new AbortController();
       });
 
-      it('aborts fetch on preconfigured abort signal', () => {
+      it('aborts fetch on preconfigured abort signal', async () => {
         init = { signal: customController.signal };
-        fetch();
+
+        const promise = fetch();
+
         customController.abort();
         expect(abortSpy).toHaveBeenCalled();
+
+        await promise;
       });
-      it('receives predefined abort signal', () => {
+      it('receives predefined abort signal', async () => {
         customController.abort();
         init = { signal: customController.signal };
-        fetch();
+
+        const promise = fetch();
+
         expect(abortSpy).toHaveBeenCalled();
+
+        await promise;
       });
     });
 

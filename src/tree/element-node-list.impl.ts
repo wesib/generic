@@ -75,7 +75,7 @@ export function elementNodeList<N extends ElementNode>(
           }
         }
       }
-    });
+    }).catch(console.error);
   }
 
   if (!all) {

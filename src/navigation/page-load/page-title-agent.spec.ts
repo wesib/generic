@@ -61,24 +61,24 @@ describe('navigation', () => {
 <title>New Title</title>
 </head>
 </html>`;
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/some');
+        ).open('/some').catch(reject);
       });
       expect(doc.title).toBe('New Title');
     });
     it('does not update page title if absent in loaded document', async () => {
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/some');
+        ).open('/some').catch(reject);
       });
       expect(doc.title).toBe('Initial Title');
     });
@@ -89,13 +89,13 @@ describe('navigation', () => {
 <title></title>
 </head>
 </html>`;
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
               receiver: r => r.ok && resolve(),
             },
-        ).open('/some');
+        ).open('/some').catch(reject);
       });
       expect(doc.title).toBe('Initial Title');
     });

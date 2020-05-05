@@ -70,7 +70,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
             if (!requested.num && requested === tracked) {
               supply.off(reason);
             }
-          });
+          }).catch(console.error);
         }
       });
     });
