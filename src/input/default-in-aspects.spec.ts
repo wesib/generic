@@ -4,8 +4,10 @@ import { newManualRenderScheduler, RenderScheduler } from '@proc7ts/render-sched
 import {
   bootstrapComponents,
   BootstrapContext,
+  Component,
+  ComponentContext,
   DefaultNamespaceAliaser,
-  DefaultRenderScheduler,
+  ElementRenderScheduler,
   Feature,
 } from '@wesib/wesib';
 import { DefaultInAspects } from './default-in-aspects';
@@ -15,33 +17,41 @@ describe('input', () => {
   describe('DefaultInAspects', () => {
 
     let mockRenderScheduler: Mock<ReturnType<RenderScheduler>, Parameters<RenderScheduler>>;
-    let context: BootstrapContext;
+    let bsContext: BootstrapContext;
+    let context: ComponentContext;
     let control: InControl<any>;
 
     beforeEach(async () => {
       mockRenderScheduler = jest.fn(newManualRenderScheduler());
 
-      @Feature({
-        setup(setup) {
-          setup.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
+      @Component({
+        feature: {
+          setup(setup) {
+            setup.perComponent({ a: ElementRenderScheduler, is: mockRenderScheduler });
+          },
         },
       })
-      class TestFeature {}
+      class TestComponent {}
 
-      context = await bootstrapComponents(TestFeature).whenReady();
+      bsContext = await bootstrapComponents(TestComponent).whenReady();
+
+      const defContext = await bsContext.whenDefined(TestComponent);
+      const element = document.createElement('test-element');
+
+      context = defContext.mountTo(element).context;
       context.get(DefaultInAspects).to(aspects => {
         control = inValue(13).convert(aspects);
       });
     });
 
-    it('delegates `InRenderScheduler` to `DefaultRenderScheduler`', () => {
+    it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
 
       const scheduler = control.aspect(InRenderScheduler);
       const opts = { node: document.createElement('div') };
 
       scheduler(opts);
 
-      expect(mockRenderScheduler).toHaveBeenLastCalledWith({ window, ...opts });
+      expect(mockRenderScheduler).toHaveBeenLastCalledWith({ ...opts });
     });
     it('sets `InNamespaceAliaser` to `DefaultNamespaceAliaser`', () => {
       expect(control.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
@@ -57,7 +67,7 @@ describe('input', () => {
       })
       class TestFeature {}
 
-      await new Promise(resolve => context.load(TestFeature).read(({ ready }) => ready && resolve()));
+      await new Promise(resolve => bsContext.load(TestFeature).read(({ ready }) => ready && resolve()));
 
       expect(control.aspect(InStyledElement)).toBe(styled);
     });
@@ -72,7 +82,7 @@ describe('input', () => {
       })
       class TestFeature {}
 
-      await new Promise(resolve => context.load(TestFeature).read(({ ready }) => ready && resolve()));
+      await new Promise(resolve => bsContext.load(TestFeature).read(({ ready }) => ready && resolve()));
 
       expect(control.aspect(InRenderScheduler)).toBe(scheduler);
     });

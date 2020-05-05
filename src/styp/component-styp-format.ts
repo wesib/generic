@@ -63,7 +63,7 @@ export interface ComponentStypFormatConfig extends StypFormatConfig {
    *
    * Creates a render schedule per rule.
    *
-   * `DefaultRenderScheduler` is used when omitted.
+   * `ElementRenderScheduler` is used when omitted.
    */
   readonly scheduler?: RenderScheduler;
 
@@ -123,7 +123,7 @@ export abstract class ComponentStypFormat {
     const producer = this.newProducer(rules, config);
     const supply = eventSupply();
 
-    this.context.whenConnected(() => {
+    this.context.whenSettled(() => {
       producer().needs(supply).cuts(supply);
     });
 

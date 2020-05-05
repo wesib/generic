@@ -3,7 +3,7 @@
  * @module @wesib/generic/styp
  */
 import { produceBasicStyle } from '@proc7ts/style-producer';
-import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
+import { FeatureDef, FeatureDef__symbol, StateSupport } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
 import { ComponentStypFormat } from './component-styp-format';
 import { ComponentStypObjectFormat } from './component-styp-object.format';
@@ -12,6 +12,7 @@ import { ComponentStypObjectFormat } from './component-styp-object.format';
  * @internal
  */
 const BasicStyleProducerSupport__feature: FeatureDef = {
+  needs: StateSupport,
   setup(setup) {
     setup.provide({ a: ComponentStyleProducer, is: produceBasicStyle });
     setup.perComponent({
