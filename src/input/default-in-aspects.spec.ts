@@ -1,3 +1,4 @@
+import { noop } from '@proc7ts/call-thru';
 import { ContextKey__symbol } from '@proc7ts/context-values';
 import { InControl, InNamespaceAliaser, InRenderScheduler, InStyledElement, inValue } from '@proc7ts/input-aspects';
 import { newManualRenderScheduler, RenderScheduler } from '@proc7ts/render-scheduler';
@@ -85,6 +86,17 @@ describe('input', () => {
       await new Promise(resolve => bsContext.load(TestFeature).read(({ ready }) => ready && resolve()));
 
       expect(control.aspect(InRenderScheduler)).toBe(scheduler);
+    });
+    it('cuts off supply when component destroyed', () => {
+
+      const whenOff = jest.fn();
+
+      context.get(DefaultInAspects).to(noop).whenOff(whenOff);
+
+      const reason = new Error('reason');
+
+      context.destroy(reason);
+      expect(whenOff).toHaveBeenCalledWith(reason);
     });
 
     describe('upKey', () => {

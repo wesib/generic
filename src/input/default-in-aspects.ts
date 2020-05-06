@@ -3,7 +3,7 @@
  * @module @wesib/generic/input
  */
 import { ContextValueOpts, ContextValues } from '@proc7ts/context-values';
-import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
+import { ContextSupply, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import { AfterEvent, EventKeeper } from '@proc7ts/fun-events';
 import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from '@proc7ts/input-aspects';
 import { DefaultNamespaceAliaser, ElementRenderScheduler } from '@wesib/wesib';
@@ -52,7 +52,7 @@ class DefaultInAspectsKey
             InRenderScheduler.to(scheduler),
             InNamespaceAliaser.to(nsAlias),
         ),
-    );
+    ).tillOff(opts.context.get(ContextSupply));
   }
 
 }
