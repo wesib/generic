@@ -1,5 +1,7 @@
 import { noop } from '@proc7ts/call-thru';
 import { ContextRegistry } from '@proc7ts/context-values';
+import { ContextSupply } from '@proc7ts/context-values/updatable';
+import { eventSupply } from '@proc7ts/fun-events';
 import { testPageParam } from '../spec/test-page-param';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
@@ -164,6 +166,21 @@ describe('navigation', () => {
 
       agent(mockNavigate, when, from, to);
       expect(to.put).toHaveBeenCalledWith(param, 'test');
+    });
+    it('throws when context destroyed', () => {
+
+      const contextSupply = eventSupply();
+
+      registry.provide({ a: ContextSupply, is: contextSupply});
+
+      const values = registry.newValues();
+
+      agent = values.get(NavigationAgent);
+
+      const reason = new Error('reason');
+
+      contextSupply.off(reason);
+      expect(() => agent(mockNavigate, when, from, to)).toThrow(reason);
     });
   });
 });

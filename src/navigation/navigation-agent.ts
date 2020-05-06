@@ -4,7 +4,7 @@
  */
 import { nextArg } from '@proc7ts/call-thru';
 import { ContextValueOpts, ContextValues } from '@proc7ts/context-values';
-import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
+import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
 import { BootstrapWindow } from '@wesib/wesib';
 import { Navigation } from './navigation';
@@ -132,7 +132,11 @@ class NavigationAgentKey
     opts.context.get(
         this.upKey,
         'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
-    )!.to(agent => delegated = agent);
+    )!.to(
+        agent => delegated = agent,
+    ).whenOff(
+        reason => delegated = contextDestroyed(reason),
+    );
 
     return (next, when, from, to) => delegated(next, when, from, to);
   }
