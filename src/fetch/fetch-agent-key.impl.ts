@@ -1,6 +1,6 @@
 import { nextArg } from '@proc7ts/call-thru';
 import { ContextValueOpts, ContextValues } from '@proc7ts/context-values';
-import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
+import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import {
   AfterEvent,
   afterThe,
@@ -63,12 +63,16 @@ export class FetchAgentKey<Res extends any[]>
           AfterEvent<FetchAgent<Res>[]>>,
   ): CombinedFetchAgent<Res> {
 
-    let delegated!: CombinedFetchAgent<Res>;
+    let delegated: CombinedFetchAgent<Res>;
 
     opts.context.get(
         this.upKey,
         'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
-    )!.to(agent => delegated = agent);
+    )!.to(
+        agent => delegated = agent,
+    ).whenOff(
+        reason => delegated = contextDestroyed(reason),
+    );
 
     return (next, request) => delegated(next, request);
   }

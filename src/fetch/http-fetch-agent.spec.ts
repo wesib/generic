@@ -1,5 +1,6 @@
 import { ContextRegistry } from '@proc7ts/context-values';
-import { EventEmitter, OnEvent, onSupplied } from '@proc7ts/fun-events';
+import { ContextSupply } from '@proc7ts/context-values/updatable';
+import { EventEmitter, eventSupply, OnEvent, onSupplied } from '@proc7ts/fun-events';
 import { HttpFetchAgent } from './http-fetch-agent';
 import Mock = jest.Mock;
 
@@ -79,6 +80,23 @@ describe('fetch', () => {
       expect(agent(mockFetch, request)).toBe(emitter.on());
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request);
       expect(mockFetch).toHaveBeenCalledWith(request);
+    });
+    it('throws when context destroyed', () => {
+
+      const contextSupply = eventSupply();
+
+      registry.provide({ a: ContextSupply, is: contextSupply });
+
+      const values = registry.newValues();
+
+      agent = values.get(HttpFetchAgent);
+
+      const reason = new Error('reason');
+
+      contextSupply.off(reason);
+
+      expect(() => agent(mockFetch, request)).toThrow(reason);
+      expect(mockFetch).not.toHaveBeenCalled();
     });
   });
 });
