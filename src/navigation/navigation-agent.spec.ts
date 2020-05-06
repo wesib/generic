@@ -171,7 +171,7 @@ describe('navigation', () => {
 
       const contextSupply = eventSupply();
 
-      registry.provide({ a: ContextSupply, is: contextSupply});
+      registry.provide({ a: ContextSupply, is: contextSupply });
 
       const values = registry.newValues();
 
