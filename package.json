@@ -21,7 +21,6 @@
   "module": "dist/wesib.generic.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "@proc7ts/a-iterable": "^2.5.1",
     "@proc7ts/call-thru": "^3.0.0",
     "@proc7ts/context-values": "^3.1.0",
     "@proc7ts/fun-events": "^9.0.0",
@@ -32,6 +31,7 @@
     "@wesib/wesib": "^1.0.0-beta.1"
   },
   "dependencies": {
+    "@proc7ts/a-iterable": "^2.5.1",
     "@proc7ts/http-header-value": "^2.0.2"
   },
   "peerDependenciesMeta": {
@@ -43,7 +43,6 @@
     }
   },
   "devDependencies": {
-    "@proc7ts/a-iterable": "^2.5.1",
     "@proc7ts/call-thru": "^3.0.0",
     "@proc7ts/context-values": "^3.1.0",
     "@proc7ts/eslint-config": "^1.0.4",
