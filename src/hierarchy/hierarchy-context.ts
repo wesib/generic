@@ -14,7 +14,6 @@ import {
 import {
   AfterEvent,
   afterEventBy,
-  EventKeeper,
   EventReceiver,
   EventSupply,
   eventSupply,
@@ -100,9 +99,8 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
   /**
    * Provides hierarchy context value.
    *
-   * The provided value will be available in context itself, as well as in all nested hierarchy contexts.
-   *
-   * Note that the provided value key has to `ContextUpKey`.
+   * If provided value is updatable (i.e. its key implements `ContextUpKey`), then it will be available in this context,
+   * as well as in all nested hierarchy contexts. Otherwise the value will be available in this context only.
    *
    * @typeparam Deps  Dependencies tuple type.
    * @typeparam Src  Source value type.
@@ -112,7 +110,7 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
    * @returns A function that removes the given context value specifier when called.
    */
   abstract provide<Deps extends any[], Src, Seed>(
-      spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src | EventKeeper<Src[]>, Seed>,
+      spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src, Seed>,
   ): () => void;
 
 }
@@ -136,7 +134,7 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
   }
 
   provide<Deps extends any[], Src, Seed>(
-      spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src | EventKeeper<Src[]>, Seed>,
+      spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src, Seed>,
   ): () => void {
 
     const off = this._registry.provide(spec);
