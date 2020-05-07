@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { noop } from '@proc7ts/call-thru';
+import { noop, valueProvider } from '@proc7ts/call-thru';
 import { eventSupply } from '@proc7ts/fun-events';
 import {
   BootstrapWindow,
@@ -12,6 +12,7 @@ import {
   ComponentContext,
   ComponentDecorator,
   ElementRenderScheduler,
+  RenderDef,
   StateSupport,
 } from '@wesib/wesib';
 import { importNodeContent } from '../../util';
@@ -50,22 +51,23 @@ export function IncludePage<T extends ComponentClass = Class>(
     define(context) {
       context.whenComponent(context => {
 
+        const { fragment, render } = def;
         const document = context.get(BootstrapWindow).document;
-        const schedule = context.get(ElementRenderScheduler)();
+        const schedule = context.get(ElementRenderScheduler)(render);
         const navigation = context.get(Navigation);
         let lastPageURL: string | undefined = contentKey(navigation.page);
-        const detectFragment = (): PageFragmentRequest => {
+        let detectFragment: () => PageFragmentRequest;
 
-          const { fragment } = def;
+        if (fragment) {
+          detectFragment = valueProvider(fragment);
+        } else {
+          detectFragment = () => {
 
-          if (fragment) {
-            return fragment;
-          }
+            const { element: { id, tagName: tag } }: { element: Element } = context;
 
-          const { element: { id, tagName: tag } }: { element: Element } = context;
-
-          return id ? { id } : { tag };
-        };
+            return id ? { id } : { tag };
+          };
+        }
 
         context.whenConnected(() => {
 
@@ -142,6 +144,11 @@ export interface IncludePageDef<T extends object = any> {
    * By default uses custom element identifier if present, or element tag name otherwise.
    */
   readonly fragment?: PageFragmentRequest;
+
+  /**
+   * Rendering options.
+   */
+  readonly render?: RenderDef.Options;
 
   /**
    * Builds content key for the given page.
