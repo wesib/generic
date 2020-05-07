@@ -21,14 +21,14 @@
   "module": "dist/wesib.generic.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "@proc7ts/call-thru": "^3.0.0",
+    "@proc7ts/call-thru": "^3.0.2",
     "@proc7ts/context-values": "^3.1.0",
     "@proc7ts/fun-events": "^9.0.1",
     "@proc7ts/input-aspects": "^3.0.0",
     "@proc7ts/namespace-aliaser": "^2.0.3",
     "@proc7ts/render-scheduler": "^1.2.0",
     "@proc7ts/style-producer": "^5.0.1",
-    "@wesib/wesib": "^1.0.0-beta.4"
+    "@wesib/wesib": "^1.0.0-beta.5"
   },
   "dependencies": {
     "@proc7ts/a-iterable": "^2.5.1",
@@ -43,7 +43,7 @@
     }
   },
   "devDependencies": {
-    "@proc7ts/call-thru": "^3.0.0",
+    "@proc7ts/call-thru": "^3.0.2",
     "@proc7ts/context-values": "^3.1.0",
     "@proc7ts/eslint-config": "^1.0.4",
     "@proc7ts/fun-events": "^9.0.1",
@@ -57,7 +57,7 @@
     "@types/jsdom": "^16.2.1",
     "@typescript-eslint/eslint-plugin": "~2.31.0",
     "@typescript-eslint/parser": "~2.31.0",
-    "@wesib/wesib": "^1.0.0-beta.4",
+    "@wesib/wesib": "^1.0.0-beta.5",
     "codecov": "^3.6.5",
     "cross-fetch": "^3.0.4",
     "cssesc": "^3.0.0",
