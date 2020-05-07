@@ -24,6 +24,7 @@ import {
   ComponentDecorator,
   DefaultNamespaceAliaser,
   ElementRenderScheduler,
+  RenderDef,
   Wesib__NS,
 } from '@wesib/wesib';
 import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
@@ -148,6 +149,11 @@ export interface ActivateNavLinkDef<T extends object = any> {
    * The `active` class in Wesib namespace is used by default.
    */
   readonly active?: QualifiedName;
+
+  /**
+   * Rendering definition options to pass to nav links render scheduler.
+   */
+  readonly render?: RenderDef.Options;
 
   /**
    * Weighs matching navigation link.
@@ -414,7 +420,7 @@ function activateNavLink(
 ): (opts: NavLinkOpts) => ActiveNavLink {
 
   const scheduler = context.get(ElementRenderScheduler);
-  const { active = defaultActiveNavLinkClass } = def;
+  const { render, active = defaultActiveNavLinkClass } = def;
   const activeClass = css__naming.name(active, context.get(DefaultNamespaceAliaser));
   const activate = def.activate ? def.activate.bind(def) : noop;
   const assignClass = (active: boolean, { node }: { node: ElementNode }): void => {
@@ -433,7 +439,7 @@ function activateNavLink(
 
     const { element } = opts.node;
     const schedule = element[NavLinkRenderSchedule__symbol]
-        || (element[NavLinkRenderSchedule__symbol] = scheduler({ node: element }));
+        || (element[NavLinkRenderSchedule__symbol] = scheduler(render));
     const makeActive = (active: boolean): void => {
       schedule(() => assignClass(active, opts));
       activate(active, opts);
