@@ -1,11 +1,11 @@
 import { lazyStypRules, stypRoot, StypRule, StypRules } from '@proc7ts/style-producer';
-import { Theme as Theme_ } from './theme';
+import { Theme } from './theme';
 import { ThemeStyle } from './theme-style';
 
 /**
  * @internal
  */
-export class Theme extends Theme_ {
+export class Theme$ extends Theme {
 
   readonly root: StypRule = stypRoot();
   private readonly _rules = new Map<ThemeStyle.Provider, StypRules>();
