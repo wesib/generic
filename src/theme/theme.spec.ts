@@ -1,4 +1,5 @@
 import { itsEmpty, itsFirst } from '@proc7ts/a-iterable';
+import { ContextRegistry } from '@proc7ts/context-values';
 import { RefStypRule, StypLength, StypRule, StypRuleList, StypRuleRef } from '@proc7ts/style-producer';
 import { bootstrapComponents, BootstrapContext, Class, Feature } from '@wesib/wesib';
 import { Theme } from './theme';
@@ -33,6 +34,12 @@ describe('theme', () => {
     });
 
     describe('style', () => {
+      it('falls back the style', () => {
+
+        const values = new ContextRegistry().newValues();
+
+        expect(values.get(ThemeStyle, { or: null })).toBeNull();
+      });
       it('obtains unregistered style', async () => {
         await bootstrap();
 
