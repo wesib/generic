@@ -142,7 +142,7 @@ class ThemeStyleKey extends IterativeContextKey<ThemeStyle.ById, ThemeStyle> {
 /**
  * A key of bootstrap context value containing theme styles.
  */
-export const ThemeStyle: ContextRef<ThemeStyle.ById, ThemeStyle> = new ThemeStyleKey();
+export const ThemeStyle: ContextRef<ThemeStyle.ById, ThemeStyle> = (/*#__PURE__*/ new ThemeStyleKey());
 
 /**
  * @internal

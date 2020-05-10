@@ -8,7 +8,7 @@ import { Theme } from './theme';
 /**
  * @internal
  */
-const ThemeFactory__key = new SingleContextKey<ThemeFactory>('theme-factory');
+const ThemeFactory__key = (/*#__PURE__*/ new SingleContextKey<ThemeFactory>('theme-factory'));
 
 export abstract class ThemeFactory {
 

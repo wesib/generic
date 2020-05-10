@@ -9,7 +9,7 @@ import { ThemeStyle } from './theme-style';
 /**
  * @internal
  */
-const Theme__key = new SingleContextKey<Theme>('theme');
+const Theme__key = (/*#__PURE__*/ new SingleContextKey<Theme>('theme'));
 
 /**
  * A hierarchy of CSS rules within single root.
