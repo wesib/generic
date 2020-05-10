@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { ContextRef, ContextValueOpts, ContextValues, IterativeContextKey } from '@proc7ts/context-values';
+import { ContextRef, ContextValueSlot, IterativeContextKey } from '@proc7ts/context-values';
 import { stypRules, StypRules } from '@proc7ts/style-producer';
 import { Theme } from './theme';
 
@@ -80,13 +80,13 @@ class ThemeStyleKey extends IterativeContextKey<ThemeStyle.ById, ThemeStyle> {
     super('theme-style');
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, ThemeStyle.ById, ThemeStyle, Iterable<ThemeStyle>>,
-  ): ThemeStyle.ById | null | undefined {
+  grow(
+      slot: ContextValueSlot<ThemeStyle.ById, ThemeStyle, Iterable<ThemeStyle>>,
+  ): void {
 
     const providers = new Map<ThemeStyle.Provider, [ThemeStyle.Provider, boolean]>();
 
-    for (const style of opts.seed) {
+    for (const style of slot.seed) {
 
       let key: ThemeStyle.Provider;
       let provider: ThemeStyle.Provider;
@@ -119,7 +119,9 @@ class ThemeStyleKey extends IterativeContextKey<ThemeStyle.ById, ThemeStyle> {
       }
     }
 
-    return providers.size ? byId : opts.byDefault(() => byId);
+    if (providers.size || !slot.hasFallback) {
+      slot.insert(byId);
+    }
 
     function byId(id: ThemeStyle.Provider): ThemeStyle.Provider {
 

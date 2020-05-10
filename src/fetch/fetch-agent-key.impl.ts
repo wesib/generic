@@ -1,5 +1,5 @@
 import { nextArg } from '@proc7ts/call-thru';
-import { ContextValueOpts, ContextValues } from '@proc7ts/context-values';
+import { ContextValueSlot } from '@proc7ts/context-values';
 import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import {
   AfterEvent,
@@ -41,40 +41,39 @@ export class FetchAgentKey<Res extends any[]>
   constructor(name: string) {
     super(name);
     this.upKey = this.createUpKey(
-        opts => opts.seed.keepThru(
+        slot => slot.insert(slot.seed.keepThru(
             (...agents) => {
               if (agents.length) {
                 return nextArg(combineFetchAgents(agents));
               }
-
-              const defaultProvider = (): AfterEvent<[CombinedFetchAgent<Res>]> => afterThe(defaultFetchAgent);
-
-              return nextAfterEvent(opts.byDefault(defaultProvider) || defaultProvider());
+              if (slot.hasFallback && slot.or) {
+                return nextAfterEvent(slot.or);
+              }
+              return defaultFetchAgent;
             },
-        ),
+        )),
     );
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<
-          Ctx,
+  grow(
+      slot: ContextValueSlot<
           CombinedFetchAgent<Res>,
           EventKeeper<FetchAgent<Res>[]> | FetchAgent<Res>,
           AfterEvent<FetchAgent<Res>[]>>,
-  ): CombinedFetchAgent<Res> {
+  ): void {
 
     let delegated: CombinedFetchAgent<Res>;
 
-    opts.context.get(
+    slot.context.get(
         this.upKey,
-        'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
+        slot.hasFallback ? { or: slot.or != null ? afterThe(slot.or) : slot.or } : undefined,
     )!.to(
         agent => delegated = agent,
     ).whenOff(
         reason => delegated = contextDestroyed(reason),
     );
 
-    return (next, request) => delegated(next, request);
+    slot.insert((next, request) => delegated(next, request));
   }
 
 }

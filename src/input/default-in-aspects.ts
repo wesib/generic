@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
-import { ContextValueOpts, ContextValues } from '@proc7ts/context-values';
+import { ContextValueSlot } from '@proc7ts/context-values';
 import { ContextSupply, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import { AfterEvent, EventKeeper } from '@proc7ts/fun-events';
 import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from '@proc7ts/input-aspects';
@@ -35,24 +35,27 @@ class DefaultInAspectsKey
     super('default-in-aspects');
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<
-          Ctx,
+  grow(
+      slot: ContextValueSlot<
           AfterEvent<[InConverter.Aspect<any, any>]>,
           EventKeeper<InConverter.Aspect<any, any>[]> | InConverter.Aspect<any, any>,
           AfterEvent<InConverter.Aspect<any, any>[]>>,
-  ): AfterEvent<[InConverter.Aspect.Factory<any, any>]> {
+  ): void {
 
-    const nsAlias = opts.context.get(DefaultNamespaceAliaser);
-    const scheduler = opts.context.get(ElementRenderScheduler);
+    const nsAlias = slot.context.get(DefaultNamespaceAliaser);
+    const scheduler = slot.context.get(ElementRenderScheduler);
 
-    return opts.seed.keepThru(
-        (...fns) => intoConvertedBy(
-            ...fns,
-            InRenderScheduler.to(scheduler),
-            InNamespaceAliaser.to(nsAlias),
+    slot.insert(
+        slot.seed.keepThru(
+            (...fns) => intoConvertedBy(
+                ...fns,
+                InRenderScheduler.to(scheduler),
+                InNamespaceAliaser.to(nsAlias),
+            ),
+        ).tillOff(
+            slot.context.get(ContextSupply),
         ),
-    ).tillOff(opts.context.get(ContextSupply));
+    );
   }
 
 }
