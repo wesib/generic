@@ -2,8 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { nextArg } from '@proc7ts/call-thru';
-import { ContextValueOpts, ContextValues } from '@proc7ts/context-values';
+import { ContextValueSlot } from '@proc7ts/context-values';
 import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
 import { BootstrapWindow } from '@wesib/wesib';
@@ -49,19 +48,20 @@ class NavigationAgentKey
   constructor(name: string) {
     super(name);
     this.upKey = this.createUpKey(
-        opts => {
+        slot => {
 
-          const { document } = opts.context.get(BootstrapWindow);
+          const { document } = slot.context.get(BootstrapWindow);
 
-          return opts.seed.keepThru(
+          slot.insert(slot.seed.keepThru(
               (...agents) => {
                 if (agents.length) {
-                  return nextArg(combinedAgent);
+                  return combinedAgent;
+                }
+                if (slot.hasFallback && slot.or) {
+                  return nextAfterEvent(slot.or);
                 }
 
-                const defaultProvider = (): AfterEvent<[NavigationAgent.Combined]> => afterThe(defaultNavigationAgent);
-
-                return nextAfterEvent(opts.byDefault(defaultProvider) || defaultProvider());
+                return defaultNavigationAgent;
 
                 function combinedAgent(
                     next: (this: void, target: Navigation.URLTarget) => void,
@@ -114,31 +114,30 @@ class NavigationAgentKey
                   }
                 }
               },
-          );
+          ));
         },
     );
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<
-          Ctx,
+  grow(
+      slot: ContextValueSlot<
           NavigationAgent.Combined,
           EventKeeper<NavigationAgent[]> | NavigationAgent,
           AfterEvent<NavigationAgent[]>>,
-  ): NavigationAgent.Combined {
+  ): void {
 
     let delegated: NavigationAgent.Combined;
 
-    opts.context.get(
+    slot.context.get(
         this.upKey,
-        'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
+        slot.hasFallback ? { or: slot.or != null ? afterThe(slot.or) : slot.or } : undefined,
     )!.to(
         agent => delegated = agent,
     ).whenOff(
         reason => delegated = contextDestroyed(reason),
     );
 
-    return (next, when, from, to) => delegated(next, when, from, to);
+    slot.insert((next, when, from, to) => delegated(next, when, from, to));
   }
 
 }
