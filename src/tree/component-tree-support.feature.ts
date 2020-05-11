@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { BootstrapContext, ComponentContext, FeatureDef, FeatureDef__symbol, StateSupport } from '@wesib/wesib';
+import { BootstrapContext, ComponentContext, FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { ComponentNode } from './element-node';
 import { elementNodeOf } from './element-node.impl';
 
@@ -10,7 +10,6 @@ import { elementNodeOf } from './element-node.impl';
  * @internal
  */
 const ComponentTreeSupport__feature: FeatureDef = {
-  needs: StateSupport,
   setup(setup) {
     setup.perComponent({
       a: ComponentNode,

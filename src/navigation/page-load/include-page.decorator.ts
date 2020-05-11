@@ -13,7 +13,6 @@ import {
   ComponentDecorator,
   ElementRenderScheduler,
   RenderDef,
-  StateSupport,
 } from '@wesib/wesib';
 import { importNodeContent } from '../../util';
 import { Navigation } from '../navigation';
@@ -30,7 +29,7 @@ import { PageLoadSupport } from './page-load-support.feature';
  *
  * Utilizes [[PageLoadParam]] navigation parameter.
  *
- * Enables [[StateSupport]], [[NavigationSupport]], and [[PageLoadSupport]] features.
+ * Enables [[NavigationSupport]] and [[PageLoadSupport]] features.
  *
  * @typeparam T  A type of decorated component class.
  * @param def  Page inclusion definition.
@@ -46,7 +45,7 @@ export function IncludePage<T extends ComponentClass = Class>(
 
   return Component({
     feature: {
-      needs: [PageLoadSupport, StateSupport],
+      needs: [PageLoadSupport],
     },
     define(context) {
       context.whenComponent(context => {

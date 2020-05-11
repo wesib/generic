@@ -12,7 +12,7 @@ import {
   OnEventCallChain,
 } from '@proc7ts/fun-events';
 import { InControl, InConverter } from '@proc7ts/input-aspects';
-import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator, StateSupport } from '@wesib/wesib';
+import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { DefaultInAspects } from './default-in-aspects';
 import { inputFromControl, InputFromControl, NoInputFromControl } from './input-from-control';
@@ -20,8 +20,6 @@ import { inputFromControl, InputFromControl, NoInputFromControl } from './input-
 /**
  * Constructs component decorator that converts input control from {@link HierarchyContext.up enclosing component}
  * and uses it as an {@link InputFromControl origin of user input} in decorated component.
- *
- * Enables `StateSupport` feature.
  *
  * @param convert  Input control converter definition.
  *
@@ -31,9 +29,6 @@ export function ConvertInput<T extends ComponentClass = Class>(
     convert: ConvertInputDef<InstanceType<T>>,
 ): ComponentDecorator<T> {
   return Component({
-    feature: {
-      needs: StateSupport,
-    },
     define(defContext) {
       defContext.whenComponent(context => {
 
