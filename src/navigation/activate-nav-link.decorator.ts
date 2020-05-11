@@ -30,7 +30,6 @@ import {
 import { ComponentNode, ElementNode, ElementPickMode } from '../tree';
 import { getHashURL } from './hash-url';
 import { Navigation } from './navigation';
-import { NavigationSupport } from './navigation-support.feature';
 import { Page } from './page';
 
 /**
@@ -50,8 +49,6 @@ type ActiveNavLinks = Map<ElementNode, ActiveNavLink>;
  *
  * Marks navigation links with highest weight.
  *
- * Enables [[NavigationSupport]] feature.
- *
  * @typeparam T  A type of decorated component class.
  * @param def  Navigation link activation definition.
  *
@@ -64,9 +61,6 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
   const { select = 'a', pick = { all: true, deep: true } } = def;
 
   return Component({
-    feature: {
-      needs: NavigationSupport,
-    },
     define(defContext) {
       defContext.whenComponent(context => {
 

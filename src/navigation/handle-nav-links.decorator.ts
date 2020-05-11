@@ -4,15 +4,12 @@
  */
 import { ArraySet, Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { Navigation } from './navigation';
-import { NavigationSupport } from './navigation-support.feature';
 import { Page } from './page';
 
 /**
  * Creates component decorator that handles events (e.g. clicks) on navigation links.
  *
  * Such events would lead to {@link Navigation navigation actions} instead of default ones.
- *
- * Enables [[NavigationSupport]] feature.
  *
  * @typeparam T  A type of decorated component class.
  * @param def  Navigation links handler definition.
@@ -27,9 +24,6 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
   const events = new ArraySet(def.event || 'click');
 
   return Component({
-    feature: {
-      needs: NavigationSupport,
-    },
     define(defContext) {
       defContext.whenComponent(context => {
         context.whenConnected(() => {

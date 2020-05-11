@@ -29,7 +29,7 @@ import { PageLoadSupport } from './page-load-support.feature';
  *
  * Utilizes [[PageLoadParam]] navigation parameter.
  *
- * Enables [[NavigationSupport]] and [[PageLoadSupport]] features.
+ * Enables [[PageLoadSupport]] feature.
  *
  * @typeparam T  A type of decorated component class.
  * @param def  Page inclusion definition.

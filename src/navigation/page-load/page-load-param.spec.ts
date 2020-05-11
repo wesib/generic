@@ -5,7 +5,6 @@ import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { testPageParam } from '../../spec/test-page-param';
 import { Navigation } from '../navigation';
-import { NavigationSupport } from '../navigation-support.feature';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
 import { PageLoadParam } from './page-load-param';
@@ -45,7 +44,6 @@ describe('navigation', () => {
           setup.provide({ a: BootstrapWindow, is: locationMock.window });
           setup.provide({ a: PageLoadAgent, is: mockAgent });
         },
-        needs: NavigationSupport,
       })
       class TestFeature {
       }

@@ -7,7 +7,6 @@ import { LocationMock, navHistoryState } from '../spec/location-mock';
 import { testPageParam } from '../spec/test-page-param';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
-import { NavigationSupport } from './navigation-support.feature';
 import { EnterPageEvent, LeavePageEvent, NavigationEventType, StayOnPageEvent } from './navigation.event';
 import { Page } from './page';
 import { PageParam } from './page-param';
@@ -38,7 +37,6 @@ describe('navigation', () => {
           setup.provide({ a: BootstrapWindow, is: locationMock.window });
           setup.provide({ a: NavigationAgent, is: agent });
         },
-        needs: NavigationSupport,
       })
       class TestFeature {
       }

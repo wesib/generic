@@ -5,13 +5,11 @@
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { Navigation } from '../navigation';
 import { NavigationAgent } from '../navigation-agent';
-import { NavigationSupport } from '../navigation-support.feature';
 import { Page } from '../page';
 import { setHashURL } from './hash-url';
 import { PageHashURLValueParam } from './page-hash-url-param.impl';
 
 const PageHashURLSupport__feature: FeatureDef = {
-  needs: NavigationSupport,
   setup(setup) {
     setup.provide({ a: NavigationAgent, is: pageHashURLAgent });
   },
@@ -19,8 +17,6 @@ const PageHashURLSupport__feature: FeatureDef = {
 
 /**
  * {@link PageHashURLParam Page hash URL parameter} support feature.
- *
- * Enables [[NavigationSupport]].
  */
 export class PageHashURLSupport {
 

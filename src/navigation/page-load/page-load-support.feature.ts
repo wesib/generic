@@ -3,7 +3,6 @@
  * @module @wesib/generic
  */
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
-import { NavigationSupport } from '../navigation-support.feature';
 import { PageCacheBuster } from './page-cache-buster.impl';
 import { PageLoadAgent } from './page-load-agent';
 import { PageLoadURLModifier } from './page-load-url-modifier';
@@ -15,7 +14,6 @@ import { pageTitleAgent } from './page-title-agent.impl';
  * @internal
  */
 const PageLoadSupport__feature: FeatureDef = {
-  needs: NavigationSupport,
   setup(setup) {
     setup.provide({
       a: PageLoadURLModifier,

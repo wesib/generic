@@ -4,7 +4,6 @@ import { LocationMock, navHistoryState } from '../spec/location-mock';
 import { testPageParam, testPageParamHandle } from '../spec/test-page-param';
 import { NAV_DATA_KEY, NavDataEnvelope } from './nav-history.impl';
 import { Navigation } from './navigation';
-import { NavigationSupport } from './navigation-support.feature';
 import { Page } from './page';
 import { PageParam } from './page-param';
 import Mocked = jest.Mocked;
@@ -26,7 +25,6 @@ describe('navigation', () => {
     beforeEach(async () => {
 
       @Feature({
-        needs: NavigationSupport,
         setup(setup) {
           setup.provide({ a: BootstrapWindow, is: locationMock.window });
         },
