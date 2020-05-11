@@ -4,7 +4,6 @@
  */
 import { StypRule, StypRules } from '@proc7ts/style-producer';
 import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
-import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
 
 /**
@@ -13,9 +12,11 @@ import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp
  * Decorated property value should either contain a CSS rules source of type `StypRules.Source` or be a method
  * returning it.
  *
- * This decorator automatically enables [[BasicStyleProducerSupport]] feature.
- *
  * Produces CSS using {@link ComponentStypFormat component style production format}.
+ *
+ * Depends on [@proc7ts/style-producer].
+ *
+ * [@proc7ts/style-producer]: https://www.npmjs.com/package/@proc7ts/style-producer
  *
  * @typeparam T  A type of decorated component class.
  * @param config  Non-mandatory component style production format config.
@@ -30,9 +31,6 @@ export function ProduceStyle<T extends ComponentClass>(
     T> {
   return ComponentProperty(({ get }) => ({
     componentDef: {
-      feature: {
-        needs: BasicStyleProducerSupport,
-      },
       define(defContext) {
         defContext.whenComponent(context => {
           context.whenReady(({ component }) => {

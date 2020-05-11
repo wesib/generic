@@ -4,35 +4,27 @@
  */
 import { produceStyle } from '@proc7ts/style-producer';
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
-import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStyleProducer } from './component-style-producer';
-import { ComponentStypFormat } from './component-styp-format';
-import { ComponentStypObjectFormat } from './component-styp-object.format';
 
 /**
  * @internal
  */
 const StyleProducerSupport__feature: FeatureDef = {
-  has: BasicStyleProducerSupport,
   setup(setup) {
     setup.provide({ a: ComponentStyleProducer, is: produceStyle });
-    setup.perComponent({
-      a: ComponentStypFormat,
-      as: ComponentStypObjectFormat,
-    });
   },
 };
 
 /**
  * Style producer support feature.
  *
- * Depends on [style-producer].
- *
- * This is an implementation of [[BasicStyleProducerSupport]] feature that enables default CSS renderers.
+ * This feature enables default CSS renderers.
  *
  * It is _not_ enabled automatically by {@link ProduceStyle @ProduceStyle} decorator.
  *
- * [style-producer]: https://www.npmjs.com/package/style-producer
+ * Depends on [@proc7ts/style-producer].
+ *
+ * [@proc7ts/style-producer]: https://www.npmjs.com/package/@proc7ts/style-producer
  */
 export class StyleProducerSupport {
 

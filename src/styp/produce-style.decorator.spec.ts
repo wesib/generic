@@ -11,7 +11,6 @@ import {
   ShadowContentRoot,
 } from '@wesib/wesib';
 import { testDefinition } from '../spec/test-element';
-import { BasicStyleProducerSupport } from './basic-style-producer-support.feature';
 import { ComponentStypDomFormat } from './component-styp-dom.format';
 import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
 import { ComponentStypRenderer } from './component-styp-renderer';
@@ -188,7 +187,6 @@ describe('styp', () => {
 
       @Component(def)
       @Feature({
-        needs: BasicStyleProducerSupport,
         setup(setup) {
           setup.provide({
             a: DefaultRenderScheduler,

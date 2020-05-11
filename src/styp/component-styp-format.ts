@@ -11,6 +11,8 @@ import {
   lazyStypRules,
   StypFormat,
   StypFormatConfig,
+  stypObjectFormat,
+  StypObjectFormatConfig,
   StypPureSelector,
   StypRenderer,
   StypRules,
@@ -20,11 +22,16 @@ import {
 } from '@proc7ts/style-producer';
 import { ArraySet, ComponentContext, ShadowContentRoot } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
+import { componentStypDomFormatConfig } from './component-styp-dom.format';
 import { ComponentStypRenderer } from './component-styp-renderer';
 import { ElementIdClass } from './element-id-class.impl';
 
 /**
  * Configuration of {@link ComponentStypFormat component style production format}.
+ *
+ * Depends on [@proc7ts/style-producer].
+ *
+ * [@proc7ts/style-producer]: https://www.npmjs.com/package/@proc7ts/style-producer
  */
 export interface ComponentStypFormatConfig extends StypFormatConfig {
 
@@ -76,11 +83,14 @@ export interface ComponentStypFormatConfig extends StypFormatConfig {
 
 }
 
-const ComponentStypFormat__symbol = (
-    /*#__PURE__*/ new SingleContextKey<ComponentStypFormat>(
-        'component-styp-format',
-    )
-);
+const ComponentStypFormat__symbol = (/*#__PURE__*/ new SingleContextKey<ComponentStypFormat>(
+    'component-styp-format',
+    {
+      byDefault(context) {
+        return new ComponentStypObjectFormat(context.get(ComponentContext));
+      },
+    },
+));
 
 /**
  * Component style production format.
@@ -328,5 +338,42 @@ function extendHostSelector(
     },
     ...rest,
   ];
+}
+
+/**
+ * Component's CSS object model production format.
+ *
+ * Renders CSS when component's element connected to document.
+ *
+ * This format is used by default.
+ */
+export class ComponentStypObjectFormat extends ComponentStypFormat {
+
+  /**
+   * Constructs CSS object model production format.
+   *
+   * @param context  Target component context.
+   */
+  constructor(readonly context: ComponentContext) {
+    super();
+  }
+
+  format(config?: ComponentStypFormatConfig & StypObjectFormatConfig): StypFormat {
+    return stypObjectFormat(this.config(config));
+  }
+
+  /**
+   * Builds configuration of CSS object model production format.
+   *
+   * This method is called by {@link format} one.
+   *
+   * @param config  Original component style production format configuration.
+   *
+   * @returns Configuration of CSS object model production format.
+   */
+  config(config?: ComponentStypFormatConfig & StypObjectFormatConfig): StypObjectFormatConfig {
+    return componentStypDomFormatConfig(this, config, { when: 'connected' });
+  }
+
 }
 

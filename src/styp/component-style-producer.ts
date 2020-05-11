@@ -4,7 +4,8 @@
  */
 import { SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
 import { EventSupply } from '@proc7ts/fun-events';
-import { StypFormat, StypRules } from '@proc7ts/style-producer';
+import { produceBasicStyle, StypFormat, StypRules } from '@proc7ts/style-producer';
+import { bootstrapDefault } from '@wesib/wesib';
 
 /**
  * Component style producer signature.
@@ -24,7 +25,19 @@ export type ComponentStyleProducer =
 
 /**
  * A key of bootstrap, definition, or component context value containing a component style producer.
+ *
+ * Utilizes `produceBasicStyle()` by default. I.e. it does not enable default renderers. To enable them all a
+ * [[StyleProducerSupport]] can be used.
+ *
+ * Depends on [@proc7ts/style-producer].
+ *
+ * [@proc7ts/style-producer]: https://www.npmjs.com/package/@proc7ts/style-producer
  */
 export const ComponentStyleProducer: SingleContextRef<ComponentStyleProducer> = (
-    /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>('component-style-producer')
+    /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>(
+        'component-style-producer',
+        {
+          byDefault: bootstrapDefault(() => produceBasicStyle),
+        },
+    )
 );
