@@ -22,7 +22,7 @@ import {
 } from '@proc7ts/style-producer';
 import { ArraySet, ComponentContext, ShadowContentRoot } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
-import { componentStypDomFormatConfig } from './component-styp-dom.format';
+import { componentStypDomFormatConfig } from './component-styp-dom.format-config';
 import { ComponentStypRenderer } from './component-styp-renderer';
 import { ElementIdClass } from './element-id-class.impl';
 

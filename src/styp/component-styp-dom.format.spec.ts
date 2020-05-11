@@ -9,7 +9,7 @@ import {
   ElementRenderer,
   ElementRenderScheduler,
 } from '@wesib/wesib';
-import { componentStypDomFormatConfig } from './component-styp-dom.format';
+import { componentStypDomFormatConfig } from './component-styp-dom.format-config';
 import { ComponentStypFormat } from './component-styp-format';
 
 describe('styp', () => {
