@@ -13,15 +13,13 @@ import {
 } from '@proc7ts/fun-events';
 import { InControl, InConverter } from '@proc7ts/input-aspects';
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
-import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
+import { ComponentNode, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
 import { inputFromControl } from './input-from-control';
 
 /**
  * Constructs component decorator that finds input element and uses it as an {@link InputFromControl origin of user
  * input}.
- *
- * Enables [[ComponentTreeSupport]] feature.
  *
  * @typeparam T  A type of decorated component class.
  * @param def  Input element usage definition.
@@ -35,9 +33,6 @@ export function UseInputElement<T extends ComponentClass = Class>(
   const { select = 'input', pick = { deep: true, all: true } } = def;
 
   return Component({
-    feature: {
-      needs: ComponentTreeSupport,
-    },
     define(defContext) {
       defContext.whenComponent(context => {
 

@@ -11,7 +11,6 @@ import {
   ElementObserver,
   Feature,
 } from '@wesib/wesib';
-import { ComponentTreeSupport } from './component-tree-support.feature';
 import { ComponentNode, ElementNode } from './element-node';
 import { ElementNodeList } from './element-node-list';
 import Mock = jest.Mock;
@@ -38,7 +37,6 @@ describe('tree', () => {
       const defContext = await new Promise<DefinitionContext>((resolve, reject) => {
         @Component({
           feature: {
-            needs: ComponentTreeSupport,
             setup(setup) {
               setup.provide({
                 a: CustomElements,

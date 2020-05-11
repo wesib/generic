@@ -4,8 +4,9 @@
  */
 import { SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
 import { ValueTracker } from '@proc7ts/fun-events';
-import { ComponentClass, ComponentContext } from '@wesib/wesib';
+import { BootstrapContext, ComponentClass, ComponentContext } from '@wesib/wesib';
 import { ElementNodeList } from './element-node-list';
+import { elementNodeOf } from './element-node.impl';
 
 /**
  * Arbitrary element node within component tree. Either bound to some component or not.
@@ -122,7 +123,17 @@ export interface ComponentNode<T extends object = any> extends ComponentTreeNode
  * A key of component context value containing a component node instance.
  */
 export const ComponentNode: SingleContextRef<ComponentNode> = (
-    /*#__PURE__*/ new SingleContextKey<ComponentNode>('component-node')
+    /*#__PURE__*/ new SingleContextKey<ComponentNode>(
+        'component-node',
+        {
+          byDefault(context) {
+            return elementNodeOf(
+                context.get(BootstrapContext),
+                context.get(ComponentContext).element,
+            ) as ComponentNode;
+          },
+        },
+    )
 );
 
 /**

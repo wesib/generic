@@ -6,14 +6,12 @@ import { nextArgs, NextCall } from '@proc7ts/call-thru';
 import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from '@proc7ts/fun-events';
 import { InControl, InConverter, InFormElement } from '@proc7ts/input-aspects';
 import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
-import { ComponentNode, ComponentTreeSupport, ElementNode, ElementPickMode } from '../tree';
+import { ComponentNode, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
 import { inputToForm } from './input-to-form';
 
 /**
  * Constructs component decorator that finds form element to {@link InputToForm fill by user input}.
- *
- * Enables [[ComponentTreeSupport]] feature.
  *
  * @typeparam T  A type of decorated component class.
  * @param def  Form element fill definition.
@@ -27,9 +25,6 @@ export function FillInputForm<T extends ComponentClass = Class>(
   const { select = 'form', pick = { deep: true, all: true } } = def;
 
   return Component({
-    feature: {
-      needs: ComponentTreeSupport,
-    },
     define(defContext) {
       defContext.whenComponent(context => {
 

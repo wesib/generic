@@ -4,16 +4,8 @@ import { itsFirst } from '@proc7ts/a-iterable';
 import { noop } from '@proc7ts/call-thru';
 import { ValueTracker } from '@proc7ts/fun-events';
 import { QualifiedName } from '@proc7ts/namespace-aliaser';
-import {
-  Component,
-  ComponentClass,
-  ComponentContext,
-  ComponentContext__symbol,
-  DomProperty,
-  Feature,
-} from '@wesib/wesib';
+import { Component, ComponentClass, ComponentContext, ComponentContext__symbol, DomProperty } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
-import { ComponentTreeSupport } from './component-tree-support.feature';
 import { ComponentNode, ElementNode } from './element-node';
 
 describe('tree', () => {
@@ -54,9 +46,6 @@ describe('tree', () => {
       extend: {
         type: MockElement,
       },
-    })
-    @Feature({
-      needs: ComponentTreeSupport,
     })
     class TestComponent {
     }
@@ -172,9 +161,6 @@ describe('tree', () => {
                 type: MockElement,
               },
             })
-            @Feature({
-              needs: ComponentTreeSupport,
-            })
             class TestComponent {
 
               @DomProperty()
@@ -249,9 +235,6 @@ describe('tree', () => {
           extend: {
             type: MockElement,
           },
-        })
-        @Feature({
-          needs: ComponentTreeSupport,
         })
         class TestComponent {}
 
