@@ -2,14 +2,58 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
-import { RefStypRule, StypProperties, StypRule, StypRuleRef, StypRules } from '@proc7ts/style-producer';
+import { ContextKey, ContextKey__symbol, ContextRef, SingleContextKey } from '@proc7ts/context-values';
+import {
+  lazyStypRules,
+  RefStypRule,
+  StypProperties,
+  stypRoot,
+  StypRule,
+  StypRuleRef,
+  StypRules,
+} from '@proc7ts/style-producer';
 import { ThemeStyle } from './theme-style';
+
+export interface ThemeFactory {
+
+  newTheme(): Theme;
+
+}
+
+export const ThemeFactory: ContextRef<ThemeFactory> = (/*#__PURE__*/ new SingleContextKey<ThemeFactory>(
+    'theme-factory',
+    {
+      byDefault(context) {
+        return new ThemeFactory$(context.get(ThemeStyle));
+      },
+    },
+));
 
 /**
  * @internal
  */
-const Theme__key = (/*#__PURE__*/ new SingleContextKey<Theme>('theme'));
+class ThemeFactory$ implements ThemeFactory {
+
+  constructor(private readonly _styles: ThemeStyle.ById) {
+  }
+
+  newTheme(): Theme$ {
+    return new Theme$(this._styles);
+  }
+
+}
+
+/**
+ * @internal
+ */
+const Theme__key = (/*#__PURE__*/ new SingleContextKey<Theme>(
+    'theme',
+    {
+      byDefault(context) {
+        return context.get(ThemeFactory).newTheme();
+      },
+    },
+));
 
 /**
  * A hierarchy of CSS rules within single root.
@@ -59,5 +103,43 @@ export abstract class Theme {
    * @returns Dynamically updated CSS rule set containing the requested styling.
    */
   abstract style(...styles: ThemeStyle.Provider[]): StypRules;
+
+}
+
+/**
+ * @internal
+ */
+class Theme$ extends Theme {
+
+  readonly root: StypRule = stypRoot();
+  private readonly _rules = new Map<ThemeStyle.Provider, StypRules>();
+
+  constructor(private readonly _styles: ThemeStyle.ById) {
+    super();
+  }
+
+  style(...styles: ThemeStyle.Provider[]): StypRules {
+
+    const theme = this;
+
+    return lazyStypRules(...styles.reduce<StypRules[]>(addStyleRules, []));
+
+    function addStyleRules(target: StypRules[], style: ThemeStyle.Provider): StypRules[] {
+
+      const existing = theme._rules.get(style);
+
+      if (existing) {
+        target.push(existing);
+      } else {
+
+        const constructed = theme._styles(style)(theme);
+
+        theme._rules.set(style, constructed);
+        target.push(constructed);
+      }
+
+      return target;
+    }
+  }
 
 }

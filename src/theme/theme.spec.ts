@@ -4,7 +4,6 @@ import { RefStypRule, StypLength, StypRule, StypRuleList, StypRuleRef } from '@p
 import { bootstrapComponents, BootstrapContext, Class, Feature } from '@wesib/wesib';
 import { Theme } from './theme';
 import { ThemeStyle } from './theme-style';
-import { ThemeSupport } from './theme-support.feature';
 
 describe('theme', () => {
   describe('Theme', () => {
@@ -58,7 +57,6 @@ describe('theme', () => {
       it('obtains registered style', async () => {
 
         @Feature({
-          needs: ThemeSupport,
           setup(setup) {
             setup.provide({ a: ThemeStyle, is: style });
           },
@@ -94,7 +92,6 @@ describe('theme', () => {
         it('combines registered style and extension', async () => {
 
           @Feature({
-            needs: ThemeSupport,
             setup(setup) {
               setup.provide({ a: ThemeStyle, is: style1 });
               setup.provide({ a: ThemeStyle, is: { style: style1, provide: style2 } });
@@ -110,7 +107,6 @@ describe('theme', () => {
         it('combines style with extension registered before it', async () => {
 
           @Feature({
-            needs: ThemeSupport,
             setup(setup) {
               setup.provide({ a: ThemeStyle, is: { style: style1, provide: style2 } });
               setup.provide({ a: ThemeStyle, is: style1 });
@@ -126,7 +122,6 @@ describe('theme', () => {
         it('combines unregistered style and registered extension', async () => {
 
           @Feature({
-            needs: ThemeSupport,
             setup(setup) {
               setup.provide({ a: ThemeStyle, is: { style: style1, provide: style2 } });
             },
@@ -168,7 +163,6 @@ describe('theme', () => {
     async function bootstrap(...features: Class<any>[]): Promise<BootstrapContext> {
 
       @Feature({
-        needs: ThemeSupport,
         init(context) {
           theme = context.get(Theme);
         },
