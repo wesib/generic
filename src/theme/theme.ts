@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { ContextKey, ContextKey__symbol, ContextRef, SingleContextKey } from '@proc7ts/context-values';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import {
   lazyStypRules,
   RefStypRule,
@@ -12,34 +12,12 @@ import {
   StypRuleRef,
   StypRules,
 } from '@proc7ts/style-producer';
+import { bootstrapDefault } from '@wesib/wesib';
 import { ThemeStyle } from './theme-style';
 
 export interface ThemeFactory {
 
   newTheme(): Theme;
-
-}
-
-export const ThemeFactory: ContextRef<ThemeFactory> = (/*#__PURE__*/ new SingleContextKey<ThemeFactory>(
-    'theme-factory',
-    {
-      byDefault(context) {
-        return new ThemeFactory$(context.get(ThemeStyle));
-      },
-    },
-));
-
-/**
- * @internal
- */
-class ThemeFactory$ implements ThemeFactory {
-
-  constructor(private readonly _styles: ThemeStyle.ById) {
-  }
-
-  newTheme(): Theme$ {
-    return new Theme$(this._styles);
-  }
 
 }
 
@@ -49,9 +27,7 @@ class ThemeFactory$ implements ThemeFactory {
 const Theme__key = (/*#__PURE__*/ new SingleContextKey<Theme>(
     'theme',
     {
-      byDefault(context) {
-        return context.get(ThemeFactory).newTheme();
-      },
+      byDefault: bootstrapDefault(context => new Theme$(context.get(ThemeStyle))),
     },
 ));
 
