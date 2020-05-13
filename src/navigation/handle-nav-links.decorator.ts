@@ -143,7 +143,7 @@ function defaultHandleNavLinks(
 
     const target = event.target as Element;
     const pageURL = page.url;
-    const url = new URL(href, target.ownerDocument!.baseURI);
+    const url = new URL(href, target.ownerDocument.baseURI);
 
     if (url.origin !== pageURL.origin) {
       return; // External link

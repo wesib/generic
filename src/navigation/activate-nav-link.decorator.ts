@@ -298,7 +298,7 @@ function defaultNavLinkWeight(
     return afterThe(node, -1);
   }
 
-  const linkURL = new URL(href, element.ownerDocument!.baseURI);
+  const linkURL = new URL(href, element.ownerDocument.baseURI);
 
   return afterThe(node, calcNavLinkWeight(linkURL, page.url));
 }
