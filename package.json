@@ -57,7 +57,7 @@
     "@types/jsdom": "^16.2.3",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
-    "@wesib/wesib": "^1.0.0-beta.9",
+    "@wesib/wesib": "^1.0.0-beta.10",
     "codecov": "^3.7.0",
     "cross-fetch": "^3.0.4",
     "cssesc": "^3.0.0",
