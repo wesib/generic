@@ -2,8 +2,8 @@ import { itsReduction } from '@proc7ts/a-iterable';
 import { nextEach } from '@proc7ts/call-thru';
 import { SingleContextKey } from '@proc7ts/context-values';
 import { EventNotifier, onAsync, OnEvent, onEventBy } from '@proc7ts/fun-events';
-import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { hthvParse, hthvQuote } from '@proc7ts/http-header-value';
+import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
 import { PageLoadAgent } from './page-load-agent';
@@ -32,7 +32,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
   const httpFetch = context.get(HttpFetch);
   const modifyURL = context.get(PageLoadURLModifier);
   const agent = context.get(PageLoadAgent);
-  const parser: DOMParser = new (window as any).DOMParser();
+  const parser = new window.DOMParser();
 
   return page => {
 
@@ -86,6 +86,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
                   ok: false as const,
                   page,
                   response,
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   error,
                 };
               }

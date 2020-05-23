@@ -92,7 +92,7 @@ export class MockElement {
 
     this._attributes[name] = value;
 
-    const observedAttributes: string[] = this._target.observedAttributes;
+    const observedAttributes = this._target.observedAttributes as readonly string[] | undefined;
 
     if (observedAttributes && observedAttributes.includes(name)) {
       this.attributeChangedCallback(name, oldValue, value);
@@ -105,7 +105,7 @@ export class MockElement {
 
     delete this._attributes[name];
 
-    const observedAttributes: string[] = this._target.observedAttributes;
+    const observedAttributes = this._target.observedAttributes as readonly string[] | undefined;
 
     if (observedAttributes && observedAttributes.includes(name)) {
       this.attributeChangedCallback(name, oldValue, null);

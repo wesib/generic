@@ -45,7 +45,10 @@ export interface NavDataEnvelope {
 }
 
 function extractNavData(state: any): PartialNavData {
-  return state == null || typeof state !== 'object' ? { data: state } : state[NAV_DATA_KEY];
+  return state == null || typeof state !== 'object'
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      ? { data: state }
+      : state[NAV_DATA_KEY] as PartialNavData;
 }
 
 /**
@@ -75,9 +78,11 @@ export class NavHistory {
 
   init(): PageEntry {
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { data } = extractNavData(this._history.state);
     const entry = this.newEntry({
       url: new URL(this._location.href),
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       data,
       title: this._document.title,
     });
@@ -182,6 +187,7 @@ export class NavHistory {
       tracker: ValueTracker<PageEntry>,
   ): PageEntry | undefined {
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { state } = popState;
 
     if (state == null) {
@@ -194,6 +200,7 @@ export class NavHistory {
     }
 
     const fromEntry = tracker.it;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { uid, data, id: pageId } = extractNavData(state);
     let toEntry: PageEntry;
 
@@ -205,6 +212,7 @@ export class NavHistory {
       // Returning to page existed in previous app version
       toEntry = this.newEntry({
         url: new URL(this._location.href),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data,
         title: this._document.title,
       });
@@ -276,6 +284,7 @@ export class NavHistory {
       [NAV_DATA_KEY]: {
         uid: this._uid,
         id,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data,
       },
     };
@@ -318,7 +327,9 @@ export class PageEntry {
       get title() {
         return target.title;
       },
-      get data() {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      get data(): any {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return target.data;
       },
       get visited() {

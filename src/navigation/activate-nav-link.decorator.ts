@@ -16,6 +16,7 @@ import {
   nextAfterEvent,
 } from '@proc7ts/fun-events';
 import { css__naming, QualifiedName } from '@proc7ts/namespace-aliaser';
+import { RenderSchedule } from '@proc7ts/render-scheduler';
 import {
   Class,
   Component,
@@ -38,11 +39,6 @@ import { Page } from './page';
 interface ActiveNavLink {
   supply(): EventSupply;
 }
-
-/**
- * @internal
- */
-type ActiveNavLinks = Map<ElementNode, ActiveNavLink>;
 
 /**
  * Creates component decorator that marks navigation link(s) inside decorated component active.
@@ -71,7 +67,7 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
 
         context.whenConnected(() => {
 
-          let active: ActiveNavLinks = new Map();
+          let active = new Map<ElementNode, ActiveNavLink>();
 
           navigation.read().tillOff(context).consume(
               page => componentNode.select(select, pick).read().keepThru_(
@@ -82,7 +78,7 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
                   (...weights: NavLinkWeight[]) => {
 
                     const selected = selectActiveNavLinks(weights);
-                    const newActive: ActiveNavLinks = new Map();
+                    const newActive = new Map<ElementNode, ActiveNavLink>();
                     const result = eventSupply();
 
                     selected.forEach(node => {
@@ -291,7 +287,7 @@ function defaultNavLinkWeight(
     }: NavLinkOpts,
 ): AfterEvent<NavLinkWeight> {
 
-  const element: Element = node.element;
+  const { element } = node as { element: Element };
   const href = element.getAttribute('href');
 
   if (href == null) {
@@ -408,6 +404,15 @@ const defaultActiveNavLinkClass: QualifiedName = ['active', Wesib__NS];
 /**
  * @internal
  */
+interface RenderedElement extends Element {
+
+  [NavLinkRenderSchedule__symbol]?: RenderSchedule;
+
+}
+
+/**
+ * @internal
+ */
 function activateNavLink(
     context: ComponentContext,
     def: ActivateNavLinkDef,
@@ -419,7 +424,7 @@ function activateNavLink(
   const activate = def.activate ? def.activate.bind(def) : noop;
   const assignClass = (active: boolean, { node }: { node: ElementNode }): void => {
 
-    const element: Element = node.element;
+    const { element } = node as { element: Element };
     const { classList } = element;
 
     if (active) {
@@ -431,7 +436,7 @@ function activateNavLink(
 
   return opts => {
 
-    const { element } = opts.node;
+    const { element } = opts.node as { element: RenderedElement };
     const schedule = element[NavLinkRenderSchedule__symbol]
         || (element[NavLinkRenderSchedule__symbol] = scheduler(render));
     const makeActive = (active: boolean): void => {

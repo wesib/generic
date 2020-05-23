@@ -38,7 +38,7 @@ export function getHashURL(url: URL): URL {
  */
 export function setHashURL(url: URL, hashURL: URL): URL {
   if (hashURL.origin !== url.origin || hashURL.username) {
-    return new URL('#' + hashURL, url);
+    return new URL(`#${hashURL}`, url);
   }
 
   const { pathname, search, hash } = hashURL;

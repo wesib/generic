@@ -29,7 +29,7 @@ class AttributesObserver {
       return this._observer;
     }
 
-    const Observer: typeof MutationObserver = (this._bs.get(BootstrapWindow) as any).MutationObserver;
+    const Observer = this._bs.get(BootstrapWindow).MutationObserver;
 
     return this._observer = new Observer(mutations => this._update(mutations));
   }

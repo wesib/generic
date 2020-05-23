@@ -195,6 +195,7 @@ export class StayOnPageEvent extends Event {
     super(type, { ...init, cancelable: true });
     this.from = init.from;
     this.to = init.to;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.reason = init.reason;
   }
 

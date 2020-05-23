@@ -22,7 +22,7 @@ export const HierarchyRoot = (/*#__PURE__*/ new SingleContextKey<HierarchyRoot>(
     {
       byDefault: bsContext => {
 
-        const root: Element = bsContext.get(BootstrapRoot);
+        const root = bsContext.get(BootstrapRoot);
 
         new DomEventDispatcher(root).on<ComponentEvent>('wesib:component').to(
             ({ context }: ComponentEvent) => context.get(HierarchyUpdates).issue(),
@@ -80,7 +80,7 @@ export class HierarchyUpdates {
 export function findParentContext(of: ComponentContext): [ComponentContext, boolean] | undefined {
 
   const root = of.get(BootstrapContext).get(BootstrapRoot);
-  let element: Node = of.element;
+  let { element } = of as { element: Node };
   let immediate = true;
 
   if (element === root) {
@@ -94,7 +94,7 @@ export function findParentContext(of: ComponentContext): [ComponentContext, bool
       return;
     }
 
-    const ctx: ComponentContext = (parent as any)[ComponentContext__symbol];
+    const ctx = (parent as any)[ComponentContext__symbol] as ComponentContext | undefined;
 
     if (ctx) {
       return [ctx, immediate];

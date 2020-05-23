@@ -28,7 +28,7 @@ class PropertyTracker<T> extends ValueTracker<T> {
   }
 
   get it(): T {
-    return this._element[this._key];
+    return this._element[this._key] as T;
   }
 
   set it(value: T) {

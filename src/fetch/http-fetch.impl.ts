@@ -24,7 +24,7 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
 
       if ('AbortController' in window) {
 
-        const abortController = new (window as any).AbortController();
+        const abortController = new window.AbortController();
         const { signal } = abortController;
 
         supply = eventSupply(reason => {

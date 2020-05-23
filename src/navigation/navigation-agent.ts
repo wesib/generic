@@ -85,6 +85,7 @@ class NavigationAgentKey
                             {
                               url: nextURL = agentTo.url,
                               title: nextTitle = agentTo.title,
+                              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                               data: nextData = agentTo.data,
                             }: Navigation.Target = agentTo,
                         ) => navigate(
@@ -92,6 +93,7 @@ class NavigationAgentKey
                             {
                               url: new URL(String(nextURL), document.baseURI),
                               title: nextTitle,
+                              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                               data: nextData,
                               get visited() {
                                 return agentTo.visited;

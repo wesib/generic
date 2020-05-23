@@ -69,6 +69,7 @@ export class LocationMock {
 
         const oldIndex = this._index;
 
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         this._index = Math.max(0, Math.min(this.stateData.length - 1, oldIndex + delta));
         if (oldIndex !== this._index) {
           this.window.dispatchEvent(new PopStateEvent('popstate', { state: this.state() }));

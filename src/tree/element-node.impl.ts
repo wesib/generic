@@ -41,7 +41,7 @@ class ElementNode$ implements ComponentTreeNode {
   }
 
   get context(): ComponentContext<any> | undefined {
-    return (this.element as any)[ComponentContext__symbol];
+    return (this.element as any)[ComponentContext__symbol] as ComponentContext<any> | undefined;
   }
 
   get parent(): ElementNode | null {
@@ -74,7 +74,7 @@ class ElementNode$ implements ComponentTreeNode {
  */
 export function elementNodeOf(bsContext: BootstrapContext, element: Element, optional?: boolean): ElementNode {
 
-  const existing: ElementNode = (element as any)[ElementNode__symbol];
+  const existing = (element as any)[ElementNode__symbol] as ElementNode;
 
   return (existing || optional) ? existing : new ElementNode$(bsContext, element);
 }

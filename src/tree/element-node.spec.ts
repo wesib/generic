@@ -103,9 +103,9 @@ describe('tree', () => {
     }>]>([
       [
         'custom element property',
-        async (TestComponent: ComponentClass) => {
+        async (componentType: ComponentClass) => {
 
-          const element = new (await testElement(TestComponent))();
+          const element = new (await testElement(componentType))();
           const elementNode = ComponentContext.of(element).get(ComponentNode);
           const property = elementNode.property<string>('property');
 
@@ -118,7 +118,7 @@ describe('tree', () => {
       ],
       [
         'mounted element property',
-        async (TestComponent: ComponentClass) => {
+        async (componentType: ComponentClass) => {
 
           const root = await newComponentNode('root-component');
 
@@ -130,7 +130,7 @@ describe('tree', () => {
 
           const elementNode = itsFirst(root.node.select('test-component', { all: true }))!;
           const property = elementNode.property<string>('property');
-          const defContext = await testDefinition(TestComponent);
+          const defContext = await testDefinition(componentType);
 
           const mount = defContext.mountTo(element);
 

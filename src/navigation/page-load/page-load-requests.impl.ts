@@ -123,6 +123,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
                   emitter.send({
                     ok: false as const,
                     page,
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     error,
                   });
                 }

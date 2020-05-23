@@ -652,6 +652,7 @@ function createNavigation(context: BootstrapContext): Navigation {
           {
             from: nav.it.page,
             to: navTarget,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             reason,
           },
       ));
@@ -694,6 +695,7 @@ function createNavigation(context: BootstrapContext): Navigation {
         ({ url, data, title }) => {
           navigated = true;
           navTarget.url = url;
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           navTarget.data = data;
           navTarget.title = title;
         },

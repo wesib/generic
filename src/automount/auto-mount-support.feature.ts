@@ -92,7 +92,7 @@ function mountExistingElements(context: FeatureContext, { select = '*' }: AutoMo
   }
 
   const selector = select === true ? '*' : select;
-  const root: Element = context.get(BootstrapRoot);
+  const root = context.get(BootstrapRoot);
   const adapter = context.get(ElementAdapter);
   const document = context.get(BootstrapWindow).document;
   const adapt = (): void => {

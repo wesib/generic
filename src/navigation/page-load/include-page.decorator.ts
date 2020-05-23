@@ -41,7 +41,9 @@ export function IncludePage<T extends ComponentClass = Class>(
 ): ComponentDecorator<T> {
 
   const onResponse = def.onResponse ? def.onResponse.bind(def) : noop;
-  const contentKey = def.contentKey ? def.contentKey.bind(def) : defaultPageContentKey;
+  const contentKey: (page: Page) => string | undefined = def.contentKey
+      ? def.contentKey.bind(def)
+      : defaultPageContentKey;
 
   return Component({
     feature: {
@@ -54,7 +56,7 @@ export function IncludePage<T extends ComponentClass = Class>(
         const document = context.get(BootstrapWindow).document;
         const schedule = context.get(ElementRenderScheduler)(render);
         const navigation = context.get(Navigation);
-        let lastPageURL: string | undefined = contentKey(navigation.page);
+        let lastPageURL = contentKey(navigation.page);
         let detectFragment: () => PageFragmentRequest;
 
         if (fragment) {
@@ -62,7 +64,7 @@ export function IncludePage<T extends ComponentClass = Class>(
         } else {
           detectFragment = () => {
 
-            const { element: { id, tagName: tag } }: { element: Element } = context;
+            const { element: { id, tagName: tag } } = context as { element: Element };
 
             return id ? { id } : { tag };
           };
