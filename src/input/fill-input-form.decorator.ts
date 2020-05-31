@@ -5,7 +5,8 @@
 import { nextArgs, NextCall } from '@proc7ts/call-thru';
 import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from '@proc7ts/fun-events';
 import { InControl, InConverter, InFormElement } from '@proc7ts/input-aspects';
-import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
+import { Class } from '@proc7ts/primitives';
+import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { ComponentNode, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
 import { inputToForm } from './input-to-form';

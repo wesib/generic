@@ -1,7 +1,7 @@
 import { OnEvent } from '@proc7ts/fun-events';
+import { Class } from '@proc7ts/primitives';
 import {
   bootstrapComponents,
-  Class,
   ComponentClass,
   ComponentDef,
   CustomElements,

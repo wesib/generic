@@ -1,5 +1,5 @@
-import { noop } from '@proc7ts/call-thru';
 import { EventReceiver, EventSupply, eventSupply, onEventBy, onPromise } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';

@@ -2,7 +2,6 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { noop } from '@proc7ts/call-thru';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import {
   AfterEvent,
@@ -17,7 +16,8 @@ import {
   trackValue,
 } from '@proc7ts/fun-events';
 import { DomEventDispatcher, DomEventListener, OnDomEvent } from '@proc7ts/fun-events/dom';
-import { BootstrapContext, bootstrapDefault, BootstrapWindow, mergeFunctions } from '@wesib/wesib';
+import { mergeFunctions, noop } from '@proc7ts/primitives';
+import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { NavHistory, PageEntry } from './nav-history.impl';
 import { NavigationAgent } from './navigation-agent';
 import {

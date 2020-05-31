@@ -1,5 +1,4 @@
 import { flatMapIt, itsEach, itsIterator } from '@proc7ts/a-iterable';
-import { noop } from '@proc7ts/call-thru';
 import {
   EventEmitter,
   eventReceiver,
@@ -10,6 +9,7 @@ import {
   OnEvent,
   onEventBy,
 } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';

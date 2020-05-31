@@ -1,5 +1,5 @@
 import { filterIt, flatMapIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from '@proc7ts/a-iterable';
-import { isPresent, nextArg, valuesProvider } from '@proc7ts/call-thru';
+import { nextArg } from '@proc7ts/call-thru';
 import {
   AfterEvent,
   afterEventBy,
@@ -12,6 +12,7 @@ import {
   onEventBy,
 } from '@proc7ts/fun-events';
 import { html__naming } from '@proc7ts/namespace-aliaser';
+import { isPresent, valuesProvider } from '@proc7ts/primitives';
 import {
   BootstrapContext,
   ComponentClass,

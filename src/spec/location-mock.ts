@@ -1,6 +1,6 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
-import { noop } from '@proc7ts/call-thru';
+import { noop } from '@proc7ts/primitives';
 import { BootstrapWindow } from '@wesib/wesib';
 import { NAV_DATA_KEY, NavDataEnvelope, PartialNavData } from '../navigation/nav-history.impl';
 

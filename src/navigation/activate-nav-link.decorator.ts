@@ -3,7 +3,7 @@
  * @module @wesib/generic
  */
 import { mapIt } from '@proc7ts/a-iterable';
-import { nextArgs, noop } from '@proc7ts/call-thru';
+import { nextArgs } from '@proc7ts/call-thru';
 import {
   afterEach,
   AfterEvent,
@@ -16,9 +16,9 @@ import {
   nextAfterEvent,
 } from '@proc7ts/fun-events';
 import { css__naming, QualifiedName } from '@proc7ts/namespace-aliaser';
+import { Class, noop } from '@proc7ts/primitives';
 import { RenderSchedule } from '@proc7ts/render-scheduler';
 import {
-  Class,
   Component,
   ComponentClass,
   ComponentContext,

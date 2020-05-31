@@ -2,11 +2,10 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { noop, valueProvider } from '@proc7ts/call-thru';
 import { eventSupply } from '@proc7ts/fun-events';
+import { Class, noop, valueProvider } from '@proc7ts/primitives';
 import {
   BootstrapWindow,
-  Class,
   Component,
   ComponentClass,
   ComponentContext,

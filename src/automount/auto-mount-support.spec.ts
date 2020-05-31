@@ -1,5 +1,5 @@
-import { noop } from '@proc7ts/call-thru';
-import { bootstrapComponents, BootstrapRoot, Class, ElementAdapter, Feature, FeatureDef__symbol } from '@wesib/wesib';
+import { Class, noop } from '@proc7ts/primitives';
+import { bootstrapComponents, BootstrapRoot, ElementAdapter, Feature, FeatureDef__symbol } from '@wesib/wesib';
 import { autoMountSupport, AutoMountSupport } from './auto-mount-support.feature';
 import SpyInstance = jest.SpyInstance;
 

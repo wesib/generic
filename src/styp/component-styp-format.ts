@@ -2,10 +2,10 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { valueProvider } from '@proc7ts/call-thru';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import { EventSupply, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
 import { NamespaceAliaser } from '@proc7ts/namespace-aliaser';
+import { elementOrArray, extendSetOfElements, setOfElements, valueProvider } from '@proc7ts/primitives';
 import { RenderScheduler } from '@proc7ts/render-scheduler';
 import {
   lazyStypRules,
@@ -20,7 +20,7 @@ import {
   stypSelector,
   StypSubSelector,
 } from '@proc7ts/style-producer';
-import { ArraySet, ComponentContext, ShadowContentRoot } from '@wesib/wesib';
+import { ComponentContext, ShadowContentRoot } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
 import { componentStypDomFormatConfig } from './component-styp-dom.format-config';
 import { ComponentStypRenderer } from './component-styp-renderer';
@@ -203,8 +203,11 @@ export abstract class ComponentStypFormat {
 
     const shadowRoot = this.context.get(ShadowContentRoot, { or: null });
     const { renderer } = config;
-    const renderers = new ArraySet<StypRenderer>(renderer)
-        .add(...this.context.get(ComponentStypRenderer));
+    const renderers = extendSetOfElements(
+        setOfElements<StypRenderer>(renderer),
+        this.context.get(ComponentStypRenderer),
+    );
+
     const hostSelector = config.hostSelector
         ? stypSelector(config.hostSelector)[0] as StypPureSelector.NormalizedPart
         : undefined;
@@ -213,7 +216,7 @@ export abstract class ComponentStypFormat {
         ? shadowRenderer(hostSelector)
         : noShadowRenderer(hostSelector || { c: [this.context.get(ElementIdClass)] }));
 
-    return renderers.value;
+    return elementOrArray(renderers);
   }
 
 }

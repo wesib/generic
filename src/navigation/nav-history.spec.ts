@@ -1,4 +1,4 @@
-import { noop } from '@proc7ts/call-thru';
+import { noop } from '@proc7ts/primitives';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { LocationMock, navHistoryState } from '../spec/location-mock';
 import { testPageParam, testPageParamHandle } from '../spec/test-page-param';

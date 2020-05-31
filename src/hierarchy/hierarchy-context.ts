@@ -2,7 +2,6 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { noop } from '@proc7ts/call-thru';
 import {
   ContextKey,
   ContextKey__symbol,
@@ -23,6 +22,7 @@ import {
   trackValue,
   ValueTracker,
 } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
 import { BootstrapContext, ComponentContext } from '@wesib/wesib';
 import { newHierarchyRegistry } from './hierarchy-registry.impl';
 import { findParentContext, HierarchyRoot, HierarchyUpdates } from './hierarchy-updates.impl';

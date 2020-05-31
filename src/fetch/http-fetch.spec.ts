@@ -1,8 +1,8 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
 import SpyInstance = jest.SpyInstance;
-import { noop } from '@proc7ts/call-thru';
 import { EventReceiver, EventSupply } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';

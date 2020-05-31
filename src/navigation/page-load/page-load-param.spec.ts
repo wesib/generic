@@ -1,5 +1,5 @@
-import { noop } from '@proc7ts/call-thru';
 import { afterThe, EventEmitter, eventSupply } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';

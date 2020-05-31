@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { noop, valueProvider } from '@proc7ts/call-thru';
 import { ContextUpRef, FnContextKey } from '@proc7ts/context-values/updatable';
+import { noop, valueProvider } from '@proc7ts/primitives';
 
 /**
  * A signature of page load URL modifier function.

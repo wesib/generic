@@ -1,7 +1,8 @@
 import { itsEmpty, itsFirst } from '@proc7ts/a-iterable';
 import { ContextRegistry } from '@proc7ts/context-values';
+import { Class } from '@proc7ts/primitives';
 import { RefStypRule, StypLength, StypRule, StypRuleList, StypRuleRef } from '@proc7ts/style-producer';
-import { bootstrapComponents, BootstrapContext, Class, Feature } from '@wesib/wesib';
+import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { Theme } from './theme';
 import { ThemeStyle } from './theme-style';
 
@@ -160,7 +161,7 @@ describe('theme', () => {
       });
     });
 
-    async function bootstrap(...features: Class<any>[]): Promise<BootstrapContext> {
+    async function bootstrap(...features: Class[]): Promise<BootstrapContext> {
 
       @Feature({
         init(context) {

@@ -1,7 +1,7 @@
+import { Class } from '@proc7ts/primitives';
 import {
   bootstrapComponents,
   BootstrapRoot,
-  Class,
   Component,
   ComponentClass,
   ComponentContext,

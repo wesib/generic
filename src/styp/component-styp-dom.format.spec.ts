@@ -1,6 +1,6 @@
-import { noop } from '@proc7ts/call-thru';
 import { ContextRegistry } from '@proc7ts/context-values';
 import { newNamespaceAliaser } from '@proc7ts/namespace-aliaser';
+import { noop } from '@proc7ts/primitives';
 import { immediateRenderScheduler } from '@proc7ts/render-scheduler';
 import {
   BootstrapWindow,

@@ -4,10 +4,10 @@
  */
 import { itsEach, overArray } from '@proc7ts/a-iterable';
 import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
+import { Class } from '@proc7ts/primitives';
 import {
   BootstrapRoot,
   BootstrapWindow,
-  Class,
   ElementAdapter,
   FeatureContext,
   FeatureDef,

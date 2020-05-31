@@ -2,7 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { ArraySet, Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
+import { Class, setOfElements } from '@proc7ts/primitives';
+import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { Navigation } from './navigation';
 import { Page } from './page';
 
@@ -21,7 +22,7 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
 ): ComponentDecorator<T> {
 
   const handle = def.handle ? def.handle.bind(def) : defaultHandleNavLinks(def);
-  const events = new ArraySet(def.event || 'click');
+  const events = setOfElements(def.event || 'click');
 
   return Component({
     define(defContext) {

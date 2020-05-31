@@ -12,7 +12,8 @@ import {
   OnEventCallChain,
 } from '@proc7ts/fun-events';
 import { InControl, InConverter } from '@proc7ts/input-aspects';
-import { Class, Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
+import { Class } from '@proc7ts/primitives';
+import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { DefaultInAspects } from './default-in-aspects';
 import { inputFromControl, InputFromControl, NoInputFromControl } from './input-from-control';

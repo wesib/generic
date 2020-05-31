@@ -1,5 +1,5 @@
-import { valueProvider } from '@proc7ts/call-thru';
 import { afterThe } from '@proc7ts/fun-events';
+import { valueProvider } from '@proc7ts/primitives';
 import { immediateRenderScheduler } from '@proc7ts/render-scheduler';
 import { bootstrapComponents, BootstrapWindow, Component, ComponentMount, DefaultRenderScheduler } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
