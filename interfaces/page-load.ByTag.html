@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Failure | Wesib: Generic Components</title>
+	<title>ByTag | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,27 +54,31 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/@wesib_generic.html">@wesib/generic</a>
+					<a href="../modules/page-load.html">page-load</a>
 				</li>
 				<li>
-					<a href="../modules/@wesib_generic.PageLoadResponse.html">PageLoadResponse</a>
-				</li>
-				<li>
-					<a href="@wesib_generic.PageLoadResponse.Failure.html">Failure</a>
+					<a href="page-load.ByTag.html">ByTag</a>
 				</li>
 			</ul>
-			<h1>Interface Failure</h1>
+			<h1>Interface ByTag</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>A request of page element with the given tag name.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Failure</span>
+						<span class="target">ByTag</span>
 					</li>
 				</ul>
 			</section>
@@ -85,11 +89,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@wesib_generic.PageLoadResponse.Failure.html#document" class="tsd-kind-icon">document</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@wesib_generic.PageLoadResponse.Failure.html#error" class="tsd-kind-icon">error</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@wesib_generic.PageLoadResponse.Failure.html#ok" class="tsd-kind-icon">ok</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@wesib_generic.PageLoadResponse.Failure.html#page" class="tsd-kind-icon">page</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@wesib_generic.PageLoadResponse.Failure.html#response" class="tsd-kind-icon">response</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="page-load.ByTag.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="page-load.ByTag.html#tag" class="tsd-kind-icon">tag</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,77 +99,27 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="document" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> document</h3>
-					<div class="tsd-signature tsd-kind-icon">document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Document</span></div>
+					<a name="id" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> id</h3>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/72126f3/src/navigation/page-load/page-load-response.ts#L95">wesib/generic/src/navigation/page-load/page-load-response.ts:95</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/bb7f255/src/navigation/page-load/page-load-request.ts#L65">wesib/generic/src/navigation/page-load/page-load-request.ts:65</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Error document.</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="error" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> error</h3>
-					<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<a name="tag" class="tsd-anchor"></a>
+					<h3>tag</h3>
+					<div class="tsd-signature tsd-kind-icon">tag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/72126f3/src/navigation/page-load/page-load-response.ts#L100">wesib/generic/src/navigation/page-load/page-load-response.ts:100</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/bb7f255/src/navigation/page-load/page-load-request.ts#L70">wesib/generic/src/navigation/page-load/page-load-request.ts:70</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Page load error. Always present.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="ok" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> ok</h3>
-					<div class="tsd-signature tsd-kind-icon">ok<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/72126f3/src/navigation/page-load/page-load-response.ts#L80">wesib/generic/src/navigation/page-load/page-load-response.ts:80</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Page load completeness flag. Always <code>false</code>.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="page" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> page</h3>
-					<div class="tsd-signature tsd-kind-icon">page<span class="tsd-signature-symbol">:</span> <a href="@wesib_generic.Page.html" class="tsd-signature-type">Page</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/72126f3/src/navigation/page-load/page-load-response.ts#L85">wesib/generic/src/navigation/page-load/page-load-response.ts:85</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The page failed to load.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="response" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> response</h3>
-					<div class="tsd-signature tsd-kind-icon">response<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Response</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/72126f3/src/navigation/page-load/page-load-response.ts#L90">wesib/generic/src/navigation/page-load/page-load-response.ts:90</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>HTTP fetch response.</p>
+							<p>Requested element tag name.</p>
 						</div>
 					</div>
 				</section>
@@ -180,39 +131,54 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-module tsd-is-not-exported">
+						<a href="../modules/reflection-1010.html">&lt;em&gt;<wbr>Module&lt;/em&gt;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/@wesib_generic.html">@wesib/generic</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/@wesib_generic_input.html">@wesib/generic/input</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/@wesib_generic_styp.html">@wesib/generic/styp</a>
+					</li>
+					<li class="current tsd-kind-namespace">
+						<a href="../modules/page-load.html">page-<wbr>load</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="page-load.ById.html" class="tsd-kind-icon">By<wbr>Id</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="@wesib_generic.PageLoadResponse.Failure.html" class="tsd-kind-icon">Failure</a>
+						<a href="page-load.ByTag.html" class="tsd-kind-icon">By<wbr>Tag</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@wesib_generic.PageLoadResponse.Failure.html#document" class="tsd-kind-icon">document</a>
+								<a href="page-load.ByTag.html#id" class="tsd-kind-icon">id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@wesib_generic.PageLoadResponse.Failure.html#error" class="tsd-kind-icon">error</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@wesib_generic.PageLoadResponse.Failure.html#ok" class="tsd-kind-icon">ok</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@wesib_generic.PageLoadResponse.Failure.html#page" class="tsd-kind-icon">page</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@wesib_generic.PageLoadResponse.Failure.html#response" class="tsd-kind-icon">response</a>
+								<a href="page-load.ByTag.html#tag" class="tsd-kind-icon">tag</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="@wesib_generic.PageLoadResponse.Ok.html" class="tsd-kind-icon">Ok</a>
+						<a href="page-load.Failure.html" class="tsd-kind-icon">Failure</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="@wesib_generic.PageLoadResponse.Start.html" class="tsd-kind-icon">Start</a>
+						<a href="page-load.Ok.html" class="tsd-kind-icon">Ok</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="page-load.Start.html" class="tsd-kind-icon">Start</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
+						<a href="../modules/page-load.html#Combined" class="tsd-kind-icon">Combined</a>
 					</li>
 				</ul>
 			</nav>
@@ -224,7 +190,6 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>

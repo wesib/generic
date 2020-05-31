@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>NavigationAgent | Wesib: Generic Components</title>
+	<title> | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,13 +54,16 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="@wesib_generic.html">@wesib/generic</a>
+					<a href="reflection-1010.html"></a>
 				</li>
 				<li>
-					<a href="@wesib_generic.NavigationAgent.html">NavigationAgent</a>
+					<a href="reflection-1010.reflection-1011.html"></a>
+				</li>
+				<li>
+					<a href="reflection-1010.reflection-1011.reflection-355.html"></a>
 				</li>
 			</ul>
-			<h1>Namespace NavigationAgent</h1>
+			<h1>Namespace &lt;T, I&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -70,19 +73,65 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A key of context value containing an <a href="@wesib_generic.NavigationAgent.html">NavigationAgent</a> instance.</p>
+						<p>A key of context value containing an [[NavigationAgent]] instance.</p>
 					</div>
 					<p>The agent returned combines all registered agents into one. If no agent registered it just performs the navigation.</p>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>T</h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Parameter value type.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>I</h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Parameter input type.</p>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../interfaces/@wesib_generic.PageParam.Ref.html" class="tsd-signature-type">Ref</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/reflection-1010.reflection-1011.reflection-355.Ref.html" class="tsd-kind-icon">Ref</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="@wesib_generic.NavigationAgent.html#Combined" class="tsd-kind-icon">Combined</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="reflection-1010.reflection-1011.reflection-355.html#Combined" class="tsd-kind-icon">Combined</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-namespace tsd-is-inherited"><a href="reflection-1010.reflection-1011.reflection-355.html#_PageParam__symbol_" class="tsd-kind-icon">[<wbr>Page<wbr>Param__symbol]</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-namespace tsd-is-overwrite"><a href="reflection-1010.reflection-1011.reflection-355.html#byDefault" class="tsd-kind-icon">by<wbr>Default</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-namespace tsd-is-inherited"><a href="reflection-1010.reflection-1011.reflection-355.html#create" class="tsd-kind-icon">create</a></li>
 							</ul>
 						</section>
 					</div>
@@ -96,14 +145,14 @@
 					<div class="tsd-signature tsd-kind-icon">Combined<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, target<span class="tsd-signature-symbol">: </span><a href="../interfaces/@wesib_generic.Navigation.URLTarget.html" class="tsd-signature-type">URLTarget</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span>, when<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"pretend"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"pre-open"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"pre-replace"</span>, from<span class="tsd-signature-symbol">: </span><a href="../interfaces/@wesib_generic.Page.html" class="tsd-signature-type">Page</a>, to<span class="tsd-signature-symbol">: </span><a href="../interfaces/@wesib_generic.Page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/72126f3/src/navigation/navigation-agent.ts#L166">wesib/generic/src/navigation/navigation-agent.ts:166</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/bb7f255/src/navigation/navigation-agent.ts#L166">wesib/generic/src/navigation/navigation-agent.ts:166</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Combined navigation agent signature.</p>
 						</div>
-						<p>This is what is available under <a href="@wesib_generic.NavigationAgent.html">NavigationAgent</a> key.</p>
+						<p>This is what is available under [[NavigationAgent]] key.</p>
 					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
@@ -188,6 +237,105 @@
 					</div>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-namespace tsd-is-inherited">
+					<a name="_PageParam__symbol_" class="tsd-anchor"></a>
+					<h3>[<wbr>Page<wbr>Param__symbol]</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-namespace tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> [PageParam__symbol]<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="../classes/@wesib_generic.PageParam.html">PageParam</a>.<a href="../classes/@wesib_generic.PageParam.html#_PageParam__symbol_">[PageParam__symbol]</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/bb7f255/src/navigation/page-param.ts#L24">wesib/generic/src/navigation/page-param.ts:24</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-namespace tsd-is-overwrite">
+					<a name="byDefault" class="tsd-anchor"></a>
+					<h3>by<wbr>Default</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-namespace tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">by<wbr>Default<span class="tsd-signature-symbol">(</span>page<span class="tsd-signature-symbol">: </span><a href="../interfaces/@wesib_generic.Page.html" class="tsd-signature-type">Page</a>, context<span class="tsd-signature-symbol">: </span><a href="../classes/@wesib_generic.PageParamContext.html" class="tsd-signature-type">PageParamContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/@wesib_generic.PageParam.Handle.html" class="tsd-signature-type">Handle</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides <a href="../classes/@wesib_generic.PageParam.html">PageParam</a>.<a href="../classes/@wesib_generic.PageParam.html#byDefault">byDefault</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/bb7f255/src/navigation/page-param.ts#L87">wesib/generic/src/navigation/page-param.ts:87</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>page: <a href="../interfaces/@wesib_generic.Page.html" class="tsd-signature-type">Page</a></h5>
+								</li>
+								<li>
+									<h5>context: <a href="../classes/@wesib_generic.PageParamContext.html" class="tsd-signature-type">PageParamContext</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/@wesib_generic.PageParam.Handle.html" class="tsd-signature-type">Handle</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-namespace tsd-is-inherited">
+					<a name="create" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> create</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-namespace tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>page<span class="tsd-signature-symbol">: </span><a href="../interfaces/@wesib_generic.Page.html" class="tsd-signature-type">Page</a>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">I</span>, context<span class="tsd-signature-symbol">: </span><a href="../classes/@wesib_generic.PageParamContext.html" class="tsd-signature-type">PageParamContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/@wesib_generic.PageParam.Handle.html" class="tsd-signature-type">Handle</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="../classes/@wesib_generic.PageParam.html">PageParam</a>.<a href="../classes/@wesib_generic.PageParam.html#create">create</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/bb7f255/src/navigation/page-param.ts#L41">wesib/generic/src/navigation/page-param.ts:41</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates page parameter handle.</p>
+								</div>
+								<p>This method is called when <a href="../interfaces/@wesib_generic.Page.html#put">assigning new page parameter</a>. It is called at most once per request,
+									unless this parameter is assigned already. A <a href="../interfaces/@wesib_generic.PageParam.Handle.html#put">PageParam.Handle.put</a> method will be called instead
+								in the latter case.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>page: <a href="../interfaces/@wesib_generic.Page.html" class="tsd-signature-type">Page</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A page to assign navigation parameter to.</p>
+									</div>
+								</li>
+								<li>
+									<h5>input: <span class="tsd-signature-type">I</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Parameter input used to construct its initial value.</p>
+									</div>
+								</li>
+								<li>
+									<h5>context: <a href="../classes/@wesib_generic.PageParamContext.html" class="tsd-signature-type">PageParamContext</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Page parameter context.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/@wesib_generic.PageParam.Handle.html" class="tsd-signature-type">Handle</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>New page parameter value handle.</p>
+						</li>
+					</ul>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
@@ -199,8 +347,20 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../interfaces/reflection-1010.reflection-1011.reflection-355.Ref.html" class="tsd-kind-icon">Ref</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
-						<a href="@wesib_generic.NavigationAgent.html#Combined" class="tsd-kind-icon">Combined</a>
+						<a href="reflection-1010.reflection-1011.reflection-355.html#Combined" class="tsd-kind-icon">Combined</a>
+					</li>
+					<li class=" tsd-kind-get-signature tsd-parent-kind-namespace tsd-is-inherited">
+						<a href="reflection-1010.reflection-1011.reflection-355.html#_PageParam__symbol_" class="tsd-kind-icon">[<wbr>Page<wbr>Param__symbol]</a>
+					</li>
+					<li class=" tsd-kind-method tsd-parent-kind-namespace tsd-is-overwrite">
+						<a href="reflection-1010.reflection-1011.reflection-355.html#byDefault" class="tsd-kind-icon">by<wbr>Default</a>
+					</li>
+					<li class=" tsd-kind-method tsd-parent-kind-namespace tsd-is-inherited">
+						<a href="reflection-1010.reflection-1011.reflection-355.html#create" class="tsd-kind-icon">create</a>
 					</li>
 				</ul>
 			</nav>
@@ -212,7 +372,6 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>

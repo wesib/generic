@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>PageLoadAgent | Wesib: Generic Components</title>
+	<title>page-load | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,13 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="@wesib_generic.html">@wesib/generic</a>
-				</li>
-				<li>
-					<a href="@wesib_generic.PageLoadAgent.html">PageLoadAgent</a>
+					<a href="page-load.html">page-load</a>
 				</li>
 			</ul>
-			<h1>Namespace PageLoadAgent</h1>
+			<h1>Namespace page-load</h1>
 		</div>
 	</div>
 </header>
@@ -70,9 +67,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A key of context value containing an <a href="@wesib_generic.PageLoadAgent.html">PageLoadAgent</a> instance.</p>
+						<p>Page fragment request.</p>
 					</div>
-					<p>The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -80,9 +76,19 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/page-load.ById.html" class="tsd-kind-icon">By<wbr>Id</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/page-load.ByTag.html" class="tsd-kind-icon">By<wbr>Tag</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/page-load.Failure.html" class="tsd-kind-icon">Failure</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/page-load.Ok.html" class="tsd-kind-icon">Ok</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/page-load.Start.html" class="tsd-kind-icon">Start</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="@wesib_generic.PageLoadAgent.html#Combined" class="tsd-kind-icon">Combined</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="page-load.html#Combined" class="tsd-kind-icon">Combined</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,24 +99,24 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace">
 					<a name="Combined" class="tsd-anchor"></a>
 					<h3>Combined</h3>
-					<div class="tsd-signature tsd-kind-icon">Combined<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="@wesib_generic.PageLoadResponse.html" class="tsd-signature-type">PageLoadResponse</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="@wesib_generic.PageLoadResponse.html" class="tsd-signature-type">PageLoadResponse</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Combined<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">PageLoadResponse</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">PageLoadResponse</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/72126f3/src/navigation/page-load/page-load-agent.ts#L40">wesib/generic/src/navigation/page-load/page-load-agent.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/bb7f255/src/navigation/page-load/page-load-agent.ts#L40">wesib/generic/src/navigation/page-load/page-load-agent.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Combined page load agent signature.</p>
 						</div>
-						<p>This is what is available under <a href="@wesib_generic.PageLoadAgent.html">PageLoadAgent</a> key.</p>
+						<p>This is what is available under [[PageLoadAgent]] key.</p>
 					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="@wesib_generic.PageLoadResponse.html" class="tsd-signature-type">PageLoadResponse</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="@wesib_generic.PageLoadResponse.html" class="tsd-signature-type">PageLoadResponse</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">PageLoadResponse</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">PageLoadResponse</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -122,7 +128,7 @@
 												<h5>this: <span class="tsd-signature-type">void</span></h5>
 											</li>
 											<li>
-												<h5>next: <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="@wesib_generic.PageLoadResponse.html" class="tsd-signature-type">PageLoadResponse</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h5>
+												<h5>next: <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">PageLoadResponse</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h5>
 												<div class="tsd-comment tsd-typography">
 													<p>Either calls the next agent in chain, or actually loads page document if this agent is the last one.
 													Accepts <code>Request</code> parameter.</p>
@@ -130,7 +136,7 @@
 												<ul class="tsd-parameters">
 													<li class="tsd-parameter-signature">
 														<ul class="tsd-signatures tsd-kind-type-literal">
-															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="@wesib_generic.PageLoadResponse.html" class="tsd-signature-type">PageLoadResponse</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">PageLoadResponse</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 														</ul>
 														<ul class="tsd-descriptions">
 															<li class="tsd-description">
@@ -147,7 +153,7 @@
 																		<h5>request: <span class="tsd-signature-type">Request</span></h5>
 																	</li>
 																</ul>
-																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="@wesib_generic.PageLoadResponse.html" class="tsd-signature-type">PageLoadResponse</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">PageLoadResponse</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 															</li>
 														</ul>
 													</li>
@@ -162,7 +168,7 @@
 												</div>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="@wesib_generic.PageLoadResponse.html" class="tsd-signature-type">PageLoadResponse</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">PageLoadResponse</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 										<p>An <code>OnEvent</code> registrar of loaded document.</p>
 									</li>
 								</ul>
@@ -178,12 +184,42 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-module tsd-is-not-exported">
+						<a href="reflection-1010.html">&lt;em&gt;<wbr>Module&lt;/em&gt;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="@wesib_generic.html">@wesib/generic</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="@wesib_generic_input.html">@wesib/generic/input</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="@wesib_generic_styp.html">@wesib/generic/styp</a>
+					</li>
+					<li class="current tsd-kind-namespace">
+						<a href="page-load.html">page-<wbr>load</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="../interfaces/page-load.ById.html" class="tsd-kind-icon">By<wbr>Id</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="../interfaces/page-load.ByTag.html" class="tsd-kind-icon">By<wbr>Tag</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="../interfaces/page-load.Failure.html" class="tsd-kind-icon">Failure</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="../interfaces/page-load.Ok.html" class="tsd-kind-icon">Ok</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="../interfaces/page-load.Start.html" class="tsd-kind-icon">Start</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
-						<a href="@wesib_generic.PageLoadAgent.html#Combined" class="tsd-kind-icon">Combined</a>
+						<a href="page-load.html#Combined" class="tsd-kind-icon">Combined</a>
 					</li>
 				</ul>
 			</nav>
@@ -195,7 +231,6 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
