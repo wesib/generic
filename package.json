@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@hatsy/http-header-value": "^3.0.0",
-    "@proc7ts/a-iterable": "^2.6.1",
+    "@proc7ts/a-iterable": "^2.7.0",
     "@proc7ts/primitives": "^1.0.2"
   },
   "peerDependenciesMeta": {
