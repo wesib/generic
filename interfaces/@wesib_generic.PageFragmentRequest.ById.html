@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Ref | Wesib: Generic Components</title>
+	<title>ById | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,19 +54,16 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/reflection-1010.html"></a>
+					<a href="../modules/@wesib_generic.html">@wesib/generic</a>
 				</li>
 				<li>
-					<a href="../modules/reflection-1010.reflection-1011.html"></a>
+					<a href="../modules/@wesib_generic.PageFragmentRequest.html">PageFragmentRequest</a>
 				</li>
 				<li>
-					<a href="../modules/reflection-1010.reflection-1011.reflection-355.html"></a>
-				</li>
-				<li>
-					<a href="reflection-1010.reflection-1011.reflection-355.Ref.html">Ref</a>
+					<a href="@wesib_generic.PageFragmentRequest.ById.html">ById</a>
 				</li>
 			</ul>
-			<h1>Interface Ref&lt;T, I&gt;</h1>
+			<h1>Interface ById</h1>
 		</div>
 	</div>
 </header>
@@ -76,36 +73,15 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A reference to page navigation parameter that has default value.</p>
+						<p>A request of page element with the given identifier.</p>
 					</div>
 				</div>
-			</section>
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>T</h4>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Parameter value type.</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<h4>I</h4>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Parameter input type.</p>
-							</div>
-						</div>
-					</li>
-				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Ref</span>
+						<span class="target">ById</span>
 					</li>
 				</ul>
 			</section>
@@ -116,7 +92,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-1010.reflection-1011.reflection-355.Ref.html#_PageParam__symbol_" class="tsd-kind-icon">[<wbr>Page<wbr>Param__symbol]</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@wesib_generic.PageFragmentRequest.ById.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@wesib_generic.PageFragmentRequest.ById.html#tag" class="tsd-kind-icon">tag</a></li>
 							</ul>
 						</section>
 					</div>
@@ -125,19 +102,29 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="_PageParam__symbol_" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> [<wbr>Page<wbr>Param__symbol]</h3>
-					<div class="tsd-signature tsd-kind-icon">[<wbr>Page<wbr>Param__symbol]<span class="tsd-signature-symbol">:</span> <a href="../modules/reflection-1010.reflection-1011.html" class="tsd-signature-type"></a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="id" class="tsd-anchor"></a>
+					<h3>id</h3>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/bb7f255/src/navigation/page-param.ts#L104">wesib/generic/src/navigation/page-param.ts:104</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/8746dce/src/navigation/page-load/page-load-request.ts#L54">wesib/generic/src/navigation/page-load/page-load-request.ts:54</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Referred page navigation parameter instance.</p>
+							<p>Requested element identifier.</p>
 						</div>
 					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="tag" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tag</h3>
+					<div class="tsd-signature tsd-kind-icon">tag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/8746dce/src/navigation/page-load/page-load-request.ts#L56">wesib/generic/src/navigation/page-load/page-load-request.ts:56</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -153,27 +140,21 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="reflection-1010.reflection-1011.reflection-355.Ref.html" class="tsd-kind-icon">Ref</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="@wesib_generic.PageFragmentRequest.ById.html" class="tsd-kind-icon">By<wbr>Id</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="reflection-1010.reflection-1011.reflection-355.Ref.html#_PageParam__symbol_" class="tsd-kind-icon">[<wbr>Page<wbr>Param__symbol]</a>
+								<a href="@wesib_generic.PageFragmentRequest.ById.html#id" class="tsd-kind-icon">id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="@wesib_generic.PageFragmentRequest.ById.html#tag" class="tsd-kind-icon">tag</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
-						<a href="../modules/reflection-1010.reflection-1011.reflection-355.html#Combined" class="tsd-kind-icon">Combined</a>
-					</li>
-					<li class=" tsd-kind-get-signature tsd-parent-kind-namespace tsd-is-inherited">
-						<a href="../modules/reflection-1010.reflection-1011.reflection-355.html#_PageParam__symbol_" class="tsd-kind-icon">[<wbr>Page<wbr>Param__symbol]</a>
-					</li>
-					<li class=" tsd-kind-method tsd-parent-kind-namespace tsd-is-overwrite">
-						<a href="../modules/reflection-1010.reflection-1011.reflection-355.html#byDefault" class="tsd-kind-icon">by<wbr>Default</a>
-					</li>
-					<li class=" tsd-kind-method tsd-parent-kind-namespace tsd-is-inherited">
-						<a href="../modules/reflection-1010.reflection-1011.reflection-355.html#create" class="tsd-kind-icon">create</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="@wesib_generic.PageFragmentRequest.ByTag.html" class="tsd-kind-icon">By<wbr>Tag</a>
 					</li>
 				</ul>
 			</nav>
@@ -185,6 +166,7 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
