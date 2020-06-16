@@ -366,13 +366,10 @@ function navLinkSearchParamsWeight(
 
   let weight = 0;
 
-  linkParams.forEach((_value, key) => {
+  linkParams.forEach((value, key) => {
     if (!isIgnoredSearchParam(key)) {
-
-      const pageValues = new Set(pageParams.getAll(key));
-
       if (weight >= 0) {
-        if (linkParams.getAll(key).every(linkValue => pageValues.has(linkValue))) {
+        if (pageParams.getAll(key).includes(value)) {
           weight += 1;
         } else {
           weight = -1;
