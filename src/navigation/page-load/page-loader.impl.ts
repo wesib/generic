@@ -121,7 +121,7 @@ function parsePageDocument(parser: DOMParser, url: URL, response: Response, text
 
   const doc = parser.parseFromString(
       text,
-      hthvParse(response.headers.get('Content-Type') || 'text/html')[0].v as SupportedType,
+      hthvParse(response.headers.get('Content-Type') || 'text/html')[0].v as DOMParserSupportedType,
   );
 
   if (doc.head) {
