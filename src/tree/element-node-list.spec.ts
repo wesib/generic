@@ -1,6 +1,6 @@
-import { itsEmpty, mapIt } from '@proc7ts/a-iterable';
 import { afterSupplied, onSupplied } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
+import { itsEmpty, mapIt } from '@proc7ts/push-iterator';
 import {
   bootstrapComponents,
   BootstrapContext,

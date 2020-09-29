@@ -1,6 +1,6 @@
-import { itsEmpty, itsFirst } from '@proc7ts/a-iterable';
 import { ContextRegistry } from '@proc7ts/context-values';
 import { Class } from '@proc7ts/primitives';
+import { itsEmpty, itsFirst } from '@proc7ts/push-iterator';
 import { RefStypRule, StypLength, StypRule, StypRuleList, StypRuleRef } from '@proc7ts/style-producer';
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { Theme } from './theme';

@@ -1,7 +1,7 @@
-import { itsEach } from '@proc7ts/a-iterable';
 import { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } from '@proc7ts/context-values';
 import { ValueTracker } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
+import { itsEach } from '@proc7ts/push-iterator';
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { Navigation } from './navigation';
 import { Page } from './page';

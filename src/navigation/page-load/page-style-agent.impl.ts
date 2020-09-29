@@ -1,4 +1,4 @@
-import { itsEach, itsFirst, overArray } from '@proc7ts/a-iterable';
+import { itsEach, itsFirst, overArray } from '@proc7ts/push-iterator';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { importNode } from '../../util';
 import { PageLoadAgent } from './page-load-agent';
