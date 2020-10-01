@@ -2,7 +2,6 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { mapIt } from '@proc7ts/a-iterable';
 import { nextArgs } from '@proc7ts/call-thru';
 import {
   afterEach,
@@ -17,6 +16,7 @@ import {
 } from '@proc7ts/fun-events';
 import { css__naming, QualifiedName } from '@proc7ts/namespace-aliaser';
 import { Class, noop } from '@proc7ts/primitives';
+import { mapIt } from '@proc7ts/push-iterator';
 import { RenderSchedule } from '@proc7ts/render-scheduler';
 import {
   Component,

@@ -1,4 +1,3 @@
-import { filterIt, flatMapIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from '@proc7ts/a-iterable';
 import { nextArg } from '@proc7ts/call-thru';
 import {
   AfterEvent,
@@ -13,6 +12,7 @@ import {
 } from '@proc7ts/fun-events';
 import { html__naming } from '@proc7ts/namespace-aliaser';
 import { isPresent, valuesProvider } from '@proc7ts/primitives';
+import { filterIt, flatMapIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from '@proc7ts/push-iterator';
 import {
   BootstrapContext,
   ComponentClass,
@@ -261,6 +261,6 @@ export function elementNodeList<N extends ElementNode>(
 function overNodeSubtree(nodes: NodeList): Iterable<Node> {
   return flatMapIt(
       overArray(nodes),
-      node => [node, ...overNodeSubtree(node.childNodes)],
+      node => overArray([node, ...overNodeSubtree(node.childNodes)]),
   );
 }

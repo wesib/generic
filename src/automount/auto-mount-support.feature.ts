@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { itsEach, overArray } from '@proc7ts/a-iterable';
 import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
 import { Class } from '@proc7ts/primitives';
+import { itsEach, overArray } from '@proc7ts/push-iterator';
 import {
   BootstrapRoot,
   BootstrapWindow,
