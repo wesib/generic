@@ -63,7 +63,7 @@ class AttributesObserver {
       observer.observe(self.element, {
         attributes: true,
         attributeOldValue: true,
-        attributeFilter: Array.from(self._emitters.keys()),
+        attributeFilter: [...self._emitters.keys()],
       });
     }
   }

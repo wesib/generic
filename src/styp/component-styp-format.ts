@@ -299,7 +299,7 @@ function extractHostSelector(
         let host: StypSelector.Mutable;
 
         if (params.length) {
-          host = Array.from(params[0] as StypSubSelector.NormalizedParameter);
+          host = (params[0] as StypSubSelector.NormalizedParameter).slice();
           (host[0] as any).$ = $;
         } else {
           host = $ ? [{ $ }] : [];

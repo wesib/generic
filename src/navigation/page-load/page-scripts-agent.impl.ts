@@ -1,4 +1,4 @@
-import { filterIt, itsEach, mapIt, overArray } from '@proc7ts/push-iterator';
+import { filterArray, filterIt, itsEach, mapIt, PushIterable } from '@proc7ts/push-iterator';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { importNode } from '../../util';
 import { PageLoadAgent } from './page-load-agent';
@@ -15,13 +15,13 @@ export function pageScriptsAgent(context: BootstrapContext): PageLoadAgent {
         if (response.ok) {
 
           const allScripts = new Set<string>(mapIt(
-              externalScripts(doc, overArray(doc.scripts)),
+              externalScripts(doc, doc.scripts),
               ([src]) => src,
           ));
 
           itsEach(
               filterIt(
-                  externalScripts(response.document, overArray(response.document.querySelectorAll('script'))),
+                  externalScripts(response.document, response.document.querySelectorAll('script')),
                   ([src]) => !allScripts.has(src),
               ),
               ([src, script]) => {
@@ -37,13 +37,10 @@ export function pageScriptsAgent(context: BootstrapContext): PageLoadAgent {
 
 function externalScripts(
     doc: Document,
-    scripts: Iterable<HTMLScriptElement>,
-): Iterable<readonly [string, HTMLScriptElement]> {
+    scripts: ArrayLike<HTMLScriptElement>,
+): PushIterable<readonly [string, HTMLScriptElement]> {
   return mapIt(
-      filterIt(
-          scripts,
-          script => !!script.src,
-      ),
+      filterArray(scripts, ({ src }) => !!src),
       script => [new URL(script.src, doc.baseURI).href, script] as const,
   );
 }

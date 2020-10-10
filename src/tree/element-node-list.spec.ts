@@ -1,6 +1,6 @@
 import { afterSupplied, onSupplied } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import { itsEmpty, mapIt } from '@proc7ts/push-iterator';
+import { itsElements, itsEmpty } from '@proc7ts/push-iterator';
 import {
   bootstrapComponents,
   BootstrapContext,
@@ -639,7 +639,7 @@ describe('tree', () => {
     });
 
     function elementsOf(nodes: Iterable<ElementNode>): Element[] {
-      return Array.from(mapIt(nodes, node => node.element));
+      return itsElements(nodes, node => node.element);
     }
   });
 });

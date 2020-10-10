@@ -9,7 +9,7 @@ import {
   onEventBy,
 } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import { flatMapIt, itsEach, itsIterator } from '@proc7ts/push-iterator';
+import { flatMapIt, itsEach, itsEvery, overIterator, PushIterable } from '@proc7ts/push-iterator';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
@@ -52,31 +52,36 @@ export const PageLoadRequestsParam: PageParam<PageLoadRequests, PageLoadRequests
 /**
  * @internal
  */
-export class PageLoadRequests implements Iterable<PageLoadReq> {
+export class PageLoadRequests {
 
   private readonly _map = new Map<EventSupply, PageLoadReq[]>();
+  private readonly _requests: PushIterable<PageLoadReq>;
 
   constructor(
       private readonly _navigation: Navigation,
       private readonly _loader: PageLoader,
-  ) {}
+  ) {
+    this._requests = flatMapIt(overIterator(() => this._map.values()));
+  }
 
   get fragments(): readonly PageFragmentRequest[] {
 
     const result: PageFragmentRequest[] = [];
 
-    for (const request of this) {
-      if (!request.fragment) {
-        return [];
-      }
-      result.push(request.fragment);
+    if (!itsEvery(
+        this._requests,
+        request => {
+          if (!request.fragment) {
+            return false;
+          }
+          result.push(request.fragment);
+          return true;
+        },
+    )) {
+      return [];
     }
 
     return result;
-  }
-
-  [Symbol.iterator](): Iterator<PageLoadReq> {
-    return itsIterator(flatMapIt(this._map.values()));
   }
 
   handle(): PageParam.Handle<void, PageLoadRequest> {
@@ -133,7 +138,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
         }).share();
 
         itsEach(
-            self,
+            self._requests,
             ({ fragment, receiver }) => onFragment(onLoad, fragment).to({
               supply: eventSupply().needs(receiver.supply),
               receive(context, response): void {
@@ -174,7 +179,7 @@ export class PageLoadRequests implements Iterable<PageLoadReq> {
     const transferred = new PageLoadRequests(this._navigation, this._loader);
 
     for (const [supply, list] of this._map.entries()) {
-      transferred._map.set(supply, Array.from(list));
+      transferred._map.set(supply, list.slice());
     }
 
     return transferred;
