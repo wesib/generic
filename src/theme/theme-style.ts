@@ -3,6 +3,7 @@
  * @module @wesib/generic/styp
  */
 import { ContextRef, ContextValueSlot, IterativeContextKey } from '@proc7ts/context-values';
+import { itsEach } from '@proc7ts/push-iterator';
 import { stypRules, StypRules } from '@proc7ts/style-producer';
 import { Theme } from './theme';
 
@@ -86,38 +87,41 @@ class ThemeStyleKey extends IterativeContextKey<ThemeStyle.ById, ThemeStyle> {
 
     const providers = new Map<ThemeStyle.Provider, [ThemeStyle.Provider, boolean]>();
 
-    for (const style of slot.seed) {
+    itsEach(
+        slot.seed,
+        style => {
 
-      let key: ThemeStyle.Provider;
-      let provider: ThemeStyle.Provider;
-      let isId: boolean;
+          let key: ThemeStyle.Provider;
+          let provider: ThemeStyle.Provider;
+          let isId: boolean;
 
-      if (typeof style === 'function') {
-        key = provider = style;
-        isId = true;
-      } else {
-        key = style.style;
-        provider = style.provide.bind(style);
-        isId = false;
-      }
+          if (typeof style === 'function') {
+            key = provider = style;
+            isId = true;
+          } else {
+            key = style.style;
+            provider = style.provide.bind(style);
+            isId = false;
+          }
 
-      const prev = providers.get(key);
+          const prev = providers.get(key);
 
-      if (!prev) {
-        providers.set(key, [provider, isId]);
-      } else {
+          if (!prev) {
+            providers.set(key, [provider, isId]);
+          } else {
 
-        const [prevProvider, hasId] = prev;
+            const [prevProvider, hasId] = prev;
 
-        providers.set(
-            key,
-            [
-              isId ? combineStyles(provider, prevProvider) : combineStyles(prevProvider, provider),
-              isId || hasId,
-            ],
-        );
-      }
-    }
+            providers.set(
+                key,
+                [
+                  isId ? combineStyles(provider, prevProvider) : combineStyles(prevProvider, provider),
+                  isId || hasId,
+                ],
+            );
+          }
+        },
+    );
 
     if (providers.size || !slot.hasFallback) {
       slot.insert(byId);

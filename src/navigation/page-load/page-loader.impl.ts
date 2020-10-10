@@ -2,7 +2,6 @@ import { hthvParse, hthvQuote } from '@hatsy/http-header-value';
 import { nextEach } from '@proc7ts/call-thru';
 import { SingleContextKey } from '@proc7ts/context-values';
 import { EventNotifier, onAsync, OnEvent, onEventBy } from '@proc7ts/fun-events';
-import { itsReduction } from '@proc7ts/push-iterator';
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
@@ -104,8 +103,7 @@ function requestPageFragments(page: Page, request: Request): void {
   if (fragments && fragments.length) {
     request.headers.set(
         'Accept-Fragment',
-        itsReduction(
-            fragments,
+        fragments.reduce(
             (header, fragment) => (header ? header + ', ' : '') + (
                 fragment.tag != null
                     ? 'tag=' + hthvQuote(fragment.tag)

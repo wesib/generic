@@ -12,7 +12,21 @@ import {
 } from '@proc7ts/fun-events';
 import { html__naming } from '@proc7ts/namespace-aliaser';
 import { isPresent, valuesProvider } from '@proc7ts/primitives';
-import { filterIt, flatMapIt, itsEach, itsFirst, itsIterator, mapIt, overArray } from '@proc7ts/push-iterator';
+import {
+  filterArray,
+  filterIt,
+  flatMapArray,
+  iteratorOf,
+  itsEach,
+  itsElements,
+  itsFirst,
+  mapIt,
+  overArray,
+  overIterator,
+  PushIterable,
+  PushIterator,
+  PushIterator__symbol,
+} from '@proc7ts/push-iterator';
 import {
   BootstrapContext,
   ComponentClass,
@@ -43,7 +57,6 @@ export function elementNodeList<N extends ElementNode>(
   const updates = new EventEmitter<[N[], N[]]>();
   const init = deep ? WATCH_DEEP : undefined;
   let cache = new Set<Element>();
-  let iterable: Iterable<N> | undefined;
   let selector: string | undefined;
   const overNodes: (nodes: NodeList) => Iterable<Node> = deep ? overNodeSubtree : overArray;
 
@@ -51,7 +64,6 @@ export function elementNodeList<N extends ElementNode>(
     selector = selectorOrType;
   } else {
     bsContext.whenDefined(selectorOrType).then(({ elementDef: { name } }) => {
-      iterable = undefined;
       if (name) {
         selector = html__naming.name(name, bsContext.get(DefaultNamespaceAliaser));
         if (updates.size) {
@@ -62,7 +74,7 @@ export function elementNodeList<N extends ElementNode>(
 
           if (selected.size) {
 
-            const added = Array.from(
+            const added = itsElements(
                 filterIt<N | undefined, N>(
                     mapIt(selected, node => nodeOf(node)),
                     isPresent,
@@ -93,7 +105,15 @@ export function elementNodeList<N extends ElementNode>(
     });
   }
 
-  class ElementNodeList$ extends ElementNodeList<N> {
+  const iterable: PushIterable<N> = filterIt<N | undefined, N>(
+      mapIt(
+          overIterator(elements),
+          element => nodeOf(element),
+      ),
+      isPresent,
+  );
+
+  class ElementNodeList$ extends ElementNodeList<N> implements PushIterable<N> {
 
     onUpdate(): OnEvent<[N[], N[]]>;
     onUpdate(receiver: EventReceiver<[N[], N[]]>): EventSupply;
@@ -142,7 +162,7 @@ export function elementNodeList<N extends ElementNode>(
         const initialEmitter = new EventEmitter<[readonly N[], readonly N[]]>();
 
         initialEmitter.on(receiver);
-        initialEmitter.send(Array.from(this), []);
+        initialEmitter.send(itsElements(this), []);
 
         onUpdate.to(receiver);
       }).F)(receiver);
@@ -156,31 +176,27 @@ export function elementNodeList<N extends ElementNode>(
       ).F)(receiver);
     }
 
-    [Symbol.iterator](): Iterator<N> {
-      return itsIterator(iterable || (iterable = filterIt<N | undefined, N>(
-          mapIt(
-              elements(),
-              element => nodeOf(element),
-          ),
-          isPresent,
-      )));
+    [Symbol.iterator](): PushIterator<N> {
+      return this[PushIterator__symbol]();
+    }
+
+    [PushIterator__symbol](accept?: PushIterator.Acceptor<N>): PushIterator<N> {
+      return iterable[PushIterator__symbol](accept);
     }
 
   }
 
   return new ElementNodeList$();
 
-  function elements(): Set<Element> {
-    return updates.size ? cache : refresh();
+  function elements(): Iterator<Element> {
+    return iteratorOf(updates.size ? cache : refresh());
   }
 
   function clearCache(): void {
-    iterable = undefined;
     cache.clear();
   }
 
   function refresh(): Set<Element> {
-    iterable = undefined;
 
     const list = select();
 
@@ -201,12 +217,8 @@ export function elementNodeList<N extends ElementNode>(
     if (deep) {
       return new Set(overArray(root.querySelectorAll(sel)));
     }
-    return new Set(
-        filterIt(
-            overArray(root.children),
-            item => item.matches(sel),
-        ),
-    );
+
+    return new Set(filterArray(root.children, item => item.matches(sel)));
   }
 
   function update(mutations: MutationRecord[]): void {
@@ -259,8 +271,8 @@ export function elementNodeList<N extends ElementNode>(
 }
 
 function overNodeSubtree(nodes: NodeList): Iterable<Node> {
-  return flatMapIt(
-      overArray(nodes),
+  return flatMapArray(
+      nodes,
       node => overArray([node, ...overNodeSubtree(node.childNodes)]),
   );
 }
