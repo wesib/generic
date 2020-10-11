@@ -1,6 +1,6 @@
 {
   "name": "@wesib/generic",
-  "version": "1.0.0-beta.18",
+  "version": "1.0.0-beta.19",
   "description": "Wesib: Generic Components",
   "keywords": [
     "web-components",
@@ -73,7 +73,7 @@
     "@types/jsdom": "^16.2.4",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
-    "@wesib/wesib": "^1.0.0-beta.18",
+    "@wesib/wesib": "^1.0.0-beta.19",
     "codecov": "^3.8.0",
     "cross-fetch": "^3.0.6",
     "cssesc": "^3.0.0",
