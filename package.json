@@ -35,7 +35,7 @@
     }
   },
   "peerDependencies": {
-    "@proc7ts/context-values": "^4.6.0",
+    "@proc7ts/context-values": "^4.6.1",
     "@proc7ts/fun-events": "^9.3.0",
     "@proc7ts/input-aspects": "^3.4.1",
     "@proc7ts/namespace-aliaser": "^2.1.0",
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@proc7ts/call-thru": "^4.1.0",
-    "@proc7ts/context-values": "^4.6.0",
+    "@proc7ts/context-values": "^4.6.1",
     "@proc7ts/eslint-config": "^2.0.5",
     "@proc7ts/fun-events": "^9.3.0",
     "@proc7ts/input-aspects": "^3.4.1",
@@ -77,7 +77,7 @@
     "codecov": "^3.8.0",
     "cross-fetch": "^3.0.6",
     "cssesc": "^3.0.0",
-    "eslint": "^7.10.0",
+    "eslint": "^7.11.0",
     "eslint-plugin-jest": "^24.1.0",
     "gh-pages": "^3.1.0",
     "hyphenate-style-name": "^1.0.4",
@@ -90,7 +90,7 @@
     "run-z": "^1.5.0",
     "shx": "^0.3.2",
     "ts-jest": "^26.4.1",
-    "tslib": "^2.0.2",
+    "tslib": "^2.0.3",
     "typedoc": "^0.19.0",
     "typedoc-plugin-external-module-name": "^4.0.3",
     "typescript": "^4.0.3"
