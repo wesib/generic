@@ -51,7 +51,10 @@ describe('navigation', () => {
 
     it('performs navigation without agents', () => {
       agent(mockNavigate, when, from, to);
-      expect(mockNavigate).toHaveBeenCalledWith(expect.objectContaining({ ...to, get: expect.any(Function) }));
+      expect(mockNavigate).toHaveBeenCalledWith(expect.objectContaining({
+        url: expect.objectContaining({ href: to.url.href }),
+        get: expect.any(Function),
+      }));
     });
     it('performs navigation without agents with `null` fallback value', () => {
       agent = registry.newValues().get(NavigationAgent, { or: null })!;

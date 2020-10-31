@@ -52,8 +52,7 @@ describe('navigation', () => {
       });
 
       it('activates nav link with longest matching URL', async () => {
-
-        const { context } = await bootstrap({ activate });
+        await bootstrap({ activate });
 
         expect(link1.classList).toHaveLength(0);
         expect(link2.classList.contains('active@b')).toBe(true);
@@ -61,8 +60,7 @@ describe('navigation', () => {
         expect(activate).toHaveBeenCalledWith(
             true,
             expect.objectContaining({
-              context,
-              node: expect.objectContaining({ element: link2 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link2.href }) }),
             }),
         );
         expect(activate).toHaveBeenCalledTimes(1);
@@ -70,7 +68,7 @@ describe('navigation', () => {
       it('activates multiple nav link with longest matching URL', async () => {
         link3.href = 'index';
 
-        const { context } = await bootstrap({ activate });
+        await bootstrap({ activate });
 
         expect(link1.classList).toHaveLength(0);
         expect(link2.classList.contains('active@b')).toBe(true);
@@ -78,15 +76,13 @@ describe('navigation', () => {
         expect(activate).toHaveBeenCalledWith(
             true,
             expect.objectContaining({
-              context,
-              node: expect.objectContaining({ element: link2 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link2.href }) }),
             }),
         );
         expect(activate).toHaveBeenCalledWith(
             true,
             expect.objectContaining({
-              context,
-              node: expect.objectContaining({ element: link3 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link3.href }) }),
             }),
         );
         expect(activate).toHaveBeenCalledTimes(2);
@@ -106,8 +102,7 @@ describe('navigation', () => {
         expect(activate).toHaveBeenCalledWith(
             false,
             expect.objectContaining({
-              context,
-              node: expect.objectContaining({ element: link2 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link2.href }) }),
             }),
         );
         expect(activate).toHaveBeenCalledWith(
@@ -115,7 +110,7 @@ describe('navigation', () => {
             {
               context,
               page,
-              node: expect.objectContaining({ element: link1 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link1.href }) }),
             },
         );
         expect(activate).toHaveBeenCalledTimes(2);
@@ -156,8 +151,7 @@ describe('navigation', () => {
         expect(activate).toHaveBeenCalledWith(
             false,
             expect.objectContaining({
-              context,
-              node: expect.objectContaining({ element: link2 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link2.href }) }),
             }),
         );
         expect(activate).toHaveBeenCalledTimes(1);
@@ -187,8 +181,7 @@ describe('navigation', () => {
         expect(activate).toHaveBeenCalledWith(
             false,
             expect.objectContaining({
-              context,
-              node: expect.objectContaining({ element: link1 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link1.href }) }),
             }),
         );
         expect(activate).toHaveBeenCalledWith(
@@ -196,7 +189,7 @@ describe('navigation', () => {
             {
               context,
               page,
-              node: expect.objectContaining({ element: link2 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link2.href }) }),
             },
         );
         expect(activate).toHaveBeenCalledTimes(2);
@@ -220,8 +213,7 @@ describe('navigation', () => {
         expect(activate).toHaveBeenCalledWith(
             false,
             expect.objectContaining({
-              context,
-              node: expect.objectContaining({ element: link2 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link2.href }) }),
             }),
         );
         expect(activate).toHaveBeenCalledWith(
@@ -229,7 +221,7 @@ describe('navigation', () => {
             {
               context,
               page,
-              node: expect.objectContaining({ element: link4 }),
+              node: expect.objectContaining({ element: expect.objectContaining({ href: link4.href }) }),
             },
         );
         expect(activate).toHaveBeenCalledTimes(2);

@@ -224,11 +224,11 @@ describe('navigation', () => {
             expect.any(Function),
             'pre-open',
             expect.objectContaining({
-              url: new URL('http://localhost/index'),
+              url: expect.objectContaining({ href: 'http://localhost/index' }),
               data: 'initial',
             }),
             expect.objectContaining({
-              url: new URL('http://localhost/other'),
+              url: expect.objectContaining({ href: 'http://localhost/other' }),
               title: 'new title',
               data: 'new data',
             }),
@@ -327,7 +327,7 @@ describe('navigation', () => {
           type: NavigationEventType.EnterPage,
           when: 'enter',
           to: expect.objectContaining({
-            url: new URL('http://localhost/index#other'),
+            url: expect.objectContaining({ href: 'http://localhost/index#other' }),
             data: null,
           }),
         }));

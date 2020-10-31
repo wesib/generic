@@ -33,7 +33,7 @@ describe('input', () => {
       expect(onSubmit).toHaveBeenCalledWith(
           expect.objectContaining({
             control: expect.any(InGroup),
-            form: expect.objectContaining({ element: formElement }),
+            form: expect.objectContaining({ element: expect.objectContaining({ tagName: 'FORM' }) }),
           }),
           expect.objectContaining({
             type: 'submit',

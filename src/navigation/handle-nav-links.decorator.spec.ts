@@ -107,7 +107,7 @@ describe('navigation', () => {
       expect(mockHandler).toHaveBeenCalledWith({
         event,
         context,
-        page: expect.objectContaining({ url: pageURL.it }),
+        page: expect.objectContaining({ url: expect.objectContaining({ href: pageURL.it.href }) }),
         navigation: context.get(Navigation),
       });
     });
