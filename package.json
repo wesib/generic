@@ -40,7 +40,7 @@
     "@proc7ts/input-aspects": "^3.4.1",
     "@proc7ts/namespace-aliaser": "^2.1.0",
     "@proc7ts/render-scheduler": "^1.3.0",
-    "@proc7ts/style-producer": "^5.4.1",
+    "@proc7ts/style-producer": "^5.4.2",
     "@wesib/wesib": "^1.0.0-beta.18"
   },
   "dependencies": {
@@ -66,7 +66,7 @@
     "@proc7ts/namespace-aliaser": "^2.1.0",
     "@proc7ts/render-scheduler": "^1.3.0",
     "@proc7ts/rollup-helpers": "^1.0.0",
-    "@proc7ts/style-producer": "^5.4.1",
+    "@proc7ts/style-producer": "^5.4.2",
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@types/jest": "^26.0.15",
@@ -76,7 +76,6 @@
     "@wesib/wesib": "^1.0.0-beta.19",
     "codecov": "^3.8.1",
     "cross-fetch": "^3.0.6",
-    "cssesc": "^3.0.0",
     "eslint": "^7.12.1",
     "eslint-plugin-jest": "^24.1.0",
     "gh-pages": "^3.1.0",
