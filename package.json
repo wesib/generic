@@ -76,7 +76,7 @@
     "@wesib/wesib": "^1.0.0-beta.19",
     "codecov": "^3.8.1",
     "cross-fetch": "^3.0.6",
-    "eslint": "^7.12.1",
+    "eslint": "^7.13.0",
     "eslint-plugin-jest": "^24.1.0",
     "gh-pages": "^3.1.0",
     "hyphenate-style-name": "^1.0.4",
