@@ -1,5 +1,5 @@
 {
-  "main": "../dist/wesib.input.js",
-  "module": "../dist/wesib.input.mjs",
+  "main": "../dist/wesib.input.cjs",
+  "module": "../dist/wesib.input.js",
   "types": "index.d.ts"
 }

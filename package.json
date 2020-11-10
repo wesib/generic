@@ -17,21 +17,22 @@
   "bugs": {
     "url": "https://github.com/wesib/wesib/issues"
   },
-  "main": "dist/wesib.generic.js",
-  "module": "dist/wesib.generic.mjs",
+  "type": "module",
+  "main": "dist/wesib.generic.cjs",
+  "module": "dist/wesib.generic.js",
   "types": "index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/wesib.generic.mjs",
-      "require": "./dist/wesib.generic.js"
+      "import": "./dist/wesib.generic.js",
+      "require": "./dist/wesib.generic.cjs"
     },
     "./input": {
-      "import": "./dist/wesib.input.mjs",
-      "require": "./dist/wesib.input.js"
+      "import": "./dist/wesib.input.js",
+      "require": "./dist/wesib.input.cjs"
     },
     "./styp": {
-      "import": "./dist/wesib.styp.mjs",
-      "require": "./dist/wesib.styp.js"
+      "import": "./dist/wesib.styp.js",
+      "require": "./dist/wesib.styp.cjs"
     }
   },
   "peerDependencies": {
@@ -41,7 +42,7 @@
     "@proc7ts/namespace-aliaser": "^2.2.0",
     "@proc7ts/render-scheduler": "^1.4.0",
     "@proc7ts/style-producer": "^5.5.0",
-    "@wesib/wesib": "^1.0.0-beta.18"
+    "@wesib/wesib": "^1.0.0-beta.20"
   },
   "dependencies": {
     "@hatsy/http-header-value": "^3.5.1",
@@ -73,7 +74,7 @@
     "@types/jsdom": "^16.2.5",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
-    "@wesib/wesib": "^1.0.0-beta.19",
+    "@wesib/wesib": "^1.0.0-beta.20",
     "codecov": "^3.8.1",
     "cross-fetch": "^3.0.6",
     "eslint": "^7.13.0",

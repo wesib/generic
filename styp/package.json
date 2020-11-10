@@ -1,5 +1,5 @@
 {
-  "main": "../dist/wesib.styp.js",
-  "module": "../dist/wesib.styp.mjs",
+  "main": "../dist/wesib.styp.cjs",
+  "module": "../dist/wesib.styp.js",
   "types": "index.d.ts"
 }
