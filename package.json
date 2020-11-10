@@ -39,7 +39,7 @@
     "@proc7ts/fun-events": "^9.4.0",
     "@proc7ts/input-aspects": "^3.4.1",
     "@proc7ts/namespace-aliaser": "^2.2.0",
-    "@proc7ts/render-scheduler": "^1.3.0",
+    "@proc7ts/render-scheduler": "^1.4.0",
     "@proc7ts/style-producer": "^5.4.2",
     "@wesib/wesib": "^1.0.0-beta.18"
   },
@@ -64,7 +64,7 @@
     "@proc7ts/fun-events": "^9.4.0",
     "@proc7ts/input-aspects": "^3.4.1",
     "@proc7ts/namespace-aliaser": "^2.2.0",
-    "@proc7ts/render-scheduler": "^1.3.0",
+    "@proc7ts/render-scheduler": "^1.4.0",
     "@proc7ts/rollup-helpers": "^1.0.0",
     "@proc7ts/style-producer": "^5.4.2",
     "@rollup/plugin-commonjs": "^16.0.0",
