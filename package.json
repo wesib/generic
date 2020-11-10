@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@hatsy/http-header-value": "^3.5.0",
-    "@proc7ts/call-thru": "^4.1.0",
+    "@proc7ts/call-thru": "^4.2.0",
     "@proc7ts/primitives": "^1.4.0",
     "@proc7ts/push-iterator": "^2.2.0"
   },
@@ -58,7 +58,7 @@
     }
   },
   "devDependencies": {
-    "@proc7ts/call-thru": "^4.1.0",
+    "@proc7ts/call-thru": "^4.2.0",
     "@proc7ts/context-values": "^4.6.1",
     "@proc7ts/eslint-config": "^2.0.5",
     "@proc7ts/fun-events": "^9.3.0",
