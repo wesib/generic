@@ -68,7 +68,7 @@ describe('input', () => {
       })
       class TestFeature {}
 
-      await new Promise(resolve => bsContext.load(TestFeature).read(({ ready }) => ready && resolve()));
+      await new Promise<void>(resolve => bsContext.load(TestFeature).read(({ ready }) => ready && resolve()));
 
       expect(control.aspect(InStyledElement)).toBe(styled);
     });
@@ -83,7 +83,7 @@ describe('input', () => {
       })
       class TestFeature {}
 
-      await new Promise(resolve => bsContext.load(TestFeature).read(({ ready }) => ready && resolve()));
+      await new Promise<void>(resolve => bsContext.load(TestFeature).read(({ ready }) => ready && resolve()));
 
       expect(control.aspect(InRenderScheduler)).toBe(scheduler);
     });

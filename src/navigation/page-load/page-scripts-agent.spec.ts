@@ -63,7 +63,7 @@ describe('navigation', () => {
 </head>
 <body></body>
 </html>`;
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -87,7 +87,7 @@ describe('navigation', () => {
 </head>
 <body></body>
 </html>`;
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -106,7 +106,7 @@ describe('navigation', () => {
 <body></body>
 </html>`;
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {

@@ -54,7 +54,7 @@ describe('navigation', () => {
       const { context } = await bootstrap();
       const navigation = context.get(Navigation);
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -75,7 +75,7 @@ describe('navigation', () => {
       const { context } = await bootstrap();
       const navigation = context.get(Navigation);
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -94,7 +94,7 @@ describe('navigation', () => {
       const { context } = await bootstrap({ fragment: { tag: 'requested-fragment' } });
       const navigation = context.get(Navigation);
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -113,7 +113,7 @@ describe('navigation', () => {
       const { context } = await bootstrap({ fragment: { tag: 'requested-fragment' } });
       const navigation = context.get(Navigation);
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -131,7 +131,7 @@ describe('navigation', () => {
       const { context } = await bootstrap({ onResponse });
       const navigation = context.get(Navigation);
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -154,7 +154,7 @@ describe('navigation', () => {
       const { context } = await bootstrap({ onResponse });
       const navigation = context.get(Navigation);
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -172,7 +172,7 @@ describe('navigation', () => {
       const { context } = await bootstrap({ onResponse, contentKey: valueProvider('same') });
       const navigation = context.get(Navigation);
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {

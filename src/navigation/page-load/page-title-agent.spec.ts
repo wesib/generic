@@ -61,7 +61,7 @@ describe('navigation', () => {
 <title>New Title</title>
 </head>
 </html>`;
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -72,7 +72,7 @@ describe('navigation', () => {
       expect(doc.title).toBe('New Title');
     });
     it('does not update page title if absent in loaded document', async () => {
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -89,7 +89,7 @@ describe('navigation', () => {
 <title></title>
 </head>
 </html>`;
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {

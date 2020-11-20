@@ -75,7 +75,7 @@ describe('navigation', () => {
     });
 
     it('sends page revision as search parameter', async () => {
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -90,7 +90,7 @@ describe('navigation', () => {
     });
     it('does not reload current page if loaded page revision is the same', async () => {
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -105,7 +105,7 @@ describe('navigation', () => {
     it('does not reload current page if loaded page revision is empty', async () => {
       responseRev = '';
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {
@@ -120,7 +120,7 @@ describe('navigation', () => {
     it('reloads current page if loaded page revision differs', async () => {
       responseRev = 'updated-rev';
 
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         navigation.with(
             PageLoadParam,
             {

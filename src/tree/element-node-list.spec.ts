@@ -386,7 +386,9 @@ describe('tree', () => {
           class ObservingTestFeature {
           }
 
-          await new Promise(resolve => bsContext.load(ObservingTestFeature).read(({ ready }) => ready && resolve()));
+          await new Promise<void>(
+              resolve => bsContext.load(ObservingTestFeature).read(({ ready }) => ready && resolve()),
+          );
 
           list = rootNode.select('*', { all: true });
         });
@@ -452,7 +454,7 @@ describe('tree', () => {
         class Component2 {
         }
 
-        await new Promise(resolve => bsContext.load(Component2).read(({ ready }) => ready && resolve()));
+        await new Promise<void>(resolve => bsContext.load(Component2).read(({ ready }) => ready && resolve()));
 
         defContext1 = await bsContext.whenDefined(Component1);
         defContext2 = await bsContext.whenDefined(Component2);
@@ -549,7 +551,9 @@ describe('tree', () => {
 
           cType = NamedComponent;
 
-          await new Promise(resolve => bsContext.load(NamedComponent).read(({ ready }) => ready && resolve()));
+          await new Promise<void>(
+              resolve => bsContext.load(NamedComponent).read(({ ready }) => ready && resolve()),
+          );
         });
 
         async function addNamedComponent(): Promise<ComponentNode> {
@@ -623,7 +627,9 @@ describe('tree', () => {
           @Component({})
           class Component4 {}
 
-          await new Promise(resolve => bsContext.load(Component4).read(({ ready }) => ready && resolve()));
+          await new Promise<void>(
+              resolve => bsContext.load(Component4).read(({ ready }) => ready && resolve()),
+          );
 
           const onUpdate = jest.fn();
           const list = rootNode.select(Component4);
