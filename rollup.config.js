@@ -1,4 +1,5 @@
 import { externalModules } from '@proc7ts/rollup-helpers';
+import flatDts from '@proc7ts/rollup-plugin-flat-dts';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import path from 'path';
@@ -10,7 +11,7 @@ export default {
   input: {
     'wesib.generic': './src/index.ts',
     'wesib.input': './src/input/index.ts',
-    'wesib.styp': './src/styp/main.ts',
+    'wesib.styp': './src/styp/index.ts',
   },
   plugins: [
     commonjs(),
@@ -28,14 +29,11 @@ export default {
     moduleSideEffects: false,
   },
   manualChunks(id) {
-    if (id.startsWith(path.join(__dirname, 'src', 'styp') + path.sep)) {
-      return 'wesib.styp';
-    }
-    if (id.startsWith(path.join(__dirname, 'src', 'theme') + path.sep)) {
-      return 'wesib.styp';
-    }
-    if (id.startsWith(path.join(__dirname, 'src', 'input') + path.sep)) {
+    if (id.startsWith(path.resolve('src', 'input') + path.sep)) {
       return 'wesib.input';
+    }
+    if (id.startsWith(path.resolve('src', 'styp') + path.sep)) {
+      return 'wesib.styp';
     }
     return 'wesib.generic';
   },
@@ -45,16 +43,31 @@ export default {
       sourcemap: true,
       dir: './dist',
       entryFileNames: '[name].cjs',
-      chunkFileNames: `_[name].cjs`,
+      chunkFileNames: '_[name].cjs',
       hoistTransitiveImports: false,
     },
     {
       format: 'esm',
       sourcemap: true,
-      dir: './dist',
-      entryFileNames: '[name].js',
-      chunkFileNames: `_[name].js`,
+      dir: '.',
+      entryFileNames: 'dist/[name].js',
+      chunkFileNames: 'dist/_[name].js',
       hoistTransitiveImports: false,
+      plugins: [
+        flatDts({
+          tsconfig: 'tsconfig.main.json',
+          lib: true,
+          entries: {
+            input: {
+              file: 'input/index.d.ts',
+            },
+            styp: {
+              file: 'styp/index.d.ts',
+            },
+          },
+          internal: ['**/impl/**', '**/*.impl'],
+        }),
+      ],
     },
   ],
 };
