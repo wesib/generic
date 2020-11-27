@@ -66,7 +66,7 @@
     "@proc7ts/input-aspects": "^3.5.1",
     "@proc7ts/namespace-aliaser": "^2.2.2",
     "@proc7ts/render-scheduler": "^1.4.2",
-    "@proc7ts/rollup-helpers": "^1.1.1",
+    "@run-z/rollup-helpers": "^1.0.0",
     "@proc7ts/rollup-plugin-flat-dts": "^1.1.2",
     "@proc7ts/style-producer": "^5.5.1",
     "@rollup/plugin-commonjs": "^16.0.0",
