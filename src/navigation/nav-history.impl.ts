@@ -8,6 +8,9 @@ import { Page } from './page';
 import { PageParam, PageParam__symbol } from './page-param';
 import { PageParamContext } from './page-param-context';
 
+/**
+ * @internal
+ */
 const NavHistory__key = (/*#__PURE__*/ new SingleContextKey<NavHistory>(
     'nav-history',
     {
@@ -44,11 +47,14 @@ export interface NavDataEnvelope {
   readonly [NAV_DATA_KEY]: NavData;
 }
 
+/**
+ * @internal
+ */
 function extractNavData(state: any): PartialNavData {
   return state == null || typeof state !== 'object'
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       ? { data: state }
-      : state[NAV_DATA_KEY] as PartialNavData;
+      : (state as NavDataEnvelope)[NAV_DATA_KEY] as PartialNavData;
 }
 
 /**

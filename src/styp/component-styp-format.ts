@@ -300,7 +300,7 @@ function extractHostSelector(
 
         if (params.length) {
           host = (params[0] as StypSubSelector.NormalizedParameter).slice();
-          (host[0] as any).$ = $;
+          (host[0] as { $?: string | readonly string[] }).$ = $;
         } else {
           host = $ ? [{ $ }] : [];
         }

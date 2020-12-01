@@ -4,6 +4,7 @@ import {
   ComponentClass,
   ComponentContext,
   ComponentContext__symbol,
+  ComponentContextHolder,
   ComponentEvent,
   ElementAdapter,
 } from '@wesib/wesib';
@@ -21,17 +22,24 @@ const ElementNode__symbol = (/*#__PURE__*/ Symbol('element-node'));
 /**
  * @internal
  */
+type TreeElement = Element & ComponentContextHolder & {
+  [ElementNode__symbol]?: ComponentTreeNode;
+};
+
+/**
+ * @internal
+ */
 class ElementNode$ implements ComponentTreeNode {
 
   private readonly _attrs: NodeAttributes;
   private readonly _props: NodeProperties;
 
-  constructor(private readonly _bs: BootstrapContext, readonly element: Element) {
+  constructor(private readonly _bs: BootstrapContext, readonly element: TreeElement) {
     this._attrs = new NodeAttributes(_bs, element);
     this._props = new NodeProperties(element);
-    (element as any)[ElementNode__symbol] = this;
+    element[ElementNode__symbol] = this;
 
-    const context = (element as any)[ComponentContext__symbol] as ComponentContext<any> | undefined;
+    const context = element[ComponentContext__symbol];
 
     if (context) {
       this._bind(context);
@@ -41,7 +49,7 @@ class ElementNode$ implements ComponentTreeNode {
   }
 
   get context(): ComponentContext<any> | undefined {
-    return (this.element as any)[ComponentContext__symbol] as ComponentContext<any> | undefined;
+    return this.element[ComponentContext__symbol];
   }
 
   get parent(): ElementNode | null {
@@ -72,9 +80,38 @@ class ElementNode$ implements ComponentTreeNode {
 /**
  * @internal
  */
-export function elementNodeOf(bsContext: BootstrapContext, element: Element, optional?: boolean): ElementNode {
+export function elementNodeOf(
+    bsContext: BootstrapContext,
+    element: TreeElement,
+    optional: true,
+): ElementNode | undefined;
 
-  const existing = (element as any)[ElementNode__symbol] as ElementNode;
+/**
+ * @internal
+ */
+export function elementNodeOf(
+    bsContext: BootstrapContext,
+    element: TreeElement,
+    optional?: false,
+): ElementNode;
+
+/**
+ * @internal
+ */
+export function elementNodeOf(
+    bsContext: BootstrapContext,
+    element: TreeElement,
+    optional?: boolean,
+): ElementNode | undefined;
+
+
+export function elementNodeOf(
+    bsContext: BootstrapContext,
+    element: TreeElement,
+    optional?: boolean,
+): ElementNode | undefined {
+
+  const existing = element[ElementNode__symbol];
 
   return (existing || optional) ? existing : new ElementNode$(bsContext, element);
 }

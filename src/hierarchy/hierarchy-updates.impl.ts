@@ -6,6 +6,7 @@ import {
   BootstrapRoot,
   ComponentContext,
   ComponentContext__symbol,
+  ComponentContextHolder,
   ComponentEvent,
 } from '@wesib/wesib';
 
@@ -94,7 +95,7 @@ export function findParentContext(of: ComponentContext): [ComponentContext, bool
       return;
     }
 
-    const ctx = (parent as any)[ComponentContext__symbol] as ComponentContext | undefined;
+    const ctx = (parent as ComponentContextHolder)[ComponentContext__symbol];
 
     if (ctx) {
       return [ctx, immediate];

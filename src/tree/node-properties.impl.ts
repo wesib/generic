@@ -12,15 +12,24 @@ import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesi
 /**
  * @internal
  */
+type ElementWithProperty<T> = {
+  [key in PropertyKey]: T;
+};
+
+/**
+ * @internal
+ */
 class PropertyTracker<T> extends ValueTracker<T> {
 
   private readonly _updates = new EventEmitter<[T, T]>();
+  private readonly _key: string;
 
   constructor(
-      private readonly _element: any,
-      private readonly _key: PropertyKey,
+      private readonly _element: ElementWithProperty<T>,
+      key: PropertyKey,
   ) {
     super();
+    this._key = key as string;
   }
 
   get [EventSupply__symbol](): EventSupply {
@@ -28,7 +37,7 @@ class PropertyTracker<T> extends ValueTracker<T> {
   }
 
   get it(): T {
-    return this._element[this._key] as T;
+    return this._element[this._key];
   }
 
   set it(value: T) {
