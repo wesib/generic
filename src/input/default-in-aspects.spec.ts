@@ -1,7 +1,7 @@
+import { InControl, InNamespaceAliaser, InRenderScheduler, InStyledElement, inValue } from '@frontmeans/input-aspects';
+import { newManualRenderScheduler, RenderScheduler } from '@frontmeans/render-scheduler';
 import { ContextKey__symbol } from '@proc7ts/context-values';
-import { InControl, InNamespaceAliaser, InRenderScheduler, InStyledElement, inValue } from '@proc7ts/input-aspects';
 import { noop } from '@proc7ts/primitives';
-import { newManualRenderScheduler, RenderScheduler } from '@proc7ts/render-scheduler';
 import {
   bootstrapComponents,
   BootstrapContext,

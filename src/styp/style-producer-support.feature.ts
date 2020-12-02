@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { produceStyle } from '@proc7ts/style-producer';
+import { produceStyle } from '@frontmeans/style-producer';
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
 
@@ -22,9 +22,9 @@ const StyleProducerSupport__feature: FeatureDef = {
  *
  * It is _not_ enabled automatically by {@link ProduceStyle @ProduceStyle} decorator.
  *
- * Depends on [@proc7ts/style-producer].
+ * Depends on [@frontmeans/style-producer].
  *
- * [@proc7ts/style-producer]: https://www.npmjs.com/package/@proc7ts/style-producer
+ * [@frontmeans/style-producer]: https://www.npmjs.com/package/@frontmeans/style-producer
  */
 export class StyleProducerSupport {
 

@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { InControl, InFormElement } from '@frontmeans/input-aspects';
 import { SingleContextUpKey, SingleContextUpRef } from '@proc7ts/context-values/updatable';
 import { eventSupply, EventSupply } from '@proc7ts/fun-events';
-import { InControl, InFormElement } from '@proc7ts/input-aspects';
 import { ComponentContext } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { InputFromControl } from './input-from-control';

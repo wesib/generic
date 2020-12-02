@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
+import { produceBasicStyle, StypFormat, StypRules } from '@frontmeans/style-producer';
 import { SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
 import { EventSupply } from '@proc7ts/fun-events';
-import { produceBasicStyle, StypFormat, StypRules } from '@proc7ts/style-producer';
 import { bootstrapDefault } from '@wesib/wesib';
 
 /**
@@ -29,9 +29,9 @@ export type ComponentStyleProducer =
  * Utilizes `produceBasicStyle()` by default. I.e. it does not enable default renderers. To enable them all a
  * [[StyleProducerSupport]] can be used.
  *
- * Depends on [@proc7ts/style-producer].
+ * Depends on [@frontmeans/style-producer].
  *
- * [@proc7ts/style-producer]: https://www.npmjs.com/package/@proc7ts/style-producer
+ * [@frontmeans/style-producer]: https://www.npmjs.com/package/@frontmeans/style-producer
  */
 export const ComponentStyleProducer: SingleContextRef<ComponentStyleProducer> = (
     /*#__PURE__*/ new SingleContextKey<ComponentStyleProducer>(

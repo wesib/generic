@@ -1,5 +1,5 @@
+import { inGroup, InGroup, InText, inText } from '@frontmeans/input-aspects';
 import { trackValue } from '@proc7ts/fun-events';
-import { inGroup, InGroup, InText, inText } from '@proc7ts/input-aspects';
 import { bootstrapComponents, Component, ComponentContext } from '@wesib/wesib';
 import { inputFromControl } from './input-from-control';
 import { SetInputName } from './set-input-name.decorator';

@@ -1,3 +1,4 @@
+import { html__naming } from '@frontmeans/namespace-aliaser';
 import { nextArg } from '@proc7ts/call-thru';
 import {
   AfterEvent,
@@ -10,7 +11,6 @@ import {
   OnEvent,
   onEventBy,
 } from '@proc7ts/fun-events';
-import { html__naming } from '@proc7ts/namespace-aliaser';
 import { isPresent, valuesProvider } from '@proc7ts/primitives';
 import {
   filterArray,

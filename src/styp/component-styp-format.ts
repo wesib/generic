@@ -2,11 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
-import { EventSupply, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
-import { NamespaceAliaser } from '@proc7ts/namespace-aliaser';
-import { elementOrArray, extendSetOfElements, setOfElements, valueProvider } from '@proc7ts/primitives';
-import { RenderScheduler } from '@proc7ts/render-scheduler';
+import { NamespaceAliaser } from '@frontmeans/namespace-aliaser';
+import { RenderScheduler } from '@frontmeans/render-scheduler';
 import {
   lazyStypRules,
   StypFormat,
@@ -19,7 +16,10 @@ import {
   StypSelector,
   stypSelector,
   StypSubSelector,
-} from '@proc7ts/style-producer';
+} from '@frontmeans/style-producer';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
+import { EventSupply, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
+import { elementOrArray, extendSetOfElements, setOfElements, valueProvider } from '@proc7ts/primitives';
 import { ComponentContext, ShadowContentRoot } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
 import { componentStypDomFormatConfig } from './component-styp-dom.format-config';
@@ -29,9 +29,9 @@ import { ElementIdClass } from './element-id-class.impl';
 /**
  * Configuration of {@link ComponentStypFormat component style production format}.
  *
- * Depends on [@proc7ts/style-producer].
+ * Depends on [@frontmeans/style-producer].
  *
- * [@proc7ts/style-producer]: https://www.npmjs.com/package/@proc7ts/style-producer
+ * [@frontmeans/style-producer]: https://www.npmjs.com/package/@frontmeans/style-producer
  */
 export interface ComponentStypFormatConfig extends StypFormatConfig {
 

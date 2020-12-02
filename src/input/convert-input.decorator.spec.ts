@@ -1,5 +1,5 @@
+import { InControl, InStyledElement, inValue } from '@frontmeans/input-aspects';
 import { afterSupplied, EventEmitter, eventSupply, EventSupply, eventSupplyOf, trackValue } from '@proc7ts/fun-events';
-import { InControl, InStyledElement, inValue } from '@proc7ts/input-aspects';
 import { bootstrapComponents, Component, ComponentContext, ComponentMount } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { ConvertInput, ConvertInputDef } from './convert-input.decorator';

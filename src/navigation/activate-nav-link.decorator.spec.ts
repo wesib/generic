@@ -1,5 +1,5 @@
+import { immediateRenderScheduler } from '@frontmeans/render-scheduler';
 import { EventKeeper, trackValue } from '@proc7ts/fun-events';
-import { immediateRenderScheduler } from '@proc7ts/render-scheduler';
 import {
   bootstrapComponents,
   BootstrapWindow,

@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { StypDomFormatConfig } from '@proc7ts/style-producer';
+import { StypDomFormatConfig } from '@frontmeans/style-producer';
 import {
   BootstrapWindow,
   ComponentContext,

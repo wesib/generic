@@ -1,5 +1,5 @@
+import { css__naming, html__naming, NamespaceDef, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ContextValues, SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
-import { css__naming, html__naming, NamespaceDef, QualifiedName } from '@proc7ts/namespace-aliaser';
 import { ComponentContext, DefaultNamespaceAliaser, ElementDef } from '@wesib/wesib';
 
 /**

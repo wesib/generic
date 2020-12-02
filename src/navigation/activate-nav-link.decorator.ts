@@ -2,6 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { css__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
+import { RenderSchedule } from '@frontmeans/render-scheduler';
 import { nextArgs } from '@proc7ts/call-thru';
 import {
   afterEach,
@@ -14,10 +16,8 @@ import {
   EventSupply,
   nextAfterEvent,
 } from '@proc7ts/fun-events';
-import { css__naming, QualifiedName } from '@proc7ts/namespace-aliaser';
 import { Class, noop } from '@proc7ts/primitives';
 import { mapIt } from '@proc7ts/push-iterator';
-import { RenderSchedule } from '@proc7ts/render-scheduler';
 import {
   Component,
   ComponentClass,

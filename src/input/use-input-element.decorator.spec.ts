@@ -1,5 +1,5 @@
+import { InControl, InElement, inText } from '@frontmeans/input-aspects';
 import { afterThe, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
-import { InControl, InElement, inText } from '@proc7ts/input-aspects';
 import { noop } from '@proc7ts/primitives';
 import { bootstrapComponents, ComponentMount } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';

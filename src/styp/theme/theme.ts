@@ -2,7 +2,6 @@
  * @packageDocumentation
  * @module @wesib/generic/styp
  */
-import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import {
   lazyStypRules,
   RefStypRule,
@@ -11,7 +10,8 @@ import {
   StypRule,
   StypRuleRef,
   StypRules,
-} from '@proc7ts/style-producer';
+} from '@frontmeans/style-producer';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import { bootstrapDefault } from '@wesib/wesib';
 import { ThemeStyle } from './theme-style';
 

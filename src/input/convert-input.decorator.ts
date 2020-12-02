@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { InControl, InConverter } from '@frontmeans/input-aspects';
 import { nextArg, nextArgs, NextCall } from '@proc7ts/call-thru';
 import {
   afterAll,
@@ -11,7 +12,6 @@ import {
   nextAfterEvent,
   OnEventCallChain,
 } from '@proc7ts/fun-events';
-import { InControl, InConverter } from '@proc7ts/input-aspects';
 import { Class } from '@proc7ts/primitives';
 import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';

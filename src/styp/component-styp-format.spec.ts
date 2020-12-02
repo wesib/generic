@@ -1,12 +1,10 @@
-import { ContextRegistry } from '@proc7ts/context-values';
-import { eventSupply, EventSupply, EventSupply__symbol, trackValue } from '@proc7ts/fun-events';
-import { newNamespaceAliaser } from '@proc7ts/namespace-aliaser';
+import { newNamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import {
   immediateRenderScheduler,
   newManualRenderScheduler,
   RenderSchedule,
   RenderScheduler,
-} from '@proc7ts/render-scheduler';
+} from '@frontmeans/render-scheduler';
 import {
   produceBasicStyle,
   StypFormatConfig,
@@ -14,7 +12,9 @@ import {
   stypRoot,
   StypSelector,
   stypSelector,
-} from '@proc7ts/style-producer';
+} from '@frontmeans/style-producer';
+import { ContextRegistry } from '@proc7ts/context-values';
+import { eventSupply, EventSupply, EventSupply__symbol, trackValue } from '@proc7ts/fun-events';
 import {
   BootstrapWindow,
   ComponentContext,

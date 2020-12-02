@@ -1,4 +1,4 @@
-import { inFormElement, InGroup, inGroup } from '@proc7ts/input-aspects';
+import { inFormElement, InGroup, inGroup } from '@frontmeans/input-aspects';
 import { noop } from '@proc7ts/primitives';
 import { bootstrapComponents, ComponentMount } from '@wesib/wesib';
 import { FillInputForm, FillInputFormDef } from './fill-input-form.decorator';

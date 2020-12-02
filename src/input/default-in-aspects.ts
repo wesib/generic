@@ -2,10 +2,10 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from '@frontmeans/input-aspects';
 import { ContextValueSlot } from '@proc7ts/context-values';
 import { ContextSupply, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import { AfterEvent, EventKeeper } from '@proc7ts/fun-events';
-import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from '@proc7ts/input-aspects';
 import { DefaultNamespaceAliaser, ElementRenderScheduler } from '@wesib/wesib';
 
 /**

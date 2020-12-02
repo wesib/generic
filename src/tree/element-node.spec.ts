@@ -1,7 +1,7 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
+import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ValueTracker } from '@proc7ts/fun-events';
-import { QualifiedName } from '@proc7ts/namespace-aliaser';
 import { noop } from '@proc7ts/primitives';
 import { itsFirst } from '@proc7ts/push-iterator';
 import { Component, ComponentClass, ComponentContext, ComponentContext__symbol, DomProperty } from '@wesib/wesib';

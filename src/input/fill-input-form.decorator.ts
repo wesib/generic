@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
+import { InControl, InConverter, InFormElement } from '@frontmeans/input-aspects';
 import { nextArgs, NextCall } from '@proc7ts/call-thru';
 import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from '@proc7ts/fun-events';
-import { InControl, InConverter, InFormElement } from '@proc7ts/input-aspects';
 import { Class } from '@proc7ts/primitives';
 import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { ComponentNode, ElementNode, ElementPickMode } from '../tree';
