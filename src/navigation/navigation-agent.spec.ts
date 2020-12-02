@@ -71,7 +71,14 @@ describe('navigation', () => {
     });
     it('calls the registered agent', () => {
 
-      const mockAgent = jest.fn((next: any) => next());
+      const mockAgent = jest.fn(
+          (
+              next: (target?: Navigation.URLTarget) => void,
+              _when: string,
+              _from: Page,
+              _to: Page,
+          ) => next(),
+      );
 
       registry.provide({ a: NavigationAgent, is: mockAgent });
 
