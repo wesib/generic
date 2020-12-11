@@ -48,7 +48,7 @@
     "@hatsy/http-header-value": "^3.5.3",
     "@proc7ts/call-thru": "^4.3.1",
     "@proc7ts/primitives": "^1.6.0",
-    "@proc7ts/push-iterator": "^2.4.1"
+    "@proc7ts/push-iterator": "^2.5.0"
   },
   "peerDependenciesMeta": {
     "@proc7ts/input-aspects": {
