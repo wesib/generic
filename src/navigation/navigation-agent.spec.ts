@@ -1,5 +1,4 @@
-import { ContextRegistry } from '@proc7ts/context-values';
-import { ContextSupply } from '@proc7ts/context-values/updatable';
+import { ContextRegistry, ContextSupply } from '@proc7ts/context-values';
 import { noop, Supply } from '@proc7ts/primitives';
 import { testPageParam } from '../spec/test-page-param';
 import { Navigation } from './navigation';

@@ -1,5 +1,4 @@
-import { ContextRegistry } from '@proc7ts/context-values';
-import { ContextSupply } from '@proc7ts/context-values/updatable';
+import { ContextRegistry, ContextSupply } from '@proc7ts/context-values';
 import { EventEmitter, onceOn, OnEvent, onSupplied } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { HttpFetchAgent } from './http-fetch-agent';
