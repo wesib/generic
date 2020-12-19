@@ -19,7 +19,7 @@ describe('navigation', () => {
 
     beforeEach(() => {
       responder = new EventEmitter();
-      mockLoader = jest.fn(_page => responder.on());
+      mockLoader = jest.fn(_page => responder.on);
       caching = cachingPageLoader(mockLoader);
       page = { url: new URL('http://localhost/page?p=1#test') } as Page;
       page2 = { url: new URL('http://localhost/page2?p=1#test') } as Page;
@@ -28,7 +28,7 @@ describe('navigation', () => {
     });
 
     it('loads page', () => {
-      caching(page).to(mockReceiver);
+      caching(page)(mockReceiver);
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -37,7 +37,7 @@ describe('navigation', () => {
       expect(mockReceiver).toHaveBeenCalledTimes(1);
     });
     it('reports page load progress', () => {
-      caching(page).to(mockReceiver);
+      caching(page)(mockReceiver);
 
       const response1 = { ok: undefined, page } as PageLoadResponse;
       const response2 = { ok: true, page } as PageLoadResponse;
@@ -49,8 +49,8 @@ describe('navigation', () => {
       expect(mockReceiver).toHaveBeenCalledTimes(2);
     });
     it('receives the same response for the same page', () => {
-      caching(page).to(mockReceiver);
-      caching(page).to(mockReceiver2);
+      caching(page)(mockReceiver);
+      caching(page)(mockReceiver2);
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -60,8 +60,8 @@ describe('navigation', () => {
       expect(mockReceiver2).toHaveBeenCalledTimes(1);
     });
     it('receives the same response for the page with different hash', () => {
-      caching(page).to(mockReceiver);
-      caching({ url: new URL('#other', page.url) } as Page).to(mockReceiver2);
+      caching(page)(mockReceiver);
+      caching({ url: new URL('#other', page.url) } as Page)(mockReceiver2);
 
       const response = { ok: true, page } as PageLoadResponse;
 
@@ -71,12 +71,12 @@ describe('navigation', () => {
       expect(mockReceiver2).toHaveBeenCalledTimes(1);
     });
     it('receives the same response for the same already loaded page', () => {
-      caching(page).to(mockReceiver);
+      caching(page)(mockReceiver);
 
       const response = { ok: true, page } as PageLoadResponse;
 
       responder.send(response);
-      caching(page).to(mockReceiver2);
+      caching(page)(mockReceiver2);
       expect(mockReceiver2).toHaveBeenCalledWith(response);
       expect(mockReceiver).toHaveBeenCalledTimes(1);
       expect(mockReceiver2).toHaveBeenCalledTimes(1);
@@ -85,8 +85,8 @@ describe('navigation', () => {
 
       const done1 = jest.fn();
 
-      caching(page).to(mockReceiver).whenOff(done1);
-      caching(page2).to(mockReceiver2);
+      caching(page)(mockReceiver).whenOff(done1);
+      caching(page2)(mockReceiver2);
 
       expect(done1).toHaveBeenCalled();
 
@@ -105,8 +105,8 @@ describe('navigation', () => {
           () => onEventBy(receiver => responder.on(receiver).whenOff(loadDone)),
       );
 
-      const supply1 = caching(page).to(mockReceiver);
-      const supply2 = caching(page).to(mockReceiver2);
+      const supply1 = caching(page)(mockReceiver);
+      const supply2 = caching(page)(mockReceiver2);
 
       supply1.off(1);
       await Promise.resolve();
@@ -123,11 +123,11 @@ describe('navigation', () => {
           () => onEventBy(receiver => responder.on(receiver).whenOff(loadDone)),
       );
 
-      const supply1 = caching(page).to(mockReceiver);
+      const supply1 = caching(page)(mockReceiver);
 
       supply1.off(1);
 
-      const supply2 = caching(page).to(mockReceiver2);
+      const supply2 = caching(page)(mockReceiver2);
 
       await Promise.resolve();
       expect(loadDone).not.toHaveBeenCalled();
@@ -149,13 +149,13 @@ describe('navigation', () => {
           () => onEventBy(receiver => responder.on(receiver).whenOff(loadDone)),
       );
 
-      const supply1 = caching(page).to(mockReceiver);
+      const supply1 = caching(page)(mockReceiver);
 
       supply1.off(1);
       await Promise.resolve();
       expect(loadDone).toHaveBeenCalledWith(1);
 
-      const supply2 = caching(page).to(mockReceiver2);
+      const supply2 = caching(page)(mockReceiver2);
 
       expect(supply2.isOff).toBe(false);
 

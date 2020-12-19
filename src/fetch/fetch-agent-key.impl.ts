@@ -1,15 +1,6 @@
-import { nextArg } from '@proc7ts/call-thru';
 import { ContextValueSlot } from '@proc7ts/context-values';
 import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
-import {
-  AfterEvent,
-  afterThe,
-  EventKeeper,
-  EventSender,
-  nextAfterEvent,
-  OnEvent,
-  onSupplied,
-} from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, digAfter, EventKeeper, EventSender, OnEvent, onSupplied } from '@proc7ts/fun-events';
 
 /**
  * @internal
@@ -41,17 +32,18 @@ export class FetchAgentKey<Res extends any[]>
   constructor(name: string) {
     super(name);
     this.upKey = this.createUpKey(
-        slot => slot.insert(slot.seed.keepThru(
+        slot => slot.insert(slot.seed.do(digAfter(
             (...agents) => {
               if (agents.length) {
-                return nextArg(combineFetchAgents(agents));
+                return afterThe(combineFetchAgents(agents));
               }
               if (slot.hasFallback && slot.or) {
-                return nextAfterEvent(slot.or);
+                return slot.or;
               }
-              return defaultFetchAgent;
+
+              return afterThe(defaultFetchAgent);
             },
-        )),
+        ))),
     );
   }
 
@@ -67,7 +59,7 @@ export class FetchAgentKey<Res extends any[]>
     slot.context.get(
         this.upKey,
         slot.hasFallback ? { or: slot.or != null ? afterThe(slot.or) : slot.or } : undefined,
-    )!.to(
+    )!(
         agent => delegated = agent,
     ).whenOff(
         reason => delegated = contextDestroyed(reason),

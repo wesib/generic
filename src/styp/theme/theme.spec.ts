@@ -1,5 +1,6 @@
 import { RefStypRule, StypLength, StypRule, StypRuleList, StypRuleRef } from '@frontmeans/style-producer';
 import { ContextRegistry } from '@proc7ts/context-values';
+import { onceAfter } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import { itsEmpty, itsFirst } from '@proc7ts/push-iterator';
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
@@ -28,7 +29,7 @@ describe('theme', () => {
 
         const receiver = jest.fn();
 
-        ref.read().once(receiver);
+        ref.read.do(onceAfter)(receiver);
         expect(receiver).toHaveBeenCalledWith({ $length: StypLength.zero });
       });
     });
@@ -70,7 +71,7 @@ describe('theme', () => {
         const rule: StypRule = itsFirst(theme.style(style))!;
         const receiver = jest.fn();
 
-        rule.read().once(receiver);
+        rule.read.do(onceAfter)(receiver);
         expect(receiver).toHaveBeenCalledWith({ $value: 'test' });
 
         function style(_theme: Theme): StypRuleList {
@@ -153,9 +154,9 @@ describe('theme', () => {
           const receiver1 = jest.fn();
           const receiver2 = jest.fn();
 
-          rules[0].read().once(receiver1);
+          rules[0].read.do(onceAfter)(receiver1);
           expect(receiver1).toHaveBeenCalledWith({ $value: 'test1' });
-          rules[1].read().once(receiver2);
+          rules[1].read.do(onceAfter)(receiver2);
           expect(receiver2).toHaveBeenCalledWith({ $value: 'test2' });
         }
       });
@@ -171,7 +172,7 @@ describe('theme', () => {
       class TestFeature {
       }
 
-      return bootstrapComponents(TestFeature, ...features).whenReady();
+      return bootstrapComponents(TestFeature, ...features).whenReady;
     }
 
   });

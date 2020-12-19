@@ -2,13 +2,13 @@ import {
   EventEmitter,
   eventReceiver,
   EventReceiver,
-  eventSupply,
-  EventSupply,
-  noEventSupply,
+  mapOn_,
   OnEvent,
   onEventBy,
+  shareOn,
+  supplyOn,
 } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import { neverSupply, noop, Supply } from '@proc7ts/primitives';
 import { flatMapIt, itsEach, itsEvery, overIterator, PushIterable } from '@proc7ts/push-iterator';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
@@ -54,7 +54,7 @@ export const PageLoadRequestsParam: PageParam<PageLoadRequests, PageLoadRequests
  */
 export class PageLoadRequests {
 
-  private readonly _map = new Map<EventSupply, PageLoadReq[]>();
+  private readonly _map = new Map<Supply, PageLoadReq[]>();
   private readonly _requests: PushIterable<PageLoadReq>;
 
   constructor(
@@ -87,8 +87,8 @@ export class PageLoadRequests {
   handle(): PageParam.Handle<void, PageLoadRequest> {
 
     const self = this;
-    const pageSupply = eventSupply();
-    let loadSupply = noEventSupply();
+    const pageSupply = new Supply();
+    let loadSupply = neverSupply();
 
     return {
       get() {/* void */},
@@ -112,35 +112,34 @@ export class PageLoadRequests {
           return;
         }
 
-        loadSupply = eventSupply().needs(pageSupply);
+        loadSupply = new Supply().needs(pageSupply);
 
         const onLoad = onEventBy<[PageLoadResponse]>(responseReceiver => {
 
           const emitter = new EventEmitter<[PageLoadResponse]>();
           const supply = emitter.on(responseReceiver);
 
-          self._loader(page)
-              .tillOff(loadSupply)
-              .to(response => emitter.send(response))
-              .whenOff(error => {
-                if (error !== undefined && !(error instanceof PageLoadAbortError)) {
-                  // Report current page load error as failed load response
-                  emitter.send({
-                    ok: false as const,
-                    page,
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    error,
-                  });
-                }
+          self._loader(page).do(supplyOn(loadSupply))(
+              response => emitter.send(response),
+          ).whenOff(error => {
+            if (error !== undefined && !(error instanceof PageLoadAbortError)) {
+              // Report current page load error as failed load response
+              emitter.send({
+                ok: false as const,
+                page,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                error,
               });
+            }
+          });
 
           return supply;
-        }).share();
+        }).do(shareOn);
 
         itsEach(
             self._requests,
-            ({ fragment, receiver }) => onFragment(onLoad, fragment).to({
-              supply: eventSupply().needs(receiver.supply),
+            ({ fragment, receiver }) => onFragment(onLoad, fragment)({
+              supply: new Supply().needs(receiver.supply),
               receive(context, response): void {
                 receiver.receive(context, response);
               },
@@ -192,17 +191,19 @@ function onFragment(
     fragment?: PageFragmentRequest,
 ): OnEvent<[PageLoadResponse]> {
   return fragment
-      ? onLoad.thru_(
-          response => response.ok
-              ? {
-                ...response,
-                fragment: (
-                    fragment.tag != null
-                        ? response.document.getElementsByTagName(fragment.tag)[0]
-                        : response.document.getElementById(fragment.id)
-                ) || undefined,
-              }
-              : response,
+      ? onLoad.do(
+          mapOn_(
+              response => response.ok
+                  ? {
+                    ...response,
+                    fragment: (
+                        fragment.tag != null
+                            ? response.document.getElementsByTagName(fragment.tag)[0]
+                            : response.document.getElementById(fragment.id)
+                    ) || undefined,
+                  }
+                  : response,
+          ),
       )
       : onLoad;
 }

@@ -1,7 +1,6 @@
 import { hthvParse, hthvQuote } from '@hatsy/http-header-value';
-import { nextEach } from '@proc7ts/call-thru';
 import { SingleContextKey } from '@proc7ts/context-values';
-import { EventNotifier, onAsync, OnEvent, onEventBy } from '@proc7ts/fun-events';
+import { afterThe, digOn_, EventNotifier, mapOn_, OnEvent, onEventBy, resolveOnOrdered } from '@proc7ts/fun-events';
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
@@ -48,7 +47,7 @@ function newPageLoader(context: BootstrapContext): PageLoader {
         },
     );
 
-    return onEventBy(receiver => agent(fetch, request).to(receiver));
+    return onEventBy(receiver => agent(fetch, request)(receiver));
 
     function fetch(fetchRequest: Request): OnEvent<[PageLoadResponse]> {
       requestPageFragments(page, fetchRequest);
@@ -60,11 +59,11 @@ function newPageLoader(context: BootstrapContext): PageLoader {
         dispatcher.on(receiver);
         dispatcher.send({ page });
 
-        onAsync(httpFetch(fetchRequest).thru_(
-            response => Promise.all([response, response.text()]),
-        )).thru_(
-            (...batch: [Response, string][]) => nextEach(batch),
-            ([response, text]): PageLoadResponse => {
+        httpFetch(fetchRequest).do(
+            mapOn_(response => Promise.all([response, response.text()])),
+            resolveOnOrdered,
+            digOn_((...batch: [Response, string][]) => afterThe<[Response, string][]>(...batch)),
+            mapOn_(([response, text]): PageLoadResponse => {
               if (!response.ok) {
                 return {
                   ok: false as const,
@@ -89,8 +88,8 @@ function newPageLoader(context: BootstrapContext): PageLoader {
                   error,
                 };
               }
-            },
-        ).to(receiver);
+            }),
+        )(receiver);
       });
     }
   };

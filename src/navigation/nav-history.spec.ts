@@ -1,3 +1,4 @@
+import { onceOn } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { LocationMock, navHistoryState } from '../spec/location-mock';
@@ -77,7 +78,7 @@ describe('navigation', () => {
       describe('to.put', () => {
         it('makes parameter available in future route', async () => {
 
-          const promise = new Promise<string | undefined>(resolve => navigation.on().once(event => {
+          const promise = new Promise<string | undefined>(resolve => navigation.on.do(onceOn)(event => {
             if (event.when === 'pre-open') {
               event.to.put(param, 'init');
               resolve(event.to.get(param));
@@ -123,7 +124,7 @@ describe('navigation', () => {
 
       describe('preventDefault', () => {
         it('aborts parameter assignment', async () => {
-          navigation.on().once(event => {
+          navigation.on.do(onceOn)(event => {
             if (event.when === 'pre-open') {
               event.to.put(param, 'init');
               event.preventDefault();

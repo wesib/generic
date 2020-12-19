@@ -3,16 +3,8 @@
  * @module @wesib/generic/input
  */
 import { InControl, InConverter } from '@frontmeans/input-aspects';
-import { nextArgs, NextCall } from '@proc7ts/call-thru';
-import {
-  afterAll,
-  EventKeeper,
-  EventSupply,
-  eventSupplyOf,
-  nextAfterEvent,
-  OnEventCallChain,
-} from '@proc7ts/fun-events';
-import { Class } from '@proc7ts/primitives';
+import { afterAll, afterThe, consumeEvents, digAfter, EventKeeper } from '@proc7ts/fun-events';
+import { Class, Supply } from '@proc7ts/primitives';
 import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { ComponentNode, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
@@ -41,35 +33,36 @@ export function UseInputElement<T extends ComponentClass = Class>(
 
         context.whenConnected(() => {
           afterAll({
-            node: componentNode.select(select, pick).first(),
+            node: componentNode.select(select, pick).first,
             aspects: context.get(DefaultInAspects),
-          }).keepThru(({
-            node: [node],
-            aspects: [aspects],
-          }): NextCall<OnEventCallChain, [InControl<any>?, EventSupply?]> => {
-            if (!node) {
-              return nextArgs();
-            }
+          }).do(
+              digAfter(({
+                node: [node],
+                aspects: [aspects],
+              }): EventKeeper<[InControl<any>?, Supply?]> => {
+                if (!node) {
+                  return afterThe();
+                }
 
-            const control = def.makeControl({ node, context, aspects });
+                const control = def.makeControl({ node, context, aspects });
 
-            if (!control) {
-              return nextArgs();
-            }
+                if (!control) {
+                  return afterThe();
+                }
 
-            return control instanceof InControl ? nextArgs(control) : nextAfterEvent(control);
-          }).consume(
-              (control?: InControl<any>, supply?: EventSupply) => {
+                return control instanceof InControl ? afterThe(control) : control;
+              }),
+              consumeEvents((control?: InControl<any>, supply?: Supply) => {
                 if (!control) {
                   return;
                 }
 
                 const usageSupply = inputFromControl(context, control);
 
-                (supply || eventSupplyOf(control)).needs(usageSupply);
+                (supply || control.supply).needs(usageSupply);
 
                 return usageSupply;
-              },
+              }),
           );
         });
       });
@@ -125,7 +118,7 @@ export interface UseInputElementDef<T extends object = any> {
       },
   ):
       | InControl<any>
-      | EventKeeper<[InControl<any>?, EventSupply?]>
+      | EventKeeper<[InControl<any>?, Supply?]>
       | null
       | undefined;
 

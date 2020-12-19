@@ -4,7 +4,7 @@
  */
 import { InControl, InFormElement } from '@frontmeans/input-aspects';
 import { SingleContextUpKey, SingleContextUpRef } from '@proc7ts/context-values/updatable';
-import { eventSupply, EventSupply } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { InputFromControl } from './input-from-control';
@@ -68,10 +68,10 @@ export function inputToForm<Model, Elt extends HTMLElement>(
     root: ComponentContext,
     control: InControl<Model>,
     form: InFormElement<Elt>,
-): EventSupply {
+): Supply {
 
   const hierarchy = root.get(HierarchyContext);
-  const off = hierarchy.provide({
+  const supply = hierarchy.provide({
     a: InputToForm,
     by: () => ({
       root,
@@ -83,9 +83,9 @@ export function inputToForm<Model, Elt extends HTMLElement>(
   hierarchy.provide({
     a: InputFromControl,
     via: InputToForm,
-  });
+  }).needs(supply);
 
-  return eventSupply(off)
+  return supply
       .needs(root)
       .needs(control)
       .needs(form);

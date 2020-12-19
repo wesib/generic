@@ -1,3 +1,4 @@
+import { mapOn_ } from '@proc7ts/fun-events';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { PageLoadAgent } from './page-load-agent';
 
@@ -8,7 +9,7 @@ export function pageTitleAgent(context: BootstrapContext): PageLoadAgent {
 
   const doc = context.get(BootstrapWindow).document;
 
-  return next => next().thru_(response => {
+  return next => next().do(mapOn_(response => {
     if (response.ok) {
 
       const title = response.document.getElementsByTagName('title').item(0);
@@ -19,5 +20,5 @@ export function pageTitleAgent(context: BootstrapContext): PageLoadAgent {
     }
 
     return response;
-  });
+  }));
 }

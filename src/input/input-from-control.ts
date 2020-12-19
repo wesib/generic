@@ -4,7 +4,7 @@
  */
 import { InControl } from '@frontmeans/input-aspects';
 import { SingleContextUpKey, SingleContextUpRef } from '@proc7ts/context-values/updatable';
-import { eventSupply, EventSupply } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 
@@ -66,17 +66,15 @@ export const InputFromControl: SingleContextUpRef<InputFromControl | NoInputFrom
 export function inputFromControl<Value>(
     root: ComponentContext,
     control: InControl<Value>,
-): EventSupply {
-
-  const off = root.get(HierarchyContext).provide({
-    a: InputFromControl,
-    by: () => ({
-      root,
-      control,
-    }),
-  });
-
-  return eventSupply(off)
+): Supply {
+  return root.get(HierarchyContext)
+      .provide({
+        a: InputFromControl,
+        by: () => ({
+          root,
+          control,
+        }),
+      })
       .needs(root)
       .needs(control);
 }

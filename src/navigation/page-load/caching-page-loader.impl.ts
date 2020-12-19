@@ -1,5 +1,5 @@
-import { nextArgs, nextSkip } from '@proc7ts/call-thru';
-import { eventSupply, EventSupply, OnEvent, onEventBy, trackValue } from '@proc7ts/fun-events';
+import { OnEvent, onEventBy, supplyOn, trackValue, valueOn_ } from '@proc7ts/fun-events';
+import { asis, Supply } from '@proc7ts/primitives';
 import { Page } from '../page';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoader } from './page-loader.impl';
@@ -12,7 +12,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
   let state: {
     readonly url: string;
     readonly on: OnEvent<[PageLoadResponse]>;
-    readonly sup: EventSupply;
+    readonly sup: Supply;
   } | undefined;
 
   return page => {
@@ -30,7 +30,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
       readonly on: OnEvent<[PageLoadResponse]>;
       num: number;
     } | undefined;
-    const supply = eventSupply().whenOff(() => {
+    const supply = new Supply(() => {
       state = undefined;
       tracked = undefined;
     });
@@ -40,7 +40,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
 
         const onLoad = loader(page);
         const tracker = trackValue<PageLoadResponse>();
-        const trackSupply = onLoad.to(resp => {
+        const trackSupply = onLoad(resp => {
           tracker.it = resp;
         }).whenOff(reason => {
           // Error drops page cache, unlike successful page load.
@@ -52,9 +52,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
         supply.cuts(trackSupply).cuts(tracker);
 
         tracked = {
-          on: tracker.read().thru_(
-              response => response ? nextArgs(response) : nextSkip(),
-          ),
+          on: tracker.read.do(valueOn_(asis)),
           num: 0,
         };
       }
@@ -63,7 +61,7 @@ export function cachingPageLoader(loader: PageLoader): PageLoader {
 
       ++requested.num;
 
-      return requested.on.tillOff(supply).to(receiver).whenOff(reason => {
+      return requested.on.do(supplyOn(supply))(receiver).whenOff(reason => {
         if (!--requested.num) {
           // Allow to request the same page again
           Promise.resolve().then(() => {

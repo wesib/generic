@@ -201,7 +201,7 @@ describe('navigation', () => {
       )
       class PageContent {}
 
-      const bsContext = await bootstrapComponents(PageContent).whenReady();
+      const bsContext = await bootstrapComponents(PageContent).whenReady;
       const defContext = await bsContext.whenDefined(PageContent);
 
       return defContext.mountTo(element);

@@ -13,7 +13,7 @@
     "url": "ssh://git@github.com:wesib/generic.git"
   },
   "license": "MIT",
-  "author": "Ruslan Lopatin<ruslan.lopatin@gmail.com>",
+  "author": "Ruslan Lopatin <ruslan.lopatin@gmail.com>",
   "bugs": {
     "url": "https://github.com/wesib/wesib/issues"
   },
@@ -36,15 +36,16 @@
     }
   },
   "peerDependencies": {
-    "@frontmeans/input-aspects": "^3.6.0",
+    "@frontmeans/input-aspects": "^4.0.0-dev.0",
     "@frontmeans/namespace-aliaser": "^2.3.0",
-    "@frontmeans/render-scheduler": "^1.5.0",
-    "@frontmeans/style-producer": "^5.6.2",
-    "@proc7ts/context-values": "^4.7.1",
-    "@proc7ts/fun-events": "^9.4.2",
+    "@frontmeans/style-producer": "^6.0.0-dev.0",
+    "@proc7ts/context-values": "^5.0.0-dev.1",
+    "@proc7ts/fun-events": "^10.0.0-dev.5",
     "@wesib/wesib": "^1.0.0-beta.24"
   },
   "dependencies": {
+    "@frontmeans/dom-events": "^1.0.0-dev.3",
+    "@frontmeans/render-scheduler": "^1.5.0",
     "@hatsy/http-header-value": "^3.5.3",
     "@proc7ts/call-thru": "^4.3.1",
     "@proc7ts/primitives": "^1.6.0",
@@ -59,13 +60,13 @@
     }
   },
   "devDependencies": {
-    "@frontmeans/input-aspects": "^3.6.0",
+    "@frontmeans/input-aspects": "^4.0.0-dev.0",
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/render-scheduler": "^1.5.0",
-    "@frontmeans/style-producer": "^5.6.2",
+    "@frontmeans/style-producer": "^6.0.0-dev.0",
     "@proc7ts/call-thru": "^4.3.1",
-    "@proc7ts/context-values": "^4.7.1",
-    "@proc7ts/fun-events": "^9.4.2",
+    "@proc7ts/context-values": "^5.0.0-dev.1",
+    "@proc7ts/fun-events": "^10.0.0-dev.5",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@run-z/eslint-config": "^1.1.0",

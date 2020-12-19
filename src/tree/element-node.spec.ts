@@ -214,7 +214,7 @@ describe('tree', () => {
 
               property.on(onUpdate);
 
-              property.done();
+              property.supply.off();
               element.property = newValue;
               expect(onUpdate).not.toHaveBeenCalledWith(newValue, expect.anything());
             });
@@ -392,7 +392,7 @@ describe('tree', () => {
           const onUpdate = jest.fn();
 
           attribute.on(onUpdate);
-          attribute.done();
+          attribute.supply.off();
           setAttribute('attr', newValue, oldValue);
           expect(onUpdate).not.toHaveBeenCalledWith(newValue, oldValue);
         });

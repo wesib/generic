@@ -3,9 +3,8 @@
  * @module @wesib/generic/input
  */
 import { InControl, InConverter, InFormElement } from '@frontmeans/input-aspects';
-import { nextArgs, NextCall } from '@proc7ts/call-thru';
-import { afterAll, EventKeeper, EventSupply, nextAfterEvent, OnEventCallChain } from '@proc7ts/fun-events';
-import { Class } from '@proc7ts/primitives';
+import { afterAll, afterThe, consumeEvents, digAfter, EventKeeper } from '@proc7ts/fun-events';
+import { Class, Supply } from '@proc7ts/primitives';
 import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { ComponentNode, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
@@ -33,25 +32,26 @@ export function FillInputForm<T extends ComponentClass = Class>(
 
         context.whenConnected(() => {
           afterAll({
-            node: componentNode.select(select, pick).first(),
+            node: componentNode.select(select, pick).first,
             aspects: context.get(DefaultInAspects),
-          }).keepThru(({
-            node: [node],
-            aspects: [aspects],
-          }): NextCall<OnEventCallChain, [InControl<any>, InFormElement, EventSupply?] | []> => {
-            if (!node) {
-              return nextArgs();
-            }
+          }).do(
+              digAfter(({
+                node: [node],
+                aspects: [aspects],
+              }): EventKeeper<[InControl<any>, InFormElement, Supply?] | []> => {
+                if (!node) {
+                  return afterThe();
+                }
 
-            const tuple = def.makeForm({ node, context, aspects });
+                const tuple = def.makeForm({ node, context, aspects });
 
-            if (!tuple) {
-              return nextArgs();
-            }
+                if (!tuple) {
+                  return afterThe();
+                }
 
-            return Array.isArray(tuple) ? nextArgs(...tuple) : nextAfterEvent(tuple);
-          }).consume(
-              (control?, form?, supply?) => {
+                return Array.isArray(tuple) ? afterThe(...tuple) : tuple;
+              }),
+              consumeEvents((control?, form?, supply?) => {
                 if (!control) {
                   return;
                 }
@@ -65,7 +65,7 @@ export function FillInputForm<T extends ComponentClass = Class>(
                 }
 
                 return fillSupply;
-              },
+              }),
           );
         });
       });
@@ -122,7 +122,7 @@ export interface FillInputFormDef<T extends object = any> {
       },
   ):
       | [InControl<any>, InFormElement]
-      | EventKeeper<[InControl<any>, InFormElement, EventSupply?] | []>
+      | EventKeeper<[InControl<any>, InFormElement, Supply?] | []>
       | null
       | undefined;
 

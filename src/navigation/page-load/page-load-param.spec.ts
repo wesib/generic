@@ -1,5 +1,5 @@
-import { afterThe, EventEmitter, eventSupply } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import { afterThe, EventEmitter, onceOn } from '@proc7ts/fun-events';
+import { noop, Supply } from '@proc7ts/primitives';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
@@ -30,7 +30,7 @@ describe('navigation', () => {
 
     beforeEach(() => {
       responder = new EventEmitter();
-      mockAgent = jest.fn((_next, _request) => responder.on());
+      mockAgent = jest.fn((_next, _request) => responder.on);
       receiver = jest.fn();
     });
 
@@ -48,7 +48,7 @@ describe('navigation', () => {
       class TestFeature {
       }
 
-      context = await bootstrapComponents(TestFeature).whenReady();
+      context = await bootstrapComponents(TestFeature).whenReady;
       navigation = context.get(Navigation);
       navigation.read(p => page = p);
     });
@@ -184,7 +184,7 @@ describe('navigation', () => {
     });
     it('does not report to unregistered receivers', async () => {
 
-      const supply = eventSupply();
+      const supply = new Supply();
       const receiver2 = jest.fn();
 
       page.put(PageLoadParam, { receiver: { supply, receive: (_, r) => receiver(r) } });
@@ -201,7 +201,7 @@ describe('navigation', () => {
       expect(receiver2).not.toHaveBeenCalled();
     });
     it('does not load page when navigation cancelled', async () => {
-      navigation.onLeave().once(event => event.preventDefault());
+      navigation.onLeave.do(onceOn)(event => event.preventDefault());
       await navigation.with(PageLoadParam, { receiver }).open('/other');
 
       const response = { ok: true, page } as PageLoadResponse;

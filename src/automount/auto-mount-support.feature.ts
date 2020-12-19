@@ -2,7 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
+import { DomEventDispatcher } from '@frontmeans/dom-events';
+import { onceOn } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import { itsEach, overArray } from '@proc7ts/push-iterator';
 import {
@@ -103,7 +104,7 @@ function mountExistingElements(context: FeatureContext, { select = '*' }: AutoMo
   };
 
   if (document.readyState === 'loading') {
-    new DomEventDispatcher(document).on('DOMContentLoaded').once(adapt);
+    new DomEventDispatcher(document).on('DOMContentLoaded').do(onceOn)(adapt);
   } else {
     adapt();
   }

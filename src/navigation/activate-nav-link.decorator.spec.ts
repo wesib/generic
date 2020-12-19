@@ -464,7 +464,7 @@ describe('navigation', () => {
         expect(link2.classList.contains('active@b')).toBe(true);
         expect(link3.classList).toHaveLength(0);
 
-        w2.done();
+        w2.supply.off();
         expect(link1.classList.contains('active@b')).toBe(true);
         expect(link2.classList).toHaveLength(0);
         expect(link3.classList).toHaveLength(0);
@@ -495,7 +495,7 @@ describe('navigation', () => {
       )
       class TestComponent {}
 
-      const bsContext = await bootstrapComponents(TestComponent).whenReady();
+      const bsContext = await bootstrapComponents(TestComponent).whenReady;
       const defContext = await bsContext.whenDefined(TestComponent);
 
       return defContext.mountTo(root);

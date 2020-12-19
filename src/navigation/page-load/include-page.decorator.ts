@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { eventSupply } from '@proc7ts/fun-events';
-import { Class, noop, valueProvider } from '@proc7ts/primitives';
+import { onceAfter } from '@proc7ts/fun-events';
+import { Class, noop, Supply, valueProvider } from '@proc7ts/primitives';
 import {
   BootstrapWindow,
   Component,
@@ -75,13 +75,13 @@ export function IncludePage<T extends ComponentClass = Class>(
 
           range.selectNodeContents(context.contentRoot);
 
-          navigation.read().once(page => {
+          navigation.read.do(onceAfter)(page => {
             page.put(
                 PageLoadParam,
                 {
                   fragment: detectFragment(),
                   receiver: {
-                    supply: eventSupply().needs(context),
+                    supply: new Supply().needs(context),
                     receive: (_ctx, response) => handleResponse(response),
                   },
                 },

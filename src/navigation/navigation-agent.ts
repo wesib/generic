@@ -4,7 +4,7 @@
  */
 import { ContextValueSlot } from '@proc7ts/context-values';
 import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
-import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';
 import { BootstrapWindow } from '@wesib/wesib';
 import { Navigation } from './navigation';
 import { Page } from './page';
@@ -52,16 +52,16 @@ class NavigationAgentKey
 
           const { document } = slot.context.get(BootstrapWindow);
 
-          slot.insert(slot.seed.keepThru(
-              (...agents) => {
+          slot.insert(slot.seed.do(
+              digAfter((...agents) => {
                 if (agents.length) {
-                  return combinedAgent;
+                  return afterThe(combinedAgent);
                 }
                 if (slot.hasFallback && slot.or) {
-                  return nextAfterEvent(slot.or);
+                  return slot.or;
                 }
 
-                return defaultNavigationAgent;
+                return afterThe(defaultNavigationAgent);
 
                 function combinedAgent(
                     next: (this: void, target: Navigation.URLTarget) => void,
@@ -115,7 +115,7 @@ class NavigationAgentKey
                     );
                   }
                 }
-              },
+              }),
           ));
         },
     );
@@ -133,7 +133,7 @@ class NavigationAgentKey
     slot.context.get(
         this.upKey,
         slot.hasFallback ? { or: slot.or != null ? afterThe(slot.or) : slot.or } : undefined,
-    )!.to(
+    )!(
         agent => delegated = agent,
     ).whenOff(
         reason => delegated = contextDestroyed(reason),

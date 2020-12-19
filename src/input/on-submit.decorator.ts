@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @wesib/generic/input
  */
-import { eventSupplyOf } from '@proc7ts/fun-events';
-import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
+import { DomEventDispatcher, handleDomEvents } from '@frontmeans/dom-events';
+import { consumeEvents } from '@proc7ts/fun-events';
 import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { InputToForm, NoInputToForm } from './input-to-form';
@@ -35,21 +35,21 @@ export function OnSubmit<T extends ComponentClass, Model = any, Elt extends HTML
             const hierarchy = context.get(HierarchyContext);
             const { component } = context;
 
-            hierarchy.get(InputToForm).consume((inputToForm: InputToForm<Model, Elt> | NoInputToForm) => {
+            hierarchy.get(InputToForm).do(consumeEvents((inputToForm: InputToForm<Model, Elt> | NoInputToForm) => {
               if (!inputToForm.control) {
                 return;
               }
 
               const submitDispatcher = new DomEventDispatcher(inputToForm.form.element);
 
-              eventSupplyOf(submitDispatcher).needs(context);
+              submitDispatcher.supply.needs(context);
 
               const onSubmit = submitDispatcher.on('submit');
 
-              return (cancel ? onSubmit.instead() : onSubmit).to(
+              return (cancel ? onSubmit.do(handleDomEvents(false)) : onSubmit)(
                   event => get(component).call(component, inputToForm, event),
               );
-            });
+            }));
           });
         });
       },

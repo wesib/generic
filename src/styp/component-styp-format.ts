@@ -18,8 +18,7 @@ import {
   StypSubSelector,
 } from '@frontmeans/style-producer';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
-import { EventSupply, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
-import { elementOrArray, extendSetOfElements, setOfElements, valueProvider } from '@proc7ts/primitives';
+import { elementOrArray, extendSetOfElements, setOfElements, Supply, valueProvider } from '@proc7ts/primitives';
 import { ComponentContext, ShadowContentRoot } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
 import { componentStypDomFormatConfig } from './component-styp-dom.format-config';
@@ -128,10 +127,10 @@ export abstract class ComponentStypFormat {
   produce(
       rules: StypRules.Source,
       config?: ComponentStypFormatConfig,
-  ): EventSupply {
+  ): Supply {
 
     const producer = this.newProducer(rules, config);
-    const supply = eventSupply();
+    const supply = new Supply();
 
     this.context.whenSettled(() => {
       producer().needs(supply).cuts(supply);
@@ -153,11 +152,11 @@ export abstract class ComponentStypFormat {
   newProducer(
       rules: StypRules.Source,
       config?: ComponentStypFormatConfig,
-  ): (this: void) => EventSupply {
+  ): (this: void) => Supply {
 
     const css = lazyStypRules(rules);
-    let producer: () => EventSupply;
-    const componentSupply = eventSupplyOf(this.context);
+    let producer: () => Supply;
+    const componentSupply = this.context.supply;
 
     producer = () => {
 

@@ -13,16 +13,13 @@ import {
 import {
   AfterEvent,
   afterEventBy,
-  EventReceiver,
-  EventSupply,
-  eventSupply,
-  EventSupply__symbol,
-  eventSupplyOf,
-  EventSupplyPeer,
+  consumeEvents,
+  shareAfter,
+  supplyAfter,
   trackValue,
   ValueTracker,
 } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import { noop, Supply, SupplyPeer } from '@proc7ts/primitives';
 import { BootstrapContext, ComponentContext } from '@wesib/wesib';
 import { newHierarchyRegistry } from './hierarchy-registry.impl';
 import { findParentContext, HierarchyRoot, HierarchyUpdates } from './hierarchy-updates.impl';
@@ -46,7 +43,7 @@ const HierarchyContext__key = (/*#__PURE__*/ new SingleContextKey<HierarchyConte
  *
  * @typeparam T  A type of component.
  */
-export abstract class HierarchyContext<T extends object = any> extends ContextValues implements EventSupplyPeer {
+export abstract class HierarchyContext<T extends object = any> extends ContextValues implements SupplyPeer {
 
   /**
    * A key of component context value containing its hierarchy context instance.
@@ -60,29 +57,16 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
    */
   abstract readonly context: ComponentContext<T>;
 
-  get [EventSupply__symbol](): EventSupply {
-    return eventSupplyOf(this.context);
+  /**
+   * An `AfterEvent` keeper of enclosing component's hierarchy context.
+   *
+   * May send `undefined` when component is outside of hierarchy. E.g. when it is disconnected.
+   */
+  abstract readonly up: AfterEvent<[HierarchyContext?]>;
+
+  get supply(): Supply {
+    return this.context.supply;
   }
-
-  /**
-   * Builds an `AfterEvent` keeper of enclosing component's hierarchy context.
-   *
-   * May send `undefined` when component is outside of hierarchy. E.g. when it is disconnected.
-   *
-   * @returns An `AfterEvent` of enclosing hierarcy context.
-   */
-  abstract up(): AfterEvent<[HierarchyContext?]>;
-
-  /**
-   * Starts sending enclosing component's hierarchy context and updates to the given `receiver`
-   *
-   * May send `undefined` when component is outside of hierarchy. E.g. when it is disconnected.
-   *
-   * @param receiver  Target receiver of enclosing hierarchy context.
-   *
-   * @returns Enclosing hierarchy context supply.
-   */
-  abstract up(receiver: EventReceiver<[HierarchyContext?]>): EventSupply;
 
   /**
    * Assigns enclosing component to use by default.
@@ -107,11 +91,11 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
    * @typeparam Seed  Value seed type.
    * @param spec  Context value specifier.
    *
-   * @returns A function that removes the given context value specifier when called.
+   * @returns A value supply that that removes the given context value specifier once cut off.
    */
   abstract provide<Deps extends any[], Src, Seed>(
       spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src, Seed>,
-  ): () => void;
+  ): Supply;
 
 }
 
@@ -120,34 +104,12 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
   private readonly _parent: ValueTracker<HierarchyContext | undefined>;
   private readonly _registry: ContextRegistry<HierarchyContext<T>>;
   readonly get: HierarchyContext<T>['get'];
+  readonly up: AfterEvent<[HierarchyContext?]>;
 
   constructor(readonly context: ComponentContext<T>) {
     super();
 
-    const parent = this._parent = trackValue<HierarchyContext>();
-
-    context.whenConnected(noop).cuts(parent);
-
-    const registry = this._registry = newHierarchyRegistry<T>(this.up());
-
-    this.get = registry.newValues().get;
-  }
-
-  provide<Deps extends any[], Src, Seed>(
-      spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src, Seed>,
-  ): () => void {
-
-    const off = this._registry.provide(spec);
-
-    eventSupplyOf(this).whenOff(off);
-
-    return off;
-  }
-
-  up(): AfterEvent<[HierarchyContext?]>;
-  up(receiver: EventReceiver<[HierarchyContext?]>): EventSupply;
-  up(receiver?: EventReceiver<[HierarchyContext?]>): AfterEvent<[HierarchyContext?]> | EventSupply {
-    return (this.up = afterEventBy<[HierarchyContext?]>(
+    this.up = afterEventBy<[HierarchyContext?]>(
         receiver => {
 
           const { supply } = receiver;
@@ -159,8 +121,8 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
           parentHierarchy.by(this._parent);
           supply.cuts(parentHierarchy);
 
-          const rootSupply = eventSupply().needs(supply);
-          const parentSupply = eventSupply().needs(supply);
+          const rootSupply = new Supply().needs(supply);
+          const parentSupply = new Supply().needs(supply);
           const updateParent = (): void => {
 
             const parent = findParentContext(this.context);
@@ -183,16 +145,31 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
             supply: rootSupply,
             receive: () => this.context.connected && updateParent(),
           });
-          parentHierarchy.read().tillOff(parentSupply).consume(
-              newParent => newParent && newParent.context.get(HierarchyUpdates).on.to(updateParent),
+          parentHierarchy.read.do(
+              supplyAfter(parentSupply),
+              consumeEvents(newParent => newParent && newParent.context.get(HierarchyUpdates).on(updateParent)),
           );
           parentHierarchy.read(receiver);
           this.context.whenConnected({
-            supply: eventSupply().needs(supply),
+            supply: new Supply().needs(supply),
             receive: updateParent,
           });
         },
-    ).share().F)(receiver);
+    ).do(shareAfter);
+
+    const parent = this._parent = trackValue<HierarchyContext>();
+
+    context.whenConnected(noop).cuts(parent);
+
+    const registry = this._registry = newHierarchyRegistry<T>(this.up);
+
+    this.get = registry.newValues().get;
+  }
+
+  provide<Deps extends any[], Src, Seed>(
+      spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src, Seed>,
+  ): Supply {
+    return this._registry.provide(spec).needs(this);
   }
 
   inside(enclosing?: ComponentContext): this {

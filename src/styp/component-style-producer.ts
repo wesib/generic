@@ -4,7 +4,7 @@
  */
 import { produceBasicStyle, StypFormat, StypRules } from '@frontmeans/style-producer';
 import { SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
-import { EventSupply } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { bootstrapDefault } from '@wesib/wesib';
 
 /**
@@ -21,7 +21,7 @@ export type ComponentStyleProducer =
     (
         rules: StypRules,
         format: StypFormat,
-    ) => EventSupply;
+    ) => Supply;
 
 /**
  * A key of bootstrap, definition, or component context value containing a component style producer.

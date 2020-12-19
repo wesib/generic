@@ -1,17 +1,15 @@
 import { html__naming } from '@frontmeans/namespace-aliaser';
-import { nextArg } from '@proc7ts/call-thru';
 import {
   AfterEvent,
   afterEventBy,
-  afterSent,
   afterSupplied,
   EventEmitter,
-  EventReceiver,
-  EventSupply,
+  mapAfter,
   OnEvent,
   onEventBy,
+  translateAfter,
 } from '@proc7ts/fun-events';
-import { isPresent, valuesProvider } from '@proc7ts/primitives';
+import { isPresent, valueProvider } from '@proc7ts/primitives';
 import {
   filterArray,
   filterIt,
@@ -115,13 +113,17 @@ export function elementNodeList<N extends ElementNode>(
 
   class ElementNodeList$ extends ElementNodeList<N> implements PushIterable<N> {
 
-    onUpdate(): OnEvent<[N[], N[]]>;
-    onUpdate(receiver: EventReceiver<[N[], N[]]>): EventSupply;
-    onUpdate(receiver?: EventReceiver<[N[], N[]]>): OnEvent<[N[], N[]]> | EventSupply {
+    readonly onUpdate: OnEvent<[N[], N[]]>;
+    readonly read: AfterEvent<[ElementNodeList<N>]>;
+    readonly track: AfterEvent<[readonly N[], readonly N[]]>;
+    readonly first: AfterEvent<[N?]>;
+
+    constructor() {
+      super();
 
       const observer = bsContext.get(ElementObserver)(update);
 
-      return (this.onUpdate = onEventBy<[N[], N[]]>(receiver => {
+      this.onUpdate = onEventBy<[N[], N[]]>(receiver => {
 
         const firstReceiver = !updates.size;
         const supply = updates.on(receiver);
@@ -131,49 +133,31 @@ export function elementNodeList<N extends ElementNode>(
           observer.observe(root, init);
         }
 
-        return supply.whenOff(() => {
+        supply.whenOff(() => {
           if (!updates.size) {
             observer.disconnect();
             clearCache(); // clear cache as there is no more receivers
           }
-        });
-      }).F)(receiver);
-    }
+        }).needs(receiver.supply);
+      });
 
-    read(): AfterEvent<[ElementNodeList<N>]>;
-    read(receiver: EventReceiver<[ElementNodeList<N>]>): EventSupply;
-    read(receiver?: EventReceiver<[ElementNodeList<N>]>): AfterEvent<[ElementNodeList<N>]> | EventSupply {
-      return (this.read = afterSent<[ElementNodeList<N>]>(
-          this.onUpdate().thru(() => this),
-          valuesProvider(this),
-      ).F)(receiver);
-    }
+      const returnSelf = valueProvider(this);
 
-    track(): AfterEvent<[readonly N[], readonly N[]]>;
-    track(receiver: EventReceiver<[readonly N[], readonly N[]]>): EventSupply;
-    track(
-        receiver?: EventReceiver<[readonly N[], readonly N[]]>,
-    ): AfterEvent<[readonly N[], readonly N[]]> | EventSupply {
+      this.read = this.onUpdate.do(mapAfter(returnSelf, returnSelf));
 
-      const onUpdate: OnEvent<[readonly N[], readonly N[]]> = this.onUpdate();
-
-      return (this.track = afterEventBy<[readonly N[], readonly N[]]>(receiver => {
+      this.track = afterEventBy<[readonly N[], readonly N[]]>(receiver => {
 
         const initialEmitter = new EventEmitter<[readonly N[], readonly N[]]>();
 
         initialEmitter.on(receiver);
         initialEmitter.send(itsElements(this), []);
 
-        onUpdate.to(receiver);
-      }).F)(receiver);
-    }
+        this.onUpdate(receiver);
+      });
 
-    first(): AfterEvent<[N?]>;
-    first(receiver: EventReceiver<[N?]>): EventSupply;
-    first(receiver?: EventReceiver<[N?]>): AfterEvent<[N?]> | EventSupply {
-      return (this.first = afterSupplied(this.read()).keepThru(
-          list => nextArg<N | undefined>(itsFirst(list)),
-      ).F)(receiver);
+      this.first = afterSupplied(this.read).do(translateAfter(
+          (send, list) => send(itsFirst(list)),
+      ));
     }
 
     [Symbol.iterator](): PushIterator<N> {

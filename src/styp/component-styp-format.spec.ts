@@ -14,7 +14,8 @@ import {
   stypSelector,
 } from '@frontmeans/style-producer';
 import { ContextRegistry } from '@proc7ts/context-values';
-import { eventSupply, EventSupply, EventSupply__symbol, trackValue } from '@proc7ts/fun-events';
+import { trackValue } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import {
   BootstrapWindow,
   ComponentContext,
@@ -31,10 +32,10 @@ import Mock = jest.Mock;
 
 describe('styp', () => {
 
-  let done: EventSupply;
+  let done: Supply;
 
   beforeEach(() => {
-    done = eventSupply();
+    done = new Supply();
   });
   afterEach(() => {
     done.off();
@@ -50,9 +51,9 @@ describe('styp', () => {
     const ready = trackValue<ComponentContext>();
 
     context = {
-      [EventSupply__symbol]: eventSupply(),
-      whenReady: ready.read().F,
-      whenSettled: ready.read().F,
+      supply: new Supply(),
+      whenReady: ready.read,
+      whenSettled: ready.read,
       settled: true,
       get: values.get,
       contentRoot: document.createElement('content-root'),

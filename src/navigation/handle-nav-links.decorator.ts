@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { onceAfter } from '@proc7ts/fun-events';
 import { Class, setOfElements } from '@proc7ts/primitives';
 import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { Navigation } from './navigation';
@@ -32,8 +33,8 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
           const navigation = context.get(Navigation);
 
           for (const eventType of events) {
-            context.on(eventType).to(event => {
-              navigation.read().once(
+            context.on(eventType)(event => {
+              navigation.read.do(onceAfter)(
                   page => handle({
                     event,
                     page,

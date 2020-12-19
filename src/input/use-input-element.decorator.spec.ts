@@ -1,6 +1,6 @@
 import { InControl, InElement, inText } from '@frontmeans/input-aspects';
-import { afterThe, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import { afterThe, onceAfter } from '@proc7ts/fun-events';
+import { noop, Supply } from '@proc7ts/primitives';
 import { bootstrapComponents, ComponentMount } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { InputFromControl } from './input-from-control';
@@ -26,7 +26,7 @@ describe('input', () => {
         makeControl: ({ node }) => inText(node.element),
       });
 
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeInstanceOf(InElement);
             expect(control!.aspect(InElement)!.element).toBe(input);
@@ -40,7 +40,7 @@ describe('input', () => {
         makeControl: ({ node }) => inText(node.element),
       });
 
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeUndefined();
           },
@@ -52,7 +52,7 @@ describe('input', () => {
         makeControl: noop,
       });
 
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeUndefined();
           },
@@ -66,15 +66,15 @@ describe('input', () => {
 
       let ctrl!: InControl<any>;
 
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => ctrl = control!,
       );
 
       input.remove();
       await Promise.resolve();
 
-      expect(eventSupplyOf(ctrl).isOff).toBe(true);
-      context.get(HierarchyContext).get(InputFromControl).once(
+      expect(ctrl.supply.isOff).toBe(true);
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeUndefined();
           },
@@ -82,23 +82,23 @@ describe('input', () => {
     });
     it('cuts off provided supply when control unused', async () => {
 
-      const supply = eventSupply();
+      const supply = new Supply();
       const { context } = await bootstrap({
         makeControl: ({ node }) => afterThe(inText(node.element), supply),
       });
 
       let ctrl!: InControl<any>;
 
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => ctrl = control!,
       );
 
       input.remove();
       await Promise.resolve();
 
-      expect(eventSupplyOf(ctrl).isOff).toBe(false);
+      expect(ctrl.supply.isOff).toBe(false);
       expect(supply.isOff).toBe(true);
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeUndefined();
           },
@@ -110,7 +110,7 @@ describe('input', () => {
       @UseInputElement(def)
       class TestElement {}
 
-      const bsContext = await bootstrapComponents(TestElement).whenReady();
+      const bsContext = await bootstrapComponents(TestElement).whenReady;
       const defContext = await bsContext.whenDefined(TestElement);
 
       return defContext.mountTo(element);
