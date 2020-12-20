@@ -93,11 +93,12 @@ export interface ComponentTreeNode {
    * The changes are tracked with `StateTracker`. So it is expected that the target property notifies on its changes
    * with state updater. E.g. when it is defined by `@DomProperty` decorator.
    *
+   * @typeParam TValue - Property value type.
    * @param key - Target property key.
    *
    * @returns Target property's value tracker.
    */
-  property<V>(key: PropertyKey): ValueTracker<V>;
+  property<TValue>(key: PropertyKey): ValueTracker<TValue>;
 
 }
 

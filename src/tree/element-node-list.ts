@@ -20,43 +20,45 @@ import { ElementNode } from './element-node';
  * Implements an `EventSender` interface by sending added and removed nodes arrays.
  *
  * Implements an `EventKeeper` interface by sending updated node list.
+ *
+ * @typeParam TNode - A type of element nodes.
  */
-export abstract class ElementNodeList<N extends ElementNode = ElementNode>
-    implements Iterable<N>, EventSender<[N[], N[]]>, EventKeeper<[ElementNodeList<N>]> {
+export abstract class ElementNodeList<TNode extends ElementNode = ElementNode>
+    implements Iterable<TNode>, EventSender<[TNode[], TNode[]]>, EventKeeper<[ElementNodeList<TNode>]> {
 
   /**
    * An `OnEvent` sender of this list changes.
    *
    * The `[OnEvent__symbol]` property is an alias of this one.
    */
-  abstract readonly onUpdate: OnEvent<[N[], N[]]>;
+  abstract readonly onUpdate: OnEvent<[TNode[], TNode[]]>;
 
   /**
    * An `AfterEvent` keeper of current node list.
    *
    * The `[AfterEvent__symbol]` property is an alias of this one.
    */
-  abstract readonly read: AfterEvent<[ElementNodeList<N>]>;
+  abstract readonly read: AfterEvent<[ElementNodeList<TNode>]>;
 
   /**
    * An `AfterEvent` keeper of tracked list changes.
    *
    * Sends current nodes immediately upon receiver registration as added ones.
    */
-  abstract readonly track: AfterEvent<[readonly N[], readonly N[]]>;
+  abstract readonly track: AfterEvent<[readonly TNode[], readonly TNode[]]>;
 
   /**
    * An `AfterEvent` keeper of either the first node in this list, or `undefined` when the list is empty.
    */
-  abstract readonly first: AfterEvent<[N?]>;
+  abstract readonly first: AfterEvent<[TNode?]>;
 
-  abstract [Symbol.iterator](): Iterator<N>;
+  abstract [Symbol.iterator](): Iterator<TNode>;
 
-  [OnEvent__symbol](): OnEvent<[N[], N[]]> {
+  [OnEvent__symbol](): OnEvent<[TNode[], TNode[]]> {
     return this.onUpdate;
   }
 
-  [AfterEvent__symbol](): AfterEvent<[ElementNodeList<N>]> {
+  [AfterEvent__symbol](): AfterEvent<[ElementNodeList<TNode>]> {
     return this.read;
   }
 

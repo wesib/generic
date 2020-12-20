@@ -44,15 +44,15 @@ const WATCH_DEEP: ElementObserverInit = { subtree: true };
 /**
  * @internal
  */
-export function elementNodeList<N extends ElementNode>(
+export function elementNodeList<TNode extends ElementNode>(
     bsContext: BootstrapContext,
     root: Element,
     selectorOrType: string | ComponentClass<any>,
-    nodeOf: (node: Element, optional?: boolean) => N | undefined,
+    nodeOf: (node: Element, optional?: boolean) => TNode | undefined,
     { deep, all }: ElementPickMode,
-): ElementNodeList<N> {
+): ElementNodeList<TNode> {
 
-  const updates = new EventEmitter<[N[], N[]]>();
+  const updates = new EventEmitter<[TNode[], TNode[]]>();
   const init = deep ? WATCH_DEEP : undefined;
   let cache = new Set<Element>();
   let selector: string | undefined;
@@ -73,7 +73,7 @@ export function elementNodeList<N extends ElementNode>(
           if (selected.size) {
 
             const added = itsElements(
-                filterIt<N | undefined, N>(
+                filterIt<TNode | undefined, TNode>(
                     mapIt(selected, node => nodeOf(node)),
                     isPresent,
                 ),
@@ -96,14 +96,14 @@ export function elementNodeList<N extends ElementNode>(
 
       if (cache.has(element)) {
 
-        const node = nodeOf(element) as N;
+        const node = nodeOf(element) as TNode;
 
         updates.send([node], []);
       }
     });
   }
 
-  const iterable: PushIterable<N> = filterIt<N | undefined, N>(
+  const iterable: PushIterable<TNode> = filterIt<TNode | undefined, TNode>(
       mapIt(
           overIterator(elements),
           element => nodeOf(element),
@@ -111,19 +111,19 @@ export function elementNodeList<N extends ElementNode>(
       isPresent,
   );
 
-  class ElementNodeList$ extends ElementNodeList<N> implements PushIterable<N> {
+  class ElementNodeList$ extends ElementNodeList<TNode> implements PushIterable<TNode> {
 
-    readonly onUpdate: OnEvent<[N[], N[]]>;
-    readonly read: AfterEvent<[ElementNodeList<N>]>;
-    readonly track: AfterEvent<[readonly N[], readonly N[]]>;
-    readonly first: AfterEvent<[N?]>;
+    readonly onUpdate: OnEvent<[TNode[], TNode[]]>;
+    readonly read: AfterEvent<[ElementNodeList<TNode>]>;
+    readonly track: AfterEvent<[readonly TNode[], readonly TNode[]]>;
+    readonly first: AfterEvent<[TNode?]>;
 
     constructor() {
       super();
 
       const observer = bsContext.get(ElementObserver)(update);
 
-      this.onUpdate = onEventBy<[N[], N[]]>(receiver => {
+      this.onUpdate = onEventBy<[TNode[], TNode[]]>(receiver => {
 
         const firstReceiver = !updates.size;
         const supply = updates.on(receiver);
@@ -145,9 +145,9 @@ export function elementNodeList<N extends ElementNode>(
 
       this.read = this.onUpdate.do(mapAfter(returnSelf, returnSelf));
 
-      this.track = afterEventBy<[readonly N[], readonly N[]]>(receiver => {
+      this.track = afterEventBy<[readonly TNode[], readonly TNode[]]>(receiver => {
 
-        const initialEmitter = new EventEmitter<[readonly N[], readonly N[]]>();
+        const initialEmitter = new EventEmitter<[readonly TNode[], readonly TNode[]]>();
 
         initialEmitter.on(receiver);
         initialEmitter.send(itsElements(this), []);
@@ -160,11 +160,11 @@ export function elementNodeList<N extends ElementNode>(
       ));
     }
 
-    [Symbol.iterator](): PushIterator<N> {
+    [Symbol.iterator](): PushIterator<TNode> {
       return this[PushIterator__symbol]();
     }
 
-    [PushIterator__symbol](accept?: PushIterator.Acceptor<N>): PushIterator<N> {
+    [PushIterator__symbol](accept?: PushIterator.Acceptor<TNode>): PushIterator<TNode> {
       return iterable[PushIterator__symbol](accept);
     }
 
@@ -207,19 +207,19 @@ export function elementNodeList<N extends ElementNode>(
 
   function update(mutations: MutationRecord[]): void {
 
-    const added: N[] = [];
-    const removed: N[] = [];
+    const added: TNode[] = [];
+    const removed: TNode[] = [];
 
     mutations.forEach(mutation => {
       itsEach(
-          filterIt<N | undefined, N>(
+          filterIt<TNode | undefined, TNode>(
               mapIt(overNodes(mutation.removedNodes), removeNode),
               isPresent,
           ),
           node => removed.push(node),
       );
       itsEach(
-          filterIt<N | undefined, N>(
+          filterIt<TNode | undefined, TNode>(
               mapIt(overNodes(mutation.addedNodes), addNode),
               isPresent,
           ),
@@ -231,7 +231,7 @@ export function elementNodeList<N extends ElementNode>(
     }
   }
 
-  function addNode(node: Node): N | undefined {
+  function addNode(node: Node): TNode | undefined {
     if (!isElement(node)) {
       return;
     }
@@ -242,7 +242,7 @@ export function elementNodeList<N extends ElementNode>(
     return;
   }
 
-  function removeNode(node: Node): N | undefined {
+  function removeNode(node: Node): TNode | undefined {
     if (!isElement(node)) {
       return;
     }
