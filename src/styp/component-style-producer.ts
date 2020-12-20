@@ -12,9 +12,9 @@ import { bootstrapDefault } from '@wesib/wesib';
  */
 export type ComponentStyleProducer =
 /**
- * @param rules  CSS rules to produce stylesheets for. This can be e.g. a `StypRule.rules` to render all rules,
+ * @param rules - CSS rules to produce stylesheets for. This can be e.g. a `StypRule.rules` to render all rules,
  * or a result of `StypRuleList.grab()` method call to render only matching ones.
- * @param format  Style production format.
+ * @param format - Style production format.
  *
  * @returns Styles supply. Once cut off (i.e. its `off()` method is called) the produced stylesheets are removed.
  */
@@ -27,7 +27,7 @@ export type ComponentStyleProducer =
  * A key of bootstrap, definition, or component context value containing a component style producer.
  *
  * Utilizes `produceBasicStyle()` by default. I.e. it does not enable default renderers. To enable them all a
- * [[StyleProducerSupport]] can be used.
+ * {@link StyleProducerSupport} can be used.
  *
  * Depends on [@frontmeans/style-producer].
  *

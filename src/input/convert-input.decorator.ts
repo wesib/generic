@@ -14,7 +14,7 @@ import { inputFromControl, InputFromControl, NoInputFromControl } from './input-
  * Constructs component decorator that converts input control from {@link HierarchyContext.up enclosing component}
  * and uses it as an {@link InputFromControl origin of user input} in decorated component.
  *
- * @param convert  Input control converter definition.
+ * @param convert - Input control converter definition.
  *
  * @returns New component decorator.
  */
@@ -78,9 +78,9 @@ export function ConvertInput<T extends ComponentClass = Class>(
  */
 export type ConvertInputDef<T extends object = any> =
 /**
- * @param control  Enclosing component's user input to convert.
- * @param context  Decorated component context.
- * @param aspects  Default input aspect converter. This is a value of [[DefaultInAspects]].
+ * @param control - Enclosing component's user input to convert.
+ * @param context - Decorated component context.
+ * @param aspects - Default input aspect converter. This is a value of {@link DefaultInAspects}.
  *
  * @returns Either input control, its keeper, or nothing.
  */

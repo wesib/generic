@@ -29,8 +29,8 @@ export class ComponentStypDomFormat extends ComponentStypFormat {
   /**
    * Constructs DOM style production format.
    *
-   * @param context  Target component context.
-   * @param when  When to start style rendering. `settled` by default.
+   * @param context - Target component context.
+   * @param when - When to start style rendering. `settled` by default.
    */
   constructor(
       readonly context: ComponentContext,
@@ -53,7 +53,7 @@ export class ComponentStypDomFormat extends ComponentStypFormat {
    *
    * This method is called by {@link format} one.
    *
-   * @param config  Original component style production format configuration.
+   * @param config - Original component style production format configuration.
    *
    * @returns Configuration of DOM style production format.
    */

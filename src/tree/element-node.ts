@@ -40,8 +40,8 @@ export interface ComponentTreeNode {
   /**
    * Selects component nodes matching the given selector.
    *
-   * @param selector  Simple CSS selector of nested components.
-   * @param mode  Component nodes pick mode.
+   * @param selector - Simple CSS selector of nested components.
+   * @param mode - Component nodes pick mode.
    *
    * @returns Dynamically updatable list of matching component nodes.
    */
@@ -53,8 +53,8 @@ export interface ComponentTreeNode {
   /**
    * Selects component nodes of the given type.
    *
-   * @param componentType  Nested component type with custom element name.
-   * @param mode  Component nodes pick mode.
+   * @param componentType - Nested component type with custom element name.
+   * @param mode - Component nodes pick mode.
    *
    * @returns Dynamically updatable list of matching component nodes.
    */
@@ -66,8 +66,8 @@ export interface ComponentTreeNode {
   /**
    * Selects element nodes matching the given selector.
    *
-   * @param selector  Simple CSS selector of nested elements. E.g. CSS class selector.
-   * @param mode  A mode of node picking from component tree.
+   * @param selector - Simple CSS selector of nested elements. E.g. CSS class selector.
+   * @param mode - A mode of node picking from component tree.
    *
    * @returns Dynamically updatable list of matching element nodes.
    */
@@ -81,7 +81,7 @@ export interface ComponentTreeNode {
    *
    * `null` attribute value corresponds to its absence. Setting it to `null` removes attribute.
    *
-   * @param name  Target attribute name.
+   * @param name - Target attribute name.
    *
    * @returns Target attribute's value tracker.
    */
@@ -93,7 +93,7 @@ export interface ComponentTreeNode {
    * The changes are tracked with `StateTracker`. So it is expected that the target property notifies on its changes
    * with state updater. E.g. when it is defined by `@DomProperty` decorator.
    *
-   * @param key  Target property key.
+   * @param key - Target property key.
    *
    * @returns Target property's value tracker.
    */

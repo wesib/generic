@@ -17,9 +17,9 @@ import { PageLoadResponse } from './page-load-response';
  */
 export type PageLoadAgent =
 /**
- * @param next  Either calls the next agent in chain, or actually loads page document if this agent is the last one.
+ * @param next - Either calls the next agent in chain, or actually loads page document if this agent is the last one.
  * Accepts an optional `Request` parameter. The original request will be used instead when omitted.
- * @param request  HTTP request.
+ * @param request - HTTP request.
  *
  * @returns An `EventSender` of page load response. It is returned either to preceding agent in chain, or as a loaded
  * document.
@@ -35,15 +35,15 @@ export namespace PageLoadAgent {
   /**
    * Combined page load agent signature.
    *
-   * This is what is available under [[PageLoadAgent]] key.
+   * This is what is available under {@link PageLoadAgent} key.
    */
   export type Combined =
   /**
-   * @param next  Either calls the next agent in chain, or actually loads page document if this agent is the last one.
+   * @param next - Either calls the next agent in chain, or actually loads page document if this agent is the last one.
    * Accepts `Request` parameter.
-   * @param request  HTTP request.
+   * @param request - HTTP request.
    *
-   * @returns An `OnEvent` registrar of loaded document.
+   * @returns An `OnEvent` sender of page load response.
    */
       (
           this: void,
@@ -54,7 +54,7 @@ export namespace PageLoadAgent {
 }
 
 /**
- * A key of context value containing an [[PageLoadAgent]] instance.
+ * A key of context value containing an {@link PageLoadAgent} instance.
  *
  * The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.
  */

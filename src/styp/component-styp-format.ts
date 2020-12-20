@@ -119,8 +119,8 @@ export abstract class ComponentStypFormat {
    *
    * Utilizes {@link newProducer component's producer function}.
    *
-   * @param rules  A source of CSS rules to produce stylesheets for.
-   * @param config  Style production format configuration.
+   * @param rules - A source of CSS rules to produce stylesheets for.
+   * @param config - Style production format configuration.
    *
    * @returns CSS rules supply. Once cut off the produced stylesheets are removed.
    */
@@ -144,8 +144,8 @@ export abstract class ComponentStypFormat {
    *
    * Utilizes {@link ComponentStyleProducer}.
    *
-   * @param rules  A source of CSS rules to produce stylesheets for.
-   * @param config  Style production format configuration.
+   * @param rules - A source of CSS rules to produce stylesheets for.
+   * @param config - Style production format configuration.
    *
    * @returns CSS rules producer function returning CSS rules supply. Once cut off the produced stylesheets are removed.
    */
@@ -179,7 +179,7 @@ export abstract class ComponentStypFormat {
    *
    * This method is called by {@link produce} one.
    *
-   * @param config  Component style production format configuration.
+   * @param config - Component style production format configuration.
    *
    * @returns Component style production format.
    */
@@ -192,7 +192,7 @@ export abstract class ComponentStypFormat {
    *
    * This method is called by {@link format} one.
    *
-   * @param config  Component style production format configuration.
+   * @param config - Component style production format configuration.
    *
    * @returns Component style renderer(s).
    */
@@ -354,7 +354,7 @@ export class ComponentStypObjectFormat extends ComponentStypFormat {
   /**
    * Constructs CSS object model production format.
    *
-   * @param context  Target component context.
+   * @param context - Target component context.
    */
   constructor(readonly context: ComponentContext) {
     super();
@@ -369,7 +369,7 @@ export class ComponentStypObjectFormat extends ComponentStypFormat {
    *
    * This method is called by {@link format} one.
    *
-   * @param config  Original component style production format configuration.
+   * @param config - Original component style production format configuration.
    *
    * @returns Configuration of CSS object model production format.
    */

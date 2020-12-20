@@ -20,19 +20,19 @@ import { newHttpFetch } from './http-fetch.impl';
  * `whenOff()` method are notified. When fetch fails for whatever reason, this reason is passed to these callbacks.
  * The fetch can be aborted by cutting off the response supply. I.e. by calling its `off()` method.
  *
- * An instance of [[HttpFetch]] is available from bootstrap context.
+ * An instance of {@link HttpFetch} is available from bootstrap context.
  */
 export type HttpFetch =
 /**
- * @param input  The resource to fetch. This can either an URL string, or a `Request` object.
- * @param init  Custom settings to apply to the request.
+ * @param input - The resource to fetch. This can either an URL string, or a `Request` object.
+ * @param init - Custom settings to apply to the request.
  *
  * @returns An `OnEvent` sender of responses.
  */
     (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>;
 
 /**
- * A key of bootstrap context value containing an [[HttpFetch]] instance.
+ * A key of bootstrap context value containing an {@link HttpFetch} instance.
  */
 export const HttpFetch: FnContextRef<Parameters<HttpFetch>, ReturnType<HttpFetch>> = (
     /*#__PURE__*/ new FnContextKey<Parameters<HttpFetch>, ReturnType<HttpFetch>>(

@@ -26,7 +26,7 @@ let AutoMountSupport__feature: FeatureDef | undefined;
  *
  * Automatically mounts components decorated with {@link Mount @Mount} decorator.
  *
- * Can be applied directly, or using [[autoMountSupport]] function when custom auto-mount configuration is required.
+ * Can be applied directly, or using {@link autoMountSupport} function when custom auto-mount configuration is required.
  *
  * Does not track DOM mutations. To do that either enable `AutoConnectSupport`, or apply `ElementAdapter` to added
  * elements. E.g. by utilizing `ElementObserver`.
@@ -44,9 +44,9 @@ export class AutoMountSupport {
 /**
  * Configures auto-mount support.
  *
- * Constructs an [[AutoMountSupport]] feature replacement with auto-mount configuration applied.
+ * Constructs an {@link AutoMountSupport} feature replacement with auto-mount configuration applied.
  *
- * @param config  Custom auto-mount configuration option.
+ * @param config - Custom auto-mount configuration option.
  *
  * @returns Configured auto-mount support feature.
  */

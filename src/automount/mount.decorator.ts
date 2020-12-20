@@ -12,10 +12,10 @@ import { MountDef } from './mount-def';
  *
  * Enables a {@link MountDef.adapter mount adapter} for decorated component.
  *
- * Enables [[AutoMountSupport]] feature when applied to component.
+ * Enables {@link AutoMountSupport} feature when applied to component.
  *
- * @typeparam T  A type of decorated component class.
- * @param def  Either component auto-mount definition, matching element selector, or element predicate function.
+ * @typeParam T - A type of decorated component class.
+ * @param def - Either component auto-mount definition, matching element selector, or element predicate function.
  *
  * @returns New component decorator.
  */

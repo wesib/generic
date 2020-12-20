@@ -13,16 +13,16 @@ import { InputToForm, NoInputToForm } from './input-to-form';
  *
  * The decorated method accepts a {@link InputToForm filled input form} and submit event as parameters.
  *
- * @typeparam T  A type of decorated component class.
- * @typeparam M  Submitted value type.
- * @typeparam Elt  A type of HTML form element.
- * @param def  Submit handler definition.
+ * @typeParam T - A type of decorated component class.
+ * @typeParam TModel - Submitted model type.
+ * @typeParam TElt - A type of HTML form element.
+ * @param def - Submit handler definition.
  *
  * @returns New component property decorator.
  */
-export function OnSubmit<T extends ComponentClass, Model = any, Elt extends HTMLElement = HTMLElement>(
+export function OnSubmit<T extends ComponentClass, TModel = any, TElt extends HTMLElement = HTMLElement>(
     def: OnSubmitDef = {},
-): ComponentPropertyDecorator<(form: InputToForm<Model, Elt>, event: Event) => void, T> {
+): ComponentPropertyDecorator<(form: InputToForm<TModel, TElt>, event: Event) => void, T> {
 
   const { cancel = true } = def;
 
@@ -35,7 +35,7 @@ export function OnSubmit<T extends ComponentClass, Model = any, Elt extends HTML
             const hierarchy = context.get(HierarchyContext);
             const { component } = context;
 
-            hierarchy.get(InputToForm).do(consumeEvents((inputToForm: InputToForm<Model, Elt> | NoInputToForm) => {
+            hierarchy.get(InputToForm).do(consumeEvents((inputToForm: InputToForm<TModel, TElt> | NoInputToForm) => {
               if (!inputToForm.control) {
                 return;
               }

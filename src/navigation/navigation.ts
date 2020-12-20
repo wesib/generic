@@ -141,7 +141,7 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    * value (for instance, specifying -1 when there are no previously-visited pages in navigation history), this method
    * silently has no effect.
    *
-   * @param delta  Relative location in navigation history to navigate to. The absent value or value of `0` reloads
+   * @param delta - Relative location in navigation history to navigate to. The absent value or value of `0` reloads
    * the current page.
    */
   abstract go(delta?: number): void;
@@ -160,7 +160,7 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    *
    * Appends an entry to navigation history.
    *
-   * @param target  Either navigation target or URL to navigate to.
+   * @param target - Either navigation target or URL to navigate to.
    * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually navigate.
    * Then navigates to the `target`, unless the event cancelled.
    * @fires NavigateEvent@wesib:navigate  On window object when navigation succeed.
@@ -172,7 +172,7 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
   /**
    * Replaces current navigation history entry with the given `target`.
    *
-   * @param target  Either navigation target or URL to replace current history entry with.
+   * @param target - Either navigation target or URL to replace current history entry with.
    * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually update the history.
    * Then navigates to the `target`, unless the event cancelled.
    * @fires NavigateEvent@wesib:navigate  On window object when history updated.
@@ -186,7 +186,7 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    *
    * Does not alter current page state, and does not trigger any events.
    *
-   * @param url  An URL to replace the the current one with.
+   * @param url - An URL to replace the the current one with.
    *
    * @returns Current page with updated URL.
    */
@@ -195,14 +195,14 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
   /**
    * Creates parameterized navigation instance and assigns a page parameter to apply to target page.
    *
-   * @typeparam T  Parameter value type.
-   * @typeparam I  Parameter input type.
-   * @param ref  A reference to page navigation parameter to apply.
-   * @param input  Parameter input to use when constructing its value.
+   * @typeParam T - Parameter value type.
+   * @typeParam TInput - Parameter input type.
+   * @param ref - A reference to page navigation parameter to apply.
+   * @param input - Parameter input to use when constructing its value.
    *
    * @returns New parameterized navigation instance.
    */
-  abstract with<T, I>(ref: PageParam.Ref<T, I>, input: I): Navigation.Parameterized;
+  abstract with<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): Navigation.Parameterized;
 
 }
 
@@ -218,21 +218,21 @@ export namespace Navigation {
     /**
      * Applies parameter to navigation target page.
      *
-     * @typeparam T  Parameter value type.
-     * @typeparam I  Parameter input type.
-     * @param ref  A reference to page navigation parameter to apply.
-     * @param input  Parameter input to use when constructing its value.
+     * @typeParam T - Parameter value type.
+     * @typeParam TInput - Parameter input type.
+     * @param ref - A reference to page navigation parameter to apply.
+     * @param input - Parameter input to use when constructing its value.
      *
      * @returns New parameterized navigation instance.
      */
-    with<T, I>(ref: PageParam.Ref<T, I>, input: I): Parameterized;
+    with<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): Parameterized;
 
     /**
      * Opens a page by navigating to the given `target` with provided page parameters.
      *
      * Appends an entry to navigation history.
      *
-     * @param target  Either navigation target or URL to navigate to. Navigates to current page URL when omitted.
+     * @param target - Either navigation target or URL to navigate to. Navigates to current page URL when omitted.
      * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually navigate.
      * Then navigates to the `target`, unless the event cancelled.
      * @fires NavigateEvent@wesib:navigate  On window object when navigation succeed.
@@ -244,7 +244,7 @@ export namespace Navigation {
     /**
      * Replaces the most recent entry in navigation history with the given `target` and provided page parameters.
      *
-     * @param target  Either navigation target or URL to replace the latest history entry with. Navigates to current
+     * @param target - Either navigation target or URL to replace the latest history entry with. Navigates to current
      * page URL when omitted.
      * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually update the history.
      * Then navigates to the `target`, unless the event cancelled.
@@ -262,8 +262,8 @@ export namespace Navigation {
      *
      * This is useful e.g. to build target URL or evaluate target page parameter.
      *
-     * @param target  Either navigation target or URL to pretend navigation to.
-     * @param callback A callback function receiving two pages as parameters: the page to leave, and the page to open.
+     * @param target - Either navigation target or URL to pretend navigation to.
+     * @param callback - A callback function receiving two pages as parameters: the page to leave, and the page to open.
      * The latter one is valid only inside callback, as its parameters will be cleaned up right after callback returns.
      * The value returned from callback is then returned from this method call. It may be used to collect some data
      * from target page.
@@ -283,7 +283,7 @@ export namespace Navigation {
      *
      * This is useful e.g. to build target URL or evaluate target page parameter.
      *
-     * @param callback A callback function receiving two pages as parameters: the page to leave, and the page to open.
+     * @param callback - A callback function receiving two pages as parameters: the page to leave, and the page to open.
      * The latter one is valid only inside callback, as its parameters will be cleaned up right after callback returns.
      * The value returned from callback is then returned from this method call. It may be used to collect some data
      * from target page.
@@ -302,7 +302,7 @@ export namespace Navigation {
      *
      * This is useful e.g. to build target URL or evaluate target page parameter.
      *
-     * @param target  Either navigation target or URL to pretend navigation to. Prepends navigation to current page
+     * @param target - Either navigation target or URL to pretend navigation to. Prepends navigation to current page
      * when omitted.
      *
      * @returns Either Navigation target with URL value, or `undefined` when navigation failed.
@@ -316,7 +316,7 @@ export namespace Navigation {
   /**
    * Navigation target.
    *
-   * This is passed to [[Navigation.open]] and [[Navigation.replace]] methods.
+   * This is passed to {@link Navigation.open} and {@link Navigation.replace} methods.
    */
   export interface Target {
 
@@ -440,7 +440,7 @@ function createNavigation(context: BootstrapContext): Navigation {
       return navHistory.update(nav, toURL(url)).page;
     }
 
-    with<T, I>(ref: PageParam.Ref<T, I>, input: I): Navigation.Parameterized {
+    with<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): Navigation.Parameterized {
       return withParam(page => page.put(ref, input));
     }
 
@@ -450,7 +450,7 @@ function createNavigation(context: BootstrapContext): Navigation {
 
   function withParam(applyParams: (page: Page) => void): Navigation.Parameterized {
     return {
-      with<TT, II>(ref: PageParam.Ref<TT, II>, input: II): Navigation.Parameterized {
+      with<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): Navigation.Parameterized {
         return withParam(mergeFunctions(applyParams, page => page.put(ref, input)));
       },
       open(target?: Navigation.Target | string | URL) {

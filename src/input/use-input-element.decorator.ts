@@ -14,8 +14,8 @@ import { inputFromControl } from './input-from-control';
  * Constructs component decorator that finds input element and uses it as an {@link InputFromControl origin of user
  * input}.
  *
- * @typeparam T  A type of decorated component class.
- * @param def  Input element usage definition.
+ * @typeParam T - A type of decorated component class.
+ * @param def - Input element usage definition.
  *
  * @returns New component decorator.
  */
@@ -75,7 +75,7 @@ export function UseInputElement<T extends ComponentClass = Class>(
  *
  * Configures {@link UseInputElement @UseInputElement} component decorator.
  *
- * @typeparam T  A type of component.
+ * @typeParam T - A type of component.
  */
 export interface UseInputElementDef<T extends object = any> {
 
@@ -100,9 +100,9 @@ export interface UseInputElementDef<T extends object = any> {
    * the input from control is no longer needed. Otherwise the control's input supply will be cut off instead,
    * and control would become unusable after that.
    *
-   * @param node  Element node to construct input control for.
-   * @param context  Component context the {@link UseInputElement @UseInputElement} decorator is applied to.
-   * @param aspects  Default input aspect converter. This is a value of [[DefaultInAspects]].
+   * @param node - Element node to construct input control for.
+   * @param context - Component context the {@link UseInputElement @UseInputElement} decorator is applied to.
+   * @param aspects - Default input aspect converter. This is a value of {@link DefaultInAspects}.
    *
    * @returns Either input control, its keeper, or nothing.
    */

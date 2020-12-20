@@ -21,12 +21,12 @@ import Target = Navigation.Target;
  */
 export type NavigationAgent =
 /**
- * @param next  Either calls the next agent in chain, or applies the final navigation target if this agent is the last
+ * @param next - Either calls the next agent in chain, or applies the final navigation target if this agent is the last
  * one. Not calling this function effectively prevents navigation.
- * Accepts an optional [[Navigation.Target]] parameter. The original target will be used instead when omitted.
- * @param when  When navigation occurred. Either `pretend`, `pre-open`, or `pre-replace`.
- * @param from  The page to leave.
- * @param to  Navigation target page.
+ * Accepts an optional {@link Navigation.Target} parameter. The original target will be used instead when omitted.
+ * @param when - When navigation occurred. Either `pretend`, `pre-open`, or `pre-replace`.
+ * @param from - The page to leave.
+ * @param to - Navigation target page.
  */
     (
         this: void,
@@ -161,16 +161,16 @@ export namespace NavigationAgent {
   /**
    * Combined navigation agent signature.
    *
-   * This is what is available under [[NavigationAgent]] key.
+   * This is what is available under {@link NavigationAgent} key.
    */
   export type Combined =
   /**
-   * @param next  Either calls the next agent in chain, or applies the final navigation target if this agent is the last
-   * one. Not calling this function effectively prevents navigation.
-   * Accepts an optional [[Navigation.Target]] parameter. The original target will be used instead when omitted.
-   * @param when  When navigation occurred. Either `pretend`, `pre-open`, or `pre-replace`.
-   * @param from  The page to leave.
-   * @param to  Navigation target page.
+   * @param next - Either calls the next agent in chain, or applies the final navigation target if this agent is the
+   * last one. Not calling this function effectively prevents navigation.
+   * Accepts an optional {@link Navigation.Target} parameter. The original target will be used instead when omitted.
+   * @param when - When navigation occurred. Either `pretend`, `pre-open`, or `pre-replace`.
+   * @param from - The page to leave.
+   * @param to - Navigation target page.
    */
       (
           this: void,
@@ -183,7 +183,7 @@ export namespace NavigationAgent {
 }
 
 /**
- * A key of context value containing an [[NavigationAgent]] instance.
+ * A key of context value containing an {@link NavigationAgent} instance.
  *
  * The agent returned combines all registered agents into one. If no agent registered it just performs the navigation.
  */

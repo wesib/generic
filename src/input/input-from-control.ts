@@ -14,11 +14,11 @@ import { HierarchyContext } from '../hierarchy';
  * It is meant to be present in root {@link HierarchyContext hierarchy context}. Nested components may access it from
  * their hierarchy contexts to participate in user input.
  *
- * An [[inputFromControl]] function can be used to initiate user input.
+ * An {@link inputFromControl} function can be used to initiate user input.
  *
- * @typeparam Value  Input value type.
+ * @typeParam TValue - Input value type.
  */
-export interface InputFromControl<Value = any> {
+export interface InputFromControl<TValue = any> {
 
   /**
    * Root component context the input is initiated for.
@@ -28,7 +28,7 @@ export interface InputFromControl<Value = any> {
   /**
    * User input control.
    */
-  readonly control: InControl<Value>;
+  readonly control: InControl<TValue>;
 
 }
 
@@ -55,17 +55,17 @@ export const InputFromControl: SingleContextUpRef<InputFromControl | NoInputFrom
 /**
  * Initiates user input from the given control for the given root component.
  *
- * Constructs an [[InputFromControl]] instance and makes it available in `root` component's hierarchy.
+ * Constructs an {@link InputFromControl} instance and makes it available in `root` component's hierarchy.
  *
- * @typeparam Value  Input value type.
- * @param root  Root component context to initiate user input for.
- * @param control  User input control.
+ * @typeParam TValue - Input value type.
+ * @param root - Root component context to initiate user input for.
+ * @param control - User input control.
  *
  * @returns User input supply. The user input would be stopped once this supply is cut off.
  */
-export function inputFromControl<Value>(
+export function inputFromControl<TValue>(
     root: ComponentContext,
-    control: InControl<Value>,
+    control: InControl<TValue>,
 ): Supply {
   return root.get(HierarchyContext)
       .provide({

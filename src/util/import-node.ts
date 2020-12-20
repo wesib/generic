@@ -8,9 +8,9 @@ import { isElement } from '@wesib/wesib';
 /**
  * Imports DOM node from one document to another.
  *
- * @param from  The node to import.
- * @param to  The node to append imported node to.
- * @param importContent  A function that imports nodes nested in parent element. [[importNodeContent]] by default.
+ * @param from - The node to import.
+ * @param to - The node to append imported node to.
+ * @param importContent - A function that imports nodes nested in parent element. {@link importNodeContent} by default.
  *
  * @returns Imported node.
  */
@@ -23,10 +23,10 @@ export function importNode<N extends Node>(
 /**
  * Imports DOM node from one document to another and inserts it before the given node.
  *
- * @param from  The node to import.
- * @param to  The node to append imported node to.
- * @param before  The node to insert imported node before, or `null` to append it to the end of target one.
- * @param importContent  A function that imports nodes nested in parent element. [[importNodeContent]] by default.
+ * @param from - The node to import.
+ * @param to - The node to append imported node to.
+ * @param before - The node to insert imported node before, or `null` to append it to the end of target one.
+ * @param importContent - A function that imports nodes nested in parent element. {@link importNodeContent} by default.
  *
  * @returns Imported node.
  */
@@ -76,8 +76,8 @@ export function importNode<N extends Node>(
 /**
  * Imports DOM node contents from one document to another.
  *
- * @param from  The node which contents to import.
- * @param to  The node to append imported nodes to.
+ * @param from - The node which contents to import.
+ * @param to - The node to append imported nodes to.
  */
 export function importNodeContent(from: Node, to: Node): void {
   itsEach(

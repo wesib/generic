@@ -5,7 +5,7 @@
 /**
  * Auto-mount configuration options.
  *
- * Can be applied using [[autoMountSupport]] function, or provided in bootstrap context by any feature.
+ * Can be applied using {@link autoMountSupport} function, or provided in bootstrap context by any feature.
  */
 export interface AutoMountConfig {
 

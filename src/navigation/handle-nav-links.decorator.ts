@@ -13,8 +13,8 @@ import { Page } from './page';
  *
  * Such events would lead to {@link Navigation navigation actions} instead of default ones.
  *
- * @typeparam T  A type of decorated component class.
- * @param def  Navigation links handler definition.
+ * @typeParam T - A type of decorated component class.
+ * @param def - Navigation links handler definition.
  *
  * @returns New component decorator.
  */
@@ -53,7 +53,7 @@ export function HandleNavLinks<T extends ComponentClass = Class>(
 /**
  * Navigation links handler definition.
  *
- * @typeparam T  A type of component.
+ * @typeParam T - A type of component.
  */
 export interface HandleNavLinksDef<T extends object = any> {
 
@@ -74,10 +74,10 @@ export interface HandleNavLinksDef<T extends object = any> {
    * it {@link Navigation.open opens} a page at this URL instead of default action. It also prevents navigation
    * if URL didn't change.
    *
-   * @param event  A click event to handle.
-   * @param page  Current navigation page.
-   * @param navigation  Navigation service to use.
-   * @param context  Component context.
+   * @param event - A click event to handle.
+   * @param page - Current navigation page.
+   * @param navigation - Navigation service to use.
+   * @param context - Component context.
    */
   handle?(
       {
@@ -98,7 +98,7 @@ export interface HandleNavLinksDef<T extends object = any> {
    *
    * Extracts hyper-reference from `href` attribute of event target.
    *
-   * @param event  A click event to handle.
+   * @param event - A click event to handle.
    *
    * @returns Extracted hyper-reference, or nothing if it can not be extracted. Event will be ignored in this case.
    */

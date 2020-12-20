@@ -26,12 +26,12 @@ import { PageLoadSupport } from './page-load-support.feature';
  *
  * The page is loaded and included whenever it is {@link Navigation.onEnter entered}.
  *
- * Utilizes [[PageLoadParam]] navigation parameter.
+ * Utilizes {@link PageLoadParam} navigation parameter.
  *
- * Enables [[PageLoadSupport]] feature.
+ * Enables {@link PageLoadSupport} feature.
  *
- * @typeparam T  A type of decorated component class.
- * @param def  Page inclusion definition.
+ * @typeParam T - A type of decorated component class.
+ * @param def - Page inclusion definition.
  *
  * @returns New component decorator.
  */
@@ -134,7 +134,7 @@ function defaultPageContentKey({ url }: Page): string {
  *
  * Configures {@link IncludePage @LoadPage} decorator.
  *
- * @typeparam T  A type of component.
+ * @typeParam T - A type of component.
  */
 export interface IncludePageDef<T extends object = any> {
 
@@ -157,7 +157,7 @@ export interface IncludePageDef<T extends object = any> {
    *
    * By default uses page URL without hash part as a key. This prevents content refresh when only URL hash changes.
    *
-   * @param page  Target page. Either loaded or not.
+   * @param page - Target page. Either loaded or not.
    *
    * @returns Content key.
    */
@@ -171,9 +171,9 @@ export interface IncludePageDef<T extends object = any> {
    *
    * This method can be used e.g. to indicate the page load progress.
    *
-   * @param context  Decorated component context.
-   * @param response  Page load response.
-   * @param range  Document range the loaded page contents going to replace.
+   * @param context - Decorated component context.
+   * @param response - Page load response.
+   * @param range - Document range the loaded page contents going to replace.
    */
   onResponse?(
       {

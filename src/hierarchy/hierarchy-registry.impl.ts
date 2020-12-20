@@ -10,10 +10,10 @@ export function newHierarchyRegistry<T extends object>(
     up: AfterEvent<[HierarchyContext?]>,
 ): ContextRegistry<HierarchyContext<T>> {
   return new ContextRegistry(
-      <Src, Seed>(key: ContextSeedKey<Src, Seed>) => isContextSeedUpKey(key)
+      <TSrc, TSeed>(key: ContextSeedKey<TSrc, TSeed>) => isContextSeedUpKey(key)
           ? up.do(digAfter(
               upper => upper ? upper.get(key) : afterThe(),
-          )) as unknown as Seed
+          )) as unknown as TSeed
           : undefined,
   );
 }
@@ -21,8 +21,8 @@ export function newHierarchyRegistry<T extends object>(
 /**
  * @internal
  */
-function isContextSeedUpKey<Src>(
-    key: ContextSeedKey<Src | EventKeeper<Src[]>, any>,
-): key is ContextUpKey.SeedKey<Src> {
+function isContextSeedUpKey<TSrc>(
+    key: ContextSeedKey<TSrc | EventKeeper<TSrc[]>, any>,
+): key is ContextUpKey.SeedKey<TSrc> {
   return 'upKey' in key;
 }

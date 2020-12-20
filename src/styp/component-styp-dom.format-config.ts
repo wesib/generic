@@ -19,9 +19,9 @@ import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp
  *
  * Utilizes `DefaultNamespaceAliaser` by default.
  *
- * @param format  Target component style production format.
- * @param config  Original component style production format configuration.
- * @param render  Element render definition to apply to style render schedule, unless render scheduler specified
+ * @param format - Target component style production format.
+ * @param config - Original component style production format configuration.
+ * @param render - Element render definition to apply to style render schedule, unless render scheduler specified
  * explicitly in `config`.
  *
  * @returns Configuration of DOM style production format.

@@ -13,8 +13,8 @@ import { inputToForm } from './input-to-form';
 /**
  * Constructs component decorator that finds form element to {@link InputToForm fill by user input}.
  *
- * @typeparam T  A type of decorated component class.
- * @param def  Form element fill definition.
+ * @typeParam T - A type of decorated component class.
+ * @param def - Form element fill definition.
  *
  * @returns New component decorator.
  */
@@ -78,7 +78,7 @@ export function FillInputForm<T extends ComponentClass = Class>(
  *
  * Configures {@link FillInputForm @FillInputForm} component decorator.
  *
- * @typeparam T  A type of component.
+ * @typeParam T - A type of component.
  */
 export interface FillInputFormDef<T extends object = any> {
 
@@ -104,9 +104,9 @@ export interface FillInputFormDef<T extends object = any> {
    * the form filling is no longer needed. Otherwise the form's control supply will be cut off instead,
    * and it would become unusable after that.
    *
-   * @param node  Element node to construct form element control for.
-   * @param context  Component context the {@link FillInputForm @FillInputForm} decorator is applied to.
-   * @param aspects  Default input aspect converter. This is a value of [[DefaultInAspects]].
+   * @param node - Element node to construct form element control for.
+   * @param context - Component context the {@link FillInputForm @FillInputForm} decorator is applied to.
+   * @param aspects - Default input aspect converter. This is a value of {@link DefaultInAspects}.
    *
    * @returns Either form control and form element control tuple, their keeper, or nothing.
    */

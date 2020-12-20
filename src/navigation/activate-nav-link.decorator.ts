@@ -45,8 +45,8 @@ interface ActiveNavLink {
  *
  * Marks navigation links with highest weight.
  *
- * @typeparam T  A type of decorated component class.
- * @param def  Navigation link activation definition.
+ * @typeParam T - A type of decorated component class.
+ * @param def - Navigation link activation definition.
  *
  * @returns New component decorator.
  */
@@ -115,9 +115,9 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
  * Navigation link activation definition.
  *
  * Defines a set of element nodes considered to be navigation links. Each matching node is {@link weigh weighed}
- * against {@link Navigation.read current page}, and the link with highest weight is marked [[active]].
+ * against {@link Navigation.read current page}, and the link with highest weight is marked {@link active}.
  *
- * @typeparam T  A type of component.
+ * @typeParam T - A type of component.
  */
 export interface ActivateNavLinkDef<T extends object = any> {
 
@@ -165,9 +165,9 @@ export interface ActivateNavLinkDef<T extends object = any> {
    *
    * Ignores search parameters with names starting and ending with double underscores. Like `__wesib_app_rev__`.
    *
-   * @param node  Navigation link node to weigh.
-   * @param page  Current navigation page.
-   * @param context  Decorated component context.
+   * @param node - Navigation link node to weigh.
+   * @param page - Current navigation page.
+   * @param context - Decorated component context.
    *
    * @returns Either navigation link weight, or its keeper. Non-positive wights means the page URL doesn't match
    * the link at all.
@@ -189,10 +189,10 @@ export interface ActivateNavLinkDef<T extends object = any> {
    *
    * This method is called each time the active link changed.
    *
-   * @param active  Whether to make target link active (`true`), or inactive (`false`).
-   * @param node  Navigation link node to update activity state of.
-   * @param page  Current navigation page.
-   * @param context  Decorated component context.
+   * @param active - Whether to make target link active (`true`), or inactive (`false`).
+   * @param node - Navigation link node to update activity state of.
+   * @param page - Current navigation page.
+   * @param context - Decorated component context.
    */
   activate?(
       active: boolean,

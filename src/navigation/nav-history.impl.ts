@@ -367,10 +367,10 @@ export class PageEntry {
     return newHandle && this._init(param, newHandle);
   }
 
-  put<T, I>(ref: PageParam.Ref<T, I>, input: I): T {
+  put<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): T {
 
     const param = ref[PageParam__symbol];
-    const handle: PageParam.Handle<T, I> | undefined = this._params.get(param);
+    const handle: PageParam.Handle<T, TInput> | undefined = this._params.get(param);
 
     if (handle) {
       handle.put(input);
@@ -393,7 +393,7 @@ export class PageEntry {
     return new ParamContext();
   }
 
-  private _init<T, I>(param: PageParam<T, I>, handle: PageParam.Handle<T, I>): T {
+  private _init<T, TInput>(param: PageParam<T, TInput>, handle: PageParam.Handle<T, TInput>): T {
     this._params.set(param, handle);
 
     if (this.page.current && handle.enter) {

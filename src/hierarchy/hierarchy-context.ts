@@ -41,7 +41,7 @@ const HierarchyContext__key = (/*#__PURE__*/ new SingleContextKey<HierarchyConte
  *
  * Available as component context value.
  *
- * @typeparam T  A type of component.
+ * @typeParam T - A type of component.
  */
 export abstract class HierarchyContext<T extends object = any> extends ContextValues implements SupplyPeer {
 
@@ -74,7 +74,7 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
    * The provided component will be treated as enclosing one until component element connected. After that the real
    * enclosing component will be used instead.
    *
-   * @param enclosing  Enclosing component's context to assign, or nothing to remove one.
+   * @param enclosing - Enclosing component's context to assign, or nothing to remove one.
    *
    * @returns `this` instance.
    */
@@ -86,15 +86,15 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
    * If provided value is updatable (i.e. its key implements `ContextUpKey`), then it will be available in this context,
    * as well as in all nested hierarchy contexts. Otherwise the value will be available in this context only.
    *
-   * @typeparam Deps  Dependencies tuple type.
-   * @typeparam Src  Source value type.
-   * @typeparam Seed  Value seed type.
-   * @param spec  Context value specifier.
+   * @typeParam TDeps - Dependencies tuple type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
+   * @param spec - Context value specifier.
    *
    * @returns A value supply that that removes the given context value specifier once cut off.
    */
-  abstract provide<Deps extends any[], Src, Seed>(
-      spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src, Seed>,
+  abstract provide<TDeps extends any[], TSrc, TSeed>(
+      spec: ContextValueSpec<HierarchyContext<T>, any, TDeps, TSrc, TSeed>,
   ): Supply;
 
 }
@@ -166,8 +166,8 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
     this.get = registry.newValues().get;
   }
 
-  provide<Deps extends any[], Src, Seed>(
-      spec: ContextValueSpec<HierarchyContext<T>, any, Deps, Src, Seed>,
+  provide<TDeps extends any[], TSrc, TSeed>(
+      spec: ContextValueSpec<HierarchyContext<T>, any, TDeps, TSrc, TSeed>,
   ): Supply {
     return this._registry.provide(spec).needs(this);
   }

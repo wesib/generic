@@ -9,7 +9,7 @@
  *
  * Input URL is never altered.
  *
- * @param url  An URL to extract hash from.
+ * @param url - An URL to extract hash from.
  *
  * @returns URL extracted from hash.
  */
@@ -31,8 +31,8 @@ export function getHashURL(url: URL): URL {
  *
  * Input URLs are never altered.
  *
- * @param url  Base URL.
- * @param hashURL  Hash URL to substitute.
+ * @param url - Base URL.
+ * @param hashURL - Hash URL to substitute.
  *
  * @returns URL with updated hash.
  */

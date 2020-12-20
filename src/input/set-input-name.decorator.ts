@@ -13,8 +13,8 @@ import { InputFromControl, NoInputFromControl } from './input-from-control';
  * Creates component decorator that adds {@link InputFromControl input control} of decorated component to input control
  * group of enclosing one under the given name.
  *
- * @typeparam T  A type of decorated component class.
- * @param name  A name to assign to component. This could be either a string, or a function returning name as a string
+ * @typeParam T - A type of decorated component class.
+ * @param name - A name to assign to component. This could be either a string, or a function returning name as a string
  * or as its keeper.
  *
  * @returns New component decorator.

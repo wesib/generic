@@ -12,12 +12,12 @@ import { InputFromControl } from './input-from-control';
 /**
  * A form control to fill by user input.
  *
- * An [[inputToForm]] function can be used to initiate filling the form.
+ * An {@link inputToForm} function can be used to initiate filling the form.
  *
- * @typeparam Model  Form model type.
- * @typeparam Elt  A type of HTML form element.
+ * @typeParam TModel - Form model type.
+ * @typeParam TElt - A type of HTML form element.
  */
-export interface InputToForm<Model = any, Elt extends HTMLElement = HTMLElement> extends InputFromControl<Model> {
+export interface InputToForm<TModel = any, TElt extends HTMLElement = HTMLElement> extends InputFromControl<TModel> {
 
   /**
    * Input form element control.
@@ -25,7 +25,7 @@ export interface InputToForm<Model = any, Elt extends HTMLElement = HTMLElement>
    * Unlike input form control this one is not supposed to be submitted. But it contains a `<form>` element issuing a
    * `submit` event.
    */
-  readonly form: InFormElement<Elt>;
+  readonly form: InFormElement<TElt>;
 
 }
 
@@ -53,21 +53,21 @@ export const InputToForm: SingleContextUpRef<InputToForm<any, any> | NoInputToFo
 /**
  * Initiates filling the form by user input from.
  *
- * Constructs [[InputToForm]] and [[InputFromControl]] instances and makes them available in `root` component's
+ * Constructs {@link InputToForm} and {@link InputFromControl} instances and makes them available in `root` component's
  * hierarchy.
  *
- * @typeparam Model  Form model type.
- * @typeparam Elt  A type of HTML form element.
- * @param root  Root component context to initiate user input for.
- * @param control  Input form control.
- * @param form  Form element control.
+ * @typeParam TModel - Form model type.
+ * @typeParam TElt - A type of HTML form element.
+ * @param root - Root component context to initiate user input for.
+ * @param control - Input form control.
+ * @param form - Form element control.
  *
  * @returns Form fill supply. The form filling would be stopped once this supply is cut off.
  */
-export function inputToForm<Model, Elt extends HTMLElement>(
+export function inputToForm<TModel, TElt extends HTMLElement>(
     root: ComponentContext,
-    control: InControl<Model>,
-    form: InFormElement<Elt>,
+    control: InControl<TModel>,
+    form: InFormElement<TElt>,
 ): Supply {
 
   const hierarchy = root.get(HierarchyContext);
