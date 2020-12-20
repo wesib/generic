@@ -36,15 +36,15 @@
     }
   },
   "peerDependencies": {
-    "@frontmeans/input-aspects": "^4.0.0-dev.0",
+    "@frontmeans/input-aspects": "^4.0.0",
     "@frontmeans/namespace-aliaser": "^2.3.0",
-    "@frontmeans/style-producer": "^6.0.0-dev.0",
-    "@proc7ts/context-values": "^5.0.0-dev.2",
-    "@proc7ts/fun-events": "^10.0.0-dev.5",
-    "@wesib/wesib": "^1.0.0-beta.24"
+    "@frontmeans/style-producer": "^6.0.0",
+    "@proc7ts/context-values": "^5.0.0",
+    "@proc7ts/fun-events": "^10.0.0",
+    "@wesib/wesib": "^1.0.0-beta.25"
   },
   "dependencies": {
-    "@frontmeans/dom-events": "^1.0.0-dev.4",
+    "@frontmeans/dom-events": "^1.0.0",
     "@frontmeans/render-scheduler": "^1.5.0",
     "@hatsy/http-header-value": "^3.5.3",
     "@proc7ts/primitives": "^1.6.0",
@@ -59,12 +59,12 @@
     }
   },
   "devDependencies": {
-    "@frontmeans/input-aspects": "^4.0.0-dev.0",
+    "@frontmeans/input-aspects": "^4.0.0",
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/render-scheduler": "^1.5.0",
-    "@frontmeans/style-producer": "^6.0.0-dev.0",
-    "@proc7ts/context-values": "^5.0.0-dev.2",
-    "@proc7ts/fun-events": "^10.0.0-dev.5",
+    "@frontmeans/style-producer": "^6.0.0",
+    "@proc7ts/context-values": "^5.0.0",
+    "@proc7ts/fun-events": "^10.0.0",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
     "@run-z/eslint-config": "^1.2.0",
@@ -73,7 +73,7 @@
     "@types/jsdom": "^16.2.5",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
-    "@wesib/wesib": "^1.0.0-beta.24",
+    "@wesib/wesib": "^1.0.0-beta.25",
     "codecov": "^3.8.1",
     "cross-fetch": "^3.0.6",
     "eslint": "^7.16.0",
