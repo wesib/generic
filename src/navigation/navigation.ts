@@ -2,20 +2,20 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
+import { DomEventDispatcher, OnDomEvent } from '@frontmeans/dom-events';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import {
   AfterEvent,
   AfterEvent__symbol,
   EventKeeper,
-  EventReceiver,
   EventSender,
-  EventSupply,
+  mapAfter,
   onAny,
   OnEvent,
   OnEvent__symbol,
+  onSupplied,
   trackValue,
 } from '@proc7ts/fun-events';
-import { DomEventDispatcher, DomEventListener, OnDomEvent } from '@proc7ts/fun-events/dom';
 import { mergeFunctions, noop } from '@proc7ts/primitives';
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { NavHistory, PageEntry } from './nav-history.impl';
@@ -73,102 +73,47 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
   abstract readonly length: number;
 
   /**
-   * Build an `OnDomEvent` sender of {@link EnterPageEvent enter page events}.
-   *
-   * @returns An `OnDomEvent` sender of {@link EnterPageEvent enter page events}.
+   * An `OnDomEvent` sender of {@link EnterPageEvent enter page events}.
    */
-  abstract onEnter(): OnDomEvent<EnterPageEvent>;
+  abstract readonly onEnter: OnDomEvent<EnterPageEvent>;
 
   /**
-   * Starts sending {@link EnterPageEvent enter page events} to the given `listener`.
-   *
-   * @param listener  Target listener of {@link EnterPageEvent enter page events}.
-   *
-   * @returns {@link EnterPageEvent Enter page events} supply.
-   */
-  abstract onEnter(listener: DomEventListener<EnterPageEvent>): EventSupply;
-
-  /**
-   * Builds an `OnDomEvent` sender of {@link LeavePageEvent leave page events}.
+   * An `OnDomEvent` sender of {@link LeavePageEvent leave page events}.
    *
    * The registered listener may cancel navigation by calling `preventDefault()` method of received event.
-   *
-   * @returns `OnDomEvent` sender of {@link LeavePageEvent leave page events}.
    */
-  abstract onLeave(): OnDomEvent<LeavePageEvent>;
+  abstract readonly onLeave: OnDomEvent<LeavePageEvent>;
 
   /**
-   * Starts sending {@link LeavePageEvent leave page events} to the given `listener`.
-   *
-   * The registered listener may cancel navigation by calling `preventDefault()` method of received event.
-   *
-   * @param listener  Target listener of {@link LeavePageEvent leave page events}.
-   *
-   * @returns {@link LeavePageEvent Leave page events} supply.
-   */
-  abstract onLeave(listener: DomEventListener<LeavePageEvent>): EventSupply;
-
-  /**
-   * Builds an `OnDomEvent` {@link StayOnPageEvent stay on page events}.
+   * An `OnDomEvent` {@link StayOnPageEvent stay on page events}.
    *
    * The registered listener is informed when navigation has been cancelled by one of leave page event receivers,
    * navigation failed due to e.g. invalid URL, or when another navigation request initiated before the page left.
    *
    * @returns `OnDomEvent` sender of {@link StayOnPageEvent stay on page events}.
    */
-  abstract onStay(): OnDomEvent<StayOnPageEvent>;
+  abstract readonly onStay: OnDomEvent<StayOnPageEvent>;
 
   /**
-   * Starts sending {@link StayOnPageEvent stay on page events} to the given `listener`.
-   *
-   * @param listener  Target listener of {@link StayOnPageEvent stay on page events}.
-   *
-   * @returns {@link StayOnPageEvent Stay on page events} supply.
-   */
-  abstract onStay(listener: DomEventListener<StayOnPageEvent>): EventSupply;
-
-  /**
-   * Builds an `OnEvent` sender of {@link NavigationEvent navigation events}.
+   * An `OnEvent` sender of {@link NavigationEvent navigation events}.
    *
    * The `[OnEvent__symbol]` property is an alias of this one.
-   *
-   * @returns `OnEvent` sender of {@link NavigationEvent navigation events}.
    */
-  abstract on(): OnEvent<[NavigationEvent]>;
-
-  /**
-   * Starts sending of {@link NavigationEvent navigation events} to the given `receiver`.
-   *
-   * @param receiver  Target receiver of {@link NavigationEvent navigation events}.
-   *
-   * @returns {@link NavigationEvent Navigation events} supply.
-   */
-  abstract on(receiver: EventReceiver<[NavigationEvent]>): EventSupply;
+  abstract readonly on: OnEvent<[NavigationEvent]>;
 
   [OnEvent__symbol](): OnEvent<[NavigationEvent]> {
-    return this.on();
+    return this.on;
   }
 
   /**
-   * Builds an `AfterEvent` keeper of {@link page current page}.
+   * An `AfterEvent` keeper of {@link page current page}.
    *
    * The `[AfterEvent__symbol]` property is an alias of this one.
-   *
-   * @returns An `AfterEvent` keeper of {@link page current page}.
    */
-  abstract read(): AfterEvent<[Page]>;
-
-  /**
-   * Starts sending {@link page current page} and updates to the given `receiver.
-   *
-   * @param receiver  Target receiver of {@link page current page}.
-   *
-   * @returns {@link page Current page} supply.
-   */
-  abstract read(receiver: EventReceiver<[Page]>): EventSupply;
+  abstract readonly read: AfterEvent<[Page]>;
 
   [AfterEvent__symbol](): AfterEvent<[Page]> {
-    return this.read();
+    return this.read;
   }
 
   /**
@@ -196,7 +141,7 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    * value (for instance, specifying -1 when there are no previously-visited pages in navigation history), this method
    * silently has no effect.
    *
-   * @param delta  Relative location in navigation history to navigate to. The absent value or value of `0` reloads
+   * @param delta - Relative location in navigation history to navigate to. The absent value or value of `0` reloads
    * the current page.
    */
   abstract go(delta?: number): void;
@@ -215,7 +160,7 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    *
    * Appends an entry to navigation history.
    *
-   * @param target  Either navigation target or URL to navigate to.
+   * @param target - Either navigation target or URL to navigate to.
    * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually navigate.
    * Then navigates to the `target`, unless the event cancelled.
    * @fires NavigateEvent@wesib:navigate  On window object when navigation succeed.
@@ -227,7 +172,7 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
   /**
    * Replaces current navigation history entry with the given `target`.
    *
-   * @param target  Either navigation target or URL to replace current history entry with.
+   * @param target - Either navigation target or URL to replace current history entry with.
    * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually update the history.
    * Then navigates to the `target`, unless the event cancelled.
    * @fires NavigateEvent@wesib:navigate  On window object when history updated.
@@ -241,7 +186,7 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
    *
    * Does not alter current page state, and does not trigger any events.
    *
-   * @param url  An URL to replace the the current one with.
+   * @param url - An URL to replace the the current one with.
    *
    * @returns Current page with updated URL.
    */
@@ -250,14 +195,14 @@ export abstract class Navigation implements EventSender<[NavigationEvent]>, Even
   /**
    * Creates parameterized navigation instance and assigns a page parameter to apply to target page.
    *
-   * @typeparam T  Parameter value type.
-   * @typeparam I  Parameter input type.
-   * @param ref  A reference to page navigation parameter to apply.
-   * @param input  Parameter input to use when constructing its value.
+   * @typeParam T - Parameter value type.
+   * @typeParam TInput - Parameter input type.
+   * @param ref - A reference to page navigation parameter to apply.
+   * @param input - Parameter input to use when constructing its value.
    *
    * @returns New parameterized navigation instance.
    */
-  abstract with<T, I>(ref: PageParam.Ref<T, I>, input: I): Navigation.Parameterized;
+  abstract with<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): Navigation.Parameterized;
 
 }
 
@@ -273,21 +218,21 @@ export namespace Navigation {
     /**
      * Applies parameter to navigation target page.
      *
-     * @typeparam T  Parameter value type.
-     * @typeparam I  Parameter input type.
-     * @param ref  A reference to page navigation parameter to apply.
-     * @param input  Parameter input to use when constructing its value.
+     * @typeParam T - Parameter value type.
+     * @typeParam TInput - Parameter input type.
+     * @param ref - A reference to page navigation parameter to apply.
+     * @param input - Parameter input to use when constructing its value.
      *
      * @returns New parameterized navigation instance.
      */
-    with<T, I>(ref: PageParam.Ref<T, I>, input: I): Parameterized;
+    with<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): Parameterized;
 
     /**
      * Opens a page by navigating to the given `target` with provided page parameters.
      *
      * Appends an entry to navigation history.
      *
-     * @param target  Either navigation target or URL to navigate to. Navigates to current page URL when omitted.
+     * @param target - Either navigation target or URL to navigate to. Navigates to current page URL when omitted.
      * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually navigate.
      * Then navigates to the `target`, unless the event cancelled.
      * @fires NavigateEvent@wesib:navigate  On window object when navigation succeed.
@@ -299,7 +244,7 @@ export namespace Navigation {
     /**
      * Replaces the most recent entry in navigation history with the given `target` and provided page parameters.
      *
-     * @param target  Either navigation target or URL to replace the latest history entry with. Navigates to current
+     * @param target - Either navigation target or URL to replace the latest history entry with. Navigates to current
      * page URL when omitted.
      * @fires PreNavigateEvent#wesib:preNavigate  On window object prior to actually update the history.
      * Then navigates to the `target`, unless the event cancelled.
@@ -317,8 +262,8 @@ export namespace Navigation {
      *
      * This is useful e.g. to build target URL or evaluate target page parameter.
      *
-     * @param target  Either navigation target or URL to pretend navigation to.
-     * @param callback A callback function receiving two pages as parameters: the page to leave, and the page to open.
+     * @param target - Either navigation target or URL to pretend navigation to.
+     * @param callback - A callback function receiving two pages as parameters: the page to leave, and the page to open.
      * The latter one is valid only inside callback, as its parameters will be cleaned up right after callback returns.
      * The value returned from callback is then returned from this method call. It may be used to collect some data
      * from target page.
@@ -338,7 +283,7 @@ export namespace Navigation {
      *
      * This is useful e.g. to build target URL or evaluate target page parameter.
      *
-     * @param callback A callback function receiving two pages as parameters: the page to leave, and the page to open.
+     * @param callback - A callback function receiving two pages as parameters: the page to leave, and the page to open.
      * The latter one is valid only inside callback, as its parameters will be cleaned up right after callback returns.
      * The value returned from callback is then returned from this method call. It may be used to collect some data
      * from target page.
@@ -357,7 +302,7 @@ export namespace Navigation {
      *
      * This is useful e.g. to build target URL or evaluate target page parameter.
      *
-     * @param target  Either navigation target or URL to pretend navigation to. Prepends navigation to current page
+     * @param target - Either navigation target or URL to pretend navigation to. Prepends navigation to current page
      * when omitted.
      *
      * @returns Either Navigation target with URL value, or `undefined` when navigation failed.
@@ -371,7 +316,7 @@ export namespace Navigation {
   /**
    * Navigation target.
    *
-   * This is passed to [[Navigation.open]] and [[Navigation.replace]] methods.
+   * This is passed to {@link Navigation.open} and {@link Navigation.replace} methods.
    */
   export interface Target {
 
@@ -416,7 +361,7 @@ function createNavigation(context: BootstrapContext): Navigation {
 
   let next: Promise<any> = Promise.resolve();
 
-  dispatcher.on<PopStateEvent>('popstate').to(popState => {
+  dispatcher.on<PopStateEvent>('popstate')(popState => {
 
     const entry = navHistory.popState(popState, nav);
 
@@ -431,7 +376,7 @@ function createNavigation(context: BootstrapContext): Navigation {
     }
   });
 
-  dispatcher.on('hashchange').to(() => {
+  dispatcher.on('hashchange')(() => {
 
     const entry = navHistory.hashChange(nav);
 
@@ -450,49 +395,33 @@ function createNavigation(context: BootstrapContext): Navigation {
 
   class Navigation$ extends Navigation {
 
+    readonly onEnter: OnDomEvent<EnterPageEvent>;
+    readonly onLeave: OnDomEvent<LeavePageEvent>;
+    readonly onStay: OnDomEvent<StayOnPageEvent>;
+    readonly on: OnEvent<[NavigationEvent]>;
+    readonly read: AfterEvent<[Page]>;
+
+    constructor() {
+      super();
+      this.onEnter = dispatcher.on<EnterPageEvent>(NavigationEventType.EnterPage);
+      this.onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage);
+      this.onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage);
+      this.on = onAny<[NavigationEvent]>(
+          onSupplied(this.onEnter),
+          onSupplied(this.onLeave),
+          onSupplied(this.onStay),
+      );
+      this.read = nav.read.do(
+          mapAfter(({ page }) => page),
+      );
+    }
+
     get page(): Page {
       return nav.it.page;
     }
 
     get length(): number {
       return history.length;
-    }
-
-    onEnter(): OnDomEvent<EnterPageEvent>;
-    onEnter(listener: DomEventListener<EnterPageEvent>): EventSupply;
-    onEnter(listener?: DomEventListener<EnterPageEvent>): OnDomEvent<EnterPageEvent> | EventSupply {
-      return (this.onEnter = dispatcher.on<EnterPageEvent>(NavigationEventType.EnterPage).F)(listener);
-    }
-
-    onLeave(): OnDomEvent<LeavePageEvent>;
-    onLeave(listener: DomEventListener<LeavePageEvent>): EventSupply;
-    onLeave(listener?: DomEventListener<LeavePageEvent>): OnDomEvent<LeavePageEvent> | EventSupply {
-      return (this.onLeave = dispatcher.on<LeavePageEvent>(NavigationEventType.LeavePage).F)(listener);
-    }
-
-    onStay(): OnDomEvent<StayOnPageEvent>;
-    onStay(listener: DomEventListener<StayOnPageEvent>): EventSupply;
-    onStay(listener?: DomEventListener<StayOnPageEvent>): OnDomEvent<StayOnPageEvent> | EventSupply {
-      return (this.onStay = dispatcher.on<StayOnPageEvent>(NavigationEventType.StayOnPage).F)(listener);
-    }
-
-    /**
-     * Builds an `OnEvent` sender of {@link NavigationEvent navigation events}.
-     *
-     * The `[OnEvent__symbol]` property is an alias of this one.
-     *
-     * @returns `OnEvent` sender of {@link NavigationEvent navigation events}.
-     */
-    on(): OnEvent<[NavigationEvent]>;
-    on(receiver: EventReceiver<[NavigationEvent]>): EventSupply;
-    on(receiver?: EventReceiver<[NavigationEvent]>): OnEvent<[NavigationEvent]> | EventSupply {
-      return (this.on = onAny<[NavigationEvent]>(this.onEnter(), this.onLeave(), this.onStay()).F)(receiver);
-    }
-
-    read(): AfterEvent<[Page]>;
-    read(receiver: EventReceiver<[Page]>): EventSupply;
-    read(receiver?: EventReceiver<[Page]>): AfterEvent<[Page]> | EventSupply {
-      return (this.read = nav.read().keepThru(entry => entry.page).F)(receiver);
     }
 
     go(delta?: number): void {
@@ -511,7 +440,7 @@ function createNavigation(context: BootstrapContext): Navigation {
       return navHistory.update(nav, toURL(url)).page;
     }
 
-    with<T, I>(ref: PageParam.Ref<T, I>, input: I): Navigation.Parameterized {
+    with<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): Navigation.Parameterized {
       return withParam(page => page.put(ref, input));
     }
 
@@ -521,7 +450,7 @@ function createNavigation(context: BootstrapContext): Navigation {
 
   function withParam(applyParams: (page: Page) => void): Navigation.Parameterized {
     return {
-      with<TT, II>(ref: PageParam.Ref<TT, II>, input: II): Navigation.Parameterized {
+      with<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): Navigation.Parameterized {
         return withParam(mergeFunctions(applyParams, page => page.put(ref, input)));
       },
       open(target?: Navigation.Target | string | URL) {

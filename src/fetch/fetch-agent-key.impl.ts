@@ -1,73 +1,65 @@
-import { nextArg } from '@proc7ts/call-thru';
 import { ContextValueSlot } from '@proc7ts/context-values';
 import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
-import {
-  AfterEvent,
-  afterThe,
-  EventKeeper,
-  EventSender,
-  nextAfterEvent,
-  OnEvent,
-  onSupplied,
-} from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, digAfter, EventKeeper, EventSender, OnEvent, onSupplied } from '@proc7ts/fun-events';
 
 /**
  * @internal
  */
-type FetchAgent<Res extends any[]> = (
+type FetchAgent<TResponse extends any[]> = (
     this: void,
-    next: (this: void, request?: Request) => OnEvent<Res>,
+    next: (this: void, request?: Request) => OnEvent<TResponse>,
     request: Request,
-) => EventSender<Res>;
+) => EventSender<TResponse>;
 
 /**
  * @internal
  */
-type CombinedFetchAgent<Res extends any[]> = (
+type CombinedFetchAgent<TResponse extends any[]> = (
     this: void,
-    next: (this: void, request: Request) => OnEvent<Res>,
+    next: (this: void, request: Request) => OnEvent<TResponse>,
     request: Request,
-) => OnEvent<Res>;
+) => OnEvent<TResponse>;
 
 /**
  * @internal
  */
-export class FetchAgentKey<Res extends any[]>
-    extends ContextUpKey<CombinedFetchAgent<Res>, FetchAgent<Res>>
-    implements ContextUpRef<CombinedFetchAgent<Res>, FetchAgent<Res>> {
+export class FetchAgentKey<TResponse extends any[]>
+    extends ContextUpKey<CombinedFetchAgent<TResponse>, FetchAgent<TResponse>>
+    implements ContextUpRef<CombinedFetchAgent<TResponse>, FetchAgent<TResponse>> {
 
-  readonly upKey: ContextUpKey.UpKey<CombinedFetchAgent<Res>, FetchAgent<Res>>;
+  readonly upKey: ContextUpKey.UpKey<CombinedFetchAgent<TResponse>, FetchAgent<TResponse>>;
 
   constructor(name: string) {
     super(name);
     this.upKey = this.createUpKey(
-        slot => slot.insert(slot.seed.keepThru(
+        slot => slot.insert(slot.seed.do(digAfter(
             (...agents) => {
               if (agents.length) {
-                return nextArg(combineFetchAgents(agents));
+                return afterThe(combineFetchAgents(agents));
               }
               if (slot.hasFallback && slot.or) {
-                return nextAfterEvent(slot.or);
+                return slot.or;
               }
-              return defaultFetchAgent;
+
+              return afterThe(defaultFetchAgent);
             },
-        )),
+        ))),
     );
   }
 
   grow(
       slot: ContextValueSlot<
-          CombinedFetchAgent<Res>,
-          EventKeeper<FetchAgent<Res>[]> | FetchAgent<Res>,
-          AfterEvent<FetchAgent<Res>[]>>,
+          CombinedFetchAgent<TResponse>,
+          EventKeeper<FetchAgent<TResponse>[]> | FetchAgent<TResponse>,
+          AfterEvent<FetchAgent<TResponse>[]>>,
   ): void {
 
-    let delegated: CombinedFetchAgent<Res>;
+    let delegated: CombinedFetchAgent<TResponse>;
 
     slot.context.get(
         this.upKey,
         slot.hasFallback ? { or: slot.or != null ? afterThe(slot.or) : slot.or } : undefined,
-    )!.to(
+    )!(
         agent => delegated = agent,
     ).whenOff(
         reason => delegated = contextDestroyed(reason),
@@ -81,20 +73,25 @@ export class FetchAgentKey<Res extends any[]>
 /**
  * @internal
  */
-function defaultFetchAgent<Res extends any[]>(
-    next: (this: void, request: Request) => OnEvent<Res>,
+function defaultFetchAgent<TResponse extends any[]>(
+    next: (this: void, request: Request) => OnEvent<TResponse>,
     request: Request,
-): OnEvent<Res> {
+): OnEvent<TResponse> {
   return next(request);
 }
 
 /**
  * @internal
  */
-export function combineFetchAgents<Res extends any[]>(agents: FetchAgent<Res>[]): CombinedFetchAgent<Res> {
+export function combineFetchAgents<TResponse extends any[]>(
+    agents: FetchAgent<TResponse>[],
+): CombinedFetchAgent<TResponse> {
   return (next, request) => {
 
-    const fetch: (agentIdx: number, agentRequest: Request) => OnEvent<Res> = (agentIdx, agentRequest) => {
+    const fetch: (agentIdx: number, agentRequest: Request) => OnEvent<TResponse> = (
+        agentIdx,
+        agentRequest,
+    ) => {
 
       const agent = agents[agentIdx];
 

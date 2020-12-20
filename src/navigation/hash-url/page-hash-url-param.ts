@@ -40,7 +40,7 @@ class PageHashURLParam$ extends PageParam<URL, URL | string | null | undefined> 
  * When {@link Navigation.with set} to another value while navigating, the hash of target URL is updated, unless set to
  * `null` or `undefined`.
  *
- * Requires [[PageHashURLSupport]] for above to function properly.
+ * Requires {@link PageHashURLSupport} for above to function properly.
  */
 export const PageHashURLParam: PageParam.WithDefaults<URL, URL | string | null | undefined> = (
     /*#__PURE__*/ new PageHashURLParam$()

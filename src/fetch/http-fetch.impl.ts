@@ -1,5 +1,6 @@
-import { EventEmitter, EventSupply, eventSupply, OnEvent, onEventBy } from '@proc7ts/fun-events';
-import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
+import { DomEventDispatcher } from '@frontmeans/dom-events';
+import { EventEmitter, onceOn, OnEvent, onEventBy } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
@@ -20,14 +21,14 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
     return onEventBy(receiver => {
 
       const responseEmitter = new EventEmitter<[Response]>();
-      let supply: EventSupply;
+      let supply: Supply;
 
       if ('AbortController' in window) {
 
         const abortController = new window.AbortController();
         const { signal } = abortController;
 
-        supply = eventSupply(reason => {
+        supply = new Supply(reason => {
           if (reason === HttpFetchAborted) {
             abortController.abort();
           }
@@ -43,7 +44,11 @@ export function newHttpFetch(context: BootstrapContext): HttpFetch {
         const customSignal = request.signal;
 
         if (customSignal) {
-          new DomEventDispatcher(customSignal).on('abort').once(() => abortController.abort());
+          new DomEventDispatcher(customSignal)
+              .on('abort')
+              .do(onceOn)(
+                  () => abortController.abort(),
+              );
           if (customSignal.aborted) {
             abortController.abort();
           }

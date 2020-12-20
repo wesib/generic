@@ -1,4 +1,4 @@
-import { trackValue, ValueTracker } from '@proc7ts/fun-events';
+import { mapOn_, trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { bootstrapComponents, ComponentMount, Feature } from '@wesib/wesib';
 import { HandleNavLinks, HandleNavLinksDef } from './handle-nav-links.decorator';
 import { Navigation } from './navigation';
@@ -28,7 +28,7 @@ describe('navigation', () => {
       pageURL = trackValue(new URL('current-page', baseURI));
       mockNavigation = {
         open: jest.fn(() => Promise.resolve()),
-        read: pageURL.read().thru_(url => ({ url })).F,
+        read: pageURL.read.do(mapOn_(url => ({ url }))),
       } as any;
     });
 
@@ -122,7 +122,7 @@ describe('navigation', () => {
       })
       class TestComponent {}
 
-      const bsContext = await bootstrapComponents(TestComponent).whenReady();
+      const bsContext = await bootstrapComponents(TestComponent).whenReady;
       const defContext = await bsContext.whenDefined(TestComponent);
 
       return defContext.mountTo(element);

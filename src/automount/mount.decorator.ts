@@ -12,10 +12,10 @@ import { MountDef } from './mount-def';
  *
  * Enables a {@link MountDef.adapter mount adapter} for decorated component.
  *
- * Enables [[AutoMountSupport]] feature when applied to component.
+ * Enables {@link AutoMountSupport} feature when applied to component.
  *
- * @typeparam T  A type of decorated component class.
- * @param def  Either component auto-mount definition, matching element selector, or element predicate function.
+ * @typeParam T - A type of decorated component class.
+ * @param def - Either component auto-mount definition, matching element selector, or element predicate function.
  *
  * @returns New component decorator.
  */
@@ -24,7 +24,7 @@ export function Mount<T extends ComponentClass = Class>(def: MountDef | MountDef
     feature: {
       needs: AutoMountSupport,
       setup(bsSetup) {
-        bsSetup.setupDefinition(bsSetup.feature).to(defSetup => {
+        bsSetup.setupDefinition(bsSetup.feature)(defSetup => {
           defSetup.whenReady(defContext => {
             bsSetup.provide({
               a: ElementAdapter,

@@ -1,5 +1,6 @@
 import { InControl, InStyledElement, inValue } from '@frontmeans/input-aspects';
-import { afterSupplied, EventEmitter, eventSupply, EventSupply, eventSupplyOf, trackValue } from '@proc7ts/fun-events';
+import { afterSupplied, EventEmitter, trackValue } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { bootstrapComponents, Component, ComponentContext, ComponentMount } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { ConvertInput, ConvertInputDef } from './convert-input.decorator';
@@ -65,16 +66,16 @@ describe('input', () => {
 
       converter.it = undefined;
 
-      expect(eventSupplyOf(converted).isOff).toBe(true);
+      expect(converted.supply.isOff).toBe(true);
     });
     it('cuts off provided supply when control unused', async () => {
 
       const converted = inValue('converted');
-      const supply = eventSupply();
-      const converter = new EventEmitter<[InControl<any>?, EventSupply?]>();
+      const supply = new Supply();
+      const converter = new EventEmitter<[InControl<any>?, Supply?]>();
 
       await bootstrap(
-          () => afterSupplied<[InControl<any>?, EventSupply?]>(
+          () => afterSupplied<[InControl<any>?, Supply?]>(
               converter,
               () => [converted, supply],
           ),
@@ -83,7 +84,7 @@ describe('input', () => {
       converter.send();
 
       expect(supply.isOff).toBe(true);
-      expect(eventSupplyOf(converted).isOff).toBe(false);
+      expect(converted.supply.isOff).toBe(false);
     });
 
     async function bootstrap(
@@ -102,7 +103,7 @@ describe('input', () => {
       @ConvertInput(convert)
       class ConvertedInput {}
 
-      const bsContext = await bootstrapComponents(RootInput, ConvertedInput).whenReady();
+      const bsContext = await bootstrapComponents(RootInput, ConvertedInput).whenReady;
       const [rootDefContext, defContext] = await Promise.all(([
         bsContext.whenDefined(RootInput),
         bsContext.whenDefined(ConvertedInput),

@@ -3,9 +3,9 @@
  * @module @wesib/generic/input
  */
 import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from '@frontmeans/input-aspects';
-import { ContextValueSlot } from '@proc7ts/context-values';
-import { ContextSupply, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
-import { AfterEvent, EventKeeper } from '@proc7ts/fun-events';
+import { ContextSupply, ContextValueSlot } from '@proc7ts/context-values';
+import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
+import { AfterEvent, EventKeeper, mapAfter, supplyAfter } from '@proc7ts/fun-events';
 import { DefaultNamespaceAliaser, ElementRenderScheduler } from '@wesib/wesib';
 
 /**
@@ -46,14 +46,13 @@ class DefaultInAspectsKey
     const scheduler = slot.context.get(ElementRenderScheduler);
 
     slot.insert(
-        slot.seed.keepThru(
-            (...fns) => intoConvertedBy(
+        slot.seed.do(
+            mapAfter((...fns) => intoConvertedBy(
                 ...fns,
                 InRenderScheduler.to(scheduler),
                 InNamespaceAliaser.to(nsAlias),
-            ),
-        ).tillOff(
-            slot.context.get(ContextSupply),
+            )),
+            supplyAfter(slot.context.get(ContextSupply)),
         ),
     );
   }

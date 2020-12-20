@@ -1,5 +1,5 @@
-import { EventReceiver, EventSupply, eventSupply, onEventBy, onPromise } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import { EventReceiver, mapOn_, onEventBy, onPromise } from '@proc7ts/fun-events';
+import { noop, Supply } from '@proc7ts/primitives';
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';
@@ -48,7 +48,7 @@ describe('navigation', () => {
     })
     class TestFeature {}
 
-    bsContext = await bootstrapComponents(TestFeature).whenReady();
+    bsContext = await bootstrapComponents(TestFeature).whenReady;
   });
 
   describe('PageLoader', () => {
@@ -169,7 +169,7 @@ describe('navigation', () => {
 
       mockHttpFetch = jest.fn((_input, _init?) => onEventBy(() => {
 
-        const failedSupply = eventSupply();
+        const failedSupply = new Supply();
 
         failedSupply.off(error);
 
@@ -256,9 +256,9 @@ describe('navigation', () => {
         document: document.implementation.createHTMLDocument('other'),
       };
 
-      mockAgent.mockImplementation(next => next().thru_(
+      mockAgent.mockImplementation(next => next().do(mapOn_(
           response => response.ok ? newResponse : response,
-      ));
+      )));
 
       const receiver = jest.fn();
 
@@ -271,10 +271,10 @@ describe('navigation', () => {
     function loadDocument(
         receiver: EventReceiver<[PageLoadResponse]> = noop,
         done: (reason?: any) => void = noop,
-    ): Promise<EventSupply> {
-      return new Promise<EventSupply>(resolve => {
+    ): Promise<Supply> {
+      return new Promise<Supply>(resolve => {
 
-        const supply = loadPage(page).to(receiver);
+        const supply = loadPage(page)(receiver);
 
         supply.whenOff(reason => {
           done(reason);

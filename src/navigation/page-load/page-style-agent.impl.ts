@@ -1,3 +1,4 @@
+import { mapOn_ } from '@proc7ts/fun-events';
 import { itsEach, itsFirst, overArray } from '@proc7ts/push-iterator';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { importNode } from '../../util';
@@ -10,8 +11,8 @@ export function pageStyleAgent(context: BootstrapContext): PageLoadAgent {
 
   const doc = context.get(BootstrapWindow).document;
 
-  return next => next().thru_(
-      response => {
+  return next => next().do(
+      mapOn_(response => {
         if (!response.ok) {
           return response;
         }
@@ -67,6 +68,6 @@ export function pageStyleAgent(context: BootstrapContext): PageLoadAgent {
         itsEach(oldStylesByHref.values(), style => style.parentNode!.removeChild(style));
 
         return response;
-      },
+      }),
   );
 }

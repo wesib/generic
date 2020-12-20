@@ -13,13 +13,13 @@ export const PageParam__symbol = (/*#__PURE__*/ Symbol('page-param'));
 /**
  * Page navigation parameter.
  *
- * Can applied before navigation happened (i.e. to [[LeavePageEvent]]). Then it will be available to the target page
+ * Can applied before navigation happened (i.e. to {@link LeavePageEvent}). Then it will be available to the target page
  * both before and after navigation.
  *
- * @typeparam T  Parameter value type.
- * @typeparam I  Parameter input type.
+ * @typeParam T - Parameter value type.
+ * @typeParam TInput - Parameter input type.
  */
-export abstract class PageParam<T, I> implements PageParam.Ref<T, I> {
+export abstract class PageParam<T, TInput> implements PageParam.Ref<T, TInput> {
 
   get [PageParam__symbol](): this {
     return this;
@@ -32,13 +32,13 @@ export abstract class PageParam<T, I> implements PageParam.Ref<T, I> {
    * unless this parameter is assigned already. A {@link PageParam.Handle.put} method will be called instead
    * in the latter case.
    *
-   * @param page  A page to assign navigation parameter to.
-   * @param input  Parameter input used to construct its initial value.
-   * @param context  Page parameter context.
+   * @param page - A page to assign navigation parameter to.
+   * @param input - Parameter input used to construct its initial value.
+   * @param context - Page parameter context.
    *
    * @returns New page parameter value handle.
    */
-  abstract create(page: Page, input: I, context: PageParamContext): PageParam.Handle<T, I>;
+  abstract create(page: Page, input: TInput, context: PageParamContext): PageParam.Handle<T, TInput>;
 
   /**
    * Creates default page parameter handle.
@@ -48,12 +48,12 @@ export abstract class PageParam<T, I> implements PageParam.Ref<T, I> {
    *
    * Returns nothing by default.
    *
-   * @param _page  A page to assign navigation parameter to.
-   * @param _context  Page parameter context.
+   * @param _page - A page to assign navigation parameter to.
+   * @param _context - Page parameter context.
    *
    * @returns New page parameter value handle or nothing if there is no default value.
    */
-  byDefault(_page: Page, _context: PageParamContext): PageParam.Handle<T, I> | undefined {
+  byDefault(_page: Page, _context: PageParamContext): PageParam.Handle<T, TInput> | undefined {
     return;
   }
 
@@ -64,27 +64,27 @@ export namespace PageParam {
   /**
    * Page navigation parameter reference.
    *
-   * @typeparam T  Parameter value type.
-   * @typeparam I  Parameter input type.
+   * @typeParam T - Parameter value type.
+   * @typeParam TInput - Parameter input type.
    */
-  export interface Ref<T, I> {
+  export interface Ref<T, TInput> {
 
     /**
      * Referred page navigation parameter instance.
      */
-    readonly [PageParam__symbol]: PageParam<T, I>;
+    readonly [PageParam__symbol]: PageParam<T, TInput>;
 
   }
 
   /**
    * Page navigation parameter that has default value.
    *
-   * @typeparam T  Parameter value type.
-   * @typeparam I  Parameter input type.
+   * @typeParam T - Parameter value type.
+   * @typeParam TInput - Parameter input type.
    */
-  export interface WithDefaults<T, I> extends PageParam<T, I> {
+  export interface WithDefaults<T, TInput> extends PageParam<T, TInput> {
 
-    byDefault(page: Page, context: PageParamContext): PageParam.Handle<T, I>;
+    byDefault(page: Page, context: PageParamContext): PageParam.Handle<T, TInput>;
 
   }
 
@@ -93,15 +93,15 @@ export namespace PageParam {
     /**
      * A reference to page navigation parameter that has default value.
      *
-     * @typeparam T  Parameter value type.
-     * @typeparam I  Parameter input type.
+     * @typeParam T - Parameter value type.
+     * @typeParam TInput - Parameter input type.
      */
-    export interface Ref<T, I> {
+    export interface Ref<T, TInput> {
 
       /**
        * Referred page navigation parameter instance.
        */
-      readonly [PageParam__symbol]: WithDefaults<T, I>;
+      readonly [PageParam__symbol]: WithDefaults<T, TInput>;
 
     }
 
@@ -114,10 +114,10 @@ export namespace PageParam {
    *
    * Created by {@link PageParam.create} method.
    *
-   * @typeparam T  Parameter value type.
-   * @typeparam I  Parameter input type.
+   * @typeParam T - Parameter value type.
+   * @typeParam TInput - Parameter input type.
    */
-  export interface Handle<T, I> {
+  export interface Handle<T, TInput> {
 
     /**
      * Returns current parameter value.
@@ -132,29 +132,31 @@ export namespace PageParam {
      * This method is called when {@link Page.put re-assigning page parameter}. It is called when page parameter
      * is assigned already and can be used to update it. The update logic is up to the implementation.
      *
-     * @param input  Parameter input to use when updating its value.
+     * @param input - Parameter input to use when updating its value.
      */
-    put(input: I): void;
+    put(input: TInput): void;
 
     /**
      * Transfers parameter to target page.
      *
-     * This is called right before [[LeavePageEvent]] is fired for each parameter handle of current page.
+     * This is called right before {@link LeavePageEvent} is fired for each parameter handle of current page.
      *
-     * @param to  A page to transfer parameter to.
-     * @param when  When the transfer happens. Either `pretend`, `pre-open`, `pre-replace`, `open`, or `return`.
+     * @param to - A page to transfer parameter to.
+     * @param when - When the transfer happens. Either `pretend`, `pre-open`, `pre-replace`, `open`, or `return`.
      * `return` is used when return to page generated by another app version. E.g. from the page that has been
      * reloaded.
      *
      * @returns New parameter handle instance for target page, or `undefined` if nothing to transfer.
      */
-    transfer?(to: Page, when: 'pretend' | 'pre-open' | 'pre-replace' | 'enter' | 'return'): Handle<T, I> | undefined;
+    transfer?(
+        to: Page, when: 'pretend' | 'pre-open' | 'pre-replace' | 'enter' | 'return',
+    ): Handle<T, TInput> | undefined;
 
     /**
      * This method is called when the page this parameter created for is entered.
      *
-     * @param page  Entered page.
-     * @param when  When the page is entered. Either `init`, `open`, `replace`, `enter`, or `return`.
+     * @param page - Entered page.
+     * @param when - When the page is entered. Either `init`, `open`, `replace`, `enter`, or `return`.
      */
     enter?(page: Page, when: 'init' | 'open' | 'replace' | 'enter' | 'return'): void;
 
@@ -168,7 +170,7 @@ export namespace PageParam {
      *
      * The handle won't be accessed after this method call.
      *
-     * @param at  The page the browser remains at.
+     * @param at - The page the browser remains at.
      */
     stay?(at: Page): void;
 

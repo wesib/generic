@@ -1,6 +1,6 @@
+import { DomEventDispatcher } from '@frontmeans/dom-events';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import { EventEmitter, OnEvent, trackValue, ValueTracker } from '@proc7ts/fun-events';
-import { DomEventDispatcher } from '@proc7ts/fun-events/dom';
 import {
   BootstrapContext,
   BootstrapRoot,
@@ -25,7 +25,7 @@ export const HierarchyRoot = (/*#__PURE__*/ new SingleContextKey<HierarchyRoot>(
 
         const root = bsContext.get(BootstrapRoot);
 
-        new DomEventDispatcher(root).on<ComponentEvent>('wesib:component').to(
+        new DomEventDispatcher(root).on<ComponentEvent>('wesib:component')(
             ({ context }: ComponentEvent) => context.get(HierarchyUpdates).issue(),
         );
 
@@ -59,7 +59,7 @@ export class HierarchyUpdates {
     const updates = new EventEmitter<[ComponentContext]>();
     const hierarchyRoot = context.get(BootstrapContext).get(HierarchyRoot);
 
-    this.on = updates.on();
+    this.on = updates.on;
     this.send = () => updates.send(context);
     this.issue = () => {
 

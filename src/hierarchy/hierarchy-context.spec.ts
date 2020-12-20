@@ -1,5 +1,6 @@
 import { MultiContextUpKey, MultiContextUpRef } from '@proc7ts/context-values/updatable';
-import { EventSupply, eventSupplyOf } from '@proc7ts/fun-events';
+import { onceAfter } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { bootstrapComponents, BootstrapRoot, Component, DefinitionContext, Feature } from '@wesib/wesib';
 import { HierarchyContext } from './hierarchy-context';
 
@@ -40,7 +41,7 @@ describe('hierarchy', () => {
       class TestFeature {
       }
 
-      const bsContext = await bootstrapComponents(TestFeature).whenReady();
+      const bsContext = await bootstrapComponents(TestFeature).whenReady;
 
       defContext = await bsContext.whenDefined(TestComponent);
       nestedHierarchy = defContext.mountTo(nestedElement).context.get(HierarchyContext);
@@ -50,7 +51,7 @@ describe('hierarchy', () => {
     describe('up', () => {
 
       let parentHierarchy: HierarchyContext | undefined;
-      let parentSupply: EventSupply;
+      let parentSupply: Supply;
 
       beforeEach(() => {
         parentSupply = nestedHierarchy.up(upper => parentHierarchy = upper);
@@ -60,13 +61,13 @@ describe('hierarchy', () => {
         expect(parentHierarchy).toBe(testHierarchy);
       });
       it('resolves to `undefined` for topmost component', () => {
-        testHierarchy.up().once(upper => expect(upper).toBeUndefined());
+        testHierarchy.up.do(onceAfter)(upper => expect(upper).toBeUndefined());
       });
       it('resolves to `undefined` for root element', () => {
 
         const rootHierarchy = defContext.mountTo(rootElement).context.get(HierarchyContext);
 
-        rootHierarchy.up().once(upper => expect(upper).toBeUndefined());
+        rootHierarchy.up.do(onceAfter)(upper => expect(upper).toBeUndefined());
       });
       it('is destroyed after component disconnection', () => {
 
@@ -76,7 +77,7 @@ describe('hierarchy', () => {
 
         const whenOff = jest.fn();
 
-        eventSupplyOf(nestedHierarchy).whenOff(whenOff);
+        nestedHierarchy.supply.whenOff(whenOff);
         expect(whenOff).toHaveBeenCalledWith(reason);
       });
       it('resolves to `undefined` for initially disconnected component', () => {
@@ -84,7 +85,7 @@ describe('hierarchy', () => {
         const element = document.createElement('disconnected-element');
         const hierarchy = defContext.mountTo(element).context.get(HierarchyContext);
 
-        hierarchy.up().once(upper => expect(upper).toBeUndefined());
+        hierarchy.up.do(onceAfter)(upper => expect(upper).toBeUndefined());
       });
       it('resolves to `undefined` for component without parent', () => {
 
@@ -94,7 +95,7 @@ describe('hierarchy', () => {
 
         mount.connect();
 
-        hierarchy.up().once(upper => expect(upper).toBeUndefined());
+        hierarchy.up.do(onceAfter)(upper => expect(upper).toBeUndefined());
       });
       it('resolves to assigned enclosing component for disconnected component', () => {
 
@@ -102,7 +103,7 @@ describe('hierarchy', () => {
         const hierarchy = defContext.mountTo(element).context.get(HierarchyContext);
 
         expect(hierarchy.inside(testHierarchy.context)).toBe(hierarchy);
-        hierarchy.up().once(upper => expect(upper).toBe(testHierarchy));
+        hierarchy.up.do(onceAfter)(upper => expect(upper).toBe(testHierarchy));
       });
       it('resolves to `undefined` when enclosing component reset for disconnected component', () => {
 
@@ -111,7 +112,7 @@ describe('hierarchy', () => {
 
         expect(hierarchy.inside(testHierarchy.context)).toBe(hierarchy);
         expect(hierarchy.inside()).toBe(hierarchy);
-        hierarchy.up().once(upper => expect(upper).toBeUndefined());
+        hierarchy.up.do(onceAfter)(upper => expect(upper).toBeUndefined());
       });
       it('updates to real enclosing component when connected', () => {
 
@@ -125,7 +126,7 @@ describe('hierarchy', () => {
 
         containerElement.appendChild(element);
         mount.checkConnected();
-        hierarchy.up().once(upper => expect(upper).toBe(containerHierarchy));
+        hierarchy.up.do(onceAfter)(upper => expect(upper).toBe(containerHierarchy));
       });
       it('updates on intermediate component mount', () => {
         defContext.mountTo(containerElement);
@@ -137,7 +138,7 @@ describe('hierarchy', () => {
 
         const hierarchy = defContext.mountTo(containerElement).context.get(HierarchyContext);
 
-        nestedHierarchy.up().once(upper => expect(upper).toBe(hierarchy));
+        nestedHierarchy.up.do(onceAfter)(upper => expect(upper).toBe(hierarchy));
       });
       it('ignores assigned enclosing component when connected', () => {
         defContext.mountTo(containerElement);
@@ -157,20 +158,20 @@ describe('hierarchy', () => {
 
       it('makes value available in context', () => {
         nestedHierarchy.provide({ a: key, is: 'foo' });
-        nestedHierarchy.get(key).once(value => expect(value).toBe('foo'));
+        nestedHierarchy.get(key).do(onceAfter)(value => expect(value).toBe('foo'));
       });
       it('makes value available in nested context', () => {
 
-        const remove = testHierarchy.provide({ a: key, is: 'foo' });
+        const supply = testHierarchy.provide({ a: key, is: 'foo' });
 
         nestedHierarchy.provide({ a: key, is: 'bar' });
-        nestedHierarchy.get(key).once((...values) => expect(values).toEqual(['foo', 'bar']));
+        nestedHierarchy.get(key).do(onceAfter)((...values) => expect(values).toEqual(['foo', 'bar']));
 
-        remove();
-        nestedHierarchy.get(key).once((...values) => expect(values).toEqual(['bar']));
+        supply.off();
+        nestedHierarchy.get(key).do(onceAfter)((...values) => expect(values).toEqual(['bar']));
 
         testHierarchy.provide({ a: key, is: 'baz' });
-        nestedHierarchy.get(key).once((...values) => expect(values).toEqual(['baz', 'bar']));
+        nestedHierarchy.get(key).do(onceAfter)((...values) => expect(values).toEqual(['baz', 'bar']));
       });
       it('makes all parent values available in nested context', () => {
         testHierarchy.provide({ a: key, is: 'foo' });
@@ -179,13 +180,13 @@ describe('hierarchy', () => {
         const hierarchy = defContext.mountTo(containerElement).context.get(HierarchyContext);
 
         hierarchy.provide({ a: key, is: 'baz' });
-        nestedHierarchy.get(key).once((...values) => expect(values).toEqual(['foo', 'baz', 'bar']));
+        nestedHierarchy.get(key).do(onceAfter)((...values) => expect(values).toEqual(['foo', 'baz', 'bar']));
       });
       it('makes disconnected component value unavailable in nested context', () => {
         testHierarchy.provide({ a: key, is: 'foo' });
         nestedHierarchy.provide({ a: key, is: 'bar' });
         nestedHierarchy.context.destroy();
-        nestedHierarchy.get(key).once((...values) => expect(values).toEqual(['bar']));
+        nestedHierarchy.get(key).do(onceAfter)((...values) => expect(values).toEqual(['bar']));
       });
     });
   });

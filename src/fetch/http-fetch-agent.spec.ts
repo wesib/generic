@@ -1,6 +1,6 @@
-import { ContextRegistry } from '@proc7ts/context-values';
-import { ContextSupply } from '@proc7ts/context-values/updatable';
-import { EventEmitter, eventSupply, OnEvent, onSupplied } from '@proc7ts/fun-events';
+import { ContextRegistry, ContextSupply } from '@proc7ts/context-values';
+import { EventEmitter, onceOn, OnEvent, onSupplied } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { HttpFetchAgent } from './http-fetch-agent';
 import Mock = jest.Mock;
 
@@ -25,16 +25,16 @@ describe('fetch', () => {
     beforeEach(() => {
       request = new Request('http://localhost/test');
       emitter = new EventEmitter<[Response]>();
-      mockFetch = jest.fn((_request?, _init?) => emitter.on());
+      mockFetch = jest.fn((_request?, _init?) => emitter.on);
     });
 
     it('performs the fetch without agents', () => {
-      expect(agent(mockFetch, request)).toBe(emitter.on());
+      expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('performs the fetch without agents with `null` fallback value', () => {
       agent = registry.newValues().get(HttpFetchAgent, { or: null })!;
-      expect(agent(mockFetch, request)).toBe(emitter.on());
+      expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('performs the fetch without agents by fallback agent', () => {
@@ -48,14 +48,14 @@ describe('fetch', () => {
     it('calls the registered agent', async () => {
 
       const emitter2 = new EventEmitter<[Response]>();
-      const mockAgent = jest.fn(() => emitter2.on());
+      const mockAgent = jest.fn(() => emitter2.on);
 
       registry.provide({ a: HttpFetchAgent, is: mockAgent });
 
       const response1 = new Response('response1');
       const response2 = new Response('response2');
       const response = await new Promise<Response>(resolve => {
-        onSupplied(agent(mockFetch, request)).once(resolve);
+        onSupplied(agent(mockFetch, request)).do(onceOn)(resolve);
         emitter.send(response1);
         emitter2.send(response2);
       });
@@ -65,7 +65,7 @@ describe('fetch', () => {
     it('performs the fetch by calling `next`', () => {
       registry.provide({ a: HttpFetchAgent, is: next => next() });
 
-      expect(agent(mockFetch, request)).toBe(emitter.on());
+      expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('calls the next agent in chain by calling `next`', () => {
@@ -77,13 +77,13 @@ describe('fetch', () => {
       registry.provide({ a: HttpFetchAgent, is: next => next() });
       registry.provide({ a: HttpFetchAgent, is: mockAgent });
 
-      expect(agent(mockFetch, request)).toBe(emitter.on());
+      expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('throws when context destroyed', () => {
 
-      const contextSupply = eventSupply();
+      const contextSupply = new Supply();
 
       registry.provide({ a: ContextSupply, is: contextSupply });
 

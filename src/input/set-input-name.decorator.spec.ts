@@ -1,5 +1,5 @@
 import { inGroup, InGroup, InText, inText } from '@frontmeans/input-aspects';
-import { trackValue } from '@proc7ts/fun-events';
+import { onceAfter, trackValue } from '@proc7ts/fun-events';
 import { bootstrapComponents, Component, ComponentContext } from '@wesib/wesib';
 import { inputFromControl } from './input-from-control';
 import { SetInputName } from './set-input-name.decorator';
@@ -22,7 +22,7 @@ describe('input', () => {
 
       const [group, control] = await bootstrap('ctrl');
 
-      group.controls.read().once(controls => {
+      group.controls.read.do(onceAfter)(controls => {
         expect([...controls]).toEqual([control]);
       });
     });
@@ -30,7 +30,7 @@ describe('input', () => {
 
       const [group, control] = await bootstrap(() => 'ctrl');
 
-      group.controls.read().once(controls => {
+      group.controls.read.do(onceAfter)(controls => {
         expect([...controls]).toEqual([control]);
       });
     });
@@ -39,12 +39,12 @@ describe('input', () => {
       const name = trackValue<string | undefined>('ctrl');
       const [group, control] = await bootstrap(() => name);
 
-      group.controls.read().once(controls => {
+      group.controls.read.do(onceAfter)(controls => {
         expect([...controls]).toEqual([control]);
       });
 
       name.it = undefined;
-      group.controls.read().once(controls => {
+      group.controls.read.do(onceAfter)(controls => {
         expect([...controls]).toHaveLength(0);
       });
     });
@@ -52,7 +52,7 @@ describe('input', () => {
 
       const [group] = await bootstrap('ctrl', { createGroup: false });
 
-      group.controls.read().once(controls => {
+      group.controls.read.do(onceAfter)(controls => {
         expect([...controls]).toHaveLength(0);
       });
     });
@@ -60,7 +60,7 @@ describe('input', () => {
 
       const [group] = await bootstrap('ctrl', { createControl: false });
 
-      group.controls.read().once(controls => {
+      group.controls.read.do(onceAfter)(controls => {
         expect([...controls]).toHaveLength(0);
       });
     });
@@ -68,7 +68,7 @@ describe('input', () => {
 
       const [group] = await bootstrap('ctrl', { createGroup: false, createControl: false });
 
-      group.controls.read().once(controls => {
+      group.controls.read.do(onceAfter)(controls => {
         expect([...controls]).toHaveLength(0);
       });
     });
@@ -114,7 +114,7 @@ describe('input', () => {
 
       }
 
-      const bsContext = await bootstrapComponents(GroupComponent, InputComponent).whenReady();
+      const bsContext = await bootstrapComponents(GroupComponent, InputComponent).whenReady;
       const groupFactory = await bsContext.whenDefined(GroupComponent);
       const controlFactory = await bsContext.whenDefined(InputComponent);
 

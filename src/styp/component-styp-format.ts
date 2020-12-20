@@ -18,8 +18,7 @@ import {
   StypSubSelector,
 } from '@frontmeans/style-producer';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
-import { EventSupply, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
-import { elementOrArray, extendSetOfElements, setOfElements, valueProvider } from '@proc7ts/primitives';
+import { elementOrArray, extendSetOfElements, setOfElements, Supply, valueProvider } from '@proc7ts/primitives';
 import { ComponentContext, ShadowContentRoot } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
 import { componentStypDomFormatConfig } from './component-styp-dom.format-config';
@@ -120,18 +119,18 @@ export abstract class ComponentStypFormat {
    *
    * Utilizes {@link newProducer component's producer function}.
    *
-   * @param rules  A source of CSS rules to produce stylesheets for.
-   * @param config  Style production format configuration.
+   * @param rules - A source of CSS rules to produce stylesheets for.
+   * @param config - Style production format configuration.
    *
    * @returns CSS rules supply. Once cut off the produced stylesheets are removed.
    */
   produce(
       rules: StypRules.Source,
       config?: ComponentStypFormatConfig,
-  ): EventSupply {
+  ): Supply {
 
     const producer = this.newProducer(rules, config);
-    const supply = eventSupply();
+    const supply = new Supply();
 
     this.context.whenSettled(() => {
       producer().needs(supply).cuts(supply);
@@ -145,19 +144,19 @@ export abstract class ComponentStypFormat {
    *
    * Utilizes {@link ComponentStyleProducer}.
    *
-   * @param rules  A source of CSS rules to produce stylesheets for.
-   * @param config  Style production format configuration.
+   * @param rules - A source of CSS rules to produce stylesheets for.
+   * @param config - Style production format configuration.
    *
    * @returns CSS rules producer function returning CSS rules supply. Once cut off the produced stylesheets are removed.
    */
   newProducer(
       rules: StypRules.Source,
       config?: ComponentStypFormatConfig,
-  ): (this: void) => EventSupply {
+  ): (this: void) => Supply {
 
     const css = lazyStypRules(rules);
-    let producer: () => EventSupply;
-    const componentSupply = eventSupplyOf(this.context);
+    let producer: () => Supply;
+    const componentSupply = this.context.supply;
 
     producer = () => {
 
@@ -180,7 +179,7 @@ export abstract class ComponentStypFormat {
    *
    * This method is called by {@link produce} one.
    *
-   * @param config  Component style production format configuration.
+   * @param config - Component style production format configuration.
    *
    * @returns Component style production format.
    */
@@ -193,7 +192,7 @@ export abstract class ComponentStypFormat {
    *
    * This method is called by {@link format} one.
    *
-   * @param config  Component style production format configuration.
+   * @param config - Component style production format configuration.
    *
    * @returns Component style renderer(s).
    */
@@ -355,7 +354,7 @@ export class ComponentStypObjectFormat extends ComponentStypFormat {
   /**
    * Constructs CSS object model production format.
    *
-   * @param context  Target component context.
+   * @param context - Target component context.
    */
   constructor(readonly context: ComponentContext) {
     super();
@@ -370,7 +369,7 @@ export class ComponentStypObjectFormat extends ComponentStypFormat {
    *
    * This method is called by {@link format} one.
    *
-   * @param config  Original component style production format configuration.
+   * @param config - Original component style production format configuration.
    *
    * @returns Configuration of CSS object model production format.
    */

@@ -4,19 +4,19 @@
  */
 import { css__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { RenderSchedule } from '@frontmeans/render-scheduler';
-import { nextArgs } from '@proc7ts/call-thru';
 import {
   afterEach,
   AfterEvent,
   afterEventBy,
   afterSupplied,
   afterThe,
+  consumeEvents,
+  digAfter_,
   EventKeeper,
-  eventSupply,
-  EventSupply,
-  nextAfterEvent,
+  supplyAfter,
+  translateAfter_,
 } from '@proc7ts/fun-events';
-import { Class, noop } from '@proc7ts/primitives';
+import { Class, noop, Supply } from '@proc7ts/primitives';
 import { mapIt } from '@proc7ts/push-iterator';
 import {
   Component,
@@ -37,7 +37,7 @@ import { Page } from './page';
  * @internal
  */
 interface ActiveNavLink {
-  supply(): EventSupply;
+  supply(): Supply;
 }
 
 /**
@@ -45,8 +45,8 @@ interface ActiveNavLink {
  *
  * Marks navigation links with highest weight.
  *
- * @typeparam T  A type of decorated component class.
- * @param def  Navigation link activation definition.
+ * @typeParam T - A type of decorated component class.
+ * @param def - Navigation link activation definition.
  *
  * @returns New component decorator.
  */
@@ -69,38 +69,40 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
 
           let active = new Map<ElementNode, ActiveNavLink>();
 
-          navigation.read().tillOff(context).consume(
-              page => componentNode.select(select, pick).read().keepThru_(
-                  nodes => nextAfterEvent(afterEach(
-                      ...mapIt(nodes, node => weigh({ node, context, page })),
-                  )),
-              ).consume(
-                  (...weights: NavLinkWeight[]) => {
+          navigation.read.do(
+              supplyAfter(context),
+              consumeEvents(
+                  page => componentNode.select(select, pick).read.do(
+                      digAfter_(nodes => afterEach(
+                          ...mapIt(nodes, node => weigh({ node, context, page })),
+                      )),
+                      consumeEvents((...weights: NavLinkWeight[]) => {
 
-                    const selected = selectActiveNavLinks(weights);
-                    const newActive = new Map<ElementNode, ActiveNavLink>();
-                    const result = eventSupply();
+                        const selected = selectActiveNavLinks(weights);
+                        const newActive = new Map<ElementNode, ActiveNavLink>();
+                        const result = new Supply();
 
-                    selected.forEach(node => {
+                        selected.forEach(node => {
 
-                      let activeLink: ActiveNavLink;
-                      const existing = active.get(node);
+                          let activeLink: ActiveNavLink;
+                          const existing = active.get(node);
 
-                      if (existing) {
-                        newActive.set(node, existing);
-                        activeLink = existing;
-                      } else {
-                        activeLink = activate({ node, context, page });
-                        newActive.set(node, activeLink);
-                      }
+                          if (existing) {
+                            newActive.set(node, existing);
+                            activeLink = existing;
+                          } else {
+                            activeLink = activate({ node, context, page });
+                            newActive.set(node, activeLink);
+                          }
 
-                      activeLink.supply().needs(result);
-                    });
+                          activeLink.supply().needs(result);
+                        });
 
-                    active = newActive;
+                        active = newActive;
 
-                    return result;
-                  },
+                        return result;
+                      }),
+                  ),
               ),
           );
         });
@@ -113,9 +115,9 @@ export function ActivateNavLink<T extends ComponentClass = Class>(
  * Navigation link activation definition.
  *
  * Defines a set of element nodes considered to be navigation links. Each matching node is {@link weigh weighed}
- * against {@link Navigation.read current page}, and the link with highest weight is marked [[active]].
+ * against {@link Navigation.read current page}, and the link with highest weight is marked {@link active}.
  *
- * @typeparam T  A type of component.
+ * @typeParam T - A type of component.
  */
 export interface ActivateNavLinkDef<T extends object = any> {
 
@@ -163,9 +165,9 @@ export interface ActivateNavLinkDef<T extends object = any> {
    *
    * Ignores search parameters with names starting and ending with double underscores. Like `__wesib_app_rev__`.
    *
-   * @param node  Navigation link node to weigh.
-   * @param page  Current navigation page.
-   * @param context  Decorated component context.
+   * @param node - Navigation link node to weigh.
+   * @param page - Current navigation page.
+   * @param context - Decorated component context.
    *
    * @returns Either navigation link weight, or its keeper. Non-positive wights means the page URL doesn't match
    * the link at all.
@@ -187,10 +189,10 @@ export interface ActivateNavLinkDef<T extends object = any> {
    *
    * This method is called each time the active link changed.
    *
-   * @param active  Whether to make target link active (`true`), or inactive (`false`).
-   * @param node  Navigation link node to update activity state of.
-   * @param page  Current navigation page.
-   * @param context  Decorated component context.
+   * @param active - Whether to make target link active (`true`), or inactive (`false`).
+   * @param node - Navigation link node to update activity state of.
+   * @param page - Current navigation page.
+   * @param context - Decorated component context.
    */
   activate?(
       active: boolean,
@@ -250,6 +252,7 @@ function navLinkWeight(
   if (!def.weigh) {
     return defaultNavLinkWeight;
   }
+
   return opts => {
 
     const weight = def.weigh!(opts);
@@ -258,18 +261,18 @@ function navLinkWeight(
       return afterThe(opts.node, weight);
     }
 
-    let supplier: AfterEvent<NavLinkWeight> = afterSupplied(weight).keepThru_(
-        weight => nextArgs(opts.node, weight),
-    );
+    let supplier: AfterEvent<NavLinkWeight> = afterSupplied(weight).do(translateAfter_(
+        (send, weight) => send(opts.node, weight),
+    ));
 
     return afterEventBy<NavLinkWeight>(receiver => {
-      supplier.to({
-        supply: eventSupply()
+      supplier({
+        supply: new Supply()
             .needs(receiver.supply)
             .whenOff(() => {
               // Fall back to zero weight once the weight supply cut off
               supplier = afterThe(opts.node, 0);
-              supplier.to(receiver);
+              supplier(receiver);
             }),
         receive: receiver.receive.bind(receiver),
       });
@@ -443,12 +446,12 @@ function activateNavLink(
 
     makeActive(true);
 
-    let lastSupply: EventSupply | undefined;
+    let lastSupply: Supply | undefined;
 
     return {
-      supply(): EventSupply {
+      supply(): Supply {
 
-        const supply = lastSupply = eventSupply(() => {
+        const supply = lastSupply = new Supply(() => {
           if (lastSupply === supply) {
             makeActive(false);
           }

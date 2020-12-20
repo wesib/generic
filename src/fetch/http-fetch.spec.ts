@@ -1,8 +1,8 @@
 import Mock = jest.Mock;
 import Mocked = jest.Mocked;
 import SpyInstance = jest.SpyInstance;
-import { EventReceiver, EventSupply } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import { EventReceiver } from '@proc7ts/fun-events';
+import { noop, Supply } from '@proc7ts/primitives';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
@@ -38,7 +38,7 @@ describe('fetch', () => {
     })
     class TestFeature {}
 
-    bsContext = await bootstrapComponents(TestFeature).whenReady();
+    bsContext = await bootstrapComponents(TestFeature).whenReady;
   });
 
   describe('HttpFetch', () => {
@@ -132,7 +132,7 @@ describe('fetch', () => {
 
         const receiver = jest.fn();
         const done = jest.fn();
-        const supply = httpFetch(request, init).to(receiver).whenOff(done);
+        const supply = httpFetch(request, init)(receiver).whenOff(done);
 
         supply.off();
 
@@ -182,10 +182,10 @@ describe('fetch', () => {
     function fetch(
         receiver: EventReceiver<[Response]> = noop,
         done: (reason?: any) => void = noop,
-    ): Promise<EventSupply> {
-      return new Promise<EventSupply>(resolve => {
+    ): Promise<Supply> {
+      return new Promise<Supply>(resolve => {
 
-        const supply = httpFetch(request, init).to(receiver);
+        const supply = httpFetch(request, init)(receiver);
 
         supply.whenOff(reason => {
           done(reason);

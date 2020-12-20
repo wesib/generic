@@ -1,5 +1,5 @@
 import { ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
-import { AfterEvent, afterThe } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, mapOn_ } from '@proc7ts/fun-events';
 import { BootstrapContext, bootstrapDefault, BootstrapWindow } from '@wesib/wesib';
 import { Navigation } from '../navigation';
 import { PageLoadAgent } from './page-load-agent';
@@ -42,9 +42,8 @@ export class PageCacheBuster {
 
       this.urlModifier = afterThe(url => url.searchParams.set(appRevSearchParam, rev));
       this.agent = afterThe(
-          (next, request) => next(new Request(request.url, request))
-              .thru_(
-                  response => {
+          (next, request) => next(new Request(request.url, request)).do(
+              mapOn_(response => {
                     if (response.ok) {
 
                       const newRev = appRev(response.document);
@@ -60,8 +59,8 @@ export class PageCacheBuster {
                     }
 
                     return response;
-                  },
-              ),
+                  }),
+          ),
       );
     }
   }

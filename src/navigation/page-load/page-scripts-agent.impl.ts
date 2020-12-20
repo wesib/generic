@@ -1,3 +1,4 @@
+import { mapOn_ } from '@proc7ts/fun-events';
 import { filterArray, filterIt, itsEach, mapIt, PushIterable } from '@proc7ts/push-iterator';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { importNode } from '../../util';
@@ -10,8 +11,8 @@ export function pageScriptsAgent(context: BootstrapContext): PageLoadAgent {
 
   const doc = context.get(BootstrapWindow).document;
 
-  return next => next().thru_(
-      response => {
+  return next => next().do(
+      mapOn_(response => {
         if (response.ok) {
 
           const allScripts = new Set<string>(mapIt(
@@ -31,7 +32,7 @@ export function pageScriptsAgent(context: BootstrapContext): PageLoadAgent {
           );
         }
         return response;
-      },
+      }),
   );
 }
 

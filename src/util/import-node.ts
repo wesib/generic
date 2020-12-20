@@ -8,41 +8,43 @@ import { isElement } from '@wesib/wesib';
 /**
  * Imports DOM node from one document to another.
  *
- * @param from  The node to import.
- * @param to  The node to append imported node to.
- * @param importContent  A function that imports nodes nested in parent element. [[importNodeContent]] by default.
+ * @typeParam TNode - DOM node type.
+ * @param from - The node to import.
+ * @param to - The node to append imported node to.
+ * @param importContent - A function that imports nodes nested in parent element. {@link importNodeContent} by default.
  *
  * @returns Imported node.
  */
-export function importNode<N extends Node>(
-    from: N,
+export function importNode<TNode extends Node>(
+    from: TNode,
     to: Node,
-    importContent?: (this: void, from: N, to: N) => void,
-): N;
+    importContent?: (this: void, from: TNode, to: TNode) => void,
+): TNode;
 
 /**
  * Imports DOM node from one document to another and inserts it before the given node.
  *
- * @param from  The node to import.
- * @param to  The node to append imported node to.
- * @param before  The node to insert imported node before, or `null` to append it to the end of target one.
- * @param importContent  A function that imports nodes nested in parent element. [[importNodeContent]] by default.
+ * @typeParam TNode - DOM node type.
+ * @param from - The node to import.
+ * @param to - The node to append imported node to.
+ * @param before - The node to insert imported node before, or `null` to append it to the end of target one.
+ * @param importContent - A function that imports nodes nested in parent element. {@link importNodeContent} by default.
  *
  * @returns Imported node.
  */
-export function importNode<N extends Node>(
-    from: N,
+export function importNode<TNode extends Node>(
+    from: TNode,
     to: Node,
     before?: Node | null,
-    importContent?: (this: void, from: N, to: N) => void,
-): N;
+    importContent?: (this: void, from: TNode, to: TNode) => void,
+): TNode;
 
-export function importNode<N extends Node>(
-    from: N,
+export function importNode<TNode extends Node>(
+    from: TNode,
     to: Node,
-    beforeOrImport?: Node | null | ((this: void, from: N, to: N) => void),
-    importContent: (this: void, from: N, to: N) => void = importNodeContent,
-): N {
+    beforeOrImport?: Node | null | ((this: void, from: TNode, to: TNode) => void),
+    importContent: (this: void, from: TNode, to: TNode) => void = importNodeContent,
+): TNode {
 
   let before: Node | null;
 
@@ -57,7 +59,7 @@ export function importNode<N extends Node>(
 
   if (isElement(from)) {
 
-    const elementClone = doc.createElement(from.tagName.toLowerCase()) as Node as (Element & N);
+    const elementClone = doc.createElement(from.tagName.toLowerCase()) as Node as (Element & TNode);
 
     from.getAttributeNames().forEach(attr => elementClone.setAttribute(attr, from.getAttribute(attr)!));
     importContent(from, elementClone);
@@ -76,8 +78,8 @@ export function importNode<N extends Node>(
 /**
  * Imports DOM node contents from one document to another.
  *
- * @param from  The node which contents to import.
- * @param to  The node to append imported nodes to.
+ * @param from - The node which contents to import.
+ * @param to - The node to append imported nodes to.
  */
 export function importNodeContent(from: Node, to: Node): void {
   itsEach(

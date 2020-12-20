@@ -11,7 +11,7 @@ import { Theme } from './theme';
  * Theme style provides part of the theme styling information.
  *
  * Theme style(s) can be provided in bootstrap context. They are applied to the theme at most once, when requested
- * by calling [[Theme.style]] method.
+ * by calling {@link Theme.style} method.
  *
  * Theme style is either a function, or an extension of another theme style.
  */
@@ -24,11 +24,11 @@ export namespace ThemeStyle {
    *
    * This function is called at most once per theme to apply styles to the latter. E.g. by declaring CSS rules.
    *
-   * This function is used as an identifier of particular style and can be extended using [[ThemeStyle.Extension]].
+   * This function is used as an identifier of particular style and can be extended using {@link ThemeStyle.Extension}.
    *
    * It is not absolutely necessary to register style provider. It will be applied on request anyway.
    *
-   * @param theme  A theme to apply styling to.
+   * @param theme - A theme to apply styling to.
    *
    * @returns Dynamically updated CSS rule set containing the applied styling.
    */
@@ -53,7 +53,7 @@ export namespace ThemeStyle {
      *
      * It will be called after the style provider it extends.
      *
-     * @param theme  A theme to apply styling to.
+     * @param theme - A theme to apply styling to.
      *
      * @returns Dynamically updated CSS rule set containing the applied styling.
      */
@@ -64,7 +64,7 @@ export namespace ThemeStyle {
   /**
    * A function obtaining combined style provider. I.e. the one that applies the style along with all extensions.
    *
-   * @param A  provider of theme style to apply.
+   * @param A - provider of theme style to apply.
    *
    * @returns A combined theme style provider.
    */

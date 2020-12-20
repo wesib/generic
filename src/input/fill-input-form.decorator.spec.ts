@@ -1,6 +1,6 @@
 import { InControl, InElement, InFormElement, inFormElement, InGroup, inGroup } from '@frontmeans/input-aspects';
-import { afterThe, eventSupply, eventSupplyOf } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import { afterThe, onceAfter } from '@proc7ts/fun-events';
+import { noop, Supply } from '@proc7ts/primitives';
 import { bootstrapComponents, ComponentMount } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { FillInputForm, FillInputFormDef } from './fill-input-form.decorator';
@@ -29,14 +29,14 @@ describe('input', () => {
 
       const { context } = await bootstrap();
 
-      context.get(HierarchyContext).get(InputToForm).once(
+      context.get(HierarchyContext).get(InputToForm).do(onceAfter)(
           ({ control, form }) => {
             expect(control).toBeInstanceOf(InGroup);
             expect(form).toBeInstanceOf(InElement);
             expect(form!.element).toBe(formElement);
           },
       );
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeInstanceOf(InGroup);
           },
@@ -54,13 +54,13 @@ describe('input', () => {
         },
       });
 
-      context.get(HierarchyContext).get(InputToForm).once(
+      context.get(HierarchyContext).get(InputToForm).do(onceAfter)(
           ({ control, form }) => {
             expect(control).toBeUndefined();
             expect(form).toBeUndefined();
           },
       );
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeUndefined();
           },
@@ -72,13 +72,13 @@ describe('input', () => {
         makeForm: noop,
       });
 
-      context.get(HierarchyContext).get(InputToForm).once(
+      context.get(HierarchyContext).get(InputToForm).do(onceAfter)(
           ({ control, form }) => {
             expect(control).toBeUndefined();
             expect(form).toBeUndefined();
           },
       );
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeUndefined();
           },
@@ -91,7 +91,7 @@ describe('input', () => {
       let ctrl!: InControl<any>;
       let formCtrl!: InFormElement;
 
-      context.get(HierarchyContext).get(InputToForm).once(
+      context.get(HierarchyContext).get(InputToForm).do(onceAfter)(
           ({ control, form }) => {
             ctrl = control!;
             formCtrl = form!;
@@ -101,15 +101,15 @@ describe('input', () => {
       formElement.remove();
       await Promise.resolve();
 
-      expect(eventSupplyOf(ctrl).isOff).toBe(true);
-      expect(eventSupplyOf(formCtrl).isOff).toBe(true);
-      context.get(HierarchyContext).get(InputToForm).once(
+      expect(ctrl.supply.isOff).toBe(true);
+      expect(formCtrl.supply.isOff).toBe(true);
+      context.get(HierarchyContext).get(InputToForm).do(onceAfter)(
           ({ control, form }) => {
             expect(control).toBeUndefined();
             expect(form).toBeUndefined();
           },
       );
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeUndefined();
           },
@@ -117,7 +117,7 @@ describe('input', () => {
     });
     it('cuts off provided supply when control unused', async () => {
 
-      const supply = eventSupply();
+      const supply = new Supply();
       const { context } = await bootstrap({
         makeForm: ({ node }) => {
 
@@ -130,7 +130,7 @@ describe('input', () => {
       let ctrl!: InControl<any>;
       let formCtrl!: InFormElement;
 
-      context.get(HierarchyContext).get(InputToForm).once(
+      context.get(HierarchyContext).get(InputToForm).do(onceAfter)(
           ({ control, form }) => {
             ctrl = control!;
             formCtrl = form!;
@@ -140,16 +140,16 @@ describe('input', () => {
       formElement.remove();
       await Promise.resolve();
 
-      expect(eventSupplyOf(ctrl).isOff).toBe(false);
-      expect(eventSupplyOf(formCtrl).isOff).toBe(false);
+      expect(ctrl.supply.isOff).toBe(false);
+      expect(formCtrl.supply.isOff).toBe(false);
       expect(supply.isOff).toBe(true);
-      context.get(HierarchyContext).get(InputToForm).once(
+      context.get(HierarchyContext).get(InputToForm).do(onceAfter)(
           ({ control, form }) => {
             expect(control).toBeUndefined();
             expect(form).toBeUndefined();
           },
       );
-      context.get(HierarchyContext).get(InputFromControl).once(
+      context.get(HierarchyContext).get(InputFromControl).do(onceAfter)(
           ({ control }) => {
             expect(control).toBeUndefined();
           },
@@ -168,7 +168,7 @@ describe('input', () => {
       @FillInputForm(def)
       class TestElement {}
 
-      const bsContext = await bootstrapComponents(TestElement).whenReady();
+      const bsContext = await bootstrapComponents(TestElement).whenReady;
       const defContext = await bsContext.whenDefined(TestElement);
 
       return defContext.mountTo(element);

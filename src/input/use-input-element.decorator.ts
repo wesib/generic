@@ -3,16 +3,8 @@
  * @module @wesib/generic/input
  */
 import { InControl, InConverter } from '@frontmeans/input-aspects';
-import { nextArgs, NextCall } from '@proc7ts/call-thru';
-import {
-  afterAll,
-  EventKeeper,
-  EventSupply,
-  eventSupplyOf,
-  nextAfterEvent,
-  OnEventCallChain,
-} from '@proc7ts/fun-events';
-import { Class } from '@proc7ts/primitives';
+import { afterAll, afterThe, consumeEvents, digAfter, EventKeeper } from '@proc7ts/fun-events';
+import { Class, Supply } from '@proc7ts/primitives';
 import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { ComponentNode, ElementNode, ElementPickMode } from '../tree';
 import { DefaultInAspects } from './default-in-aspects';
@@ -22,8 +14,8 @@ import { inputFromControl } from './input-from-control';
  * Constructs component decorator that finds input element and uses it as an {@link InputFromControl origin of user
  * input}.
  *
- * @typeparam T  A type of decorated component class.
- * @param def  Input element usage definition.
+ * @typeParam T - A type of decorated component class.
+ * @param def - Input element usage definition.
  *
  * @returns New component decorator.
  */
@@ -41,35 +33,36 @@ export function UseInputElement<T extends ComponentClass = Class>(
 
         context.whenConnected(() => {
           afterAll({
-            node: componentNode.select(select, pick).first(),
+            node: componentNode.select(select, pick).first,
             aspects: context.get(DefaultInAspects),
-          }).keepThru(({
-            node: [node],
-            aspects: [aspects],
-          }): NextCall<OnEventCallChain, [InControl<any>?, EventSupply?]> => {
-            if (!node) {
-              return nextArgs();
-            }
+          }).do(
+              digAfter(({
+                node: [node],
+                aspects: [aspects],
+              }): EventKeeper<[InControl<any>?, Supply?]> => {
+                if (!node) {
+                  return afterThe();
+                }
 
-            const control = def.makeControl({ node, context, aspects });
+                const control = def.makeControl({ node, context, aspects });
 
-            if (!control) {
-              return nextArgs();
-            }
+                if (!control) {
+                  return afterThe();
+                }
 
-            return control instanceof InControl ? nextArgs(control) : nextAfterEvent(control);
-          }).consume(
-              (control?: InControl<any>, supply?: EventSupply) => {
+                return control instanceof InControl ? afterThe(control) : control;
+              }),
+              consumeEvents((control?: InControl<any>, supply?: Supply) => {
                 if (!control) {
                   return;
                 }
 
                 const usageSupply = inputFromControl(context, control);
 
-                (supply || eventSupplyOf(control)).needs(usageSupply);
+                (supply || control.supply).needs(usageSupply);
 
                 return usageSupply;
-              },
+              }),
           );
         });
       });
@@ -82,7 +75,7 @@ export function UseInputElement<T extends ComponentClass = Class>(
  *
  * Configures {@link UseInputElement @UseInputElement} component decorator.
  *
- * @typeparam T  A type of component.
+ * @typeParam T - A type of component.
  */
 export interface UseInputElementDef<T extends object = any> {
 
@@ -107,9 +100,9 @@ export interface UseInputElementDef<T extends object = any> {
    * the input from control is no longer needed. Otherwise the control's input supply will be cut off instead,
    * and control would become unusable after that.
    *
-   * @param node  Element node to construct input control for.
-   * @param context  Component context the {@link UseInputElement @UseInputElement} decorator is applied to.
-   * @param aspects  Default input aspect converter. This is a value of [[DefaultInAspects]].
+   * @param node - Element node to construct input control for.
+   * @param context - Component context the {@link UseInputElement @UseInputElement} decorator is applied to.
+   * @param aspects - Default input aspect converter. This is a value of {@link DefaultInAspects}.
    *
    * @returns Either input control, its keeper, or nothing.
    */
@@ -125,7 +118,7 @@ export interface UseInputElementDef<T extends object = any> {
       },
   ):
       | InControl<any>
-      | EventKeeper<[InControl<any>?, EventSupply?]>
+      | EventKeeper<[InControl<any>?, Supply?]>
       | null
       | undefined;
 

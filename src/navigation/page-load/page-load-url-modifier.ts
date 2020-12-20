@@ -14,7 +14,7 @@ import { noop, valueProvider } from '@proc7ts/primitives';
  */
 export type PageLoadURLModifier =
 /**
- * @param url  An URL of page to load.
+ * @param url - An URL of page to load.
  */
     (this: void, url: URL) => void;
 

@@ -60,7 +60,7 @@ export abstract class Theme {
    *
    * This is a helper method that resolves the given `referrer` against the `root` CSS rule of this theme.
    *
-   * @param referrer  Target CSS rule referrer.
+   * @param referrer - Target CSS rule referrer.
    *
    * @returns CSS rule reference.
    */
@@ -74,7 +74,7 @@ export abstract class Theme {
    * This method requests the registered {@link ThemeStyle theme styles} for CSS rules they provide.
    * If some of the styles are not registered then uses the given style as provider.
    *
-   * @param styles  The styles to obtain styling information for.
+   * @param styles - The styles to obtain styling information for.
    *
    * @returns Dynamically updated CSS rule set containing the requested styling.
    */

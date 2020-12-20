@@ -43,8 +43,8 @@ export interface Page {
    *
    * The requested parameter has default value.
    *
-   * @typeparam T  Parameter value type.
-   * @param ref  A reference to page navigation parameter to retrieve.
+   * @typeParam T - Parameter value type.
+   * @param ref - A reference to page navigation parameter to retrieve.
    *
    * @returns The requested parameter value.
    */
@@ -53,8 +53,8 @@ export interface Page {
   /**
    * Requests arbitrary page navigation parameter of this page.
    *
-   * @typeparam T  Parameter value type.
-   * @param ref  A reference to page navigation parameter to retrieve.
+   * @typeParam T - Parameter value type.
+   * @param ref - A reference to page navigation parameter to retrieve.
    *
    * @returns Either requested parameter value, or `undefined` if requested parameter is not assigned to the page.
    */
@@ -66,11 +66,11 @@ export interface Page {
    * The meaning of putting depends on type parameter implementation. This can be e.g. a value assignment, or appending
    * to the list of values.
    *
-   * @typeparam T  Parameter value type.
-   * @typeparam I  Parameter input type.
-   * @param ref  A reference to page navigation parameter to put.
-   * @param input  Parameter input to use when constructing its value.
+   * @typeParam T - Parameter value type.
+   * @typeParam TInput - Parameter input type.
+   * @param ref - A reference to page navigation parameter to put.
+   * @param input - Parameter input to use when constructing its value.
    */
-  put<T, I>(ref: PageParam.Ref<T, I>, input: I): void;
+  put<T, TInput>(ref: PageParam.Ref<T, TInput>, input: TInput): void;
 
 }

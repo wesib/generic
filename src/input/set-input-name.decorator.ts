@@ -3,8 +3,7 @@
  * @module @wesib/generic/input
  */
 import { InGroup } from '@frontmeans/input-aspects';
-import { nextArg } from '@proc7ts/call-thru';
-import { afterAll, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
+import { afterAll, afterThe, consumeEvents, digAfter_, EventKeeper, mapAfter_ } from '@proc7ts/fun-events';
 import { Class, valueProvider } from '@proc7ts/primitives';
 import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
@@ -14,8 +13,8 @@ import { InputFromControl, NoInputFromControl } from './input-from-control';
  * Creates component decorator that adds {@link InputFromControl input control} of decorated component to input control
  * group of enclosing one under the given name.
  *
- * @typeparam T  A type of decorated component class.
- * @param name  A name to assign to component. This could be either a string, or a function returning name as a string
+ * @typeParam T - A type of decorated component class.
+ * @param name - A name to assign to component. This could be either a string, or a function returning name as a string
  * or as its keeper.
  *
  * @returns New component decorator.
@@ -38,14 +37,14 @@ export function SetInputName<T extends ComponentClass = Class>(
         const hierarchy = context.get(HierarchyContext);
 
         afterAll({
-          group: hierarchy.up().keepThru_(
-              upper => upper ? nextAfterEvent(upper.get(InputFromControl)) : nextArg<NoInputFromControl>({}),
-              ({ control }) => control && control.aspect(InGroup),
+          group: hierarchy.up.do(
+              digAfter_(upper => upper ? upper.get(InputFromControl) : afterThe<[NoInputFromControl]>({})),
+              mapAfter_(({ control }) => control && control.aspect(InGroup)),
           ),
           control: hierarchy.get(InputFromControl),
           name: getName(context),
-        }).consume(
-            ({
+        }).do(
+            consumeEvents(({
               group: [group],
               control: [{ control }],
               name: [name],
@@ -57,7 +56,7 @@ export function SetInputName<T extends ComponentClass = Class>(
                 return;
               }
               return group.controls.set(name, control);
-            },
+            }),
         );
       });
     },

@@ -25,8 +25,8 @@ export const MountDef = {
   /**
    * Creates element adapter that mounts component to matching element.
    *
-   * @param defContext  Target component definition context.
-   * @param def  Either component auto-mount definition, matching element selector, or element predicate function.
+   * @param defContext - Target component definition context.
+   * @param def - Either component auto-mount definition, matching element selector, or element predicate function.
    *
    * @returns New element adapter.
    */

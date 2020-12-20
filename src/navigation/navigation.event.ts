@@ -58,8 +58,8 @@ export class EnterPageEvent extends Event {
   /**
    * Constructs enter page event.
    *
-   * @param type  Event type.
-   * @param init  Initialization options.
+   * @param type - Event type.
+   * @param init - Initialization options.
    */
   constructor(type: string, init: EnterPageEventInit) {
     super(type, { ...init, cancelable: false });
@@ -121,8 +121,8 @@ export class LeavePageEvent extends Event {
   /**
    * Constructs leave page event.
    *
-   * @param type  Event type.
-   * @param init  Initialization options.
+   * @param type - Event type.
+   * @param init - Initialization options.
    */
   constructor(type: string, init: LeavePageEventInit) {
     super(type, { ...init, cancelable: true });
@@ -188,8 +188,8 @@ export class StayOnPageEvent extends Event {
   /**
    * Constructs stay on page event.
    *
-   * @param type  Event type.
-   * @param init  Initialization options.
+   * @param type - Event type.
+   * @param init - Initialization options.
    */
   constructor(type: string, init: StayOnPageEventInit) {
     super(type, { ...init, cancelable: true });

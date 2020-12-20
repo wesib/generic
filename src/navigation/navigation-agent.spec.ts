@@ -1,7 +1,5 @@
-import { ContextRegistry } from '@proc7ts/context-values';
-import { ContextSupply } from '@proc7ts/context-values/updatable';
-import { eventSupply } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import { ContextRegistry, ContextSupply } from '@proc7ts/context-values';
+import { noop, Supply } from '@proc7ts/primitives';
 import { testPageParam } from '../spec/test-page-param';
 import { Navigation } from './navigation';
 import { NavigationAgent } from './navigation-agent';
@@ -179,7 +177,7 @@ describe('navigation', () => {
     });
     it('throws when context destroyed', () => {
 
-      const contextSupply = eventSupply();
+      const contextSupply = new Supply();
 
       registry.provide({ a: ContextSupply, is: contextSupply });
 

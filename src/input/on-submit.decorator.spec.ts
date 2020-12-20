@@ -76,7 +76,7 @@ describe('input', () => {
 
       }
 
-      const bsContext = await bootstrapComponents(TestElement).whenReady();
+      const bsContext = await bootstrapComponents(TestElement).whenReady;
       const defContext = await bsContext.whenDefined(TestElement);
 
       return defContext.mountTo(element);

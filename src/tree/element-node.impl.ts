@@ -67,7 +67,7 @@ class ElementNode$ implements ComponentTreeNode {
     return this._attrs.get(name);
   }
 
-  property<V>(key: PropertyKey): ValueTracker<V> {
+  property<TValue>(key: PropertyKey): ValueTracker<TValue> {
     return this._props.get(key);
   }
 

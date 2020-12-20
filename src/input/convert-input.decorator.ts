@@ -3,16 +3,8 @@
  * @module @wesib/generic/input
  */
 import { InControl, InConverter } from '@frontmeans/input-aspects';
-import { nextArg, nextArgs, NextCall } from '@proc7ts/call-thru';
-import {
-  afterAll,
-  EventKeeper,
-  EventSupply,
-  eventSupplyOf,
-  nextAfterEvent,
-  OnEventCallChain,
-} from '@proc7ts/fun-events';
-import { Class } from '@proc7ts/primitives';
+import { afterAll, AfterEvent, afterThe, consumeEvents, digAfter_, EventKeeper } from '@proc7ts/fun-events';
+import { Class, Supply } from '@proc7ts/primitives';
 import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { DefaultInAspects } from './default-in-aspects';
@@ -22,7 +14,7 @@ import { inputFromControl, InputFromControl, NoInputFromControl } from './input-
  * Constructs component decorator that converts input control from {@link HierarchyContext.up enclosing component}
  * and uses it as an {@link InputFromControl origin of user input} in decorated component.
  *
- * @param convert  Input control converter definition.
+ * @param convert - Input control converter definition.
  *
  * @returns New component decorator.
  */
@@ -36,40 +28,39 @@ export function ConvertInput<T extends ComponentClass = Class>(
         const { up } = context.get(HierarchyContext);
 
         afterAll({
-          parent: up().keepThru_(
-              upper => upper ? nextAfterEvent(upper.get(InputFromControl)) : nextArg<NoInputFromControl>({}),
+          parent: up.do(
+              digAfter_((upper): AfterEvent<[InputFromControl | NoInputFromControl]> => upper
+                  ? upper.get(InputFromControl)
+                  : afterThe<[NoInputFromControl]>({})),
           ),
           aspects: context.get(DefaultInAspects),
-        }).keepThru_(
-            ({
+        }).do(
+            digAfter_(({
               parent: [control],
               aspects: [aspects],
-            }): NextCall<OnEventCallChain, [InControl<any>?, EventSupply?]> => {
+            }): EventKeeper<[InControl<any>?, Supply?]> => {
               if (control.control) {
 
                 const converted = convert({ control, context, aspects });
 
                 if (converted) {
-                  return converted instanceof InControl
-                      ? nextArgs(converted)
-                      : nextAfterEvent(converted);
+                  return converted instanceof InControl ? afterThe(converted) : converted;
                 }
               }
 
-              return nextArgs();
-            },
-        ).consume(
-            (control?: InControl<any> | null, supply?: EventSupply) => {
+              return afterThe();
+            }),
+            consumeEvents((control?: InControl<any> | null, supply?: Supply) => {
               if (!control) {
                 return;
               }
 
               const usageSupply = inputFromControl(context, control);
 
-              (supply || eventSupplyOf(control)).needs(usageSupply);
+              (supply || control.supply).needs(usageSupply);
 
               return usageSupply;
-            },
+            }),
         );
       });
     },
@@ -87,9 +78,9 @@ export function ConvertInput<T extends ComponentClass = Class>(
  */
 export type ConvertInputDef<T extends object = any> =
 /**
- * @param control  Enclosing component's user input to convert.
- * @param context  Decorated component context.
- * @param aspects  Default input aspect converter. This is a value of [[DefaultInAspects]].
+ * @param control - Enclosing component's user input to convert.
+ * @param context - Decorated component context.
+ * @param aspects - Default input aspect converter. This is a value of {@link DefaultInAspects}.
  *
  * @returns Either input control, its keeper, or nothing.
  */
@@ -104,4 +95,4 @@ export type ConvertInputDef<T extends object = any> =
           context: ComponentContext<T>;
           aspects: InConverter.Aspect<any, any>;
         },
-    ) => InControl<any> | EventKeeper<[InControl<any>?, EventSupply?]> | null | undefined;
+    ) => InControl<any> | EventKeeper<[InControl<any>?, Supply?]> | null | undefined;

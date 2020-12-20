@@ -18,8 +18,8 @@ import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp
  *
  * [@frontmeans/style-producer]: https://www.npmjs.com/package/@frontmeans/style-producer
  *
- * @typeparam T  A type of decorated component class.
- * @param config  Non-mandatory component style production format config.
+ * @typeParam T - A type of decorated component class.
+ * @param config - Non-mandatory component style production format config.
  *
  * @returns Component property decorator.
  */

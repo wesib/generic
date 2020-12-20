@@ -34,13 +34,13 @@ describe('input', () => {
       })
       class TestComponent {}
 
-      bsContext = await bootstrapComponents(TestComponent).whenReady();
+      bsContext = await bootstrapComponents(TestComponent).whenReady;
 
       const defContext = await bsContext.whenDefined(TestComponent);
       const element = document.createElement('test-element');
 
       context = defContext.mountTo(element).context;
-      context.get(DefaultInAspects).to(aspects => {
+      context.get(DefaultInAspects)(aspects => {
         control = inValue(13).convert(aspects);
       });
     });
@@ -91,7 +91,7 @@ describe('input', () => {
 
       const whenOff = jest.fn();
 
-      context.get(DefaultInAspects).to(noop).whenOff(whenOff);
+      context.get(DefaultInAspects)(noop).whenOff(whenOff);
 
       const reason = new Error('reason');
 
