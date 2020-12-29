@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @wesib/generic
+ */
 export * from './automount';
 export * from './fetch';
 export * from './hierarchy';

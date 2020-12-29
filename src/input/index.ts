@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @wesib/generic/input
+ */
 export * from './convert-input.decorator';
 export * from './default-in-aspects';
 export * from './fill-input-form.decorator';

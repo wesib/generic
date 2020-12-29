@@ -1,14 +1,9 @@
 {
-  "disableAutoModuleName": true,
-  "exclude": [
-    "**/index.ts",
-    "**/main.ts",
-    "**/spec/**/*.ts",
-    "**/*.spec.ts",
-    "**/*.impl.ts"
+  "entryPoints": [
+    "src/index.ts",
+    "src/input/index.ts",
+    "src/styp/index.ts"
   ],
-  "excludeNotExported": true,
-  "mode": "modules",
   "name": "Wesib: Generic Components",
   "out": "./target/typedoc",
   "tsconfig": "tsconfig.main.json"

@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @wesib/generic/styp
+ */
 export * from './component-style-producer';
 export * from './component-styp-dom.format';
 export * from './component-styp-dom.format-config';
