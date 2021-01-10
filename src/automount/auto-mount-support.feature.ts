@@ -7,6 +7,7 @@ import { onceOn } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import { itsEach, overArray } from '@proc7ts/push-iterator';
 import {
+  BootstrapContext,
   BootstrapRoot,
   BootstrapWindow,
   ElementAdapter,
@@ -75,10 +76,12 @@ function autoMountFeatureDef(config: AutoMountConfig = {}): FeatureDef.Options {
   return {
     setup(setup) {
       setup.whenReady(context => {
-        // Await for mount definition registration
-        Promise.resolve()
-            .then(() => mountExistingElements(context, config))
-            .catch(console.error);
+        context.get(BootstrapContext).whenReady(() => {
+          // Await for mount definitions registration.
+          Promise.resolve()
+              .then(() => mountExistingElements(context, config))
+              .catch(console.error);
+        });
       });
     },
   };

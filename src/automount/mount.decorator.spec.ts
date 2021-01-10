@@ -6,7 +6,6 @@ import {
   ComponentClass,
   ComponentContext,
   ComponentContext__symbol,
-  ElementAdapter,
   Feature,
 } from '@wesib/wesib';
 import { MockElement } from '../spec/test-element';
@@ -22,12 +21,6 @@ describe('automount', () => {
   });
   afterEach(() => {
     root.remove();
-  });
-
-  let mockAdapter: ElementAdapter;
-
-  beforeEach(() => {
-    mockAdapter = jest.fn();
   });
 
   let componentType: ComponentClass;
@@ -100,7 +93,6 @@ describe('automount', () => {
     @Feature({
       setup(setup) {
         setup.provide({ a: BootstrapRoot, is: root });
-        setup.provide({ a: ElementAdapter, is: mockAdapter });
       },
     })
     class TestFeature {
