@@ -2,9 +2,16 @@ import Mock = jest.Mock;
 import Mocked = jest.Mocked;
 import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ValueTracker } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import { noop, valueProvider } from '@proc7ts/primitives';
 import { itsFirst } from '@proc7ts/push-iterator';
-import { Component, ComponentClass, ComponentContext, ComponentContext__symbol, DomProperty } from '@wesib/wesib';
+import {
+  Component,
+  ComponentClass,
+  ComponentContext,
+  ComponentContext__symbol,
+  ComponentContextHolder,
+  DomProperty,
+} from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { ComponentNode, ElementNode } from './element-node';
 
@@ -54,9 +61,9 @@ describe('tree', () => {
     const realElement = new Element();
 
     const context = ComponentContext.of(realElement);
-    const element: Element = document.createElement(name);
+    const element: Element & ComponentContextHolder = document.createElement(name);
 
-    (element as any)[ComponentContext__symbol] = context;
+    element[ComponentContext__symbol] = valueProvider(context);
     jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
     (context as any).element = element;
 

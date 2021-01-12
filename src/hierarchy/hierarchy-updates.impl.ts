@@ -5,7 +5,6 @@ import {
   BootstrapContext,
   BootstrapRoot,
   ComponentContext,
-  ComponentContext__symbol,
   ComponentContextHolder,
   ComponentEvent,
 } from '@wesib/wesib';
@@ -89,13 +88,13 @@ export function findParentContext(of: ComponentContext): [ComponentContext, bool
   }
   for (;;) {
 
-    const parent = element.parentNode;
+    const parent = element.parentNode as (Node & ComponentContextHolder) | null;
 
     if (!parent) {
       return;
     }
 
-    const ctx = (parent as ComponentContextHolder)[ComponentContext__symbol];
+    const ctx = ComponentContext.findIn(parent);
 
     if (ctx) {
       return [ctx, immediate];

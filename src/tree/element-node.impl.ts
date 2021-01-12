@@ -3,7 +3,6 @@ import {
   BootstrapContext,
   ComponentClass,
   ComponentContext,
-  ComponentContext__symbol,
   ComponentContextHolder,
   ComponentEvent,
   ElementAdapter,
@@ -39,7 +38,7 @@ class ElementNode$ implements ComponentTreeNode {
     this._props = new NodeProperties(element);
     element[ElementNode__symbol] = this;
 
-    const context = element[ComponentContext__symbol];
+    const context = this.context;
 
     if (context) {
       this._bind(context);
@@ -48,8 +47,8 @@ class ElementNode$ implements ComponentTreeNode {
     }
   }
 
-  get context(): ComponentContext<any> | undefined {
-    return this.element[ComponentContext__symbol];
+  get context(): ComponentContext | undefined {
+    return ComponentContext.findIn(this.element);
   }
 
   get parent(): ElementNode | null {

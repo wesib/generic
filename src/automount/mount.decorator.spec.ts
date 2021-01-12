@@ -5,7 +5,7 @@ import {
   Component,
   ComponentClass,
   ComponentContext,
-  ComponentContext__symbol,
+  ComponentContextHolder,
   Feature,
 } from '@wesib/wesib';
 import { MockElement } from '../spec/test-element';
@@ -42,7 +42,7 @@ describe('automount', () => {
   describe('@Mount', () => {
     it('mounts to matching element', async () => {
 
-      const element = document.createElement('test-component');
+      const element: Element & ComponentContextHolder = document.createElement('test-component');
 
       root.appendChild(element);
 
@@ -66,7 +66,7 @@ describe('automount', () => {
       class TestComponent {
       }
 
-      const element = document.createElement('element');
+      const element: Element & ComponentContextHolder = document.createElement('element');
 
       root.appendChild(element);
 
@@ -79,12 +79,12 @@ describe('automount', () => {
     });
     it('does not mount to non-matching element', async () => {
 
-      const element = document.createElement('element');
+      const element: Element & ComponentContextHolder = document.createElement('element');
 
       root.appendChild(element);
       await bootstrap(componentType);
 
-      expect((element as any)[ComponentContext__symbol]).toBeUndefined();
+      expect(ComponentContext.findIn(element)).toBeUndefined();
     });
   });
 
