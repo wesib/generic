@@ -1,5 +1,12 @@
 import { Class, noop } from '@proc7ts/primitives';
-import { bootstrapComponents, BootstrapRoot, ElementAdapter, Feature, FeatureDef__symbol } from '@wesib/wesib';
+import {
+  bootstrapComponents,
+  BootstrapRoot,
+  ComponentBinder,
+  ElementAdapter,
+  Feature,
+  FeatureDef__symbol,
+} from '@wesib/wesib';
 import { autoMountSupport, AutoMountSupport } from './auto-mount-support.feature';
 import SpyInstance = jest.SpyInstance;
 
@@ -16,7 +23,7 @@ describe('automount', () => {
   });
 
   let domContentLoaded: () => void;
-  let mockAdapter: ElementAdapter;
+  let mockBinder: jest.Mocked<ComponentBinder>;
 
   let readyStateSpy: SpyInstance;
   let addEventListenerSpy: SpyInstance;
@@ -25,7 +32,7 @@ describe('automount', () => {
 
   beforeEach(() => {
     domContentLoaded = noop;
-    mockAdapter = jest.fn();
+    mockBinder = { to: 'element-1', bind: jest.fn() };
     mockReadyState = 'interactive';
     readyStateSpy = jest.spyOn(document, 'readyState', 'get');
     readyStateSpy.mockImplementation(() => mockReadyState);
@@ -98,8 +105,8 @@ describe('automount', () => {
 
       await bootstrap(autoMountSupport());
 
-      expect(mockAdapter).toHaveBeenCalledWith(element1);
-      expect(mockAdapter).toHaveBeenCalledWith(element2);
+      expect(mockBinder.bind).toHaveBeenCalledWith(element1);
+      expect(mockBinder.bind).not.toHaveBeenCalledWith(element2);
     });
     it('does not register DOMContentLoaded listener if document is loaded', async () => {
       await bootstrap(autoMountSupport());
@@ -126,7 +133,7 @@ describe('automount', () => {
     @Feature({
       setup(setup) {
         setup.provide({ a: BootstrapRoot, is: root });
-        setup.provide({ a: ElementAdapter, is: mockAdapter });
+        setup.provide({ a: ElementAdapter, is: mockBinder });
       },
     })
     class TestFeature {

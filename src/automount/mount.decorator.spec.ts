@@ -4,8 +4,9 @@ import {
   BootstrapRoot,
   Component,
   ComponentClass,
-  ComponentContext,
-  ComponentContextHolder,
+  ComponentElement,
+  ComponentSlot,
+  ComponentSlot__symbol,
   Feature,
 } from '@wesib/wesib';
 import { MockElement } from '../spec/test-element';
@@ -40,20 +41,20 @@ describe('automount', () => {
   });
 
   describe('@Mount', () => {
-    it('mounts to matching element', async () => {
+    it('mounts to named element', async () => {
 
-      const element: Element & ComponentContextHolder = document.createElement('test-component');
+      const element: ComponentElement = document.createElement('test-component');
 
       root.appendChild(element);
 
       await bootstrap(componentType);
 
-      const context = ComponentContext.of(element);
+      const context = await ComponentSlot.of(element).whenReady;
 
       expect(context.componentType).toBe(componentType);
       expect(context.mount).toBeDefined();
     });
-    it('mounts to element matching by custom predicate', async () => {
+    it('mounts to matching element', async () => {
 
       @Component({
         extend: {
@@ -61,30 +62,77 @@ describe('automount', () => {
         },
       })
       @Mount({
-        to: () => true,
+        to: 'test-element',
       })
       class TestComponent {
       }
 
-      const element: Element & ComponentContextHolder = document.createElement('element');
+      const element: ComponentElement = document.createElement('test-element');
 
       root.appendChild(element);
 
       await bootstrap(TestComponent);
 
-      const context = ComponentContext.of(element);
+      const context = await ComponentSlot.of(element).whenReady;
+
+      expect(context.componentType).toBe(TestComponent);
+      expect(context.mount).toBeDefined();
+    });
+    it('mounts to element matching the custom predicate', async () => {
+
+      @Component({
+        extend: {
+          type: MockElement,
+        },
+      })
+      @Mount({
+        to: 'test-element',
+        when: () => true,
+      })
+      class TestComponent {
+      }
+
+      const element: ComponentElement = document.createElement('test-element');
+
+      root.appendChild(element);
+
+      await bootstrap(TestComponent);
+
+      const context = await ComponentSlot.of(element).whenReady;
 
       expect(context.componentType).toBe(TestComponent);
       expect(context.mount).toBeDefined();
     });
     it('does not mount to non-matching element', async () => {
 
-      const element: Element & ComponentContextHolder = document.createElement('element');
+      const element: ComponentElement = document.createElement('wrong-element');
 
       root.appendChild(element);
       await bootstrap(componentType);
 
-      expect(ComponentContext.findIn(element)).toBeUndefined();
+      expect(element[ComponentSlot__symbol]).toBeUndefined();
+    });
+    it('does not mount to element not matching the custom predicate', async () => {
+
+      @Component({
+        extend: {
+          type: MockElement,
+        },
+      })
+      @Mount({
+        to: 'test-element',
+        when: () => false,
+      })
+      class TestComponent {
+      }
+
+      const element: ComponentElement = document.createElement('test-element');
+
+      root.appendChild(element);
+
+      await bootstrap(TestComponent);
+
+      expect(element[ComponentSlot__symbol]).toBeUndefined();
     });
   });
 

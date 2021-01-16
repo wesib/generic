@@ -2,14 +2,14 @@ import Mock = jest.Mock;
 import Mocked = jest.Mocked;
 import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ValueTracker } from '@proc7ts/fun-events';
-import { noop, valueProvider } from '@proc7ts/primitives';
+import { noop } from '@proc7ts/primitives';
 import { itsFirst } from '@proc7ts/push-iterator';
 import {
   Component,
   ComponentClass,
   ComponentContext,
-  ComponentContext__symbol,
-  ComponentContextHolder,
+  ComponentElement,
+  ComponentSlot,
   DomProperty,
 } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
@@ -60,10 +60,10 @@ describe('tree', () => {
     const Element = await testElement(TestComponent);
     const realElement = new Element();
 
-    const context = ComponentContext.of(realElement);
-    const element: Element & ComponentContextHolder = document.createElement(name);
+    const context = await ComponentSlot.of(realElement).whenReady;
+    const element: ComponentElement = document.createElement(name);
 
-    element[ComponentContext__symbol] = valueProvider(context);
+    ComponentSlot.of(element).bind(context);
     jest.spyOn(context, 'contentRoot', 'get').mockReturnValue(element);
     (context as any).element = element;
 
@@ -113,7 +113,8 @@ describe('tree', () => {
         async (componentType: ComponentClass) => {
 
           const element = new (await testElement(componentType))();
-          const elementNode = ComponentContext.of(element).get(ComponentNode);
+          const context = await ComponentSlot.of(element).whenReady;
+          const elementNode = context.get(ComponentNode);
           const property = elementNode.property<string>('property');
 
           return {
@@ -246,7 +247,10 @@ describe('tree', () => {
         class TestComponent {}
 
         element = new (await testElement(TestComponent))();
-        compNode = ComponentContext.of(element).get(ComponentNode);
+
+        const context = await ComponentSlot.of(element).whenReady;
+
+        compNode = context.get(ComponentNode);
         attribute = compNode.attribute('attr');
       });
 

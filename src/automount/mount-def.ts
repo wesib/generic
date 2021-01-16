@@ -2,7 +2,9 @@
  * @packageDocumentation
  * @module @wesib/generic
  */
-import { DefinitionContext, ElementAdapter } from '@wesib/wesib';
+import { isQualifiedName, QualifiedName } from '@frontmeans/namespace-aliaser';
+import { valueProvider } from '@proc7ts/primitives';
+import { ComponentBinder, ComponentElement, DefinitionContext } from '@wesib/wesib';
 
 /**
  * Component auto-mount definition.
@@ -10,32 +12,52 @@ import { DefinitionContext, ElementAdapter } from '@wesib/wesib';
 export interface MountDef {
 
   /**
-   * A selector of element to automatically mount the component to.
-   *
-   * This can be:
-   * - a CSS selector, or
-   * - a function accepting an element as its ony argument and returning `true` for matching elements.
+   * A name of the element to automatically mount the component to.
    */
-  readonly to: string | ((element: any) => boolean);
+  readonly to: QualifiedName;
+
+  /**
+   * Detects whether to mount to the given element.
+   *
+   * @param element - Target element with matching {@link to name}.
+   *
+   * @returns `true` to mount the component to the given element, or `false` otherwise.
+   */
+  when?(element: ComponentElement): boolean;
 
 }
 
 export const MountDef = {
 
   /**
-   * Creates element adapter that mounts component to matching element.
+   * Creates a component binder that mounts component to matching element.
    *
    * @param defContext - Target component definition context.
    * @param def - Either component auto-mount definition, matching element selector, or element predicate function.
    *
-   * @returns New element adapter.
+   * @returns New component binder.
    */
-  adapter(defContext: DefinitionContext, def: MountDef | MountDef['to']): ElementAdapter {
+  binder(defContext: DefinitionContext, def: MountDef | QualifiedName): ComponentBinder {
 
-    const to = typeof def === 'object' ? def.to : def;
-    const matches: (element: Element) => boolean = typeof to === 'function' ? to : element => element.matches(to);
+    let to: QualifiedName;
+    let when: (element: ComponentElement) => boolean;
 
-    return (element: Element) => matches(element) ? defContext.mountTo(element).context : undefined;
+    if (isQualifiedName(def)) {
+      to = def;
+      when = valueProvider(true);
+    } else {
+      to = def.to;
+      when = def.when ? def.when.bind(def) : valueProvider(true);
+    }
+
+    return {
+      to,
+      bind(element: ComponentElement) {
+        if (when(element)) {
+          defContext.mountTo(element);
+        }
+      },
+    };
   },
 
 };

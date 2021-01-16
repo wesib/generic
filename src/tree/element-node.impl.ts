@@ -3,8 +3,9 @@ import {
   BootstrapContext,
   ComponentClass,
   ComponentContext,
-  ComponentContextHolder,
+  ComponentElement,
   ComponentEvent,
+  ComponentSlot__symbol,
   ElementAdapter,
 } from '@wesib/wesib';
 import { ComponentNode, ComponentTreeNode, ElementNode, ElementPickMode } from './element-node';
@@ -21,7 +22,7 @@ const ElementNode__symbol = (/*#__PURE__*/ Symbol('element-node'));
 /**
  * @internal
  */
-type TreeElement = Element & ComponentContextHolder & {
+type TreeElement = Element & ComponentElement & {
   [ElementNode__symbol]?: ComponentTreeNode;
 };
 
@@ -48,7 +49,7 @@ class ElementNode$ implements ComponentTreeNode {
   }
 
   get context(): ComponentContext | undefined {
-    return ComponentContext.findIn(this.element);
+    return this.element[ComponentSlot__symbol]?.context;
   }
 
   get parent(): ElementNode | null {
