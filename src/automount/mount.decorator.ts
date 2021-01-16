@@ -28,7 +28,7 @@ export function Mount<T extends ComponentClass = Class>(def: MountDef | MountDef
           defSetup.whenReady(defContext => {
             bsSetup.provide({
               a: ElementAdapter,
-              is: MountDef.adapter(defContext, def),
+              is: MountDef.binder(defContext, def),
             });
           });
         });

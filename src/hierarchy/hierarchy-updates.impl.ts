@@ -5,8 +5,9 @@ import {
   BootstrapContext,
   BootstrapRoot,
   ComponentContext,
-  ComponentContextHolder,
+  ComponentElement,
   ComponentEvent,
+  ComponentSlot__symbol,
 } from '@wesib/wesib';
 
 /**
@@ -86,15 +87,17 @@ export function findParentContext(of: ComponentContext): [ComponentContext, bool
   if (element === root) {
     return;
   }
+
   for (;;) {
 
-    const parent = element.parentNode as (Node & ComponentContextHolder) | null;
+    const parent = element.parentNode as ComponentElement | null
+        || (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined; // Inside shadow DOM?
 
     if (!parent) {
       return;
     }
 
-    const ctx = ComponentContext.findIn(parent);
+    const ctx = parent[ComponentSlot__symbol]?.context;
 
     if (ctx) {
       return [ctx, immediate];
