@@ -1,2 +1,3 @@
 export * from './component-share';
-export * from './component-share-registry';
+export * from './shared.decorator';
+export * from './shared-by-component';

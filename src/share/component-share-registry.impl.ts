@@ -1,8 +1,8 @@
 import { html__naming } from '@frontmeans/namespace-aliaser';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import { AfterEvent, mapAfter, trackValue, ValueTracker } from '@proc7ts/fun-events';
-import { neverSupply, Supply } from '@proc7ts/primitives';
-import { bootstrapDefault, ComponentClass, DefaultNamespaceAliaser, DefinitionContext } from '@wesib/wesib';
+import { Supply } from '@proc7ts/primitives';
+import { bootstrapDefault, DefaultNamespaceAliaser, DefinitionContext } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
 
 const ComponentShareRegistry__key = (/*#__PURE__*/ new SingleContextKey(
@@ -12,30 +12,34 @@ const ComponentShareRegistry__key = (/*#__PURE__*/ new SingleContextKey(
     },
 ));
 
+/**
+ * @internal
+ */
 export class ComponentShareRegistry {
 
   static get [ContextKey__symbol](): ContextKey<ComponentShareRegistry> {
     return ComponentShareRegistry__key;
   }
 
-  private readonly _sharers = new Map<ComponentShare<any, any, any>, ValueTracker<[Map<Supply, string>]>>();
+  private readonly _sharers = new Map<ComponentShare<unknown>, ValueTracker<[Map<Supply, string>]>>();
 
   constructor(private readonly _nsAlias: DefaultNamespaceAliaser) {
   }
 
-  addSharer<TValue, TOpts extends any[], TClass extends ComponentClass>(
-      share: ComponentShare<TValue, TOpts, TClass>,
-      defContext: DefinitionContext<InstanceType<TClass>>,
-  ): Supply {
+  addSharer(
+      share: ComponentShare<unknown>,
+      defContext: DefinitionContext,
+      supply: Supply,
+  ): void {
 
     const { name } = defContext.elementDef;
 
     if (!name) {
-      return neverSupply();
+      supply.off();
+      return;
     }
 
     const elementName = html__naming.name(name, this._nsAlias).toLowerCase();
-    const supply = new Supply();
     let sharers = this._sharers.get(share);
 
     if (!sharers) {
@@ -49,7 +53,7 @@ export class ComponentShareRegistry {
       sharers.it = [map];
     }
 
-    return supply.whenOff(() => {
+    supply.whenOff(() => {
 
       const [map] = sharers!.it;
 
@@ -58,9 +62,7 @@ export class ComponentShareRegistry {
     });
   }
 
-  sharers<TValue, TOpts extends any[], TClass extends ComponentClass>(
-      share: ComponentShare<TValue, TOpts, TClass>,
-  ): AfterEvent<[ReadonlySet<string>]> {
+  sharers(share: ComponentShare<unknown>): AfterEvent<[ReadonlySet<string>]> {
 
     let sharers = this._sharers.get(share);
 

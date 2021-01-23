@@ -1,157 +1,152 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
-import { SingleContextUpKey, SingleContextUpRef } from '@proc7ts/context-values/updatable';
-import { afterAll, AfterEvent, digAfter_, EventKeeper, trackValue, translateAfter } from '@proc7ts/fun-events';
-import { Class } from '@proc7ts/primitives';
+import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
+import {
+  afterAll,
+  AfterEvent,
+  AfterEvent__symbol,
+  afterEventBy,
+  afterThe,
+  digAfter_,
+  EventKeeper,
+  isEventKeeper,
+  sendEventsTo,
+  shareAfter,
+  trackValue,
+  translateAfter,
+} from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import {
   BootstrapContext,
-  ComponentClass,
   ComponentContext,
-  ComponentDef,
   ComponentElement,
-  ComponentProperty,
-  ComponentPropertyDecorator,
   ComponentSlot,
   DefinitionContext,
   DefinitionSetup,
 } from '@wesib/wesib';
-import { ComponentShareRegistry } from './component-share-registry';
+import { ComponentShareRegistry } from './component-share-registry.impl';
+import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
+import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
 
-export interface ComponentShare<
-    TValue,
-    TOpts extends any[] = [],
-    TClass extends ComponentClass = Class>
-    extends ComponentShare.Ref<TValue> {
+export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T?]>, SharedByComponent<T>> {
 
-  (...opts: TOpts): ComponentPropertyDecorator<ComponentShare.Value<TValue>, TClass>;
+  /**
+   * @internal
+   */
+  readonly [ComponentShare$impl]: ComponentShare$<T>;
 
-  shareFor(consumer: ComponentContext): AfterEvent<[TValue?]>;
+  constructor(name: string, options: ComponentShare.Options<T> = {}) {
+    this[ComponentShare$impl] = new ComponentShare$(this, name, options);
+  }
+
+  get name(): string {
+    return this[ComponentShare$impl].name;
+  }
+
+  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>> {
+    return this[ComponentShare$impl].key;
+  }
+
+  for(consumer: ComponentContext): AfterEvent<[T?]> {
+
+    const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
+    const status = trackValue<boolean>();
+    const updateStatus = ({ connected }: ComponentContext): void => {
+      status.it = connected;
+    };
+
+    consumer.whenSettled(updateStatus);
+    consumer.whenConnected(updateStatus);
+    status.supply.needs(consumer);
+
+    let lastValue: T | null | undefined = null;
+
+    return afterAll({
+      sharers,
+      status,
+    }).do(
+        digAfter_(({ sharers: [names] }): AfterEvent<[T?]> | undefined => {
+
+          let element: ComponentElement = consumer.element;
+
+          for (;;) {
+
+            const parent = element.parentNode as ComponentElement | null
+                || (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined; // Inside shadow DOM?
+
+            if (!parent) {
+              return;
+            }
+            if (names.has(parent.tagName.toLowerCase())) {
+              return ComponentSlot.of(element).read.do(
+                  digAfter_(sharerContext => sharerContext && sharerContext.get(this)),
+              );
+            }
+
+            element = parent;
+          }
+        }),
+        translateAfter((send, value) => {
+          if (lastValue !== value) {
+            lastValue = value;
+            send(value);
+          }
+        }),
+    );
+  }
+
+  shareBy(defContext: DefinitionContext): Supply {
+    return this[ComponentShare$impl].shareBy(defContext);
+  }
+
+  provideValue<TComponent extends object>(
+      setup: DefinitionSetup<TComponent>,
+      provider: (this: void, context: ComponentContext<TComponent>) => T | EventKeeper<[] | [T]>,
+  ): void {
+    this[ComponentShare$impl].provideValue(setup, provider);
+  }
+
+  selectValue(...values: SharedByComponent<T>[]): AfterEvent<[] | [T]> {
+
+    let selected: SharedByComponent.Details<T> | undefined;
+
+    for (const value of values) {
+      if (!SharedByComponent.isDetailed(value)) {
+        return afterThe(value);
+      }
+
+      const details = value[SharedByComponent__symbol];
+
+      if (!selected || selected.order > details.order) {
+        selected = details;
+      }
+    }
+
+    if (!selected) {
+      return afterThe();
+    }
+
+    return afterEventBy<[] | [T]>(receiver => {
+
+      const value = selected!.get();
+
+      if (isEventKeeper(value)) {
+        value[AfterEvent__symbol]()(receiver);
+      } else {
+        sendEventsTo(receiver)(value);
+      }
+    }).do(
+        shareAfter,
+    );
+  }
 
 }
 
 export namespace ComponentShare {
 
-  export type Ref<TValue> = SingleContextUpRef<TValue | undefined>;
+  export interface Options<T> {
 
-  /**
-   * A type of the value of component property that builds a share.
-   *
-   * @typeParam TValue - Shared value type.
-   */
-  export type Value<TValue> = TValue | EventKeeper<[TValue?]>;
+    readonly aliases?: ComponentShare<T> | readonly ComponentShare<T>[];
 
-}
+  }
 
-/**
- * Component share definition.
- *
- * @typeParam TValue - Shared value type.
- * @typeParam TOpts - C
- * @typeParam TClass - A type of sharing component class.
- */
-export interface ComponentShareDef<TValue, TOpts extends any[] = [], TClass extends ComponentClass = Class> {
-
-  readonly key: ComponentShare.Ref<TValue>;
-
-  define?(
-      descriptor: ComponentProperty.Descriptor<ComponentShare.Value<TValue>, TClass>,
-      ...opts: TOpts
-  ): void | ComponentProperty.Definition<TValue, TClass>;
-
-}
-
-export function ComponentShare<TValue, TOpts extends any[], TClass extends ComponentClass>(
-    def: ComponentShareDef<TValue, TOpts, TClass>,
-): ComponentShare<TValue, TOpts, TClass> {
-
-  type Share = ((...opts: TOpts) => ComponentPropertyDecorator<ComponentShare.Value<TValue>, TClass>) & {
-    -readonly [K in keyof ComponentShare<TValue, TOpts, TClass>]: ComponentShare<TValue, TOpts, TClass>[K];
-  };
-
-  const { key = new SingleContextUpKey<TValue | undefined>('share') } = def;
-  const createDeco = (
-      ...opts: TOpts
-  ): ComponentPropertyDecorator<ComponentShare.Value<TValue>, TClass> => ComponentProperty(descriptor => {
-    ComponentDef.define(
-        descriptor.type,
-        {
-          setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
-            setup.perComponent({
-              a: key,
-              by(ctx: ComponentContext<InstanceType<TClass>>): ComponentShare.Value<TValue> {
-                return ctx.component[descriptor.key];
-              },
-            });
-          },
-          define(defContext: DefinitionContext<InstanceType<TClass>>) {
-
-            const { name } = defContext.elementDef;
-
-            if (name) {
-              defContext.get(ComponentShareRegistry)
-                  .addSharer(createDeco as ComponentShare<TValue, TOpts, TClass>, defContext);
-            }
-          },
-        },
-    );
-
-    return def.define?.(descriptor, ...opts);
-  });
-
-  const share = createDeco as Share;
-
-  share[ContextKey__symbol] = key[ContextKey__symbol];
-  share.shareFor = ComponentShare$shareFor;
-
-  return share;
-}
-
-function ComponentShare$shareFor<TValue, TOpts extends any[], TClass extends ComponentClass>(
-    this: ComponentShare<TValue, TOpts, TClass>,
-    consumer: ComponentContext,
-): AfterEvent<[TValue?]> {
-
-  const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
-  const status = trackValue<boolean>();
-  const updateStatus = ({ connected }: ComponentContext): void => {
-    status.it = connected;
-  };
-
-  consumer.whenSettled(updateStatus);
-  consumer.whenConnected(updateStatus);
-  status.supply.needs(consumer);
-
-  let lastValue: TValue | null | undefined = null;
-
-  return afterAll({
-    sharers,
-    status,
-  }).do(
-      digAfter_(({ sharers: [names] }): AfterEvent<[TValue?]> | undefined => {
-
-        let element: ComponentElement = consumer.element;
-
-        for (;;) {
-
-          const parent = element.parentNode as ComponentElement | null
-              || (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined; // Inside shadow DOM?
-
-          if (!parent) {
-            return;
-          }
-          if (names.has(parent.tagName.toLowerCase())) {
-            return ComponentSlot.of(element).read.do(
-                digAfter_(sharerContext => sharerContext && sharerContext.get(this)),
-            );
-          }
-
-          element = parent;
-        }
-      }),
-      translateAfter((send, value) => {
-        if (lastValue !== value) {
-          lastValue = value;
-          send(value);
-        }
-      }),
-  );
 }
