@@ -40,7 +40,7 @@
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/style-producer": "^6.0.0",
     "@proc7ts/context-values": "^5.1.0",
-    "@proc7ts/fun-events": "^10.0.1",
+    "@proc7ts/fun-events": "^10.0.2",
     "@wesib/wesib": "^1.0.0-beta.28"
   },
   "dependencies": {
@@ -64,7 +64,7 @@
     "@frontmeans/render-scheduler": "^1.5.0",
     "@frontmeans/style-producer": "^6.0.0",
     "@proc7ts/context-values": "^5.1.0",
-    "@proc7ts/fun-events": "^10.0.1",
+    "@proc7ts/fun-events": "^10.0.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.1.0",
     "@run-z/eslint-config": "^1.2.1",
@@ -82,7 +82,7 @@
     "jest": "^26.6.3",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-junit": "^12.0.0",
-    "rollup": "^2.37.0",
+    "rollup": "^2.38.0",
     "rollup-plugin-flat-dts": "^1.0.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.29.0",
