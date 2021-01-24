@@ -1,8 +1,8 @@
-import { html__naming } from '@frontmeans/namespace-aliaser';
+import { html__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import { AfterEvent, mapAfter, trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
-import { bootstrapDefault, DefaultNamespaceAliaser, DefinitionContext } from '@wesib/wesib';
+import { bootstrapDefault, DefaultNamespaceAliaser } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
 
 const ComponentShareRegistry__key = (/*#__PURE__*/ new SingleContextKey(
@@ -28,12 +28,9 @@ export class ComponentShareRegistry {
 
   addSharer(
       share: ComponentShare<unknown>,
-      defContext: DefinitionContext,
+      name: QualifiedName | undefined,
       supply: Supply,
   ): void {
-
-    const { name } = defContext.elementDef;
-
     if (!name) {
       supply.off();
       return;
