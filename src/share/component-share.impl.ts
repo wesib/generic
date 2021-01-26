@@ -30,7 +30,6 @@ export class ComponentShare$<T> {
     this._aliases = arrayOfElements(options.aliases);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   addSharer(defContext: DefinitionContext, name = defContext.elementDef.name): Supply {
 
     const registry = defContext.get(ComponentShareRegistry);
