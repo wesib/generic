@@ -18,7 +18,7 @@ export const ComponentShare$impl = (/*#__PURE__*/ Symbol('ComponentShare.impl'))
  */
 export class ComponentShare$<T> {
 
-  readonly key: ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
+  readonly key: ContextUpKey<AfterEvent<[T] | []>, SharedByComponent<T>>;
   private readonly _aliases: readonly ComponentShare<T>[];
 
   constructor(
@@ -45,7 +45,7 @@ export class ComponentShare$<T> {
 
   shareValue<TComponent extends object>(
       registry: ContextRegistry<ComponentContext<TComponent>>,
-      provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[] | [T]>,
+      provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T] | []>,
   ): Supply {
 
     const supply = registry.provide({

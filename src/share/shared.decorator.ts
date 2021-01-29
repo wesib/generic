@@ -23,7 +23,7 @@ import { ComponentShare } from './component-share';
  */
 export function Shared<T, TClass extends ComponentClass = Class>(
     share: ComponentShare<T>,
-): ComponentPropertyDecorator<T | EventKeeper<[] | [T]>, TClass> {
+): ComponentPropertyDecorator<T | EventKeeper<[T] | []>, TClass> {
   return ComponentProperty(descriptor => {
     ComponentDef.define(
         descriptor.type,

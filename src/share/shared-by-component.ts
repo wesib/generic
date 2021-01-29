@@ -48,7 +48,7 @@ export namespace SharedByComponent {
      *
      * @returns Either the shared value, or its `EventKeeper`.
      */
-    get(): T | EventKeeper<[] | [T]>;
+    get(): T | EventKeeper<[T] | []>;
 
   }
 

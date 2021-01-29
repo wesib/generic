@@ -7,7 +7,7 @@ import { SharedByComponent } from './shared-by-component';
 /**
  * @internal
  */
-export class ComponentShareKey<T> extends ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>> {
+export class ComponentShareKey<T> extends ContextUpKey<AfterEvent<[T] | []>, SharedByComponent<T>> {
 
   constructor(name: string, private readonly _share: ComponentShare<T>) {
     super(`${name}:share`);
@@ -19,7 +19,7 @@ export class ComponentShareKey<T> extends ContextUpKey<AfterEvent<[T?]>, SharedB
 
   grow(
       slot: ContextValueSlot<
-          AfterEvent<[T?]>,
+          AfterEvent<[T] | []>,
           EventKeeper<SharedByComponent<T>[]> | SharedByComponent<T>,
           AfterEvent<SharedByComponent<T>[]>>,
   ): void {

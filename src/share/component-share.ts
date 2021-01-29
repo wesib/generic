@@ -7,14 +7,13 @@ import {
   AfterEvent__symbol,
   afterEventBy,
   afterThe,
+  deduplicateAfter,
   digAfter_,
-  digOn_,
   EventKeeper,
   isEventKeeper,
   sendEventsTo,
   shareAfter,
   trackValue,
-  translateAfter,
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
@@ -38,7 +37,7 @@ import { SharedByComponent, SharedByComponent__symbol } from './shared-by-compon
  *
  * @typeParam T - Shared value type.
  */
-export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T?]>, SharedByComponent<T>> {
+export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, SharedByComponent<T>> {
 
   /**
    * @internal
@@ -65,7 +64,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T?]>, SharedB
   /**
    * A key of the sharer component context value containing an `AfterEvent` keeper of the shared value.
    */
-  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>> {
+  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T] | []>, SharedByComponent<T>> {
     return this[ComponentShare$impl].key;
   }
 
@@ -91,7 +90,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T?]>, SharedB
    * parameter, and returning either a static value, or an event keeper reporting it.
    */
   shareValue<TComponent extends object>(
-      provider: (this: void, context: ComponentContext<TComponent>) => T | EventKeeper<[] | [T]>,
+      provider: (this: void, context: ComponentContext<TComponent>) => T | EventKeeper<[T] | []>,
   ): ContextBuilder<ComponentContext<TComponent>> {
     return {
       [ContextBuilder__symbol]: registry => this[ComponentShare$impl].shareValue(registry, provider),
@@ -108,7 +107,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T?]>, SharedB
    *
    * @returns An `AfterEvent` keeper of the shared value, if present.
    */
-  valueFor(consumer: ComponentContext): AfterEvent<[] | [T]> {
+  valueFor(consumer: ComponentContext): AfterEvent<[T] | []> {
 
     const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
     const status = trackValue<boolean>();
@@ -120,13 +119,11 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T?]>, SharedB
     consumer.whenConnected(updateStatus);
     status.supply.needs(consumer);
 
-    let lastValue: [T] | [] = [];
-
     return afterAll({
       sharers,
       status,
     }).do(
-        digOn_(({ sharers: [names] }): AfterEvent<[T?]> | undefined => {
+        digAfter_(({ sharers: [names] }): AfterEvent<[T] | []> => {
 
           let element: ComponentElement = consumer.element;
 
@@ -136,30 +133,19 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T?]>, SharedB
                 || (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined; // Inside shadow DOM?
 
             if (!parent) {
-              return;
+              return afterThe();
             }
 
             if (names.has(parent.tagName.toLowerCase())) {
               return ComponentSlot.of(parent).read.do(
-                  digAfter_(sharerContext => sharerContext && sharerContext.get(this)),
+                  digAfter_(sharerContext => sharerContext ? sharerContext.get(this) : afterThe()),
               );
             }
 
             element = parent;
           }
         }),
-        translateAfter(
-            (send, value?: T) => {
-
-              const [last] = lastValue;
-
-              if (last !== value) {
-                lastValue = [value as T];
-                send(value as T);
-              }
-            },
-            () => lastValue,
-        ),
+        deduplicateAfter(),
     );
   }
 
@@ -179,7 +165,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T?]>, SharedB
    *
    * @returns An `AfterEvent` keeper of selected value, if present.
    */
-  selectValue(...values: SharedByComponent<T>[]): AfterEvent<[] | [T]> {
+  selectValue(...values: SharedByComponent<T>[]): AfterEvent<[T] | []> {
 
     let selected: SharedByComponent.Details<T> | undefined;
 
@@ -202,7 +188,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T?]>, SharedB
       return afterThe();
     }
 
-    return afterEventBy<[] | [T]>(receiver => {
+    return afterEventBy<[T] | []>(receiver => {
 
       const value = selected!.get();
 
