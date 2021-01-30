@@ -8,7 +8,7 @@ import { FormControlShare } from './form-control.share';
  * Builds a component property decorator that {@link FormControlShare shares} a form control.
  *
  * @typeParam TValue - Input value type.
- * @typePAram TClass - A type of decorated component class.
+ * @typeParam TClass - A type of decorated component class.
  * @param def - Form control definition.
  */
 export function FormControl<TValue = any, TClass extends ComponentClass = Class>(
