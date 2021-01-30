@@ -3,7 +3,7 @@ import { ContextUpKey } from '@proc7ts/context-values/updatable';
 import { AfterEvent, EventKeeper } from '@proc7ts/fun-events';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
 import { ComponentContext, DefinitionContext } from '@wesib/wesib';
-import { ComponentShare } from './component-share';
+import { ComponentShare, ComponentShare__symbol } from './component-share';
 import { ComponentShareKey } from './component-share-key.impl';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
@@ -27,7 +27,7 @@ export class ComponentShare$<T> {
       options: ComponentShare.Options<T>,
   ) {
     this.key = new ComponentShareKey(name, _share);
-    this._aliases = arrayOfElements(options.aliases);
+    this._aliases = arrayOfElements(options.aliases).map(share => share[ComponentShare__symbol]());
   }
 
   addSharer(defContext: DefinitionContext, name = defContext.elementDef.name): Supply {

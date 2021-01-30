@@ -8,7 +8,7 @@ import {
   DefinitionContext,
   DefinitionSetup,
 } from '@wesib/wesib';
-import { ComponentShare } from './component-share';
+import { ComponentShare__symbol, ComponentShareRef } from './component-share';
 
 /**
  * Builds a component property decorator that {@link ComponentShare shares} a property value.
@@ -17,24 +17,38 @@ import { ComponentShare } from './component-share';
  *
  * @typeParam T - Shared value type.
  * @typeParam TClass - A type of decorated component class.
- * @param share - Target share instance.
+ * @param share - Target share reference.
  *
  * @returns Component property decorator.
  */
 export function Shared<T, TClass extends ComponentClass = Class>(
-    share: ComponentShare<T>,
-): ComponentPropertyDecorator<T | EventKeeper<[T] | []>, TClass> {
+    share: ComponentShareRef<T>,
+): ComponentShareDecorator<T, TClass> {
+
+  const shr = share[ComponentShare__symbol]();
+
   return ComponentProperty(descriptor => {
     ComponentDef.define(
         descriptor.type,
         {
           setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
-            setup.perComponent(share.shareValue(ctx => ctx.component[descriptor.key]));
+            setup.perComponent(shr.shareValue(ctx => ctx.component[descriptor.key]));
           },
           define(defContext: DefinitionContext<InstanceType<TClass>>) {
-            share.addSharer(defContext);
+            shr.addSharer(defContext);
           },
         },
     );
   });
 }
+
+/**
+ * Decorator of component property that {@link ComponentShare shares} a property value.
+ *
+ * Built by {@link Shared @Shared()} decorator.
+ *
+ * @typeParam T - Shared value type.
+ * @typeParam TClass - A type of decorated component class.
+ */
+export type ComponentShareDecorator<T, TClass extends ComponentClass = Class> =
+    ComponentPropertyDecorator<T | EventKeeper<[T] | []>, TClass>;

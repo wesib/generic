@@ -14,12 +14,19 @@ import {
   sendEventsTo,
   shareAfter,
   trackValue,
+  translateAfter_,
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
 import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
+
+/**
+ * A key of {@link ComponentShareRef component share reference} method returning referred {@link ComponentShare
+ * component share} instance.
+ */
+export const ComponentShare__symbol = (/*#__PURE__*/ Symbol('ComponentShare'));
 
 /**
  * A kind of the value a component shares with the nested ones.
@@ -37,7 +44,8 @@ import { SharedByComponent, SharedByComponent__symbol } from './shared-by-compon
  *
  * @typeParam T - Shared value type.
  */
-export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, SharedByComponent<T>> {
+export class ComponentShare<T>
+    implements ComponentShareRef<T>, ContextUpRef<AfterEvent<[T] | []>, SharedByComponent<T>> {
 
   /**
    * @internal
@@ -52,6 +60,15 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
    */
   constructor(name: string, options: ComponentShare.Options<T> = {}) {
     this[ComponentShare$impl] = new ComponentShare$(this, name, options);
+  }
+
+  /**
+   * Refers to itself.
+   *
+   * @returns `this` component share instance.
+   */
+  [ComponentShare__symbol](): this {
+    return this;
   }
 
   /**
@@ -105,9 +122,9 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
    *
    * @param consumer - Consumer component context.
    *
-   * @returns An `AfterEvent` keeper of the shared value, if present.
+   * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
-  valueFor(consumer: ComponentContext): AfterEvent<[T] | []> {
+  valueFor(consumer: ComponentContext): AfterEvent<[T, ComponentContext] | []> {
 
     const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
     const status = trackValue<boolean>();
@@ -123,7 +140,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
       sharers,
       status,
     }).do(
-        digAfter_(({ sharers: [names] }): AfterEvent<[T] | []> => {
+        digAfter_(({ sharers: [names] }): AfterEvent<[T, ComponentContext] | []> => {
 
           let element: ComponentElement = consumer.element;
 
@@ -138,7 +155,11 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
 
             if (names.has(parent.tagName.toLowerCase())) {
               return ComponentSlot.of(parent).read.do(
-                  digAfter_(sharerContext => sharerContext ? sharerContext.get(this) : afterThe()),
+                  digAfter_(sharerContext => sharerContext
+                      ? sharerContext.get(this).do(
+                          translateAfter_((send, value?) => value ? send(value, sharerContext) : send()),
+                      )
+                      : afterThe()),
               );
             }
 
@@ -204,6 +225,22 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
 
 }
 
+/**
+ * A reference to {@link ComponentShare component share}.
+ *
+ * @typeParam T - Shared value type.
+ */
+export interface ComponentShareRef<T> {
+
+  /**
+   * Refers to component share.
+   *
+   * @returns Referred component share instance.
+   */
+  [ComponentShare__symbol](): ComponentShare<T>;
+
+}
+
 export namespace ComponentShare {
 
   /**
@@ -214,11 +251,12 @@ export namespace ComponentShare {
   export interface Options<T> {
 
     /**
-     * Component shares the share provides a value for in addition to the one it provides for itself.
+     * Component share reference(s) the share provides a value for in addition to the one it provides for itself.
      *
-     * The order of aliases is important. It defines the {@link SharedByComponent.Details.order order} the shared value.
+     * The order of aliases is important. It defines the {@link SharedByComponent.Details.order order} of the value
+     * shared for the corresponding share.
      */
-    readonly aliases?: ComponentShare<T> | readonly ComponentShare<T>[];
+    readonly aliases?: ComponentShareRef<T> | readonly ComponentShareRef<T>[];
 
   }
 
