@@ -2,7 +2,7 @@ import { InControl } from '@frontmeans/input-aspects';
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
 import { ComponentShare, ComponentShareDecorator, Shared } from '../share';
-import { FormControlShare } from './form-control-share';
+import { FormControlShare } from './form-control.share';
 
 /**
  * Builds a component property decorator that {@link FormControlShare shares} a form control.
