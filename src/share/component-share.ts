@@ -105,12 +105,16 @@ export class ComponentShare<T>
    * @typeParam - A type of the sharer component.
    * @param provider - Shared value provider. This is a function accepting a sharer component context as its only
    * parameter, and returning either a static value, or an event keeper reporting it.
+   * @param order - Shared value order. Missing, zero, or negative value means explicitly provided value.
+   *
+   * @return A builder of shared value for component context.
    */
   shareValue<TComponent extends object>(
       provider: (this: void, context: ComponentContext<TComponent>) => T | EventKeeper<[T] | []>,
+      order?: number,
   ): ContextBuilder<ComponentContext<TComponent>> {
     return {
-      [ContextBuilder__symbol]: registry => this[ComponentShare$impl].shareValue(registry, provider),
+      [ContextBuilder__symbol]: registry => this[ComponentShare$impl].shareValue(registry, provider, order),
     };
   }
 

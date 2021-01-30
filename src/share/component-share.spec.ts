@@ -1,5 +1,6 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
-import { trackValue } from '@proc7ts/fun-events';
+import { afterEventBy, trackValue } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
 import {
   BootstrapContext,
   Component,
@@ -190,8 +191,8 @@ describe('share', () => {
         const value1 = trackValue('test1');
         const value2 = trackValue('test2');
 
-        defContext.perComponent(share2.shareValue(() => value2));
         defContext.perComponent(share.shareValue(() => value1));
+        defContext.perComponent(share2.shareValue(() => value2));
         expect(await context.get(share)).toEqual('test1');
         expect(await context.get(share2)).toEqual('test2');
 
@@ -202,6 +203,21 @@ describe('share', () => {
         value1.it = 'test1b';
         expect(await context.get(share)).toEqual('test1b');
         expect(await context.get(share2)).toEqual('test2b');
+      });
+      it('prefers explicitly shared value with lower order', async () => {
+
+        const value1 = trackValue('test1');
+        const value2 = trackValue('test2');
+
+        defContext.perComponent(share.shareValue(() => value1, 1));
+        defContext.perComponent(share.shareValue(() => value2, 2));
+        expect(await context.get(share)).toEqual('test1');
+
+        value2.it = 'test2b';
+        expect(await context.get(share)).toEqual('test1');
+
+        value1.it = 'test1b';
+        expect(await context.get(share)).toEqual('test1b');
       });
       it('prefers shared value with earlier aliasing order', async () => {
 
@@ -288,19 +304,58 @@ describe('share', () => {
         testCtx = testDefContext.mountTo(testEl).context;
       });
 
-      it('reports nothing without sharer registered', async () => {
+      it('reports nothing without sharer registered', () => {
         sharerDefContext.perComponent(share.shareValue(() => 'test'));
-        expect(await share.valueFor(testCtx)).toBeUndefined();
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenCalledWith();
       });
-      it('reports value shared by parent sharer', async () => {
+      it('reports nothing without value shared', () => {
+        share.addSharer(sharerDefContext, 'sharer-el');
+
+        const value = afterEventBy<[]>(noop, () => []);
+
+        sharerDefContext.perComponent(share.shareValue(() => value));
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenCalledWith();
+      });
+      it('reports value shared by parent sharer', () => {
         share.addSharer(sharerDefContext, 'sharer-el');
         sharerDefContext.perComponent(share.shareValue(() => 'test'));
 
-        const shared = share.valueFor(testCtx);
+        const receiver = jest.fn();
 
-        expect(await shared).toBe('test');
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        expect(receiver).toHaveBeenCalledTimes(1);
+
         sharerMount.connect();
-        expect(await shared).toBe('test');
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        expect(receiver).toHaveBeenCalledTimes(1);
+      });
+      it('reports value shared by mounted parent sharer', () => {
+        sharerEl = document.createElement('sharer-el');
+
+        testEl = sharerEl.appendChild(document.createElement('test-el'));
+        testCtx = testDefContext.mountTo(testEl).context;
+
+        share.addSharer(sharerDefContext, 'sharer-el');
+        sharerDefContext.perComponent(share.shareValue(() => 'test'));
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenLastCalledWith();
+
+        sharerMount = sharerDefContext.mountTo(sharerEl);
+        sharerMount.connect();
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        expect(receiver).toHaveBeenCalledTimes(2);
       });
     });
   });

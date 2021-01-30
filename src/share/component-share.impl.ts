@@ -46,13 +46,24 @@ export class ComponentShare$<T> {
   shareValue<TComponent extends object>(
       registry: ContextRegistry<ComponentContext<TComponent>>,
       provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T] | []>,
+      order = 0,
   ): Supply {
 
+    const firstIndex = Math.max(0, order);
     const supply = registry.provide({
       a: this._share,
-      by: (
-          ctx: ComponentContext<TComponent>,
-      ): T | EventKeeper<T[]> | null | undefined => provider(ctx),
+      by: firstIndex
+          ? (
+              ctx: ComponentContext<TComponent>,
+          ): SharedByComponent<T> | EventKeeper<SharedByComponent<T>[]> | null | undefined => ({
+            [SharedByComponent__symbol]: {
+              order: firstIndex,
+              get: () => provider(ctx),
+            },
+          })
+          : (
+              ctx: ComponentContext<TComponent>,
+          ): T | EventKeeper<T[]> | null | undefined => provider(ctx),
     });
 
     this._aliases.forEach((alias, index) => {
@@ -61,7 +72,7 @@ export class ComponentShare$<T> {
             a: alias,
             by: (ctx: ComponentContext<TComponent>): SharedByComponent.Detailed<T> => ({
               [SharedByComponent__symbol]: {
-                order: index + 1,
+                order: firstIndex + 1 + index,
                 get: () => provider(ctx),
               },
             }),
