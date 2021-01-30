@@ -8,7 +8,7 @@ import {
   DefinitionContext,
   DefinitionSetup,
 } from '@wesib/wesib';
-import { ComponentShare__symbol, ComponentShareRef } from './component-share';
+import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 
 /**
  * Builds a component property decorator that {@link ComponentShare shares} a property value.

@@ -18,15 +18,10 @@ import {
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
+import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
 import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
-
-/**
- * A key of {@link ComponentShareRef component share reference} method returning referred {@link ComponentShare
- * component share} instance.
- */
-export const ComponentShare__symbol = (/*#__PURE__*/ Symbol('ComponentShare'));
 
 /**
  * A kind of the value a component shares with the nested ones.
@@ -226,22 +221,6 @@ export class ComponentShare<T>
         shareAfter,
     );
   }
-
-}
-
-/**
- * A reference to {@link ComponentShare component share}.
- *
- * @typeParam T - Shared value type.
- */
-export interface ComponentShareRef<T> {
-
-  /**
-   * Refers to component share.
-   *
-   * @returns Referred component share instance.
-   */
-  [ComponentShare__symbol](): ComponentShare<T>;
 
 }
 

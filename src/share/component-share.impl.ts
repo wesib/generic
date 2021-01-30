@@ -3,8 +3,9 @@ import { ContextUpKey } from '@proc7ts/context-values/updatable';
 import { AfterEvent, EventKeeper } from '@proc7ts/fun-events';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
 import { ComponentContext, DefinitionContext } from '@wesib/wesib';
-import { ComponentShare, ComponentShare__symbol } from './component-share';
+import { ComponentShare } from './component-share';
 import { ComponentShareKey } from './component-share-key.impl';
+import { ComponentShare__symbol } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
 
