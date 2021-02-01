@@ -45,7 +45,7 @@ export function Shared<T, TClass extends ComponentClass = Class>(
         );
       },
       ...define.map(define => (
-          descriptor: ComponentProperty.Descriptor<T | EventKeeper<[T] | []>, TClass>,
+          descriptor: ComponentProperty.Descriptor<T | EventKeeper<[T?]>, TClass>,
       ) => define({ ...descriptor, share: shr })),
   );
 }
@@ -59,7 +59,7 @@ export function Shared<T, TClass extends ComponentClass = Class>(
  * @typeParam TClass - A type of decorated component class.
  */
 export type ComponentShareDecorator<T, TClass extends ComponentClass = Class> =
-    ComponentPropertyDecorator<T | EventKeeper<[T] | []>, TClass>;
+    ComponentPropertyDecorator<T | EventKeeper<[T?]>, TClass>;
 
 export namespace Shared {
 
@@ -73,7 +73,7 @@ export namespace Shared {
    * @typeParam TClass - A type of component class.
    */
   export interface Descriptor<T, TClass extends ComponentClass = Class>
-      extends ComponentProperty.Descriptor<T | EventKeeper<[T] | []>, TClass> {
+      extends ComponentProperty.Descriptor<T | EventKeeper<[T?]>, TClass> {
 
     /**
      * Target share instance.
@@ -99,6 +99,6 @@ export namespace Shared {
       (
           this: void,
           descriptor: Descriptor<T, TClass>,
-      ) => ComponentProperty.Definition<T | EventKeeper<[T] | []>, TClass>;
+      ) => ComponentProperty.Definition<T | EventKeeper<[T?]>, TClass>;
 
 }

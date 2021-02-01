@@ -40,7 +40,7 @@ import { SharedByComponent, SharedByComponent__symbol } from './shared-by-compon
  * @typeParam T - Shared value type.
  */
 export class ComponentShare<T>
-    implements ComponentShareRef<T>, ContextUpRef<AfterEvent<[T] | []>, SharedByComponent<T>> {
+    implements ComponentShareRef<T>, ContextUpRef<AfterEvent<[T?]>, SharedByComponent<T>> {
 
   /**
    * @internal
@@ -76,7 +76,7 @@ export class ComponentShare<T>
   /**
    * A key of the sharer component context value containing an `AfterEvent` keeper of the shared value.
    */
-  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T] | []>, SharedByComponent<T>> {
+  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>> {
     return this[ComponentShare$impl].key;
   }
 
@@ -105,7 +105,7 @@ export class ComponentShare<T>
    * @return A builder of shared value for component context.
    */
   shareValue<TComponent extends object>(
-      provider: (this: void, context: ComponentContext<TComponent>) => T | EventKeeper<[T] | []>,
+      provider: (this: void, context: ComponentContext<TComponent>) => T | EventKeeper<[T?]>,
       order?: number,
   ): ContextBuilder<ComponentContext<TComponent>> {
     return {
@@ -185,7 +185,7 @@ export class ComponentShare<T>
    *
    * @returns An `AfterEvent` keeper of selected value, if present.
    */
-  selectValue(...values: SharedByComponent<T>[]): AfterEvent<[T] | []> {
+  selectValue(...values: SharedByComponent<T>[]): AfterEvent<[T?]> {
 
     let selected: SharedByComponent.Details<T> | undefined;
 
@@ -208,7 +208,7 @@ export class ComponentShare<T>
       return afterThe();
     }
 
-    return afterEventBy<[T] | []>(receiver => {
+    return afterEventBy<[T?]>(receiver => {
 
       const value = selected!.get();
 
