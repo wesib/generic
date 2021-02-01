@@ -22,10 +22,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
     const formControlShare = FieldShare[ComponentShare__symbol]();
     const supply = super.addSharer(defContext, name);
 
-    formControlShare
-        .addSharer(defContext, name)
-        .needs(supply)
-        .cuts(supply);
+    formControlShare.addSharer(defContext, name).as(supply);
 
     return supply;
   }

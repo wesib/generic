@@ -78,8 +78,7 @@ export class ComponentShare$<T> {
               },
             }),
           })
-          .needs(supply)
-          .cuts(supply);
+          .as(supply);
     });
 
     return supply;
