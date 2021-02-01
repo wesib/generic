@@ -5,8 +5,8 @@ import { AfterEvent, AfterEvent__symbol, EventKeeper, isEventKeeper, translateAf
 import { Supply } from '@proc7ts/primitives';
 import { ComponentContext, DefinitionContext } from '@wesib/wesib';
 import { ComponentShare, ComponentShare__symbol } from '../share';
+import { FieldShare } from './field.share';
 import { Form } from './form';
-import { FormControlShare } from './form-control.share';
 
 let FormShare$instance: FormShare | undefined;
 
@@ -19,7 +19,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
 
   addSharer(defContext: DefinitionContext, name?: QualifiedName): Supply {
 
-    const formControlShare = FormControlShare[ComponentShare__symbol]();
+    const formControlShare = FieldShare[ComponentShare__symbol]();
     const supply = super.addSharer(defContext, name);
 
     formControlShare
@@ -36,9 +36,9 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
           | Form<TModel, TElt>,
   ): ContextBuilder<ComponentContext<TComponent>> {
 
-    const builder = super.shareValue(provider);
-    const formControlShare = FormControlShare[ComponentShare__symbol]();
-    const controlBuilder = formControlShare.shareValue<TComponent>(
+    const shareBuilder = super.shareValue(provider);
+    const fieldShare = FieldShare[ComponentShare__symbol]();
+    const fieldBuilder = fieldShare.shareValue<TComponent>(
         (
             context: ComponentContext<TComponent>,
         ): InControl<TModel> | AfterEvent<[InControl<TModel>] | []> => {
@@ -59,9 +59,9 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
     return {
       [ContextBuilder__symbol](registry) {
 
-        const supply = builder[ContextBuilder__symbol](registry);
+        const supply = shareBuilder[ContextBuilder__symbol](registry);
 
-        controlBuilder[ContextBuilder__symbol](registry).needs(supply).cuts(supply);
+        fieldBuilder[ContextBuilder__symbol](registry).needs(supply).cuts(supply);
 
         return supply;
       },
