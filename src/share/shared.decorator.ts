@@ -12,42 +12,46 @@ import { ComponentShare } from './component-share';
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 
 /**
- * Builds a component property decorator that {@link ComponentShare shares} a property value.
+ * Builds a decorator of component property that {@link ComponentShare shares} its value.
  *
  * The decorated property should return either a static value, or its `EventKeeper` if the case the value is updatable.
  *
  * @typeParam T - Shared value type.
  * @typeParam TClass - A type of decorated component class.
  * @param share - Target share reference.
- * @param definers - Component share definers to apply.
+ * @param define - Sharing property definition builders.
  *
  * @returns Component property decorator.
  */
 export function Shared<T, TClass extends ComponentClass = Class>(
     share: ComponentShareRef<T>,
-    ...definers: Shared.Definer<T, TClass>[]
+    ...define: Shared.Definer<T, TClass>[]
 ): ComponentShareDecorator<T, TClass> {
 
   const shr = share[ComponentShare__symbol]();
 
-  return ComponentProperty(descriptor => {
-    ComponentDef.define(
-        descriptor.type,
-        {
-          setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
-            setup.perComponent(shr.shareValue(ctx => ctx.component[descriptor.key]));
-          },
-          define(defContext: DefinitionContext<InstanceType<TClass>>) {
-            shr.addSharer(defContext);
-          },
-        },
-        ...definers.map(ext => ext(shr, descriptor)),
-    );
-  });
+  return ComponentProperty(
+      descriptor => {
+        ComponentDef.define(
+            descriptor.type,
+            {
+              setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
+                setup.perComponent(shr.shareValue(ctx => ctx.component[descriptor.key]));
+              },
+              define(defContext: DefinitionContext<InstanceType<TClass>>) {
+                shr.addSharer(defContext);
+              },
+            },
+        );
+      },
+      ...define.map(define => (
+          descriptor: ComponentProperty.Descriptor<T | EventKeeper<[T] | []>, TClass>,
+      ) => define({ ...descriptor, share: shr })),
+  );
 }
 
 /**
- * Decorator of component property that {@link ComponentShare shares} a property value.
+ * Decorator of component property that {@link ComponentShare shares} its value.
  *
  * Built by {@link Shared @Shared()} decorator.
  *
@@ -60,24 +64,41 @@ export type ComponentShareDecorator<T, TClass extends ComponentClass = Class> =
 export namespace Shared {
 
   /**
-   * Component share definer.
+   * A descriptor of the component property that {@link ComponentShare shares} its value.
    *
-   * Definers could be added to {@link Shared @Shared} decorator to extend decorated component definition.
+   * Passed to {@link Definer property definer} by {@link Shared @Shared} to build a {@link Definition
+   * property definition}.
+   *
+   * @typeParam TValue - Shared value type.
+   * @typeParam TClass - A type of component class.
+   */
+  export interface Descriptor<T, TClass extends ComponentClass = Class>
+      extends ComponentProperty.Descriptor<T | EventKeeper<[T] | []>, TClass> {
+
+    /**
+     * Target share instance.
+     */
+    readonly share: ComponentShare<T>;
+
+  }
+
+  /**
+   * A signature of definition builder of the component property that {@link ComponentShare shares} its value.
+   *
+   * This is a function called by {@link Shared @Shared} decorator to apply additional definitions.
    *
    * @typeParam T - Shared value type.
    * @typeParam TClass - A type of decorated component class.
    */
   export type Definer<T, TClass extends ComponentClass = Class> =
   /**
-   * @param share - Target share instance.
    * @param descriptor - Decorated component property descriptor.
    *
-   * @returns Component definition to apply to decorated component.
+   * @returns Component property definition, or nothing if the property definition is not to be changed.
    */
       (
           this: void,
-          share: ComponentShare<T>,
-          descriptor: ComponentProperty.Descriptor<T | EventKeeper<[T] | []>, TClass>,
-      ) => ComponentDef<InstanceType<TClass>>;
+          descriptor: Descriptor<T, TClass>,
+      ) => ComponentProperty.Definition<T | EventKeeper<[T] | []>, TClass>;
 
 }

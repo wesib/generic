@@ -62,10 +62,12 @@ describe('share', () => {
 
         @Shared(
             share,
-            (share, descriptor) => ({
-              setup(setup) {
-                setup.perComponent({ a: extKey1, is: share });
-                setup.perComponent({ a: extKey2, is: descriptor.type });
+            ({ share, type }) => ({
+              componentDef: {
+                setup(setup) {
+                  setup.perComponent({ a: extKey1, is: share });
+                  setup.perComponent({ a: extKey2, is: type });
+                },
               },
             }),
         )
