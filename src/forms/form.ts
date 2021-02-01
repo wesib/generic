@@ -6,11 +6,12 @@ import { FormShare } from './form.share';
 
 export function Form<TModel = any, TElt extends HTMLElement = HTMLElement, TClass extends ComponentClass = Class>(
     def: FormDef<TModel, TElt> = {},
+    ...define: Form.Definer<TModel, TElt, TClass>[]
 ): ComponentShareDecorator<Form<TModel, TElt>, TClass> {
 
   const { share = FormShare } = def;
 
-  return Shared(share);
+  return Shared(share, ...define);
 }
 
 /**
@@ -36,5 +37,34 @@ export interface Form<TModel = any, TElt extends HTMLElement = HTMLElement> {
 export interface FormDef<TModel = any, TElt extends HTMLElement = HTMLElement> {
 
   readonly share?: ComponentShareRef<Form<TModel, TElt>>;
+
+}
+
+export namespace Form {
+
+  export interface Descriptor<
+      TModel = any,
+      TElt extends HTMLElement = HTMLElement,
+      TClass extends ComponentClass = Class>
+      extends Shared.Descriptor<Form<TModel, TElt>, TClass> {
+
+    readonly share: FormShare<TModel, TElt>;
+
+  }
+
+  export type Definer<
+      TModel = any,
+      TElt extends HTMLElement = HTMLElement,
+      TClass extends ComponentClass = Class> =
+      (
+          this: void,
+          descriptor: Descriptor<TModel, TElt, TClass>,
+      ) => Definition<TModel, TElt, TClass>;
+
+  export type Definition<
+      TModel = any,
+      TElt extends HTMLElement = HTMLElement,
+      TClass extends ComponentClass = Class> =
+      Shared.Definition<Form<TModel, TElt>, TClass>;
 
 }
