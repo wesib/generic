@@ -2,6 +2,8 @@ import { InControl } from '@frontmeans/input-aspects';
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
 import { ComponentShare__symbol, ComponentShareDecorator, ComponentShareRef, Shared } from '../share';
+import { FieldName } from './field-name.definer';
+import { Field$name } from './field.impl';
 import { FieldShare } from './field.share';
 import { Form } from './form';
 import { FormShare } from './form.share';
@@ -21,14 +23,15 @@ export function Field<TValue = any, TClass extends ComponentClass = Class>(
     ...define: Field.Definer<TValue, TClass>[]
 ): ComponentShareDecorator<Field<TValue>, TClass> {
 
-  const { share = FieldShare, formShare: formShareRef = FormShare } = def;
+  const { share = FieldShare, formShare: formShareRef = FormShare, name } = def;
   const formShare: FormShare = formShareRef[ComponentShare__symbol]();
+  const definers: Field.Definer<TValue, TClass>[] = [FieldName({ name }), ...define];
 
   return Shared(
       share,
-      ...define.map(definer => (
+      ...definers.map(definer => (
           descriptor: Shared.Descriptor<Field<TValue>, TClass>,
-      ) => definer({ ...descriptor, formShare })),
+      ) => definer({ ...descriptor, formShare, name: Field$name(descriptor.key, name) })),
   );
 }
 
@@ -43,6 +46,8 @@ export interface FieldDef<TValue = any> {
 
   readonly share?: ComponentShareRef<InControl<TValue>>;
 
+  readonly name?: string;
+
 }
 
 export type Field<TValue> = InControl<TValue>;
@@ -54,13 +59,15 @@ export namespace Field {
 
     readonly formShare: FormShare;
 
+    readonly name: string | null;
+
   }
 
   export type Definer<TValue = any, TClass extends ComponentClass = Class> =
       (
           this: void,
           descriptor: Descriptor<TValue, TClass>,
-      ) => Definition<TValue, TClass>;
+      ) => Definition<TValue, TClass> | void;
 
   export type Definition<TValue = any, TClass extends ComponentClass = Class> =
       Shared.Definition<Field<TValue>, TClass>;

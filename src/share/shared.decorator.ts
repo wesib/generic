@@ -99,7 +99,7 @@ export namespace Shared {
       (
           this: void,
           descriptor: Descriptor<T, TClass>,
-      ) => Definition<T, TClass>;
+      ) => Definition<T, TClass> | void;
 
    export type Definition<T, TClass extends ComponentClass = Class> =
        ComponentProperty.Definition<T | EventKeeper<[T?]>, TClass>;
