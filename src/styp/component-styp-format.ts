@@ -132,9 +132,7 @@ export abstract class ComponentStypFormat {
     const producer = this.newProducer(rules, config);
     const supply = new Supply();
 
-    this.context.whenSettled(() => {
-      producer().needs(supply).cuts(supply);
-    });
+    this.context.whenSettled(() => producer().as(supply));
 
     return supply;
   }

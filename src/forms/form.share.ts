@@ -61,7 +61,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
 
         const supply = shareBuilder[ContextBuilder__symbol](registry);
 
-        fieldBuilder[ContextBuilder__symbol](registry).needs(supply).cuts(supply);
+        fieldBuilder[ContextBuilder__symbol](registry).as(supply);
 
         return supply;
       },
