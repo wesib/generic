@@ -1,4 +1,5 @@
 import { QualifiedName } from '@frontmeans/namespace-aliaser';
+import { ContextKey__symbol } from '@proc7ts/context-values';
 import { Supply } from '@proc7ts/primitives';
 import { DefinitionContext } from '@wesib/wesib';
 import { ComponentShare, ComponentShare__symbol, SharedByComponent } from '../share';
@@ -12,6 +13,10 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
 
   static [ComponentShare__symbol](): FormShare<any, any> {
     return FormShare$instance || (FormShare$instance = new FormShare('form'));
+  }
+
+  static get [ContextKey__symbol](): ComponentShare.Key<Form> {
+    return this[ComponentShare__symbol]()[ContextKey__symbol];
   }
 
   addSharer(defContext: DefinitionContext, name?: QualifiedName): Supply {
