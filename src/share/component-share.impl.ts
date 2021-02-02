@@ -52,7 +52,7 @@ export class ComponentShare$<T> {
     const priorityOffset = registrar.priority + 1;
 
     this._aliases.forEach((alias, index) => {
-      alias.shareValue(registrar.prioritize(priorityOffset + index));
+      alias.shareValue(registrar.withPriority(priorityOffset + index));
     });
   }
 
@@ -98,7 +98,7 @@ function SharedByComponent$Registrar<T, TComponent extends object>(
             : SharedByComponent$bareProvider(provider),
       }).as(supply);
     },
-    prioritize: newPriority => SharedByComponent$Registrar(registry, provider, Math.max(0, newPriority)),
+    withPriority: newPriority => SharedByComponent$Registrar(registry, provider, Math.max(0, newPriority)),
   };
 }
 

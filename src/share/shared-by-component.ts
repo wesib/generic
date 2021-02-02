@@ -93,7 +93,7 @@ export namespace SharedByComponent {
      *
      * @returns New registrar instance with {@link priority} set to the given value.
      */
-    prioritize(this: void, priority: number): Registrar<T>;
+    withPriority(this: void, priority: number): Registrar<T>;
 
   }
 

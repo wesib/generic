@@ -29,7 +29,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
 
     const fieldShare = FieldShare[ComponentShare__symbol]();
 
-    fieldShare.shareValue(registrar.prioritize(registrar.priority + 1));
+    fieldShare.shareValue(registrar.withPriority(registrar.priority + 1));
   }
 
 }
