@@ -233,8 +233,15 @@ export namespace ComponentShare {
      * The order of aliases is important. It defines the {@link SharedByComponent.Details.priority priority} of the
      * value shared for the corresponding share.
      */
-    readonly aliases?: ComponentShareRef<T> | readonly ComponentShareRef<T>[];
+    readonly as?: ComponentShareRef<T> | readonly ComponentShareRef<T>[];
 
   }
+
+  /**
+   * A key of context value containing an `AfterEvent` keeper of shared value.
+   *
+   * @typeParam T - Shared value type.
+   */
+  export type Key<T> = ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
 
 }

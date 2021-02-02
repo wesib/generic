@@ -67,7 +67,7 @@ describe('share', () => {
       });
       it('registers sharer for aliased shares', async () => {
 
-        const share2 = new ComponentShare('other-share', { aliases: share });
+        const share2 = new ComponentShare('other-share', { as: share });
         const supply = share2.addSharer(defContext);
 
         expect([...await registry.sharers(share)]).toEqual(['test-component']);
@@ -84,7 +84,7 @@ describe('share', () => {
       let share2: ComponentShare<string>;
 
       beforeEach(() => {
-        share2 = new ComponentShare('other-share', { aliases: share });
+        share2 = new ComponentShare('other-share', { as: share });
       });
 
       let defContext: DefinitionContext;
@@ -147,8 +147,8 @@ describe('share', () => {
       let share3: ComponentShare<string>;
 
       beforeEach(() => {
-        share2 = new ComponentShare('other-share', { aliases: share });
-        share3 = new ComponentShare('third-share', { aliases: [share2, share] });
+        share2 = new ComponentShare('other-share', { as: share });
+        share3 = new ComponentShare('third-share', { as: [share2, share] });
       });
 
       let defContext: DefinitionContext;

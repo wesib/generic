@@ -28,7 +28,7 @@ export class ComponentShare$<T> {
       options: ComponentShare.Options<T>,
   ) {
     this.key = new ComponentShareKey(name, _share);
-    this._aliases = arrayOfElements(options.aliases).map(share => share[ComponentShare__symbol]());
+    this._aliases = arrayOfElements(options.as).map(alias => alias[ComponentShare__symbol]());
   }
 
   addSharer(defContext: DefinitionContext, name = defContext.elementDef.name): Supply {
