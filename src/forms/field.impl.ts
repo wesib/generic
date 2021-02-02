@@ -14,9 +14,6 @@ export function Field$name(key: string | symbol, name: string | undefined): stri
 /**
  * @internal
  */
-export function Field$nameByKey(key: string | symbol): string {
-  if (typeof key === 'string') {
-    return key;
-  }
-  throw new TypeError(`Field name is required for ${String(key)}`);
+export function Field$nameByKey(key: string | symbol): string | null {
+  return typeof key === 'string' ? key : null;
 }

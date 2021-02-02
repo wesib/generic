@@ -25,7 +25,14 @@ export function FieldName<TValue, TClass extends ComponentClass = Class>(
     } else if (name != null) {
       return; // Empty field name. Do not ad it to form.
     } else {
-      fieldName = Field$nameByKey(key);
+
+      const autoName = Field$nameByKey(key);
+
+      if (!autoName) {
+        return;
+      }
+
+      fieldName = autoName;
     }
 
     const fieldFormShare = (def.formShare || formShare)[ComponentShare__symbol]();
