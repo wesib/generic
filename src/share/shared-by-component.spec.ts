@@ -26,7 +26,7 @@ describe('share', () => {
 
         const value: SharedByComponent.Detailed<string> = {
           [SharedByComponent__symbol]: {
-            order: 1,
+            priority: 1,
             get: valueProvider('test'),
           },
         };

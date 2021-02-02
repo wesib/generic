@@ -3,13 +3,13 @@ import { afterAll, consumeEvents } from '@proc7ts/fun-events';
 import { Class, Supply } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
 import { ComponentShare__symbol, ComponentShareRef } from '../share';
-import { Field } from './field';
 import { Field$nameByKey } from './field.impl';
 import { Form } from './form';
+import { SharedField } from './shared-field.decorator';
 
 export function FieldName<TValue, TClass extends ComponentClass = Class>(
     def: FieldNameDef = {},
-): Field.Definer<TValue, TClass> {
+): SharedField.Definer<TValue, TClass> {
   return ({
     key,
     share,
@@ -49,7 +49,7 @@ export function FieldName<TValue, TClass extends ComponentClass = Class>(
                     return;
                   }
 
-                  return group.controls.set(fieldName, field);
+                  return group.controls.set(fieldName, field.control);
                 }),
             );
           });

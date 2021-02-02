@@ -1,5 +1,5 @@
 import { QualifiedName } from '@frontmeans/namespace-aliaser';
-import { ContextBuilder, ContextBuilder__symbol, ContextKey__symbol } from '@proc7ts/context-values';
+import { ContextKey__symbol } from '@proc7ts/context-values';
 import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import {
   afterAll,
@@ -9,7 +9,6 @@ import {
   afterThe,
   deduplicateAfter,
   digAfter_,
-  EventKeeper,
   isEventKeeper,
   sendEventsTo,
   shareAfter,
@@ -97,20 +96,14 @@ export class ComponentShare<T>
   /**
    * Shares a value by providing it for the sharer component context.
    *
-   * @typeParam - A type of the sharer component.
-   * @param provider - Shared value provider. This is a function accepting a sharer component context as its only
-   * parameter, and returning either a static value, or an event keeper reporting it.
-   * @param order - Shared value order. Missing, zero, or negative value means explicitly provided value.
+   * @param registrar - Shared value registrar.
    *
    * @return A builder of shared value for component context.
    */
-  shareValue<TComponent extends object>(
-      provider: (this: void, context: ComponentContext<TComponent>) => T | EventKeeper<[T?]>,
-      order?: number,
-  ): ContextBuilder<ComponentContext<TComponent>> {
-    return {
-      [ContextBuilder__symbol]: registry => this[ComponentShare$impl].shareValue(registry, provider, order),
-    };
+  shareValue(
+      registrar: SharedByComponent.Registrar<T>,
+  ): void {
+    this[ComponentShare$impl].shareValue(registrar);
   }
 
   /**
@@ -176,8 +169,9 @@ export class ComponentShare<T>
    *
    * By default:
    *
-   * - Prefers pure value.
-   * - Prefers the value detailed value specifier with lesser {@link SharedByComponent.Details.order order}.
+   * - Prefers bare value.
+   * - Prefers the value from {@link SharedByComponent.Detailed detailed specifier} with higher priority
+   *   (i.e. lesser {@link SharedByComponent.Details.priority priority value}).
    * - Prefers the value declared last.
    *
    * @param values - The values shared by sharers. May contain a {@link SharedByComponent.Detailed detailed value
@@ -199,7 +193,7 @@ export class ComponentShare<T>
 
       const details = value[SharedByComponent__symbol];
 
-      if (!selected || selected.order > details.order) {
+      if (!selected || selected.priority > details.priority) {
         selected = details;
       }
     }
@@ -236,8 +230,8 @@ export namespace ComponentShare {
     /**
      * Component share reference(s) the share provides a value for in addition to the one it provides for itself.
      *
-     * The order of aliases is important. It defines the {@link SharedByComponent.Details.order order} of the value
-     * shared for the corresponding share.
+     * The order of aliases is important. It defines the {@link SharedByComponent.Details.priority priority} of the
+     * value shared for the corresponding share.
      */
     readonly aliases?: ComponentShareRef<T> | readonly ComponentShareRef<T>[];
 

@@ -1,4 +1,4 @@
-import { ContextRegistry } from '@proc7ts/context-values';
+import { ContextBuilder, ContextBuilder__symbol, ContextRegistry } from '@proc7ts/context-values';
 import { ContextUpKey } from '@proc7ts/context-values/updatable';
 import { AfterEvent, AfterEvent__symbol, EventKeeper, isEventKeeper, translateAfter } from '@proc7ts/fun-events';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
@@ -44,36 +44,65 @@ export class ComponentShare$<T> {
     return supply;
   }
 
-  shareValue<TComponent extends object>(
-      registry: ContextRegistry<ComponentContext<TComponent>>,
-      provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T?]>,
-      order = 0,
-  ): Supply {
-    order = Math.max(0, order);
+  shareValue(
+      registrar: SharedByComponent.Registrar<T>,
+  ): void {
+    registrar.shareAs(this._share);
 
-    const supply = registry.provide({
-      a: this._share,
-      by: order
-          ? ComponentShare$orderedProvider(provider, order)
-          : ComponentShare$explicitProvider(provider),
-    });
-    const firstIndex = order + 1;
+    const priorityOffset = registrar.priority + 1;
 
     this._aliases.forEach((alias, index) => {
-      registry
-          .provide({
-            a: alias,
-            by: ComponentShare$orderedProvider(provider, firstIndex + index),
-          })
-          .as(supply);
+      alias.shareValue(registrar.prioritize(priorityOffset + index));
     });
-
-    return supply;
   }
 
 }
 
-function ComponentShare$explicitProvider<T, TComponent extends object>(
+/**
+ * @internal
+ */
+export function SharedByComponent$ContextBuilder<T, TComponent extends object>(
+    share: ComponentShare<T>,
+    provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T?]>,
+    priority?: number,
+): ContextBuilder<ComponentContext<TComponent>> {
+  return {
+    [ContextBuilder__symbol]: registry => {
+
+      const registrar = SharedByComponent$Registrar(registry, provider, priority);
+
+      share.shareValue(registrar);
+
+      return registrar.supply;
+    },
+  };
+}
+
+function SharedByComponent$Registrar<T, TComponent extends object>(
+    registry: ContextRegistry<ComponentContext<TComponent>>,
+    provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T?]>,
+    priority = 0,
+): SharedByComponent.Registrar<T> {
+
+  const supply = new Supply();
+
+  return {
+    priority,
+    supply,
+    shareAs: (alias, newPriority = priority) => {
+      newPriority = Math.max(0, newPriority);
+      registry.provide({
+        a: alias[ComponentShare__symbol](),
+        by: newPriority
+            ? SharedByComponent$detailedProvider(provider, newPriority)
+            : SharedByComponent$bareProvider(provider),
+      }).as(supply);
+    },
+    prioritize: newPriority => SharedByComponent$Registrar(registry, provider, Math.max(0, newPriority)),
+  };
+}
+
+function SharedByComponent$bareProvider<T, TComponent extends object>(
     provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T?]>,
 ): (
     context: ComponentContext<TComponent>,
@@ -92,15 +121,15 @@ function ComponentShare$explicitProvider<T, TComponent extends object>(
   };
 }
 
-function ComponentShare$orderedProvider<T, TComponent extends object>(
+function SharedByComponent$detailedProvider<T, TComponent extends object>(
     provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T?]>,
-    order: number,
+    priority: number,
 ): (
     context: ComponentContext<TComponent>,
 ) => SharedByComponent.Detailed<T> {
   return context => ({
     [SharedByComponent__symbol]: {
-      order,
+      priority,
       get: () => provider(context),
     },
   });
