@@ -22,8 +22,8 @@ export function FieldName<TValue, TClass extends ComponentClass = Class>(
 
     if (name) {
       fieldName = name;
-    } else if (name == null) {
-      return;
+    } else if (name != null) {
+      return; // Empty field name. Do not ad it to form.
     } else {
       fieldName = Field$nameByKey(key);
     }
@@ -36,7 +36,7 @@ export function FieldName<TValue, TClass extends ComponentClass = Class>(
           setup.whenComponent(context => {
             afterAll({
               field: context.get(share),
-              form: context.get(fieldFormShare),
+              form: fieldFormShare.valueFor(context),
             }).do(
                 consumeEvents(({ field: [field], form: [form] }): Supply | undefined => {
                   if (!form || !field) {
