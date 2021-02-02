@@ -1,4 +1,4 @@
-import { EventKeeper } from '@proc7ts/fun-events';
+import { afterThe, deduplicateAfter_, digAfter, EventKeeper, isEventKeeper } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import {
   ComponentClass,
@@ -39,7 +39,18 @@ export function Shared<T, TClass extends ComponentClass = Class>(
               setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
                 setup.perComponent(SharedByComponent$ContextBuilder(
                     shr,
-                    context => context.component[descriptor.key],
+                    context => context.readStatus.do(
+                        deduplicateAfter_((a, b) => a === b, ([{ ready }]) => ready),
+                        digAfter(({ ready }): EventKeeper<[T?]> => {
+                          if (!ready) {
+                            return afterThe();
+                          }
+
+                          const value: T | EventKeeper<[T?]> = context.component[descriptor.key];
+
+                          return isEventKeeper(value) ? value : afterThe(value);
+                        }),
+                    ),
                 ));
               },
               define(defContext: DefinitionContext<InstanceType<TClass>>) {
