@@ -173,10 +173,7 @@ describe('forms', () => {
         )
         class FieldComponent {
 
-          @SharedField(
-              {},
-              FieldName({ name: 'customName' }),
-          )
+          @SharedField(FieldName({ name: 'customName' }))
           readonly field = new Field<string>(inValue('test'));
 
         }
