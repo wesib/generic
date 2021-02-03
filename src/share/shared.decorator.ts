@@ -68,7 +68,7 @@ export function Shared<T, TClass extends ComponentClass = Class>(
 /**
  * Decorator of component property that {@link ComponentShare shares} its value.
  *
- * Built by {@link Shared @Shared()} decorator.
+ * Built by {@link Shared @Shared} decorator.
  *
  * @typeParam T - Shared value type.
  * @typeParam TClass - A type of decorated component class.
@@ -81,10 +81,10 @@ export namespace Shared {
   /**
    * A descriptor of the component property that {@link ComponentShare shares} its value.
    *
-   * Passed to {@link Definer property definer} by {@link Shared @Shared} to build a {@link Definition
+   * Passed to {@link Definer property definer} by {@link Shared @Shared} decorator to build a {@link Definition
    * property definition}.
    *
-   * @typeParam TValue - Shared value type.
+   * @typeParam T - Shared value type.
    * @typeParam TClass - A type of component class.
    */
   export interface Descriptor<T, TClass extends ComponentClass = Class>
@@ -116,6 +116,12 @@ export namespace Shared {
           descriptor: Descriptor<T, TClass>,
       ) => Definition<T, TClass> | void;
 
+  /**
+   * A definition of component property that {@link ComponentShare shares} its value.
+   *
+   * @typeParam T - Shared value type.
+   * @typeParam TClass - A type of component class.
+   */
   export type Definition<T, TClass extends ComponentClass = Class> =
       ComponentProperty.Definition<T | EventKeeper<[T?]>, TClass>;
 
