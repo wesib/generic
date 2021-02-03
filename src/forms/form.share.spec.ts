@@ -56,6 +56,22 @@ describe('forms', () => {
         supply.off();
         expect([...await registry.sharers(fieldShare)]).toHaveLength(0);
       });
+      it('registers field sharer for specific share', async () => {
+
+        interface TestModel {
+          test: string;
+        }
+
+        const fieldShare = new FieldShare<TestModel>('custom-field');
+        const formShare = new FormShare<TestModel>('custom-form', { asField: fieldShare });
+
+        const supply = formShare.addSharer(defContext);
+
+        expect([...await registry.sharers(fieldShare)]).toEqual(['test-component']);
+
+        supply.off();
+        expect([...await registry.sharers(fieldShare)]).toHaveLength(0);
+      });
     });
 
     describe('shareValue', () => {
@@ -95,6 +111,18 @@ describe('forms', () => {
         expect(await context.get(formShare)).toBe(form);
       });
       it('shares field', async () => {
+        expect(await context.get(fieldShare)).toBe(form);
+      });
+      it('shares specific field', async () => {
+
+        interface TestModel {
+          test: string;
+        }
+
+        const fieldShare = new FieldShare<TestModel>('custom-field');
+        const formShare = new FormShare<TestModel>('custom-form', { asField: fieldShare });
+
+        defContext.perComponent(shareValue(formShare, () => form));
         expect(await context.get(fieldShare)).toBe(form);
       });
     });

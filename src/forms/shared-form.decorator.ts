@@ -1,6 +1,6 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShareDecorator, ComponentShareRef, Shared } from '../share';
+import { ComponentShare, ComponentShareDecorator, ComponentShareRef, Shared } from '../share';
 import { Form } from './form';
 import { FormShare } from './form.share';
 
@@ -28,7 +28,7 @@ export namespace SharedForm {
       TClass extends ComponentClass = Class>
       extends Shared.Descriptor<Form<TModel, TElt>, TClass> {
 
-    readonly share: FormShare<TModel, TElt>;
+    readonly share: ComponentShare<Form<TModel, TElt>>;
 
   }
 

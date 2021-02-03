@@ -1,8 +1,15 @@
 import { InControl, inFormElement, InFormElement } from '@frontmeans/input-aspects';
 import { Field } from './field';
 
+const Form$element__symbol = (/*#__PURE__*/ Symbol('Form.element'));
+
 /**
  * User input form.
+ *
+ * A component {@link FormShare shares} form (e.g. using {@link SharedForm @SharedForm} decorator) to make its
+ * accessible by component itself and nested ones. E.g. to add {@link Field fields} to it or submit it.
+ *
+ * A form may be nested within another one, as it implements a {@link Field} interface.
  *
  * @typeParam TModel - A model type of the form, i.e. a type of its control value.
  * @typeParam TElt - A type of HTML form element.
@@ -27,12 +34,9 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement> extends 
   }
 
   /**
-   * Form element control.
-   *
-   * Unlike {@link input input control} this one is not supposed to be submitted. But it contains a `<form>` element
-   * issuing a `submit` event.
+   * @internal
    */
-  readonly element: InFormElement<TElt>;
+  private readonly [Form$element__symbol]: InFormElement<TElt>;
 
   /**
    * Constructs a form.
@@ -42,7 +46,17 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement> extends 
    */
   constructor(control: InControl<TModel>, element: InFormElement<TElt>) {
     super(control);
-    this.element = element;
+    this[Form$element__symbol] = element;
+  }
+
+  /**
+   * Form element control.
+   *
+   * Unlike {@link input input control} this one is not supposed to be submitted. But it contains a `<form>` element
+   * issuing a `submit` event.
+   */
+  get element(): InFormElement<TElt> {
+    return this[Form$element__symbol];
   }
 
 }

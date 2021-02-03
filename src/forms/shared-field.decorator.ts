@@ -1,6 +1,6 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShare__symbol, ComponentShareDecorator, ComponentShareRef, Shared } from '../share';
+import { ComponentShare, ComponentShare__symbol, ComponentShareDecorator, ComponentShareRef, Shared } from '../share';
 import { Field } from './field';
 import { FieldName } from './field-name.definer';
 import { Field$name } from './field.impl';
@@ -24,7 +24,7 @@ export function SharedField<TValue = any, TClass extends ComponentClass = Class>
 ): ComponentShareDecorator<Field<TValue>, TClass> {
 
   const { share = FieldShare, formShare: formShareRef = FormShare, name } = def;
-  const formShare: FormShare = formShareRef[ComponentShare__symbol];
+  const formShare: ComponentShare<Form<any, any>> = formShareRef[ComponentShare__symbol];
   const definers: SharedField.Definer<TValue, TClass>[] = [FieldName({ name }), ...define];
 
   return Shared(
@@ -55,7 +55,7 @@ export namespace SharedField {
   export interface Descriptor<TValue = any, TClass extends ComponentClass = Class>
       extends Shared.Descriptor<Field<TValue>, TClass> {
 
-    readonly formShare: FormShare;
+    readonly formShare: ComponentShare<Form<any, any>>;
 
     readonly name: string | null;
 
