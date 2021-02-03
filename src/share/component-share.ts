@@ -38,8 +38,7 @@ import { SharedByComponent, SharedByComponent__symbol } from './shared-by-compon
  *
  * @typeParam T - Shared value type.
  */
-export class ComponentShare<T>
-    implements ComponentShareRef<T>, ContextUpRef<AfterEvent<[T?]>, SharedByComponent<T>> {
+export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<AfterEvent<[T?]>, SharedByComponent<T>> {
 
   /**
    * @internal
@@ -58,10 +57,8 @@ export class ComponentShare<T>
 
   /**
    * Refers to itself.
-   *
-   * @returns `this` component share instance.
    */
-  [ComponentShare__symbol](): this {
+  get [ComponentShare__symbol](): this {
     return this;
   }
 

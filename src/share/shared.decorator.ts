@@ -29,7 +29,7 @@ export function Shared<T, TClass extends ComponentClass = Class>(
     ...define: Shared.Definer<T, TClass>[]
 ): ComponentShareDecorator<T, TClass> {
 
-  const shr = share[ComponentShare__symbol]();
+  const shr = share[ComponentShare__symbol];
 
   return ComponentProperty(
       descriptor => {

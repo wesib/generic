@@ -3,6 +3,9 @@ import { Field } from './field';
 
 /**
  * User input form.
+ *
+ * @typeParam TModel - A model type of the form, i.e. a type of its control value.
+ * @typeParam TElt - A type of HTML form element.
  */
 export class Form<TModel = any, TElt extends HTMLElement = HTMLElement> extends Field<TModel> {
 
@@ -31,6 +34,12 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement> extends 
    */
   readonly element: InFormElement<TElt>;
 
+  /**
+   * Constructs a form.
+   *
+   * @param control - Submitted control. An `InGroup` instance typically.
+   * @param element - HTML form element control.
+   */
   constructor(control: InControl<TModel>, element: InFormElement<TElt>) {
     super(control);
     this.element = element;

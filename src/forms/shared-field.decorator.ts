@@ -24,7 +24,7 @@ export function SharedField<TValue = any, TClass extends ComponentClass = Class>
 ): ComponentShareDecorator<Field<TValue>, TClass> {
 
   const { share = FieldShare, formShare: formShareRef = FormShare, name } = def;
-  const formShare: FormShare = formShareRef[ComponentShare__symbol]();
+  const formShare: FormShare = formShareRef[ComponentShare__symbol];
   const definers: SharedField.Definer<TValue, TClass>[] = [FieldName({ name }), ...define];
 
   return Shared(

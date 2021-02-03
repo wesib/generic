@@ -35,7 +35,7 @@ export function FieldName<TValue, TClass extends ComponentClass = Class>(
       fieldName = autoName;
     }
 
-    const fieldFormShare = (def.formShare || formShare)[ComponentShare__symbol]();
+    const fieldFormShare = (def.formShare || formShare)[ComponentShare__symbol];
 
     return {
       componentDef: {

@@ -17,8 +17,8 @@ describe('forms', () => {
     let fieldShare: FieldShare;
 
     beforeEach(() => {
-      formShare = FormShare[ComponentShare__symbol]();
-      fieldShare = FieldShare[ComponentShare__symbol]();
+      formShare = FormShare[ComponentShare__symbol];
+      fieldShare = FieldShare[ComponentShare__symbol];
     });
 
     describe('addSharer', () => {

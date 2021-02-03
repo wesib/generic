@@ -1,8 +1,8 @@
 import { ComponentShare } from './component-share';
 
 /**
- * A key of {@link ComponentShareRef component share reference} method returning referred {@link ComponentShare
- * component share} instance.
+ * A key of {@link ComponentShareRef component share reference} property containing a {@link ComponentShare component
+ * share} instance.
  */
 export const ComponentShare__symbol = (/*#__PURE__*/ Symbol('ComponentShare'));
 
@@ -14,10 +14,8 @@ export const ComponentShare__symbol = (/*#__PURE__*/ Symbol('ComponentShare'));
 export interface ComponentShareRef<T> {
 
   /**
-   * Refers to component share.
-   *
-   * @returns Referred component share instance.
+   * Component share instance.
    */
-  [ComponentShare__symbol](): ComponentShare<T>;
+  readonly [ComponentShare__symbol]: ComponentShare<T>;
 
 }

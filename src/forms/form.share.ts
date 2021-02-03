@@ -8,33 +8,43 @@ import { Form } from './form';
 
 let FormShare$instance: FormShare | undefined;
 
+/**
+ * A kind of user input form a component shares with the nested ones.
+ *
+ * Nested components may utilize it e.g. to add {@link Field fields} to it.
+ *
+ * @typeParam TModel - A model type of the form.
+ * @typeParam TElt - A type of HTML form element.
+ */
 export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
     extends ComponentShare<Form<TModel, TElt>> {
 
-  static [ComponentShare__symbol](): FormShare<any, any> {
+  /**
+   * Default form share instance.
+   */
+  static get [ComponentShare__symbol](): FormShare<any, any> {
     return FormShare$instance || (FormShare$instance = new FormShare('form'));
   }
 
+  /**
+   * A key of context value containing default form instance.
+   */
   static get [ContextKey__symbol](): ComponentShare.Key<Form> {
-    return this[ComponentShare__symbol]()[ContextKey__symbol];
+    return this[ComponentShare__symbol][ContextKey__symbol];
   }
 
   addSharer(defContext: DefinitionContext, name?: QualifiedName): Supply {
 
-    const formControlShare = FieldShare[ComponentShare__symbol]();
     const supply = super.addSharer(defContext, name);
 
-    formControlShare.addSharer(defContext, name).as(supply);
+    FieldShare[ComponentShare__symbol].addSharer(defContext, name).as(supply);
 
     return supply;
   }
 
   shareValue(registrar: SharedByComponent.Registrar<Form<TModel, TElt>>): void {
     super.shareValue(registrar);
-
-    const fieldShare = FieldShare[ComponentShare__symbol]();
-
-    fieldShare.shareValue(registrar.withPriority(registrar.priority + 1));
+    FieldShare[ComponentShare__symbol].shareValue(registrar.withPriority(registrar.priority + 1));
   }
 
 }
