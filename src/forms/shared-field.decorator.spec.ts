@@ -3,7 +3,7 @@ import { trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentClass, ComponentContext, ComponentSlot, FeatureDef } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { Field } from './field';
-import { FieldName } from './field-name.definer';
+import { FieldName, FormName } from './field-name.definer';
 import { FieldShare } from './field.share';
 import { Form } from './form';
 import { FormShare } from './form.share';
@@ -118,10 +118,10 @@ describe('forms', () => {
       class FormComponent {
 
         @SharedForm()
-        readonly form: ValueTracker<Form>;
+        readonly form: Form;
 
         constructor(context: ComponentContext) {
-          this.form = trackValue(Form.forElement(inList([]), context.element));
+          this.form = Form.forElement(inList([]), context.element);
         }
 
       }
@@ -186,6 +186,33 @@ describe('forms', () => {
 
         expect(controls.get('field')).toBe(field!.control);
         expect(controls.get('customName')).toBe(field!.control);
+      });
+      it('adds nested form to enclosing one', async () => {
+
+        @Component(
+            'sub-form-element',
+            {
+              extend: { type: MockElement },
+            },
+        )
+        class SubFormComponent {
+
+          @SharedForm(FormName())
+          readonly subForm: Form<readonly string[]>;
+
+          constructor(context: ComponentContext) {
+            this.subForm = Form.forElement(inList<string>([]), context.element);
+          }
+
+        }
+
+        const { formCtx, fieldCtx } = await bootstrap(SubFormComponent);
+
+        const form = await formCtx.get(FormShare);
+        const subForm = await fieldCtx.get(FormShare);
+        const controls = await form!.control.aspect(InGroup)!.controls.read;
+
+        expect(controls.get('subForm')).toBe(subForm!.control);
       });
     });
 

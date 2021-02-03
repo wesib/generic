@@ -11,6 +11,7 @@ import { FormShare } from './form.share';
 /**
  * Builds a decorator of component property that {@link FieldShare shares} a form field.
  *
+ * @typeParam TField - Field type.
  * @typeParam TValue - Field value type.
  * @typeParam TClass - A type of decorated component class.
  * @param def - Field definition.
@@ -18,33 +19,43 @@ import { FormShare } from './form.share';
  *
  * @return Component property decorator.
  */
-export function SharedField<TValue = any, TClass extends ComponentClass = Class>(
+export function SharedField<
+    TField extends Field<TValue>,
+    TValue = TField extends Field<infer T> ? T : never,
+    TClass extends ComponentClass = Class>(
     def?: SharedFieldDef<TValue>,
-    ...define: SharedField.Definer<TValue, TClass>[]
-): ComponentShareDecorator<Field<TValue>, TClass>;
+    ...define: SharedField.Definer<TField, TValue, TClass>[]
+): ComponentShareDecorator<TField, TClass>;
 
 /**
  * Builds a decorator of component property that {@link FieldShare shares} a form field and adds it to the
  * {@link FormShare default form} under decorated property name.
  *
+ * @typeParam TField - Field type.
  * @typeParam TValue - Field value type.
  * @typeParam TClass - A type of decorated component class.
  * @param define - Field property definition builders.
  *
  * @return Component property decorator.
  */
-export function SharedField<TValue = any, TClass extends ComponentClass = Class>(
-    ...define: SharedField.Definer<TValue, TClass>[]
-): ComponentShareDecorator<Field<TValue>, TClass>;
+export function SharedField<
+    TField extends Field<TValue>,
+    TValue = TField extends Field<infer T> ? T : never,
+    TClass extends ComponentClass = Class>(
+    ...define: SharedField.Definer<TField, TValue, TClass>[]
+): ComponentShareDecorator<TField, TClass>;
 
-export function SharedField<TValue = any, TClass extends ComponentClass = Class>(
-    defOrDefiner: SharedFieldDef<TValue> | SharedField.Definer<TValue, TClass> = {},
-    ...define: SharedField.Definer<TValue, TClass>[]
-): ComponentShareDecorator<Field<TValue>, TClass> {
+export function SharedField<
+    TField extends Field<TValue>,
+    TValue,
+    TClass extends ComponentClass>(
+    defOrDefiner: SharedFieldDef<TValue> | SharedField.Definer<TField, TValue, TClass> = {},
+    ...define: SharedField.Definer<TField, TValue, TClass>[]
+): ComponentShareDecorator<TField, TClass> {
 
   let def: SharedFieldDef<TValue>;
   let fieldName: string | undefined;
-  let definers: SharedField.Definer<TValue, TClass>[];
+  let definers: SharedField.Definer<TField, TValue, TClass>[];
 
   if (typeof defOrDefiner === 'function') {
     def = {};
@@ -55,14 +66,18 @@ export function SharedField<TValue = any, TClass extends ComponentClass = Class>
     definers = [FieldName({ name: fieldName }), ...define];
   }
 
-  const { share = FieldShare, formShare: formShareRef = FormShare } = def;
+  const { share = FieldShare, form: formShareRef = FormShare } = def;
   const formShare: ComponentShare<Form<any, any>> = formShareRef[ComponentShare__symbol];
 
   return Shared(
       share,
       ...definers.map(definer => (
           descriptor: Shared.Descriptor<Field<TValue>, TClass>,
-      ) => definer({ ...descriptor, formShare, name: Field$name(descriptor.key, fieldName) })),
+      ) => definer({
+        ...descriptor,
+        formShare,
+        name: Field$name(descriptor.key, fieldName),
+      })),
   );
 }
 
@@ -79,16 +94,18 @@ export interface SharedFieldDef<TValue = any> {
   readonly share?: ComponentShareRef<Field<TValue>>;
 
   /**
-   * A reference to the share of the form to add the field to.
+   * A form to add the field to.
+   *
+   * This is a reference to the form share.
    *
    * The {@link FieldShare default form share} is used when omitted.
    */
-  readonly formShare?: ComponentShareRef<Form>;
+  readonly form?: ComponentShareRef<Form>;
 
   /**
    * Field name.
    *
-   * The shared field will be added to the input control group (`InGroup`) withing the {@link formShare target form},
+   * The shared field will be added to the input control group (`InGroup`) within the {@link form target form},
    * unless the name is empty string.
    *
    * Equals to decorated property name when omitted.
@@ -117,14 +134,14 @@ export namespace SharedField {
     readonly share: ComponentShare<Field<TValue>>;
 
     /**
-     * A share of the form to add the field to.
+     * Predefined share of the form to add the field to, or `undefined` when unknown.
      */
-    readonly formShare: ComponentShare<Form<any, any>>;
+    readonly formShare?: ComponentShare<Form<any, any>>;
 
     /**
-     * Field name, or `null` when the field is not to be added to the {@link formShare form}.
+     * Predefined field name, or `null`/`undefined` when the field is not to be added to the {@link formShare form}.
      */
-    readonly name: string | null;
+    readonly name?: string | null;
 
   }
 
@@ -133,14 +150,23 @@ export namespace SharedField {
    *
    * This is a function called by {@link SharedField @SharedField} decorator to apply additional definitions.
    *
+   * @typeParam TField - Field type.
    * @typeParam TValue - Field value type.
    * @typeParam TClass - A type of decorated component class.
    */
-  export type Definer<TValue = any, TClass extends ComponentClass = Class> =
+  export type Definer<
+      TField extends Field<TValue>,
+      TValue = TField extends Field<infer T> ? T : never,
+      TClass extends ComponentClass = Class> =
+  /**
+   * @param descriptor - Decorated component property descriptor.
+   *
+   * @returns Component property definition, or nothing if the property definition is not to be changed.
+   */
       (
           this: void,
           descriptor: Descriptor<TValue, TClass>,
-      ) => Definition<TValue, TClass> | void;
+      ) => Definition<TField, TValue, TClass> | void;
 
   /**
    * A definition of component property that {@link FieldShare shares} a form field.
@@ -148,7 +174,10 @@ export namespace SharedField {
    * @typeParam TValue - Field value type.
    * @typeParam TClass - A type of component class.
    */
-  export type Definition<TValue = any, TClass extends ComponentClass = Class> =
-      Shared.Definition<Field<TValue>, TClass>;
+  export type Definition<
+      TField extends Field<TValue>,
+      TValue = TField extends Field<infer T> ? T : never,
+      TClass extends ComponentClass = Class> =
+      Shared.Definition<TField, TClass>;
 
 }

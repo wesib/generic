@@ -3,13 +3,50 @@ import { afterAll, consumeEvents } from '@proc7ts/fun-events';
 import { Class, Supply } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
 import { ComponentShare__symbol, ComponentShareRef } from '../share';
+import { Field } from './field';
 import { Field$nameByKey } from './field.impl';
 import { Form } from './form';
+import { FormShare } from './form.share';
 import { SharedField } from './shared-field.decorator';
+import { SharedForm } from './shared-form.decorator';
 
-export function FieldName<TValue, TClass extends ComponentClass = Class>(
+/**
+ * Builds a {@link SharedForm shared form} definition builder that adds nested form to enclosing one.
+ *
+ * @typeParam TForm - Nested form type.
+ * @typeParam TModel - A model type of the form.
+ * @typeParam TElt - A type of HTML form element.
+ * @typeParam TClass - A type of decorated component class.
+ * @param def - Nested form naming definition.
+ *
+ * @returns Shared form definition builder.
+ */
+export function FormName<
+    TForm extends Form<TModel, TElt>,
+    TModel = TForm extends Form<infer T, any> ? T : never,
+    TElt extends HTMLElement = TForm extends Form<any, infer T> ? T : never,
+    TClass extends ComponentClass = Class>(
+    def?: FieldNameDef,
+): SharedForm.Definer<TForm, TModel, TElt, TClass> {
+  return FieldName(def);
+}
+
+/**
+ * Builds a {@link SharedField shared form field} definition builder that adds the field to enclosing form.
+ *
+ * @typeParam TField - Field type.
+ * @typeParam TValue - Field value type.
+ * @typeParam TClass - A type of decorated component class.
+ * @param def - Field naming definition.
+ *
+ * @returns Shared field definition builder.
+ */
+export function FieldName<
+    TField extends Field<TValue>,
+    TValue = TField extends Field<infer T> ? T : never,
+    TClass extends ComponentClass = Class>(
     def: FieldNameDef = {},
-): SharedField.Definer<TValue, TClass> {
+): SharedField.Definer<TField, TValue, TClass> {
   return ({
     key,
     share,
@@ -35,7 +72,7 @@ export function FieldName<TValue, TClass extends ComponentClass = Class>(
       fieldName = autoName;
     }
 
-    const fieldFormShare = (def.formShare || formShare)[ComponentShare__symbol];
+    const fieldFormShare = (def.form || formShare || FormShare)[ComponentShare__symbol];
 
     return {
       componentDef: {
@@ -66,10 +103,28 @@ export function FieldName<TValue, TClass extends ComponentClass = Class>(
   };
 }
 
+/**
+ * Form field naming definition.
+ */
 export interface FieldNameDef {
 
-  readonly formShare?: ComponentShareRef<Form>;
+  /**
+   * A form to add the field to.
+   *
+   * This is a reference to the form share.
+   *
+   * Either {@link SharedFieldDef.form predefined}, or {@link FieldShare default} form share is used when omitted.
+   */
+  readonly form?: ComponentShareRef<Form>;
 
+  /**
+   * Field name.
+   *
+   * The shared field will be added to the input control group (`InGroup`) within the {@link form target form},
+   * unless the name is empty string.
+   *
+   * Either {@link SharedFieldDef.name predefined}, or property name is used when omitted.
+   */
   readonly name?: string;
 
 }
