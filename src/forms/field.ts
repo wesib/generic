@@ -34,3 +34,9 @@ export class Field<TValue> {
   }
 
 }
+
+export namespace Field {
+
+  export type ValueType<TField extends Field<any>> = TField extends Field<infer TValue> ? TValue : never;
+
+}

@@ -14,20 +14,14 @@ import { SharedForm } from './shared-form.decorator';
  * Builds a {@link SharedForm shared form} definition builder that adds nested form to enclosing one.
  *
  * @typeParam TForm - Nested form type.
- * @typeParam TModel - A model type of the form.
- * @typeParam TElt - A type of HTML form element.
  * @typeParam TClass - A type of decorated component class.
  * @param def - Nested form naming definition.
  *
  * @returns Shared form definition builder.
  */
-export function FormName<
-    TForm extends Form<TModel, TElt>,
-    TModel = TForm extends Form<infer T, any> ? T : never,
-    TElt extends HTMLElement = TForm extends Form<any, infer T> ? T : never,
-    TClass extends ComponentClass = Class>(
+export function FormName<TForm extends Form<any, any>, TClass extends ComponentClass = Class>(
     def?: FieldNameDef,
-): SharedForm.Definer<TForm, TModel, TElt, TClass> {
+): SharedForm.Definer<TForm, TClass> {
   return FieldName(def);
 }
 
@@ -35,18 +29,14 @@ export function FormName<
  * Builds a {@link SharedField shared form field} definition builder that adds the field to enclosing form.
  *
  * @typeParam TField - Field type.
- * @typeParam TValue - Field value type.
  * @typeParam TClass - A type of decorated component class.
  * @param def - Field naming definition.
  *
  * @returns Shared field definition builder.
  */
-export function FieldName<
-    TField extends Field<TValue>,
-    TValue = TField extends Field<infer T> ? T : never,
-    TClass extends ComponentClass = Class>(
+export function FieldName<TField extends Field<any>, TClass extends ComponentClass = Class>(
     def: FieldNameDef = {},
-): SharedField.Definer<TField, TValue, TClass> {
+): SharedField.Definer<TField, TClass> {
   return ({
     key,
     share,

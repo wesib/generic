@@ -60,3 +60,11 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement> extends 
   }
 
 }
+
+export namespace Form {
+
+  export type ModelType<TForm extends Form<any, any>> = Field.ValueType<TForm>;
+
+  export type ElementType<TForm extends Form<any, any>> = TForm extends Form<any, infer TElt> ? TElt : never;
+
+}

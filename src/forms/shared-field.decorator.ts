@@ -12,19 +12,15 @@ import { FormShare } from './form.share';
  * Builds a decorator of component property that {@link FieldShare shares} a form field.
  *
  * @typeParam TField - Field type.
- * @typeParam TValue - Field value type.
  * @typeParam TClass - A type of decorated component class.
  * @param def - Field definition.
  * @param define - Field property definition builders.
  *
  * @return Component property decorator.
  */
-export function SharedField<
-    TField extends Field<TValue>,
-    TValue = TField extends Field<infer T> ? T : never,
-    TClass extends ComponentClass = Class>(
-    def?: SharedFieldDef<TValue>,
-    ...define: SharedField.Definer<TField, TValue, TClass>[]
+export function SharedField<TField extends Field<any>, TClass extends ComponentClass = Class>(
+    def?: SharedFieldDef<Field.ValueType<TField>>,
+    ...define: SharedField.Definer<TField, TClass>[]
 ): ComponentShareDecorator<TField, TClass>;
 
 /**
@@ -32,30 +28,26 @@ export function SharedField<
  * {@link FormShare default form} under decorated property name.
  *
  * @typeParam TField - Field type.
- * @typeParam TValue - Field value type.
  * @typeParam TClass - A type of decorated component class.
  * @param define - Field property definition builders.
  *
  * @return Component property decorator.
  */
-export function SharedField<
-    TField extends Field<TValue>,
-    TValue = TField extends Field<infer T> ? T : never,
-    TClass extends ComponentClass = Class>(
-    ...define: SharedField.Definer<TField, TValue, TClass>[]
+export function SharedField<TField extends Field<any>, TClass extends ComponentClass = Class>(
+    ...define: SharedField.Definer<TField, TClass>[]
 ): ComponentShareDecorator<TField, TClass>;
 
-export function SharedField<
-    TField extends Field<TValue>,
-    TValue,
-    TClass extends ComponentClass>(
-    defOrDefiner: SharedFieldDef<TValue> | SharedField.Definer<TField, TValue, TClass> = {},
-    ...define: SharedField.Definer<TField, TValue, TClass>[]
+export function SharedField<TField extends Field<any>, TClass extends ComponentClass>(
+    defOrDefiner:
+        | SharedFieldDef<Field.ValueType<TField>>
+        | SharedField.Definer<TField, TClass> = {},
+    ...define: SharedField.Definer<TField, TClass>[]
 ): ComponentShareDecorator<TField, TClass> {
 
+  type TValue = Field.ValueType<TField>;
   let def: SharedFieldDef<TValue>;
   let fieldName: string | undefined;
-  let definers: SharedField.Definer<TField, TValue, TClass>[];
+  let definers: SharedField.Definer<TField, TClass>[];
 
   if (typeof defOrDefiner === 'function') {
     def = {};
@@ -151,13 +143,9 @@ export namespace SharedField {
    * This is a function called by {@link SharedField @SharedField} decorator to apply additional definitions.
    *
    * @typeParam TField - Field type.
-   * @typeParam TValue - Field value type.
    * @typeParam TClass - A type of decorated component class.
    */
-  export type Definer<
-      TField extends Field<TValue>,
-      TValue = TField extends Field<infer T> ? T : never,
-      TClass extends ComponentClass = Class> =
+  export type Definer<TField extends Field<any>, TClass extends ComponentClass = Class> =
   /**
    * @param descriptor - Decorated component property descriptor.
    *
@@ -165,19 +153,16 @@ export namespace SharedField {
    */
       (
           this: void,
-          descriptor: Descriptor<TValue, TClass>,
-      ) => Definition<TField, TValue, TClass> | void;
+          descriptor: Descriptor<Field.ValueType<TField>, TClass>,
+      ) => Definition<TField, TClass> | void;
 
   /**
    * A definition of component property that {@link FieldShare shares} a form field.
    *
-   * @typeParam TValue - Field value type.
+   * @typeParam TField - Field type.
    * @typeParam TClass - A type of component class.
    */
-  export type Definition<
-      TField extends Field<TValue>,
-      TValue = TField extends Field<infer T> ? T : never,
-      TClass extends ComponentClass = Class> =
+  export type Definition<TField extends Field<any>, TClass extends ComponentClass = Class> =
       Shared.Definition<TField, TClass>;
 
 }
