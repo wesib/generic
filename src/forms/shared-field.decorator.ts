@@ -9,7 +9,7 @@ import { Form } from './form';
 import { FormShare } from './form.share';
 
 /**
- * Builds a component property decorator that {@link FieldShare shares} a form field.
+ * Builds a decorator of component property that {@link FieldShare shares} a form field.
  *
  * @typeParam TValue - Field value type.
  * @typeParam TClass - A type of decorated component class.
@@ -24,8 +24,8 @@ export function SharedField<TValue = any, TClass extends ComponentClass = Class>
 ): ComponentShareDecorator<Field<TValue>, TClass>;
 
 /**
- * Builds a component property decorator that {@link FieldShare shares} a form field and adds it to the {@link FormShare
- * default form} under decorated property name.
+ * Builds a decorator of component property that {@link FieldShare shares} a form field and adds it to the
+ * {@link FormShare default form} under decorated property name.
  *
  * @typeParam TValue - Field value type.
  * @typeParam TClass - A type of decorated component class.
@@ -100,7 +100,7 @@ export interface SharedFieldDef<TValue = any> {
 export namespace SharedField {
 
   /**
-   * A descriptor of the component property that {@link ComponentShare shares} a field.
+   * A descriptor of the component property that {@link FieldShare shares} a form field.
    *
    * Passed to {@link Definer property definer} by {@link SharedField @SharedField} decorator to build a
    * {@link Definition property definition}.
@@ -110,6 +110,11 @@ export namespace SharedField {
    */
   export interface Descriptor<TValue = any, TClass extends ComponentClass = Class>
       extends Shared.Descriptor<Field<TValue>, TClass> {
+
+    /**
+     * Target field share instance.
+     */
+    readonly share: ComponentShare<Field<TValue>>;
 
     /**
      * A share of the form to add the field to.
@@ -124,7 +129,7 @@ export namespace SharedField {
   }
 
   /**
-   * A signature of definition builder of the component property that {@link FieldShare shares} a field.
+   * A signature of definition builder of the component property that {@link FieldShare shares} a form field.
    *
    * This is a function called by {@link SharedField @SharedField} decorator to apply additional definitions.
    *
