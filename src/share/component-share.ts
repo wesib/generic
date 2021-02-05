@@ -8,11 +8,11 @@ import {
   afterEventBy,
   afterThe,
   deduplicateAfter,
+  deduplicateAfter_,
   digAfter_,
   isEventKeeper,
   sendEventsTo,
   shareAfter,
-  trackValue,
   translateAfter_,
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
@@ -116,14 +116,12 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
   valueFor(consumer: ComponentContext): AfterEvent<[T, ComponentContext] | []> {
 
     const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
-    const status = trackValue<boolean>();
-    const updateStatus = ({ connected }: ComponentContext): void => {
-      status.it = connected;
-    };
-
-    consumer.whenSettled(updateStatus);
-    consumer.whenConnected(updateStatus);
-    status.supply.needs(consumer);
+    const status = consumer.readStatus.do(
+        deduplicateAfter_(
+            (a, b) => a === b,
+            ComponentShare$consumerStatus,
+        ),
+    );
 
     return afterAll({
       sharers,
@@ -241,4 +239,8 @@ export namespace ComponentShare {
    */
   export type Key<T> = ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
 
+}
+
+function ComponentShare$consumerStatus([{ settled, connected }]: [ComponentContext]): 0 | 1 | 2 {
+  return connected ? 2 : settled ? 1 : 0;
 }
