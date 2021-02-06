@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { ContextValues } from '@proc7ts/context-values';
 
 /**

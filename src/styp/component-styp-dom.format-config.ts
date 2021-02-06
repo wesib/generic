@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import { StypDomFormatConfig } from '@frontmeans/style-producer';
 import {
   BootstrapWindow,

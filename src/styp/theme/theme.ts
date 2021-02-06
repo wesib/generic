@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import {
   lazyStypRules,
   RefStypRule,

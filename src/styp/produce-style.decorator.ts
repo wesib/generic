@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import { StypRule, StypRules } from '@frontmeans/style-producer';
 import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
 import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';

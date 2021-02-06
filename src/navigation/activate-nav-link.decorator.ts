@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { css__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { RenderSchedule } from '@frontmeans/render-scheduler';
 import {

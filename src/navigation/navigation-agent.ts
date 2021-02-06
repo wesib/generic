@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { ContextValueSlot } from '@proc7ts/context-values';
 import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import { AfterEvent, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';

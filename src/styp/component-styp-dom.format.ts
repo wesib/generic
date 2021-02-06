@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import { stypDomFormat, StypDomFormatConfig, StypFormat } from '@frontmeans/style-producer';
 import { ComponentContext } from '@wesib/wesib';
 import { componentStypDomFormatConfig } from './component-styp-dom.format-config';

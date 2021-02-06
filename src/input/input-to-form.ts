@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/input
- */
 import { InControl, InFormElement } from '@frontmeans/input-aspects';
 import { SingleContextUpKey, SingleContextUpRef } from '@proc7ts/context-values/updatable';
 import { Supply } from '@proc7ts/primitives';

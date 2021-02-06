@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/input
- */
 import { InGroup } from '@frontmeans/input-aspects';
 import { afterAll, afterThe, consumeEvents, digAfter_, EventKeeper, mapAfter_ } from '@proc7ts/fun-events';
 import { Class, valueProvider } from '@proc7ts/primitives';

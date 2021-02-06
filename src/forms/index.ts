@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic/forms
+ * @module Module @wesib/generic/forms
  */
 export * from './field';
 export * from './field.share';

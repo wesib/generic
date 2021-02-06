@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import { stypRules, StypRules } from '@frontmeans/style-producer';
 import { ContextRef, ContextValueSlot, IterativeContextKey } from '@proc7ts/context-values';
 import { itsEach } from '@proc7ts/push-iterator';

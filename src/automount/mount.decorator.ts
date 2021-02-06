@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { Class } from '@proc7ts/primitives';
 import { Component, ComponentClass, ComponentDecorator, ElementAdapter } from '@wesib/wesib';
 import { AutoMountSupport } from './auto-mount-support.feature';

@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
 import { ValueTracker } from '@proc7ts/fun-events';
 import { BootstrapContext, ComponentClass, ComponentContext } from '@wesib/wesib';

@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import { produceBasicStyle, StypFormat, StypRules } from '@frontmeans/style-producer';
 import { SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
 import { Supply } from '@proc7ts/primitives';

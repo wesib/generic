@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { DomEventDispatcher } from '@frontmeans/dom-events';
 import { onceOn } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';

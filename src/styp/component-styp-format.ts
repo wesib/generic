@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import { NamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import { RenderScheduler } from '@frontmeans/render-scheduler';
 import {

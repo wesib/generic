@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import { produceStyle } from '@frontmeans/style-producer';
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';

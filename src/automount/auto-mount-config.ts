@@ -1,8 +1,4 @@
 /**
- * @packageDocumentation
- * @module @wesib/generic
- */
-/**
  * Auto-mount configuration options.
  *
  * Can be applied using {@link autoMountSupport} function, or provided in bootstrap context by any feature.

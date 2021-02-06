@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { FnContextKey, FnContextRef } from '@proc7ts/context-values/updatable';
 import { OnEvent } from '@proc7ts/fun-events';
 import { bootstrapDefault } from '@wesib/wesib';

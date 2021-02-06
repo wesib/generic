@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { Navigation } from './navigation';
 import { Page } from './page';
 
