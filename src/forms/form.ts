@@ -1,7 +1,7 @@
 import { InControl, inFormElement, InFormElement } from '@frontmeans/input-aspects';
+import { ShareableByComponent } from '../share/shareable-by-component';
 import { Field } from './field';
-
-const Form$element__symbol = (/*#__PURE__*/ Symbol('Form.element'));
+import { ShareableField } from './shareable-field';
 
 /**
  * User input form.
@@ -19,7 +19,8 @@ const Form$element__symbol = (/*#__PURE__*/ Symbol('Form.element'));
  * @typeParam TSharer - Form sharer component type.
  */
 export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = any>
-    extends Field<TModel, TSharer> {
+    extends ShareableField<Form<TModel, TElt, TSharer>, TModel, TSharer, Form.Controls<TModel, TElt>>
+    implements Form.Controls<TModel, TElt> {
 
   /**
    * Builds a user input form for the given form control and HTML element.
@@ -35,33 +36,20 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
       element: TElt,
       options?: Omit<InFormElement.Options, 'form'>,
   ): Form<TModel, TElt> {
-    return new this<TModel, TElt>(control, inFormElement(element, { ...options, form: control }));
-  }
-
-  /**
-   * @internal
-   */
-  private readonly [Form$element__symbol]: InFormElement<TElt>;
-
-  /**
-   * Constructs a form.
-   *
-   * @param control - Submitted control. An `InGroup` instance typically.
-   * @param element - HTML form element control.
-   */
-  constructor(control: InControl<TModel>, element: InFormElement<TElt>) {
-    super(control);
-    this[Form$element__symbol] = element;
+    return new this<TModel, TElt>({
+      control,
+      element: inFormElement(element, { ...options, form: control }),
+    });
   }
 
   /**
    * Form element control.
    *
-   * Unlike {@link input input control} this one is not supposed to be submitted. But it contains a `<form>` element
-   * issuing a `submit` event.
+   * Unlike {@link control input control} this one is not supposed to be submitted, but rather contains a `<form>`
+   * element issuing a `submit` event.
    */
   get element(): InFormElement<TElt> {
-    return this[Form$element__symbol];
+    return this.internals.element;
   }
 
 }
@@ -73,7 +61,7 @@ export namespace Form {
    *
    * @typeParam TForm - Form type.
    */
-  export type ModelType<TForm extends Form<any, any>> = Field.ValueType<TForm>;
+  export type ModelType<TForm extends Form<any, any>> = ShareableField.ValueType<TForm>;
 
   /**
    * HTML form element type of the form.
@@ -81,5 +69,38 @@ export namespace Form {
    * @typeParam TForm - Form type.
    */
   export type ElementType<TForm extends Form<any, any>> = TForm extends Form<any, infer TElt> ? TElt : never;
+
+  /**
+   * Form controls.
+   *
+   * @typeParam TModel - A model type of the form, i.e. a type of its control value.
+   * @typeParam TElt - A type of HTML form element.
+   */
+  export interface Controls<TModel, TElt extends HTMLElement> extends Field.Controls<TModel> {
+
+    /**
+     * Submittable form input control.
+     */
+    readonly control: InControl<TModel>;
+
+    /**
+     * Form element control.
+     *
+     * Unlike {@link control input control} this one is not supposed to be submitted, but rather contains a `<form>`
+     * element issuing a `submit` event.
+     */
+    readonly element: InFormElement<TElt>;
+
+  }
+
+  /**
+   * Form controls provider signature.
+   *
+   * @typeParam TModel - A model type of the form, i.e. a type of its control value.
+   * @typeParam TElt - A type of HTML form element.
+   * @typeParam TSharer - Form sharer component type.
+   */
+  export type Provider<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = object> =
+      ShareableByComponent.Provider<TSharer, Controls<TModel, TElt>>;
 
 }

@@ -100,10 +100,10 @@ describe('forms', () => {
 
         const group = inGroup({});
 
-        form = new Form(
-            group,
-            inFormElement(document.createElement('form'), { form: group }),
-        );
+        form = new Form({
+            control: group,
+            element: inFormElement(document.createElement('form'), { form: group }),
+        });
         defContext.perComponent(shareValue(formShare, () => form));
       });
 

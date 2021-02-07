@@ -1,5 +1,6 @@
 import { InGroup, inGroup, inList, InList, inValue } from '@frontmeans/input-aspects';
 import { trackValue, ValueTracker } from '@proc7ts/fun-events';
+import { valueProvider } from '@proc7ts/primitives';
 import { BootstrapContext, Component, ComponentClass, ComponentContext, ComponentSlot, FeatureDef } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { Field } from './field';
@@ -18,7 +19,7 @@ describe('forms', () => {
       class TestComponent {
 
         @SharedField()
-        readonly field = new Field<string>(inValue('test'));
+        readonly field = new Field<string>({ control: inValue('test') });
 
       }
 
@@ -29,7 +30,7 @@ describe('forms', () => {
     });
     it('shares provided field', async () => {
 
-      const createControl = jest.fn(() => inValue('test'));
+      const createControl = jest.fn(valueProvider({ control: inValue('test') }));
 
       @Component('test-element', { extend: { type: MockElement } })
       class TestComponent {
@@ -44,7 +45,7 @@ describe('forms', () => {
       const { control } = (await context.get(FieldShare))!;
 
       expect(createControl).toHaveBeenCalledWith(context);
-      expect(createControl).toReturnWith(control);
+      expect(createControl).toHaveReturnedWith({ control });
       expect(createControl).toHaveBeenCalledTimes(1);
     });
     it('adds field to enclosing form', async () => {
@@ -68,7 +69,7 @@ describe('forms', () => {
       class FieldComponent {
 
         @SharedField({ name: 'customField' })
-        readonly field = new Field<string>(inValue('test'));
+        readonly field = new Field<string>({ control: inValue('test') });
 
       }
 
@@ -92,7 +93,7 @@ describe('forms', () => {
       class FieldComponent {
 
         @SharedField({ name: '' })
-        readonly field = new Field<string>(inValue('test'));
+        readonly field = new Field<string>({ control: inValue('test') });
 
       }
 
@@ -116,7 +117,7 @@ describe('forms', () => {
       class FieldComponent {
 
         @SharedField()
-        readonly [symbol] = new Field<string>(inValue('test'));
+        readonly [symbol] = new Field<string>({ control: inValue('test') });
 
       }
 
@@ -171,7 +172,7 @@ describe('forms', () => {
               },
               FieldName(),
           )
-          readonly field = new Field<string>(inValue('test'));
+          readonly field = new Field<string>({ control: inValue('test') });
 
         }
 
@@ -194,7 +195,7 @@ describe('forms', () => {
         class FieldComponent {
 
           @SharedField(FieldName({ name: 'customName' }))
-          readonly field = new Field<string>(inValue('test'));
+          readonly field = new Field<string>({ control: inValue('test') });
 
         }
 
@@ -275,7 +276,7 @@ describe('forms', () => {
         class FieldComponent {
 
           @SharedField()
-          readonly field = new Field<string>(inValue('test'));
+          readonly field = new Field<string>({ control: inValue('test') });
 
         }
 
