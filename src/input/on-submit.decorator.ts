@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/input
- */
 import { DomEventDispatcher, handleDomEvents } from '@frontmeans/dom-events';
 import { consumeEvents } from '@proc7ts/fun-events';
 import { ComponentClass, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';

@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import { StypRenderer } from '@frontmeans/style-producer';
 import { MultiContextKey, MultiContextRef } from '@proc7ts/context-values';
 

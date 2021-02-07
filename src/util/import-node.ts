@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { itsEach, overArray } from '@proc7ts/push-iterator';
 import { isElement } from '@wesib/wesib';
 

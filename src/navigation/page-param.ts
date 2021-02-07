@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { Page } from './page';
 import { PageParamContext } from './page-param-context';
 

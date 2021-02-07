@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { Page } from '../page';
 import { PageParam } from '../page-param';
 import { getHashURL } from './hash-url';

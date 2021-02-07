@@ -1,12 +1,12 @@
-import { ContextRegistry } from '@proc7ts/context-values';
 import { ContextUpKey } from '@proc7ts/context-values/updatable';
-import { AfterEvent, EventKeeper } from '@proc7ts/fun-events';
+import { AfterEvent } from '@proc7ts/fun-events';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
-import { ComponentContext, DefinitionContext } from '@wesib/wesib';
+import { DefinitionContext } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
 import { ComponentShareKey } from './component-share-key.impl';
+import { ComponentShare__symbol } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
-import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
+import { SharedByComponent } from './shared-by-component';
 
 /**
  * @internal
@@ -18,7 +18,7 @@ export const ComponentShare$impl = (/*#__PURE__*/ Symbol('ComponentShare.impl'))
  */
 export class ComponentShare$<T> {
 
-  readonly key: ContextUpKey<AfterEvent<[T] | []>, SharedByComponent<T>>;
+  readonly key: ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
   private readonly _aliases: readonly ComponentShare<T>[];
 
   constructor(
@@ -27,7 +27,7 @@ export class ComponentShare$<T> {
       options: ComponentShare.Options<T>,
   ) {
     this.key = new ComponentShareKey(name, _share);
-    this._aliases = arrayOfElements(options.aliases);
+    this._aliases = arrayOfElements(options.as).map(alias => alias[ComponentShare__symbol]);
   }
 
   addSharer(defContext: DefinitionContext, name = defContext.elementDef.name): Supply {
@@ -43,34 +43,16 @@ export class ComponentShare$<T> {
     return supply;
   }
 
-  shareValue<TComponent extends object>(
-      registry: ContextRegistry<ComponentContext<TComponent>>,
-      provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T] | []>,
-  ): Supply {
+  shareValue(
+      registrar: SharedByComponent.Registrar<T>,
+  ): void {
+    registrar.shareAs(this._share);
 
-    const supply = registry.provide({
-      a: this._share,
-      by: (
-          ctx: ComponentContext<TComponent>,
-      ): T | EventKeeper<T[]> | null | undefined => provider(ctx),
-    });
+    const priorityOffset = registrar.priority + 1;
 
     this._aliases.forEach((alias, index) => {
-      registry
-          .provide({
-            a: alias,
-            by: (ctx: ComponentContext<TComponent>): SharedByComponent.Detailed<T> => ({
-              [SharedByComponent__symbol]: {
-                order: index + 1,
-                get: () => provider(ctx),
-              },
-            }),
-          })
-          .needs(supply)
-          .cuts(supply);
+      alias.shareValue(registrar.withPriority(priorityOffset + index));
     });
-
-    return supply;
   }
 
 }

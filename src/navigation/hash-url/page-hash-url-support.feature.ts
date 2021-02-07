@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { Navigation } from '../navigation';
 import { NavigationAgent } from '../navigation-agent';

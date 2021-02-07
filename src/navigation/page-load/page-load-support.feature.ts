@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { PageCacheBuster } from './page-cache-buster.impl';
 import { PageLoadAgent } from './page-load-agent';

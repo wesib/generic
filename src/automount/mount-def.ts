@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { isQualifiedName, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { valueProvider } from '@proc7ts/primitives';
 import { ComponentBinder, ComponentElement, DefinitionContext } from '@wesib/wesib';

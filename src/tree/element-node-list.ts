@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import {
   AfterEvent,
   AfterEvent__symbol,

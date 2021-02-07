@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic/input
+ * @module Module @wesib/generic/input
  */
 export * from './convert-input.decorator';
 export * from './default-in-aspects';

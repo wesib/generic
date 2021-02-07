@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { EventReceiver } from '@proc7ts/fun-events';
 import { PageLoadResponse } from './page-load-response';
 

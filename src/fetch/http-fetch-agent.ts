@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { ContextUpRef } from '@proc7ts/context-values/updatable';
 import { EventSender, OnEvent } from '@proc7ts/fun-events';
 import { FetchAgentKey } from './fetch-agent-key.impl';

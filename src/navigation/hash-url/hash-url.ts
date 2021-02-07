@@ -1,8 +1,4 @@
 /**
- * @packageDocumentation
- * @module @wesib/generic
- */
-/**
  * Extracts URL contained in the hash of another URL.
  *
  * Extracted hash URL is based on origin of the original URL. Still, it may be absolute one.

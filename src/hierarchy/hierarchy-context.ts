@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import {
   ContextKey,
   ContextKey__symbol,

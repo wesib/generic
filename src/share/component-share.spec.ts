@@ -1,5 +1,6 @@
-import { ContextKey__symbol } from '@proc7ts/context-values';
-import { trackValue } from '@proc7ts/fun-events';
+import { ContextBuilder, ContextKey__symbol } from '@proc7ts/context-values';
+import { afterEventBy, EventKeeper, trackValue } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
 import {
   BootstrapContext,
   Component,
@@ -12,6 +13,7 @@ import {
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { ComponentShare } from './component-share';
 import { ComponentShareRegistry } from './component-share-registry.impl';
+import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
 
 describe('share', () => {
   describe('ComponentShare', () => {
@@ -65,7 +67,7 @@ describe('share', () => {
       });
       it('registers sharer for aliased shares', async () => {
 
-        const share2 = new ComponentShare('other-share', { aliases: share });
+        const share2 = new ComponentShare('other-share', { as: share });
         const supply = share2.addSharer(defContext);
 
         expect([...await registry.sharers(share)]).toEqual(['test-component']);
@@ -82,7 +84,7 @@ describe('share', () => {
       let share2: ComponentShare<string>;
 
       beforeEach(() => {
-        share2 = new ComponentShare('other-share', { aliases: share });
+        share2 = new ComponentShare('other-share', { as: share });
       });
 
       let defContext: DefinitionContext;
@@ -107,21 +109,21 @@ describe('share', () => {
         expect(await context.get(share)).toBeUndefined();
       });
       it('shares static value', async () => {
-        defContext.perComponent(share.shareValue(() => 'test'));
+        defContext.perComponent(shareValue(share, () => 'test'));
         expect(await context.get(share)).toEqual('test');
       });
       it('shares updatable value', async () => {
 
         const value = trackValue('test1');
 
-        defContext.perComponent(share.shareValue(() => value));
+        defContext.perComponent(shareValue(share, () => value));
         expect(await context.get(share)).toEqual('test1');
 
         value.it = 'test2';
         expect(await context.get(share)).toEqual('test2');
       });
       it('shares static value for aliased shares', async () => {
-        defContext.perComponent(share2.shareValue(() => 'test'));
+        defContext.perComponent(shareValue(share2, () => 'test'));
         expect(await context.get(share)).toEqual('test');
         expect(await context.get(share2)).toEqual('test');
       });
@@ -129,7 +131,7 @@ describe('share', () => {
 
         const value = trackValue('test1');
 
-        defContext.perComponent(share2.shareValue(() => value));
+        defContext.perComponent(shareValue(share2, () => value));
         expect(await context.get(share)).toEqual('test1');
         expect(await context.get(share2)).toEqual('test1');
 
@@ -145,8 +147,8 @@ describe('share', () => {
       let share3: ComponentShare<string>;
 
       beforeEach(() => {
-        share2 = new ComponentShare('other-share', { aliases: share });
-        share3 = new ComponentShare('third-share', { aliases: [share2, share] });
+        share2 = new ComponentShare('other-share', { as: share });
+        share3 = new ComponentShare('third-share', { as: [share2, share] });
       });
 
       let defContext: DefinitionContext;
@@ -172,8 +174,8 @@ describe('share', () => {
         const value1 = trackValue('test1');
         const value2 = trackValue('test2');
 
-        defContext.perComponent(share.shareValue(() => value1));
-        defContext.perComponent(share2.shareValue(() => value2));
+        defContext.perComponent(shareValue(share, () => value1));
+        defContext.perComponent(shareValue(share2, () => value2));
         expect(await context.get(share)).toEqual('test1');
         expect(await context.get(share2)).toEqual('test2');
 
@@ -185,13 +187,13 @@ describe('share', () => {
         expect(await context.get(share)).toEqual('test1b');
         expect(await context.get(share2)).toEqual('test2b');
       });
-      it('prefers explicitly shared value despite the order of sharing', async () => {
+      it('prefers bare value despite the order of sharing', async () => {
 
         const value1 = trackValue('test1');
         const value2 = trackValue('test2');
 
-        defContext.perComponent(share2.shareValue(() => value2));
-        defContext.perComponent(share.shareValue(() => value1));
+        defContext.perComponent(shareValue(share, () => value1));
+        defContext.perComponent(shareValue(share2, () => value2));
         expect(await context.get(share)).toEqual('test1');
         expect(await context.get(share2)).toEqual('test2');
 
@@ -202,14 +204,29 @@ describe('share', () => {
         value1.it = 'test1b';
         expect(await context.get(share)).toEqual('test1b');
         expect(await context.get(share2)).toEqual('test2b');
+      });
+      it('prefers detailed value with lower priority', async () => {
+
+        const value1 = trackValue('test1');
+        const value2 = trackValue('test2');
+
+        defContext.perComponent(shareValue(share, () => value1, 1));
+        defContext.perComponent(shareValue(share, () => value2, 2));
+        expect(await context.get(share)).toEqual('test1');
+
+        value2.it = 'test2b';
+        expect(await context.get(share)).toEqual('test1');
+
+        value1.it = 'test1b';
+        expect(await context.get(share)).toEqual('test1b');
       });
       it('prefers shared value with earlier aliasing order', async () => {
 
         const value2 = trackValue('test2');
         const value3 = trackValue('test3');
 
-        defContext.perComponent(share2.shareValue(() => value2));
-        defContext.perComponent(share3.shareValue(() => value3));
+        defContext.perComponent(shareValue(share2, () => value2));
+        defContext.perComponent(shareValue(share3, () => value3));
         expect(await context.get(share)).toEqual('test2');
         expect(await context.get(share2)).toEqual('test2');
         expect(await context.get(share3)).toEqual('test3');
@@ -229,8 +246,8 @@ describe('share', () => {
         const value2 = trackValue('test2');
         const value3 = trackValue('test3');
 
-        defContext.perComponent(share3.shareValue(() => value3));
-        defContext.perComponent(share2.shareValue(() => value2));
+        defContext.perComponent(shareValue(share3, () => value3));
+        defContext.perComponent(shareValue(share2, () => value2));
         expect(await context.get(share)).toEqual('test2');
         expect(await context.get(share2)).toEqual('test2');
         expect(await context.get(share3)).toEqual('test3');
@@ -288,20 +305,74 @@ describe('share', () => {
         testCtx = testDefContext.mountTo(testEl).context;
       });
 
-      it('reports nothing without sharer registered', async () => {
-        sharerDefContext.perComponent(share.shareValue(() => 'test'));
-        expect(await share.valueFor(testCtx)).toBeUndefined();
+      it('reports nothing without sharer registered', () => {
+        sharerDefContext.perComponent(shareValue(share, () => 'test'));
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenCalledWith();
       });
-      it('reports value shared by parent sharer', async () => {
+      it('reports nothing without value shared', () => {
         share.addSharer(sharerDefContext, 'sharer-el');
-        sharerDefContext.perComponent(share.shareValue(() => 'test'));
 
-        const shared = share.valueFor(testCtx);
+        const value = afterEventBy<[]>(noop, () => []);
 
-        expect(await shared).toBe('test');
+        sharerDefContext.perComponent(shareValue(share, () => value));
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenCalledWith();
+      });
+      it('reports value shared by parent sharer', () => {
+        share.addSharer(sharerDefContext, 'sharer-el');
+        sharerDefContext.perComponent(shareValue(share, () => 'test'));
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        expect(receiver).toHaveBeenCalledTimes(1);
+
         sharerMount.connect();
-        expect(await shared).toBe('test');
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        expect(receiver).toHaveBeenCalledTimes(1);
+      });
+      it('reports value shared by mounted parent sharer', () => {
+        sharerEl = document.createElement('sharer-el');
+
+        testEl = sharerEl.appendChild(document.createElement('test-el'));
+        testCtx = testDefContext.mountTo(testEl).context;
+
+        share.addSharer(sharerDefContext, 'sharer-el');
+        sharerDefContext.perComponent(shareValue(share, () => 'test'));
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenLastCalledWith();
+
+        sharerMount = sharerDefContext.mountTo(sharerEl);
+        sharerMount.connect();
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        expect(receiver).toHaveBeenCalledTimes(2);
       });
     });
   });
+
+  function shareValue<T, TComponent extends object>(
+      share: ComponentShare<T>,
+      provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | EventKeeper<[T?]>,
+      priority?: number,
+  ): ContextBuilder<ComponentContext<TComponent>> {
+    return SharedByComponent$ContextBuilder<T, TComponent>(
+        share,
+        {
+          priority,
+          provide,
+        },
+    );
+  }
+
 });

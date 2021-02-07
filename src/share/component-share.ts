@@ -1,5 +1,5 @@
 import { QualifiedName } from '@frontmeans/namespace-aliaser';
-import { ContextBuilder, ContextBuilder__symbol, ContextKey__symbol } from '@proc7ts/context-values';
+import { ContextKey__symbol, ContextRegistry } from '@proc7ts/context-values';
 import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import {
   afterAll,
@@ -8,18 +8,20 @@ import {
   afterEventBy,
   afterThe,
   deduplicateAfter,
+  deduplicateAfter_,
   digAfter_,
-  EventKeeper,
   isEventKeeper,
   sendEventsTo,
   shareAfter,
-  trackValue,
+  translateAfter_,
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
+import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
 import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
+import { SharedByComponent$Registrar } from './shared-by-component.impl';
 
 /**
  * A kind of the value a component shares with the nested ones.
@@ -37,7 +39,7 @@ import { SharedByComponent, SharedByComponent__symbol } from './shared-by-compon
  *
  * @typeParam T - Shared value type.
  */
-export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, SharedByComponent<T>> {
+export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<AfterEvent<[T?]>, SharedByComponent<T>> {
 
   /**
    * @internal
@@ -55,6 +57,13 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
   }
 
   /**
+   * Refers to itself.
+   */
+  get [ComponentShare__symbol](): this {
+    return this;
+  }
+
+  /**
    * A human-readable name of the name.
    */
   get name(): string {
@@ -64,7 +73,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
   /**
    * A key of the sharer component context value containing an `AfterEvent` keeper of the shared value.
    */
-  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T] | []>, SharedByComponent<T>> {
+  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>> {
     return this[ComponentShare$impl].key;
   }
 
@@ -85,16 +94,44 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
   /**
    * Shares a value by providing it for the sharer component context.
    *
-   * @typeParam - A type of the sharer component.
-   * @param provider - Shared value provider. This is a function accepting a sharer component context as its only
-   * parameter, and returning either a static value, or an event keeper reporting it.
+   * @param registrar - Shared value registrar.
+   *
+   * @return A builder of shared value for component context.
    */
-  shareValue<TComponent extends object>(
-      provider: (this: void, context: ComponentContext<TComponent>) => T | EventKeeper<[T] | []>,
-  ): ContextBuilder<ComponentContext<TComponent>> {
-    return {
-      [ContextBuilder__symbol]: registry => this[ComponentShare$impl].shareValue(registry, provider),
-    };
+  shareValue(
+      registrar: SharedByComponent.Registrar<T>,
+  ): void {
+    this[ComponentShare$impl].shareValue(registrar);
+  }
+
+  /**
+   * Creates a shared value registrar that shares a value created by the given provider.
+   *
+   * @typeParam TSharer - Sharer component type.
+   * @param registry - Target component context registry.
+   * @param provider - Shared value provider.
+   *
+   * @returns New shared value registrar.
+   */
+  createRegistrar<TSharer extends object>(
+      registry: ContextRegistry<ComponentContext<TSharer>>,
+      provider: SharedByComponent.Provider<T, TSharer>,
+  ): SharedByComponent.Registrar<T> {
+    return SharedByComponent$Registrar(this, registry, provider);
+  }
+
+  /**
+   * Binds shared value to its sharer component context.
+   *
+   * This method is called for each shared value.
+   *
+   * @param value - A shared value to bind.
+   * @param _sharer - Sharer component context.
+   *
+   * @returns Bound value instance. The `value` itself by default.
+   */
+  bindValue(value: T, _sharer: ComponentContext): T {
+    return value;
   }
 
   /**
@@ -105,25 +142,23 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
    *
    * @param consumer - Consumer component context.
    *
-   * @returns An `AfterEvent` keeper of the shared value, if present.
+   * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
-  valueFor(consumer: ComponentContext): AfterEvent<[T] | []> {
+  valueFor(consumer: ComponentContext): AfterEvent<[T, ComponentContext] | []> {
 
     const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
-    const status = trackValue<boolean>();
-    const updateStatus = ({ connected }: ComponentContext): void => {
-      status.it = connected;
-    };
-
-    consumer.whenSettled(updateStatus);
-    consumer.whenConnected(updateStatus);
-    status.supply.needs(consumer);
+    const status = consumer.readStatus.do(
+        deduplicateAfter_(
+            (a, b) => a === b,
+            ComponentShare$consumerStatus,
+        ),
+    );
 
     return afterAll({
       sharers,
       status,
     }).do(
-        digAfter_(({ sharers: [names] }): AfterEvent<[T] | []> => {
+        digAfter_(({ sharers: [names] }): AfterEvent<[T, ComponentContext] | []> => {
 
           let element: ComponentElement = consumer.element;
 
@@ -138,7 +173,11 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
 
             if (names.has(parent.tagName.toLowerCase())) {
               return ComponentSlot.of(parent).read.do(
-                  digAfter_(sharerContext => sharerContext ? sharerContext.get(this) : afterThe()),
+                  digAfter_(sharerContext => sharerContext
+                      ? sharerContext.get(this).do(
+                          translateAfter_((send, value?) => value ? send(value, sharerContext) : send()),
+                      )
+                      : afterThe()),
               );
             }
 
@@ -156,8 +195,9 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
    *
    * By default:
    *
-   * - Prefers pure value.
-   * - Prefers the value detailed value specifier with lesser {@link SharedByComponent.Details.order order}.
+   * - Prefers bare value.
+   * - Prefers the value from {@link SharedByComponent.Detailed detailed specifier} with higher priority
+   *   (i.e. lesser {@link SharedByComponent.Details.priority priority value}).
    * - Prefers the value declared last.
    *
    * @param values - The values shared by sharers. May contain a {@link SharedByComponent.Detailed detailed value
@@ -165,7 +205,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
    *
    * @returns An `AfterEvent` keeper of selected value, if present.
    */
-  selectValue(...values: SharedByComponent<T>[]): AfterEvent<[T] | []> {
+  selectValue(...values: SharedByComponent<T>[]): AfterEvent<[T?]> {
 
     let selected: SharedByComponent.Details<T> | undefined;
 
@@ -179,7 +219,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
 
       const details = value[SharedByComponent__symbol];
 
-      if (!selected || selected.order > details.order) {
+      if (!selected || selected.priority > details.priority) {
         selected = details;
       }
     }
@@ -188,7 +228,7 @@ export class ComponentShare<T> implements ContextUpRef<AfterEvent<[T] | []>, Sha
       return afterThe();
     }
 
-    return afterEventBy<[T] | []>(receiver => {
+    return afterEventBy<[T?]>(receiver => {
 
       const value = selected!.get();
 
@@ -214,12 +254,24 @@ export namespace ComponentShare {
   export interface Options<T> {
 
     /**
-     * Component shares the share provides a value for in addition to the one it provides for itself.
+     * Component share reference(s) the share provides a value for in addition to the one it provides for itself.
      *
-     * The order of aliases is important. It defines the {@link SharedByComponent.Details.order order} the shared value.
+     * The order of aliases is important. It defines the {@link SharedByComponent.Details.priority priority} of the
+     * value shared for the corresponding share.
      */
-    readonly aliases?: ComponentShare<T> | readonly ComponentShare<T>[];
+    readonly as?: ComponentShareRef<T> | readonly ComponentShareRef<T>[];
 
   }
 
+  /**
+   * A key of context value containing an `AfterEvent` keeper of shared value.
+   *
+   * @typeParam T - Shared value type.
+   */
+  export type Key<T> = ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
+
+}
+
+function ComponentShare$consumerStatus([{ settled, connected }]: [ComponentContext]): 0 | 1 | 2 {
+  return connected ? 2 : settled ? 1 : 0;
 }

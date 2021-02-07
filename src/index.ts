@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @wesib/generic
+ * @module Module @wesib/generic
  */
 export * from './automount';
 export * from './fetch';

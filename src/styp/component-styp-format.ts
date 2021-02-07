@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic/styp
- */
 import { NamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import { RenderScheduler } from '@frontmeans/render-scheduler';
 import {
@@ -132,9 +128,7 @@ export abstract class ComponentStypFormat {
     const producer = this.newProducer(rules, config);
     const supply = new Supply();
 
-    this.context.whenSettled(() => {
-      producer().needs(supply).cuts(supply);
-    });
+    this.context.whenSettled(() => producer().as(supply));
 
     return supply;
   }

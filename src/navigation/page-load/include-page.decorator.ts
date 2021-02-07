@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { onceAfter } from '@proc7ts/fun-events';
 import { Class, noop, Supply, valueProvider } from '@proc7ts/primitives';
 import {

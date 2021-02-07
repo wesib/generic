@@ -1,4 +1,7 @@
 import { EventKeeper } from '@proc7ts/fun-events';
+import { Supply, SupplyPeer } from '@proc7ts/primitives';
+import { ComponentContext } from '@wesib/wesib';
+import { ComponentShareRef } from './component-share-ref';
 
 /**
  * A key of the {@link SharedByComponent.Detailed detailed shared value descriptor} containing the
@@ -37,18 +40,99 @@ export namespace SharedByComponent {
   export interface Details<T> {
 
     /**
-     * The order of the shared value.
+     * A priority of the shared value.
      *
-     * The values with lesser order are {@link ComponentShare.selectValue preferred}.
+     * Never negative. The lesser value means higher priority. The shared value with higher priority
+     * {@link ComponentShare.selectValue takes precedence}.
      */
-    readonly order: number;
+    readonly priority: number;
 
     /**
      * Builds the shared value.
      *
      * @returns Either the shared value, or its `EventKeeper`.
      */
-    get(): T | EventKeeper<[T] | []>;
+    get(): T | EventKeeper<[T?]>;
+
+  }
+
+  /**
+   * Shared value registrar.
+   *
+   * Passed to {@link ComponentShare.shareValue} method in order to share the value.
+   *
+   * @typeParam T - Shared value type.
+   */
+  export interface Registrar<T> extends SupplyPeer {
+
+    /**
+     * The default priority of the shared value.
+     *
+     * Never negative.
+     */
+    readonly priority: number;
+
+    /**
+     * Shared value supply.
+     *
+     * Stops value sharing once cut off.
+     */
+    readonly supply: Supply;
+
+    /**
+     * Shares the value under the given alias.
+     *
+     * @param alias - A reference to share alias.
+     * @param priority - Shared value priority. Equals to {@link priority default one} when omitted.
+     */
+    shareAs(this: void, alias: ComponentShareRef<T>, priority?: number): void;
+
+    /**
+     * Builds a shared value registrar instance with another default priority.
+     *
+     * @param priority - New default shared value priority.
+     *
+     * @returns New registrar instance with {@link priority} set to the given value.
+     */
+    withPriority(this: void, priority: number): Registrar<T>;
+
+  }
+
+  /**
+   * Shared value provider.
+   *
+   * Can be used to {@link ComponentShare.createRegistrar create} a {@link SharedByComponent.Registrar} instance.
+   *
+   * @typeParam TSharer - Supported sharer component type.
+   * @typeParam T - Shared value type.
+   */
+  export interface Provider<T, TSharer extends object = any> {
+
+    /**
+     * The default priority of the shared value.
+     *
+     * Equals to `0` when absent or negative.
+     */
+    readonly priority?: number;
+
+    /**
+     * Shared value supply.
+     *
+     * Stops value sharing once cut off.
+     *
+     * New supply instance will be created when absent.
+     */
+    readonly supply?: Supply;
+
+    /**
+     * Provides shared value for the given component context.
+     *
+     * @typeParam TComponent - Actual sharer component type.
+     * @param context - Sharer component context to provide value for.
+     *
+     * @returns Either a shared value, or its `EventKeeper`.
+     */
+    provide<TComponent extends TSharer>(context: ComponentContext<TComponent>): T | EventKeeper<[T?]>;
 
   }
 

@@ -1,14 +1,10 @@
-/**
- * @packageDocumentation
- * @module @wesib/generic
- */
 import { css__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { RenderSchedule } from '@frontmeans/render-scheduler';
 import {
   afterEach,
   AfterEvent,
+  AfterEvent__symbol,
   afterEventBy,
-  afterSupplied,
   afterThe,
   consumeEvents,
   digAfter_,
@@ -261,9 +257,9 @@ function navLinkWeight(
       return afterThe(opts.node, weight);
     }
 
-    let supplier: AfterEvent<NavLinkWeight> = afterSupplied(weight).do(translateAfter_(
-        (send, weight) => send(opts.node, weight),
-    ));
+    let supplier: AfterEvent<NavLinkWeight> = weight[AfterEvent__symbol]().do(
+        translateAfter_((send, weight) => send(opts.node, weight)),
+    );
 
     return afterEventBy<NavLinkWeight>(receiver => {
       supplier({
@@ -274,7 +270,7 @@ function navLinkWeight(
               supplier = afterThe(opts.node, 0);
               supplier(receiver);
             }),
-        receive: receiver.receive.bind(receiver),
+        receive: receiver.receive,
       });
     });
   };
