@@ -30,7 +30,7 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement> extends 
       element: TElt,
       options?: Omit<InFormElement.Options, 'form'>,
   ): Form<TModel, TElt> {
-    return new Form<TModel, TElt>(control, inFormElement(element, { ...options, form: control }));
+    return new this<TModel, TElt>(control, inFormElement(element, { ...options, form: control }));
   }
 
   /**
