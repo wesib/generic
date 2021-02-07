@@ -10,7 +10,7 @@ import {
 } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
-import { SharedByComponent$ContextBuilder } from './component-share.impl';
+import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
 
 /**
  * Builds a decorator of component property that {@link ComponentShare shares} its value.
@@ -39,17 +39,19 @@ export function Shared<T, TClass extends ComponentClass = Class>(
               setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
                 setup.perComponent(SharedByComponent$ContextBuilder(
                     shr,
-                    context => context.onceReady.do(
-                        digAfter(
-                            (): EventKeeper<[T?]> => {
+                    {
+                      provide: context => context.onceReady.do(
+                          digAfter(
+                              (): EventKeeper<[T?]> => {
 
-                              const value: T | EventKeeper<[T?]> = context.component[descriptor.key];
+                                const value: T | EventKeeper<[T?]> = context.component[descriptor.key];
 
-                              return isEventKeeper(value) ? value : afterThe(value);
-                            },
-                            valuesProvider(),
-                        ),
-                    ),
+                                return isEventKeeper(value) ? value : afterThe(value);
+                              },
+                              valuesProvider(),
+                          ),
+                      ),
+                    },
                 ));
               },
               define(defContext: DefinitionContext<InstanceType<TClass>>) {

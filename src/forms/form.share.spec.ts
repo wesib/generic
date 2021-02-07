@@ -4,7 +4,7 @@ import { EventKeeper } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext, ComponentSlot, DefinitionContext } from '@wesib/wesib';
 import { ComponentShare, ComponentShare__symbol } from '../share';
 import { ComponentShareRegistry } from '../share/component-share-registry.impl';
-import { SharedByComponent$ContextBuilder } from '../share/component-share.impl';
+import { SharedByComponent$ContextBuilder } from '../share/shared-by-component.impl';
 import { testDefinition, testElement } from '../spec/test-element';
 import { FieldShare } from './field.share';
 import { Form } from './form';
@@ -129,10 +129,16 @@ describe('forms', () => {
 
     function shareValue<T, TComponent extends object>(
         share: ComponentShare<T>,
-        provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T?]>,
+        provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | EventKeeper<[T?]>,
         priority?: number,
     ): ContextBuilder<ComponentContext<TComponent>> {
-      return SharedByComponent$ContextBuilder(share, provider, priority);
+      return SharedByComponent$ContextBuilder<T, TComponent>(
+          share,
+          {
+            priority,
+            provide,
+          },
+      );
     }
   });
 });

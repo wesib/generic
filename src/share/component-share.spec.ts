@@ -13,7 +13,7 @@ import {
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { ComponentShare } from './component-share';
 import { ComponentShareRegistry } from './component-share-registry.impl';
-import { SharedByComponent$ContextBuilder } from './component-share.impl';
+import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
 
 describe('share', () => {
   describe('ComponentShare', () => {
@@ -363,10 +363,16 @@ describe('share', () => {
 
   function shareValue<T, TComponent extends object>(
       share: ComponentShare<T>,
-      provider: (context: ComponentContext<TComponent>) => T | EventKeeper<[T?]>,
+      provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | EventKeeper<[T?]>,
       priority?: number,
   ): ContextBuilder<ComponentContext<TComponent>> {
-    return SharedByComponent$ContextBuilder(share, provider, priority);
+    return SharedByComponent$ContextBuilder<T, TComponent>(
+        share,
+        {
+          priority,
+          provide,
+        },
+    );
   }
 
 });

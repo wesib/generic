@@ -1,5 +1,5 @@
 import { QualifiedName } from '@frontmeans/namespace-aliaser';
-import { ContextKey__symbol } from '@proc7ts/context-values';
+import { ContextKey__symbol, ContextRegistry } from '@proc7ts/context-values';
 import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import {
   afterAll,
@@ -21,6 +21,7 @@ import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
 import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
+import { SharedByComponent$Registrar } from './shared-by-component.impl';
 
 /**
  * A kind of the value a component shares with the nested ones.
@@ -101,6 +102,36 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
       registrar: SharedByComponent.Registrar<T>,
   ): void {
     this[ComponentShare$impl].shareValue(registrar);
+  }
+
+  /**
+   * Creates a shared value registrar that shares a value created by the given provider.
+   *
+   * @typeParam TComponent - Sharer component type.
+   * @param registry - Target component context registry.
+   * @param provider - Shared value provider.
+   *
+   * @returns New shared value registrar.
+   */
+  createRegistrar<TComponent extends object>(
+      registry: ContextRegistry<ComponentContext<TComponent>>,
+      provider: SharedByComponent.Provider<T, TComponent>,
+  ): SharedByComponent.Registrar<T> {
+    return SharedByComponent$Registrar(this, registry, provider);
+  }
+
+  /**
+   * Binds shared value to its sharer component context.
+   *
+   * This method is called for each shared value.
+   *
+   * @param value - A shared value to bind.
+   * @param _context - Sharer component context.
+   *
+   * @returns Bound value instance. The `value` itself by default.
+   */
+  bindValue(value: T, _context: ComponentContext): T {
+    return value;
   }
 
   /**

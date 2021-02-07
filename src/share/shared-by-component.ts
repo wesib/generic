@@ -1,5 +1,6 @@
 import { EventKeeper } from '@proc7ts/fun-events';
 import { Supply, SupplyPeer } from '@proc7ts/primitives';
+import { ComponentContext } from '@wesib/wesib';
 import { ComponentShareRef } from './component-share-ref';
 
 /**
@@ -94,6 +95,44 @@ export namespace SharedByComponent {
      * @returns New registrar instance with {@link priority} set to the given value.
      */
     withPriority(this: void, priority: number): Registrar<T>;
+
+  }
+
+  /**
+   * Shared value provider.
+   *
+   * Can be used to {@link ComponentShare.createRegistrar create} a {@link SharedByComponent.Registrar} instance.
+   *
+   * @typeParam TComponent - Supported sharer component type.
+   * @typeParam T - Shared value type.
+   */
+  export interface Provider<T, TComponent extends object = any> {
+
+    /**
+     * The default priority of the shared value.
+     *
+     * Equals to `0` when absent or negative.
+     */
+    readonly priority?: number;
+
+    /**
+     * Shared value supply.
+     *
+     * Stops value sharing once cut off.
+     *
+     * New supply instance will be created when absent.
+     */
+    readonly supply?: Supply;
+
+    /**
+     * Provides shared value for the given component context.
+     *
+     * @typeParam TCtx - Actual sharer component type.
+     * @param context - Sharer component context to provide value for.
+     *
+     * @returns Either a shared value, or its `EventKeeper`.
+     */
+    provide<TCtx extends TComponent>(context: ComponentContext<TCtx>): T | EventKeeper<[T?]>;
 
   }
 
