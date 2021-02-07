@@ -9,10 +9,10 @@ import { SharedByComponent, SharedByComponent__symbol } from './shared-by-compon
 /**
  * @internal
  */
-export function SharedByComponent$ContextBuilder<T, TComponent extends object>(
+export function SharedByComponent$ContextBuilder<T, TSharer extends object>(
     share: ComponentShare<T>,
-    provider: SharedByComponent.Provider<T, TComponent>,
-): ContextBuilder<ComponentContext<TComponent>> {
+    provider: SharedByComponent.Provider<T, TSharer>,
+): ContextBuilder<ComponentContext<TSharer>> {
   return {
     [ContextBuilder__symbol]: registry => {
 
@@ -28,18 +28,18 @@ export function SharedByComponent$ContextBuilder<T, TComponent extends object>(
 /**
  * @internal
  */
-export function SharedByComponent$Registrar<T, TComponent extends object>(
+export function SharedByComponent$Registrar<T, TSharer extends object>(
     share: ComponentShare<T>,
-    registry: ContextRegistry<ComponentContext<TComponent>>,
-    provider: SharedByComponent.Provider<T, TComponent>,
+    registry: ContextRegistry<ComponentContext<TSharer>>,
+    provider: SharedByComponent.Provider<T, TSharer>,
 ): SharedByComponent.Registrar<T> {
   return SharedByComponent$BoundRegistrar(share, registry, SharedByComponent$bindProvider(share, provider));
 }
 
-function SharedByComponent$BoundRegistrar<T, TComponent extends object>(
+function SharedByComponent$BoundRegistrar<T, TSharer extends object>(
     share: ComponentShare<T>,
-    registry: ContextRegistry<ComponentContext<TComponent>>,
-    provider: SharedByComponent$BoundProvider<T, TComponent>,
+    registry: ContextRegistry<ComponentContext<TSharer>>,
+    provider: SharedByComponent$BoundProvider<T, TSharer>,
 ): SharedByComponent.Registrar<T> {
 
   const { priority, supply, provide } = provider;
@@ -64,16 +64,16 @@ function SharedByComponent$BoundRegistrar<T, TComponent extends object>(
   };
 }
 
-interface SharedByComponent$BoundProvider<T, TComponent extends object> {
+interface SharedByComponent$BoundProvider<T, TSharer extends object> {
   readonly priority: number;
   readonly supply: Supply;
-  provide(this: void, context: ComponentContext<TComponent>): T | AfterEvent<[T?]>;
+  provide(this: void, context: ComponentContext<TSharer>): T | AfterEvent<[T?]>;
 }
 
-function SharedByComponent$bindProvider<T, TComponent extends object>(
+function SharedByComponent$bindProvider<T, TSharer extends object>(
     share: ComponentShare<T>,
     provider: SharedByComponent.Provider<T>,
-): SharedByComponent$BoundProvider<T, TComponent> {
+): SharedByComponent$BoundProvider<T, TSharer> {
 
   const priority = provider.priority ? Math.max(0, provider.priority) : 0;
   const { supply = new Supply() } = provider;

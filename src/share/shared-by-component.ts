@@ -103,10 +103,10 @@ export namespace SharedByComponent {
    *
    * Can be used to {@link ComponentShare.createRegistrar create} a {@link SharedByComponent.Registrar} instance.
    *
-   * @typeParam TComponent - Supported sharer component type.
+   * @typeParam TSharer - Supported sharer component type.
    * @typeParam T - Shared value type.
    */
-  export interface Provider<T, TComponent extends object = any> {
+  export interface Provider<T, TSharer extends object = any> {
 
     /**
      * The default priority of the shared value.
@@ -127,12 +127,12 @@ export namespace SharedByComponent {
     /**
      * Provides shared value for the given component context.
      *
-     * @typeParam TCtx - Actual sharer component type.
+     * @typeParam TComponent - Actual sharer component type.
      * @param context - Sharer component context to provide value for.
      *
      * @returns Either a shared value, or its `EventKeeper`.
      */
-    provide<TCtx extends TComponent>(context: ComponentContext<TCtx>): T | EventKeeper<[T?]>;
+    provide<TComponent extends TSharer>(context: ComponentContext<TComponent>): T | EventKeeper<[T?]>;
 
   }
 

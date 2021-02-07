@@ -107,15 +107,15 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
   /**
    * Creates a shared value registrar that shares a value created by the given provider.
    *
-   * @typeParam TComponent - Sharer component type.
+   * @typeParam TSharer - Sharer component type.
    * @param registry - Target component context registry.
    * @param provider - Shared value provider.
    *
    * @returns New shared value registrar.
    */
-  createRegistrar<TComponent extends object>(
-      registry: ContextRegistry<ComponentContext<TComponent>>,
-      provider: SharedByComponent.Provider<T, TComponent>,
+  createRegistrar<TSharer extends object>(
+      registry: ContextRegistry<ComponentContext<TSharer>>,
+      provider: SharedByComponent.Provider<T, TSharer>,
   ): SharedByComponent.Registrar<T> {
     return SharedByComponent$Registrar(this, registry, provider);
   }
@@ -126,11 +126,11 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    * This method is called for each shared value.
    *
    * @param value - A shared value to bind.
-   * @param _context - Sharer component context.
+   * @param _sharer - Sharer component context.
    *
    * @returns Bound value instance. The `value` itself by default.
    */
-  bindValue(value: T, _context: ComponentContext): T {
+  bindValue(value: T, _sharer: ComponentContext): T {
     return value;
   }
 

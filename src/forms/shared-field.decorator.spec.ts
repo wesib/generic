@@ -27,6 +27,26 @@ describe('forms', () => {
 
       expect(await context.get(FieldShare)).toBeInstanceOf(Field);
     });
+    it('shares provided field', async () => {
+
+      const createControl = jest.fn(() => inValue('test'));
+
+      @Component('test-element', { extend: { type: MockElement } })
+      class TestComponent {
+
+        @SharedField()
+        readonly field = new Field<string>(createControl);
+
+      }
+
+      const element = new (await testElement(TestComponent))();
+      const context = await ComponentSlot.of(element).whenReady;
+      const { control } = (await context.get(FieldShare))!;
+
+      expect(createControl).toHaveBeenCalledWith(context);
+      expect(createControl).toReturnWith(control);
+      expect(createControl).toHaveBeenCalledTimes(1);
+    });
     it('adds field to enclosing form', async () => {
 
       const { formCtx, fieldCtx } = await bootstrap();

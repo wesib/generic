@@ -1,7 +1,7 @@
 import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ContextKey__symbol } from '@proc7ts/context-values';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
-import { DefinitionContext } from '@wesib/wesib';
+import { ComponentContext, DefinitionContext } from '@wesib/wesib';
 import { ComponentShare, ComponentShare__symbol, ComponentShareRef, SharedByComponent } from '../share';
 import { Field } from './field';
 import { FieldShare } from './field.share';
@@ -108,6 +108,10 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
    */
   shareField(registrar: SharedByComponent.Registrar<Field<TModel>>): void {
     this[FormShare$asFields].forEach(fieldShare => fieldShare.shareValue(registrar));
+  }
+
+  bindValue(form: Form<TModel, TElt>, sharer: ComponentContext): Form<TModel, TElt> {
+    return form.shareBy(sharer);
   }
 
 }

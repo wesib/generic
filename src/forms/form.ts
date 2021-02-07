@@ -11,10 +11,15 @@ const Form$element__symbol = (/*#__PURE__*/ Symbol('Form.element'));
  *
  * A form may be nested within another one, as it implements a {@link Field} interface.
  *
+ * The form instance is not usable until it is {@link shareBy bound} to its sharer component. The latter is done
+ * automatically when the field is shared by {@link FormShare}.
+ *
  * @typeParam TModel - A model type of the form, i.e. a type of its control value.
  * @typeParam TElt - A type of HTML form element.
+ * @typeParam TSharer - Form sharer component type.
  */
-export class Form<TModel = any, TElt extends HTMLElement = HTMLElement> extends Field<TModel> {
+export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = any>
+    extends Field<TModel, TSharer> {
 
   /**
    * Builds a user input form for the given form control and HTML element.
@@ -63,8 +68,18 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement> extends 
 
 export namespace Form {
 
+  /**
+   * Model type of the form.
+   *
+   * @typeParam TForm - Form type.
+   */
   export type ModelType<TForm extends Form<any, any>> = Field.ValueType<TForm>;
 
+  /**
+   * HTML form element type of the form.
+   *
+   * @typeParam TForm - Form type.
+   */
   export type ElementType<TForm extends Form<any, any>> = TForm extends Form<any, infer TElt> ? TElt : never;
 
 }

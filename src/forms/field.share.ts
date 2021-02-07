@@ -1,4 +1,5 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
+import { ComponentContext } from '@wesib/wesib';
 import { ComponentShare, ComponentShare__symbol } from '../share';
 import { Field } from './field';
 
@@ -26,6 +27,10 @@ export class FieldShare<TValue = any> extends ComponentShare<Field<TValue>> {
    */
   static get [ContextKey__symbol](): ComponentShare.Key<Field<any>> {
     return this[ComponentShare__symbol][ContextKey__symbol];
+  }
+
+  bindValue(value: Field<TValue>, sharer: ComponentContext): Field<TValue> {
+    return value.shareBy(sharer);
   }
 
 }
