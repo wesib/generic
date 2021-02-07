@@ -45,7 +45,7 @@
     "@frontmeans/style-producer": "^6.0.0",
     "@proc7ts/context-values": "^5.2.0",
     "@proc7ts/fun-events": "^10.1.2",
-    "@wesib/wesib": "^1.0.0-beta.28"
+    "@wesib/wesib": "^1.0.0-beta.29"
   },
   "dependencies": {
     "@frontmeans/dom-events": "^1.0.0",
@@ -77,7 +77,7 @@
     "@types/jsdom": "^16.2.6",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
-    "@wesib/wesib": "^1.0.0-beta.28",
+    "@wesib/wesib": "^1.0.0-beta.29",
     "codecov": "^3.8.1",
     "cross-fetch": "^3.0.6",
     "eslint": "^7.19.0",
