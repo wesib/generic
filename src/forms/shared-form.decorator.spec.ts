@@ -1,4 +1,4 @@
-import { inGroup } from '@frontmeans/input-aspects';
+import { InElement, inGroup } from '@frontmeans/input-aspects';
 import { trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
 import { MockElement, testElement } from '../spec/test-element';
@@ -24,8 +24,10 @@ describe('forms', () => {
 
       const element = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
+      const form = await context.get(FormShare);
 
-      expect(await context.get(FormShare)).toBeInstanceOf(Form);
+      expect(form).toBeInstanceOf(Form);
+      expect(form?.element).toBeInstanceOf(InElement);
     });
   });
 });
