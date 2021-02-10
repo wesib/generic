@@ -2,13 +2,7 @@ import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ContextKey__symbol } from '@proc7ts/context-values';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
 import { DefinitionContext } from '@wesib/wesib';
-import {
-  AbstractComponentShare,
-  ComponentShare,
-  ComponentShare__symbol,
-  ComponentShareRef,
-  SharedByComponent,
-} from '../share';
+import { ComponentShare, ComponentShare__symbol, ComponentShareRef, SharedByComponent } from '../share';
 import { Field } from './field';
 import { FieldShare } from './field.share';
 import { Form } from './form';
@@ -29,7 +23,7 @@ let FormShare$instance: FormShare | undefined;
  * @typeParam TElt - A type of HTML form element.
  */
 export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
-    extends AbstractComponentShare<Form<TModel, TElt>, Form.Controls<TModel, TElt>> {
+    extends ComponentShare<Form<TModel, TElt>> {
 
   /**
    * Default form share instance.

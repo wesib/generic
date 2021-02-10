@@ -1,5 +1,5 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
-import { AbstractComponentShare, ComponentShare, ComponentShare__symbol } from '../share';
+import { ComponentShare, ComponentShare__symbol } from '../share';
 import { Field } from './field';
 
 let FieldShare$instance: FieldShare | undefined;
@@ -12,7 +12,7 @@ let FieldShare$instance: FieldShare | undefined;
  *
  * @typeParam TValue - Field value type.
  */
-export class FieldShare<TValue = any> extends AbstractComponentShare<Field<TValue>, Field.Controls<TValue>> {
+export class FieldShare<TValue = any> extends ComponentShare<Field<TValue>> {
 
   /**
    * Default field share instance.

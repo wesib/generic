@@ -1,4 +1,3 @@
-export * from './abstract-component-share';
 export * from './component-share';
 export * from './component-share-ref';
 export * from './shareable-by-component';
