@@ -1,7 +1,7 @@
 import { InControl, inFormElement, InFormElement } from '@frontmeans/input-aspects';
-import { ShareableByComponent } from '../share/shareable-by-component';
+import { ShareableByComponent } from '../share';
 import { Field } from './field';
-import { ShareableField } from './shareable-field';
+import { FormUnit } from './form-unit';
 
 /**
  * User input form.
@@ -19,7 +19,7 @@ import { ShareableField } from './shareable-field';
  * @typeParam TSharer - Form sharer component type.
  */
 export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = any>
-    extends ShareableField<Form<TModel, TElt, TSharer>, TModel, TSharer, Form.Controls<TModel, TElt>>
+    extends FormUnit<Form<TModel, TElt, TSharer>, TModel, TSharer, Form.Controls<TModel, TElt>>
     implements Form.Controls<TModel, TElt> {
 
   /**
@@ -57,11 +57,11 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
 export namespace Form {
 
   /**
-   * Model type of the form.
+   * A model type of the given form.
    *
    * @typeParam TForm - Form type.
    */
-  export type ModelType<TForm extends Form<any, any>> = ShareableField.ValueType<TForm>;
+  export type ModelType<TForm extends Form<any, any>> = FormUnit.ValueType<TForm>;
 
   /**
    * HTML form element type of the form.
