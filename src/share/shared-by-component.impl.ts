@@ -1,5 +1,6 @@
-import { ContextBuilder, ContextBuilder__symbol, ContextRegistry } from '@proc7ts/context-values';
-import { AfterEvent, AfterEvent__symbol, isEventKeeper, mapAfter, translateAfter } from '@proc7ts/fun-events';
+import { applyContextTo, ContextBuilder, ContextBuilder__symbol, ContextRegistry } from '@proc7ts/context-values';
+import { applyContextAfter } from '@proc7ts/context-values/updatable';
+import { AfterEvent, isAfterEvent, translateAfter } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
@@ -29,15 +30,13 @@ export function SharedByComponent$ContextBuilder<T, TSharer extends object>(
  * @internal
  */
 export function SharedByComponent$Registrar<T, TSharer extends object>(
-    share: ComponentShare<T>,
     registry: ContextRegistry<ComponentContext<TSharer>>,
     provider: SharedByComponent.Provider<T, TSharer>,
 ): SharedByComponent.Registrar<T> {
-  return SharedByComponent$BoundRegistrar(share, registry, SharedByComponent$bindProvider(share, provider));
+  return SharedByComponent$BoundRegistrar(registry, SharedByComponent$bindProvider(provider));
 }
 
 function SharedByComponent$BoundRegistrar<T, TSharer extends object>(
-    share: ComponentShare<T>,
     registry: ContextRegistry<ComponentContext<TSharer>>,
     provider: SharedByComponent$BoundProvider<T, TSharer>,
 ): SharedByComponent.Registrar<T> {
@@ -57,7 +56,6 @@ function SharedByComponent$BoundRegistrar<T, TSharer extends object>(
       }).as(supply);
     },
     withPriority: newPriority => SharedByComponent$BoundRegistrar(
-        share,
         registry,
         { ...provider, priority: Math.max(0, newPriority) },
     ),
@@ -71,7 +69,6 @@ interface SharedByComponent$BoundProvider<T, TSharer extends object> {
 }
 
 function SharedByComponent$bindProvider<T, TSharer extends object>(
-    share: ComponentShare<T>,
     provider: SharedByComponent.Provider<T>,
 ): SharedByComponent$BoundProvider<T, TSharer> {
 
@@ -81,17 +78,17 @@ function SharedByComponent$bindProvider<T, TSharer extends object>(
   return {
     priority,
     supply,
-    provide: context => {
+    provide: (context: ComponentContext): T | AfterEvent<[T?]> => {
 
       const value = provider.provide(context);
 
-      if (isEventKeeper(value)) {
-        return value[AfterEvent__symbol]().do(
-            mapAfter(value => value && share.bindValue(value, context)),
+      if (isAfterEvent(value)) {
+        return value.do(
+            applyContextAfter(context),
         );
       }
 
-      return share.bindValue(value, context);
+      return applyContextTo(value)(context);
     },
   };
 }
@@ -105,7 +102,7 @@ function SharedByComponent$bareProvider<T, TComponent extends object>(
 
     const value = provider(context);
 
-    if (isEventKeeper(value)) {
+    if (isAfterEvent(value)) {
       return value.do(
           translateAfter((send, value?) => value !== undefined ? send(value) : send()),
       );

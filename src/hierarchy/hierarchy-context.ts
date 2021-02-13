@@ -82,15 +82,14 @@ export abstract class HierarchyContext<T extends object = any> extends ContextVa
    * If provided value is updatable (i.e. its key implements `ContextUpKey`), then it will be available in this context,
    * as well as in all nested hierarchy contexts. Otherwise the value will be available in this context only.
    *
-   * @typeParam TDeps - Dependencies tuple type.
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
+   * @typeParam TDeps - Dependencies tuple type.
    * @param spec - Context value specifier.
    *
    * @returns A value supply that that removes the given context value specifier once cut off.
    */
-  abstract provide<TDeps extends any[], TSrc, TSeed>(
-      spec: ContextValueSpec<HierarchyContext<T>, any, TDeps, TSrc, TSeed>,
+  abstract provide<TSrc, TDeps extends any[]>(
+      spec: ContextValueSpec<HierarchyContext<T>, unknown, TSrc, TDeps>,
   ): Supply;
 
 }
@@ -162,8 +161,8 @@ class HierarchyContext$<T extends object> extends HierarchyContext<T> {
     this.get = registry.newValues().get;
   }
 
-  provide<TDeps extends any[], TSrc, TSeed>(
-      spec: ContextValueSpec<HierarchyContext<T>, any, TDeps, TSrc, TSeed>,
+  provide<TSrc, TDeps extends any[]>(
+      spec: ContextValueSpec<HierarchyContext<T>, unknown, TSrc, TDeps>,
   ): Supply {
     return this._registry.provide(spec).needs(this);
   }

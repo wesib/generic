@@ -1,7 +1,7 @@
 import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from '@frontmeans/input-aspects';
 import { ContextSupply, ContextValueSlot } from '@proc7ts/context-values';
 import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
-import { AfterEvent, EventKeeper, mapAfter, supplyAfter } from '@proc7ts/fun-events';
+import { AfterEvent, mapAfter, supplyAfter } from '@proc7ts/fun-events';
 import { DefaultNamespaceAliaser, ElementRenderScheduler } from '@wesib/wesib';
 
 /**
@@ -35,7 +35,7 @@ class FormAspectsKey extends ContextUpKey<FormAspects.Factory, FormAspects> {
 
   grow(slot: ContextValueSlot<
       FormAspects.Factory,
-      EventKeeper<FormAspects[]> | FormAspects,
+      ContextUpKey.Source<FormAspects>,
       AfterEvent<FormAspects[]>>): void {
 
     let delegated: FormAspects.Factory;

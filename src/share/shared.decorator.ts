@@ -1,4 +1,4 @@
-import { afterThe, digAfter, EventKeeper, isEventKeeper } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
 import { Class, valuesProvider } from '@proc7ts/primitives';
 import {
   ComponentClass,
@@ -15,7 +15,8 @@ import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
 /**
  * Builds a decorator of component property that {@link ComponentShare shares} its value.
  *
- * The decorated property should return either a static value, or its `EventKeeper` if the case the value is updatable.
+ * The decorated property should return either a static value, or its `AfterEvent` keeper if the case the value is
+ * updatable.
  *
  * @typeParam T - Shared value type.
  * @typeParam TClass - A type of decorated component class.
@@ -42,11 +43,11 @@ export function Shared<T, TClass extends ComponentClass = Class>(
                     {
                       provide: context => context.onceReady.do(
                           digAfter(
-                              (): EventKeeper<[T?]> => {
+                              (): AfterEvent<[T?]> => {
 
-                                const value: T | EventKeeper<[T?]> = context.component[descriptor.key];
+                                const value: T | AfterEvent<[T?]> = context.component[descriptor.key];
 
-                                return isEventKeeper(value) ? value : afterThe(value);
+                                return isAfterEvent(value) ? value : afterThe(value);
                               },
                               valuesProvider(),
                           ),
@@ -61,7 +62,7 @@ export function Shared<T, TClass extends ComponentClass = Class>(
         );
       },
       ...define.map(define => (
-          descriptor: ComponentProperty.Descriptor<T | EventKeeper<[T?]>, TClass>,
+          descriptor: ComponentProperty.Descriptor<T | AfterEvent<[T?]>, TClass>,
       ) => define({ ...descriptor, share: shr })),
   );
 }
@@ -75,7 +76,7 @@ export function Shared<T, TClass extends ComponentClass = Class>(
  * @typeParam TClass - A type of decorated component class.
  */
 export type ComponentShareDecorator<T, TClass extends ComponentClass = Class> =
-    ComponentPropertyDecorator<T | EventKeeper<[T?]>, TClass>;
+    ComponentPropertyDecorator<T | AfterEvent<[T?]>, TClass>;
 
 export namespace Shared {
 
@@ -89,7 +90,7 @@ export namespace Shared {
    * @typeParam TClass - A type of component class.
    */
   export interface Descriptor<T, TClass extends ComponentClass = Class>
-      extends ComponentProperty.Descriptor<T | EventKeeper<[T?]>, TClass> {
+      extends ComponentProperty.Descriptor<T | AfterEvent<[T?]>, TClass> {
 
     /**
      * Target share instance.
@@ -124,6 +125,6 @@ export namespace Shared {
    * @typeParam TClass - A type of component class.
    */
   export type Definition<T, TClass extends ComponentClass = Class> =
-      ComponentProperty.Definition<T | EventKeeper<[T?]>, TClass>;
+      ComponentProperty.Definition<T | AfterEvent<[T?]>, TClass>;
 
 }

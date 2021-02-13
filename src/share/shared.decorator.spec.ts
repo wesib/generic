@@ -1,5 +1,5 @@
 import { SingleContextKey } from '@proc7ts/context-values';
-import { EventKeeper, trackValue } from '@proc7ts/fun-events';
+import { AfterEvent, trackValue } from '@proc7ts/fun-events';
 import { Component, ComponentClass, ComponentSlot } from '@wesib/wesib';
 import { testElement } from '../spec/test-element';
 import { ComponentShare } from './component-share';
@@ -37,8 +37,8 @@ describe('share', () => {
       class TestComponent {
 
         @Shared(share)
-        get sharedValue(): EventKeeper<[string]> {
-          return value;
+        get sharedValue(): AfterEvent<[string]> {
+          return value.read;
         }
 
       }
