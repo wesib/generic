@@ -1,33 +1,24 @@
+import { Contextual, Contextual__symbol } from '@proc7ts/context-values';
 import { noop, valueProvider, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
-
-/**
- * A key of the method of {@link ShareableByComponent.Base shareable value} that bounds the value to component context.
- */
-export const ShareableByComponent__symbol = (/*#__PURE__*/ Symbol('ShareableByComponent'));
 
 const ShareableByComponent$internals = (/*#__PURE__*/ Symbol('ShareableByComponent.internals'));
 
 /**
  * Abstract implementation of value shareable by component.
  *
- * Shareable instance contains {@link internals} that become usable only when {@link ComponentShare.bindValue bound to
- * sharer component}.
+ * Shareable instance contains {@link internals} that become usable only when bound to sharer component.
  *
- * @typeParam T - Shared value type. Expected to be implemented by shareable instance.
  * @typeParam TSharer - Sharer component type.
  * @typeParam TInternals - Internals data type.
  */
-export abstract class ShareableByComponent<
-    T extends ShareableByComponent<T, TSharer, TInternals>,
-    TSharer extends object = any,
-    TInternals = unknown>
-    implements ShareableByComponent.Base<T> {
+export abstract class ShareableByComponent<TSharer extends object = any, TInternals = unknown>
+    implements Contextual<ShareableByComponent<TSharer, TInternals>> {
 
   /**
    * @internal
    */
-  private [ShareableByComponent$internals]: ShareableByComponent$Internals<T, TSharer, TInternals>;
+  private [ShareableByComponent$internals]: ShareableByComponent$Internals<TSharer, TInternals>;
 
   /**
    * Constructs shareable instance.
@@ -38,9 +29,16 @@ export abstract class ShareableByComponent<
     this[ShareableByComponent$internals] = new ShareableByComponent$Internals(this, internals);
   }
 
-  [ShareableByComponent__symbol](sharer: ComponentContext): T {
+  /**
+   * Binds this shareable instance to sharer component.
+   *
+   * @param sharer - Sharer component context.
+   *
+   * @returns `this` instance.
+   */
+  [Contextual__symbol](sharer: ComponentContext): this {
     this[ShareableByComponent$internals].bind(sharer);
-    return this as unknown as T;
+    return this;
   }
 
   /**
@@ -55,28 +53,6 @@ export abstract class ShareableByComponent<
 }
 
 export namespace ShareableByComponent {
-
-  /**
-   * Base interface of {@link ShareableByComponent shareable by component} instance.
-   *
-   * @typeParam T - Shared value type. Expected to be implemented by shareable instance.
-   * is assignable from shareable instance one.
-   */
-  export interface Base<T> {
-
-    /**
-     * Binds this shareable instance to sharer component.
-     *
-     * This method is called automatically by {@link ComponentShare.bindValue component share} if shared instance
-     * implements this interface.
-     *
-     * @param sharer - Sharer component context.
-     *
-     * @returns A value to share. `this` instance by default.
-     */
-    [ShareableByComponent__symbol](sharer: ComponentContext): T;
-
-  }
 
   /**
    * Shareable provider signature.
@@ -100,32 +76,12 @@ export namespace ShareableByComponent {
 
 }
 
-/**
- * Checks whether the given value is {@link ShareableByComponent.Base shareable by component}.
- *
- * @typeParam T - Shared value type.
- * @typeParam TOther - Other value type.
- * @param value - The value to check.
- *
- * @returns `true` is `value` contains a {@link ShareableByComponent__symbol} method.
- */
-export function isShareableByComponent<T, TOther = unknown>(
-    value: ShareableByComponent.Base<T> | TOther,
-): value is ShareableByComponent.Base<T> {
-  return !!value
-      && (typeof value === 'object' || typeof value === 'function')
-      && typeof (value as Partial<ShareableByComponent.Base<T>>)[ShareableByComponent__symbol] === 'function';
-}
-
-class ShareableByComponent$Internals<
-    T extends ShareableByComponent<T, TSharer, TInternals>,
-    TSharer extends object,
-    TInternals> {
+class ShareableByComponent$Internals<TSharer extends object, TInternals> {
 
   private readonly _get: ShareableByComponent.Provider<TSharer, TInternals>;
 
   constructor(
-      private readonly _source: ShareableByComponent<T, TSharer, TInternals>,
+      private readonly _source: ShareableByComponent<TSharer, TInternals>,
       internals: TInternals | ShareableByComponent.Provider<TSharer, TInternals>,
   ) {
     this._get = valueRecipe<TInternals, [ComponentContext]>(internals);

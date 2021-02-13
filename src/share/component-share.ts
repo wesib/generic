@@ -19,7 +19,6 @@ import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, De
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
-import { isShareableByComponent, ShareableByComponent__symbol } from './shareable-by-component';
 import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
 import { SharedByComponent$Registrar } from './shared-by-component.impl';
 
@@ -117,23 +116,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
       registry: ContextRegistry<ComponentContext<TSharer>>,
       provider: SharedByComponent.Provider<T, TSharer>,
   ): SharedByComponent.Registrar<T> {
-    return SharedByComponent$Registrar(this, registry, provider);
-  }
-
-  /**
-   * Binds shared value to its sharer component context.
-   *
-   * This method is called for each shared value.
-   *
-   * Detects {@link ShareableByComponent.Base shareable instance} and binds it to sharer context.
-   *
-   * @param value - A shared value to bind.
-   * @param sharer - Sharer component context.
-   *
-   * @returns Bound value instance.
-   */
-  bindValue(value: T, sharer: ComponentContext): T {
-    return isShareableByComponent<T>(value) ? value[ShareableByComponent__symbol](sharer) : value;
+    return SharedByComponent$Registrar(registry, provider);
   }
 
   /**
