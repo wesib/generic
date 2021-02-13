@@ -4,13 +4,12 @@ import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import {
   afterAll,
   AfterEvent,
-  AfterEvent__symbol,
   afterEventBy,
   afterThe,
   deduplicateAfter,
   deduplicateAfter_,
   digAfter_,
-  isEventKeeper,
+  isAfterEvent,
   sendEventsTo,
   shareAfter,
   translateAfter_,
@@ -235,8 +234,8 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
 
       const value = selected!.get();
 
-      if (isEventKeeper(value)) {
-        value[AfterEvent__symbol]()(receiver);
+      if (isAfterEvent(value)) {
+        value(receiver);
       } else {
         sendEventsTo(receiver)(value);
       }
@@ -272,6 +271,16 @@ export namespace ComponentShare {
    * @typeParam T - Shared value type.
    */
   export type Key<T> = ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
+
+  /**
+   * A source value accepted by {@link ComponentShare component share}.
+   *
+   * An array of either source values, their {@link SharedByComponent.Detailed detailed descriptors} or an `AfterEvent`
+   * keeper of the above.
+   *
+   * @typeParam T - Shared value type.
+   */
+  export type Source<T> = ContextUpKey.Source<SharedByComponent<T>>;
 
 }
 

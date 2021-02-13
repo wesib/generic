@@ -1,4 +1,4 @@
-import { EventKeeper } from '@proc7ts/fun-events';
+import { AfterEvent } from '@proc7ts/fun-events';
 import { Supply, SupplyPeer } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { ComponentShareRef } from './component-share-ref';
@@ -50,9 +50,9 @@ export namespace SharedByComponent {
     /**
      * Builds the shared value.
      *
-     * @returns Either the shared value, or its `EventKeeper`.
+     * @returns Either the shared value, or its `AfterEvent` keeper.
      */
-    get(): T | EventKeeper<[T?]>;
+    get(): T | AfterEvent<[T?]>;
 
   }
 
@@ -130,9 +130,9 @@ export namespace SharedByComponent {
      * @typeParam TComponent - Actual sharer component type.
      * @param context - Sharer component context to provide value for.
      *
-     * @returns Either a shared value, or its `EventKeeper`.
+     * @returns Either a shared value, or its `AfterEvent` keeper.
      */
-    provide<TComponent extends TSharer>(context: ComponentContext<TComponent>): T | EventKeeper<[T?]>;
+    provide<TComponent extends TSharer>(context: ComponentContext<TComponent>): T | AfterEvent<[T?]>;
 
   }
 

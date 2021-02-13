@@ -1,5 +1,5 @@
 import { ContextBuilder, ContextBuilder__symbol, ContextRegistry } from '@proc7ts/context-values';
-import { AfterEvent, AfterEvent__symbol, isEventKeeper, mapAfter, translateAfter } from '@proc7ts/fun-events';
+import { AfterEvent, isAfterEvent, mapAfter, translateAfter } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
@@ -85,8 +85,8 @@ function SharedByComponent$bindProvider<T, TSharer extends object>(
 
       const value = provider.provide(context);
 
-      if (isEventKeeper(value)) {
-        return value[AfterEvent__symbol]().do(
+      if (isAfterEvent(value)) {
+        return value.do(
             mapAfter(value => value && share.bindValue(value, context)),
         );
       }
@@ -105,7 +105,7 @@ function SharedByComponent$bareProvider<T, TComponent extends object>(
 
     const value = provider(context);
 
-    if (isEventKeeper(value)) {
+    if (isAfterEvent(value)) {
       return value.do(
           translateAfter((send, value?) => value !== undefined ? send(value) : send()),
       );

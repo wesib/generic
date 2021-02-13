@@ -1,5 +1,5 @@
 import { InElement, inGroup } from '@frontmeans/input-aspects';
-import { trackValue, ValueTracker } from '@proc7ts/fun-events';
+import { AfterEvent, trackValue } from '@proc7ts/fun-events';
 import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
 import { MockElement, testElement } from '../spec/test-element';
 import { Form } from './form';
@@ -14,10 +14,10 @@ describe('forms', () => {
       class TestComponent {
 
         @SharedForm()
-        readonly form: ValueTracker<Form>;
+        readonly form: AfterEvent<[Form]>;
 
         constructor(context: ComponentContext) {
-          this.form = trackValue(Form.forElement(inGroup({}), context.element));
+          this.form = trackValue(Form.forElement(inGroup({}), context.element)).read;
         }
 
       }

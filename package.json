@@ -43,7 +43,7 @@
     "@frontmeans/input-aspects": "^4.0.0",
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/style-producer": "^6.0.0",
-    "@proc7ts/context-values": "^5.2.0",
+    "@proc7ts/context-values": "^6.0.0-dev.0",
     "@proc7ts/fun-events": "^10.2.0",
     "@wesib/wesib": "^1.0.0-beta.29"
   },
@@ -67,7 +67,7 @@
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/render-scheduler": "^1.5.0",
     "@frontmeans/style-producer": "^6.0.0",
-    "@proc7ts/context-values": "^5.2.0",
+    "@proc7ts/context-values": "^6.0.0-dev.0",
     "@proc7ts/fun-events": "^10.2.0",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.1.1",

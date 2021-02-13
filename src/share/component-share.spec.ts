@@ -1,5 +1,5 @@
 import { ContextBuilder, ContextKey__symbol } from '@proc7ts/context-values';
-import { afterEventBy, EventKeeper, trackValue } from '@proc7ts/fun-events';
+import { AfterEvent, afterEventBy, trackValue } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import {
   BootstrapContext,
@@ -116,7 +116,7 @@ describe('share', () => {
 
         const value = trackValue('test1');
 
-        defContext.perComponent(shareValue(share, () => value));
+        defContext.perComponent(shareValue(share, () => value.read));
         expect(await context.get(share)).toEqual('test1');
 
         value.it = 'test2';
@@ -131,7 +131,7 @@ describe('share', () => {
 
         const value = trackValue('test1');
 
-        defContext.perComponent(shareValue(share2, () => value));
+        defContext.perComponent(shareValue(share2, () => value.read));
         expect(await context.get(share)).toEqual('test1');
         expect(await context.get(share2)).toEqual('test1');
 
@@ -174,8 +174,8 @@ describe('share', () => {
         const value1 = trackValue('test1');
         const value2 = trackValue('test2');
 
-        defContext.perComponent(shareValue(share, () => value1));
-        defContext.perComponent(shareValue(share2, () => value2));
+        defContext.perComponent(shareValue(share, () => value1.read));
+        defContext.perComponent(shareValue(share2, () => value2.read));
         expect(await context.get(share)).toEqual('test1');
         expect(await context.get(share2)).toEqual('test2');
 
@@ -192,8 +192,8 @@ describe('share', () => {
         const value1 = trackValue('test1');
         const value2 = trackValue('test2');
 
-        defContext.perComponent(shareValue(share, () => value1));
-        defContext.perComponent(shareValue(share2, () => value2));
+        defContext.perComponent(shareValue(share, () => value1.read));
+        defContext.perComponent(shareValue(share2, () => value2.read));
         expect(await context.get(share)).toEqual('test1');
         expect(await context.get(share2)).toEqual('test2');
 
@@ -210,8 +210,8 @@ describe('share', () => {
         const value1 = trackValue('test1');
         const value2 = trackValue('test2');
 
-        defContext.perComponent(shareValue(share, () => value1, 1));
-        defContext.perComponent(shareValue(share, () => value2, 2));
+        defContext.perComponent(shareValue(share, () => value1.read, 1));
+        defContext.perComponent(shareValue(share, () => value2.read, 2));
         expect(await context.get(share)).toEqual('test1');
 
         value2.it = 'test2b';
@@ -225,8 +225,8 @@ describe('share', () => {
         const value2 = trackValue('test2');
         const value3 = trackValue('test3');
 
-        defContext.perComponent(shareValue(share2, () => value2));
-        defContext.perComponent(shareValue(share3, () => value3));
+        defContext.perComponent(shareValue(share2, () => value2.read));
+        defContext.perComponent(shareValue(share3, () => value3.read));
         expect(await context.get(share)).toEqual('test2');
         expect(await context.get(share2)).toEqual('test2');
         expect(await context.get(share3)).toEqual('test3');
@@ -246,8 +246,8 @@ describe('share', () => {
         const value2 = trackValue('test2');
         const value3 = trackValue('test3');
 
-        defContext.perComponent(shareValue(share3, () => value3));
-        defContext.perComponent(shareValue(share2, () => value2));
+        defContext.perComponent(shareValue(share3, () => value3.read));
+        defContext.perComponent(shareValue(share2, () => value2.read));
         expect(await context.get(share)).toEqual('test2');
         expect(await context.get(share2)).toEqual('test2');
         expect(await context.get(share3)).toEqual('test3');
@@ -363,7 +363,7 @@ describe('share', () => {
 
   function shareValue<T, TComponent extends object>(
       share: ComponentShare<T>,
-      provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | EventKeeper<[T?]>,
+      provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | AfterEvent<[T?]>,
       priority?: number,
   ): ContextBuilder<ComponentContext<TComponent>> {
     return SharedByComponent$ContextBuilder<T, TComponent>(

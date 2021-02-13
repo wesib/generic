@@ -1,7 +1,7 @@
 import { InConverter, InNamespaceAliaser, InRenderScheduler, intoConvertedBy } from '@frontmeans/input-aspects';
 import { ContextSupply, ContextValueSlot } from '@proc7ts/context-values';
 import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
-import { AfterEvent, EventKeeper, mapAfter, supplyAfter } from '@proc7ts/fun-events';
+import { AfterEvent, mapAfter, supplyAfter } from '@proc7ts/fun-events';
 import { DefaultNamespaceAliaser, ElementRenderScheduler } from '@wesib/wesib';
 
 /**
@@ -34,7 +34,7 @@ class DefaultInAspectsKey
   grow(
       slot: ContextValueSlot<
           AfterEvent<[InConverter.Aspect<any, any>]>,
-          EventKeeper<InConverter.Aspect<any, any>[]> | InConverter.Aspect<any, any>,
+          ContextUpKey.Source<InConverter.Aspect<any, any>>,
           AfterEvent<InConverter.Aspect<any, any>[]>>,
   ): void {
 

@@ -1,6 +1,6 @@
 import { ContextRegistry, ContextSeedKey } from '@proc7ts/context-values';
 import { ContextUpKey } from '@proc7ts/context-values/updatable';
-import { AfterEvent, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, digAfter } from '@proc7ts/fun-events';
 import { HierarchyContext } from './hierarchy-context';
 
 /**
@@ -22,7 +22,7 @@ export function newHierarchyRegistry<T extends object>(
  * @internal
  */
 function isContextSeedUpKey<TSrc>(
-    key: ContextSeedKey<TSrc | EventKeeper<TSrc[]>, any>,
+    key: ContextSeedKey<ContextUpKey.Source<TSrc>, unknown>,
 ): key is ContextUpKey.SeedKey<TSrc> {
   return 'upKey' in key;
 }

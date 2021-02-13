@@ -1,6 +1,6 @@
 import { inFormElement, inGroup } from '@frontmeans/input-aspects';
 import { ContextBuilder } from '@proc7ts/context-values';
-import { EventKeeper } from '@proc7ts/fun-events';
+import { AfterEvent } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext, ComponentSlot, DefinitionContext } from '@wesib/wesib';
 import { ComponentShare, ComponentShare__symbol } from '../share';
 import { ComponentShareRegistry } from '../share/component-share-registry.impl';
@@ -129,7 +129,7 @@ describe('forms', () => {
 
     function shareValue<T, TComponent extends object>(
         share: ComponentShare<T>,
-        provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | EventKeeper<[T?]>,
+        provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | AfterEvent<[T?]>,
         priority?: number,
     ): ContextBuilder<ComponentContext<TComponent>> {
       return SharedByComponent$ContextBuilder<T, TComponent>(

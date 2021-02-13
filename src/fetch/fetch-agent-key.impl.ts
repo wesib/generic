@@ -1,6 +1,6 @@
 import { ContextValueSlot } from '@proc7ts/context-values';
 import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
-import { AfterEvent, afterThe, digAfter, EventKeeper, EventSender, OnEvent, onSupplied } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, digAfter, EventSender, OnEvent, onSupplied } from '@proc7ts/fun-events';
 
 /**
  * @internal
@@ -50,7 +50,7 @@ export class FetchAgentKey<TResponse extends any[]>
   grow(
       slot: ContextValueSlot<
           CombinedFetchAgent<TResponse>,
-          EventKeeper<FetchAgent<TResponse>[]> | FetchAgent<TResponse>,
+          ContextUpKey.Source<FetchAgent<TResponse>>,
           AfterEvent<FetchAgent<TResponse>[]>>,
   ): void {
 
