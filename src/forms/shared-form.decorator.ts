@@ -1,62 +1,89 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShare, ComponentShareDecorator, ComponentShareRef, Shared } from '../share';
+import { ComponentShare, ComponentShareDecorator, ComponentShareRef } from '../share';
 import { Form } from './form';
 import { FormShare } from './form.share';
+import { SharedFormUnit } from './shared-form-unit.decorator';
 
 /**
  * Builds a decorator of component property that {@link FormShare shares} a form.
  *
  * @typeParam TForm - Form type.
+ * @typeParam TModel - Form model type.
+ * @typeParam TElt - A type of HTML form element.
+ * @typeParam TClass - A type of decorated component class.
  * @param def - Form definition.
  * @param define - Form property definition builders.
  *
  * @returns Component property decorator.
  */
-export function SharedForm<TForm extends Form<any, any>, TClass extends ComponentClass = Class>(
-    def?: SharedFormDef<Form.ModelType<TForm>, Form.ElementType<TForm>>,
-    ...define: SharedForm.Definer<TForm, TClass>[]
+export function SharedForm<
+    TForm extends Form<TModel, TElt>,
+    TModel = Form.ModelType<TForm>,
+    TElt extends HTMLElement = Form.ElementType<TForm>,
+    TClass extends ComponentClass = Class>(
+    def?: SharedFormDef<TForm, TModel, TElt>,
+    ...define: SharedForm.Definer<TForm, TModel, TElt, TClass>[]
 ): ComponentShareDecorator<TForm, TClass>;
 
 /**
  * Builds a decorator of component property that {@link FormShare shares} a form as default share.
  *
  * @typeParam TForm - Form type.
+ * @typeParam TModel - Form model type.
+ * @typeParam TElt - A type of HTML form element.
+ * @typeParam TClass - A type of decorated component class.
  * @param define - Form property definition builders.
  *
  * @returns Component property decorator.
  */
-export function SharedForm<TForm extends Form<any, any>, TClass extends ComponentClass = Class>(
-    ...define: SharedForm.Definer<TForm, TClass>[]
+export function SharedForm<
+    TForm extends Form<TModel, TElt>,
+    TModel = Form.ModelType<TForm>,
+    TElt extends HTMLElement = Form.ElementType<TForm>,
+    TClass extends ComponentClass = Class>(
+    ...define: SharedForm.Definer<TForm, TModel, TElt, TClass>[]
 ): ComponentShareDecorator<TForm, TClass>;
 
-export function SharedForm<TForm extends Form<any, any>, TClass extends ComponentClass>(
+export function SharedForm<
+    TForm extends Form<TModel, TElt>,
+    TModel = Form.ModelType<TForm>,
+    TElt extends HTMLElement = Form.ElementType<TForm>,
+    TClass extends ComponentClass = Class>(
     defOrDefiner:
-        | SharedFormDef<Form.ModelType<TForm>, Form.ElementType<TForm>>
-        | SharedForm.Definer<TForm, TClass> = {},
-    ...define: SharedForm.Definer<TForm, TClass>[]
+        | SharedFormDef<TForm, TModel, TElt>
+        | SharedForm.Definer<TForm, TModel, TElt, TClass> = {},
+    ...define: SharedForm.Definer<TForm, TModel, TElt, TClass>[]
 ): ComponentShareDecorator<TForm, TClass> {
   if (typeof defOrDefiner === 'function') {
-    return Shared(FormShare, defOrDefiner, ...define);
+    return SharedFormUnit<TForm, TModel, Form.Controls<TModel, TElt>, TClass>(
+        FormShare as ComponentShareRef<any> as ComponentShareRef<TForm>,
+        defOrDefiner,
+        ...define,
+    );
   }
 
-  const { share = FormShare } = defOrDefiner;
+  const { share = FormShare as ComponentShareRef<any> as ComponentShareRef<TForm> } = defOrDefiner;
 
-  return Shared(share, ...define);
+  return SharedFormUnit<TForm, TModel, Form.Controls<TModel, TElt>, TClass>(share, ...define);
 }
 
 /**
  * Shared form definition.
  *
+ * @typeParam TForm - Form type.
  * @typeParam TModel - A model type of the form.
  * @typeParam TElt - A type of HTML form element.
  */
-export interface SharedFormDef<TModel = any, TElt extends HTMLElement = HTMLElement> {
+export interface SharedFormDef<
+    TForm extends Form<TModel, TElt>,
+    TModel = Form.ModelType<TForm>,
+    TElt extends HTMLElement = Form.ElementType<TForm>> {
 
   /**
    * A reference to the target form share.
    */
-  readonly share?: ComponentShareRef<Form<TModel, TElt>>;
+  readonly share?: ComponentShareRef<TForm>;
 
 }
 
@@ -68,20 +95,22 @@ export namespace SharedForm {
    * Passed to {@link Definer property definer} by {@link SharedForm @SharedForm} decorator to build a
    * {@link Definition property definition}.
    *
+   * @typeParam TForm - Form type.
    * @typeParam TModel - A model type of the form.
    * @typeParam TElt - A type of HTML form element.
    * @typeParam TClass - A type of decorated component class.
    */
   export interface Descriptor<
-      TModel = any,
-      TElt extends HTMLElement = HTMLElement,
+      TForm extends Form<TModel, TElt>,
+      TModel = Form.ModelType<TForm>,
+      TElt extends HTMLElement = Form.ElementType<TForm>,
       TClass extends ComponentClass = Class>
-      extends Shared.Descriptor<Form<TModel, TElt>, TClass> {
+      extends SharedFormUnit.Descriptor<TForm, TModel, Form.Controls<TModel, TElt>, TClass> {
 
     /**
      * Target form share instance.
      */
-    readonly share: ComponentShare<Form<TModel, TElt>>;
+    readonly share: ComponentShare<TForm>;
 
   }
 
@@ -91,9 +120,15 @@ export namespace SharedForm {
    * This is a function called by {@link SharedForm @SharedForm} decorator to apply additional definitions.
    *
    * @typeParam TForm - Form type.
+   * @typeParam TModel - A model type of the form.
+   * @typeParam TElt - A type of HTML form element.
    * @typeParam TClass - A type of decorated component class.
    */
-  export type Definer<TForm extends Form<any, any>, TClass extends ComponentClass = Class> =
+  export type Definer<
+      TForm extends Form<TModel, TElt>,
+      TModel = Form.ModelType<TForm>,
+      TElt extends HTMLElement = Form.ElementType<TForm>,
+      TClass extends ComponentClass = Class> =
   /**
    * @param descriptor - Decorated component property descriptor.
    *
@@ -101,15 +136,22 @@ export namespace SharedForm {
    */
       (
           this: void,
-          descriptor: Descriptor<Form.ModelType<TForm>, Form.ElementType<TForm>, TClass>,
-      ) => Definition<TForm, TClass> | void;
+          descriptor: Descriptor<TForm, TModel, TElt, TClass>,
+      ) => Definition<TForm, TModel, TElt, TClass> | void;
 
   /**
    * A definition of component property that {@link FormShare shares} a form.
    *
    * @typeParam TForm - Form type.
+   * @typeParam TModel - A model type of the form.
+   * @typeParam TElt - A type of HTML form element.
+   * @typeParam TClass - A type of decorated component class.
    */
-  export type Definition<TForm extends Form<any, any>, TClass extends ComponentClass = Class> =
-      Shared.Definition<TForm, TClass>;
+  export type Definition<
+      TForm extends Form<TModel, TElt>,
+      TModel = Form.ModelType<TForm>,
+      TElt extends HTMLElement = Form.ElementType<TForm>,
+      TClass extends ComponentClass = Class> =
+      SharedFormUnit.Definition<TForm, TModel, Form.Controls<TModel, TElt>, TClass>;
 
 }

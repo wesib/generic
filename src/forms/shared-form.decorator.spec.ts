@@ -17,7 +17,7 @@ describe('forms', () => {
         readonly form: AfterEvent<[Form]>;
 
         constructor(context: ComponentContext) {
-          this.form = trackValue(Form.forElement(inGroup({}), context.element)).read;
+          this.form = trackValue(new Form(Form.forElement(inGroup({}), context.element))).read;
         }
 
       }
@@ -28,6 +28,13 @@ describe('forms', () => {
 
       expect(form).toBeInstanceOf(Form);
       expect(form?.element).toBeInstanceOf(InElement);
+
+      const controls = await form?.readControls;
+
+      expect(controls).toEqual({
+        control: form?.control,
+        element: form?.element,
+      });
     });
   });
 });

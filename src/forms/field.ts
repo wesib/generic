@@ -1,5 +1,7 @@
 import { InControl } from '@frontmeans/input-aspects';
+import { digAfter } from '@proc7ts/fun-events';
 import { ShareableByComponent } from '../share';
+import { FormDefaults } from './form-defaults';
 import { FormUnit } from './form-unit';
 
 /**
@@ -15,8 +17,12 @@ import { FormUnit } from './form-unit';
  * @typeParam TSharer - Field sharer component type.
  */
 export class Field<TValue, TSharer extends object = any>
-    extends FormUnit<TValue, TSharer, Field.Controls<TValue>>
+    extends FormUnit<TValue, Field.Controls<TValue>, TSharer>
     implements Field.Controls<TValue> {
+
+  constructor(controls: Field.Controls<TValue> | Field.Provider<TValue, TSharer>) {
+    super(Field$provider(() => this, controls));
+  }
 
   toString(): string {
     return 'Field';
@@ -35,13 +41,15 @@ export namespace Field {
 
   /**
    * Form field controls.
+   *
+   * @typeParam TValue - Input value type.
    */
-  export interface Controls<TModel> extends FormUnit.Controls<TModel> {
+  export interface Controls<TValue> extends FormUnit.Controls<TValue> {
 
     /**
      * Field input control.
      */
-    readonly control: InControl<TModel>;
+    readonly control: InControl<TValue>;
 
   }
 
@@ -52,6 +60,18 @@ export namespace Field {
    * @typeParam TSharer - Field sharer component type.
    */
   export type Provider<TValue, TSharer extends object = any> =
-      ShareableByComponent.Provider<TSharer, Controls<TValue>>;
+      ShareableByComponent.Provider<Controls<TValue>, TSharer>;
 
+}
+
+function Field$provider<TValue, TSharer extends object>(
+    field: () => Field<TValue, TSharer>,
+    controls: Field.Controls<TValue> | Field.Provider<TValue, TSharer>,
+): Field.Provider<TValue, TSharer> {
+
+  const provider = ShareableByComponent.provider(controls);
+
+  return sharer => sharer.get(FormDefaults).rules.do(
+      digAfter(defaults => defaults.setupField(field(), provider(sharer))),
+  );
 }
