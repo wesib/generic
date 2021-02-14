@@ -17,7 +17,7 @@ import { FormUnit } from './form-unit';
  * @typeParam TSharer - Field sharer component type.
  */
 export class Field<TValue, TSharer extends object = any>
-    extends FormUnit<TValue, TSharer, Field.Controls<TValue>>
+    extends FormUnit<TValue, Field.Controls<TValue>, TSharer>
     implements Field.Controls<TValue> {
 
   constructor(controls: Field.Controls<TValue> | Field.Provider<TValue, TSharer>) {

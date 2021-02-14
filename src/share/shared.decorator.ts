@@ -87,7 +87,7 @@ export namespace Shared {
    * property definition}.
    *
    * @typeParam T - Shared value type.
-   * @typeParam TClass - A type of component class.
+   * @typeParam TClass - A type of decorated component class.
    */
   export interface Descriptor<T, TClass extends ComponentClass = Class>
       extends ComponentProperty.Descriptor<T | AfterEvent<[T?]>, TClass> {

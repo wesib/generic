@@ -6,37 +6,59 @@ import { ComponentShare__symbol, ComponentShareRef } from '../share';
 import { Field } from './field';
 import { Field$nameByKey } from './field.impl';
 import { Form } from './form';
+import { FormUnit } from './form-unit';
 import { FormShare } from './form.share';
 import { SharedField } from './shared-field.decorator';
+import { SharedFormUnit } from './shared-form-unit.decorator';
 import { SharedForm } from './shared-form.decorator';
 
 /**
  * Builds a {@link SharedForm shared form} definition builder that adds nested form to enclosing one.
  *
  * @typeParam TForm - Nested form type.
+ * @typeParam TModel - Nested form model type.
+ * @typeParam TElt - A type of nested HTML form element.
  * @typeParam TClass - A type of decorated component class.
  * @param def - Nested form naming definition.
  *
  * @returns Shared form definition builder.
  */
-export function FormName<TForm extends Form<any, any>, TClass extends ComponentClass = Class>(
+export function FormName<
+    TForm extends Form<TModel, TElt>,
+    TModel = Form.ModelType<TForm>,
+    TElt extends HTMLElement = Form.ElementType<TForm>,
+    TClass extends ComponentClass = Class>(
     def?: FieldNameDef,
-): SharedForm.Definer<TForm, TClass> {
-  return FieldName(def);
+): SharedForm.Definer<TForm, TModel, TElt, TClass> {
+  return FormUnitName<TForm, TModel, Form.Controls<TModel, TElt>, TClass>(def);
 }
 
 /**
  * Builds a {@link SharedField shared form field} definition builder that adds the field to enclosing form.
  *
  * @typeParam TField - Field type.
+ * @typeParam TValue - Field value type.
  * @typeParam TClass - A type of decorated component class.
  * @param def - Field naming definition.
  *
  * @returns Shared field definition builder.
  */
-export function FieldName<TField extends Field<any>, TClass extends ComponentClass = Class>(
+export function FieldName<
+    TField extends Field<TValue>,
+    TValue = Field.ValueType<TField>,
+    TClass extends ComponentClass = Class>(
     def: FieldNameDef = {},
-): SharedField.Definer<TField, TClass> {
+): SharedField.Definer<TField, TValue, TClass> {
+  return FormUnitName<TField, TValue, Field.Controls<TValue>, TClass>(def);
+}
+
+function FormUnitName<
+    TUnit extends FormUnit<TValue, TControls, any>,
+    TValue,
+    TControls extends FormUnit.Controls<TValue>,
+    TClass extends ComponentClass = Class>(
+    def: FieldNameDef = {},
+): SharedFormUnit.Definer<TUnit, TValue, TControls, TClass> {
   return ({
     key,
     share,
@@ -69,10 +91,10 @@ export function FieldName<TField extends Field<any>, TClass extends ComponentCla
         setup(setup) {
           setup.whenComponent(context => {
             afterAll({
-              field: context.get(share),
+              unit: context.get(share),
               form: fieldFormShare.valueFor(context),
             }).do(
-                consumeEvents(({ field: [field], form: [form] }): Supply | undefined => {
+                consumeEvents(({ unit: [field], form: [form] }): Supply | undefined => {
                   if (!form || !field) {
                     return;
                   }

@@ -21,7 +21,7 @@ import { FormUnit } from './form-unit';
  * @typeParam TSharer - Form sharer component type.
  */
 export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = any>
-    extends FormUnit<TModel, TSharer, Form.Controls<TModel, TElt>>
+    extends FormUnit<TModel, Form.Controls<TModel, TElt>, TSharer>
     implements Form.Controls<TModel, TElt> {
 
   /**

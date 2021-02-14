@@ -8,13 +8,13 @@ import { ShareableByComponent } from '../share';
  * Represents a form or its field control and contains its value.
  *
  * @typeParam TValue - Input value type.
- * @typeParam TSharer - Unit sharer component type.
  * @typeParam TControls - A type of input controls this unit represents.
+ * @typeParam TSharer - Unit sharer component type.
  */
 export abstract class FormUnit<
     TValue,
-    TSharer extends object = any,
-    TControls extends FormUnit.Controls<TValue> = FormUnit.Controls<TValue>>
+    TControls extends FormUnit.Controls<TValue> = FormUnit.Controls<TValue>,
+    TSharer extends object = any>
     extends ShareableByComponent<TControls, TSharer>
     implements FormUnit.Controls<TValue> {
 
@@ -50,10 +50,18 @@ export namespace FormUnit {
   /**
    * A value type of the given form unit.
    *
-   * @typeParam TValue - Field value type.
-   * @typeParam TSharer - Field sharer component type.
+   * @typeParam TUnit - Target unit type.
    */
-  export type ValueType<TUnit extends FormUnit<any>> = TUnit extends FormUnit<infer TValue> ? TValue : never;
+  export type ValueType<TUnit extends FormUnit<any, any, any>> =
+      TUnit extends FormUnit<infer TValue, any, any> ? TValue : never;
+
+  /**
+   * A controls type of the given form unit.
+   *
+   * @typeParam TUnit - Target unit type.
+   */
+  export type ControlsType<TUnit extends FormUnit<any, any, any>> =
+      TUnit extends FormUnit<any, any, infer TControls> ? TControls : never;
 
   /**
    * Form unit controls.
