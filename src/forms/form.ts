@@ -37,11 +37,11 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
       control: InControl<TModel>,
       element: TElt,
       options?: Omit<InFormElement.Options, 'form'>,
-  ): Form<TModel, TElt> {
-    return new this<TModel, TElt>({
+  ): Form.Controls<TModel, TElt> {
+    return {
       control,
       element: inFormElement(element, { ...options, form: control }),
-    });
+    };
   }
 
   constructor(
@@ -73,14 +73,9 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
 
   const provider = ShareableByComponent.provider(controls);
 
-  return sharer => {
-
-    const controls = provider(sharer);
-
-    return sharer.get(FormDefaults).rules.do(
-        digAfter(defaults => defaults.setupForm(form(), controls)),
-    );
-  };
+  return sharer => sharer.get(FormDefaults).rules.do(
+      digAfter(defaults => defaults.setupForm(form(), provider(sharer))),
+  );
 }
 
 export namespace Form {
@@ -105,7 +100,7 @@ export namespace Form {
    * @typeParam TModel - A model type of the form, i.e. a type of its control value.
    * @typeParam TElt - A type of HTML form element.
    */
-  export interface Controls<TModel, TElt extends HTMLElement> extends Field.Controls<TModel> {
+  export interface Controls<TModel, TElt extends HTMLElement = HTMLElement> extends Field.Controls<TModel> {
 
     /**
      * Submittable form input control.

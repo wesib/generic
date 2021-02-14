@@ -142,7 +142,7 @@ describe('forms', () => {
         readonly form: Form;
 
         constructor(context: ComponentContext) {
-          this.form = Form.forElement(inList([]), context.element);
+          this.form = new Form(Form.forElement(inList([]), context.element));
         }
 
       }
@@ -222,7 +222,7 @@ describe('forms', () => {
           readonly subForm: Form<readonly string[]>;
 
           constructor(context: ComponentContext) {
-            this.subForm = Form.forElement(inList<string>([]), context.element);
+            this.subForm = new Form(() => Form.forElement(inList<string>([]), context.element));
           }
 
         }
@@ -258,7 +258,7 @@ describe('forms', () => {
           readonly form: AfterEvent<[Form]>;
 
           constructor(context: ComponentContext) {
-            this.form = trackValue(Form.forElement(inGroup({}), context.element)).read;
+            this.form = trackValue(new Form(Form.forElement(inGroup({}), context.element))).read;
           }
 
         }

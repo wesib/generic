@@ -71,13 +71,7 @@ function Field$provider<TValue, TSharer extends object>(
 
   const provider = ShareableByComponent.provider(controls);
 
-  return sharer => {
-
-    const controls = provider(sharer);
-
-    return sharer.get(FormDefaults).rules.do(
-        digAfter(defaults => defaults.setupField(field(), controls)),
-    );
-  };
-
+  return sharer => sharer.get(FormDefaults).rules.do(
+      digAfter(defaults => defaults.setupField(field(), provider(sharer))),
+  );
 }
