@@ -49,6 +49,8 @@ export namespace FormUnit {
 
   /**
    * Form unit controls.
+   *
+   * @typeParam TValue - Input value type.
    */
   export interface Controls<TValue> {
 

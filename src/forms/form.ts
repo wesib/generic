@@ -80,6 +80,9 @@ export namespace Form {
 
     /**
      * Submittable form input control.
+     *
+     * @typeParam TModel - A model type of the form, i.e. a type of its control value.
+     * @typeParam TElt - A type of HTML form element.
      */
     readonly control: InControl<TModel>;
 

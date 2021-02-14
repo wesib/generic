@@ -35,13 +35,15 @@ export namespace Field {
 
   /**
    * Form field controls.
+   *
+   * @typeParam TValue - Input value type.
    */
-  export interface Controls<TModel> extends FormUnit.Controls<TModel> {
+  export interface Controls<TValue> extends FormUnit.Controls<TValue> {
 
     /**
      * Field input control.
      */
-    readonly control: InControl<TModel>;
+    readonly control: InControl<TValue>;
 
   }
 
