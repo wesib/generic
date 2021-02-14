@@ -1,6 +1,8 @@
 import { InControl, inFormElement, InFormElement } from '@frontmeans/input-aspects';
+import { digAfter } from '@proc7ts/fun-events';
 import { ShareableByComponent } from '../share';
 import { Field } from './field';
+import { FormDefaults } from './form-defaults';
 import { FormUnit } from './form-unit';
 
 /**
@@ -42,6 +44,12 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
     });
   }
 
+  constructor(
+      controls: Form.Controls<TModel, TElt> | Form.Provider<TModel, TElt, TSharer>,
+  ) {
+    super(Form$provider(() => this, controls));
+  }
+
   /**
    * Form element control.
    *
@@ -52,6 +60,27 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
     return this.internals.element;
   }
 
+  toString(): string {
+    return 'Form';
+  }
+
+}
+
+function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>(
+    form: () => Form<TModel, TElt, TSharer>,
+    controls: Form.Controls<TModel, TElt> | Form.Provider<TModel, TElt, TSharer>,
+): Form.Provider<TModel, TElt, TSharer> {
+
+  const provider = ShareableByComponent.provider(controls);
+
+  return sharer => {
+
+    const controls = provider(sharer);
+
+    return sharer.get(FormDefaults).rules.do(
+        digAfter(defaults => defaults.setupForm(form(), controls)),
+    );
+  };
 }
 
 export namespace Form {
@@ -104,6 +133,6 @@ export namespace Form {
    * @typeParam TSharer - Form sharer component type.
    */
   export type Provider<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = object> =
-      ShareableByComponent.Provider<TSharer, Controls<TModel, TElt>>;
+      ShareableByComponent.Provider<Controls<TModel, TElt>, TSharer>;
 
 }
