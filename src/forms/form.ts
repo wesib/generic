@@ -1,6 +1,6 @@
 import { InControl, inFormElement, InFormElement } from '@frontmeans/input-aspects';
 import { digAfter } from '@proc7ts/fun-events';
-import { ShareableByComponent } from '../share';
+import { ComponentShareable } from '../share';
 import { Field } from './field';
 import { FormDefaults } from './form-defaults';
 import { FormUnit } from './form-unit';
@@ -71,7 +71,7 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
     controls: Form.Controls<TModel, TElt> | Form.Provider<TModel, TElt, TSharer>,
 ): Form.Provider<TModel, TElt, TSharer> {
 
-  const provider = ShareableByComponent.provider(controls);
+  const provider = ComponentShareable.provider(controls);
 
   return sharer => sharer.get(FormDefaults).rules.do(
       digAfter(defaults => defaults.setupForm(form(), provider(sharer))),
@@ -128,6 +128,6 @@ export namespace Form {
    * @typeParam TSharer - Form sharer component type.
    */
   export type Provider<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = object> =
-      ShareableByComponent.Provider<Controls<TModel, TElt>, TSharer>;
+      ComponentShareable.Provider<Controls<TModel, TElt>, TSharer>;
 
 }

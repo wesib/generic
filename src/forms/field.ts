@@ -1,6 +1,6 @@
 import { InControl } from '@frontmeans/input-aspects';
 import { digAfter } from '@proc7ts/fun-events';
-import { ShareableByComponent } from '../share';
+import { ComponentShareable } from '../share';
 import { FormDefaults } from './form-defaults';
 import { FormUnit } from './form-unit';
 
@@ -60,7 +60,7 @@ export namespace Field {
    * @typeParam TSharer - Field sharer component type.
    */
   export type Provider<TValue, TSharer extends object = any> =
-      ShareableByComponent.Provider<Controls<TValue>, TSharer>;
+      ComponentShareable.Provider<Controls<TValue>, TSharer>;
 
 }
 
@@ -69,7 +69,7 @@ function Field$provider<TValue, TSharer extends object>(
     controls: Field.Controls<TValue> | Field.Provider<TValue, TSharer>,
 ): Field.Provider<TValue, TSharer> {
 
-  const provider = ShareableByComponent.provider(controls);
+  const provider = ComponentShareable.provider(controls);
 
   return sharer => sharer.get(FormDefaults).rules.do(
       digAfter(defaults => defaults.setupField(field(), provider(sharer))),
