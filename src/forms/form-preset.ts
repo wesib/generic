@@ -21,10 +21,7 @@ class FormPresetKey extends ContextUpKey<FormPreset, FormPreset.Spec> {
           AfterEvent<FormPreset.Spec[]>>,
   ): void {
     slot.insert(new FormPreset(slot.seed.do(
-      mapAfter((...specs: FormPreset.Spec[]): FormPreset.Rules => ({
-        setupField: FormDefaults$setupField(specs),
-        setupForm: FormDefaults$setupForm(specs),
-      })),
+      mapAfter(FormPreset.combine),
     )));
   }
 
@@ -50,10 +47,29 @@ export class FormPreset implements FormPreset.Rules, EventKeeper<[FormPreset.Rul
   }
 
   /**
+   * Combines form preset specifiers.
+   *
+   * @param specs - Form preset specifiers to combine.
+   *
+   * @returns Form preset rules instance combining the given specifiers.
+   */
+  static combine(...specs: FormPreset.Spec[]): FormPreset.Rules {
+    return {
+      setupField: FormDefaults$setupField(specs),
+      setupForm: FormDefaults$setupForm(specs),
+    };
+  }
+
+  /**
    * @internal
    */
   private [FormPreset$rules__symbol]: FormPreset.Rules;
 
+  /**
+   * Constructs form preset.
+   *
+   * @param rules - An `AfterEvent` keeper of form preset {@link FormPreset.Rules rules}.
+   */
   constructor(readonly rules: AfterEvent<[FormPreset.Rules]>) {
     rules(rules => {
       this[FormPreset$rules__symbol] = rules;
