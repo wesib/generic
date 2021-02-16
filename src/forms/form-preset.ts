@@ -1,6 +1,6 @@
-import { ContextKey__symbol, ContextValueSlot } from '@proc7ts/context-values';
+import { ContextKey__symbol, ContextSupply, ContextValueSlot } from '@proc7ts/context-values';
 import { ContextUpKey } from '@proc7ts/context-values/updatable';
-import { AfterEvent, AfterEvent__symbol, EventKeeper, mapAfter } from '@proc7ts/fun-events';
+import { AfterEvent, AfterEvent__symbol, EventKeeper, mapAfter, supplyAfter } from '@proc7ts/fun-events';
 import { Field } from './field';
 import { Form } from './form';
 
@@ -21,7 +21,8 @@ class FormPresetKey extends ContextUpKey<FormPreset, FormPreset.Spec> {
           AfterEvent<FormPreset.Spec[]>>,
   ): void {
     slot.insert(new FormPreset(slot.seed.do(
-      mapAfter(FormPreset.combine),
+        mapAfter(FormPreset.combine),
+        supplyAfter(slot.context.get(ContextSupply)),
     )));
   }
 
