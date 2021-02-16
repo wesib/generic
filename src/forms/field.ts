@@ -1,7 +1,7 @@
 import { InControl } from '@frontmeans/input-aspects';
 import { digAfter } from '@proc7ts/fun-events';
 import { ComponentShareable } from '../share';
-import { FormDefaults } from './form-defaults';
+import { FormPreset } from './form-preset';
 import { FormUnit } from './form-unit';
 
 /**
@@ -71,7 +71,7 @@ function Field$provider<TValue, TSharer extends object>(
 
   const provider = ComponentShareable.provider(controls);
 
-  return sharer => sharer.get(FormDefaults).rules.do(
-      digAfter(defaults => defaults.setupField(field(), provider(sharer))),
+  return sharer => sharer.get(FormPreset).rules.do(
+      digAfter(presets => presets.setupField(provider(sharer), field())),
   );
 }

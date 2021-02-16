@@ -2,7 +2,7 @@ import { InControl, inFormElement, InFormElement } from '@frontmeans/input-aspec
 import { digAfter } from '@proc7ts/fun-events';
 import { ComponentShareable } from '../share';
 import { Field } from './field';
-import { FormDefaults } from './form-defaults';
+import { FormPreset } from './form-preset';
 import { FormUnit } from './form-unit';
 
 /**
@@ -73,8 +73,8 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
 
   const provider = ComponentShareable.provider(controls);
 
-  return sharer => sharer.get(FormDefaults).rules.do(
-      digAfter(defaults => defaults.setupForm(form(), provider(sharer))),
+  return sharer => sharer.get(FormPreset).rules.do(
+      digAfter(preset => preset.setupForm(provider(sharer), form())),
   );
 }
 
