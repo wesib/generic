@@ -10,8 +10,11 @@ export class FormModePreset extends AbstractFormPreset {
   /**
    * @internal
    */
-  private readonly _byValidity: InMode.Source;
+  private readonly _byValidity: InMode.Source | null;
 
+  /**
+   * @internal
+   */
   private readonly _byForm?: boolean;
 
   constructor(options: FormModePreset.Options = {}) {
@@ -19,7 +22,9 @@ export class FormModePreset extends AbstractFormPreset {
 
     const { byValidity, byForm = true } = options;
 
-    this._byValidity = inModeByValidity(byValidity);
+    this._byValidity = byValidity === false
+        ? null
+        : inModeByValidity(byValidity === true ? {} : byValidity);
     this._byForm = byForm;
   }
 
@@ -34,9 +39,7 @@ export class FormModePreset extends AbstractFormPreset {
               controls.control.aspect(InParents).read(parents => {
                 itsEach(
                     parents,
-                    ({ parent }) => controls.control
-                        .aspect(InMode)
-                        .derive(parent.aspect(InMode)),
+                    ({ parent }) => controls.control.setup(InMode, mode => mode.derive(parent.aspect(InMode))),
                 );
               });
 
@@ -50,12 +53,14 @@ export class FormModePreset extends AbstractFormPreset {
       controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
       _form: Form<TModel, TElt, TSharer>,
   ): AfterEvent<[Form.Controls<TModel, TElt>]> {
-    return controls.do(
-        mapAfter(controls => {
-          controls.control.setup(InMode, mode => mode.derive(this._byValidity));
-          return controls;
-        }),
-    );
+    return this._byValidity
+        ? controls.do(
+            mapAfter(controls => {
+              controls.control.setup(InMode, mode => mode.derive(this._byValidity!));
+              return controls;
+            }),
+        )
+        : controls;
   }
 
 }
@@ -64,7 +69,7 @@ export namespace FormModePreset {
 
   export interface Options {
 
-    readonly byValidity?: Parameters<typeof inModeByValidity>[0];
+    readonly byValidity?: Parameters<typeof inModeByValidity>[0] | boolean;
 
     readonly byForm?: boolean;
 
