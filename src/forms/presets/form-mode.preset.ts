@@ -39,7 +39,17 @@ export class FormModePreset extends AbstractFormPreset {
               controls.control.aspect(InParents).read(parents => {
                 itsEach(
                     parents,
-                    ({ parent }) => controls.control.setup(InMode, mode => mode.derive(parent.aspect(InMode))),
+                    ({ parent }) => {
+
+                      const form = parent.aspect(Form);
+
+                      if (form) {
+                        controls.control.setup(
+                            InMode,
+                            mode => mode.derive(form.element.aspect(InMode)),
+                        );
+                      }
+                    },
                 );
               });
 

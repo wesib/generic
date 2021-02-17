@@ -1,5 +1,5 @@
 import { inGroup, InMode, InValidation, inValue } from '@frontmeans/input-aspects';
-import { afterThe } from '@proc7ts/fun-events';
+import { trackValue } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext } from '@wesib/wesib';
 import { MockElement, testDefinition } from '../../spec/test-element';
 import { Field } from '../field';
@@ -17,7 +17,7 @@ describe('forms', () => {
 
       const [{ control }] = await bootstrap();
 
-      control.aspect(InValidation).by(afterThe({ invalid: true }));
+      control.aspect(InValidation).by(trackValue({ invalid: true }));
 
       expect(await control.aspect(InMode).read).toBe('-on');
     });
@@ -25,7 +25,7 @@ describe('forms', () => {
 
       const [{ control }] = await bootstrap({ byValidity: { invalid: 'on' } });
 
-      control.aspect(InValidation).by(afterThe({ invalid: true }));
+      control.aspect(InValidation).by(trackValue({ invalid: true }));
 
       expect(await control.aspect(InMode).read).toBe('on');
     });
@@ -33,7 +33,7 @@ describe('forms', () => {
 
       const [{ control }] = await bootstrap({ byValidity: false });
 
-      control.aspect(InValidation).by(afterThe({ invalid: true }));
+      control.aspect(InValidation).by(trackValue({ invalid: true }));
 
       expect(await control.aspect(InMode).read).toBe('on');
     });
@@ -41,7 +41,7 @@ describe('forms', () => {
 
       const [{ element: form }, { control: field }] = await bootstrap();
 
-      form.aspect(InMode).derive(afterThe('off'));
+      form.aspect(InMode).own.it = 'off';
 
       expect(await field.aspect(InMode).read).toBe('off');
     });
@@ -49,7 +49,7 @@ describe('forms', () => {
 
       const [{ element: form }, { control: field }] = await bootstrap({ byForm: false });
 
-      form.aspect(InMode).derive(afterThe('off'));
+      form.aspect(InMode).own.it = 'off';
 
       expect(await field.aspect(InMode).read).toBe('on');
     });

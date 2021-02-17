@@ -1,6 +1,15 @@
-import { InAspect, InAspect__symbol, InControl, inFormElement, InFormElement } from '@frontmeans/input-aspects';
-import { digAfter } from '@proc7ts/fun-events';
-import { noop } from '@proc7ts/primitives';
+import {
+  InAspect,
+  InAspect__symbol,
+  InControl,
+  InConverter,
+  inconvertibleInAspect,
+  inFormElement,
+  InFormElement,
+  nullInAspect,
+} from '@frontmeans/input-aspects';
+import { AfterEvent, digAfter, mapAfter } from '@proc7ts/fun-events';
+import { ComponentContext } from '@wesib/wesib';
 import { ComponentShareable } from '../share';
 import { Field } from './field';
 import { FormPreset } from './form-preset';
@@ -10,10 +19,7 @@ const Form__aspect: Form$Aspect = {
 
   applyTo<TValue>(_control: InControl<TValue>): Form$Applied<TValue> {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return {
-      instance: null!,
-      convertTo: noop,
-    };
+    return nullInAspect();
   },
 
 };
@@ -57,7 +63,7 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
     };
   }
 
-  static get [InAspect__symbol](): InAspect<Form> {
+  static get [InAspect__symbol](): InAspect<Form | null> {
     return Form__aspect;
   }
 
@@ -88,10 +94,29 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
     controls: Form.Controls<TModel, TElt> | Form.Provider<TModel, TElt, TSharer>,
 ): Form.Provider<TModel, TElt, TSharer> {
 
+  const formAspects: InConverter.Aspect.Factory<any> = control => ({
+    applyAspect<TInstance, TKind extends InAspect.Application.Kind>(
+        aspect: InAspect<any, any>,
+    ): InAspect.Application.Result<TInstance, any, TKind> | undefined {
+      if (aspect === Form__aspect) {
+        return inconvertibleInAspect(control, Form, form()) as InAspect.Application.Result<TInstance, any, TKind>;
+      }
+      return;
+    },
+  });
   const provider = ComponentShareable.provider(controls);
+  const createControls = (
+      sharer: ComponentContext<TSharer>,
+  ): AfterEvent<[Form.Controls<TModel, TElt>]> => provider(sharer).do(
+      mapAfter(({ control, element }) => {
+        control.addAspect(formAspects);
+        element.addAspect(formAspects);
+        return { control, element };
+      }),
+  );
 
   return sharer => sharer.get(FormPreset).rules.do(
-      digAfter(preset => preset.setupForm(provider(sharer), form())),
+      digAfter(preset => preset.setupForm(createControls(sharer), form())),
   );
 }
 
@@ -152,7 +177,7 @@ export namespace Form {
 /**
  * Form aspect.
  */
-interface Form$Aspect extends InAspect<Form, 'form'> {
+interface Form$Aspect extends InAspect<Form | null, 'form'> {
 
   applyTo<TValue>(control: InControl<TValue>): Form$Applied<TValue>;
 
@@ -161,11 +186,7 @@ interface Form$Aspect extends InAspect<Form, 'form'> {
 /**
  * A form aspect applied to control.
  */
-interface Form$Applied<TValue> extends InAspect.Applied<TValue, Form<TValue>, Form<any>> {
-
-  convertTo(): undefined;
-
-}
+type Form$Applied<TValue> = InAspect.Applied<TValue, Form<TValue> | null, Form<any> | null>;
 
 declare module '@frontmeans/input-aspects' {
 
@@ -174,9 +195,9 @@ declare module '@frontmeans/input-aspects' {
     export interface Map<TInstance, TValue> {
 
       /**
-       * Input data aspect application type.
+       * Form aspect application type.
        */
-      form(): Form<TValue>;
+      form(): Form<TValue> | null;
 
     }
 
