@@ -1,9 +1,22 @@
-import { InControl, inFormElement, InFormElement } from '@frontmeans/input-aspects';
+import { InAspect, InAspect__symbol, InControl, inFormElement, InFormElement } from '@frontmeans/input-aspects';
 import { digAfter } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
 import { ComponentShareable } from '../share';
 import { Field } from './field';
 import { FormPreset } from './form-preset';
 import { FormUnit } from './form-unit';
+
+const Form__aspect: Form$Aspect = {
+
+  applyTo<TValue>(_control: InControl<TValue>): Form$Applied<TValue> {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    return {
+      instance: null!,
+      convertTo: noop,
+    };
+  },
+
+};
 
 /**
  * User input form.
@@ -42,6 +55,10 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
       control,
       element: inFormElement(element, { ...options, form: control }),
     };
+  }
+
+  static get [InAspect__symbol](): InAspect<Form> {
+    return Form__aspect;
   }
 
   constructor(
@@ -129,5 +146,40 @@ export namespace Form {
    */
   export type Provider<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = object> =
       ComponentShareable.Provider<Controls<TModel, TElt>, TSharer>;
+
+}
+
+/**
+ * Form aspect.
+ */
+interface Form$Aspect extends InAspect<Form, 'form'> {
+
+  applyTo<TValue>(control: InControl<TValue>): Form$Applied<TValue>;
+
+}
+
+/**
+ * A form aspect applied to control.
+ */
+interface Form$Applied<TValue> extends InAspect.Applied<TValue, Form<TValue>, Form<any>> {
+
+  convertTo(): undefined;
+
+}
+
+declare module '@frontmeans/input-aspects' {
+
+  export namespace InAspect.Application {
+
+    export interface Map<TInstance, TValue> {
+
+      /**
+       * Input data aspect application type.
+       */
+      form(): Form<TValue>;
+
+    }
+
+  }
 
 }
