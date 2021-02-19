@@ -1,7 +1,7 @@
-import { InControl, InElement, InGroup, inGroup, inValue } from '@frontmeans/input-aspects';
+import { InBuilder, InControl, InElement, InFormElement, InGroup, inGroup, inValue } from '@frontmeans/input-aspects';
 import { ContextKey__symbol, Contextual__symbol } from '@proc7ts/context-values';
 import { ContextUpKey } from '@proc7ts/context-values/updatable';
-import { AfterEvent, afterSupplied, mapAfter, trackValue, ValueTracker } from '@proc7ts/fun-events';
+import { afterSupplied, trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
 import { MockElement, testElement } from '../spec/test-element';
 import { Field } from './field';
@@ -16,7 +16,7 @@ describe('forms', () => {
   describe('FormPreset', () => {
     it('is applied to field', async () => {
 
-      const setup = jest.fn((controls: AfterEvent<[Field.Controls<any>]>, _field: Field<any>) => controls);
+      const setup = jest.fn();
 
       @Component(
           'test-element',
@@ -46,11 +46,11 @@ describe('forms', () => {
       expect(field?.sharer).toBe(context);
       expect(field?.control).toBeInstanceOf(InControl);
 
-      expect(setup).toHaveBeenCalledWith(expect.any(Function), field);
+      expect(setup).toHaveBeenCalledWith(expect.objectContaining({ sharer: context, field }));
     });
     it('is applied to form', async () => {
 
-      const setup = jest.fn((controls: AfterEvent<[Form.Controls<any, any>]>, _form: Form) => controls);
+      const setup = jest.fn();
 
       @Component(
           'test-element',
@@ -85,7 +85,7 @@ describe('forms', () => {
       expect(form?.control).toBeInstanceOf(InGroup);
       expect(form?.element).toBeInstanceOf(InElement);
 
-      expect(setup).toHaveBeenCalledWith(expect.any(Function), form);
+      expect(setup).toHaveBeenCalledWith(expect.objectContaining({ sharer: context, form }));
     });
     it('tracks field rule changes', async () => {
 
@@ -118,7 +118,7 @@ describe('forms', () => {
       expect(field.control.it).toBe('test1');
 
       const rules: jest.Mocked<FormPreset.Spec> = {
-        setupField: jest.fn((controls: AfterEvent<[Field.Controls<any>]>, _field: Field<any>) => controls),
+        setupField: jest.fn(),
       };
 
       ruleTracker.it = rules;
@@ -160,7 +160,7 @@ describe('forms', () => {
       expect(form.control.it.counter).toBe(1);
 
       const rules: jest.Mocked<FormPreset.Spec> = {
-        setupForm: jest.fn((controls: AfterEvent<[Form.Controls<any, any>]>, _field: Form<any>) => controls),
+        setupForm: jest.fn(),
       };
 
       ruleTracker.it = rules;
@@ -174,7 +174,7 @@ describe('forms', () => {
         let controlCounter: number;
         let ruleTracker: ValueTracker<FormPreset.Spec>;
         let context: ComponentContext;
-        let formDefaults: FormPreset;
+        let formPreset: FormPreset;
 
         beforeEach(async () => {
           controlCounter = 0;
@@ -198,64 +198,90 @@ describe('forms', () => {
           const element = new (await testElement(TestComponent))();
 
           context = await ComponentSlot.of(element).whenReady;
-          formDefaults = context.get(FormPreset);
+          formPreset = context.get(FormPreset);
         });
 
         describe('setupField', () => {
-          it('reflects rule changes', async () => {
+          it('reflects rule changes', () => {
 
-            const field = new Field<number>(() => ({ control: inValue(++controlCounter) }));
+            const createControls = (builder: Field.Builder<number, any>): Field.Controls<number> => ({
+              control: builder.control.build(opts => inValue(++controlCounter, opts)),
+            });
+            const field = new Field<number>(createControls);
 
             expect(field[Contextual__symbol](context)).toBe(field);
 
-            const controls = formDefaults.setupField(field.readControls, field);
-
-            expect((await controls).control.it).toBe(1);
-
-            ruleTracker.it = {
-              setupField: (controls: AfterEvent<[Field.Controls<any>]>, _field: Field<any>) => controls.do(
-                  mapAfter(cts => {
-                    cts.control.it += 10;
-                    return cts;
-                  }),
-              ),
+            const builder1: Field.Builder<number, any> = {
+              sharer: context,
+              field,
+              control: new InBuilder<InControl<number>>(),
             };
 
-            expect((await controls).control.it).toBe(12);
+            formPreset.setupField(builder1);
+            expect(createControls(builder1).control.it).toBe(1);
+
+            ruleTracker.it = {
+              setupField: (builder: Field.Builder<any, any>) => {
+                builder.control.setup(ctl => ctl.it += 10);
+              },
+            };
+
+            const builder2: Field.Builder<number, any> = {
+              sharer: context,
+              field,
+              control: new InBuilder<InControl<number>>(),
+            };
+
+            formPreset.setupField(builder2);
+            expect(createControls(builder2).control.it).toBe(12);
           });
         });
 
         describe('setupForm', () => {
-          it('reflects rule changes', async () => {
+          it('reflects rule changes', () => {
 
-            const form = new Form<{ counter: number }>(() => Form.forElement(
-                inGroup({ counter: ++controlCounter }),
+            const createControls = (
+                builder: Form.Builder<{ counter: number }, any, any>,
+            ): Form.Controls<{ counter: number }> => Form.forElement(
+                builder.control.build(opts => inGroup({ counter: ++controlCounter }, opts)),
                 context.element,
-            ));
+            );
+            const form = new Form<{ counter: number }>(createControls);
 
             expect(form[Contextual__symbol](context)).toBe(form);
 
-            const controls = formDefaults.setupForm(form.readControls, form);
-
-            expect((await controls).control.it.counter).toBe(1);
-
-            ruleTracker.it = {
-              setupForm: (controls: AfterEvent<[Form.Controls<any, any>]>, _form: Form<any>) => controls.do(
-                  mapAfter(cts => {
-                    cts.control.it.counter += 10;
-                    return cts;
-                  }),
-              ),
+            const builder1: Form.Builder<{ counter: number }, any, any> = {
+              sharer: context,
+              form,
+              control: new InBuilder<InControl<{ counter: number }>>(),
+              element: new InBuilder<InFormElement>(),
             };
 
-            expect((await controls).control.it.counter).toBe(12);
+            formPreset.setupForm(builder1);
+            expect(createControls(builder1).control.it.counter).toBe(1);
+
+            ruleTracker.it = {
+              setupForm: (builder: Form.Builder<any, any, any>) => {
+                builder.control.setup(ctl => ctl.it.counter += 10);
+              },
+            };
+
+            const builder2: Form.Builder<{ counter: number }, any, any> = {
+              sharer: context,
+              form,
+              control: new InBuilder<InControl<{ counter: number }>>(),
+              element: new InBuilder<InFormElement>(),
+            };
+
+            formPreset.setupForm(builder2);
+            expect(createControls(builder2).control.it.counter).toBe(12);
           });
         });
 
         describe('[AfterEvent__symbol]', () => {
           it('reflects rule changes', () => {
 
-            const rules = afterSupplied(formDefaults);
+            const rules = afterSupplied(formPreset);
             const receiver = jest.fn();
 
             rules(receiver);

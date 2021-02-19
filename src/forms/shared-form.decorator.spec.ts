@@ -1,4 +1,4 @@
-import { InElement, inGroup } from '@frontmeans/input-aspects';
+import { InElement, inFormElement, inGroup } from '@frontmeans/input-aspects';
 import { AfterEvent, trackValue } from '@proc7ts/fun-events';
 import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
 import { MockElement, testElement } from '../spec/test-element';
@@ -17,7 +17,10 @@ describe('forms', () => {
         readonly form: AfterEvent<[Form]>;
 
         constructor(context: ComponentContext) {
-          this.form = trackValue(new Form(Form.forElement(inGroup({}), context.element))).read;
+          this.form = trackValue(Form.by<any>(
+              opts => inGroup({}, opts),
+              opts => inFormElement(context.element, opts),
+          )).read;
         }
 
       }

@@ -1,4 +1,4 @@
-import { inGroup, InMode, InValidation, inValue } from '@frontmeans/input-aspects';
+import { inFormElement, inGroup, InMode, InValidation, inValue } from '@frontmeans/input-aspects';
 import { trackValue } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext } from '@wesib/wesib';
 import { MockElement, testDefinition } from '../../spec/test-element';
@@ -78,7 +78,10 @@ describe('forms', () => {
       readonly form: Form;
 
       constructor(context: ComponentContext) {
-        this.form = new Form(() => Form.forElement(inGroup({}), context.element));
+        this.form = Form.by<any>(
+            opts => inGroup({}, opts),
+            opts => inFormElement(context.element, opts),
+        );
       }
 
     }
@@ -98,7 +101,7 @@ describe('forms', () => {
       readonly field: Field<string>;
 
       constructor() {
-        this.field = new Field<string>(() => ({ control: inValue('test') }));
+        this.field = Field.by(opts => inValue('test', opts));
       }
 
     }

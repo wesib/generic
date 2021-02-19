@@ -1,5 +1,4 @@
 import { ContextBuilder, ContextBuilder__symbol, ContextRegistry } from '@proc7ts/context-values';
-import { AfterEvent } from '@proc7ts/fun-events';
 import { Class, Supply, valueProvider } from '@proc7ts/primitives';
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { Field } from '../field';
@@ -36,17 +35,15 @@ export abstract class AbstractFormPreset implements FormPreset.Spec, ContextBuil
   }
 
   setupField<TValue, TSharer extends object>(
-      controls: AfterEvent<[Field.Controls<TValue>]>,
-      _field: Field<TValue, TSharer>,
-  ): AfterEvent<[Field.Controls<TValue>]> {
-    return controls;
+      _builder: Field.Builder<TValue, TSharer>,
+  ): void {
+    // No field setup
   }
 
   setupForm<TModel, TElt extends HTMLElement, TSharer extends object>(
-      controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
-      _form: Form<TModel, TElt, TSharer>,
-  ): AfterEvent<[Form.Controls<TModel, TElt>]> {
-    return controls;
+      _builder: Form.Builder<TModel, TElt, TSharer>,
+  ): void {
+    // No form setup
   }
 
 }

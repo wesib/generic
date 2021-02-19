@@ -44,7 +44,7 @@ describe('forms', () => {
       const context = await ComponentSlot.of(element).whenReady;
       const { control } = (await context.get(FieldShare))!;
 
-      expect(createControl).toHaveBeenCalledWith(context);
+      expect(createControl).toHaveBeenCalledWith(expect.objectContaining({ sharer: context }));
       expect(createControl).toHaveReturnedWith({ control });
       expect(createControl).toHaveBeenCalledTimes(1);
     });

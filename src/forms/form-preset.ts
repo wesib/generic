@@ -56,8 +56,8 @@ export class FormPreset implements FormPreset.Rules, EventKeeper<[FormPreset.Rul
    */
   static combine(...specs: FormPreset.Spec[]): FormPreset.Rules {
     return {
-      setupField: FormDefaults$setupField(specs),
-      setupForm: FormDefaults$setupForm(specs),
+      setupField: FormPreset$setupField(specs),
+      setupForm: FormPreset$setupForm(specs),
     };
   }
 
@@ -87,31 +87,23 @@ export class FormPreset implements FormPreset.Rules, EventKeeper<[FormPreset.Rul
   /**
    * Sets up a form field controls.
    *
-   * @param controls - An `AfterEvent` keeper of target field controls.
-   * @param field - Target field instance.
-   *
-   * @returns An `AfterEvent` keeper of modified field controls.
+   * @param builder - Target field builder.
    */
   setupField<TValue, TSharer extends object>(
-      controls: AfterEvent<[Field.Controls<TValue>]>,
-      field: Field<TValue, TSharer>,
-  ): AfterEvent<[Field.Controls<TValue>]> {
-    return this[FormPreset$rules__symbol].setupField(controls, field);
+      builder: Field.Builder<TValue, TSharer>,
+  ): void {
+    this[FormPreset$rules__symbol].setupField(builder);
   }
 
   /**
    * Sets up a form controls.
    *
-   * @param controls - An `AfterEvent` keeper of target field controls.
-   * @param form - Target form instance.
-   *
-   * @returns An `AfterEvent` keeper of modified form controls.
+   * @param builder - Target form builder.
    */
   setupForm<TModel, TElt extends HTMLElement, TSharer extends object>(
-      controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
-      form: Form<TModel, TElt, TSharer>,
-  ): AfterEvent<[Form.Controls<TModel, TElt>]> {
-    return this[FormPreset$rules__symbol].setupForm(controls, form);
+      builder: Form.Builder<TModel, TElt, TSharer>,
+  ): void {
+    this[FormPreset$rules__symbol].setupForm(builder);
   }
 
 }
@@ -128,28 +120,20 @@ export namespace FormPreset {
     /**
      * Sets up a form field controls.
      *
-     * @param controls - An `AfterEvent` keeper of target field controls.
-     * @param field - Target field instance.
-     *
-     * @returns An `AfterEvent` keeper of modified field controls.
+     * @param builder - Target field builder.
      */
     setupField?<TValue, TSharer extends object>(
-        controls: AfterEvent<[Field.Controls<TValue>]>,
-        field: Field<TValue, TSharer>,
-    ): AfterEvent<[Field.Controls<TValue>]>;
+        builder: Field.Builder<TValue, TSharer>,
+    ): void;
 
     /**
      * Sets up a form controls.
      *
-     * @param controls - An `AfterEvent` keeper of target field controls.
-     * @param form - Target form instance.
-     *
-     * @returns An `AfterEvent` keeper of modified form controls.
+     * @param builder - Target form builder.
      */
     setupForm?<TModel, TElt extends HTMLElement, TSharer extends object>(
-        controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
-        form: Form<TModel, TElt, TSharer>,
-    ): AfterEvent<[Form.Controls<TModel, TElt>]>;
+        builder: Form.Builder<TModel, TElt, TSharer>,
+    ): void;
 
   }
 
@@ -162,56 +146,62 @@ export namespace FormPreset {
 
     setupField<TValue, TSharer extends object>(
         this: void,
-        controls: AfterEvent<[Field.Controls<TValue>]>,
-        field: Field<TValue, TSharer>,
-    ): AfterEvent<[Field.Controls<TValue>]>;
+        builder: Field.Builder<TValue, TSharer>,
+    ): void;
 
     setupForm<TModel, TElt extends HTMLElement, TSharer extends object>(
         this: void,
-        controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
-        form: Form<TModel, TElt, TSharer>,
-    ): AfterEvent<[Form.Controls<TModel, TElt>]>;
+        builder: Form.Builder<TModel, TElt, TSharer>,
+    ): void;
 
   }
 
 }
 
-function FormDefaults$setupField(
+function FormPreset$setupField(
     specs: readonly FormPreset.Spec[],
 ): <TValue, TSharer extends object>(
-    controls: AfterEvent<[Field.Controls<TValue>]>,
-    field: Field<TValue, TSharer>,
-) => AfterEvent<[Field.Controls<TValue>]> {
+    builder: Field.Builder<TValue, TSharer>,
+) => void {
   return specs.reduce(
       (prev, spec) => spec.setupField
           ? <TValue, TSharer extends object>(
-              controls: AfterEvent<[Field.Controls<TValue>]>,
-              field: Field<TValue, TSharer>,
-          ): AfterEvent<[Field.Controls<TValue>]> => spec.setupField!(prev(controls, field), field)
+              builder: Field.Builder<TValue, TSharer>,
+          ): void => {
+            prev(builder);
+            spec.setupField!(builder);
+          }
           : prev,
-      <TValue, TSharer extends object>(
-          controls: AfterEvent<[Field.Controls<TValue>]>,
-          _field: Field<TValue, TSharer>,
-      ): AfterEvent<[Field.Controls<TValue>]> => controls,
+      FormPreset$noFieldSetup,
   );
 }
 
-function FormDefaults$setupForm(
+function FormPreset$noFieldSetup<TValue, TSharer extends object>(
+    _builder: Field.Builder<TValue, TSharer>,
+): void {
+  // No field setup
+}
+
+function FormPreset$setupForm(
     specs: readonly FormPreset.Spec[],
 ): <TModel, TElt extends HTMLElement, TSharer extends object>(
-    controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
-    form: Form<TModel, TElt, TSharer>,
-) => AfterEvent<[Form.Controls<TModel, TElt>]> {
+    builder: Form.Builder<TModel, TElt, TSharer>,
+) => void {
   return specs.reduce(
       (prev, spec) => spec.setupForm
           ? <TModel, TElt extends HTMLElement, TSharer extends object>(
-              controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
-              form: Form<TModel, TElt, TSharer>,
-          ): AfterEvent<[Form.Controls<TModel, TElt>]> => spec.setupForm!(prev(controls, form), form)
+              builder: Form.Builder<TModel, TElt, TSharer>,
+          ): void => {
+            prev(builder);
+            spec.setupForm!(builder);
+          }
           : prev,
-      <TModel, TElt extends HTMLElement, TSharer extends object>(
-          controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
-          _form: Form<TModel, TElt, TSharer>,
-      ): AfterEvent<[Form.Controls<TModel, TElt>]> => controls,
+      FormPreset$noFormSetup,
   );
+}
+
+function FormPreset$noFormSetup<TModel, TElt extends HTMLElement, TSharer extends object>(
+    _builder: Form.Builder<TModel, TElt, TSharer>,
+): void {
+  // No form setup
 }

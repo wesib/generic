@@ -1,5 +1,4 @@
 import { InCssClasses, inCssError, inCssInfo } from '@frontmeans/input-aspects';
-import { AfterEvent, mapAfter } from '@proc7ts/fun-events';
 import { Field } from '../field';
 import { Form } from '../form';
 import { AbstractFormPreset } from './abstract-form-preset';
@@ -23,30 +22,23 @@ export class FormCssPreset extends AbstractFormPreset {
   }
 
   setupField<TValue, TSharer extends object>(
-      controls: AfterEvent<[Field.Controls<TValue>]>,
-      _field: Field<TValue, TSharer>,
-  ): AfterEvent<[Field.Controls<TValue>]> {
-    return controls.do(
-        mapAfter(controls => {
-          controls.control.setup(InCssClasses, css => {
-            css.add(this._info);
-            css.add(this._error);
-          });
-          return controls;
-        }),
-    );
+      builder: Field.Builder<TValue, TSharer>,
+  ): void {
+    builder.control.setup(InCssClasses, css => {
+      css.add(this._info);
+      css.add(this._error);
+    });
   }
 
   setupForm<TModel, TElt extends HTMLElement, TSharer extends object>(
-      controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
-      _form: Form<TModel, TElt, TSharer>,
-  ): AfterEvent<[Form.Controls<TModel, TElt>]> {
-    return controls.do(
-        mapAfter(controls => {
-          controls.control.setup(InCssClasses, css => css.add(this._info));
-          controls.element.setup(InCssClasses, css => css.add(controls.control.aspect(InCssClasses)));
-          return controls;
-        }),
+      builder: Form.Builder<TModel, TElt, TSharer>,
+  ): void {
+    builder.control.setup(InCssClasses, css => css.add(this._info));
+    builder.element.setup(
+        InCssClasses,
+        (css, element) => css.add(
+            element.aspect(Form)!.control.aspect(InCssClasses),
+        ),
     );
   }
 

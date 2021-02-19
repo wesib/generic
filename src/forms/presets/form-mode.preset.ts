@@ -1,5 +1,6 @@
 import { InMode, inModeByValidity, InParents } from '@frontmeans/input-aspects';
-import { AfterEvent, mapAfter } from '@proc7ts/fun-events';
+import { consumeEvents } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { itsEach } from '@proc7ts/push-iterator';
 import { Field } from '../field';
 import { Form } from '../form';
@@ -29,14 +30,16 @@ export class FormModePreset extends AbstractFormPreset {
   }
 
   setupField<TValue, TSharer extends object>(
-      controls: AfterEvent<[Field.Controls<TValue>]>,
-      _field: Field<TValue, TSharer>,
-  ): AfterEvent<[Field.Controls<TValue>]> {
-    return this._byForm
-        ? controls.do(
-            mapAfter(controls => {
+      builder: Field.Builder<TValue, TSharer>,
+  ): void {
+    if (this._byForm) {
+      builder.control.setup(
+          InParents,
+          (inParents, control) => inParents.read.do(
+              consumeEvents(parents => {
 
-              controls.control.aspect(InParents).read(parents => {
+                const supply = new Supply();
+
                 itsEach(
                     parents,
                     ({ parent }) => {
@@ -44,33 +47,24 @@ export class FormModePreset extends AbstractFormPreset {
                       const form = parent.aspect(Form);
 
                       if (form) {
-                        controls.control.setup(
-                            InMode,
-                            mode => mode.derive(form.element.aspect(InMode)),
-                        );
+                        control.aspect(InMode).derive(form.element.aspect(InMode)).as(supply);
                       }
                     },
                 );
-              });
 
-              return controls;
-            }),
-        )
-        : controls;
+                return supply;
+              }),
+          ),
+      );
+    }
   }
 
   setupForm<TModel, TElt extends HTMLElement, TSharer extends object>(
-      controls: AfterEvent<[Form.Controls<TModel, TElt>]>,
-      _form: Form<TModel, TElt, TSharer>,
-  ): AfterEvent<[Form.Controls<TModel, TElt>]> {
-    return this._byValidity
-        ? controls.do(
-            mapAfter(controls => {
-              controls.control.setup(InMode, mode => mode.derive(this._byValidity!));
-              return controls;
-            }),
-        )
-        : controls;
+      builder: Form.Builder<TModel, TElt, TSharer>,
+  ): void {
+    if (this._byValidity) {
+      builder.control.setup(InMode, mode => mode.derive(this._byValidity!));
+    }
   }
 
 }
