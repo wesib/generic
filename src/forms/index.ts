@@ -7,7 +7,6 @@ export * from './field.share';
 export * from './field-name.definer';
 export * from './form';
 export * from './form.share';
-export * from './form-aspects';
 export * from './form-preset';
 export * from './form-unit';
 export * from './presets';

@@ -1,8 +1,26 @@
-import { InBuilder, InControl, InElement, InFormElement, InGroup, inGroup, inValue } from '@frontmeans/input-aspects';
+import {
+  InBuilder,
+  InControl,
+  InElement,
+  inFormElement,
+  InFormElement,
+  InGroup,
+  inGroup,
+  InNamespaceAliaser,
+  InRenderScheduler,
+  inValue,
+} from '@frontmeans/input-aspects';
+import { newManualRenderScheduler, RenderScheduler } from '@frontmeans/render-scheduler';
 import { ContextKey__symbol, Contextual__symbol } from '@proc7ts/context-values';
 import { ContextUpKey } from '@proc7ts/context-values/updatable';
 import { afterSupplied, trackValue, ValueTracker } from '@proc7ts/fun-events';
-import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
+import {
+  Component,
+  ComponentContext,
+  ComponentSlot,
+  DefaultNamespaceAliaser,
+  ElementRenderScheduler,
+} from '@wesib/wesib';
 import { MockElement, testElement } from '../spec/test-element';
 import { Field } from './field';
 import { FieldShare } from './field.share';
@@ -166,6 +184,99 @@ describe('forms', () => {
       ruleTracker.it = rules;
       expect(rules.setupForm).toHaveBeenCalledTimes(1);
       expect(form.control.it.counter).toBe(2);
+    });
+
+    describe('defaults', () => {
+
+      let mockRenderScheduler: jest.Mock<ReturnType<RenderScheduler>, Parameters<RenderScheduler>>;
+      let context: ComponentContext;
+      let form: Form;
+      let field: Field<string>;
+
+      beforeEach(async () => {
+
+        mockRenderScheduler = jest.fn(newManualRenderScheduler());
+
+        @Component(
+            'test-element',
+            {
+              extend: { type: MockElement },
+              feature: {
+                setup(setup) {
+                  setup.perComponent({ a: ElementRenderScheduler, is: mockRenderScheduler });
+                },
+              },
+            },
+        )
+        class TestComponent {
+
+          @SharedField()
+          readonly field = Field.by(opts => inValue('test', opts));
+
+          @SharedForm()
+          readonly form: Form;
+
+          constructor(context: ComponentContext) {
+            this.form = Form.by(
+                opts => inGroup<any>({}, opts),
+                opts => inFormElement(context.element, opts),
+            );
+          }
+
+        }
+
+        const element = new (await testElement(TestComponent))();
+
+        context = await ComponentSlot.of(element).whenReady;
+        form = (await context.get(FormShare))!;
+        field = (await context.get(FieldShare))!;
+      });
+
+      describe('form control', () => {
+        it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
+
+          const scheduler = form.control.aspect(InRenderScheduler);
+          const opts = { node: document.createElement('div') };
+
+          scheduler(opts);
+
+          expect(mockRenderScheduler).toHaveBeenLastCalledWith({ ...opts });
+        });
+        it('sets `InNamespaceAliaser` to `DefaultNamespaceAliaser`', () => {
+          expect(form.control.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
+        });
+      });
+
+      describe('form element', () => {
+        it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
+
+          const scheduler = form.element.aspect(InRenderScheduler);
+          const opts = { node: document.createElement('div') };
+
+          scheduler(opts);
+
+          expect(mockRenderScheduler).toHaveBeenLastCalledWith({ ...opts });
+        });
+        it('sets `InNamespaceAliaser` to `DefaultNamespaceAliaser`', () => {
+          expect(form.element.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
+        });
+      });
+
+      describe('field', () => {
+        it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
+
+          const scheduler = field.control.aspect(InRenderScheduler);
+          const opts = { node: document.createElement('div') };
+
+          scheduler(opts);
+
+          expect(mockRenderScheduler).toHaveBeenLastCalledWith({ ...opts });
+        });
+        it('sets `InNamespaceAliaser` to `DefaultNamespaceAliaser`', () => {
+          expect(field.control.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
+        });
+      });
+
     });
 
     describe('instance', () => {

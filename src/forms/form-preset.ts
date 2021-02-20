@@ -1,6 +1,7 @@
 import { ContextKey__symbol, ContextSupply, ContextValueSlot } from '@proc7ts/context-values';
 import { ContextUpKey } from '@proc7ts/context-values/updatable';
 import { AfterEvent, AfterEvent__symbol, EventKeeper, mapAfter, supplyAfter } from '@proc7ts/fun-events';
+import { DefaultFormPreset } from './default.preset.impl';
 import { Field } from './field';
 import { Form } from './form';
 
@@ -21,7 +22,7 @@ class FormPresetKey extends ContextUpKey<FormPreset, FormPreset.Spec> {
           AfterEvent<FormPreset.Spec[]>>,
   ): void {
     slot.insert(new FormPreset(slot.seed.do(
-        mapAfter(FormPreset.combine),
+        mapAfter((...specs) => FormPreset.combine(...specs, DefaultFormPreset)),
         supplyAfter(slot.context.get(ContextSupply)),
     )));
   }
@@ -42,6 +43,11 @@ export class FormPreset implements FormPreset.Rules, EventKeeper<[FormPreset.Rul
   /**
    * A key of component context value containing default form preset combined from all provided {@link FormPreset.Spec
    * specifiers}.
+   *
+   * As a bare minimum it attaches the following aspects to controls:
+   *
+   * - `InRenderScheduler` set to `ElementRenderScheduler`,
+   * - `InNamespaceAliaser` set to `DefaultNamespaceAliaser.
    */
   static get [ContextKey__symbol](): ContextUpKey<FormPreset, FormPreset.Spec> {
     return FormPreset__key;
