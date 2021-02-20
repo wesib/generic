@@ -1,9 +1,30 @@
-import { InControl, inFormElement, InFormElement } from '@frontmeans/input-aspects';
-import { digAfter } from '@proc7ts/fun-events';
+import {
+  InAspect,
+  InAspect__symbol,
+  InBuilder,
+  InControl,
+  InConverter,
+  inconvertibleInAspect,
+  inFormElement,
+  InFormElement,
+  nullInAspect,
+} from '@frontmeans/input-aspects';
+import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
+import { valueRecipe } from '@proc7ts/primitives';
+import { ComponentContext } from '@wesib/wesib';
 import { ComponentShareable } from '../share';
 import { Field } from './field';
 import { FormPreset } from './form-preset';
 import { FormUnit } from './form-unit';
+
+const Form__aspect: Form$Aspect = {
+
+  applyTo<TValue>(_control: InControl<TValue>): Form$Applied<TValue> {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    return nullInAspect();
+  },
+
+};
 
 /**
  * User input form.
@@ -44,10 +65,75 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
     };
   }
 
+  /**
+   * Creates a form instance by the given control factories.
+   *
+   * @param factory - Submittable form control factory.
+   * @param elementFactory - Form element control factory or options.
+   *
+   * @returns New form instance.
+   */
+  static by<
+      TModel,
+      TElt extends HTMLElement = HTMLElement,
+      TSharer extends object = any>(
+      factory: InControl.Factory<InControl<TModel>, TModel>,
+      elementFactory: (
+          this: void,
+          options: Parameters<InControl.Factory<InFormElement<TElt>, void>>[0] & { form: InControl<TModel>},
+      ) => InFormElement<TElt>,
+  ): Form<TModel, TElt, TSharer> {
+    return new Form(this.providerBy(factory, elementFactory));
+  }
+
+  /**
+   * Creates a form controls provider by the given control factories.
+   *
+   * @param factory - Submittable form control factory.
+   * @param elementFactory - Form element control factory or options.
+   *
+   * @returns New form controls provider.
+   */
+  static providerBy<
+      TModel,
+      TElt extends HTMLElement = HTMLElement,
+      TSharer extends object = any>(
+      factory: InControl.Factory<InControl<TModel>, TModel>,
+      elementFactory: (
+          this: void,
+          options: Parameters<InControl.Factory<InFormElement<TElt>, void>>[0] & { form: InControl<TModel>},
+      ) => InFormElement<TElt>,
+  ): Form.Provider<TModel, TElt, TSharer> {
+    return builder => {
+
+      const control = builder.control.build(factory);
+
+      return {
+        control,
+        element: builder.element.build(opts => elementFactory({ ...opts, form: control })),
+      };
+    };
+  }
+
+  /**
+   * An input control aspect representing a form this control belongs to.
+   *
+   * This aspect is available in {@link Form.Controls.control submittable form control} and {@link Form.Controls.element
+   * form element control}.
+   */
+  static get [InAspect__symbol](): InAspect<Form | null> {
+    return Form__aspect;
+  }
+
+  /**
+   * Constructs form.
+   *
+   * @param controls - Either form controls instance, or its provider.
+   */
   constructor(
       controls: Form.Controls<TModel, TElt> | Form.Provider<TModel, TElt, TSharer>,
   ) {
-    super(Form$provider(() => this, controls));
+    super(Form$provider(() => this, valueRecipe(controls)));
   }
 
   /**
@@ -68,13 +154,33 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
 
 function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>(
     form: () => Form<TModel, TElt, TSharer>,
-    controls: Form.Controls<TModel, TElt> | Form.Provider<TModel, TElt, TSharer>,
-): Form.Provider<TModel, TElt, TSharer> {
+    provider: Form.Provider<TModel, TElt, TSharer>,
+): ComponentShareable.Provider<Form.Controls<TModel, TElt>, TSharer> {
 
-  const provider = ComponentShareable.provider(controls);
+  const formAspect: InConverter.Aspect.Factory<any> = control => ({
+    applyAspect<TInstance, TKind extends InAspect.Application.Kind>(
+        _aspect: InAspect<any, any>,
+    ): InAspect.Application.Result<TInstance, any, TKind> | undefined {
+      return inconvertibleInAspect(control, Form, form()) as InAspect.Application.Result<TInstance, any, TKind>;
+    },
+  });
 
   return sharer => sharer.get(FormPreset).rules.do(
-      digAfter(preset => preset.setupForm(provider(sharer), form())),
+      digAfter(preset => {
+
+        const builder: Form.Builder<TModel, TElt, TSharer> = {
+          sharer,
+          form: form(),
+          control: new InBuilder<InControl<TModel>, TModel>().addAspect(Form, formAspect),
+          element: new InBuilder<InFormElement<TElt>, void>().addAspect(Form, formAspect),
+        };
+
+        preset.setupForm(builder);
+
+        const controls = provider(builder);
+
+        return isAfterEvent(controls) ? controls : afterThe(controls);
+      }),
   );
 }
 
@@ -104,9 +210,6 @@ export namespace Form {
 
     /**
      * Submittable form input control.
-     *
-     * @typeParam TModel - A model type of the form, i.e. a type of its control value.
-     * @typeParam TElt - A type of HTML form element.
      */
     readonly control: InControl<TModel>;
 
@@ -121,6 +224,39 @@ export namespace Form {
   }
 
   /**
+   * Form builder.
+   *
+   * @typeParam TModel - A model type of the form, i.e. a type of its control value.
+   * @typeParam TElt - A type of HTML form element.
+   */
+  export interface Builder<TModel, TElt extends HTMLElement, TSharer extends object> {
+
+    /**
+     * Sharer component context.
+     */
+    readonly sharer: ComponentContext<TSharer>;
+
+    /**
+     * Target form.
+     */
+    readonly form: Form<TModel, TElt, TSharer>;
+
+    /**
+     * Submittable form control builder.
+     */
+    readonly control: InBuilder<InControl<TModel>, TModel>;
+
+    /**
+     * Form element control builder.
+     *
+     * Unlike {@link control input control} this one is not supposed to be submitted, but rather contains a `<form>`
+     * element issuing a `submit` event.
+     */
+    readonly element: InBuilder<InFormElement<TElt>, void>;
+
+  }
+
+  /**
    * Form controls provider signature.
    *
    * @typeParam TModel - A model type of the form, i.e. a type of its control value.
@@ -128,6 +264,45 @@ export namespace Form {
    * @typeParam TSharer - Form sharer component type.
    */
   export type Provider<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = object> =
-      ComponentShareable.Provider<Controls<TModel, TElt>, TSharer>;
+  /**
+   * @param builder - Form builder.
+   *
+   * @returns Either form controls instance, or an `AfterEvent` keeper reporting one.
+   */
+      (
+          this: void,
+          builder: Builder<TModel, TElt, TSharer>,
+      ) => Controls<TModel, TElt> | AfterEvent<[Controls<TModel, TElt>]>;
+
+}
+
+/**
+ * Form aspect.
+ */
+interface Form$Aspect extends InAspect<Form | null, 'form'> {
+
+  applyTo<TValue>(control: InControl<TValue>): Form$Applied<TValue>;
+
+}
+
+/**
+ * A form aspect applied to control.
+ */
+type Form$Applied<TValue> = InAspect.Applied<TValue, Form<TValue> | null, Form<any> | null>;
+
+declare module '@frontmeans/input-aspects' {
+
+  export namespace InAspect.Application {
+
+    export interface Map<TInstance, TValue> {
+
+      /**
+       * Form aspect application type.
+       */
+      form(): Form<TValue> | null;
+
+    }
+
+  }
 
 }

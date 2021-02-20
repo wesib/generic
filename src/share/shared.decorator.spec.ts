@@ -3,6 +3,7 @@ import { AfterEvent, trackValue } from '@proc7ts/fun-events';
 import { Component, ComponentClass, ComponentSlot } from '@wesib/wesib';
 import { testElement } from '../spec/test-element';
 import { ComponentShare } from './component-share';
+import { ComponentShareable } from './component-shareable';
 import { Shared } from './shared.decorator';
 
 describe('share', () => {
@@ -51,6 +52,34 @@ describe('share', () => {
 
       value.it = 'test2';
       expect(await shared).toBe('test2');
+    });
+    it('shares shareable component property value', async () => {
+
+      const share2 = new ComponentShare<TestShareable>('shareable-share');
+
+      class TestShareable extends ComponentShareable<string> {
+
+        get it(): string {
+          return this.internals;
+        }
+
+      }
+
+      @Component({ extend: { type: Object } })
+      class TestComponent {
+
+        @Shared(share2)
+        shareable = new TestShareable(() => 'test');
+
+      }
+
+      const element = new (await testElement(TestComponent))();
+      const context = await ComponentSlot.of(element).whenReady;
+      const shared = context.get(share2);
+      const shareable = await shared;
+
+      expect(shareable).toBeInstanceOf(TestShareable);
+      expect(shareable?.it).toBe('test');
     });
     it('applies share extension', async () => {
 
