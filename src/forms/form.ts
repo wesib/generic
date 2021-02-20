@@ -115,6 +115,12 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
     };
   }
 
+  /**
+   * An input control aspect representing a form this control belongs to.
+   *
+   * This aspect is available in {@link Form.Controls.control submittable form control} and {@link Form.Controls.element
+   * form element control}.
+   */
   static get [InAspect__symbol](): InAspect<Form | null> {
     return Form__aspect;
   }

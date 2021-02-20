@@ -1,5 +1,5 @@
 import { InGroup, inGroup, inList, InList, inValue } from '@frontmeans/input-aspects';
-import { AfterEvent, trackValue } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, trackValue } from '@proc7ts/fun-events';
 import { valueProvider } from '@proc7ts/primitives';
 import { BootstrapContext, Component, ComponentClass, ComponentContext, ComponentSlot, FeatureDef } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
@@ -47,6 +47,26 @@ describe('forms', () => {
       expect(createControl).toHaveBeenCalledWith(expect.objectContaining({ sharer: context }));
       expect(createControl).toHaveReturnedWith({ control });
       expect(createControl).toHaveBeenCalledTimes(1);
+    });
+    it('shares field provided by controls keeper', async () => {
+
+      const createControl = jest.fn(() => afterThe({ control: inValue('test') }));
+
+      @Component('test-element', { extend: { type: MockElement } })
+      class TestComponent {
+
+        @SharedField()
+        readonly field = new Field<string>(createControl);
+
+      }
+
+      const element = new (await testElement(TestComponent))();
+      const context = await ComponentSlot.of(element).whenReady;
+      const { control } = (await context.get(FieldShare))!;
+
+      expect(createControl).toHaveBeenCalledWith(expect.objectContaining({ sharer: context }));
+      expect(createControl).toHaveBeenCalledTimes(1);
+      expect(control.it).toBe('test');
     });
     it('adds field to enclosing form', async () => {
 

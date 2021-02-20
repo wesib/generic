@@ -1,5 +1,5 @@
 import { inFormElement, inGroup, InMode, InValidation, inValue } from '@frontmeans/input-aspects';
-import { trackValue } from '@proc7ts/fun-events';
+import { afterThe } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext } from '@wesib/wesib';
 import { MockElement, testDefinition } from '../../spec/test-element';
 import { Field } from '../field';
@@ -17,7 +17,7 @@ describe('forms', () => {
 
       const [{ control }] = await bootstrap();
 
-      control.aspect(InValidation).by(trackValue({ invalid: true }));
+      control.aspect(InValidation).by(afterThe({ invalid: true }));
 
       expect(await control.aspect(InMode).read).toBe('-on');
     });
@@ -25,7 +25,7 @@ describe('forms', () => {
 
       const [{ control }] = await bootstrap({ byValidity: { invalid: 'on' } });
 
-      control.aspect(InValidation).by(trackValue({ invalid: true }));
+      control.aspect(InValidation).by(afterThe({ invalid: true }));
 
       expect(await control.aspect(InMode).read).toBe('on');
     });
@@ -33,7 +33,7 @@ describe('forms', () => {
 
       const [{ control }] = await bootstrap({ byValidity: false });
 
-      control.aspect(InValidation).by(trackValue({ invalid: true }));
+      control.aspect(InValidation).by(afterThe({ invalid: true }));
 
       expect(await control.aspect(InMode).read).toBe('on');
     });
@@ -49,6 +49,16 @@ describe('forms', () => {
 
       const [{ element: form }, { control: field }] = await bootstrap({ byForm: false });
 
+      form.aspect(InMode).own.it = 'off';
+
+      expect(await field.aspect(InMode).read).toBe('on');
+    });
+    it('handles adding to non-form container', async () => {
+
+      const form = inGroup<{ test: string }>({ test: '' });
+      const [, { control: field }] = await bootstrap();
+
+      form.controls.set('test', field);
       form.aspect(InMode).own.it = 'off';
 
       expect(await field.aspect(InMode).read).toBe('on');

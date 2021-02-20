@@ -59,7 +59,7 @@ export abstract class ComponentShareable<TInternals = unknown, TSharer extends o
    *
    * @param internals - Either shareable internals, or their provider.
    */
-  protected constructor(internals: TInternals | ComponentShareable.Provider<TInternals, TSharer>) {
+  constructor(internals: TInternals | ComponentShareable.Provider<TInternals, TSharer>) {
     this[ComponentShareable$Internals__symbol] = new ComponentShareable$Internals(this, internals);
   }
 

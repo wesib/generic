@@ -91,7 +91,7 @@ export class FormPreset implements FormPreset.Rules, EventKeeper<[FormPreset.Rul
   }
 
   /**
-   * Sets up a form field controls.
+   * Sets up form field controls.
    *
    * @param builder - Target field builder.
    */
@@ -102,7 +102,7 @@ export class FormPreset implements FormPreset.Rules, EventKeeper<[FormPreset.Rul
   }
 
   /**
-   * Sets up a form controls.
+   * Sets up form controls.
    *
    * @param builder - Target form builder.
    */
@@ -124,7 +124,7 @@ export namespace FormPreset {
   export interface Spec {
 
     /**
-     * Sets up a form field controls.
+     * Sets up form field controls.
      *
      * @param builder - Target field builder.
      */
@@ -133,7 +133,7 @@ export namespace FormPreset {
     ): void;
 
     /**
-     * Sets up a form controls.
+     * Sets up form controls.
      *
      * @param builder - Target form builder.
      */
@@ -146,7 +146,8 @@ export namespace FormPreset {
   /**
    * {@link FormPreset Form preset} rules.
    *
-   * Combines multiple {@link Spec specifiers}.
+   * Multiple {@link Spec specifiers} could be combined into single rule instance by {@link FormPreset.combine} static
+   * method.
    */
   export interface Rules extends FormPreset.Spec {
 

@@ -6,6 +6,12 @@ import { Field } from '../field';
 import { Form } from '../form';
 import { AbstractFormPreset } from './abstract-form-preset';
 
+/**
+ * Form preset that enables default form and field mode management.
+ *
+ * - Makes form mode depend on its validity (`inModeByValidity()`).
+ * - Derives form field's mode from form element's one.
+ */
 export class FormModePreset extends AbstractFormPreset {
 
   /**
@@ -18,14 +24,17 @@ export class FormModePreset extends AbstractFormPreset {
    */
   private readonly _byForm?: boolean;
 
+  /**
+   * Constructs customized form mode preset.
+   *
+   * @param options - Custom form mode preset options.
+   */
   constructor(options: FormModePreset.Options = {}) {
     super();
 
-    const { byValidity, byForm = true } = options;
+    const { byValidity = true, byForm = true } = options;
 
-    this._byValidity = byValidity === false
-        ? null
-        : inModeByValidity(byValidity === true ? {} : byValidity);
+    this._byValidity = byValidity ? inModeByValidity(byValidity === true ? undefined : byValidity) : null;
     this._byForm = byForm;
   }
 
@@ -62,8 +71,11 @@ export class FormModePreset extends AbstractFormPreset {
   setupForm<TModel, TElt extends HTMLElement, TSharer extends object>(
       builder: Form.Builder<TModel, TElt, TSharer>,
   ): void {
-    if (this._byValidity) {
-      builder.control.setup(InMode, mode => mode.derive(this._byValidity!));
+
+    const { _byValidity: byValidity } = this;
+
+    if (byValidity) {
+      builder.control.setup(InMode, mode => mode.derive(byValidity));
     }
   }
 
@@ -71,10 +83,23 @@ export class FormModePreset extends AbstractFormPreset {
 
 export namespace FormModePreset {
 
+  /**
+   * Form mode preset options.
+   */
   export interface Options {
 
+    /**
+     * For mode by its validity options.
+     *
+     * `false` to disable.
+     */
     readonly byValidity?: Parameters<typeof inModeByValidity>[0] | boolean;
 
+    /**
+     * Whether form field mode should be derived from form element's one.
+     *
+     * `true` by default. `false` to disable.
+     */
     readonly byForm?: boolean;
 
   }

@@ -1,5 +1,5 @@
 import { InElement, inFormElement, inGroup } from '@frontmeans/input-aspects';
-import { AfterEvent, trackValue } from '@proc7ts/fun-events';
+import { afterThe } from '@proc7ts/fun-events';
 import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
 import { MockElement, testElement } from '../spec/test-element';
 import { Form } from './form';
@@ -14,13 +14,18 @@ describe('forms', () => {
       class TestComponent {
 
         @SharedForm()
-        readonly form: AfterEvent<[Form]>;
+        readonly form: Form;
 
         constructor(context: ComponentContext) {
-          this.form = trackValue(Form.by<any>(
-              opts => inGroup({}, opts),
-              opts => inFormElement(context.element, opts),
-          )).read;
+          this.form = new Form<any>(builder => {
+
+            const control = builder.control.build(opts => inGroup({}, opts));
+
+            return afterThe<[Form.Controls<any>]>({
+              control,
+              element: builder.element.build(opts => inFormElement(context.element, { ...opts, form: control })),
+            });
+          });
         }
 
       }
