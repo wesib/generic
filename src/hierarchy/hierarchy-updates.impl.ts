@@ -5,9 +5,9 @@ import {
   BootstrapContext,
   BootstrapRoot,
   ComponentContext,
-  ComponentElement,
   ComponentEvent,
   ComponentSlot__symbol,
+  parentElement,
 } from '@wesib/wesib';
 
 /**
@@ -81,7 +81,7 @@ export class HierarchyUpdates {
 export function findParentContext(of: ComponentContext): [ComponentContext, boolean] | undefined {
 
   const root = of.get(BootstrapContext).get(BootstrapRoot);
-  let { element } = of as { element: Node };
+  let { element } = of as { element: Element };
   let immediate = true;
 
   if (element === root) {
@@ -90,8 +90,7 @@ export function findParentContext(of: ComponentContext): [ComponentContext, bool
 
   for (;;) {
 
-    const parent = element.parentNode as ComponentElement | null
-        || (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined; // Inside shadow DOM?
+    const parent = parentElement(element);
 
     if (!parent) {
       return;

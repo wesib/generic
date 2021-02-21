@@ -21,7 +21,7 @@ import {
   ComponentElement,
   ComponentSlot,
   DefinitionContext,
-  isElement,
+  parentElement,
 } from '@wesib/wesib';
 import { ComponentShareLocator } from './component-share-locator';
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
@@ -158,7 +158,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
     }).do(
         digAfter_(({ sharers: [names] }): AfterEvent<[T, ComponentContext] | []> => {
 
-          let element: ComponentElement | null | undefined = self ? consumer.element : parentElement(consumer.element);
+          let element: ComponentElement | null = self ? consumer.element : parentElement(consumer.element);
 
           while (element) {
             if (names.has(element.tagName.toLowerCase())) {
@@ -234,15 +234,6 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
     );
   }
 
-}
-
-function parentElement(element: ComponentElement): ComponentElement | null | undefined {
-
-  const { parentNode } = element;
-
-  return parentNode && isElement(parentNode)
-      ? parentNode
-      : (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined;// Inside shadow DOM?
 }
 
 export namespace ComponentShare {
