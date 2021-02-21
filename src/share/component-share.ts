@@ -15,7 +15,15 @@ import {
   translateAfter_,
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
-import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
+import {
+  BootstrapContext,
+  ComponentContext,
+  ComponentElement,
+  ComponentSlot,
+  DefinitionContext,
+  isElement,
+} from '@wesib/wesib';
+import { ComponentShareLocator } from './component-share-locator';
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
@@ -120,17 +128,22 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
   }
 
   /**
-   * Obtains a shared value for the consuming component.
+   * Locates a shared value for the consuming component.
    *
    * Searches among parent elements for the one bound to the sharer component, then obtains the shared value from
    * the sharer's context.
    *
    * @param consumer - Consumer component context.
+   * @param options - Location options.
    *
    * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
-  valueFor(consumer: ComponentContext): AfterEvent<[T, ComponentContext] | []> {
+  valueFor(
+      consumer: ComponentContext,
+      options: ComponentShareLocator.Options = {},
+  ): AfterEvent<[T, ComponentContext] | []> {
 
+    const { self } = options;
     const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
     const status = consumer.readStatus.do(
         deduplicateAfter_(
@@ -145,19 +158,11 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
     }).do(
         digAfter_(({ sharers: [names] }): AfterEvent<[T, ComponentContext] | []> => {
 
-          let element: ComponentElement = consumer.element;
+          let element: ComponentElement | null | undefined = self ? consumer.element : parentElement(consumer.element);
 
-          for (;;) {
-
-            const parent = element.parentNode as ComponentElement | null
-                || (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined; // Inside shadow DOM?
-
-            if (!parent) {
-              return afterThe();
-            }
-
-            if (names.has(parent.tagName.toLowerCase())) {
-              return ComponentSlot.of(parent).read.do(
+          while (element) {
+            if (names.has(element.tagName.toLowerCase())) {
+              return ComponentSlot.of(element).read.do(
                   digAfter_(sharerContext => sharerContext
                       ? sharerContext.get(this).do(
                           translateAfter_((send, value?) => value ? send(value, sharerContext) : send()),
@@ -166,8 +171,10 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
               );
             }
 
-            element = parent;
+            element = parentElement(element);
           }
+
+          return afterThe();
         }),
         deduplicateAfter(),
     );
@@ -227,6 +234,15 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
     );
   }
 
+}
+
+function parentElement(element: ComponentElement): ComponentElement | null | undefined {
+
+  const { parentNode } = element;
+
+  return parentNode && isElement(parentNode)
+      ? parentNode
+      : (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined;// Inside shadow DOM?
 }
 
 export namespace ComponentShare {

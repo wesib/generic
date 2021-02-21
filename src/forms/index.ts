@@ -10,6 +10,7 @@ export * from './form.share';
 export * from './form-preset';
 export * from './form-unit';
 export * from './presets';
+export * from './on-submit.decorator';
 export * from './shared-field.decorator';
 export * from './shared-form.decorator';
 export * from './shared-form-unit.decorator';
