@@ -16,6 +16,7 @@ import {
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
+import { ComponentShareLocator } from './component-share-locator';
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
@@ -120,26 +121,22 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
   }
 
   /**
-   * Obtains a shared value for the consuming component.
+   * Locates a shared value for the consuming component.
    *
    * Searches among parent elements for the one bound to the sharer component, then obtains the shared value from
    * the sharer's context.
    *
    * @param consumer - Consumer component context.
-   * @param self - Whether to include the consumer component itself into the search. `false` by default, which means
-   * the search would be started from iots parent.
+   * @param options - Location options.
    *
    * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
   valueFor(
       consumer: ComponentContext,
-      {
-        self,
-      }: {
-        readonly self?: boolean;
-      } = {},
+      options: ComponentShareLocator.Options = {},
   ): AfterEvent<[T, ComponentContext] | []> {
 
+    const { self } = options;
     const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
     const status = consumer.readStatus.do(
         deduplicateAfter_(

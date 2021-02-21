@@ -19,3 +19,18 @@ export interface ComponentShareRef<T> {
   readonly [ComponentShare__symbol]: ComponentShare<T>;
 
 }
+
+/**
+ * Checks whether the given value is a {@link ComponentShareRef component share reference}.
+ *
+ * @typeParam T - Shared value type.
+ * @typeParam TOther - Another type the value may have.
+ * @param value - A value to check.
+ *
+ * @returns `true` if the value has a {@link ComponentShare__symbol} property, or `false` otherwise.
+ */
+export function isComponentShareRef<T, TOther>(value: ComponentShareRef<T> | TOther): value is ComponentShareRef<T> {
+  return !!value
+      && (typeof value === 'object' || typeof value === 'function')
+      && !!(value as Partial<ComponentShareRef<T>>)[ComponentShare__symbol];
+}
