@@ -81,6 +81,7 @@
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="module__wesib_generic_forms.formunit.html#controlstype" class="tsd-kind-icon">Controls<wbr>Type</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="module__wesib_generic_forms.formunit.html#valuetype" class="tsd-kind-icon">Value<wbr>Type</a></li>
 							</ul>
 						</section>
@@ -90,31 +91,54 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-					<a name="valuetype" class="tsd-anchor"></a>
-					<h3>Value<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">Value<wbr>Type&lt;TUnit&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TUnit</span><span class="tsd-signature-symbol"> extends </span><a href="../classes/module__wesib_generic_forms.formunit-1.html" class="tsd-signature-type" data-tsd-kind="Class">FormUnit</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> TValue<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
+					<a name="controlstype" class="tsd-anchor"></a>
+					<h3>Controls<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">Controls<wbr>Type&lt;TUnit&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TUnit</span><span class="tsd-signature-symbol"> extends </span><a href="../classes/module__wesib_generic_forms.formunit-1.html" class="tsd-signature-type" data-tsd-kind="Class">FormUnit</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">infer </span> TControls<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">TControls</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/00dee44/src/forms/form-unit.ts#L48">wesib/generic/src/forms/form-unit.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/form-unit.ts#L63">wesib/generic/src/forms/form-unit.ts:63</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A controls type of the given form unit.</p>
+						</div>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>TUnit<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.formunit-1.html" class="tsd-signature-type" data-tsd-kind="Class">FormUnit</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Target unit type.</p>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+					<a name="valuetype" class="tsd-anchor"></a>
+					<h3>Value<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">Value<wbr>Type&lt;TUnit&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TUnit</span><span class="tsd-signature-symbol"> extends </span><a href="../classes/module__wesib_generic_forms.formunit-1.html" class="tsd-signature-type" data-tsd-kind="Class">FormUnit</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> TValue<span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/form-unit.ts#L55">wesib/generic/src/forms/form-unit.ts:55</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>A value type of the given form unit.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>typeparam</dt>
-							<dd><p>Field value type.</p>
-							</dd>
-							<dt>typeparam</dt>
-							<dd><p>Field sharer component type.</p>
-							</dd>
-						</dl>
 					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
-							<h4>TUnit<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.formunit-1.html" class="tsd-signature-type" data-tsd-kind="Class">FormUnit</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4>TUnit<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.formunit-1.html" class="tsd-signature-type" data-tsd-kind="Class">FormUnit</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Target unit type.</p>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</section>
@@ -132,6 +156,9 @@
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
 						<a href="../interfaces/module__wesib_generic_forms.formunit.controls.html" class="tsd-kind-icon">Controls</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="module__wesib_generic_forms.formunit.html#controlstype" class="tsd-kind-icon">Controls<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
 						<a href="module__wesib_generic_forms.formunit.html#valuetype" class="tsd-kind-icon">Value<wbr>Type</a>

@@ -61,7 +61,7 @@
 					<a href="module__wesib_generic_forms.sharedfielddef.html">SharedFieldDef</a>
 				</li>
 			</ul>
-			<h1>Interface SharedFieldDef&lt;TValue&gt;</h1>
+			<h1>Interface SharedFieldDef&lt;TField, TValue&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -79,7 +79,15 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>TValue = <span class="tsd-signature-type">any</span></h4>
+						<h4>TField<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.field-1.html" class="tsd-signature-type" data-tsd-kind="Class">Field</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Field type.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>TValue = <a href="../modules/module__wesib_generic_forms.field.html#valuetype" class="tsd-signature-type" data-tsd-kind="Type alias">ValueType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TField</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Field value type.</p>
@@ -116,17 +124,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="form" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> form</h3>
-					<div class="tsd-signature tsd-kind-icon">form<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="module__wesib_generic.componentshareref.html" class="tsd-signature-type" data-tsd-kind="Interface">ComponentShareRef</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">form<span class="tsd-signature-symbol">:</span> <a href="../modules/module__wesib_generic.componentsharelocator.html" class="tsd-signature-type" data-tsd-kind="Namespace">ComponentShareLocator</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/00dee44/src/forms/shared-field.decorator.ts#L95">wesib/generic/src/forms/shared-field.decorator.ts:95</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/shared-field.decorator.ts#L117">wesib/generic/src/forms/shared-field.decorator.ts:117</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>A form to add the field to.</p>
 						</div>
-						<p>This is a reference to the form share.</p>
+						<p>This is shared form locator.</p>
 						<p>The <a href="../classes/module__wesib_generic_forms.fieldshare.html">default form share</a> is used when omitted.</p>
 					</div>
 				</section>
@@ -136,7 +144,7 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/00dee44/src/forms/shared-field.decorator.ts#L105">wesib/generic/src/forms/shared-field.decorator.ts:105</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/shared-field.decorator.ts#L127">wesib/generic/src/forms/shared-field.decorator.ts:127</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -151,10 +159,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="share" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> share</h3>
-					<div class="tsd-signature tsd-kind-icon">share<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="module__wesib_generic.componentshareref.html" class="tsd-signature-type" data-tsd-kind="Interface">ComponentShareRef</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/module__wesib_generic_forms.field-1.html" class="tsd-signature-type" data-tsd-kind="Class">Field</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">share<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="module__wesib_generic.componentshareref.html" class="tsd-signature-type" data-tsd-kind="Interface">ComponentShareRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TField</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/00dee44/src/forms/shared-field.decorator.ts#L86">wesib/generic/src/forms/shared-field.decorator.ts:86</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/shared-field.decorator.ts#L108">wesib/generic/src/forms/shared-field.decorator.ts:108</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -187,6 +195,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/module__wesib_generic_forms.abstractformpreset.html" class="tsd-kind-icon">Abstract<wbr>Form<wbr>Preset</a>
+					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../classes/module__wesib_generic_forms.field-1.html" class="tsd-kind-icon">Field</a>
 					</li>
@@ -196,6 +207,15 @@
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-kind-icon">Form</a>
 					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/module__wesib_generic_forms.formcsspreset-1.html" class="tsd-kind-icon">Form<wbr>Css<wbr>Preset</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/module__wesib_generic_forms.formmodepreset-1.html" class="tsd-kind-icon">Form<wbr>Mode<wbr>Preset</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/module__wesib_generic_forms.formpreset-1.html" class="tsd-kind-icon">Form<wbr>Preset</a>
+					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../classes/module__wesib_generic_forms.formshare-1.html" class="tsd-kind-icon">Form<wbr>Share</a>
 					</li>
@@ -204,6 +224,9 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="module__wesib_generic_forms.fieldnamedef.html" class="tsd-kind-icon">Field<wbr>Name<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="module__wesib_generic_forms.onsubmitdef.html" class="tsd-kind-icon">On<wbr>Submit<wbr>Def</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -226,12 +249,6 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="module__wesib_generic_forms.sharedformdef.html" class="tsd-kind-icon">Shared<wbr>Form<wbr>Def</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_forms.html#formaspects-1" class="tsd-kind-icon">Form<wbr>Aspects</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="../modules/module__wesib_generic_forms.html#formaspects-2" class="tsd-kind-icon">Form<wbr>Aspects</a>
-					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/module__wesib_generic_forms.html#fieldname" class="tsd-kind-icon">Field<wbr>Name</a>
 					</li>
@@ -239,10 +256,16 @@
 						<a href="../modules/module__wesib_generic_forms.html#formname" class="tsd-kind-icon">Form<wbr>Name</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic_forms.html#onsubmit" class="tsd-kind-icon">On<wbr>Submit</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/module__wesib_generic_forms.html#sharedfield-1" class="tsd-kind-icon">Shared<wbr>Field</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/module__wesib_generic_forms.html#sharedform-1" class="tsd-kind-icon">Shared<wbr>Form</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic_forms.html#sharedformunit-1" class="tsd-kind-icon">Shared<wbr>Form<wbr>Unit</a>
 					</li>
 				</ul>
 			</nav>

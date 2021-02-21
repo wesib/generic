@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ShareableByComponent | Wesib: Generic Components</title>
+	<title>Options | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,100 +55,71 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic.html">Module @wesib/generic</a>
+					<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic.shareablebycomponent.html">ShareableByComponent</a>
+					<a href="../modules/module__wesib_generic.componentsharelocator.html">ComponentShareLocator</a>
+				</li>
+				<li>
+					<a href="module__wesib_generic.componentsharelocator.options.html">Options</a>
 				</li>
 			</ul>
-			<h1>Namespace ShareableByComponent</h1>
+			<h1>Interface Options</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Shared value location options.</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">Options</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="module__wesib_generic.componentsharelocator.spec.html" class="tsd-signature-type" data-tsd-kind="Interface">Spec</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Type aliases</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="module__wesib_generic.shareablebycomponent.html#provider" class="tsd-kind-icon">Provider</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.componentsharelocator.options.html#self" class="tsd-kind-icon">self</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Type aliases</h2>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-					<a name="provider" class="tsd-anchor"></a>
-					<h3>Provider</h3>
-					<div class="tsd-signature tsd-kind-icon">Provider&lt;TSharer, TInternals&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, sharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TInternals</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="self" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> self</h3>
+					<div class="tsd-signature tsd-kind-icon">self<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/00dee44/src/share/shareable-by-component.ts#L66">wesib/generic/src/share/shareable-by-component.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/share/component-share-locator.ts#L128">wesib/generic/src/share/component-share-locator.ts:128</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Shareable provider signature.</p>
+							<p>Whether to include the consumer component itself into the search.</p>
 						</div>
-						<p>Provides shareable internals rather the shareable instance itself.</p>
-						<dl class="tsd-comment-tags">
-							<dt>typeparam</dt>
-							<dd><p>Shareable value type.</p>
-							</dd>
-						</dl>
-					</div>
-					<h4 class="tsd-type-parameters-title">Type parameters</h4>
-					<ul class="tsd-type-parameters">
-						<li>
-							<h4>TSharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-type">any</span></h4>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Sharer component type.</p>
-								</div>
-							</div>
-						</li>
-						<li>
-							<h4>TInternals = <span class="tsd-signature-type">unknown</span></h4>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Internals data type.</p>
-								</div>
-							</div>
-						</li>
-					</ul>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-signature">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, sharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TInternals</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>this: <span class="tsd-signature-type">void</span></h5>
-											</li>
-											<li>
-												<h5>sharer: <span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span></h5>
-												<div class="tsd-comment tsd-typography">
-													<p>Sharer component context.</p>
-												</div>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TInternals</span></h4>
-										<p>Shareable internals.</p>
-									</li>
-								</ul>
-							</li>
-						</ul>
+						<p><code>false</code> by default, which means the search would start from consumer&#39;s parent.</p>
 					</div>
 				</section>
 			</section>
@@ -163,8 +134,35 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="module__wesib_generic.componentsharelocator.mandatoryspec.html" class="tsd-kind-icon">Mandatory<wbr>Spec</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="module__wesib_generic.componentsharelocator.options.html" class="tsd-kind-icon">Options</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="module__wesib_generic.componentsharelocator.options.html#self" class="tsd-kind-icon">self</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="module__wesib_generic.componentsharelocator.spec.html" class="tsd-kind-icon">Spec</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic.shareablebycomponent.html#provider" class="tsd-kind-icon">Provider</a>
+						<a href="../modules/module__wesib_generic.componentsharelocator.html#custom" class="tsd-kind-icon">Custom</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic.componentsharelocator.html#customwithfallback" class="tsd-kind-icon">Custom<wbr>With<wbr>Fallback</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic.componentsharelocator.html#fn" class="tsd-kind-icon">Fn</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic.componentsharelocator.html#mandatory" class="tsd-kind-icon">Mandatory</a>
 					</li>
 				</ul>
 			</nav>
@@ -186,6 +184,7 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>

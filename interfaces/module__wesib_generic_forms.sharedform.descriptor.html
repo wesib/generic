@@ -64,7 +64,7 @@
 					<a href="module__wesib_generic_forms.sharedform.descriptor.html">Descriptor</a>
 				</li>
 			</ul>
-			<h1>Interface Descriptor&lt;TModel, TElt, TClass&gt;</h1>
+			<h1>Interface Descriptor&lt;TForm, TModel, TElt, TClass&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -84,7 +84,15 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>TModel = <span class="tsd-signature-type">any</span></h4>
+						<h4>TForm<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Form type.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>TModel = <a href="../modules/module__wesib_generic_forms.form.html#modeltype" class="tsd-signature-type" data-tsd-kind="Type alias">ModelType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>A model type of the form.</p>
@@ -92,7 +100,7 @@
 						</div>
 					</li>
 					<li>
-						<h4>TElt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span> = <span class="tsd-signature-type">HTMLElement</span></h4>
+						<h4>TElt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span> = <a href="../modules/module__wesib_generic_forms.form.html#elementtype" class="tsd-signature-type" data-tsd-kind="Type alias">ElementType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>A type of HTML form element.</p>
@@ -113,7 +121,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="module__wesib_generic.shared.descriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">Descriptor</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span>
+						<a href="module__wesib_generic_forms.sharedformunit.descriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">Descriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><a href="module__wesib_generic_forms.form.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">Descriptor</span>
@@ -132,6 +140,8 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic_forms.sharedform.descriptor.html#configurable" class="tsd-kind-icon">configurable</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic_forms.sharedform.descriptor.html#enumerable" class="tsd-kind-icon">enumerable</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic_forms.sharedform.descriptor.html#key" class="tsd-kind-icon">key</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic_forms.sharedform.descriptor.html#locateform" class="tsd-kind-icon">locate<wbr>Form</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic_forms.sharedform.descriptor.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic_forms.sharedform.descriptor.html#readable" class="tsd-kind-icon">readable</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic_forms.sharedform.descriptor.html#share" class="tsd-kind-icon">share</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic_forms.sharedform.descriptor.html#type" class="tsd-kind-icon">type</a></li>
@@ -155,9 +165,9 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> configurable</h3>
 					<div class="tsd-signature tsd-kind-icon">configurable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="module__wesib_generic.shared.descriptor.html">Descriptor</a>.<a href="module__wesib_generic.shared.descriptor.html#configurable">configurable</a></p>
+						<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#configurable">configurable</a></p>
 						<ul>
-							<li>Defined in wesib/wesib/index.d.ts:1394</li>
+							<li>Defined in wesib/wesib/index.d.ts:1407</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -172,9 +182,9 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> enumerable</h3>
 					<div class="tsd-signature tsd-kind-icon">enumerable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="module__wesib_generic.shared.descriptor.html">Descriptor</a>.<a href="module__wesib_generic.shared.descriptor.html#enumerable">enumerable</a></p>
+						<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#enumerable">enumerable</a></p>
 						<ul>
-							<li>Defined in wesib/wesib/index.d.ts:1388</li>
+							<li>Defined in wesib/wesib/index.d.ts:1401</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -189,9 +199,9 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> key</h3>
 					<div class="tsd-signature tsd-kind-icon">key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="module__wesib_generic.shared.descriptor.html">Descriptor</a>.<a href="module__wesib_generic.shared.descriptor.html#key">key</a></p>
+						<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#key">key</a></p>
 						<ul>
-							<li>Defined in wesib/wesib/index.d.ts:1370</li>
+							<li>Defined in wesib/wesib/index.d.ts:1383</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -201,13 +211,45 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="locateform" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> locate<wbr>Form</h3>
+					<div class="tsd-signature tsd-kind-icon">locate<wbr>Form<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../modules/module__wesib_generic.componentsharelocator.html#fn" class="tsd-signature-type" data-tsd-kind="Type alias">Fn</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#locateform">locateForm</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/shared-form-unit.decorator.ts#L52">wesib/generic/src/forms/shared-form-unit.decorator.ts:52</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Predefined locator function of the form to add the unit to, or <code>undefined</code> when unknown.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="name" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#name">name</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/shared-form-unit.decorator.ts#L57">wesib/generic/src/forms/shared-form-unit.decorator.ts:57</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Predefined unit name, or <code>null</code>/<code>undefined</code> when the unit is not to be added to the <a href="module__wesib_generic_forms.sharedform.descriptor.html#locateform">form</a>.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="readable" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> readable</h3>
 					<div class="tsd-signature tsd-kind-icon">readable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="module__wesib_generic.shared.descriptor.html">Descriptor</a>.<a href="module__wesib_generic.shared.descriptor.html#readable">readable</a></p>
+						<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#readable">readable</a></p>
 						<ul>
-							<li>Defined in wesib/wesib/index.d.ts:1376</li>
+							<li>Defined in wesib/wesib/index.d.ts:1389</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -220,11 +262,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="share" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> share</h3>
-					<div class="tsd-signature tsd-kind-icon">share<span class="tsd-signature-symbol">:</span> <a href="../classes/module__wesib_generic.componentshare-1.html" class="tsd-signature-type" data-tsd-kind="Class">ComponentShare</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">share<span class="tsd-signature-symbol">:</span> <a href="../classes/module__wesib_generic.componentshare-1.html" class="tsd-signature-type" data-tsd-kind="Class">ComponentShare</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
-						<p>Overrides <a href="module__wesib_generic.shared.descriptor.html">Descriptor</a>.<a href="module__wesib_generic.shared.descriptor.html#share">share</a></p>
+						<p>Overrides <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#share">share</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/00dee44/src/forms/shared-form.decorator.ts#L84">wesib/generic/src/forms/shared-form.decorator.ts:84</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/shared-form.decorator.ts#L113">wesib/generic/src/forms/shared-form.decorator.ts:113</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -238,9 +280,9 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> type</h3>
 					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TClass</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="module__wesib_generic.shared.descriptor.html">Descriptor</a>.<a href="module__wesib_generic.shared.descriptor.html#type">type</a></p>
+						<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#type">type</a></p>
 						<ul>
-							<li>Defined in wesib/wesib/index.d.ts:1366</li>
+							<li>Defined in wesib/wesib/index.d.ts:1379</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -254,9 +296,9 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> writable</h3>
 					<div class="tsd-signature tsd-kind-icon">writable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="module__wesib_generic.shared.descriptor.html">Descriptor</a>.<a href="module__wesib_generic.shared.descriptor.html#writable">writable</a></p>
+						<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#writable">writable</a></p>
 						<ul>
-							<li>Defined in wesib/wesib/index.d.ts:1382</li>
+							<li>Defined in wesib/wesib/index.d.ts:1395</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -273,14 +315,14 @@
 					<a name="get" class="tsd-anchor"></a>
 					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InstanceType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InstanceType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="module__wesib_generic.shared.descriptor.html">Descriptor</a>.<a href="module__wesib_generic.shared.descriptor.html#get">get</a></p>
+								<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#get">get</a></p>
 								<ul>
-									<li>Defined in wesib/wesib/index.d.ts:1404</li>
+									<li>Defined in wesib/wesib/index.d.ts:1417</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -298,7 +340,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>Property value.</p>
 						</li>
 					</ul>
@@ -307,14 +349,14 @@
 					<a name="set" class="tsd-anchor"></a>
 					<h3>set</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InstanceType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span>, value<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InstanceType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="module__wesib_generic.shared.descriptor.html">Descriptor</a>.<a href="module__wesib_generic.shared.descriptor.html#set">set</a></p>
+								<p>Inherited from <a href="module__wesib_generic_forms.sharedformunit.descriptor.html">Descriptor</a>.<a href="module__wesib_generic_forms.sharedformunit.descriptor.html#set">set</a></p>
 								<ul>
-									<li>Defined in wesib/wesib/index.d.ts:1413</li>
+									<li>Defined in wesib/wesib/index.d.ts:1426</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -332,7 +374,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>value: <a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>value: <span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>New property value.</p>
 									</div>
@@ -367,6 +409,12 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="module__wesib_generic_forms.sharedform.descriptor.html#key" class="tsd-kind-icon">key</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="module__wesib_generic_forms.sharedform.descriptor.html#locateform" class="tsd-kind-icon">locate<wbr>Form</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="module__wesib_generic_forms.sharedform.descriptor.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="module__wesib_generic_forms.sharedform.descriptor.html#readable" class="tsd-kind-icon">readable</a>

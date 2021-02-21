@@ -93,10 +93,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
 					<a name="definer" class="tsd-anchor"></a>
 					<h3>Definer</h3>
-					<div class="tsd-signature tsd-kind-icon">Definer&lt;TForm, TClass&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, descriptor<span class="tsd-signature-symbol">: </span><a href="../interfaces/module__wesib_generic_forms.sharedform.descriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">Descriptor</a><span class="tsd-signature-symbol">&lt;</span><a href="module__wesib_generic_forms.form.html#modeltype" class="tsd-signature-type" data-tsd-kind="Type alias">ModelType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="module__wesib_generic_forms.form.html#elementtype" class="tsd-signature-type" data-tsd-kind="Type alias">ElementType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="module__wesib_generic_forms.sharedform.html#definition" class="tsd-signature-type" data-tsd-kind="Type alias">Definition</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></div>
+					<div class="tsd-signature tsd-kind-icon">Definer&lt;TForm, TModel, TElt, TClass&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, descriptor<span class="tsd-signature-symbol">: </span><a href="../interfaces/module__wesib_generic_forms.sharedform.descriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">Descriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="module__wesib_generic_forms.sharedform.html#definition" class="tsd-signature-type" data-tsd-kind="Type alias">Definition</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/00dee44/src/forms/shared-form.decorator.ts#L96">wesib/generic/src/forms/shared-form.decorator.ts:96</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/shared-form.decorator.ts#L127">wesib/generic/src/forms/shared-form.decorator.ts:127</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -108,10 +108,26 @@
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
-							<h4>TForm<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4>TForm<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Form type.</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<h4>TModel = <a href="module__wesib_generic_forms.form.html#modeltype" class="tsd-signature-type" data-tsd-kind="Type alias">ModelType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A model type of the form.</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<h4>TElt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span> = <a href="module__wesib_generic_forms.form.html#elementtype" class="tsd-signature-type" data-tsd-kind="Type alias">ElementType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of HTML form element.</p>
 								</div>
 							</div>
 						</li>
@@ -129,7 +145,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, descriptor<span class="tsd-signature-symbol">: </span><a href="../interfaces/module__wesib_generic_forms.sharedform.descriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">Descriptor</a><span class="tsd-signature-symbol">&lt;</span><a href="module__wesib_generic_forms.form.html#modeltype" class="tsd-signature-type" data-tsd-kind="Type alias">ModelType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="module__wesib_generic_forms.form.html#elementtype" class="tsd-signature-type" data-tsd-kind="Type alias">ElementType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="module__wesib_generic_forms.sharedform.html#definition" class="tsd-signature-type" data-tsd-kind="Type alias">Definition</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, descriptor<span class="tsd-signature-symbol">: </span><a href="../interfaces/module__wesib_generic_forms.sharedform.descriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">Descriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="module__wesib_generic_forms.sharedform.html#definition" class="tsd-signature-type" data-tsd-kind="Type alias">Definition</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -139,13 +155,13 @@
 												<h5>this: <span class="tsd-signature-type">void</span></h5>
 											</li>
 											<li>
-												<h5>descriptor: <a href="../interfaces/module__wesib_generic_forms.sharedform.descriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">Descriptor</a><span class="tsd-signature-symbol">&lt;</span><a href="module__wesib_generic_forms.form.html#modeltype" class="tsd-signature-type" data-tsd-kind="Type alias">ModelType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="module__wesib_generic_forms.form.html#elementtype" class="tsd-signature-type" data-tsd-kind="Type alias">ElementType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span></h5>
+												<h5>descriptor: <a href="../interfaces/module__wesib_generic_forms.sharedform.descriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">Descriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span></h5>
 												<div class="tsd-comment tsd-typography">
 													<p>Decorated component property descriptor.</p>
 												</div>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <a href="module__wesib_generic_forms.sharedform.html#definition" class="tsd-signature-type" data-tsd-kind="Type alias">Definition</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></h4>
+										<h4 class="tsd-returns-title">Returns <a href="module__wesib_generic_forms.sharedform.html#definition" class="tsd-signature-type" data-tsd-kind="Type alias">Definition</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></h4>
 										<p>Component property definition, or nothing if the property definition is not to be changed.</p>
 									</li>
 								</ul>
@@ -156,10 +172,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
 					<a name="definition" class="tsd-anchor"></a>
 					<h3>Definition</h3>
-					<div class="tsd-signature tsd-kind-icon">Definition&lt;TForm, TClass&gt;<span class="tsd-signature-symbol">:</span> <a href="module__wesib_generic.shared.html#definition" class="tsd-signature-type" data-tsd-kind="Type alias">Definition</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Definition&lt;TForm, TModel, TElt, TClass&gt;<span class="tsd-signature-symbol">:</span> <a href="module__wesib_generic_forms.sharedformunit.html#definition" class="tsd-signature-type" data-tsd-kind="Type alias">Definition</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/module__wesib_generic_forms.form.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClass</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/00dee44/src/forms/shared-form.decorator.ts#L112">wesib/generic/src/forms/shared-form.decorator.ts:112</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/forms/shared-form.decorator.ts#L150">wesib/generic/src/forms/shared-form.decorator.ts:150</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -170,7 +186,7 @@
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
-							<h4>TForm<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4>TForm<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Form type.</p>
@@ -178,7 +194,28 @@
 							</div>
 						</li>
 						<li>
+							<h4>TModel = <a href="module__wesib_generic_forms.form.html#modeltype" class="tsd-signature-type" data-tsd-kind="Type alias">ModelType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A model type of the form.</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<h4>TElt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span> = <a href="module__wesib_generic_forms.form.html#elementtype" class="tsd-signature-type" data-tsd-kind="Type alias">ElementType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TForm</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of HTML form element.</p>
+								</div>
+							</div>
+						</li>
+						<li>
 							<h4>TClass<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentClass</span> = <span class="tsd-signature-type">Class</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of decorated component class.</p>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</section>
