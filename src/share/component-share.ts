@@ -15,7 +15,14 @@ import {
   translateAfter_,
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
-import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
+import {
+  BootstrapContext,
+  ComponentContext,
+  ComponentElement,
+  ComponentSlot,
+  DefinitionContext,
+  isElement,
+} from '@wesib/wesib';
 import { ComponentShareLocator } from './component-share-locator';
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
@@ -230,8 +237,12 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
 }
 
 function parentElement(element: ComponentElement): ComponentElement | null | undefined {
-  return element.parentNode as ComponentElement | null
-      || (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined; // Inside shadow DOM?
+
+  const { parentNode } = element;
+
+  return parentNode && isElement(parentNode)
+      ? parentNode
+      : (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined;// Inside shadow DOM?
 }
 
 export namespace ComponentShare {
