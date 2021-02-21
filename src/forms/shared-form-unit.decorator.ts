@@ -47,9 +47,9 @@ export namespace SharedFormUnit {
       extends Shared.Descriptor<TUnit, TClass> {
 
     /**
-     * Predefined share locator of the form to add the unit to, or `undefined` when unknown.
+     * Predefined locator function of the form to add the unit to, or `undefined` when unknown.
      */
-    readonly locateForm?: ComponentShareLocator<Form<any, any>>;
+    readonly locateForm?: ComponentShareLocator.Fn<Form<any, any>>;
 
     /**
      * Predefined unit name, or `null`/`undefined` when the unit is not to be added to the {@link locateForm form}.

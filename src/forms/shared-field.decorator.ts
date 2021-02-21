@@ -152,9 +152,9 @@ export namespace SharedField {
     readonly share: ComponentShare<TField>;
 
     /**
-     * Predefined share locator of the form to add the field to.
+     * Predefined locator function of the form to add the field to.
      */
-    readonly locateForm: ComponentShareLocator<Form<any, any>>;
+    readonly locateForm: ComponentShareLocator.Fn<Form<any, any>>;
 
     /**
      * Predefined field name, or `null`/`undefined` when the field is not to be added to the {@link locateForm form}.
