@@ -2,7 +2,7 @@ import { InGroup } from '@frontmeans/input-aspects';
 import { afterAll, consumeEvents } from '@proc7ts/fun-events';
 import { Class, Supply } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShare__symbol, ComponentShareRef } from '../share';
+import { componentShareLocator, ComponentShareLocator } from '../share';
 import { Field } from './field';
 import { Field$nameByKey } from './field.impl';
 import { Form } from './form';
@@ -62,7 +62,7 @@ function FormUnitName<
   return ({
     key,
     share,
-    formShare,
+    locateForm: defaultForm,
     name: defaultName,
   }) => {
 
@@ -84,7 +84,7 @@ function FormUnitName<
       fieldName = autoName;
     }
 
-    const fieldFormShare = (def.form || formShare || FormShare)[ComponentShare__symbol];
+    const locateForm = componentShareLocator(def.form || defaultForm, { share: FormShare });
 
     return {
       componentDef: {
@@ -92,7 +92,7 @@ function FormUnitName<
           setup.whenComponent(context => {
             afterAll({
               unit: context.get(share),
-              form: fieldFormShare.valueFor(context),
+              form: locateForm(context),
             }).do(
                 consumeEvents(({ unit: [field], form: [form] }): Supply | undefined => {
                   if (!form || !field) {
@@ -123,11 +123,11 @@ export interface FieldNameDef {
   /**
    * A form to add the field to.
    *
-   * This is a reference to the form share.
+   * This is a shared form locator.
    *
    * Either {@link SharedFieldDef.form predefined}, or {@link FieldShare default} form share is used when omitted.
    */
-  readonly form?: ComponentShareRef<Form>;
+  readonly form?: ComponentShareLocator<Form>;
 
   /**
    * Field name.

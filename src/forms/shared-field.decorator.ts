@@ -1,6 +1,13 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShare, ComponentShare__symbol, ComponentShareDecorator, ComponentShareRef, Shared } from '../share';
+import {
+  ComponentShare,
+  ComponentShareDecorator,
+  componentShareLocator,
+  ComponentShareLocator,
+  ComponentShareRef,
+  Shared,
+} from '../share';
 import { Field } from './field';
 import { FieldName } from './field-name.definer';
 import { Field$name } from './field.impl';
@@ -71,9 +78,9 @@ export function SharedField<
 
   const {
     share = FieldShare as ComponentShareRef<any> as ComponentShareRef<TField>,
-    form: formShareRef = FormShare,
+    form: formLocator,
   } = def;
-  const formShare: ComponentShare<Form<any, any>> = formShareRef[ComponentShare__symbol];
+  const locateForm = componentShareLocator(formLocator, { share: FormShare });
 
   return SharedFormUnit<TField, TValue, Field.Controls<TValue>, TClass>(
       share,
@@ -81,7 +88,7 @@ export function SharedField<
           descriptor: Shared.Descriptor<TField, TClass>,
       ) => definer({
         ...descriptor,
-        formShare,
+        locateForm,
         name: Field$name(descriptor.key, fieldName),
       })),
   );
@@ -103,11 +110,11 @@ export interface SharedFieldDef<TField extends Field<TValue>, TValue = Field.Val
   /**
    * A form to add the field to.
    *
-   * This is a reference to the form share.
+   * This is shared form locator.
    *
    * The {@link FieldShare default form share} is used when omitted.
    */
-  readonly form?: ComponentShareRef<Form>;
+  readonly form?: ComponentShareLocator<Form>;
 
   /**
    * Field name.
@@ -145,12 +152,12 @@ export namespace SharedField {
     readonly share: ComponentShare<TField>;
 
     /**
-     * Predefined share of the form to add the field to, or `undefined` when unknown.
+     * Predefined share locator of the form to add the field to.
      */
-    readonly formShare: ComponentShare<Form<any, any>>;
+    readonly locateForm: ComponentShareLocator<Form<any, any>>;
 
     /**
-     * Predefined field name, or `null`/`undefined` when the field is not to be added to the {@link formShare form}.
+     * Predefined field name, or `null`/`undefined` when the field is not to be added to the {@link locateForm form}.
      */
     readonly name: string | null;
 
