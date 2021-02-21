@@ -126,10 +126,19 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    * the sharer's context.
    *
    * @param consumer - Consumer component context.
+   * @param self - Whether to include the consumer component itself into the search. `false` by default, which means
+   * the search would be started from iots parent.
    *
    * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
-  valueFor(consumer: ComponentContext): AfterEvent<[T, ComponentContext] | []> {
+  valueFor(
+      consumer: ComponentContext,
+      {
+        self,
+      }: {
+        readonly self?: boolean;
+      } = {},
+  ): AfterEvent<[T, ComponentContext] | []> {
 
     const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
     const status = consumer.readStatus.do(
@@ -145,19 +154,11 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
     }).do(
         digAfter_(({ sharers: [names] }): AfterEvent<[T, ComponentContext] | []> => {
 
-          let element: ComponentElement = consumer.element;
+          let element: ComponentElement | null | undefined = self ? consumer.element : parentElement(consumer.element);
 
-          for (;;) {
-
-            const parent = element.parentNode as ComponentElement | null
-                || (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined; // Inside shadow DOM?
-
-            if (!parent) {
-              return afterThe();
-            }
-
-            if (names.has(parent.tagName.toLowerCase())) {
-              return ComponentSlot.of(parent).read.do(
+          while (element) {
+            if (names.has(element.tagName.toLowerCase())) {
+              return ComponentSlot.of(element).read.do(
                   digAfter_(sharerContext => sharerContext
                       ? sharerContext.get(this).do(
                           translateAfter_((send, value?) => value ? send(value, sharerContext) : send()),
@@ -166,8 +167,10 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
               );
             }
 
-            element = parent;
+            element = parentElement(element);
           }
+
+          return afterThe();
         }),
         deduplicateAfter(),
     );
@@ -227,6 +230,11 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
     );
   }
 
+}
+
+function parentElement(element: ComponentElement): ComponentElement | null | undefined {
+  return element.parentNode as ComponentElement | null
+      || (element.getRootNode() as ShadowRoot).host as ComponentElement | undefined; // Inside shadow DOM?
 }
 
 export namespace ComponentShare {

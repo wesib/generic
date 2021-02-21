@@ -327,6 +327,7 @@ describe('share', () => {
       });
       it('reports value shared by parent sharer', () => {
         share.addSharer(sharerDefContext, 'sharer-el');
+        share.addSharer(testDefContext, 'test-el');
         sharerDefContext.perComponent(shareValue(share, () => 'test'));
 
         const receiver = jest.fn();
@@ -337,6 +338,18 @@ describe('share', () => {
 
         sharerMount.connect();
         expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        expect(receiver).toHaveBeenCalledTimes(1);
+      });
+      it('reports value shared by component itself when `self` set to `true`', () => {
+        share.addSharer(sharerDefContext, 'sharer-el');
+        share.addSharer(testDefContext, 'test-el');
+        sharerDefContext.perComponent(shareValue(share, () => 'test1'));
+        testDefContext.perComponent(shareValue(share, () => 'test2'));
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx, { self: true })(receiver);
+        expect(receiver).toHaveBeenLastCalledWith('test2', testCtx);
         expect(receiver).toHaveBeenCalledTimes(1);
       });
       it('reports value shared by mounted parent sharer', () => {
