@@ -130,6 +130,11 @@ export namespace ComponentShareLocator {
   }
 
   /**
+   * Shared value location options with all properties present.
+   */
+  export type FullOptions = Required<Options>;
+
+  /**
    * Shared value locator specifier.
    *
    * @typeParam T - Share value type.
@@ -158,6 +163,13 @@ export namespace ComponentShareLocator {
   }
 
   /**
+   * Shared value locator specifier with all properties set.
+   *
+   * @typeParam T - Share value type.
+   */
+  export type FullSpec<T> = Required<MandatorySpec<T>>;
+
+  /**
    * Signature of custom shared value locator.
    *
    * @typeParam T - Shared value type.
@@ -169,14 +181,14 @@ export namespace ComponentShareLocator {
   export type Custom<T> =
   /**
    * @param consumer - Consumer component context.
-   * @param options - Shared value location options.
+   * @param options - Full shared value location options.
    *
    * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
       (
           this: void,
           consumer: ComponentContext,
-          options: Required<Options>,
+          options: FullOptions,
       ) => AfterEvent<[] | [T, ComponentContext]>;
 
   /**
@@ -187,14 +199,14 @@ export namespace ComponentShareLocator {
   export type CustomWithFallback<T> =
   /**
    * @param consumer - Consumer component context.
-   * @param options - Shared value location options, including fallback share reference.
+   * @param options - Full shared value location specifier, including fallback share reference.
    *
    * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
       (
           this: void,
           consumer: ComponentContext,
-          options: Required<MandatorySpec<T>>,
+          spec: FullSpec<T>,
       ) => AfterEvent<[] | [T, ComponentContext]>;
 
   /**
@@ -214,7 +226,7 @@ export namespace ComponentShareLocator {
       (
           this: void,
           consumer: ComponentContext,
-          defaultSpec?: Partial<Spec<T>>,
+          defaultSpec?: Spec<T>,
       ) => AfterEvent<[] | [T, ComponentContext]>;
 
 }
