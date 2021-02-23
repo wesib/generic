@@ -1,9 +1,9 @@
-import { AfterEvent } from '@proc7ts/fun-events';
+import { ValueTracker } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { BootstrapContext, Component, DefinitionContext } from '@wesib/wesib';
 import { testDefinition } from '../spec/test-element';
 import { ComponentShare } from './component-share';
-import { ComponentShareRegistry } from './component-share-registry.impl';
+import { ComponentShareRegistry, ComponentSharers } from './component-share-registry.impl';
 import { Shared } from './shared.decorator';
 
 describe('share', () => {
@@ -18,7 +18,7 @@ describe('share', () => {
     describe('@Shared', () => {
 
       let bsContext: BootstrapContext;
-      let sharers: AfterEvent<[ReadonlySet<string>]>;
+      let sharers: ValueTracker<ComponentSharers>;
 
       beforeEach(async () => {
 
@@ -39,8 +39,8 @@ describe('share', () => {
         sharers = registry.sharers(share);
       });
 
-      it('registers sharer component name', async () => {
-        expect([...await sharers]).toEqual(['test-component']);
+      it('registers sharer component name', () => {
+        expect(sharerNames(sharers)).toEqual(['test-component']);
       });
       it('registers multiple sharer components', async () => {
 
@@ -54,7 +54,7 @@ describe('share', () => {
 
         await bsContext.load(TestComponent2).whenReady;
 
-        expect([...await sharers]).toEqual(['test-component', 'test-component2']);
+        expect(sharerNames(sharers)).toEqual(['test-component', 'test-component2']);
       });
       it('does not register sharer for anonymous component', async () => {
 
@@ -68,7 +68,7 @@ describe('share', () => {
 
         await bsContext.load(TestComponent2).whenReady;
 
-        expect([...await sharers]).toEqual(['test-component']);
+        expect(sharerNames(sharers)).toEqual(['test-component']);
       });
     });
 
@@ -89,23 +89,27 @@ describe('share', () => {
         registry = bsContext.get(ComponentShareRegistry);
       });
 
-      it('is initially empty', async () => {
-        expect([...await registry.sharers(share)]).toHaveLength(0);
+      it('is initially empty', () => {
+        expect(sharerNames(registry.sharers(share))).toHaveLength(0);
       });
 
       describe('addSharer', () => {
-        it('registers sharer', async () => {
+        it('registers sharer', () => {
 
           const supply = new Supply();
 
-          registry.addSharer(share, 'test-component', supply);
-          expect([...await registry.sharers(share)]).toEqual(['test-component']);
+          registry.addSharer(share, defContext.componentType, 'test-component', supply);
+          expect(sharerNames(registry.sharers(share))).toEqual(['test-component']);
 
           supply.off();
-          expect([...await registry.sharers(share)]).toHaveLength(0);
+          expect(sharerNames(registry.sharers(share))).toHaveLength(0);
         });
       });
 
     });
+
+    function sharerNames(sharers: ValueTracker<ComponentSharers>): readonly string[] {
+      return [...sharers.it.names.keys()];
+    }
   });
 });

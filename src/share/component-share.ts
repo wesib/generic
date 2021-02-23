@@ -1,4 +1,3 @@
-import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ContextKey__symbol, ContextRegistry } from '@proc7ts/context-values';
 import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import {
@@ -90,12 +89,12 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    * The registration is necessary for consumers to be able to find the element bound to sharer by that element's name.
    *
    * @param defContext - The definition context of the sharer component.
-   * @param name - The name of the element the sharer component is bound to. Defaults to component's element name.
+   * @param options - Value sharing options.
    *
    * @returns Sharer registration supply. Revokes the sharer registration once cut off.
    */
-  addSharer(defContext: DefinitionContext, name?: QualifiedName): Supply {
-    return this[ComponentShare$impl].addSharer(defContext, name);
+  addSharer(defContext: DefinitionContext, options?: SharedByComponent.Options): Supply {
+    return this[ComponentShare$impl].addSharer(defContext, options);
   }
 
   /**
@@ -156,18 +155,19 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
       sharers,
       status,
     }).do(
-        digAfter_(({ sharers: [names] }): AfterEvent<[T, ComponentContext] | []> => {
+        digAfter_(({ sharers: [sharers] }): AfterEvent<[T, ComponentContext] | []> => {
+          if (self) {
+            if (sharers.sharers.has(consumer.componentType)) {
+              return ComponentShare$sharedValue(this, consumer);
+            }
+          }
 
-          let element: ComponentElement | null = self ? consumer.element : parentElement(consumer.element);
+          let element: ComponentElement | null = parentElement(consumer.element);
 
           while (element) {
-            if (names.has(element.tagName.toLowerCase())) {
+            if (sharers.names.has(element.tagName.toLowerCase())) {
               return ComponentSlot.of(element).read.do(
-                  digAfter_(sharerContext => sharerContext
-                      ? sharerContext.get(this).do(
-                          translateAfter_((send, value?) => value ? send(value, sharerContext) : send()),
-                      )
-                      : afterThe()),
+                  digAfter_(sharer => sharer ? ComponentShare$sharedValue(this, sharer) : afterThe()),
               );
             }
 
@@ -263,9 +263,9 @@ export namespace ComponentShare {
   export type Key<T> = ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
 
   /**
-   * A source value accepted by {@link ComponentShare component share}.
+   * A source value accepted by {@link ComponentShare component share} context value.
    *
-   * An array of either source values, their {@link SharedByComponent.Detailed detailed descriptors} or an `AfterEvent`
+   * Either a single shared value, its {@link SharedByComponent.Detailed detailed descriptor}, or an `AfterEvent`
    * keeper of the above.
    *
    * @typeParam T - Shared value type.
@@ -276,4 +276,13 @@ export namespace ComponentShare {
 
 function ComponentShare$consumerStatus([{ settled, connected }]: [ComponentContext]): 0 | 1 | 2 {
   return connected ? 2 : settled ? 1 : 0;
+}
+
+function ComponentShare$sharedValue<T>(
+    share: ComponentShare<T>,
+    sharer: ComponentContext,
+): AfterEvent<[T, ComponentContext] | []> {
+  return sharer.get(share).do(
+      translateAfter_((send, value?) => value ? send(value, sharer) : send()),
+  );
 }

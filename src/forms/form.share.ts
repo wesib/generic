@@ -1,4 +1,3 @@
-import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ContextKey__symbol } from '@proc7ts/context-values';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
 import { DefinitionContext } from '@wesib/wesib';
@@ -60,11 +59,11 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
         : [FieldShare[ComponentShare__symbol]];
   }
 
-  addSharer(defContext: DefinitionContext, name?: QualifiedName): Supply {
+  addSharer(defContext: DefinitionContext, options?: SharedByComponent.Options): Supply {
 
-    const supply = super.addSharer(defContext, name);
+    const supply = super.addSharer(defContext, options);
 
-    this.addFieldSharer(defContext, name).as(supply);
+    this.addFieldSharer(defContext, options).as(supply);
 
     return supply;
   }
@@ -77,15 +76,15 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
    * This method is called from {@link addSharer} one.
    *
    * @param defContext - The definition context of the sharer component.
-   * @param name - The name of the element the sharer component is bound to. Defaults to component's element name.
+   * @param options - Value sharing options.
    *
    * @returns Sharer registration supply. Revokes the sharer registration once cut off.
    */
-  addFieldSharer(defContext: DefinitionContext, name?: QualifiedName): Supply {
+  addFieldSharer(defContext: DefinitionContext, options?: SharedByComponent.Options): Supply {
 
     const supply = new Supply();
 
-    this[FormShare$asFields].forEach(fieldShare => fieldShare.addSharer(defContext, name).as(supply));
+    this[FormShare$asFields].forEach(fieldShare => fieldShare.addSharer(defContext, options).as(supply));
 
     return supply;
   }
