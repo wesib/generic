@@ -56,27 +56,31 @@ describe('share', () => {
         registry = bsContext.get(ComponentShareRegistry);
       });
 
-      it('registers sharer', async () => {
+      it('registers sharer', () => {
 
         const supply = share.addSharer(defContext);
 
-        expect([...await registry.sharers(share)]).toEqual(['test-component']);
+        expect(sharerNames(share)).toEqual(['test-component']);
 
         supply.off();
-        expect([...await registry.sharers(share)]).toHaveLength(0);
+        expect(sharerNames(share)).toHaveLength(0);
       });
-      it('registers sharer for aliased shares', async () => {
+      it('registers sharer for aliased shares', () => {
 
         const share2 = new ComponentShare('other-share', { as: share });
         const supply = share2.addSharer(defContext);
 
-        expect([...await registry.sharers(share)]).toEqual(['test-component']);
-        expect([...await registry.sharers(share2)]).toEqual(['test-component']);
+        expect(sharerNames(share)).toEqual(['test-component']);
+        expect(sharerNames(share2)).toEqual(['test-component']);
 
         supply.off();
-        expect([...await registry.sharers(share)]).toHaveLength(0);
-        expect([...await registry.sharers(share2)]).toHaveLength(0);
+        expect(sharerNames(share)).toHaveLength(0);
+        expect(sharerNames(share2)).toHaveLength(0);
       });
+
+      function sharerNames(share: ComponentShare<unknown>): readonly string[] {
+        return [...registry.sharers(share).it.names.keys()];
+      }
     });
 
     describe('shareValue', () => {
@@ -314,7 +318,7 @@ describe('share', () => {
         expect(receiver).toHaveBeenCalledWith();
       });
       it('reports nothing without value shared', () => {
-        share.addSharer(sharerDefContext, 'sharer-el');
+        share.addSharer(sharerDefContext, { name: 'sharer-el' });
 
         const value = afterEventBy<[]>(noop, () => []);
 
@@ -326,8 +330,8 @@ describe('share', () => {
         expect(receiver).toHaveBeenCalledWith();
       });
       it('reports value shared by parent sharer', () => {
-        share.addSharer(sharerDefContext, 'sharer-el');
-        share.addSharer(testDefContext, 'test-el');
+        share.addSharer(sharerDefContext, { name: 'sharer-el' });
+        share.addSharer(testDefContext, { name: 'test-el' });
         sharerDefContext.perComponent(shareValue(share, () => 'test'));
 
         const receiver = jest.fn();
@@ -340,15 +344,15 @@ describe('share', () => {
         expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
         expect(receiver).toHaveBeenCalledTimes(1);
       });
-      it('reports value shared by component itself when `self` set to `true`', () => {
-        share.addSharer(sharerDefContext, 'sharer-el');
-        share.addSharer(testDefContext, 'test-el');
+      it('reports value shared by component itself when `local` set to `true`', () => {
+        share.addSharer(sharerDefContext, { name: 'sharer-el' });
+        share.addSharer(testDefContext, { name: 'test-el' });
         sharerDefContext.perComponent(shareValue(share, () => 'test1'));
         testDefContext.perComponent(shareValue(share, () => 'test2'));
 
         const receiver = jest.fn();
 
-        share.valueFor(testCtx, { self: true })(receiver);
+        share.valueFor(testCtx, { local: true })(receiver);
         expect(receiver).toHaveBeenLastCalledWith('test2', testCtx);
         expect(receiver).toHaveBeenCalledTimes(1);
       });
@@ -358,7 +362,7 @@ describe('share', () => {
         testEl = sharerEl.appendChild(document.createElement('test-el'));
         testCtx = testDefContext.mountTo(testEl).context;
 
-        share.addSharer(sharerDefContext, 'sharer-el');
+        share.addSharer(sharerDefContext, { name: 'sharer-el' });
         sharerDefContext.perComponent(shareValue(share, () => 'test'));
 
         const receiver = jest.fn();

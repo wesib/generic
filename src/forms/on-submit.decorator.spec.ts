@@ -1,7 +1,7 @@
 import { inFormElement, InGroup, inGroup } from '@frontmeans/input-aspects';
 import { afterThe } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import { Component, ComponentMount } from '@wesib/wesib';
+import { ComponentMount } from '@wesib/wesib';
 import { testDefinition } from '../spec/test-element';
 import { Form } from './form';
 import { OnSubmit, OnSubmitDef } from './on-submit.decorator';
@@ -76,7 +76,6 @@ describe('forms', () => {
         formDef?: SharedFormDef<Form<TestData>>,
     ): Promise<ComponentMount> {
 
-      @Component('custom-element')
       class TestElement {
 
         @SharedForm(formDef)

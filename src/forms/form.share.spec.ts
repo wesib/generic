@@ -38,25 +38,25 @@ describe('forms', () => {
         registry = bsContext.get(ComponentShareRegistry);
       });
 
-      it('registers form sharer', async () => {
+      it('registers form sharer', () => {
 
         const supply = formShare.addSharer(defContext);
 
-        expect([...await registry.sharers(formShare)]).toEqual(['test-component']);
+        expect(sharerNames(formShare)).toEqual(['test-component']);
 
         supply.off();
-        expect([...await registry.sharers(formShare)]).toHaveLength(0);
+        expect(sharerNames(formShare)).toHaveLength(0);
       });
-      it('registers field sharer', async () => {
+      it('registers field sharer', () => {
 
         const supply = formShare.addSharer(defContext);
 
-        expect([...await registry.sharers(fieldShare)]).toEqual(['test-component']);
+        expect(sharerNames(fieldShare)).toEqual(['test-component']);
 
         supply.off();
-        expect([...await registry.sharers(fieldShare)]).toHaveLength(0);
+        expect(sharerNames(fieldShare)).toHaveLength(0);
       });
-      it('registers field sharer for specific share', async () => {
+      it('registers field sharer for specific share', () => {
 
         interface TestModel {
           test: string;
@@ -67,11 +67,15 @@ describe('forms', () => {
 
         const supply = formShare.addSharer(defContext);
 
-        expect([...await registry.sharers(fieldShare)]).toEqual(['test-component']);
+        expect(sharerNames(fieldShare)).toEqual(['test-component']);
 
         supply.off();
-        expect([...await registry.sharers(fieldShare)]).toHaveLength(0);
+        expect(sharerNames(fieldShare)).toHaveLength(0);
       });
+
+      function sharerNames(share: ComponentShare<unknown>): readonly string[] {
+        return [...registry.sharers(share).it.names.keys()];
+      }
     });
 
     describe('shareValue', () => {

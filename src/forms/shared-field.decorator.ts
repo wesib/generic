@@ -7,6 +7,7 @@ import {
   ComponentShareLocator,
   ComponentShareRef,
   Shared,
+  TargetComponentShare,
 } from '../share';
 import { Field } from './field';
 import { FieldName } from './field-name.definer';
@@ -103,9 +104,9 @@ export function SharedField<
 export interface SharedFieldDef<TField extends Field<TValue>, TValue = Field.ValueType<TField>> {
 
   /**
-   * A reference to the target field share.
+   * Target field share.
    */
-  readonly share?: ComponentShareRef<TField>;
+  readonly share?: TargetComponentShare<TField>;
 
   /**
    * A form to add the field to.

@@ -66,32 +66,32 @@ export function componentShareLocator<T>(
 
     return (consumer, options = {}) => {
 
-      const { self = defaultSpec.self } = options;
+      const { local = defaultSpec.local } = options;
 
-      return share.valueFor(consumer, { self });
+      return share.valueFor(consumer, { local });
     };
   }
 
   if (typeof locator === 'function') {
 
-    const { self: selfByDefault = false, share: shareByDefault } = defaultSpec;
+    const { local: localByDefault = false, share: shareByDefault } = defaultSpec;
 
     return (consumer, options = {}) => {
 
-      const { share = shareByDefault!, self = selfByDefault } = options;
+      const { share = shareByDefault!, local = localByDefault } = options;
 
-      return locator(consumer, { share, self });
+      return locator(consumer, { share, local });
     };
   }
 
-  const { share: shareRef = defaultSpec.share!, self: selfByDefault = defaultSpec.self } = locator || {};
+  const { share: shareRef = defaultSpec.share!, local: localByDefault = defaultSpec.local } = locator || {};
   const share = shareRef[ComponentShare__symbol];
 
   return (consumer, options = {}) => {
 
-    const { self = selfByDefault } = options;
+    const { local = localByDefault } = options;
 
-    return share.valueFor(consumer, { self });
+    return share.valueFor(consumer, { local });
   };
 }
 
@@ -121,11 +121,13 @@ export namespace ComponentShareLocator {
   export interface Options {
 
     /**
-     * Whether to include the consumer component itself into the search.
+     * Whether to search locally, in consumer component itself.
      *
-     * `false` by default, which means the search would start from consumer's parent.
+     * - `false` (by default), to start the search from consumer's parent,
+     * - `true` to search locally, i.e. only in consumer component, or
+     * - `'too'` to start the search from consumer component.
      */
-    readonly self?: boolean;
+    readonly local?: boolean | 'too';
 
   }
 

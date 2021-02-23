@@ -9,8 +9,9 @@ import {
   DefinitionSetup,
 } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
-import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
+import { ComponentShare__symbol } from './component-share-ref';
 import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
+import { targetComponentShare, TargetComponentShare } from './target-component-share';
 
 /**
  * Builds a decorator of component property that {@link ComponentShare shares} its value.
@@ -20,17 +21,17 @@ import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
  *
  * @typeParam T - Shared value type.
  * @typeParam TClass - A type of decorated component class.
- * @param share - Target share reference.
+ * @param share - Target component share.
  * @param define - Sharing property definition builders.
  *
  * @returns Component property decorator.
  */
 export function Shared<T, TClass extends ComponentClass = Class>(
-    share: ComponentShareRef<T>,
+    share: TargetComponentShare<T>,
     ...define: Shared.Definer<T, TClass>[]
 ): ComponentShareDecorator<T, TClass> {
 
-  const shr = share[ComponentShare__symbol];
+  const { share: { [ComponentShare__symbol]: shr }, local } = targetComponentShare(share);
 
   return ComponentProperty(
       descriptor => {
@@ -56,7 +57,7 @@ export function Shared<T, TClass extends ComponentClass = Class>(
                 ));
               },
               define(defContext: DefinitionContext<InstanceType<TClass>>) {
-                shr.addSharer(defContext);
+                shr.addSharer(defContext, { local });
               },
             },
         );

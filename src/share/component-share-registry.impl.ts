@@ -1,8 +1,7 @@
-import { html__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
-import { AfterEvent, mapAfter, trackValue, ValueTracker } from '@proc7ts/fun-events';
+import { trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
-import { bootstrapDefault, DefaultNamespaceAliaser } from '@wesib/wesib';
+import { bootstrapDefault, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
 
 const ComponentShareRegistry__key = (/*#__PURE__*/ new SingleContextKey(
@@ -21,56 +20,107 @@ export class ComponentShareRegistry {
     return ComponentShareRegistry__key;
   }
 
-  private readonly _sharers = new Map<ComponentShare<unknown>, ValueTracker<[Map<Supply, string>]>>();
+  private readonly _sharers = new Map<ComponentShare<unknown>, ValueTracker<ComponentSharers>>();
 
-  constructor(private readonly _nsAlias: DefaultNamespaceAliaser) {
+  constructor(readonly nsAlias: DefaultNamespaceAliaser) {
   }
 
   addSharer(
       share: ComponentShare<unknown>,
-      name: QualifiedName | undefined,
+      componentType: ComponentClass,
+      elementName: string | undefined,
       supply: Supply,
   ): void {
-    if (!name) {
-      supply.off();
-      return;
-    }
 
-    const elementName = html__naming.name(name, this._nsAlias).toLowerCase();
     let sharers = this._sharers.get(share);
 
     if (!sharers) {
-      sharers = trackValue([new Map([[supply, elementName]])]);
+      sharers = ComponentSharers$new();
       this._sharers.set(share, sharers);
+      ComponentSharers$addSharer(sharers, componentType, supply);
+      ComponentSharers$addName(sharers, elementName, supply);
     } else {
-
-      const [map] = sharers.it;
-
-      map.set(supply, elementName);
-      sharers.it = [map];
+      ComponentSharers$addSharer(sharers, componentType, supply);
+      ComponentSharers$addName(sharers, elementName, supply);
+      sharers.it = { ...sharers.it };
     }
-
-    supply.whenOff(() => {
-
-      const [map] = sharers!.it;
-
-      map.delete(supply);
-      sharers!.it = [map];
-    });
   }
 
-  sharers(share: ComponentShare<unknown>): AfterEvent<[ReadonlySet<string>]> {
+  sharers(share: ComponentShare<unknown>): ValueTracker<ComponentSharers> {
 
     let sharers = this._sharers.get(share);
 
     if (!sharers) {
-      sharers = trackValue([new Map()]);
+      sharers = ComponentSharers$new();
       this._sharers.set(share, sharers);
     }
 
-    return sharers.read.do(
-        mapAfter(([map]) => new Set(map.values())),
-    );
+    return sharers;
   }
 
+}
+
+/**
+ * @internal
+ */
+export interface ComponentSharers {
+
+  readonly names: Map<string, number>;
+  readonly sharers: Map<ComponentClass, number>;
+
+}
+
+function ComponentSharers$new(): ValueTracker<ComponentSharers> {
+  return trackValue({ names: new Map(), sharers: new Map() });
+}
+
+function ComponentSharers$addName(
+    tracker: ValueTracker<ComponentSharers>,
+    name: string | undefined,
+    supply: Supply,
+): void {
+  if (!name) {
+    return;
+  }
+
+  const sharers = tracker.it;
+  const counter = sharers.names.get(name) || 0;
+
+  sharers.names.set(name, counter + 1);
+  supply.whenOff(() => {
+
+    const counter = sharers.names.get(name)! - 1;
+
+    if (counter > 0) {
+      sharers.names.set(name, counter);
+    } else {
+      sharers.names.delete(name);
+    }
+
+    tracker.it = { ...sharers };
+  });
+}
+
+function ComponentSharers$addSharer(
+    tracker: ValueTracker<ComponentSharers>,
+    componentType: ComponentClass,
+    supply: Supply,
+): void {
+
+  const sharers = tracker.it;
+  const counter = sharers.sharers.get(componentType) || 0;
+
+  sharers.sharers.set(componentType, counter + 1);
+  supply.whenOff(() => {
+
+    const counter = sharers.sharers.get(componentType)! - 1;
+
+    if (counter > 0) {
+      sharers.sharers.set(componentType, counter);
+    } else {
+      sharers.sharers.delete(componentType);
+    }
+
+    tracker.it = { ...sharers };
+  });
 }

@@ -1,10 +1,18 @@
 import { SingleContextKey } from '@proc7ts/context-values';
 import { AfterEvent, trackValue } from '@proc7ts/fun-events';
-import { Component, ComponentClass, ComponentSlot } from '@wesib/wesib';
-import { testElement } from '../spec/test-element';
+import {
+  BootstrapContext,
+  Component,
+  ComponentClass,
+  ComponentContext,
+  ComponentSlot,
+  DefinitionContext,
+} from '@wesib/wesib';
+import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { ComponentShare } from './component-share';
 import { ComponentShareable } from './component-shareable';
 import { Shared } from './shared.decorator';
+import { TargetComponentShare } from './target-component-share';
 
 describe('share', () => {
   describe('@Shared', () => {
@@ -113,6 +121,94 @@ describe('share', () => {
       expect(await shared).toBe('test');
       expect(context.get(extKey1)).toBe(share);
       expect(context.get(extKey2)).toBe(TestComponent);
+    });
+
+    describe('scoping', () => {
+
+      let share2: ComponentShare<string>;
+
+      beforeEach(() => {
+        share2 = new ComponentShare('outer-share');
+      });
+
+      it('makes shared value available to nested component by default', async () => {
+
+        const consumer = await bootstrap();
+
+        expect(await share.valueFor(consumer)).toBe('outer');
+        expect(await share2.valueFor(consumer)).toBe('outer2');
+      });
+      it('makes shared value available locally', async () => {
+
+        const consumer = await bootstrap();
+
+        expect(await share.valueFor(consumer, { local: 'too' })).toBe('inner');
+        expect(await share.valueFor(consumer, { local: true })).toBe('inner');
+      });
+      it('allows to share only locally', async () => {
+
+        const consumer = await bootstrap(share, { share, local: true }, { share: share2, local: true });
+
+        expect(await share.valueFor(consumer)).toBeUndefined();
+        expect(await share.valueFor(consumer, { local: true })).toBe('inner');
+        expect(await share2.valueFor(consumer)).toBeUndefined();
+        expect(await share2.valueFor(consumer, { local: true })).toBeUndefined();
+        expect(await share2.valueFor(consumer, { local: 'too' })).toBeUndefined();
+      });
+      it('allows to register sharer more than once', async () => {
+
+        const consumer = await bootstrap();
+        const supply = share.addSharer(consumer.get(DefinitionContext));
+
+        expect(await share.valueFor(consumer, { local: true })).toBe('inner');
+
+        supply.off();
+        expect(await share.valueFor(consumer, { local: true })).toBe('inner');
+      });
+
+      async function bootstrap(
+          innerShare: TargetComponentShare<string> = share,
+          outerShare: TargetComponentShare<string> = share,
+          outerShare2: TargetComponentShare<string> = share2,
+      ): Promise<ComponentContext> {
+
+        @Component(
+            'outer-element',
+            { extend: { type: MockElement } },
+        )
+        class OuterComponent {
+
+          @Shared(outerShare)
+          shared = 'outer';
+
+          @Shared(outerShare2)
+          shared2 = 'outer2';
+
+        }
+
+        @Component(
+            'inner-element',
+            { extend: { type: MockElement } },
+            { feature: { needs: OuterComponent } },
+        )
+        class InnerComponent {
+
+          @Shared(innerShare)
+          shared = 'inner';
+
+        }
+
+        const outerElt = document.createElement('outer-element');
+        const innerElt = outerElt.appendChild(document.createElement('inner-element'));
+
+        const innerDef = await testDefinition(InnerComponent);
+        const outerDef = await innerDef.get(BootstrapContext).whenDefined(OuterComponent);
+
+        outerDef.connectTo(outerElt);
+
+        return innerDef.connectTo(innerElt).context;
+      }
+
     });
   });
 });

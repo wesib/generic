@@ -1,3 +1,4 @@
+import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { AfterEvent } from '@proc7ts/fun-events';
 import { Supply, SupplyPeer } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
@@ -19,6 +20,30 @@ export const SharedByComponent__symbol = (/*#__PURE__*/ Symbol('SharedByComponen
 export type SharedByComponent<T> = T | SharedByComponent.Detailed<T>;
 
 export namespace SharedByComponent {
+
+  /**
+   * Value sharing options.
+   *
+   * Declare availability of the shared value.
+   */
+  export interface Options {
+
+    /**
+     * The name of the element the sharer component is bound to. Defaults to component's element name.
+     *
+     * Ignored for {@link local} shares
+     */
+    readonly name?: QualifiedName;
+
+    /**
+     * Whether the share is local.
+     *
+     * - `true` to make the value available only locally, i.e. only when requested by sharer context.
+     * - `false` (by default) to make the value available to nested components too.
+     */
+    readonly local?: boolean;
+
+  }
 
   /**
    * A detailed descriptor of the value shared by component.
