@@ -23,7 +23,7 @@ export function OnSubmit<TModel = any, TElt extends HTMLElement = HTMLElement, T
 ): ComponentPropertyDecorator<(form: Form<TModel, TElt>, event: Event) => void, T> {
 
   const { form: formRef = FormShare, cancel = true } = def;
-  const locateForm = componentShareLocator(formRef, { share: FormShare, self: true });
+  const locateForm = componentShareLocator(formRef, { share: FormShare, local: 'too' });
 
   return ComponentProperty(({ get }) => ({
     componentDef: {
@@ -69,7 +69,7 @@ export interface OnSubmitDef<TModel = any, TElt extends HTMLElement = HTMLElemen
   /**
    * A form to submit.
    *
-   * This is a shared form locator.
+   * This is a shared form locator. Includes the decorated component into the search (`{ local: 'too' }`) by default.
    *
    * A {@link FieldShare default} form share is used when omitted.
    */

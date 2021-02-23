@@ -344,7 +344,7 @@ describe('share', () => {
         expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
         expect(receiver).toHaveBeenCalledTimes(1);
       });
-      it('reports value shared by component itself when `self` set to `true`', () => {
+      it('reports value shared by component itself when `local` set to `true`', () => {
         share.addSharer(sharerDefContext, { name: 'sharer-el' });
         share.addSharer(testDefContext, { name: 'test-el' });
         sharerDefContext.perComponent(shareValue(share, () => 'test1'));
@@ -352,7 +352,7 @@ describe('share', () => {
 
         const receiver = jest.fn();
 
-        share.valueFor(testCtx, { self: true })(receiver);
+        share.valueFor(testCtx, { local: true })(receiver);
         expect(receiver).toHaveBeenLastCalledWith('test2', testCtx);
         expect(receiver).toHaveBeenCalledTimes(1);
       });

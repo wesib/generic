@@ -27,21 +27,21 @@ describe('share', () => {
         const locator = componentShareLocator(shareRef);
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: undefined });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: undefined });
       });
       it('falls back to default option', async () => {
 
-        const locator = componentShareLocator(shareRef, { self: true });
+        const locator = componentShareLocator(shareRef, { local: 'too' });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: true });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: 'too' });
       });
       it('respects explicit option', async () => {
 
-        const locator = componentShareLocator(shareRef, { self: true });
+        const locator = componentShareLocator(shareRef, { local: true });
 
-        expect(await locator(mockConsumer, { self: false })).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: false });
+        expect(await locator(mockConsumer, { local: false })).toBe('found');
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: false });
       });
     });
 
@@ -51,28 +51,28 @@ describe('share', () => {
         const locator = componentShareLocator({ share: shareRef });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: undefined });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: undefined });
       });
       it('falls back to default option', async () => {
 
-        const locator = componentShareLocator({ share: shareRef }, { self: true });
+        const locator = componentShareLocator({ share: shareRef }, { local: true });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: true });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: true });
       });
       it('respects explicit option', async () => {
 
-        const locator = componentShareLocator({ share: shareRef }, { self: true });
+        const locator = componentShareLocator({ share: shareRef }, { local: true });
 
-        expect(await locator(mockConsumer, { self: false })).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: false });
+        expect(await locator(mockConsumer, { local: false })).toBe('found');
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: false });
       });
       it('prefers explicit spec', async () => {
 
-        const locator = componentShareLocator({ share: shareRef, self: false }, { self: true });
+        const locator = componentShareLocator({ share: shareRef, local: 'too' }, { local: true });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: false });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: 'too' });
       });
     });
 
@@ -82,28 +82,28 @@ describe('share', () => {
         const locator = componentShareLocator({}, { share: shareRef });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: undefined });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: undefined });
       });
       it('falls back to default option', async () => {
 
-        const locator = componentShareLocator({}, { share: shareRef, self: true });
+        const locator = componentShareLocator({}, { share: shareRef, local: true });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: true });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: true });
       });
       it('respects explicit option', async () => {
 
-        const locator = componentShareLocator({}, { share: shareRef, self: true });
+        const locator = componentShareLocator({}, { share: shareRef, local: true });
 
-        expect(await locator(mockConsumer, { self: false })).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: false });
+        expect(await locator(mockConsumer, { local: false })).toBe('found');
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: false });
       });
       it('prefers explicit spec', async () => {
 
-        const locator = componentShareLocator({ self: false }, { share: shareRef, self: true });
+        const locator = componentShareLocator({ local: 'too' }, { share: shareRef, local: true });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: false });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: 'too' });
       });
     });
 
@@ -122,23 +122,23 @@ describe('share', () => {
         const locator = componentShareLocator(custom);
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(custom).toHaveBeenLastCalledWith(mockConsumer, { self: false });
+        expect(custom).toHaveBeenLastCalledWith(mockConsumer, { local: false });
         expect(mockShare.valueFor).not.toHaveBeenCalled();
       });
       it('falls back to default option', async () => {
 
-        const locator = componentShareLocator(custom, { self: true });
+        const locator = componentShareLocator(custom, { local: true });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(custom).toHaveBeenLastCalledWith(mockConsumer, { self: true });
+        expect(custom).toHaveBeenLastCalledWith(mockConsumer, { local: true });
         expect(mockShare.valueFor).not.toHaveBeenCalled();
       });
       it('respects explicit option', async () => {
 
-        const locator = componentShareLocator(custom, { self: true });
+        const locator = componentShareLocator(custom, { local: true });
 
-        expect(await locator(mockConsumer, { self: false })).toBe('found');
-        expect(custom).toHaveBeenLastCalledWith(mockConsumer, { self: false });
+        expect(await locator(mockConsumer, { local: false })).toBe('found');
+        expect(custom).toHaveBeenLastCalledWith(mockConsumer, { local: false });
         expect(mockShare.valueFor).not.toHaveBeenCalled();
       });
     });
@@ -149,21 +149,21 @@ describe('share', () => {
         const locator = componentShareLocator(null, { share: shareRef });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: undefined });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: undefined });
       });
       it('falls back to default option', async () => {
 
-        const locator = componentShareLocator(null, { share: shareRef, self: true });
+        const locator = componentShareLocator(null, { share: shareRef, local: true });
 
         expect(await locator(mockConsumer)).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: true });
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: true });
       });
       it('respects explicit option', async () => {
 
-        const locator = componentShareLocator(null, { share: shareRef, self: true });
+        const locator = componentShareLocator(null, { share: shareRef, local: true });
 
-        expect(await locator(mockConsumer, { self: false })).toBe('found');
-        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { self: false });
+        expect(await locator(mockConsumer, { local: false })).toBe('found');
+        expect(mockShare.valueFor).toHaveBeenLastCalledWith(mockConsumer, { local: false });
       });
     });
   });

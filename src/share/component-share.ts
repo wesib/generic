@@ -142,7 +142,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
       options: ComponentShareLocator.Options = {},
   ): AfterEvent<[T, ComponentContext] | []> {
 
-    const { self } = options;
+    const { local } = options;
     const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
     const status = consumer.readStatus.do(
         deduplicateAfter_(
@@ -156,9 +156,12 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
       status,
     }).do(
         digAfter_(({ sharers: [sharers] }): AfterEvent<[T, ComponentContext] | []> => {
-          if (self) {
+          if (local) {
             if (sharers.sharers.has(consumer.componentType)) {
               return ComponentShare$sharedValue(this, consumer);
+            }
+            if (local === true) {
+              return afterThe();
             }
           }
 
