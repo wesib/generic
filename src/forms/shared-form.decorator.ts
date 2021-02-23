@@ -1,6 +1,6 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShare, ComponentShareDecorator, ComponentShareRef } from '../share';
+import { ComponentShare, ComponentShareDecorator, ComponentShareRef, TargetComponentShare } from '../share';
 import { Form } from './form';
 import { FormShare } from './form.share';
 import { SharedFormUnit } from './shared-form-unit.decorator';
@@ -81,9 +81,9 @@ export interface SharedFormDef<
     TElt extends HTMLElement = Form.ElementType<TForm>> {
 
   /**
-   * A reference to the target form share.
+   * Target form share.
    */
-  readonly share?: ComponentShareRef<TForm>;
+  readonly share?: TargetComponentShare<TForm>;
 
 }
 

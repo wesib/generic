@@ -1,6 +1,6 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShareDecorator, ComponentShareLocator, ComponentShareRef, Shared } from '../share';
+import { ComponentShareDecorator, ComponentShareLocator, Shared, TargetComponentShare } from '../share';
 import { Form } from './form';
 import { FormUnit } from './form-unit';
 
@@ -11,7 +11,7 @@ import { FormUnit } from './form-unit';
  * @typeParam TValue - Unit value type.
  * @typeParam TControls - Unit controls type.
  * @typeParam TClass - A type of decorated component class.
- * @param share - Unit share reference.
+ * @param share - Target unit share.
  * @param define - Unit property definition builders.
  *
  * @return Component property decorator.
@@ -21,7 +21,7 @@ export function SharedFormUnit<
     TValue = FormUnit.ValueType<TUnit>,
     TControls extends FormUnit.Controls<TValue> = FormUnit.ControlsType<TUnit>,
     TClass extends ComponentClass = Class>(
-    share: ComponentShareRef<TUnit>,
+    share: TargetComponentShare<TUnit>,
     ...define: SharedFormUnit.Definer<TUnit, TValue, TControls, TClass>[]
 ): ComponentShareDecorator<TUnit, TClass> {
   return Shared(share, ...define);
