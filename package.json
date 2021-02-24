@@ -48,7 +48,7 @@
     "@wesib/wesib": "^1.0.0-beta.32"
   },
   "dependencies": {
-    "@frontmeans/dom-events": "^1.0.0",
+    "@frontmeans/dom-events": "^1.0.1",
     "@frontmeans/render-scheduler": "^1.5.0",
     "@hatsy/http-header-value": "^3.5.3",
     "@proc7ts/primitives": "^1.8.0",
