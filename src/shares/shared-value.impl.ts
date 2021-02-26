@@ -3,15 +3,15 @@ import { applyContextAfter } from '@proc7ts/context-values/updatable';
 import { AfterEvent, isAfterEvent, translateAfter } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
-import { ComponentShare } from './component-share';
-import { ComponentShare__symbol } from './component-share-ref';
+import { Share } from './share';
+import { Share__symbol } from './share-ref';
 import { SharedValue, SharedValue__symbol } from './shared-value';
 
 /**
  * @internal
  */
 export function SharedValue$ContextBuilder<T, TSharer extends object>(
-    share: ComponentShare<T>,
+    share: Share<T>,
     provider: SharedValue.Provider<T, TSharer>,
 ): ContextBuilder<ComponentContext<TSharer>> {
   return {
@@ -49,7 +49,7 @@ function SharedValue$BoundRegistrar<T, TSharer extends object>(
     shareAs: (alias, newPriority = priority) => {
       newPriority = Math.max(0, newPriority);
       registry.provide({
-        a: alias[ComponentShare__symbol],
+        a: alias[Share__symbol],
         by: newPriority
             ? SharedValue$detailedProvider(provide, newPriority)
             : SharedValue$bareProvider(provide),

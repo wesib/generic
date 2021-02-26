@@ -8,14 +8,14 @@ import {
   DefinitionContext,
   DefinitionSetup,
 } from '@wesib/wesib';
-import { ComponentShare } from './component-share';
-import { ComponentShare__symbol } from './component-share-ref';
+import { Share } from './share';
 import { ShareAccessor } from './share-accessor.impl';
+import { Share__symbol } from './share-ref';
 import { SharedValue$ContextBuilder } from './shared-value.impl';
-import { targetComponentShare, TargetComponentShare } from './target-component-share';
+import { targetShare, TargetShare } from './target-share';
 
 /**
- * Builds a decorator of component property that {@link ComponentShare shares} its value.
+ * Builds a decorator of component property that {@link Share shares} its value.
  *
  * The decorated property should return either a static value, or its `AfterEvent` keeper if the case the value is
  * updatable.
@@ -30,11 +30,11 @@ import { targetComponentShare, TargetComponentShare } from './target-component-s
  * @returns Component property decorator.
  */
 export function Shared<T, TClass extends ComponentClass = Class>(
-    share: TargetComponentShare<T>,
+    share: TargetShare<T>,
     ...define: Shared.Definer<T, TClass>[]
-): ComponentShareDecorator<T, TClass> {
+): ShareDecorator<T, TClass> {
 
-  const { share: { [ComponentShare__symbol]: shr }, local } = targetComponentShare(share);
+  const { share: { [Share__symbol]: shr }, local } = targetShare(share);
 
   return ComponentProperty(
       descriptor => {
@@ -82,20 +82,20 @@ export function Shared<T, TClass extends ComponentClass = Class>(
 }
 
 /**
- * Decorator of component property that {@link ComponentShare shares} its value.
+ * Decorator of component property that {@link Share shares} its value.
  *
  * Built by {@link Shared @Shared} decorator.
  *
  * @typeParam T - Shared value type.
  * @typeParam TClass - A type of decorated component class.
  */
-export type ComponentShareDecorator<T, TClass extends ComponentClass = Class> =
+export type ShareDecorator<T, TClass extends ComponentClass = Class> =
     ComponentPropertyDecorator<T | AfterEvent<[T?]>, TClass>;
 
 export namespace Shared {
 
   /**
-   * A descriptor of the component property that {@link ComponentShare shares} its value.
+   * A descriptor of the component property that {@link Share shares} its value.
    *
    * Passed to {@link Definer property definer} by {@link Shared @Shared} decorator to build a {@link Definition
    * property definition}.
@@ -109,12 +109,12 @@ export namespace Shared {
     /**
      * Target share instance.
      */
-    readonly share: ComponentShare<T>;
+    readonly share: Share<T>;
 
   }
 
   /**
-   * A signature of definition builder of the component property that {@link ComponentShare shares} its value.
+   * A signature of definition builder of the component property that {@link Share shares} its value.
    *
    * This is a function called by {@link Shared @Shared} decorator to apply additional definitions.
    *
@@ -133,7 +133,7 @@ export namespace Shared {
       ) => Definition<T, TClass> | void;
 
   /**
-   * A definition of component property that {@link ComponentShare shares} its value.
+   * A definition of component property that {@link Share shares} its value.
    *
    * @typeParam T - Shared value type.
    * @typeParam TClass - A type of component class.

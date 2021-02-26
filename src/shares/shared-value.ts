@@ -2,7 +2,7 @@ import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { AfterEvent } from '@proc7ts/fun-events';
 import { Supply, SupplyPeer } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
-import { ComponentShareRef } from './component-share-ref';
+import { ShareRef } from './share-ref';
 
 /**
  * A key of the {@link SharedValue.Detailed detailed shared value descriptor} containing the
@@ -68,7 +68,7 @@ export namespace SharedValue {
      * A priority of the shared value.
      *
      * Never negative. The lesser value means higher priority. The shared value with higher priority
-     * {@link ComponentShare.selectValue takes precedence}.
+     * {@link Share.selectValue takes precedence}.
      */
     readonly priority: number;
 
@@ -84,7 +84,7 @@ export namespace SharedValue {
   /**
    * Shared value registrar.
    *
-   * Passed to {@link ComponentShare.shareValue} method in order to share the value.
+   * Passed to {@link Share.shareValue} method in order to share the value.
    *
    * @typeParam T - Shared value type.
    */
@@ -110,7 +110,7 @@ export namespace SharedValue {
      * @param alias - A reference to share alias.
      * @param priority - Shared value priority. Equals to {@link priority default one} when omitted.
      */
-    shareAs(this: void, alias: ComponentShareRef<T>, priority?: number): void;
+    shareAs(this: void, alias: ShareRef<T>, priority?: number): void;
 
     /**
      * Builds a shared value registrar instance with another default priority.
@@ -126,7 +126,7 @@ export namespace SharedValue {
   /**
    * Shared value provider.
    *
-   * Can be used to {@link ComponentShare.createRegistrar create} a {@link SharedValue.Registrar} instance.
+   * Can be used to {@link Share.createRegistrar create} a {@link SharedValue.Registrar} instance.
    *
    * @typeParam TSharer - Supported sharer component type.
    * @typeParam T - Shared value type.

@@ -1,7 +1,7 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
 import { DefinitionContext } from '@wesib/wesib';
-import { ComponentShare, ComponentShare__symbol, ComponentShareRef, SharedValue } from '../shares';
+import { Share, Share__symbol, SharedValue, ShareRef } from '../shares';
 import { Field } from './field';
 import { FieldShare } from './field.share';
 import { Form } from './form';
@@ -22,26 +22,26 @@ let FormShare$instance: FormShare | undefined;
  * @typeParam TElt - A type of HTML form element.
  */
 export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
-    extends ComponentShare<Form<TModel, TElt>> {
+    extends Share<Form<TModel, TElt>> {
 
   /**
    * Default form share instance.
    */
-  static get [ComponentShare__symbol](): FormShare<any, any> {
+  static get [Share__symbol](): FormShare<any, any> {
     return FormShare$instance || (FormShare$instance = new FormShare('form'));
   }
 
   /**
    * A key of component context value containing default form instance.
    */
-  static get [ContextKey__symbol](): ComponentShare.Key<Form> {
-    return this[ComponentShare__symbol][ContextKey__symbol];
+  static get [ContextKey__symbol](): Share.Key<Form> {
+    return this[Share__symbol][ContextKey__symbol];
   }
 
   /**
    * @internal
    */
-  private readonly [FormShare$asFields]: readonly ComponentShare<Field<TModel>>[];
+  private readonly [FormShare$asFields]: readonly Share<Field<TModel>>[];
 
   /**
    * Constructs form share.
@@ -55,8 +55,8 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
   ) {
     super(name, options);
     this[FormShare$asFields] = options.asField
-        ? arrayOfElements<ComponentShareRef<Field<TModel>>>(options.asField).map(ref => ref[ComponentShare__symbol])
-        : [FieldShare[ComponentShare__symbol]];
+        ? arrayOfElements<ShareRef<Field<TModel>>>(options.asField).map(ref => ref[Share__symbol])
+        : [FieldShare[Share__symbol]];
   }
 
   addSharer(defContext: DefinitionContext, options?: SharedValue.Options): Supply {
@@ -119,7 +119,7 @@ export namespace FormShare {
    * @typeParam TModel - A model type of the form.
    * @typeParam TElt - A type of HTML form element.
    */
-  export interface Options<TModel, TElt extends HTMLElement> extends ComponentShare.Options<Form<TModel, TElt>> {
+  export interface Options<TModel, TElt extends HTMLElement> extends Share.Options<Form<TModel, TElt>> {
 
     /**
      * Field share reference(s) the share provides instances for in addition to the form instance.
@@ -129,7 +129,7 @@ export namespace FormShare {
      *
      * A {@link FieldShare default field share} is used when omitted.
      */
-    readonly asField?: ComponentShareRef<Field<TModel>> | ComponentShareRef<Field<TModel>>[];
+    readonly asField?: ShareRef<Field<TModel>> | ShareRef<Field<TModel>>[];
 
   }
 

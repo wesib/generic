@@ -2,23 +2,23 @@ import { ValueTracker } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { BootstrapContext, Component, DefinitionContext } from '@wesib/wesib';
 import { testDefinition } from '../spec/test-element';
-import { ComponentShare } from './component-share';
-import { ComponentShareRegistry, ComponentSharers } from './component-share-registry.impl';
+import { Share } from './share';
+import { ShareRegistry, Sharers } from './share-registry.impl';
 import { Shared } from './shared.decorator';
 
 describe('shares', () => {
-  describe('ComponentShareRegistry', () => {
+  describe('ShareRegistry', () => {
 
-    let share: ComponentShare<string>;
+    let share: Share<string>;
 
     beforeEach(() => {
-      share = new ComponentShare('test-share');
+      share = new Share('test-share');
     });
 
     describe('@Shared', () => {
 
       let bsContext: BootstrapContext;
-      let sharers: ValueTracker<ComponentSharers>;
+      let sharers: ValueTracker<Sharers>;
 
       beforeEach(async () => {
 
@@ -34,7 +34,7 @@ describe('shares', () => {
 
         bsContext = defContext.get(BootstrapContext);
 
-        const registry = bsContext.get(ComponentShareRegistry);
+        const registry = bsContext.get(ShareRegistry);
 
         sharers = registry.sharers(share);
       });
@@ -76,7 +76,7 @@ describe('shares', () => {
 
       let bsContext: BootstrapContext;
       let defContext: DefinitionContext;
-      let registry: ComponentShareRegistry;
+      let registry: ShareRegistry;
 
       beforeEach(async () => {
 
@@ -86,7 +86,7 @@ describe('shares', () => {
 
         defContext = await testDefinition(TestComponent);
         bsContext = defContext.get(BootstrapContext);
-        registry = bsContext.get(ComponentShareRegistry);
+        registry = bsContext.get(ShareRegistry);
       });
 
       it('is initially empty', () => {
@@ -108,7 +108,7 @@ describe('shares', () => {
 
     });
 
-    function sharerNames(sharers: ValueTracker<ComponentSharers>): readonly string[] {
+    function sharerNames(sharers: ValueTracker<Sharers>): readonly string[] {
       return [...sharers.it.names.keys()];
     }
   });

@@ -1,25 +1,25 @@
 import { AfterEvent } from '@proc7ts/fun-events';
 import { ComponentContext } from '@wesib/wesib';
-import { ComponentShare__symbol, ComponentShareRef, isComponentShareRef } from './component-share-ref';
+import { isShareRef, Share__symbol, ShareRef } from './share-ref';
 
 /**
  * Shared value locator.
  *
  * Can be one of:
  *
- * - component share {@link ComponentShareRef reference},
- * - shared value locator specified {@link ComponentShareLocator.Spec},
- * - {@link ComponentShareLocator.CustomWithFallback custom} shared value locator, or
+ * - component share {@link ShareRef reference},
+ * - shared value locator specified {@link ShareLocator.Spec},
+ * - {@link ShareLocator.CustomWithFallback custom} shared value locator, or
  * - `null`/`undefined` to locate a fallback share.
  *
- * A {@link componentShareLocator} function can be used to convert arbitrary locator to a function.
+ * A {@link shareLocator} function can be used to convert arbitrary locator to a function.
  *
  * @typeParam T - Shared value type.
  */
-export type ComponentShareLocator<T> =
-    | ComponentShareRef<T>
-    | ComponentShareLocator.Spec<T>
-    | ComponentShareLocator.CustomWithFallback<T>
+export type ShareLocator<T> =
+    | ShareRef<T>
+    | ShareLocator.Spec<T>
+    | ShareLocator.CustomWithFallback<T>
     | null
     | undefined;
 
@@ -32,10 +32,10 @@ export type ComponentShareLocator<T> =
  *
  * @returns Shared value locator function.
  */
-export function componentShareLocator<T>(
-    locator: ComponentShareLocator.Mandatory<T>,
-    defaultOptions?: ComponentShareLocator.Options,
-): ComponentShareLocator.Fn<T>;
+export function shareLocator<T>(
+    locator: ShareLocator.Mandatory<T>,
+    defaultOptions?: ShareLocator.Options,
+): ShareLocator.Fn<T>;
 
 /**
  * Converts arbitrary shared value locator to locator function.
@@ -46,23 +46,23 @@ export function componentShareLocator<T>(
  *
  * @returns Shared value locator function.
  */
-export function componentShareLocator<T>(
-    locator: ComponentShareLocator<T>,
-    defaultSpec: ComponentShareLocator.MandatorySpec<T>,
-): ComponentShareLocator.Fn<T>;
+export function shareLocator<T>(
+    locator: ShareLocator<T>,
+    defaultSpec: ShareLocator.MandatorySpec<T>,
+): ShareLocator.Fn<T>;
 
-export function componentShareLocator<T>(
+export function shareLocator<T>(
     locator:
-        | ComponentShareRef<T>
-        | Partial<ComponentShareLocator.MandatorySpec<T>>
-        | ComponentShareLocator.CustomWithFallback<T>
+        | ShareRef<T>
+        | Partial<ShareLocator.MandatorySpec<T>>
+        | ShareLocator.CustomWithFallback<T>
         | null
         | undefined,
-    defaultSpec: ComponentShareLocator.Spec<T> = {},
-): ComponentShareLocator.Fn<T> {
-  if (isComponentShareRef(locator)) {
+    defaultSpec: ShareLocator.Spec<T> = {},
+): ShareLocator.Fn<T> {
+  if (isShareRef(locator)) {
 
-    const share = locator[ComponentShare__symbol];
+    const share = locator[Share__symbol];
 
     return (consumer, options = {}) => {
 
@@ -85,7 +85,7 @@ export function componentShareLocator<T>(
   }
 
   const { share: shareRef = defaultSpec.share!, local: localByDefault = defaultSpec.local } = locator || {};
-  const share = shareRef[ComponentShare__symbol];
+  const share = shareRef[Share__symbol];
 
   return (consumer, options = {}) => {
 
@@ -95,23 +95,23 @@ export function componentShareLocator<T>(
   };
 }
 
-export namespace ComponentShareLocator {
+export namespace ShareLocator {
 
   /**
    * Mandatory shared value locator.
    *
    * Can be one of:
    *
-   * - component share {@link ComponentShareRef reference},
-   * - shared value locator specified {@link ComponentShareLocator.Spec}, or
-   * - {@link ComponentShareLocator.Custom custom} shared value locator.
+   * - component share {@link ShareRef reference},
+   * - shared value locator specified {@link ShareLocator.Spec}, or
+   * - {@link ShareLocator.Custom custom} shared value locator.
    *
-   * A {@link componentShareLocator} function can be used to convert arbitrary locator to a function.
+   * A {@link shareLocator} function can be used to convert arbitrary locator to a function.
    *
    * @typeParam T - Shared value type.
    */
   export type Mandatory<T> =
-      | ComponentShareRef<T>
+      | ShareRef<T>
       | MandatorySpec<T>
       | Custom<T>;
 
@@ -146,7 +146,7 @@ export namespace ComponentShareLocator {
     /**
      * Target share.
      */
-    readonly share?: ComponentShareRef<T>;
+    readonly share?: ShareRef<T>;
 
   }
 
@@ -160,7 +160,7 @@ export namespace ComponentShareLocator {
     /**
      * Target share.
      */
-    readonly share: ComponentShareRef<T>;
+    readonly share: ShareRef<T>;
 
   }
 
@@ -214,7 +214,7 @@ export namespace ComponentShareLocator {
   /**
    * Signature of shared value locator function.
    *
-   * Can be constructed by {@link componentShareLocator} function.
+   * Can be constructed by {@link shareLocator} function.
    *
    * @typeParam T - Shared value type.
    */

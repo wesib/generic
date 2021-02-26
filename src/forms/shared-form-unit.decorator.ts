@@ -1,6 +1,6 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShareDecorator, ComponentShareLocator, Shared, TargetComponentShare } from '../shares';
+import { Shared, ShareDecorator, ShareLocator, TargetShare } from '../shares';
 import { Form } from './form';
 import { FormUnit } from './form-unit';
 
@@ -21,9 +21,9 @@ export function SharedFormUnit<
     TValue = FormUnit.ValueType<TUnit>,
     TControls extends FormUnit.Controls<TValue> = FormUnit.ControlsType<TUnit>,
     TClass extends ComponentClass = Class>(
-    share: TargetComponentShare<TUnit>,
+    share: TargetShare<TUnit>,
     ...define: SharedFormUnit.Definer<TUnit, TValue, TControls, TClass>[]
-): ComponentShareDecorator<TUnit, TClass> {
+): ShareDecorator<TUnit, TClass> {
   return Shared(share, ...define);
 }
 
@@ -49,7 +49,7 @@ export namespace SharedFormUnit {
     /**
      * Predefined locator function of the form to add the unit to, or `undefined` when unknown.
      */
-    readonly locateForm?: ComponentShareLocator.Fn<Form<any, any>>;
+    readonly locateForm?: ShareLocator.Fn<Form<any, any>>;
 
     /**
      * Predefined unit name, or `null`/`undefined` when the unit is not to be added to the {@link locateForm form}.

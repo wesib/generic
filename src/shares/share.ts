@@ -22,10 +22,10 @@ import {
   DefinitionContext,
   parentElement,
 } from '@wesib/wesib';
-import { ComponentShareLocator } from './component-share-locator';
-import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
-import { ComponentShareRegistry } from './component-share-registry.impl';
-import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
+import { ShareLocator } from './share-locator';
+import { Share__symbol, ShareRef } from './share-ref';
+import { ShareRegistry } from './share-registry.impl';
+import { Share$, Share$impl__symbol } from './share.impl';
 import { SharedValue, SharedValue__symbol } from './shared-value';
 import { SharedValue$Registrar } from './shared-value.impl';
 
@@ -45,12 +45,12 @@ import { SharedValue$Registrar } from './shared-value.impl';
  *
  * @typeParam T - Shared value type.
  */
-export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<AfterEvent<[T?]>, SharedValue<T>> {
+export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, SharedValue<T>> {
 
   /**
    * @internal
    */
-  readonly [ComponentShare$impl]: ComponentShare$<T>;
+  readonly [Share$impl__symbol]: Share$<T>;
 
   /**
    * Constructs new component share.
@@ -58,14 +58,14 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    * @param name - A human-readable name of the share.
    * @param options - Constructed share options.
    */
-  constructor(name: string, options: ComponentShare.Options<T> = {}) {
-    this[ComponentShare$impl] = new ComponentShare$(this, name, options);
+  constructor(name: string, options: Share.Options<T> = {}) {
+    this[Share$impl__symbol] = new Share$(this, name, options);
   }
 
   /**
    * Refers to itself.
    */
-  get [ComponentShare__symbol](): this {
+  get [Share__symbol](): this {
     return this;
   }
 
@@ -73,14 +73,14 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    * A human-readable name of the name.
    */
   get name(): string {
-    return this[ComponentShare$impl].name;
+    return this[Share$impl__symbol].name;
   }
 
   /**
    * A key of the sharer component context value containing an `AfterEvent` keeper of the shared value.
    */
   get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T?]>, SharedValue<T>> {
-    return this[ComponentShare$impl].key;
+    return this[Share$impl__symbol].key;
   }
 
   /**
@@ -94,7 +94,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    * @returns Sharer registration supply. Revokes the sharer registration once cut off.
    */
   addSharer(defContext: DefinitionContext, options?: SharedValue.Options): Supply {
-    return this[ComponentShare$impl].addSharer(defContext, options);
+    return this[Share$impl__symbol].addSharer(defContext, options);
   }
 
   /**
@@ -107,7 +107,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
   shareValue(
       registrar: SharedValue.Registrar<T>,
   ): void {
-    this[ComponentShare$impl].shareValue(registrar);
+    this[Share$impl__symbol].shareValue(registrar);
   }
 
   /**
@@ -139,15 +139,15 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    */
   valueFor(
       consumer: ComponentContext,
-      options: ComponentShareLocator.Options = {},
+      options: ShareLocator.Options = {},
   ): AfterEvent<[T, ComponentContext] | []> {
 
     const { local } = options;
-    const sharers = consumer.get(BootstrapContext).get(ComponentShareRegistry).sharers(this);
+    const sharers = consumer.get(BootstrapContext).get(ShareRegistry).sharers(this);
     const status = consumer.readStatus.do(
         deduplicateAfter_(
             (a, b) => a === b,
-            ComponentShare$consumerStatus,
+            Share$consumerStatus,
         ),
     );
 
@@ -158,7 +158,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
         digAfter_(({ sharers: [sharers] }): AfterEvent<[T, ComponentContext] | []> => {
           if (local) {
             if (sharers.sharers.has(consumer.componentType)) {
-              return ComponentShare$sharedValue(this, consumer);
+              return Share$sharedValue(this, consumer);
             }
             if (local === true) {
               return afterThe();
@@ -170,7 +170,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
           while (element) {
             if (sharers.names.has(element.tagName.toLowerCase())) {
               return ComponentSlot.of(element).read.do(
-                  digAfter_(sharer => sharer ? ComponentShare$sharedValue(this, sharer) : afterThe()),
+                  digAfter_(sharer => sharer ? Share$sharedValue(this, sharer) : afterThe()),
               );
             }
 
@@ -239,10 +239,10 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
 
 }
 
-export namespace ComponentShare {
+export namespace Share {
 
   /**
-   * {@link ComponentShare Component share} options.
+   * {@link Share Component share} options.
    *
    * @typeParam T - Shared value type.
    */
@@ -254,7 +254,7 @@ export namespace ComponentShare {
      * The order of aliases is important. It defines the {@link SharedValue.Details.priority priority} of the
      * value shared for the corresponding share.
      */
-    readonly as?: ComponentShareRef<T> | readonly ComponentShareRef<T>[];
+    readonly as?: ShareRef<T> | readonly ShareRef<T>[];
 
   }
 
@@ -266,7 +266,7 @@ export namespace ComponentShare {
   export type Key<T> = ContextUpKey<AfterEvent<[T?]>, SharedValue<T>>;
 
   /**
-   * A source value accepted by {@link ComponentShare component share} context value.
+   * A source value accepted by {@link Share component share} context value.
    *
    * Either a single shared value, its {@link SharedValue.Detailed detailed descriptor}, or an `AfterEvent`
    * keeper of the above.
@@ -277,12 +277,12 @@ export namespace ComponentShare {
 
 }
 
-function ComponentShare$consumerStatus([{ settled, connected }]: [ComponentContext]): 0 | 1 | 2 {
+function Share$consumerStatus([{ settled, connected }]: [ComponentContext]): 0 | 1 | 2 {
   return connected ? 2 : settled ? 1 : 0;
 }
 
-function ComponentShare$sharedValue<T>(
-    share: ComponentShare<T>,
+function Share$sharedValue<T>(
+    share: Share<T>,
     sharer: ComponentContext,
 ): AfterEvent<[T, ComponentContext] | []> {
   return sharer.get(share).do(

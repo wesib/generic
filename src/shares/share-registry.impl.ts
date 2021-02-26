@@ -2,31 +2,31 @@ import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/conte
 import { trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { bootstrapDefault, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
-import { ComponentShare } from './component-share';
+import { Share } from './share';
 
-const ComponentShareRegistry__key = (/*#__PURE__*/ new SingleContextKey(
-    'component-share-registry',
+const ShareRegistry__key = (/*#__PURE__*/ new SingleContextKey(
+    'share-registry',
     {
-      byDefault: bootstrapDefault(bsContext => new ComponentShareRegistry(bsContext.get(DefaultNamespaceAliaser))),
+      byDefault: bootstrapDefault(bsContext => new ShareRegistry(bsContext.get(DefaultNamespaceAliaser))),
     },
 ));
 
 /**
  * @internal
  */
-export class ComponentShareRegistry {
+export class ShareRegistry {
 
-  static get [ContextKey__symbol](): ContextKey<ComponentShareRegistry> {
-    return ComponentShareRegistry__key;
+  static get [ContextKey__symbol](): ContextKey<ShareRegistry> {
+    return ShareRegistry__key;
   }
 
-  private readonly _sharers = new Map<ComponentShare<unknown>, ValueTracker<ComponentSharers>>();
+  private readonly _sharers = new Map<Share<unknown>, ValueTracker<Sharers>>();
 
   constructor(readonly nsAlias: DefaultNamespaceAliaser) {
   }
 
   addSharer(
-      share: ComponentShare<unknown>,
+      share: Share<unknown>,
       componentType: ComponentClass,
       elementName: string | undefined,
       supply: Supply,
@@ -35,23 +35,23 @@ export class ComponentShareRegistry {
     let sharers = this._sharers.get(share);
 
     if (!sharers) {
-      sharers = ComponentSharers$new();
+      sharers = Sharers$new();
       this._sharers.set(share, sharers);
-      ComponentSharers$addSharer(sharers, componentType, supply);
-      ComponentSharers$addName(sharers, elementName, supply);
+      Sharers$addSharer(sharers, componentType, supply);
+      Sharers$addName(sharers, elementName, supply);
     } else {
-      ComponentSharers$addSharer(sharers, componentType, supply);
-      ComponentSharers$addName(sharers, elementName, supply);
+      Sharers$addSharer(sharers, componentType, supply);
+      Sharers$addName(sharers, elementName, supply);
       sharers.it = { ...sharers.it };
     }
   }
 
-  sharers(share: ComponentShare<unknown>): ValueTracker<ComponentSharers> {
+  sharers(share: Share<unknown>): ValueTracker<Sharers> {
 
     let sharers = this._sharers.get(share);
 
     if (!sharers) {
-      sharers = ComponentSharers$new();
+      sharers = Sharers$new();
       this._sharers.set(share, sharers);
     }
 
@@ -63,19 +63,19 @@ export class ComponentShareRegistry {
 /**
  * @internal
  */
-export interface ComponentSharers {
+export interface Sharers {
 
   readonly names: Map<string, number>;
   readonly sharers: Map<ComponentClass, number>;
 
 }
 
-function ComponentSharers$new(): ValueTracker<ComponentSharers> {
+function Sharers$new(): ValueTracker<Sharers> {
   return trackValue({ names: new Map(), sharers: new Map() });
 }
 
-function ComponentSharers$addName(
-    tracker: ValueTracker<ComponentSharers>,
+function Sharers$addName(
+    tracker: ValueTracker<Sharers>,
     name: string | undefined,
     supply: Supply,
 ): void {
@@ -101,8 +101,8 @@ function ComponentSharers$addName(
   });
 }
 
-function ComponentSharers$addSharer(
-    tracker: ValueTracker<ComponentSharers>,
+function Sharers$addSharer(
+    tracker: ValueTracker<Sharers>,
     componentType: ComponentClass,
     supply: Supply,
 ): void {

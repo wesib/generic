@@ -1,15 +1,15 @@
 import { ContextValueSlot } from '@proc7ts/context-values';
 import { ContextUpKey } from '@proc7ts/context-values/updatable';
 import { AfterEvent, digAfter } from '@proc7ts/fun-events';
-import { ComponentShare } from './component-share';
+import { Share } from './share';
 import { SharedValue } from './shared-value';
 
 /**
  * @internal
  */
-export class ComponentShareKey<T> extends ContextUpKey<AfterEvent<[T?]>, SharedValue<T>> {
+export class ShareKey<T> extends ContextUpKey<AfterEvent<[T?]>, SharedValue<T>> {
 
-  constructor(name: string, private readonly _share: ComponentShare<T>) {
+  constructor(name: string, private readonly _share: Share<T>) {
     super(`${name}:share`);
   }
 
@@ -20,7 +20,7 @@ export class ComponentShareKey<T> extends ContextUpKey<AfterEvent<[T?]>, SharedV
   grow(
       slot: ContextValueSlot<
           AfterEvent<[T?]>,
-          ComponentShare.Source<T>,
+          Share.Source<T>,
           AfterEvent<SharedValue<T>[]>>,
   ): void {
     slot.insert(
