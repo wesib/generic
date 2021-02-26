@@ -1,5 +1,5 @@
 import { SingleContextKey } from '@proc7ts/context-values';
-import { AfterEvent, trackValue } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, trackValue } from '@proc7ts/fun-events';
 import {
   BootstrapContext,
   Component,
@@ -38,6 +38,26 @@ describe('share', () => {
 
       expect(await context.get(share)).toBe('test');
     });
+    it('handles component property value updates', async () => {
+
+      @Component({ extend: { type: Object } })
+      class TestComponent {
+
+        @Shared(share)
+        sharedValue = 'test';
+
+      }
+
+      const element = new (await testElement(TestComponent))();
+      const context = await ComponentSlot.of<TestComponent>(element).whenReady;
+
+      expect(await context.get(share)).toBe('test');
+      expect(context.component.sharedValue).toBe('test');
+
+      context.component.sharedValue = 'other';
+      expect(await context.get(share)).toBe('other');
+      expect(context.component.sharedValue).toBe('other');
+    });
     it('shares updatable component property value', async () => {
 
       const value = trackValue('test1');
@@ -53,13 +73,36 @@ describe('share', () => {
       }
 
       const element = new (await testElement(TestComponent))();
-      const context = await ComponentSlot.of(element).whenReady;
+      const context = await ComponentSlot.of<TestComponent>(element).whenReady;
       const shared = context.get(share);
 
       expect(await shared).toBe('test1');
+      expect(await context.component.sharedValue).toBe('test1');
 
       value.it = 'test2';
       expect(await shared).toBe('test2');
+      expect(await context.component.sharedValue).toBe('test2');
+    });
+    it('handles updatable component property value change', async () => {
+
+      @Component({ extend: { type: Object } })
+      class TestComponent {
+
+        @Shared(share)
+        sharedValue = afterThe('test1');
+
+      }
+
+      const element = new (await testElement(TestComponent))();
+      const context = await ComponentSlot.of<TestComponent>(element).whenReady;
+      const shared = context.get(share);
+
+      expect(await shared).toBe('test1');
+      expect(await context.component.sharedValue).toBe('test1');
+
+      context.component.sharedValue = afterThe('test2');
+      expect(await shared).toBe('test2');
+      expect(await context.component.sharedValue).toBe('test2');
     });
     it('shares shareable component property value', async () => {
 

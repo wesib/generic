@@ -1,8 +1,8 @@
-import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, digAfter_ } from '@proc7ts/fun-events';
 import { Class, valuesProvider } from '@proc7ts/primitives';
 import {
   ComponentClass,
-  ComponentDef,
+  ComponentInstance,
   ComponentProperty,
   ComponentPropertyDecorator,
   DefinitionContext,
@@ -10,6 +10,7 @@ import {
 } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
 import { ComponentShare__symbol } from './component-share-ref';
+import { ShareAccessor } from './share-accessor.impl';
 import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
 import { targetComponentShare, TargetComponentShare } from './target-component-share';
 
@@ -18,6 +19,8 @@ import { targetComponentShare, TargetComponentShare } from './target-component-s
  *
  * The decorated property should return either a static value, or its `AfterEvent` keeper if the case the value is
  * updatable.
+ *
+ * Applies current component context to `Contextual` shared values.
  *
  * @typeParam T - Shared value type.
  * @typeParam TClass - A type of decorated component class.
@@ -35,32 +38,42 @@ export function Shared<T, TClass extends ComponentClass = Class>(
 
   return ComponentProperty(
       descriptor => {
-        ComponentDef.define(
-            descriptor.type,
-            {
-              setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
-                setup.perComponent(SharedByComponent$ContextBuilder(
-                    shr,
-                    {
-                      provide: context => context.onceReady.do(
-                          digAfter(
-                              (): AfterEvent<[T?]> => {
 
-                                const value: T | AfterEvent<[T?]> = context.component[descriptor.key];
+        const accessorKey = Symbol(`${String(descriptor.key)}:shared`);
 
-                                return isAfterEvent(value) ? value : afterThe(value);
-                              },
-                              valuesProvider(),
-                          ),
-                      ),
-                    },
-                ));
-              },
-              define(defContext: DefinitionContext<InstanceType<TClass>>) {
-                shr.addSharer(defContext, { local });
-              },
+        type Component = ComponentInstance<InstanceType<TClass>> & {
+          [accessorKey]?: ShareAccessor<T, TClass>;
+        };
+
+        const accessor = (component: Component): ShareAccessor<T, TClass> => component[accessorKey]
+            || (component[accessorKey] = new ShareAccessor(descriptor, component));
+
+        return {
+          get: component => accessor(component).get(),
+          set: descriptor.writable
+              ? (component, value) => accessor(component).set(value)
+              : undefined,
+          componentDef: {
+            setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
+              setup.perComponent(SharedByComponent$ContextBuilder(
+                  shr,
+                  {
+                    provide: context => context.onceReady.do(
+                        digAfter_(
+                            ({ component }) => accessor(component).val,
+                            valuesProvider<[T?]>(),
+                        ),
+                    ),
+                  },
+              ));
             },
-        );
+            define(defContext: DefinitionContext<InstanceType<TClass>>) {
+              shr.addSharer(defContext, { local });
+            },
+          },
+        };
+
+
       },
       ...define.map(define => (
           descriptor: ComponentProperty.Descriptor<T | AfterEvent<[T?]>, TClass>,
