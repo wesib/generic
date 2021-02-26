@@ -40,7 +40,7 @@
     }
   },
   "peerDependencies": {
-    "@frontmeans/input-aspects": "^4.1.0",
+    "@frontmeans/input-aspects": "^4.1.1",
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/style-producer": "^6.0.0",
     "@proc7ts/context-values": "^6.0.0",
@@ -63,7 +63,7 @@
     }
   },
   "devDependencies": {
-    "@frontmeans/input-aspects": "^4.1.0",
+    "@frontmeans/input-aspects": "^4.1.1",
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/render-scheduler": "^1.5.0",
     "@frontmeans/style-producer": "^6.0.0",
