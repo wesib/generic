@@ -1,7 +1,7 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
 import { DefinitionContext } from '@wesib/wesib';
-import { ComponentShare, ComponentShare__symbol, ComponentShareRef, SharedByComponent } from '../shares';
+import { ComponentShare, ComponentShare__symbol, ComponentShareRef, SharedValue } from '../shares';
 import { Field } from './field';
 import { FieldShare } from './field.share';
 import { Form } from './form';
@@ -59,7 +59,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
         : [FieldShare[ComponentShare__symbol]];
   }
 
-  addSharer(defContext: DefinitionContext, options?: SharedByComponent.Options): Supply {
+  addSharer(defContext: DefinitionContext, options?: SharedValue.Options): Supply {
 
     const supply = super.addSharer(defContext, options);
 
@@ -80,7 +80,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
    *
    * @returns Sharer registration supply. Revokes the sharer registration once cut off.
    */
-  addFieldSharer(defContext: DefinitionContext, options?: SharedByComponent.Options): Supply {
+  addFieldSharer(defContext: DefinitionContext, options?: SharedValue.Options): Supply {
 
     const supply = new Supply();
 
@@ -89,7 +89,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
     return supply;
   }
 
-  shareValue(registrar: SharedByComponent.Registrar<Form<TModel, TElt>>): void {
+  shareValue(registrar: SharedValue.Registrar<Form<TModel, TElt>>): void {
     super.shareValue(registrar);
     this.shareField(registrar.withPriority(registrar.priority + 1));
   }
@@ -105,7 +105,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
    *
    * @return A builder of shared value for component context.
    */
-  shareField(registrar: SharedByComponent.Registrar<Field<TModel>>): void {
+  shareField(registrar: SharedValue.Registrar<Field<TModel>>): void {
     this[FormShare$asFields].forEach(fieldShare => fieldShare.shareValue(registrar));
   }
 
@@ -124,7 +124,7 @@ export namespace FormShare {
     /**
      * Field share reference(s) the share provides instances for in addition to the form instance.
      *
-     * The order of aliases is important. It defines the {@link SharedByComponent.Details.priority priority} of the
+     * The order of aliases is important. It defines the {@link SharedValue.Details.priority priority} of the
      * value shared for the corresponding share.
      *
      * A {@link FieldShare default field share} is used when omitted.

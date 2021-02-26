@@ -5,14 +5,14 @@ import { Supply } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { ComponentShare } from './component-share';
 import { ComponentShare__symbol } from './component-share-ref';
-import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
+import { SharedValue, SharedValue__symbol } from './shared-value';
 
 /**
  * @internal
  */
-export function SharedByComponent$ContextBuilder<T, TSharer extends object>(
+export function SharedValue$ContextBuilder<T, TSharer extends object>(
     share: ComponentShare<T>,
-    provider: SharedByComponent.Provider<T, TSharer>,
+    provider: SharedValue.Provider<T, TSharer>,
 ): ContextBuilder<ComponentContext<TSharer>> {
   return {
     [ContextBuilder__symbol]: registry => {
@@ -29,17 +29,17 @@ export function SharedByComponent$ContextBuilder<T, TSharer extends object>(
 /**
  * @internal
  */
-export function SharedByComponent$Registrar<T, TSharer extends object>(
+export function SharedValue$Registrar<T, TSharer extends object>(
     registry: ContextRegistry<ComponentContext<TSharer>>,
-    provider: SharedByComponent.Provider<T, TSharer>,
-): SharedByComponent.Registrar<T> {
-  return SharedByComponent$BoundRegistrar(registry, SharedByComponent$bindProvider(provider));
+    provider: SharedValue.Provider<T, TSharer>,
+): SharedValue.Registrar<T> {
+  return SharedValue$BoundRegistrar(registry, SharedValue$bindProvider(provider));
 }
 
-function SharedByComponent$BoundRegistrar<T, TSharer extends object>(
+function SharedValue$BoundRegistrar<T, TSharer extends object>(
     registry: ContextRegistry<ComponentContext<TSharer>>,
-    provider: SharedByComponent$BoundProvider<T, TSharer>,
-): SharedByComponent.Registrar<T> {
+    provider: SharedValue$BoundProvider<T, TSharer>,
+): SharedValue.Registrar<T> {
 
   const { priority, supply, provide } = provider;
 
@@ -51,26 +51,26 @@ function SharedByComponent$BoundRegistrar<T, TSharer extends object>(
       registry.provide({
         a: alias[ComponentShare__symbol],
         by: newPriority
-            ? SharedByComponent$detailedProvider(provide, newPriority)
-            : SharedByComponent$bareProvider(provide),
+            ? SharedValue$detailedProvider(provide, newPriority)
+            : SharedValue$bareProvider(provide),
       }).as(supply);
     },
-    withPriority: newPriority => SharedByComponent$BoundRegistrar(
+    withPriority: newPriority => SharedValue$BoundRegistrar(
         registry,
         { ...provider, priority: Math.max(0, newPriority) },
     ),
   };
 }
 
-interface SharedByComponent$BoundProvider<T, TSharer extends object> {
+interface SharedValue$BoundProvider<T, TSharer extends object> {
   readonly priority: number;
   readonly supply: Supply;
   provide(this: void, context: ComponentContext<TSharer>): T | AfterEvent<[T?]>;
 }
 
-function SharedByComponent$bindProvider<T, TSharer extends object>(
-    provider: SharedByComponent.Provider<T>,
-): SharedByComponent$BoundProvider<T, TSharer> {
+function SharedValue$bindProvider<T, TSharer extends object>(
+    provider: SharedValue.Provider<T>,
+): SharedValue$BoundProvider<T, TSharer> {
 
   const priority = provider.priority ? Math.max(0, provider.priority) : 0;
   const { supply = new Supply() } = provider;
@@ -93,7 +93,7 @@ function SharedByComponent$bindProvider<T, TSharer extends object>(
   };
 }
 
-function SharedByComponent$bareProvider<T, TComponent extends object>(
+function SharedValue$bareProvider<T, TComponent extends object>(
     provider: (context: ComponentContext<TComponent>) => T | AfterEvent<[T?]>,
 ): (
     context: ComponentContext<TComponent>,
@@ -112,14 +112,14 @@ function SharedByComponent$bareProvider<T, TComponent extends object>(
   };
 }
 
-function SharedByComponent$detailedProvider<T, TComponent extends object>(
+function SharedValue$detailedProvider<T, TComponent extends object>(
     provider: (context: ComponentContext<TComponent>) => T | AfterEvent<[T?]>,
     priority: number,
 ): (
     context: ComponentContext<TComponent>,
-) => SharedByComponent.Detailed<T> {
+) => SharedValue.Detailed<T> {
   return context => ({
-    [SharedByComponent__symbol]: {
+    [SharedValue__symbol]: {
       priority,
       get: () => provider(context),
     },

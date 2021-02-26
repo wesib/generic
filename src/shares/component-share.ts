@@ -26,8 +26,8 @@ import { ComponentShareLocator } from './component-share-locator';
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
-import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
-import { SharedByComponent$Registrar } from './shared-by-component.impl';
+import { SharedValue$Registrar } from './shared-by-component.impl';
+import { SharedValue, SharedValue__symbol } from './shared-value';
 
 /**
  * A kind of the value a component shares with the nested ones.
@@ -45,7 +45,7 @@ import { SharedByComponent$Registrar } from './shared-by-component.impl';
  *
  * @typeParam T - Shared value type.
  */
-export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<AfterEvent<[T?]>, SharedByComponent<T>> {
+export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<AfterEvent<[T?]>, SharedValue<T>> {
 
   /**
    * @internal
@@ -79,7 +79,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
   /**
    * A key of the sharer component context value containing an `AfterEvent` keeper of the shared value.
    */
-  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>> {
+  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T?]>, SharedValue<T>> {
     return this[ComponentShare$impl].key;
   }
 
@@ -93,7 +93,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    *
    * @returns Sharer registration supply. Revokes the sharer registration once cut off.
    */
-  addSharer(defContext: DefinitionContext, options?: SharedByComponent.Options): Supply {
+  addSharer(defContext: DefinitionContext, options?: SharedValue.Options): Supply {
     return this[ComponentShare$impl].addSharer(defContext, options);
   }
 
@@ -105,7 +105,7 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    * @return A builder of shared value for component context.
    */
   shareValue(
-      registrar: SharedByComponent.Registrar<T>,
+      registrar: SharedValue.Registrar<T>,
   ): void {
     this[ComponentShare$impl].shareValue(registrar);
   }
@@ -121,9 +121,9 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    */
   createRegistrar<TSharer extends object>(
       registry: ContextRegistry<ComponentContext<TSharer>>,
-      provider: SharedByComponent.Provider<T, TSharer>,
-  ): SharedByComponent.Registrar<T> {
-    return SharedByComponent$Registrar(registry, provider);
+      provider: SharedValue.Provider<T, TSharer>,
+  ): SharedValue.Registrar<T> {
+    return SharedValue$Registrar(registry, provider);
   }
 
   /**
@@ -191,28 +191,28 @@ export class ComponentShare<T> implements ComponentShareRef<T>, ContextUpRef<Aft
    * By default:
    *
    * - Prefers bare value.
-   * - Prefers the value from {@link SharedByComponent.Detailed detailed specifier} with higher priority
-   *   (i.e. lesser {@link SharedByComponent.Details.priority priority value}).
+   * - Prefers the value from {@link SharedValue.Detailed detailed specifier} with higher priority
+   *   (i.e. lesser {@link SharedValue.Details.priority priority value}).
    * - Prefers the value declared last.
    *
-   * @param values - The values shared by sharers. May contain a {@link SharedByComponent.Detailed detailed value
+   * @param values - The values shared by sharers. May contain a {@link SharedValue.Detailed detailed value
    * specifiers} in addition to pure values.
    *
    * @returns An `AfterEvent` keeper of selected value, if present.
    */
-  selectValue(...values: SharedByComponent<T>[]): AfterEvent<[T?]> {
+  selectValue(...values: SharedValue<T>[]): AfterEvent<[T?]> {
 
-    let selected: SharedByComponent.Details<T> | undefined;
+    let selected: SharedValue.Details<T> | undefined;
 
     for (let i = values.length - 1; i >= 0; --i) {
 
       const value = values[i];
 
-      if (!SharedByComponent.hasDetails(value)) {
+      if (!SharedValue.hasDetails(value)) {
         return afterThe(value);
       }
 
-      const details = value[SharedByComponent__symbol];
+      const details = value[SharedValue__symbol];
 
       if (!selected || selected.priority > details.priority) {
         selected = details;
@@ -251,7 +251,7 @@ export namespace ComponentShare {
     /**
      * Component share reference(s) the share provides a value for in addition to the one it provides for itself.
      *
-     * The order of aliases is important. It defines the {@link SharedByComponent.Details.priority priority} of the
+     * The order of aliases is important. It defines the {@link SharedValue.Details.priority priority} of the
      * value shared for the corresponding share.
      */
     readonly as?: ComponentShareRef<T> | readonly ComponentShareRef<T>[];
@@ -263,17 +263,17 @@ export namespace ComponentShare {
    *
    * @typeParam T - Shared value type.
    */
-  export type Key<T> = ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
+  export type Key<T> = ContextUpKey<AfterEvent<[T?]>, SharedValue<T>>;
 
   /**
    * A source value accepted by {@link ComponentShare component share} context value.
    *
-   * Either a single shared value, its {@link SharedByComponent.Detailed detailed descriptor}, or an `AfterEvent`
+   * Either a single shared value, its {@link SharedValue.Detailed detailed descriptor}, or an `AfterEvent`
    * keeper of the above.
    *
    * @typeParam T - Shared value type.
    */
-  export type Source<T> = ContextUpKey.Source<SharedByComponent<T>>;
+  export type Source<T> = ContextUpKey.Source<SharedValue<T>>;
 
 }
 

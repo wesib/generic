@@ -7,7 +7,7 @@ import { ComponentShare } from './component-share';
 import { ComponentShareKey } from './component-share-key.impl';
 import { ComponentShare__symbol } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
-import { SharedByComponent } from './shared-by-component';
+import { SharedValue } from './shared-value';
 
 /**
  * @internal
@@ -19,7 +19,7 @@ export const ComponentShare$impl = (/*#__PURE__*/ Symbol('ComponentShare.impl'))
  */
 export class ComponentShare$<T> {
 
-  readonly key: ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
+  readonly key: ContextUpKey<AfterEvent<[T?]>, SharedValue<T>>;
   private readonly _aliases: readonly ComponentShare<T>[];
 
   constructor(
@@ -31,7 +31,7 @@ export class ComponentShare$<T> {
     this._aliases = arrayOfElements(options.as).map(alias => alias[ComponentShare__symbol]);
   }
 
-  addSharer(defContext: DefinitionContext, options: SharedByComponent.Options = {}): Supply {
+  addSharer(defContext: DefinitionContext, options: SharedValue.Options = {}): Supply {
 
     const { local, name = defContext.elementDef.name } = options;
     const registry = defContext.get(BootstrapContext).get(ComponentShareRegistry);
@@ -50,7 +50,7 @@ export class ComponentShare$<T> {
   }
 
   shareValue(
-      registrar: SharedByComponent.Registrar<T>,
+      registrar: SharedValue.Registrar<T>,
   ): void {
     registrar.shareAs(this._share);
 

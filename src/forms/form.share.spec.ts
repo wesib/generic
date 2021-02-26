@@ -4,7 +4,7 @@ import { AfterEvent } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext, ComponentSlot, DefinitionContext } from '@wesib/wesib';
 import { ComponentShare, ComponentShare__symbol } from '../shares';
 import { ComponentShareRegistry } from '../shares/component-share-registry.impl';
-import { SharedByComponent$ContextBuilder } from '../shares/shared-by-component.impl';
+import { SharedValue$ContextBuilder } from '../shares/shared-by-component.impl';
 import { testDefinition, testElement } from '../spec/test-element';
 import { FieldShare } from './field.share';
 import { Form } from './form';
@@ -136,7 +136,7 @@ describe('forms', () => {
         provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | AfterEvent<[T?]>,
         priority?: number,
     ): ContextBuilder<ComponentContext<TComponent>> {
-      return SharedByComponent$ContextBuilder<T, TComponent>(
+      return SharedValue$ContextBuilder<T, TComponent>(
           share,
           {
             priority,

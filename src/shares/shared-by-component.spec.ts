@@ -1,37 +1,37 @@
 import { noop, valueProvider } from '@proc7ts/primitives';
-import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
+import { SharedValue, SharedValue__symbol } from './shared-value';
 
 describe('shares', () => {
-  describe('SharedByComponent', () => {
+  describe('SharedValue', () => {
     describe('hasDetails', () => {
       it('returns `false` for `null` value', () => {
-        expect(SharedByComponent.hasDetails(null)).toBe(false);
+        expect(SharedValue.hasDetails(null)).toBe(false);
       });
       it('returns `false` for numeric value', () => {
-        expect(SharedByComponent.hasDetails(123)).toBe(false);
+        expect(SharedValue.hasDetails(123)).toBe(false);
       });
       it('returns `false` for string value', () => {
-        expect(SharedByComponent.hasDetails('123')).toBe(false);
+        expect(SharedValue.hasDetails('123')).toBe(false);
       });
       it('returns `false` for function', () => {
-        expect(SharedByComponent.hasDetails(noop)).toBe(false);
+        expect(SharedValue.hasDetails(noop)).toBe(false);
       });
       it('returns `false` for object', () => {
-        expect(SharedByComponent.hasDetails({})).toBe(false);
+        expect(SharedValue.hasDetails({})).toBe(false);
       });
-      it('returns `false` for object with non-object [SharedByComponent__symbol] property', () => {
-        expect(SharedByComponent.hasDetails({ [SharedByComponent__symbol]: 1 })).toBe(false);
+      it('returns `false` for object with non-object [SharedValue__symbol] property', () => {
+        expect(SharedValue.hasDetails({ [SharedValue__symbol]: 1 })).toBe(false);
       });
       it('returns `true` for detailed shared value', () => {
 
-        const value: SharedByComponent.Detailed<string> = {
-          [SharedByComponent__symbol]: {
+        const value: SharedValue.Detailed<string> = {
+          [SharedValue__symbol]: {
             priority: 1,
             get: valueProvider('test'),
           },
         };
 
-        expect(SharedByComponent.hasDetails(value)).toBe(true);
+        expect(SharedValue.hasDetails(value)).toBe(true);
       });
     });
   });

@@ -11,7 +11,7 @@ import {
 import { ComponentShare } from './component-share';
 import { ComponentShare__symbol } from './component-share-ref';
 import { ShareAccessor } from './share-accessor.impl';
-import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
+import { SharedValue$ContextBuilder } from './shared-by-component.impl';
 import { targetComponentShare, TargetComponentShare } from './target-component-share';
 
 /**
@@ -55,7 +55,7 @@ export function Shared<T, TClass extends ComponentClass = Class>(
               : undefined,
           componentDef: {
             setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
-              setup.perComponent(SharedByComponent$ContextBuilder(
+              setup.perComponent(SharedValue$ContextBuilder(
                   shr,
                   {
                     provide: context => context.onceReady.do(
