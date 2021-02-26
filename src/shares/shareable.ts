@@ -11,7 +11,7 @@ import {
 import { noop, valueProvider, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 
-const ComponentShareable$Internals__symbol = (/*#__PURE__*/ Symbol('ComponentShareable.internals'));
+const Shareable$Internals__symbol = (/*#__PURE__*/ Symbol('Shareable.internals'));
 
 /**
  * Abstract implementation of value shareable by component.
@@ -21,8 +21,8 @@ const ComponentShareable$Internals__symbol = (/*#__PURE__*/ Symbol('ComponentSha
  * @typeParam TInternals - Internals data type.
  * @typeParam TSharer - Sharer component type.
  */
-export abstract class ComponentShareable<TInternals = unknown, TSharer extends object = any>
-    implements EventKeeper<[TInternals]>, Contextual<ComponentShareable<TInternals, TSharer>> {
+export abstract class Shareable<TInternals = unknown, TSharer extends object = any>
+    implements EventKeeper<[TInternals]>, Contextual<Shareable<TInternals, TSharer>> {
 
   /**
    * Converts shareable internals or their provider to provider that always returns an `AfterEvent` keeper of
@@ -33,7 +33,7 @@ export abstract class ComponentShareable<TInternals = unknown, TSharer extends o
    * @returns Shareable internals provider.
    */
   static provider<TInternals = unknown, TSharer extends object = any>(
-      internals: TInternals | ComponentShareable.Provider<TInternals, TSharer>,
+      internals: TInternals | Shareable.Provider<TInternals, TSharer>,
   ): (
       this: void,
       sharer: ComponentContext<TSharer>,
@@ -52,19 +52,19 @@ export abstract class ComponentShareable<TInternals = unknown, TSharer extends o
   /**
    * @internal
    */
-  private [ComponentShareable$Internals__symbol]: ComponentShareable$Internals<TInternals, TSharer>;
+  private [Shareable$Internals__symbol]: Shareable$Internals<TInternals, TSharer>;
 
   /**
    * Constructs shareable instance.
    *
    * @param internals - Either shareable internals, or their provider.
    */
-  constructor(internals: TInternals | ComponentShareable.Provider<TInternals, TSharer>) {
-    this[ComponentShareable$Internals__symbol] = new ComponentShareable$Internals(this, internals);
+  constructor(internals: TInternals | Shareable.Provider<TInternals, TSharer>) {
+    this[Shareable$Internals__symbol] = new Shareable$Internals(this, internals);
   }
 
   get sharer(): ComponentContext<TSharer> {
-    return this[ComponentShareable$Internals__symbol].sharer();
+    return this[Shareable$Internals__symbol].sharer();
   }
 
   /**
@@ -75,12 +75,12 @@ export abstract class ComponentShareable<TInternals = unknown, TSharer extends o
    * @returns `this` instance.
    */
   [Contextual__symbol](sharer: ComponentContext): this {
-    this[ComponentShareable$Internals__symbol].bind(sharer);
+    this[Shareable$Internals__symbol].bind(sharer);
     return this;
   }
 
   [AfterEvent__symbol](): AfterEvent<[TInternals]> {
-    return this[ComponentShareable$Internals__symbol].get().read;
+    return this[Shareable$Internals__symbol].get().read;
   }
 
   /**
@@ -89,12 +89,12 @@ export abstract class ComponentShareable<TInternals = unknown, TSharer extends o
    * Accessing these internals throws an exception until bound to sharer.
    */
   protected get internals(): TInternals {
-    return this[ComponentShareable$Internals__symbol].get().it;
+    return this[Shareable$Internals__symbol].get().it;
   }
 
 }
 
-export namespace ComponentShareable {
+export namespace Shareable {
 
   /**
    * Shareable provider signature.
@@ -117,7 +117,7 @@ export namespace ComponentShareable {
 
 }
 
-class ComponentShareable$Internals<TInternals, TSharer extends object> {
+class Shareable$Internals<TInternals, TSharer extends object> {
 
   private readonly _get: (
       this: void,
@@ -125,10 +125,10 @@ class ComponentShareable$Internals<TInternals, TSharer extends object> {
   ) => AfterEvent<[TInternals]>;
 
   constructor(
-      private readonly _source: ComponentShareable<TInternals, TSharer>,
-      internals: TInternals | ComponentShareable.Provider<TInternals, TSharer>,
+      private readonly _source: Shareable<TInternals, TSharer>,
+      internals: TInternals | Shareable.Provider<TInternals, TSharer>,
   ) {
-    this._get = ComponentShareable.provider(internals);
+    this._get = Shareable.provider(internals);
   }
 
   sharer(): ComponentContext<TSharer> {

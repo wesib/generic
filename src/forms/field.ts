@@ -2,7 +2,7 @@ import { InBuilder, InControl } from '@frontmeans/input-aspects';
 import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
 import { valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
-import { ComponentShareable } from '../shares';
+import { Shareable } from '../shares';
 import { FormPreset } from './form-preset';
 import { FormUnit } from './form-unit';
 
@@ -135,7 +135,7 @@ export namespace Field {
 function Field$provider<TValue, TSharer extends object>(
     field: () => Field<TValue, TSharer>,
     provider: Field.Provider<TValue>,
-): ComponentShareable.Provider<Field.Controls<TValue>, TSharer> {
+): Shareable.Provider<Field.Controls<TValue>, TSharer> {
   return sharer => sharer.get(FormPreset).rules.do(
       digAfter(preset => {
 

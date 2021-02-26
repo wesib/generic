@@ -1,6 +1,6 @@
 import { InControl } from '@frontmeans/input-aspects';
 import { AfterEvent, AfterEvent__symbol } from '@proc7ts/fun-events';
-import { ComponentShareable } from '../shares';
+import { Shareable } from '../shares';
 
 /**
  * Abstract unit of input {@link Form form}.
@@ -15,7 +15,7 @@ export abstract class FormUnit<
     TValue,
     TControls extends FormUnit.Controls<TValue> = FormUnit.Controls<TValue>,
     TSharer extends object = any>
-    extends ComponentShareable<TControls, TSharer>
+    extends Shareable<TControls, TSharer>
     implements FormUnit.Controls<TValue> {
 
   /**
@@ -24,7 +24,7 @@ export abstract class FormUnit<
    * @param controls - Either input controls, or their provider.
    */
   constructor(// eslint-disable-line @typescript-eslint/no-useless-constructor
-      controls: TControls | ComponentShareable.Provider<TControls, TSharer>,
+      controls: TControls | Shareable.Provider<TControls, TSharer>,
   ) {
     super(controls);
   }

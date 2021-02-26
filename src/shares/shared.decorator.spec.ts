@@ -10,7 +10,7 @@ import {
 } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { ComponentShare } from './component-share';
-import { ComponentShareable } from './component-shareable';
+import { Shareable } from './shareable';
 import { Shared } from './shared.decorator';
 import { TargetComponentShare } from './target-component-share';
 
@@ -108,7 +108,7 @@ describe('shares', () => {
 
       const share2 = new ComponentShare<TestShareable>('shareable-share');
 
-      class TestShareable extends ComponentShareable<string> {
+      class TestShareable extends Shareable<string> {
 
         get it(): string {
           return this.internals;
