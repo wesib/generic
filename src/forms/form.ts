@@ -10,7 +10,7 @@ import {
   nullInAspect,
 } from '@frontmeans/input-aspects';
 import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
-import { valueRecipe } from '@proc7ts/primitives';
+import { lazyValue, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { ComponentShareable } from '../share';
 import { Field } from './field';
@@ -106,11 +106,17 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
   ): Form.Provider<TModel, TElt, TSharer> {
     return builder => {
 
-      const control = builder.control.build(factory);
+      // Lazy construction allows recurrent access to `Form` aspect.
+      const control = lazyValue(() => builder.control.build(factory));
+      const element = lazyValue(() => builder.element.build(opts => elementFactory({ ...opts, form: control() })));
 
       return {
-        control,
-        element: builder.element.build(opts => elementFactory({ ...opts, form: control })),
+        get control() {
+          return control();
+        },
+        get element() {
+          return element();
+        },
       };
     };
   }
