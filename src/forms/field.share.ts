@@ -1,5 +1,5 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
-import { ComponentShare, ComponentShare__symbol } from '../share';
+import { ComponentShare, ComponentShare__symbol } from '../shares';
 import { Field } from './field';
 
 let FieldShare$instance: FieldShare | undefined;

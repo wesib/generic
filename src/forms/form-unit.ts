@@ -1,6 +1,6 @@
 import { InControl } from '@frontmeans/input-aspects';
 import { AfterEvent, AfterEvent__symbol } from '@proc7ts/fun-events';
-import { ComponentShareable } from '../share';
+import { ComponentShareable } from '../shares';
 
 /**
  * Abstract unit of input {@link Form form}.

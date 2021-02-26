@@ -2,7 +2,7 @@ import { InBuilder, InControl } from '@frontmeans/input-aspects';
 import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
 import { valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
-import { ComponentShareable } from '../share';
+import { ComponentShareable } from '../shares';
 import { FormPreset } from './form-preset';
 import { FormUnit } from './form-unit';
 

@@ -2,7 +2,7 @@ import { handleDomEvents } from '@frontmeans/dom-events';
 import { consumeEvents } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass, ComponentContext, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
-import { componentShareLocator, ComponentShareLocator } from '../share';
+import { componentShareLocator, ComponentShareLocator } from '../shares';
 import { Form } from './form';
 import { FormShare } from './form.share';
 

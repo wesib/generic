@@ -1,7 +1,7 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
 import { DefinitionContext } from '@wesib/wesib';
-import { ComponentShare, ComponentShare__symbol, ComponentShareRef, SharedByComponent } from '../share';
+import { ComponentShare, ComponentShare__symbol, ComponentShareRef, SharedByComponent } from '../shares';
 import { Field } from './field';
 import { FieldShare } from './field.share';
 import { Form } from './form';

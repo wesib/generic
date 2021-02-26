@@ -6,7 +6,7 @@ import { ComponentShare } from './component-share';
 import { ComponentShareRegistry, ComponentSharers } from './component-share-registry.impl';
 import { Shared } from './shared.decorator';
 
-describe('share', () => {
+describe('shares', () => {
   describe('ComponentShareRegistry', () => {
 
     let share: ComponentShare<string>;

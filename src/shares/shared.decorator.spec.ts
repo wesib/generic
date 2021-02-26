@@ -14,7 +14,7 @@ import { ComponentShareable } from './component-shareable';
 import { Shared } from './shared.decorator';
 import { TargetComponentShare } from './target-component-share';
 
-describe('share', () => {
+describe('shares', () => {
   describe('@Shared', () => {
 
     let share: ComponentShare<string>;

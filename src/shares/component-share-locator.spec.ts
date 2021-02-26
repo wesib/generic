@@ -4,7 +4,7 @@ import { ComponentShare } from './component-share';
 import { ComponentShareLocator, componentShareLocator } from './component-share-locator';
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 
-describe('share', () => {
+describe('shares', () => {
   describe('componentShareLocator', () => {
 
     let mockSharer: ComponentContext;

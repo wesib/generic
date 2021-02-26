@@ -12,7 +12,7 @@ import {
 import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
 import { lazyValue, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
-import { ComponentShareable } from '../share';
+import { ComponentShareable } from '../shares';
 import { Field } from './field';
 import { FormPreset } from './form-preset';
 import { FormUnit } from './form-unit';

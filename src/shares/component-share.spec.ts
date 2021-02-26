@@ -15,7 +15,7 @@ import { ComponentShare } from './component-share';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
 
-describe('share', () => {
+describe('shares', () => {
   describe('ComponentShare', () => {
 
     let share: ComponentShare<string>;

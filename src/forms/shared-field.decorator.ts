@@ -8,7 +8,7 @@ import {
   ComponentShareRef,
   Shared,
   TargetComponentShare,
-} from '../share';
+} from '../shares';
 import { Field } from './field';
 import { FieldName } from './field-name.definer';
 import { Field$name } from './field.impl';

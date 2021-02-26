@@ -1,7 +1,7 @@
 import { noop, valueProvider } from '@proc7ts/primitives';
 import { SharedByComponent, SharedByComponent__symbol } from './shared-by-component';
 
-describe('share', () => {
+describe('shares', () => {
   describe('SharedByComponent', () => {
     describe('hasDetails', () => {
       it('returns `false` for `null` value', () => {

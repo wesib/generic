@@ -2,7 +2,7 @@ import { noop } from '@proc7ts/primitives';
 import { ComponentShare } from './component-share';
 import { ComponentShare__symbol, isComponentShareRef } from './component-share-ref';
 
-describe('share', () => {
+describe('shares', () => {
   describe('isComponentShareRef', () => {
     it('returns `true` for component share reference', () => {
 

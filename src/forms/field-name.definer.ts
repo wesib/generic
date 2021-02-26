@@ -2,7 +2,7 @@ import { InGroup } from '@frontmeans/input-aspects';
 import { afterAll, consumeEvents } from '@proc7ts/fun-events';
 import { Class, Supply } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { componentShareLocator, ComponentShareLocator } from '../share';
+import { componentShareLocator, ComponentShareLocator } from '../shares';
 import { Field } from './field';
 import { Field$nameByKey } from './field.impl';
 import { Form } from './form';

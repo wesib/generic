@@ -1,6 +1,6 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShareDecorator, ComponentShareLocator, Shared, TargetComponentShare } from '../share';
+import { ComponentShareDecorator, ComponentShareLocator, Shared, TargetComponentShare } from '../shares';
 import { Form } from './form';
 import { FormUnit } from './form-unit';
 
