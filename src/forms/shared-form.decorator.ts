@@ -1,6 +1,6 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { ComponentShare, ComponentShareDecorator, ComponentShareRef, TargetComponentShare } from '../share';
+import { Share, ShareDecorator, ShareRef, TargetShare } from '../shares';
 import { Form } from './form';
 import { FormShare } from './form.share';
 import { SharedFormUnit } from './shared-form-unit.decorator';
@@ -24,7 +24,7 @@ export function SharedForm<
     TClass extends ComponentClass = Class>(
     def?: SharedFormDef<TForm, TModel, TElt>,
     ...define: SharedForm.Definer<TForm, TModel, TElt, TClass>[]
-): ComponentShareDecorator<TForm, TClass>;
+): ShareDecorator<TForm, TClass>;
 
 /**
  * Builds a decorator of component property that {@link FormShare shares} a form as default share.
@@ -43,7 +43,7 @@ export function SharedForm<
     TElt extends HTMLElement = Form.ElementType<TForm>,
     TClass extends ComponentClass = Class>(
     ...define: SharedForm.Definer<TForm, TModel, TElt, TClass>[]
-): ComponentShareDecorator<TForm, TClass>;
+): ShareDecorator<TForm, TClass>;
 
 export function SharedForm<
     TForm extends Form<TModel, TElt>,
@@ -54,16 +54,16 @@ export function SharedForm<
         | SharedFormDef<TForm, TModel, TElt>
         | SharedForm.Definer<TForm, TModel, TElt, TClass> = {},
     ...define: SharedForm.Definer<TForm, TModel, TElt, TClass>[]
-): ComponentShareDecorator<TForm, TClass> {
+): ShareDecorator<TForm, TClass> {
   if (typeof defOrDefiner === 'function') {
     return SharedFormUnit<TForm, TModel, Form.Controls<TModel, TElt>, TClass>(
-        FormShare as ComponentShareRef<any> as ComponentShareRef<TForm>,
+        FormShare as ShareRef<any> as ShareRef<TForm>,
         defOrDefiner,
         ...define,
     );
   }
 
-  const { share = FormShare as ComponentShareRef<any> as ComponentShareRef<TForm> } = defOrDefiner;
+  const { share = FormShare as ShareRef<any> as ShareRef<TForm> } = defOrDefiner;
 
   return SharedFormUnit<TForm, TModel, Form.Controls<TModel, TElt>, TClass>(share, ...define);
 }
@@ -83,7 +83,7 @@ export interface SharedFormDef<
   /**
    * Target form share.
    */
-  readonly share?: TargetComponentShare<TForm>;
+  readonly share?: TargetShare<TForm>;
 
 }
 
@@ -110,7 +110,7 @@ export namespace SharedForm {
     /**
      * Target form share instance.
      */
-    readonly share: ComponentShare<TForm>;
+    readonly share: Share<TForm>;
 
   }
 

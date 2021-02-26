@@ -9,18 +9,18 @@ import {
   DefinitionContext,
 } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
-import { ComponentShare } from './component-share';
-import { ComponentShareable } from './component-shareable';
+import { Share } from './share';
+import { Shareable } from './shareable';
 import { Shared } from './shared.decorator';
-import { TargetComponentShare } from './target-component-share';
+import { TargetShare } from './target-share';
 
-describe('share', () => {
+describe('shares', () => {
   describe('@Shared', () => {
 
-    let share: ComponentShare<string>;
+    let share: Share<string>;
 
     beforeEach(() => {
-      share = new ComponentShare('test-share');
+      share = new Share('test-share');
     });
 
     it('shares static component property value', async () => {
@@ -106,9 +106,9 @@ describe('share', () => {
     });
     it('shares shareable component property value', async () => {
 
-      const share2 = new ComponentShare<TestShareable>('shareable-share');
+      const share2 = new Share<TestShareable>('shareable-share');
 
-      class TestShareable extends ComponentShareable<string> {
+      class TestShareable extends Shareable<string> {
 
         get it(): string {
           return this.internals;
@@ -134,7 +134,7 @@ describe('share', () => {
     });
     it('applies share extension', async () => {
 
-      const extKey1 = new SingleContextKey<ComponentShare<string>>('ext-key1');
+      const extKey1 = new SingleContextKey<Share<string>>('ext-key1');
       const extKey2 = new SingleContextKey<ComponentClass>('ext-key2');
 
       @Component({ extend: { type: Object } })
@@ -168,10 +168,10 @@ describe('share', () => {
 
     describe('scoping', () => {
 
-      let share2: ComponentShare<string>;
+      let share2: Share<string>;
 
       beforeEach(() => {
-        share2 = new ComponentShare('outer-share');
+        share2 = new Share('outer-share');
       });
 
       it('makes shared value available to nested component by default', async () => {
@@ -210,9 +210,9 @@ describe('share', () => {
       });
 
       async function bootstrap(
-          innerShare: TargetComponentShare<string> = share,
-          outerShare: TargetComponentShare<string> = share,
-          outerShare2: TargetComponentShare<string> = share2,
+          innerShare: TargetShare<string> = share,
+          outerShare: TargetShare<string> = share,
+          outerShare2: TargetShare<string> = share2,
       ): Promise<ComponentContext> {
 
         @Component(

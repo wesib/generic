@@ -2,9 +2,9 @@ import { inFormElement, inGroup } from '@frontmeans/input-aspects';
 import { ContextBuilder } from '@proc7ts/context-values';
 import { AfterEvent } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext, ComponentSlot, DefinitionContext } from '@wesib/wesib';
-import { ComponentShare, ComponentShare__symbol } from '../share';
-import { ComponentShareRegistry } from '../share/component-share-registry.impl';
-import { SharedByComponent$ContextBuilder } from '../share/shared-by-component.impl';
+import { Share, Share__symbol } from '../shares';
+import { ShareRegistry } from '../shares/share-registry.impl';
+import { SharedValue$ContextBuilder } from '../shares/shared-value.impl';
 import { testDefinition, testElement } from '../spec/test-element';
 import { FieldShare } from './field.share';
 import { Form } from './form';
@@ -17,15 +17,15 @@ describe('forms', () => {
     let fieldShare: FieldShare;
 
     beforeEach(() => {
-      formShare = FormShare[ComponentShare__symbol];
-      fieldShare = FieldShare[ComponentShare__symbol];
+      formShare = FormShare[Share__symbol];
+      fieldShare = FieldShare[Share__symbol];
     });
 
     describe('addSharer', () => {
 
       let bsContext: BootstrapContext;
       let defContext: DefinitionContext;
-      let registry: ComponentShareRegistry;
+      let registry: ShareRegistry;
 
       beforeEach(async () => {
 
@@ -35,7 +35,7 @@ describe('forms', () => {
 
         defContext = await testDefinition(TestComponent);
         bsContext = defContext.get(BootstrapContext);
-        registry = bsContext.get(ComponentShareRegistry);
+        registry = bsContext.get(ShareRegistry);
       });
 
       it('registers form sharer', () => {
@@ -73,7 +73,7 @@ describe('forms', () => {
         expect(sharerNames(fieldShare)).toHaveLength(0);
       });
 
-      function sharerNames(share: ComponentShare<unknown>): readonly string[] {
+      function sharerNames(share: Share<unknown>): readonly string[] {
         return [...registry.sharers(share).it.names.keys()];
       }
     });
@@ -132,11 +132,11 @@ describe('forms', () => {
     });
 
     function shareValue<T, TComponent extends object>(
-        share: ComponentShare<T>,
+        share: Share<T>,
         provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | AfterEvent<[T?]>,
         priority?: number,
     ): ContextBuilder<ComponentContext<TComponent>> {
-      return SharedByComponent$ContextBuilder<T, TComponent>(
+      return SharedValue$ContextBuilder<T, TComponent>(
           share,
           {
             priority,

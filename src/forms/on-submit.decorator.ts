@@ -2,7 +2,7 @@ import { handleDomEvents } from '@frontmeans/dom-events';
 import { consumeEvents } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass, ComponentContext, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
-import { componentShareLocator, ComponentShareLocator } from '../share';
+import { shareLocator, ShareLocator } from '../shares';
 import { Form } from './form';
 import { FormShare } from './form.share';
 
@@ -23,7 +23,7 @@ export function OnSubmit<TModel = any, TElt extends HTMLElement = HTMLElement, T
 ): ComponentPropertyDecorator<(form: Form<TModel, TElt>, event: Event) => void, T> {
 
   const { form: formRef = FormShare, cancel = true } = def;
-  const locateForm = componentShareLocator(formRef, { share: FormShare, local: 'too' });
+  const locateForm = shareLocator(formRef, { share: FormShare, local: 'too' });
 
   return ComponentProperty(({ get }) => ({
     componentDef: {
@@ -73,7 +73,7 @@ export interface OnSubmitDef<TModel = any, TElt extends HTMLElement = HTMLElemen
    *
    * A {@link FieldShare default} form share is used when omitted.
    */
-  readonly form?: ComponentShareLocator<Form<TModel, TElt>>;
+  readonly form?: ShareLocator<Form<TModel, TElt>>;
 
   /**
    * Whether to cancel default submit handler.

@@ -1,5 +1,5 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
-import { ComponentShare, ComponentShare__symbol } from '../share';
+import { Share, Share__symbol } from '../shares';
 import { Field } from './field';
 
 let FieldShare$instance: FieldShare | undefined;
@@ -12,20 +12,20 @@ let FieldShare$instance: FieldShare | undefined;
  *
  * @typeParam TValue - Field value type.
  */
-export class FieldShare<TValue = any> extends ComponentShare<Field<TValue>> {
+export class FieldShare<TValue = any> extends Share<Field<TValue>> {
 
   /**
    * Default field share instance.
    */
-  static get [ComponentShare__symbol](): FieldShare {
+  static get [Share__symbol](): FieldShare {
     return FieldShare$instance || (FieldShare$instance = new FieldShare('field'));
   }
 
   /**
    * A key of component context value containing default field instance.
    */
-  static get [ContextKey__symbol](): ComponentShare.Key<Field<any>> {
-    return this[ComponentShare__symbol][ContextKey__symbol];
+  static get [ContextKey__symbol](): Share.Key<Field<any>> {
+    return this[Share__symbol][ContextKey__symbol];
   }
 
 }

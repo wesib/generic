@@ -1,14 +1,6 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import {
-  ComponentShare,
-  ComponentShareDecorator,
-  componentShareLocator,
-  ComponentShareLocator,
-  ComponentShareRef,
-  Shared,
-  TargetComponentShare,
-} from '../share';
+import { Share, Shared, ShareDecorator, ShareLocator, shareLocator, ShareRef, TargetShare } from '../shares';
 import { Field } from './field';
 import { FieldName } from './field-name.definer';
 import { Field$name } from './field.impl';
@@ -34,7 +26,7 @@ export function SharedField<
     TClass extends ComponentClass = Class>(
     def?: SharedFieldDef<TField, TValue>,
     ...define: SharedField.Definer<TField, TValue, TClass>[]
-): ComponentShareDecorator<TField, TClass>;
+): ShareDecorator<TField, TClass>;
 
 /**
  * Builds a decorator of component property that {@link FieldShare shares} a form field and adds it to the
@@ -52,7 +44,7 @@ export function SharedField<
     TValue = Field.ValueType<TField>,
     TClass extends ComponentClass = Class>(
     ...define: SharedField.Definer<TField, TValue, TClass>[]
-): ComponentShareDecorator<TField, TClass>;
+): ShareDecorator<TField, TClass>;
 
 export function SharedField<
     TField extends Field<TValue>,
@@ -62,7 +54,7 @@ export function SharedField<
         | SharedFieldDef<TField, TValue>
         | SharedField.Definer<TField, TValue, TClass> = {},
     ...define: SharedField.Definer<TField, TValue, TClass>[]
-): ComponentShareDecorator<TField, TClass> {
+): ShareDecorator<TField, TClass> {
 
   let def: SharedFieldDef<TField, TValue>;
   let fieldName: string | undefined;
@@ -78,10 +70,10 @@ export function SharedField<
   }
 
   const {
-    share = FieldShare as ComponentShareRef<any> as ComponentShareRef<TField>,
+    share = FieldShare as ShareRef<any> as ShareRef<TField>,
     form: formLocator,
   } = def;
-  const locateForm = componentShareLocator(formLocator, { share: FormShare });
+  const locateForm = shareLocator(formLocator, { share: FormShare });
 
   return SharedFormUnit<TField, TValue, Field.Controls<TValue>, TClass>(
       share,
@@ -106,7 +98,7 @@ export interface SharedFieldDef<TField extends Field<TValue>, TValue = Field.Val
   /**
    * Target field share.
    */
-  readonly share?: TargetComponentShare<TField>;
+  readonly share?: TargetShare<TField>;
 
   /**
    * A form to add the field to.
@@ -115,7 +107,7 @@ export interface SharedFieldDef<TField extends Field<TValue>, TValue = Field.Val
    *
    * The {@link FieldShare default form share} is used when omitted.
    */
-  readonly form?: ComponentShareLocator<Form>;
+  readonly form?: ShareLocator<Form>;
 
   /**
    * Field name.
@@ -150,12 +142,12 @@ export namespace SharedField {
     /**
      * Target field share instance.
      */
-    readonly share: ComponentShare<TField>;
+    readonly share: Share<TField>;
 
     /**
      * Predefined locator function of the form to add the field to.
      */
-    readonly locateForm: ComponentShareLocator.Fn<Form<any, any>>;
+    readonly locateForm: ShareLocator.Fn<Form<any, any>>;
 
     /**
      * Predefined field name, or `null`/`undefined` when the field is not to be added to the {@link locateForm form}.

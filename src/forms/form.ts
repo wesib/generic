@@ -12,7 +12,7 @@ import {
 import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
 import { lazyValue, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
-import { ComponentShareable } from '../share';
+import { Shareable } from '../shares';
 import { Field } from './field';
 import { FormPreset } from './form-preset';
 import { FormUnit } from './form-unit';
@@ -161,7 +161,7 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
 function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>(
     form: () => Form<TModel, TElt, TSharer>,
     provider: Form.Provider<TModel, TElt, TSharer>,
-): ComponentShareable.Provider<Form.Controls<TModel, TElt>, TSharer> {
+): Shareable.Provider<Form.Controls<TModel, TElt>, TSharer> {
 
   const formAspect: InConverter.Aspect.Factory<any> = control => ({
     applyAspect<TInstance, TKind extends InAspect.Application.Kind>(

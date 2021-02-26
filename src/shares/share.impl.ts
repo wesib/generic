@@ -3,38 +3,38 @@ import { ContextUpKey } from '@proc7ts/context-values/updatable';
 import { AfterEvent } from '@proc7ts/fun-events';
 import { arrayOfElements, Supply } from '@proc7ts/primitives';
 import { BootstrapContext, DefinitionContext } from '@wesib/wesib';
-import { ComponentShare } from './component-share';
-import { ComponentShareKey } from './component-share-key.impl';
-import { ComponentShare__symbol } from './component-share-ref';
-import { ComponentShareRegistry } from './component-share-registry.impl';
-import { SharedByComponent } from './shared-by-component';
+import { Share } from './share';
+import { ShareKey } from './share-key.impl';
+import { Share__symbol } from './share-ref';
+import { ShareRegistry } from './share-registry.impl';
+import { SharedValue } from './shared-value';
 
 /**
  * @internal
  */
-export const ComponentShare$impl = (/*#__PURE__*/ Symbol('ComponentShare.impl'));
+export const Share$impl__symbol = (/*#__PURE__*/ Symbol('Share.impl'));
 
 /**
  * @internal
  */
-export class ComponentShare$<T> {
+export class Share$<T> {
 
-  readonly key: ContextUpKey<AfterEvent<[T?]>, SharedByComponent<T>>;
-  private readonly _aliases: readonly ComponentShare<T>[];
+  readonly key: ContextUpKey<AfterEvent<[T?]>, SharedValue<T>>;
+  private readonly _aliases: readonly Share<T>[];
 
   constructor(
-      private readonly _share: ComponentShare<T>,
+      private readonly _share: Share<T>,
       readonly name: string,
-      options: ComponentShare.Options<T>,
+      options: Share.Options<T>,
   ) {
-    this.key = new ComponentShareKey(name, _share);
-    this._aliases = arrayOfElements(options.as).map(alias => alias[ComponentShare__symbol]);
+    this.key = new ShareKey(name, _share);
+    this._aliases = arrayOfElements(options.as).map(alias => alias[Share__symbol]);
   }
 
-  addSharer(defContext: DefinitionContext, options: SharedByComponent.Options = {}): Supply {
+  addSharer(defContext: DefinitionContext, options: SharedValue.Options = {}): Supply {
 
     const { local, name = defContext.elementDef.name } = options;
-    const registry = defContext.get(BootstrapContext).get(ComponentShareRegistry);
+    const registry = defContext.get(BootstrapContext).get(ShareRegistry);
     const supply = new Supply();
     const { componentType } = defContext;
     const elementName = local
@@ -50,7 +50,7 @@ export class ComponentShare$<T> {
   }
 
   shareValue(
-      registrar: SharedByComponent.Registrar<T>,
+      registrar: SharedValue.Registrar<T>,
   ): void {
     registrar.shareAs(this._share);
 

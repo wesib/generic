@@ -2,7 +2,7 @@ import { InGroup } from '@frontmeans/input-aspects';
 import { afterAll, consumeEvents } from '@proc7ts/fun-events';
 import { Class, Supply } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
-import { componentShareLocator, ComponentShareLocator } from '../share';
+import { shareLocator, ShareLocator } from '../shares';
 import { Field } from './field';
 import { Field$nameByKey } from './field.impl';
 import { Form } from './form';
@@ -84,7 +84,7 @@ function FormUnitName<
       fieldName = autoName;
     }
 
-    const locateForm = componentShareLocator(def.form || defaultForm, { share: FormShare });
+    const locateForm = shareLocator(def.form || defaultForm, { share: FormShare });
 
     return {
       componentDef: {
@@ -127,7 +127,7 @@ export interface FieldNameDef {
    *
    * Either {@link SharedFieldDef.form predefined}, or {@link FieldShare default} form share is used when omitted.
    */
-  readonly form?: ComponentShareLocator<Form>;
+  readonly form?: ShareLocator<Form>;
 
   /**
    * Field name.

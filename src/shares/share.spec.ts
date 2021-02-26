@@ -11,17 +11,17 @@ import {
   DefinitionContext,
 } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
-import { ComponentShare } from './component-share';
-import { ComponentShareRegistry } from './component-share-registry.impl';
-import { SharedByComponent$ContextBuilder } from './shared-by-component.impl';
+import { Share } from './share';
+import { ShareRegistry } from './share-registry.impl';
+import { SharedValue$ContextBuilder } from './shared-value.impl';
 
-describe('share', () => {
-  describe('ComponentShare', () => {
+describe('shares', () => {
+  describe('Share', () => {
 
-    let share: ComponentShare<string>;
+    let share: Share<string>;
 
     beforeEach(() => {
-      share = new ComponentShare('test-share');
+      share = new Share('test-share');
     });
 
     describe('name', () => {
@@ -43,7 +43,7 @@ describe('share', () => {
 
       let bsContext: BootstrapContext;
       let defContext: DefinitionContext;
-      let registry: ComponentShareRegistry;
+      let registry: ShareRegistry;
 
       beforeEach(async () => {
 
@@ -53,7 +53,7 @@ describe('share', () => {
 
         defContext = await testDefinition(TestComponent);
         bsContext = defContext.get(BootstrapContext);
-        registry = bsContext.get(ComponentShareRegistry);
+        registry = bsContext.get(ShareRegistry);
       });
 
       it('registers sharer', () => {
@@ -67,7 +67,7 @@ describe('share', () => {
       });
       it('registers sharer for aliased shares', () => {
 
-        const share2 = new ComponentShare('other-share', { as: share });
+        const share2 = new Share('other-share', { as: share });
         const supply = share2.addSharer(defContext);
 
         expect(sharerNames(share)).toEqual(['test-component']);
@@ -78,17 +78,17 @@ describe('share', () => {
         expect(sharerNames(share2)).toHaveLength(0);
       });
 
-      function sharerNames(share: ComponentShare<unknown>): readonly string[] {
+      function sharerNames(share: Share<unknown>): readonly string[] {
         return [...registry.sharers(share).it.names.keys()];
       }
     });
 
     describe('shareValue', () => {
 
-      let share2: ComponentShare<string>;
+      let share2: Share<string>;
 
       beforeEach(() => {
-        share2 = new ComponentShare('other-share', { as: share });
+        share2 = new Share('other-share', { as: share });
       });
 
       let defContext: DefinitionContext;
@@ -147,12 +147,12 @@ describe('share', () => {
 
     describe('selectValue', () => {
 
-      let share2: ComponentShare<string>;
-      let share3: ComponentShare<string>;
+      let share2: Share<string>;
+      let share3: Share<string>;
 
       beforeEach(() => {
-        share2 = new ComponentShare('other-share', { as: share });
-        share3 = new ComponentShare('third-share', { as: [share2, share] });
+        share2 = new Share('other-share', { as: share });
+        share3 = new Share('third-share', { as: [share2, share] });
       });
 
       let defContext: DefinitionContext;
@@ -379,11 +379,11 @@ describe('share', () => {
   });
 
   function shareValue<T, TComponent extends object>(
-      share: ComponentShare<T>,
+      share: Share<T>,
       provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | AfterEvent<[T?]>,
       priority?: number,
   ): ContextBuilder<ComponentContext<TComponent>> {
-    return SharedByComponent$ContextBuilder<T, TComponent>(
+    return SharedValue$ContextBuilder<T, TComponent>(
         share,
         {
           priority,
