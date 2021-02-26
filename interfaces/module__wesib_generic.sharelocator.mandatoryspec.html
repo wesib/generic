@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Controls | Wesib: Generic Components</title>
+	<title>MandatorySpec | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,16 +55,16 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="../modules/module__wesib_generic_forms.html">Module @wesib/generic/forms</a>
+					<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 				</li>
 				<li>
-					<a href="../modules/module__wesib_generic_forms.form.html">Form</a>
+					<a href="../modules/module__wesib_generic.sharelocator.html">ShareLocator</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic_forms.form.controls.html">Controls</a>
+					<a href="module__wesib_generic.sharelocator.mandatoryspec.html">MandatorySpec</a>
 				</li>
 			</ul>
-			<h1>Interface Controls&lt;TModel, TElt&gt;</h1>
+			<h1>Interface MandatorySpec&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -74,7 +74,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Form controls.</p>
+						<p>Mandatory shared value locator specifier.</p>
 					</div>
 				</div>
 			</section>
@@ -82,18 +82,10 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>TModel</h4>
+						<h4>T</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>A model type of the form, i.e. a type of its control value.</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<h4>TElt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span> = <span class="tsd-signature-type">HTMLElement</span></h4>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>A type of HTML form element.</p>
+								<p>Share value type.</p>
 							</div>
 						</div>
 					</li>
@@ -103,19 +95,13 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="module__wesib_generic_forms.field.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">&gt;</span>
+						<a href="module__wesib_generic.sharelocator.spec.html" class="tsd-signature-type" data-tsd-kind="Interface">Spec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">Controls</span>
+								<span class="target">MandatorySpec</span>
 							</li>
 						</ul>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implemented by</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -125,8 +111,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic_forms.form.controls.html#control" class="tsd-kind-icon">control</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.form.controls.html#element" class="tsd-kind-icon">element</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic.sharelocator.mandatoryspec.html#local" class="tsd-kind-icon">local</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic.sharelocator.mandatoryspec.html#share" class="tsd-kind-icon">share</a></li>
 							</ul>
 						</section>
 					</div>
@@ -134,37 +120,41 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="control" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> control</h3>
-					<div class="tsd-signature tsd-kind-icon">control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">&gt;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="local" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> local</h3>
+					<div class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;too&quot;</span></div>
 					<aside class="tsd-sources">
-						<p>Overrides <a href="module__wesib_generic_forms.field.controls.html">Controls</a>.<a href="module__wesib_generic_forms.field.controls.html#control">control</a></p>
+						<p>Inherited from <a href="module__wesib_generic.sharelocator.spec.html">Spec</a>.<a href="module__wesib_generic.sharelocator.spec.html#local">local</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form.ts#L220">wesib/generic/src/forms/form.ts:220</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/shares/share-locator.ts#L130">wesib/generic/src/shares/share-locator.ts:130</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Submittable form input control.</p>
+							<p>Whether to search locally, in consumer component itself.</p>
 						</div>
+						<ul>
+							<li><code>false</code> (by default), to start the search from consumer&#39;s parent,</li>
+							<li><code>true</code> to search locally, i.e. only in consumer component, or</li>
+							<li><code>&#39;too&#39;</code> to start the search from consumer component.</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="element" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> element</h3>
-					<div class="tsd-signature tsd-kind-icon">element<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+					<a name="share" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> share</h3>
+					<div class="tsd-signature tsd-kind-icon">share<span class="tsd-signature-symbol">:</span> <a href="module__wesib_generic.shareref.html" class="tsd-signature-type" data-tsd-kind="Interface">ShareRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides <a href="module__wesib_generic.sharelocator.spec.html">Spec</a>.<a href="module__wesib_generic.sharelocator.spec.html#share">share</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form.ts#L228">wesib/generic/src/forms/form.ts:228</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/shares/share-locator.ts#L163">wesib/generic/src/shares/share-locator.ts:163</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Form element control.</p>
+							<p>Target share.</p>
 						</div>
-						<p>Unlike <a href="module__wesib_generic_forms.form.controls.html#control">input control</a> this one is not supposed to be submitted, but rather contains a <code>&lt;form&gt;</code>
-						element issuing a <code>submit</code> event.</p>
 					</div>
 				</section>
 			</section>
@@ -179,32 +169,44 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic_forms.form.builder.html" class="tsd-kind-icon">Builder</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic_forms.form.controls.html" class="tsd-kind-icon">Controls</a>
+						<a href="module__wesib_generic.sharelocator.mandatoryspec.html" class="tsd-kind-icon">Mandatory<wbr>Spec</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="module__wesib_generic_forms.form.controls.html#control" class="tsd-kind-icon">control</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="module__wesib_generic.sharelocator.mandatoryspec.html#local" class="tsd-kind-icon">local</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_forms.form.controls.html#element" class="tsd-kind-icon">element</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+								<a href="module__wesib_generic.sharelocator.mandatoryspec.html#share" class="tsd-kind-icon">share</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_forms.form.html#elementtype" class="tsd-kind-icon">Element<wbr>Type</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="module__wesib_generic.sharelocator.options.html" class="tsd-kind-icon">Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="module__wesib_generic.sharelocator.spec.html" class="tsd-kind-icon">Spec</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_forms.form.html#modeltype" class="tsd-kind-icon">Model<wbr>Type</a>
+						<a href="../modules/module__wesib_generic.sharelocator.html#custom" class="tsd-kind-icon">Custom</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_forms.form.html#provider" class="tsd-kind-icon">Provider</a>
+						<a href="../modules/module__wesib_generic.sharelocator.html#customwithfallback" class="tsd-kind-icon">Custom<wbr>With<wbr>Fallback</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic.sharelocator.html#fn" class="tsd-kind-icon">Fn</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
+						<a href="../modules/module__wesib_generic.sharelocator.html#fulloptions" class="tsd-kind-icon">Full<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic.sharelocator.html#fullspec" class="tsd-kind-icon">Full<wbr>Spec</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic.sharelocator.html#mandatory" class="tsd-kind-icon">Mandatory</a>
 					</li>
 				</ul>
 			</nav>

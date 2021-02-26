@@ -58,10 +58,10 @@
 					<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 				</li>
 				<li>
-					<a href="../modules/module__wesib_generic.componentsharelocator.html">ComponentShareLocator</a>
+					<a href="../modules/module__wesib_generic.sharelocator.html">ShareLocator</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic.componentsharelocator.options.html">Options</a>
+					<a href="module__wesib_generic.sharelocator.options.html">Options</a>
 				</li>
 			</ul>
 			<h1>Interface Options</h1>
@@ -85,7 +85,7 @@
 						<span class="target">Options</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="module__wesib_generic.componentsharelocator.spec.html" class="tsd-signature-type" data-tsd-kind="Interface">Spec</a>
+								<a href="module__wesib_generic.sharelocator.spec.html" class="tsd-signature-type" data-tsd-kind="Interface">Spec</a>
 							</li>
 						</ul>
 					</li>
@@ -98,7 +98,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.componentsharelocator.options.html#self" class="tsd-kind-icon">self</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.sharelocator.options.html#local" class="tsd-kind-icon">local</a></li>
 							</ul>
 						</section>
 					</div>
@@ -107,19 +107,23 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="self" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> self</h3>
-					<div class="tsd-signature tsd-kind-icon">self<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
+					<a name="local" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> local</h3>
+					<div class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;too&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/2ad03a5/src/share/component-share-locator.ts#L128">wesib/generic/src/share/component-share-locator.ts:128</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/shares/share-locator.ts#L130">wesib/generic/src/shares/share-locator.ts:130</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Whether to include the consumer component itself into the search.</p>
+							<p>Whether to search locally, in consumer component itself.</p>
 						</div>
-						<p><code>false</code> by default, which means the search would start from consumer&#39;s parent.</p>
+						<ul>
+							<li><code>false</code> (by default), to start the search from consumer&#39;s parent,</li>
+							<li><code>true</code> to search locally, i.e. only in consumer component, or</li>
+							<li><code>&#39;too&#39;</code> to start the search from consumer component.</li>
+						</ul>
 					</div>
 				</section>
 			</section>
@@ -135,34 +139,40 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic.componentsharelocator.mandatoryspec.html" class="tsd-kind-icon">Mandatory<wbr>Spec</a>
+						<a href="module__wesib_generic.sharelocator.mandatoryspec.html" class="tsd-kind-icon">Mandatory<wbr>Spec</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="module__wesib_generic.componentsharelocator.options.html" class="tsd-kind-icon">Options</a>
+						<a href="module__wesib_generic.sharelocator.options.html" class="tsd-kind-icon">Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic.componentsharelocator.options.html#self" class="tsd-kind-icon">self</a>
+								<a href="module__wesib_generic.sharelocator.options.html#local" class="tsd-kind-icon">local</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic.componentsharelocator.spec.html" class="tsd-kind-icon">Spec</a>
+						<a href="module__wesib_generic.sharelocator.spec.html" class="tsd-kind-icon">Spec</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic.componentsharelocator.html#custom" class="tsd-kind-icon">Custom</a>
+						<a href="../modules/module__wesib_generic.sharelocator.html#custom" class="tsd-kind-icon">Custom</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic.componentsharelocator.html#customwithfallback" class="tsd-kind-icon">Custom<wbr>With<wbr>Fallback</a>
+						<a href="../modules/module__wesib_generic.sharelocator.html#customwithfallback" class="tsd-kind-icon">Custom<wbr>With<wbr>Fallback</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic.componentsharelocator.html#fn" class="tsd-kind-icon">Fn</a>
+						<a href="../modules/module__wesib_generic.sharelocator.html#fn" class="tsd-kind-icon">Fn</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
+						<a href="../modules/module__wesib_generic.sharelocator.html#fulloptions" class="tsd-kind-icon">Full<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic.componentsharelocator.html#mandatory" class="tsd-kind-icon">Mandatory</a>
+						<a href="../modules/module__wesib_generic.sharelocator.html#fullspec" class="tsd-kind-icon">Full<wbr>Spec</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic.sharelocator.html#mandatory" class="tsd-kind-icon">Mandatory</a>
 					</li>
 				</ul>
 			</nav>
