@@ -11,7 +11,7 @@ import {
 import { ComponentShare } from './component-share';
 import { ComponentShare__symbol } from './component-share-ref';
 import { ShareAccessor } from './share-accessor.impl';
-import { SharedValue$ContextBuilder } from './shared-by-component.impl';
+import { SharedValue$ContextBuilder } from './shared-value.impl';
 import { targetComponentShare, TargetComponentShare } from './target-component-share';
 
 /**

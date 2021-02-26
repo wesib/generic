@@ -13,7 +13,7 @@ import {
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { ComponentShare } from './component-share';
 import { ComponentShareRegistry } from './component-share-registry.impl';
-import { SharedValue$ContextBuilder } from './shared-by-component.impl';
+import { SharedValue$ContextBuilder } from './shared-value.impl';
 
 describe('shares', () => {
   describe('ComponentShare', () => {

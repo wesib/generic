@@ -26,8 +26,8 @@ import { ComponentShareLocator } from './component-share-locator';
 import { ComponentShare__symbol, ComponentShareRef } from './component-share-ref';
 import { ComponentShareRegistry } from './component-share-registry.impl';
 import { ComponentShare$, ComponentShare$impl } from './component-share.impl';
-import { SharedValue$Registrar } from './shared-by-component.impl';
 import { SharedValue, SharedValue__symbol } from './shared-value';
+import { SharedValue$Registrar } from './shared-value.impl';
 
 /**
  * A kind of the value a component shares with the nested ones.

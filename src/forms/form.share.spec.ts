@@ -4,7 +4,7 @@ import { AfterEvent } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext, ComponentSlot, DefinitionContext } from '@wesib/wesib';
 import { ComponentShare, ComponentShare__symbol } from '../shares';
 import { ComponentShareRegistry } from '../shares/component-share-registry.impl';
-import { SharedValue$ContextBuilder } from '../shares/shared-by-component.impl';
+import { SharedValue$ContextBuilder } from '../shares/shared-value.impl';
 import { testDefinition, testElement } from '../spec/test-element';
 import { FieldShare } from './field.share';
 import { Form } from './form';
