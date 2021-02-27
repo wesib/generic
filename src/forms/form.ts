@@ -106,9 +106,17 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
   ): Form.Provider<TModel, TElt, TSharer> {
     return builder => {
 
-      // Lazy construction allows recurrent access to `Form` aspect.
-      const control = lazyValue(() => builder.control.build(factory));
-      const element = lazyValue(() => builder.element.build(opts => elementFactory({ ...opts, form: control() })));
+      let control = (): InControl<TModel> => builder.control.build(
+          // Allow recurrent access to `Form` aspect during control setup.
+          opts => (control = lazyValue(() => factory(opts)))(),
+      );
+      let element = (): InFormElement<TElt> => builder.element.build(
+          // Allow recurrent access to `Form` aspect during control setup.
+          opts => (element = lazyValue(() => elementFactory({
+            ...opts,
+            form: control(),
+          })))(),
+      );
 
       return {
         get control() {
