@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module Module @wesib/generic/forms
  */
+export * from './adjacent-field';
 export * from './field';
 export * from './field.share';
 export * from './field-name.definer';
