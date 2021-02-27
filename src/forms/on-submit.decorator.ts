@@ -35,7 +35,7 @@ export function OnSubmit<TModel = any, TElt extends HTMLElement = HTMLElement, T
 
             locateForm(context).do(
                 consumeEvents((form?: Form<TModel, TElt>, _sharer?: ComponentContext) => {
-                  if (!form) {
+                  if (!form || !form.element) {
                     return;
                   }
 

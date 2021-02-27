@@ -35,7 +35,7 @@ describe('forms', () => {
       const form = await context.get(FormShare);
 
       expect(form).toBeInstanceOf(Form);
-      expect(form?.control.aspect(Form)).toBe(form);
+      expect(form?.control?.aspect(Form)).toBe(form);
       expect(form?.element).toBeInstanceOf(InElement);
 
       const controls = await form?.readControls;

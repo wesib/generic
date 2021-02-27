@@ -15,8 +15,7 @@ export abstract class FormUnit<
     TValue,
     TControls extends FormUnit.Controls<TValue> = FormUnit.Controls<TValue>,
     TSharer extends object = any>
-    extends Shareable<TControls, TSharer>
-    implements FormUnit.Controls<TValue> {
+    extends Shareable<TControls | undefined, TSharer> {
 
   /**
    * Constructs form unit.
@@ -24,7 +23,7 @@ export abstract class FormUnit<
    * @param controls - Either input controls, or their provider.
    */
   constructor(// eslint-disable-line @typescript-eslint/no-useless-constructor
-      controls: TControls | Shareable.Provider<TControls, TSharer>,
+      controls: TControls | Shareable.Provider<TControls | undefined, TSharer>,
   ) {
     super(controls);
   }
@@ -32,15 +31,15 @@ export abstract class FormUnit<
   /**
    * An `AfterEvent` keeper of form unit controls.
    */
-  get readControls(): AfterEvent<[TControls]> {
+  get readControls(): AfterEvent<[TControls?]> {
     return this[AfterEvent__symbol]();
   }
 
   /**
-   * Input control.
+   * Input control of the field, if present.
    */
-  get control(): InControl<TValue> {
-    return this.internals.control;
+  get control(): InControl<TValue> | undefined {
+    return this.internals?.control;
   }
 
 }

@@ -17,41 +17,41 @@ describe('forms', () => {
 
       const [{ control }] = await bootstrap();
 
-      control.aspect(InValidation).by(afterThe({ invalid: true }));
+      control?.aspect(InValidation).by(afterThe({ invalid: true }));
 
-      expect(await control.aspect(InMode).read).toBe('-on');
+      expect(await control?.aspect(InMode).read).toBe('-on');
     });
     it('reflects form validity with custom mode', async () => {
 
       const [{ control }] = await bootstrap({ byValidity: { invalid: 'on' } });
 
-      control.aspect(InValidation).by(afterThe({ invalid: true }));
+      control?.aspect(InValidation).by(afterThe({ invalid: true }));
 
-      expect(await control.aspect(InMode).read).toBe('on');
+      expect(await control?.aspect(InMode).read).toBe('on');
     });
     it('does not reflect form validity when disabled', async () => {
 
       const [{ control }] = await bootstrap({ byValidity: false });
 
-      control.aspect(InValidation).by(afterThe({ invalid: true }));
+      control?.aspect(InValidation).by(afterThe({ invalid: true }));
 
-      expect(await control.aspect(InMode).read).toBe('on');
+      expect(await control?.aspect(InMode).read).toBe('on');
     });
     it('reflects form element mode by field by default', async () => {
 
       const [{ element: form }, { control: field }] = await bootstrap();
 
-      form.aspect(InMode).own.it = 'off';
+      form!.aspect(InMode).own.it = 'off';
 
-      expect(await field.aspect(InMode).read).toBe('off');
+      expect(await field?.aspect(InMode).read).toBe('off');
     });
     it('does not reflect form element mode by field when disabled', async () => {
 
       const [{ element: form }, { control: field }] = await bootstrap({ byForm: false });
 
-      form.aspect(InMode).own.it = 'off';
+      form!.aspect(InMode).own.it = 'off';
 
-      expect(await field.aspect(InMode).read).toBe('on');
+      expect(await field?.aspect(InMode).read).toBe('on');
     });
     it('handles adding to non-form container', async () => {
 
@@ -61,7 +61,7 @@ describe('forms', () => {
       form.controls.set('test', field);
       form.aspect(InMode).own.it = 'off';
 
-      expect(await field.aspect(InMode).read).toBe('on');
+      expect(await field?.aspect(InMode).read).toBe('on');
     });
 
   });

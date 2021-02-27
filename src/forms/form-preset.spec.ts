@@ -133,7 +133,7 @@ describe('forms', () => {
       const context = await ComponentSlot.of(element).whenReady;
       const field = (await context.get(FieldShare))!;
 
-      expect(field.control.it).toBe('test1');
+      expect(field.control?.it).toBe('test1');
 
       const rules: jest.Mocked<FormPreset.Spec> = {
         setupField: jest.fn(),
@@ -141,7 +141,7 @@ describe('forms', () => {
 
       ruleTracker.it = rules;
       expect(rules.setupField).toHaveBeenCalledTimes(1);
-      expect(field.control.it).toBe('test2');
+      expect(field.control?.it).toBe('test2');
     });
     it('tracks form rule changes', async () => {
 
@@ -175,7 +175,7 @@ describe('forms', () => {
       const context = await ComponentSlot.of(element).whenReady;
       const form = (await context.get(FormShare))!;
 
-      expect(form.control.it.counter).toBe(1);
+      expect(form.control?.it.counter).toBe(1);
 
       const rules: jest.Mocked<FormPreset.Spec> = {
         setupForm: jest.fn(),
@@ -183,7 +183,7 @@ describe('forms', () => {
 
       ruleTracker.it = rules;
       expect(rules.setupForm).toHaveBeenCalledTimes(1);
-      expect(form.control.it.counter).toBe(2);
+      expect(form.control?.it.counter).toBe(2);
     });
 
     describe('defaults', () => {
@@ -235,7 +235,7 @@ describe('forms', () => {
       describe('form control', () => {
         it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
 
-          const scheduler = form.control.aspect(InRenderScheduler);
+          const scheduler = form.control!.aspect(InRenderScheduler);
           const opts = { node: document.createElement('div') };
 
           scheduler(opts);
@@ -243,14 +243,14 @@ describe('forms', () => {
           expect(mockRenderScheduler).toHaveBeenLastCalledWith({ ...opts });
         });
         it('sets `InNamespaceAliaser` to `DefaultNamespaceAliaser`', () => {
-          expect(form.control.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
+          expect(form.control!.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
         });
       });
 
       describe('form element', () => {
         it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
 
-          const scheduler = form.element.aspect(InRenderScheduler);
+          const scheduler = form.element!.aspect(InRenderScheduler);
           const opts = { node: document.createElement('div') };
 
           scheduler(opts);
@@ -258,14 +258,14 @@ describe('forms', () => {
           expect(mockRenderScheduler).toHaveBeenLastCalledWith({ ...opts });
         });
         it('sets `InNamespaceAliaser` to `DefaultNamespaceAliaser`', () => {
-          expect(form.element.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
+          expect(form.element!.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
         });
       });
 
       describe('field', () => {
         it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
 
-          const scheduler = field.control.aspect(InRenderScheduler);
+          const scheduler = field.control!.aspect(InRenderScheduler);
           const opts = { node: document.createElement('div') };
 
           scheduler(opts);
@@ -273,7 +273,7 @@ describe('forms', () => {
           expect(mockRenderScheduler).toHaveBeenLastCalledWith({ ...opts });
         });
         it('sets `InNamespaceAliaser` to `DefaultNamespaceAliaser`', () => {
-          expect(field.control.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
+          expect(field.control!.aspect(InNamespaceAliaser)).toBe(context.get(DefaultNamespaceAliaser));
         });
       });
 

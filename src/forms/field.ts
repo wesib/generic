@@ -19,8 +19,7 @@ import { FormUnit } from './form-unit';
  * @typeParam TSharer - Field sharer component type.
  */
 export class Field<TValue, TSharer extends object = any>
-    extends FormUnit<TValue, Field.Controls<TValue>, TSharer>
-    implements Field.Controls<TValue> {
+    extends FormUnit<TValue, Field.Controls<TValue>, TSharer> {
 
   /**
    * Creates a form field by the given field control factory.
@@ -32,7 +31,7 @@ export class Field<TValue, TSharer extends object = any>
   static by<TValue, TSharer extends object = any>(
       factory: InControl.Factory<InControl<TValue>>,
   ): Field<TValue, TSharer> {
-    return new Field<TValue, TSharer>(this.providerBy(factory));
+    return new this(this.providerBy(factory));
   }
 
   /**
@@ -128,14 +127,14 @@ export namespace Field {
       (
           this: void,
           builder: Builder<TValue, TSharer>,
-      ) => Controls<TValue> | AfterEvent<[Controls<TValue>]>;
+      ) => Controls<TValue> | AfterEvent<[Controls<TValue>?]>;
 
 }
 
 function Field$provider<TValue, TSharer extends object>(
     field: () => Field<TValue, TSharer>,
     provider: Field.Provider<TValue>,
-): Shareable.Provider<Field.Controls<TValue>, TSharer> {
+): Shareable.Provider<Field.Controls<TValue> | undefined, TSharer> {
   return sharer => sharer.get(FormPreset).rules.do(
       digAfter(preset => {
 
