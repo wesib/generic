@@ -61,7 +61,7 @@ describe('forms', () => {
       form.controls.set('test', field);
       form.aspect(InMode).own.it = 'off';
 
-      expect(await field?.aspect(InMode).read).toBe('on');
+      expect(await field?.aspect(InMode).read).toBe('off');
     });
 
   });
