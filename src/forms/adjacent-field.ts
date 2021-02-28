@@ -184,20 +184,14 @@ function AdjacentField$provider<
   return builder => adjacentLocator(builder.sharer).do(
       digAfter((adjacentTo?: TAdjacentTo, _sharer?): AfterEvent<[Field.Controls<TValue>?]> => adjacentTo
           ? adjacentTo.readControls.do(
-              digAfter((adjusted?: TAdjusted): AfterEvent<[Field.Controls<TValue>?]> => {
-                if (!adjusted) {
-                  return afterThe();
-                }
-
-                const adjacentBuilder: AdjacentField.Builder<TValue, TAdjacentTo, TAdjusted, TSharer> = {
-                  ...builder,
-                  field: field(),
-                  adjacentTo,
-                  adjusted,
-                };
-
-                return afterValue(provider(adjacentBuilder));
-              }),
+              digAfter((adjusted?: TAdjusted): AfterEvent<[Field.Controls<TValue>?]> => adjusted
+                  ? afterValue(provider({
+                    ...builder,
+                    field: field(),
+                    adjacentTo,
+                    adjusted,
+                  }))
+                  : afterThe()),
           )
           : afterThe()),
   );

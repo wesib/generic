@@ -57,13 +57,6 @@ export class Field<TValue, TSharer extends object = any> extends FormUnit<TValue
     super(Field$provider(() => this, valueRecipe(controls)));
   }
 
-  /**
-   * Whether this field is {@link AdjacentField adjacent} to another form unit.
-   */
-  get isAdjacent(): boolean {
-    return false;
-  }
-
   toString(): string {
     return 'Field';
   }

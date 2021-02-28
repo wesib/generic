@@ -168,7 +168,7 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
 function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>(
     form: () => Form<TModel, TElt, TSharer>,
     provider: Form.Provider<TModel, TElt, TSharer>,
-): Shareable.Provider<Form.Controls<TModel, TElt>, TSharer> {
+): Shareable.Provider<Form.Controls<TModel, TElt> | undefined, TSharer> {
 
   const formAspect: InConverter.Aspect.Factory<any> = control => ({
     applyAspect<TInstance, TKind extends InAspect.Application.Kind>(
@@ -287,7 +287,7 @@ export namespace Form {
       (
           this: void,
           builder: Builder<TModel, TElt, TSharer>,
-      ) => Controls<TModel, TElt> | AfterEvent<[Controls<TModel, TElt>]>;
+      ) => Controls<TModel, TElt> | AfterEvent<[Controls<TModel, TElt>?]>;
 
   /**
    * Form aspect instance.

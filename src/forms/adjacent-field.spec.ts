@@ -9,6 +9,7 @@ import {
   inSubmitButton,
   inValue,
 } from '@frontmeans/input-aspects';
+import { AfterEvent, mapAfter, trackValue } from '@proc7ts/fun-events';
 import { arrayOfElements } from '@proc7ts/primitives';
 import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
 import { Share__symbol } from '../shares';
@@ -83,6 +84,9 @@ describe('shares', () => {
 
     it('declares error indicator', async () => {
 
+      const hasField = trackValue(false);
+      const hasControls = trackValue(false);
+
       @Component(
           'test-element',
           {
@@ -92,7 +96,15 @@ describe('shares', () => {
       class TestComponent {
 
         @SharedField()
-        readonly field = Field.by(opts => inValue('test', opts));
+        readonly field: AfterEvent<[Field<string>?]> = hasField.read.do(
+            mapAfter((hasField: boolean): Field<string> | undefined => hasField
+                ? new Field<string>(builder => hasControls.read.do(
+                    mapAfter(hasControls => hasControls
+                        ? { control: builder.control.build(opts => inValue('test', opts)) }
+                        : undefined),
+                ))
+                : undefined),
+        );
 
         @SharedField({ share: IndicatorShare })
         readonly button = AdjacentField.toField<unknown>(builder => ({
@@ -111,6 +123,12 @@ describe('shares', () => {
 
       expect(indicator).toBeInstanceOf(AdjacentField);
       expect(indicator?.isAdjacent).toBe(true);
+      expect(indicator?.control).toBeUndefined();
+
+      hasField.it = true;
+      expect(indicator?.control).toBeUndefined();
+
+      hasControls.it = true;
       expect(indicator?.control).toBeInstanceOf(InControl);
     });
   });

@@ -1,5 +1,5 @@
-import { InGroup, inGroup, inList, InList, inValue } from '@frontmeans/input-aspects';
-import { AfterEvent, afterThe, trackValue } from '@proc7ts/fun-events';
+import { InGroup, inGroup, inList, InList, InParents, inValue } from '@frontmeans/input-aspects';
+import { AfterEvent, afterThe, mapAfter, trackValue } from '@proc7ts/fun-events';
 import { valueProvider } from '@proc7ts/primitives';
 import { BootstrapContext, Component, ComponentClass, ComponentContext, ComponentSlot, FeatureDef } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
@@ -124,7 +124,7 @@ describe('forms', () => {
 
       expect([...controls]).toHaveLength(0);
     });
-    it('does not add a field under symbol key to enclosing', async () => {
+    it('does not add a field with symbol key to enclosing form', async () => {
 
       const symbol = Symbol('test');
 
@@ -173,6 +173,42 @@ describe('forms', () => {
       const controls = await form!.control!.aspect(InList)!.controls.read;
 
       expect([...controls]).toHaveLength(0);
+    });
+    it('does not add a field to missing form', async () => {
+
+      const hasForm = trackValue(false);
+
+      @Component(
+          'form-element',
+          {
+            extend: { type: MockElement },
+          },
+      )
+      class FormComponent {
+
+        @SharedForm()
+        readonly form: AfterEvent<[Form?]>;
+
+        constructor(context: ComponentContext) {
+          this.form = hasForm.read.do(
+              mapAfter(hasForm => hasForm
+                  ? new Form(Form.forElement(inGroup({}), context.element))
+                  : undefined),
+          );
+        }
+
+      }
+
+      const { fieldCtx } = await bootstrap(undefined, FormComponent);
+      const field = await fieldCtx.get(FieldShare);
+      let parents: any[] = [];
+
+      field!.control!.aspect(InParents).read(p => parents = [...p]);
+
+      expect(parents).toHaveLength(0);
+
+      hasForm.it = true;
+      expect(parents).toHaveLength(1);
     });
 
     describe('FieldName', () => {
@@ -296,7 +332,7 @@ describe('forms', () => {
         class FieldComponent {
 
           @SharedField()
-          readonly field = new Field<string>({ control: inValue('test') });
+          readonly field = new Field<string>(() => ({ control: inValue('test') }));
 
         }
 
