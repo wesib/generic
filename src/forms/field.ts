@@ -1,5 +1,5 @@
 import { InBuilder, InControl } from '@frontmeans/input-aspects';
-import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterValue, digAfter } from '@proc7ts/fun-events';
 import { valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { Shareable } from '../shares';
@@ -18,9 +18,7 @@ import { FormUnit } from './form-unit';
  * @typeParam TValue - Field value type.
  * @typeParam TSharer - Field sharer component type.
  */
-export class Field<TValue, TSharer extends object = any>
-    extends FormUnit<TValue, Field.Controls<TValue>, TSharer>
-    implements Field.Controls<TValue> {
+export class Field<TValue, TSharer extends object = any> extends FormUnit<TValue, Field.Controls<TValue>, TSharer> {
 
   /**
    * Creates a form field by the given field control factory.
@@ -32,7 +30,7 @@ export class Field<TValue, TSharer extends object = any>
   static by<TValue, TSharer extends object = any>(
       factory: InControl.Factory<InControl<TValue>>,
   ): Field<TValue, TSharer> {
-    return new Field<TValue, TSharer>(this.providerBy(factory));
+    return new this(this.providerBy(factory));
   }
 
   /**
@@ -91,7 +89,7 @@ export namespace Field {
   /**
    * Form field builder.
    *
-   * @typeParam TValue - Input value type.
+   * @typeParam TValue - Field value type.
    * @typeParam TSharer - Field sharer component type.
    */
   export interface Builder<TValue, TSharer extends object> {
@@ -128,14 +126,14 @@ export namespace Field {
       (
           this: void,
           builder: Builder<TValue, TSharer>,
-      ) => Controls<TValue> | AfterEvent<[Controls<TValue>]>;
+      ) => Controls<TValue> | AfterEvent<[Controls<TValue>?]>;
 
 }
 
 function Field$provider<TValue, TSharer extends object>(
     field: () => Field<TValue, TSharer>,
     provider: Field.Provider<TValue>,
-): Shareable.Provider<Field.Controls<TValue>, TSharer> {
+): Shareable.Provider<Field.Controls<TValue> | undefined, TSharer> {
   return sharer => sharer.get(FormPreset).rules.do(
       digAfter(preset => {
 
@@ -147,9 +145,7 @@ function Field$provider<TValue, TSharer extends object>(
 
         preset.setupField(builder);
 
-        const controls = provider(builder);
-
-        return isAfterEvent(controls) ? controls : afterThe(controls);
+        return afterValue(provider(builder));
       }),
   );
 }

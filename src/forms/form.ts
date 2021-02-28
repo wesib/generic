@@ -9,7 +9,7 @@ import {
   InFormElement,
   nullInAspect,
 } from '@frontmeans/input-aspects';
-import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterValue, digAfter } from '@proc7ts/fun-events';
 import { lazyValue, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { Shareable } from '../shares';
@@ -42,8 +42,7 @@ const Form__aspect: Form$Aspect = {
  * @typeParam TSharer - Form sharer component type.
  */
 export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = any>
-    extends FormUnit<TModel, Form.Controls<TModel, TElt>, TSharer>
-    implements Form.Controls<TModel, TElt> {
+    extends FormUnit<TModel, Form.Controls<TModel, TElt>, TSharer> {
 
   /**
    * Builds a user input form for the given form control and HTML element.
@@ -83,7 +82,7 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
           options: Parameters<InControl.Factory<InFormElement<TElt>, void>>[0] & { form: InControl<TModel>},
       ) => InFormElement<TElt>,
   ): Form<TModel, TElt, TSharer> {
-    return new Form(this.providerBy(factory, elementFactory));
+    return new this(this.providerBy(factory, elementFactory));
   }
 
   /**
@@ -135,7 +134,7 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
    * This aspect is available in {@link Form.Controls.control submittable form control} and {@link Form.Controls.element
    * form element control}.
    */
-  static get [InAspect__symbol](): InAspect<Form | null> {
+  static get [InAspect__symbol](): InAspect<Form.Aspect | null> {
     return Form__aspect;
   }
 
@@ -151,13 +150,13 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
   }
 
   /**
-   * Form element control.
+   * Form element control, if present.
    *
    * Unlike {@link control input control} this one is not supposed to be submitted, but rather contains a `<form>`
    * element issuing a `submit` event.
    */
-  get element(): InFormElement<TElt> {
-    return this.internals.element;
+  get element(): InFormElement<TElt> | undefined {
+    return this.internals?.element;
   }
 
   toString(): string {
@@ -169,13 +168,17 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
 function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>(
     form: () => Form<TModel, TElt, TSharer>,
     provider: Form.Provider<TModel, TElt, TSharer>,
-): Shareable.Provider<Form.Controls<TModel, TElt>, TSharer> {
+): Shareable.Provider<Form.Controls<TModel, TElt> | undefined, TSharer> {
 
   const formAspect: InConverter.Aspect.Factory<any> = control => ({
     applyAspect<TInstance, TKind extends InAspect.Application.Kind>(
         _aspect: InAspect<any, any>,
     ): InAspect.Application.Result<TInstance, any, TKind> | undefined {
-      return inconvertibleInAspect(control, Form, form()) as InAspect.Application.Result<TInstance, any, TKind>;
+      return inconvertibleInAspect(
+          control,
+          Form,
+          form() as Form.Aspect,
+      ) as InAspect.Application.Result<TInstance, any, TKind>;
     },
   });
 
@@ -191,9 +194,7 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
 
         preset.setupForm(builder);
 
-        const controls = provider(builder);
-
-        return isAfterEvent(controls) ? controls : afterThe(controls);
+        return afterValue(provider(builder));
       }),
   );
 }
@@ -286,7 +287,29 @@ export namespace Form {
       (
           this: void,
           builder: Builder<TModel, TElt, TSharer>,
-      ) => Controls<TModel, TElt> | AfterEvent<[Controls<TModel, TElt>]>;
+      ) => Controls<TModel, TElt> | AfterEvent<[Controls<TModel, TElt>?]>;
+
+  /**
+   * Form aspect instance.
+   *
+   * Always contains control and element instances.
+   */
+  export interface Aspect<TModel = any> extends Form<TModel>, Form.Controls<TModel> {
+
+     /**
+      * Submittable form input control.
+      */
+     readonly control: InControl<TModel>;
+
+     /**
+      * Form element control.
+      *
+      * Unlike {@link control input control} this one is not supposed to be submitted, but rather contains a `<form>`
+      * element issuing a `submit` event.
+      */
+     readonly element: InFormElement<any>;
+
+   }
 
 }
 
@@ -302,7 +325,7 @@ interface Form$Aspect extends InAspect<Form | null, 'form'> {
 /**
  * A form aspect applied to control.
  */
-type Form$Applied<TValue> = InAspect.Applied<TValue, Form<TValue> | null, Form<any> | null>;
+type Form$Applied<TValue> = InAspect.Applied<TValue, Form.Aspect<TValue> | null, Form.Aspect<any> | null>;
 
 declare module '@frontmeans/input-aspects' {
 
@@ -313,7 +336,7 @@ declare module '@frontmeans/input-aspects' {
       /**
        * Form aspect application type.
        */
-      form(): Form<TValue> | null;
+      form(): Form.Aspect<TValue> | null;
 
     }
 

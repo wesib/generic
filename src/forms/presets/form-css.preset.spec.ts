@@ -18,26 +18,26 @@ describe('forms', () => {
 
       const [, { control }] = await bootstrap();
 
-      control.aspect(InValidation).by(trackValue({ invalid: true }));
+      control?.aspect(InValidation).by(trackValue({ invalid: true }));
 
-      expect(await control.aspect(InCssClasses).read).toMatchObject({ 'has-error@inasp': true });
+      expect(await control?.aspect(InCssClasses).read).toMatchObject({ 'has-error@inasp': true });
     });
     it('reflects field validity with custom class', async () => {
 
       const [, { control }] = await bootstrap({ error: { mark: 'has-error' } });
 
-      control.aspect(InValidation).by(trackValue({ invalid: true }));
+      control?.aspect(InValidation).by(trackValue({ invalid: true }));
 
-      expect(await control.aspect(InCssClasses).read).toMatchObject({ 'has-error': true });
+      expect(await control?.aspect(InCssClasses).read).toMatchObject({ 'has-error': true });
     });
     it('reflects form info by default', async () => {
 
       const [{ control: formCtl, element: formElt }] = await bootstrap();
 
-      formCtl.aspect(InMode).own.it = 'off';
+      formCtl!.aspect(InMode).own.it = 'off';
 
-      const formCtlCss = trackValueBy(formCtl.aspect(InCssClasses));
-      const formEltCss = trackValueBy(formElt.aspect(InCssClasses));
+      const formCtlCss = trackValueBy(formCtl!.aspect(InCssClasses));
+      const formEltCss = trackValueBy(formElt!.aspect(InCssClasses));
 
       expect(formCtlCss.it).toMatchObject({ 'disabled@inasp': true });
       expect(formEltCss.it).toMatchObject({ 'disabled@inasp': true });
@@ -46,26 +46,26 @@ describe('forms', () => {
 
       const [, { control }] = await bootstrap();
 
-      control.aspect(InMode).own.it = 'off';
+      control!.aspect(InMode).own.it = 'off';
 
-      expect(await control.aspect(InCssClasses).read).toMatchObject({ 'disabled@inasp': true });
+      expect(await control?.aspect(InCssClasses).read).toMatchObject({ 'disabled@inasp': true });
     });
     it('reflects customized field info', async () => {
 
       const [, { control }] = await bootstrap({ info: { ns: DEFAULT__NS } });
 
-      control.aspect(InMode).own.it = 'off';
+      control!.aspect(InMode).own.it = 'off';
 
-      expect(await control.aspect(InCssClasses).read).toMatchObject({ disabled: true });
+      expect(await control?.aspect(InCssClasses).read).toMatchObject({ disabled: true });
     });
     it('does not reflect form validity when disabled', async () => {
 
       const [{ control: formCtl, element: formElt }] = await bootstrap({ error: false, info: false });
 
-      formCtl.aspect(InMode).own.it = 'off';
+      formCtl!.aspect(InMode).own.it = 'off';
 
-      const formCtlCss = trackValueBy(formCtl.aspect(InCssClasses));
-      const formEltCss = trackValueBy(formElt.aspect(InCssClasses));
+      const formCtlCss = trackValueBy(formCtl!.aspect(InCssClasses));
+      const formEltCss = trackValueBy(formElt!.aspect(InCssClasses));
 
       expect(formCtlCss.it).toEqual({});
       expect(formEltCss.it).toEqual({});
@@ -74,9 +74,9 @@ describe('forms', () => {
 
       const [, { control }] = await bootstrap({ error: false, info: false });
 
-      control.aspect(InValidation).by(trackValue({ invalid: true }));
+      control?.aspect(InValidation).by(trackValue({ invalid: true }));
 
-      expect(await control.aspect(InCssClasses).read).toEqual({});
+      expect(await control?.aspect(InCssClasses).read).toEqual({});
     });
 
     async function bootstrap(options?: FormCssPreset.Options): Promise<[form: Form, field: Field<string>]> {

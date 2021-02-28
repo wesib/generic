@@ -1,5 +1,5 @@
-import { InGroup, inGroup, inList, InList, inValue } from '@frontmeans/input-aspects';
-import { AfterEvent, afterThe, trackValue } from '@proc7ts/fun-events';
+import { InGroup, inGroup, inList, InList, InParents, inValue } from '@frontmeans/input-aspects';
+import { AfterEvent, afterThe, mapAfter, trackValue } from '@proc7ts/fun-events';
 import { valueProvider } from '@proc7ts/primitives';
 import { BootstrapContext, Component, ComponentClass, ComponentContext, ComponentSlot, FeatureDef } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '../spec/test-element';
@@ -66,7 +66,7 @@ describe('forms', () => {
 
       expect(createControl).toHaveBeenCalledWith(expect.objectContaining({ sharer: context }));
       expect(createControl).toHaveBeenCalledTimes(1);
-      expect(control.it).toBe('test');
+      expect(control?.it).toBe('test');
     });
     it('adds field to enclosing form', async () => {
 
@@ -74,7 +74,7 @@ describe('forms', () => {
 
       const form = await formCtx.get(FormShare);
       const field = await fieldCtx.get(FieldShare);
-      const controls = await form!.control.aspect(InGroup)!.controls.read;
+      const controls = await form!.control!.aspect(InGroup)!.controls.read;
 
       expect(controls.get('field')).toBe(field!.control);
     });
@@ -97,7 +97,7 @@ describe('forms', () => {
 
       const form = await formCtx.get(FormShare);
       const field = await fieldCtx.get(FieldShare);
-      const controls = await form!.control.aspect(InGroup)!.controls.read;
+      const controls = await form!.control!.aspect(InGroup)!.controls.read;
 
       expect(controls.get('field')).toBeUndefined();
       expect(controls.get('customField')).toBe(field!.control);
@@ -120,11 +120,11 @@ describe('forms', () => {
       const { formCtx } = await bootstrap(FieldComponent);
 
       const form = await formCtx.get(FormShare);
-      const controls = await form!.control.aspect(InGroup)!.controls.read;
+      const controls = await form!.control!.aspect(InGroup)!.controls.read;
 
       expect([...controls]).toHaveLength(0);
     });
-    it('does not add a field under symbol key to enclosing', async () => {
+    it('does not add a field with symbol key to enclosing form', async () => {
 
       const symbol = Symbol('test');
 
@@ -144,7 +144,7 @@ describe('forms', () => {
       const { formCtx } = await bootstrap(FieldComponent);
 
       const form = await formCtx.get(FormShare);
-      const controls = await form!.control.aspect(InGroup)!.controls.read;
+      const controls = await form!.control!.aspect(InGroup)!.controls.read;
 
       expect([...controls]).toHaveLength(0);
     });
@@ -170,9 +170,42 @@ describe('forms', () => {
       const { formCtx } = await bootstrap(undefined, FormComponent);
 
       const form = await formCtx.get(FormShare);
-      const controls = await form!.control.aspect(InList)!.controls.read;
+      const controls = await form!.control!.aspect(InList)!.controls.read;
 
       expect([...controls]).toHaveLength(0);
+    });
+    it('does not add a field to missing form', async () => {
+
+      const hasForm = trackValue(false);
+
+      @Component(
+          'form-element',
+          {
+            extend: { type: MockElement },
+          },
+      )
+      class FormComponent {
+
+        @SharedForm()
+        readonly form: AfterEvent<[Form?]>;
+
+        constructor(context: ComponentContext) {
+          this.form = hasForm.read.do(
+              mapAfter(hasForm => hasForm
+                  ? new Form(Form.forElement(inGroup({}), context.element))
+                  : undefined),
+          );
+        }
+
+      }
+
+      const { fieldCtx } = await bootstrap(undefined, FormComponent);
+      const field = await fieldCtx.get(FieldShare);
+
+      expect([...(await field!.control!.aspect(InParents).read)]).toHaveLength(0);
+
+      hasForm.it = true;
+      expect([...(await field!.control!.aspect(InParents).read)]).toHaveLength(1);
     });
 
     describe('FieldName', () => {
@@ -200,7 +233,7 @@ describe('forms', () => {
 
         const form = await formCtx.get(FormShare);
         const field = await fieldCtx.get(FieldShare);
-        const controls = await form!.control.aspect(InGroup)!.controls.read;
+        const controls = await form!.control!.aspect(InGroup)!.controls.read;
 
         expect(controls.get('field')).toBe(field!.control);
       });
@@ -223,7 +256,7 @@ describe('forms', () => {
 
         const form = await formCtx.get(FormShare);
         const field = await fieldCtx.get(FieldShare);
-        const controls = await form!.control.aspect(InGroup)!.controls.read;
+        const controls = await form!.control!.aspect(InGroup)!.controls.read;
 
         expect(controls.get('field')).toBe(field!.control);
         expect(controls.get('customName')).toBe(field!.control);
@@ -251,7 +284,7 @@ describe('forms', () => {
 
         const form = await formCtx.get(FormShare);
         const subForm = await fieldCtx.get(FormShare);
-        const controls = await form!.control.aspect(InGroup)!.controls.read;
+        const controls = await form!.control!.aspect(InGroup)!.controls.read;
 
         expect(controls.get('subForm')).toBe(subForm!.control);
       });
@@ -296,7 +329,7 @@ describe('forms', () => {
         class FieldComponent {
 
           @SharedField()
-          readonly field = new Field<string>({ control: inValue('test') });
+          readonly field = new Field<string>(() => ({ control: inValue('test') }));
 
         }
 
