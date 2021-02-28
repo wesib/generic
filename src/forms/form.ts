@@ -9,7 +9,7 @@ import {
   InFormElement,
   nullInAspect,
 } from '@frontmeans/input-aspects';
-import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterValue, digAfter } from '@proc7ts/fun-events';
 import { lazyValue, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { Shareable } from '../shares';
@@ -194,9 +194,7 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
 
         preset.setupForm(builder);
 
-        const controls = provider(builder);
-
-        return isAfterEvent(controls) ? controls : afterThe(controls);
+        return afterValue(provider(builder));
       }),
   );
 }

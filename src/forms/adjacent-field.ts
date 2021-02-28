@@ -1,5 +1,5 @@
 import { InBuilder, InControl } from '@frontmeans/input-aspects';
-import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, afterValue, digAfter } from '@proc7ts/fun-events';
 import { valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { shareLocator, ShareLocator } from '../shares';
@@ -196,9 +196,7 @@ function AdjacentField$provider<
                   adjusted,
                 };
 
-                const controls = provider(adjacentBuilder);
-
-                return isAfterEvent(controls) ? controls : afterThe(controls);
+                return afterValue(provider(adjacentBuilder));
               }),
           )
           : afterThe()),

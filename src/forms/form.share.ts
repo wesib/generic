@@ -1,14 +1,13 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
-import { arrayOfElements, Supply } from '@proc7ts/primitives';
+import { arrayOfElements, Class, Supply } from '@proc7ts/primitives';
 import { DefinitionContext } from '@wesib/wesib';
 import { Share, Share__symbol, SharedValue, ShareRef } from '../shares';
 import { Field } from './field';
 import { FieldShare } from './field.share';
 import { Form } from './form';
 
-const FormShare$asFields = (/*#__PURE__*/ Symbol('FormShare.asFields'));
-
-let FormShare$instance: FormShare | undefined;
+const FormShare$map = (/*#__PURE__*/ new WeakMap<Class, FormShare<any, any>>());
+const FormShare$asFields__symbol = (/*#__PURE__*/ Symbol('FormShare.asFields'));
 
 /**
  * A kind of component share containing a user input form.
@@ -28,7 +27,15 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
    * Default form share instance.
    */
   static get [Share__symbol](): FormShare<any, any> {
-    return FormShare$instance || (FormShare$instance = new FormShare('form'));
+
+    let instance = FormShare$map.get(this);
+
+    if (!instance) {
+      instance = new this('field');
+      FormShare$map.set(this, instance);
+    }
+
+    return instance;
   }
 
   /**
@@ -41,7 +48,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
   /**
    * @internal
    */
-  private readonly [FormShare$asFields]: readonly Share<Field<TModel>>[];
+  private readonly [FormShare$asFields__symbol]: readonly Share<Field<TModel>>[];
 
   /**
    * Constructs form share.
@@ -54,7 +61,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
       options: FormShare.Options<TModel, TElt> = {},
   ) {
     super(name, options);
-    this[FormShare$asFields] = options.asField
+    this[FormShare$asFields__symbol] = options.asField
         ? arrayOfElements<ShareRef<Field<TModel>>>(options.asField).map(ref => ref[Share__symbol])
         : [FieldShare[Share__symbol]];
   }
@@ -84,7 +91,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
 
     const supply = new Supply();
 
-    this[FormShare$asFields].forEach(fieldShare => fieldShare.addSharer(defContext, options).as(supply));
+    this[FormShare$asFields__symbol].forEach(fieldShare => fieldShare.addSharer(defContext, options).as(supply));
 
     return supply;
   }
@@ -106,7 +113,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
    * @return A builder of shared value for component context.
    */
   shareField(registrar: SharedValue.Registrar<Field<TModel>>): void {
-    this[FormShare$asFields].forEach(fieldShare => fieldShare.shareValue(registrar));
+    this[FormShare$asFields__symbol].forEach(fieldShare => fieldShare.shareValue(registrar));
   }
 
 }

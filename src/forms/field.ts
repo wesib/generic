@@ -1,5 +1,5 @@
 import { InBuilder, InControl } from '@frontmeans/input-aspects';
-import { AfterEvent, afterThe, digAfter, isAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterValue, digAfter } from '@proc7ts/fun-events';
 import { valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { Shareable } from '../shares';
@@ -18,8 +18,7 @@ import { FormUnit } from './form-unit';
  * @typeParam TValue - Field value type.
  * @typeParam TSharer - Field sharer component type.
  */
-export class Field<TValue, TSharer extends object = any>
-    extends FormUnit<TValue, Field.Controls<TValue>, TSharer> {
+export class Field<TValue, TSharer extends object = any> extends FormUnit<TValue, Field.Controls<TValue>, TSharer> {
 
   /**
    * Creates a form field by the given field control factory.
@@ -153,9 +152,7 @@ function Field$provider<TValue, TSharer extends object>(
 
         preset.setupField(builder);
 
-        const controls = provider(builder);
-
-        return isAfterEvent(controls) ? controls : afterThe(controls);
+        return afterValue(provider(builder));
       }),
   );
 }

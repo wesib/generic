@@ -2,9 +2,8 @@ import { Contextual, Contextual__symbol } from '@proc7ts/context-values';
 import {
   AfterEvent,
   AfterEvent__symbol,
-  afterThe,
+  afterValue,
   EventKeeper,
-  isAfterEvent,
   trackValueBy,
   ValueTracker,
 } from '@proc7ts/fun-events';
@@ -41,12 +40,7 @@ export abstract class Shareable<TInternals = unknown, TSharer extends object = a
 
     const provider = valueRecipe(internals);
 
-    return context => {
-
-      const internals = provider(context);
-
-      return isAfterEvent(internals) ? internals : afterThe(internals);
-    };
+    return context => afterValue(provider(context));
   }
 
   /**
