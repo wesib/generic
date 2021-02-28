@@ -97,7 +97,7 @@ export namespace Field {
   /**
    * Form field builder.
    *
-   * @typeParam TValue - Input value type.
+   * @typeParam TValue - Field value type.
    * @typeParam TSharer - Field sharer component type.
    */
   export interface Builder<TValue, TSharer extends object> {

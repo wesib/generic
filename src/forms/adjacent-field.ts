@@ -4,17 +4,80 @@ import { valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { shareLocator, ShareLocator } from '../shares';
 import { Field } from './field';
+import { FieldShare } from './field.share';
+import { Form } from './form';
 import { FormUnit } from './form-unit';
+import { FormShare } from './form.share';
 
-export class AdjacentField<TValue, TSharer extends object = any> extends Field<TValue, TSharer> {
+/**
+ * A field adjacent to another form unit.
+ *
+ * Suitable e.g. for buttons or error indicators.
+ *
+ * The controls of adjacent field are based on the ones of the unit it is adjacent to.
+ *
+ * @typeParam TValue - Adjacent field value type.
+ * @typeParam TAdjacentTo - A type of form unit the field is adjacent to.
+ * @typeParam TAdjusted - A type of controls to adjust. I.e. the ones of the form unit the field is adjacent to.
+ * @typeParam TSharer - Adjacent field sharer component type.
+ */
+export class AdjacentField<
+    TValue,
+    TAdjacentTo extends FormUnit<unknown, TAdjusted>,
+    TAdjusted extends FormUnit.Controls<unknown> = FormUnit.ControlsType<TAdjacentTo>,
+    TSharer extends object = any,
+    > extends Field<TValue, TSharer> {
 
-  constructor(
-      controls: Field.Controls<TValue> | AdjacentField.Provider<TValue, TSharer>,
-      adjacentTo: ShareLocator.Mandatory<FormUnit<unknown>>,
-  ) {
-    super(AdjacentField$provider(() => this, valueRecipe(controls), shareLocator(adjacentTo)));
+  /**
+   * Creates a field adjacent to another one.
+   *
+   * @param controls - Either a field controls instance, or its provider.
+   * @param adjacentTo - A locator of the field share the created field is adjacent to. Includes local shares by
+   * default. Defaults to {@link FieldShare}.
+   */
+  static toField<TValue, TSharer extends object = any>(
+      controls:
+          | Field.Controls<TValue>
+          | AdjacentField.Provider<TValue, Field<unknown>, Field.Controls<unknown>, TSharer>,
+      adjacentTo: ShareLocator.Mandatory<Field<unknown>> = FieldShare,
+  ): AdjacentField.ToField<TValue, TSharer> {
+    return new this(controls, adjacentTo);
   }
 
+  /**
+   * Creates a field adjacent to form.
+   *
+   * @param controls - Either a field controls instance, or its provider.
+   * @param adjacentTo - A locator of the form share the created field is adjacent to. Includes local shares by default.
+   * Defaults to {@link FormShare}.
+   */
+  static toForm<TValue, TSharer extends object = any>(
+      controls:
+          | Field.Controls<TValue>
+          | AdjacentField.Provider<TValue, Form<unknown>, Form.Controls<unknown>, TSharer>,
+      adjacentTo: ShareLocator.Mandatory<Form<unknown>> = FormShare,
+  ): AdjacentField.ToForm<TValue, TSharer> {
+    return new this(controls, adjacentTo);
+  }
+
+  /**
+   * Constructs adjacent field.
+   *
+   * @param controls - Either a field controls instance, or its provider.
+   * @param adjacentTo - A locator of the share the field is adjacent to. Includes local shares by default.
+   */
+  constructor(
+      controls: Field.Controls<TValue> | AdjacentField.Provider<TValue, TAdjacentTo, TAdjusted, TSharer>,
+      adjacentTo: ShareLocator.Mandatory<TAdjacentTo>,
+  ) {
+    super(AdjacentField$provider(() => this, valueRecipe(controls), shareLocator(adjacentTo, { local: 'too' })));
+  }
+
+  /**
+   * Indicates that this field is adjacent to another form unit.
+   *
+   * Always `true`.
+   */
   get isAdjacent(): true {
     return true;
   }
@@ -24,12 +87,37 @@ export class AdjacentField<TValue, TSharer extends object = any> extends Field<T
 export namespace AdjacentField {
 
   /**
-   * Form field builder.
+   * A field adjacent to another field.
    *
-   * @typeParam TValue - Input value type.
-   * @typeParam TSharer - Field sharer component type.
+   * @typeParam TValue - Adjacent field value type.
+   * @typeParam TSharer - Adjacent field sharer component type.
    */
-  export interface Builder<TValue, TSharer extends object> extends Field.Builder<TValue, TSharer> {
+  export type ToField<TValue, TSharer extends object = any> = AdjacentField<
+      TValue,
+      Field<unknown>,
+      Field.Controls<unknown>,
+      TSharer>;
+
+  export type ToForm<TValue, TSharer extends object = any> = AdjacentField<
+      TValue,
+      Form<unknown>,
+      Form.Controls<unknown>,
+      TSharer>;
+
+  /**
+   * Adjacent field builder.
+   *
+   * @typeParam TValue - Adjacent field value type.
+   * @typeParam TAdjacentTo - A type of form unit the field is adjacent to.
+   * @typeParam TAdjusted - A type of controls to adjust. I.e. the ones of the form unit the field is adjacent to.
+   * @typeParam TSharer - Adjacent field sharer component type.
+   */
+  export interface Builder<
+      TValue,
+      TAdjacentTo extends FormUnit<unknown, TAdjusted>,
+      TAdjusted extends FormUnit.Controls<unknown> = FormUnit.ControlsType<TAdjacentTo>,
+      TSharer extends object = any,
+      > extends Field.Builder<TValue, TSharer> {
 
     /**
      * Sharer component context.
@@ -39,7 +127,7 @@ export namespace AdjacentField {
     /**
      * Target field.
      */
-    readonly field: AdjacentField<TValue, TSharer>;
+    readonly field: AdjacentField<TValue, TAdjacentTo, TAdjusted, TSharer>;
 
     /**
      * Field input control builder.
@@ -49,22 +137,29 @@ export namespace AdjacentField {
     /**
      * Form unit the field is adjacent to.
      */
-    readonly adjacentTo: FormUnit<unknown>;
+    readonly adjacentTo: TAdjacentTo;
 
     /**
      * Adjusted form unit control.
      */
-    readonly adjusted: InControl<unknown>;
+    readonly adjusted: TAdjusted;
 
   }
 
   /**
-   * Adjacent form field controls provider signature.
+   * Adjacent field controls provider signature.
    *
-   * @typeParam TValue - Field value type.
-   * @typeParam TSharer - Field sharer component type.
+   * @typeParam TValue - Adjacent field value type.
+   * @typeParam TAdjacentTo - A type of form unit the field is adjacent to.
+   * @typeParam TAdjusted - A type of controls to adjust. I.e. the ones of the form unit the field is adjacent to.
+   * @typeParam TSharer - Adjacent field sharer component type.
    */
-  export type Provider<TValue, TSharer extends object = any> =
+  export type Provider<
+      TValue,
+      TAdjacentTo extends FormUnit<unknown, TAdjusted>,
+      TAdjusted extends FormUnit.Controls<unknown> = FormUnit.ControlsType<TAdjacentTo>,
+      TSharer extends object = any,
+      > =
   /**
    * @param builder - Adjacent field builder.
    *
@@ -72,29 +167,33 @@ export namespace AdjacentField {
    */
       (
           this: void,
-          builder: Builder<TValue, TSharer>,
+          builder: Builder<TValue, TAdjacentTo, TAdjusted, TSharer>,
       ) => Field.Controls<TValue> | AfterEvent<[Field.Controls<TValue>?]>;
 
 }
 
-function AdjacentField$provider<TValue, TSharer extends object>(
-    field: () => AdjacentField<TValue, TSharer>,
-    provider: AdjacentField.Provider<TValue>,
-    adjacentLocator: ShareLocator.Fn<FormUnit<unknown>>,
+function AdjacentField$provider<
+    TValue,
+    TAdjacentTo extends FormUnit<unknown, TAdjusted>,
+    TAdjusted extends FormUnit.Controls<unknown> = FormUnit.ControlsType<TAdjacentTo>,
+    TSharer extends object = any>(
+    field: () => AdjacentField<TValue, TAdjacentTo, TAdjusted, TSharer>,
+    provider: AdjacentField.Provider<TValue, TAdjacentTo, TAdjusted, TSharer>,
+    adjacentLocator: ShareLocator.Fn<TAdjacentTo>,
 ): Field.Provider<TValue, TSharer> {
   return builder => adjacentLocator(builder.sharer).do(
-      digAfter((adjacentTo?: FormUnit<unknown>, _sharer?): AfterEvent<[Field.Controls<TValue>?]> => adjacentTo
+      digAfter((adjacentTo?: TAdjacentTo, _sharer?): AfterEvent<[Field.Controls<TValue>?]> => adjacentTo
           ? adjacentTo.readControls.do(
-              digAfter((adjusted?: FormUnit.Controls<unknown>): AfterEvent<[Field.Controls<TValue>?]> => {
+              digAfter((adjusted?: TAdjusted): AfterEvent<[Field.Controls<TValue>?]> => {
                 if (!adjusted) {
                   return afterThe();
                 }
 
-                const adjacentBuilder: AdjacentField.Builder<TValue, TSharer> = {
+                const adjacentBuilder: AdjacentField.Builder<TValue, TAdjacentTo, TAdjusted, TSharer> = {
                   ...builder,
                   field: field(),
                   adjacentTo,
-                  adjusted: adjusted.control,
+                  adjusted,
                 };
 
                 const controls = provider(adjacentBuilder);
