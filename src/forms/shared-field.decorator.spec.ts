@@ -201,14 +201,11 @@ describe('forms', () => {
 
       const { fieldCtx } = await bootstrap(undefined, FormComponent);
       const field = await fieldCtx.get(FieldShare);
-      let parents: any[] = [];
 
-      field!.control!.aspect(InParents).read(p => parents = [...p]);
-
-      expect(parents).toHaveLength(0);
+      expect([...(await field!.control!.aspect(InParents).read)]).toHaveLength(0);
 
       hasForm.it = true;
-      expect(parents).toHaveLength(1);
+      expect([...(await field!.control!.aspect(InParents).read)]).toHaveLength(1);
     });
 
     describe('FieldName', () => {
