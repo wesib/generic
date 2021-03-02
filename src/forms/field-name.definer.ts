@@ -125,13 +125,11 @@ function FormUnitName<
 export interface FieldNameDef {
 
   /**
-   * A form to add the field to.
+   * A locator of form unit to add the field to.
    *
-   * This is a shared form locator.
-   *
-   * Either {@link SharedFieldDef.form predefined}, or {@link FieldShare default} form share is used when omitted.
+   * Either {@link SharedFieldDef.form predefined}, or {@link FormShare default} form share is used when omitted.
    */
-  readonly form?: ShareLocator<Form>;
+  readonly form?: ShareLocator<FormUnit<any>>;
 
   /**
    * Field name.

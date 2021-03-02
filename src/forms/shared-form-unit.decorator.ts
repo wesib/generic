@@ -1,7 +1,6 @@
 import { Class } from '@proc7ts/primitives';
 import { ComponentClass } from '@wesib/wesib';
 import { Shared, ShareDecorator, ShareLocator, TargetShare } from '../shares';
-import { Form } from './form';
 import { FormUnit } from './form-unit';
 
 /**
@@ -47,9 +46,9 @@ export namespace SharedFormUnit {
       extends Shared.Descriptor<TUnit, TClass> {
 
     /**
-     * Predefined locator function of the form to add the unit to, or `undefined` when unknown.
+     * Predefined locator function of the form unit to add the share unit to, or `undefined` when unknown.
      */
-    readonly locateForm?: ShareLocator.Fn<Form<any, any>>;
+    readonly locateForm?: ShareLocator.Fn<FormUnit<any>>;
 
     /**
      * Predefined unit name, or `null`/`undefined` when the unit is not to be added to the {@link locateForm form}.

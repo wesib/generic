@@ -5,7 +5,7 @@ import { Field } from './field';
 import { FieldName } from './field-name.definer';
 import { Field$name } from './field.impl';
 import { FieldShare } from './field.share';
-import { Form } from './form';
+import { FormUnit } from './form-unit';
 import { FormShare } from './form.share';
 import { SharedFormUnit } from './shared-form-unit.decorator';
 
@@ -101,13 +101,11 @@ export interface SharedFieldDef<TField extends Field<TValue>, TValue = Field.Val
   readonly share?: TargetShare<TField>;
 
   /**
-   * A form to add the field to.
+   * A locator of form unit to add the shared field to.
    *
-   * This is shared form locator.
-   *
-   * The {@link FieldShare default form share} is used when omitted.
+   * The {@link FormShare default form share} is used when omitted.
    */
-  readonly form?: ShareLocator<Form>;
+  readonly form?: ShareLocator<FormUnit<unknown>>;
 
   /**
    * Field name.
@@ -145,9 +143,9 @@ export namespace SharedField {
     readonly share: Share<TField>;
 
     /**
-     * Predefined locator function of the form to add the field to.
+     * Predefined locator function of the form unit to add the shared field to.
      */
-    readonly locateForm: ShareLocator.Fn<Form<any, any>>;
+    readonly locateForm: ShareLocator.Fn<FormUnit<any>>;
 
     /**
      * Predefined field name, or `null`/`undefined` when the field is not to be added to the {@link locateForm form}.
