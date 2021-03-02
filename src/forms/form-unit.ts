@@ -29,13 +29,6 @@ export abstract class FormUnit<
   }
 
   /**
-   * Whether this form unit is {@link AdjacentField adjacent} to another one.
-   */
-  get isAdjacent(): boolean {
-    return false;
-  }
-
-  /**
    * An `AfterEvent` keeper of form unit controls.
    */
   get readControls(): AfterEvent<[TControls?]> {

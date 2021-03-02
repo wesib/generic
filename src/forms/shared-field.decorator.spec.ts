@@ -200,12 +200,13 @@ describe('forms', () => {
       }
 
       const { fieldCtx } = await bootstrap(undefined, FormComponent);
-      const field = await fieldCtx.get(FieldShare);
+      const field = (await fieldCtx.get(FieldShare))!;
 
-      expect([...(await field!.control!.aspect(InParents).read)]).toHaveLength(0);
+      expect([...(await field.control!.aspect(InParents).read)]).toHaveLength(0);
+      expect(field.isAdjacent).toBe(false);
 
       hasForm.it = true;
-      expect([...(await field!.control!.aspect(InParents).read)]).toHaveLength(1);
+      expect([...(await field.control!.aspect(InParents).read)]).toHaveLength(1);
     });
 
     describe('FieldName', () => {

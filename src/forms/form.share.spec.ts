@@ -6,7 +6,6 @@ import { Share, Share__symbol } from '../shares';
 import { ShareRegistry } from '../shares/share-registry.impl';
 import { SharedValue$ContextBuilder } from '../shares/shared-value.impl';
 import { testDefinition, testElement } from '../spec/test-element';
-import { FieldShare } from './field.share';
 import { Form } from './form';
 import { FormShare } from './form.share';
 
@@ -14,11 +13,9 @@ describe('forms', () => {
   describe('FormShare', () => {
 
     let formShare: FormShare;
-    let fieldShare: FieldShare;
 
     beforeEach(() => {
       formShare = FormShare[Share__symbol];
-      fieldShare = FieldShare[Share__symbol];
     });
 
     describe('addSharer', () => {
@@ -46,31 +43,6 @@ describe('forms', () => {
 
         supply.off();
         expect(sharerNames(formShare)).toHaveLength(0);
-      });
-      it('registers field sharer', () => {
-
-        const supply = formShare.addSharer(defContext);
-
-        expect(sharerNames(fieldShare)).toEqual(['test-component']);
-
-        supply.off();
-        expect(sharerNames(fieldShare)).toHaveLength(0);
-      });
-      it('registers field sharer for specific share', () => {
-
-        interface TestModel {
-          test: string;
-        }
-
-        const fieldShare = new FieldShare<TestModel>('custom-field');
-        const formShare = new FormShare<TestModel>('custom-form', { asField: fieldShare });
-
-        const supply = formShare.addSharer(defContext);
-
-        expect(sharerNames(fieldShare)).toEqual(['test-component']);
-
-        supply.off();
-        expect(sharerNames(fieldShare)).toHaveLength(0);
       });
 
       function sharerNames(share: Share<unknown>): readonly string[] {
@@ -113,21 +85,6 @@ describe('forms', () => {
 
       it('shares form', async () => {
         expect(await context.get(formShare)).toBe(form);
-      });
-      it('shares field', async () => {
-        expect(await context.get(fieldShare)).toBe(form);
-      });
-      it('shares specific field', async () => {
-
-        interface TestModel {
-          test: string;
-        }
-
-        const fieldShare = new FieldShare<TestModel>('custom-field');
-        const formShare = new FormShare<TestModel>('custom-form', { asField: fieldShare });
-
-        defContext.perComponent(shareValue(formShare, () => form));
-        expect(await context.get(fieldShare)).toBe(form);
       });
     });
 

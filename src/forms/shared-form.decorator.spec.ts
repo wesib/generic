@@ -47,7 +47,6 @@ describe('forms', () => {
       const form = await context.get(FormShare);
 
       expect(form).toBeInstanceOf(Form);
-      expect(form?.isAdjacent).toBe(false);
       expect(form?.control).toBeUndefined();
       expect(form?.element).toBeUndefined();
 

@@ -1,13 +1,9 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
-import { arrayOfElements, Class, Supply } from '@proc7ts/primitives';
-import { DefinitionContext } from '@wesib/wesib';
-import { Share, Share__symbol, SharedValue, ShareRef } from '../shares';
-import { Field } from './field';
-import { FieldShare } from './field.share';
+import { Class } from '@proc7ts/primitives';
+import { Share, Share__symbol } from '../shares';
 import { Form } from './form';
 
 const FormShare$map = (/*#__PURE__*/ new WeakMap<Class, FormShare<any, any>>());
-const FormShare$asFields__symbol = (/*#__PURE__*/ Symbol('FormShare.asFields'));
 
 /**
  * A kind of component share containing a user input form.
@@ -15,13 +11,10 @@ const FormShare$asFields__symbol = (/*#__PURE__*/ Symbol('FormShare.asFields'));
  * This class may be inherited to represent a specific type of forms. E.g. to support multiple forms within the same
  * component tree.
  *
- * Shares a form as a {@link FieldShare field}.
- *
  * @typeParam TModel - A model type of the form.
  * @typeParam TElt - A type of HTML form element.
  */
-export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
-    extends Share<Form<TModel, TElt>> {
+export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement> extends Share<Form<TModel, TElt>> {
 
   /**
    * Default form share instance.
@@ -43,101 +36,6 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement>
    */
   static get [ContextKey__symbol](): Share.Key<Form> {
     return this[Share__symbol][ContextKey__symbol];
-  }
-
-  /**
-   * @internal
-   */
-  private readonly [FormShare$asFields__symbol]: readonly Share<Field<TModel>>[];
-
-  /**
-   * Constructs form share.
-   *
-   * @param name - A human-readable name of the form share.
-   * @param options - Constructed form share options.
-   */
-  constructor(
-      name: string,
-      options: FormShare.Options<TModel, TElt> = {},
-  ) {
-    super(name, options);
-    this[FormShare$asFields__symbol] = options.asField
-        ? arrayOfElements<ShareRef<Field<TModel>>>(options.asField).map(ref => ref[Share__symbol])
-        : [FieldShare[Share__symbol]];
-  }
-
-  addSharer(defContext: DefinitionContext, options?: SharedValue.Options): Supply {
-
-    const supply = super.addSharer(defContext, options);
-
-    this.addFieldSharer(defContext, options).as(supply);
-
-    return supply;
-  }
-
-  /**
-   * Registers a field sharer component.
-   *
-   * By default, registers a sharer for each {@link FormShare.Options.asField aliased field share}.
-   *
-   * This method is called from {@link addSharer} one.
-   *
-   * @param defContext - The definition context of the sharer component.
-   * @param options - Value sharing options.
-   *
-   * @returns Sharer registration supply. Revokes the sharer registration once cut off.
-   */
-  addFieldSharer(defContext: DefinitionContext, options?: SharedValue.Options): Supply {
-
-    const supply = new Supply();
-
-    this[FormShare$asFields__symbol].forEach(fieldShare => fieldShare.addSharer(defContext, options).as(supply));
-
-    return supply;
-  }
-
-  shareValue(registrar: SharedValue.Registrar<Form<TModel, TElt>>): void {
-    super.shareValue(registrar);
-    this.shareField(registrar.withPriority(registrar.priority + 1));
-  }
-
-  /**
-   * Shares a field value by providing it for the sharer component context.
-   *
-   * By default, shares a form as a field instance for each {@link FormShare.Options.asField aliased field share}.
-   *
-   * This method is called from {@link shareValue} one.
-   *
-   * @param registrar - Shared value registrar.
-   *
-   * @return A builder of shared value for component context.
-   */
-  shareField(registrar: SharedValue.Registrar<Field<TModel>>): void {
-    this[FormShare$asFields__symbol].forEach(fieldShare => fieldShare.shareValue(registrar));
-  }
-
-}
-
-export namespace FormShare {
-
-  /**
-   * {@link FieldShare Field share} options.
-   *
-   * @typeParam TModel - A model type of the form.
-   * @typeParam TElt - A type of HTML form element.
-   */
-  export interface Options<TModel, TElt extends HTMLElement> extends Share.Options<Form<TModel, TElt>> {
-
-    /**
-     * Field share reference(s) the share provides instances for in addition to the form instance.
-     *
-     * The order of aliases is important. It defines the {@link SharedValue.Details.priority priority} of the
-     * value shared for the corresponding share.
-     *
-     * A {@link FieldShare default field share} is used when omitted.
-     */
-    readonly asField?: ShareRef<Field<TModel>> | ShareRef<Field<TModel>>[];
-
   }
 
 }
