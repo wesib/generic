@@ -1,4 +1,3 @@
-export * from './default-share';
 export * from './share';
 export * from './share-locator';
 export * from './share-ref';

@@ -1,8 +1,11 @@
 import { ContextKey__symbol } from '@proc7ts/context-values';
-import { DefaultShare, Share, Share__symbol } from '../shares';
+import { Class } from '@proc7ts/primitives';
+import { Share, Share__symbol } from '../shares';
 import { Form } from './form';
 
-/**                               s
+const FormShare$map = (/*#__PURE__*/ new WeakMap<Class, FormShare<any, any>>());
+
+/**
  * A kind of component share containing a user input form.
  *
  * This class may be inherited to represent a specific type of forms. E.g. to support multiple forms within the same
@@ -11,10 +14,21 @@ import { Form } from './form';
  * @typeParam TModel - A model type of the form.
  * @typeParam TElt - A type of HTML form element.
  */
-export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement> extends DefaultShare<Form<TModel, TElt>> {
+export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement> extends Share<Form<TModel, TElt>> {
 
-  static get defaultShareName(): string {
-    return 'form';
+  /**
+   * Default form share instance.
+   */
+  static get [Share__symbol](): FormShare<any, any> {
+
+    let instance = FormShare$map.get(this);
+
+    if (!instance) {
+      instance = new this('form');
+      FormShare$map.set(this, instance);
+    }
+
+    return instance;
   }
 
   /**
