@@ -58,13 +58,13 @@
 					<a href="../modules/module__wesib_generic_forms.html">Module @wesib/generic/forms</a>
 				</li>
 				<li>
-					<a href="../modules/module__wesib_generic_forms.field.html">Field</a>
+					<a href="../modules/module__wesib_generic_forms.adjacentfield.html">AdjacentField</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic_forms.field.builder.html">Builder</a>
+					<a href="module__wesib_generic_forms.adjacentfield.builder.html">Builder</a>
 				</li>
 			</ul>
-			<h1>Interface Builder&lt;TValue, TSharer&gt;</h1>
+			<h1>Interface Builder&lt;TValue, TAdjacentTo, TAdjusted, TSharer&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -74,7 +74,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Form field builder.</p>
+						<p>Adjacent field builder.</p>
 					</div>
 				</div>
 			</section>
@@ -85,15 +85,31 @@
 						<h4>TValue</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Field value type.</p>
+								<p>Adjacent field value type.</p>
 							</div>
 						</div>
 					</li>
 					<li>
-						<h4>TSharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></h4>
+						<h4>TAdjacentTo<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_forms.formunit-1.html" class="tsd-signature-type" data-tsd-kind="Class">FormUnit</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TAdjusted</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Field sharer component type.</p>
+								<p>A type of form unit the field is adjacent to.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>TAdjusted<span class="tsd-signature-symbol">: </span><a href="module__wesib_generic_forms.formunit.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span> = <a href="../modules/module__wesib_generic_forms.formunit.html#controlstype" class="tsd-signature-type" data-tsd-kind="Type alias">ControlsType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TAdjacentTo</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A type of controls to adjust. I.e. the ones of the form unit the field is adjacent to.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>TSharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-type">any</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adjacent field sharer component type.</p>
 							</div>
 						</div>
 					</li>
@@ -103,10 +119,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Builder</span>
+						<a href="module__wesib_generic_forms.field.builder.html" class="tsd-signature-type" data-tsd-kind="Interface">Builder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="module__wesib_generic_forms.adjacentfield.builder.html" class="tsd-signature-type" data-tsd-kind="Interface">Builder</a>
+								<span class="target">Builder</span>
 							</li>
 						</ul>
 					</li>
@@ -119,9 +135,11 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.field.builder.html#control" class="tsd-kind-icon">control</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.field.builder.html#field" class="tsd-kind-icon">field</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.field.builder.html#sharer" class="tsd-kind-icon">sharer</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.adjacentfield.builder.html#adjacentto" class="tsd-kind-icon">adjacent<wbr>To</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.adjacentfield.builder.html#adjusted" class="tsd-kind-icon">adjusted</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic_forms.adjacentfield.builder.html#control" class="tsd-kind-icon">control</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic_forms.adjacentfield.builder.html#field" class="tsd-kind-icon">field</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic_forms.adjacentfield.builder.html#sharer" class="tsd-kind-icon">sharer</a></li>
 							</ul>
 						</section>
 					</div>
@@ -130,12 +148,43 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="adjacentto" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> adjacent<wbr>To</h3>
+					<div class="tsd-signature tsd-kind-icon">adjacent<wbr>To<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TAdjacentTo</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/adjacent-field.ts#L150">wesib/generic/src/forms/adjacent-field.ts:150</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Form unit the field is adjacent to.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="adjusted" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> adjusted</h3>
+					<div class="tsd-signature tsd-kind-icon">adjusted<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TAdjusted</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/adjacent-field.ts#L155">wesib/generic/src/forms/adjacent-field.ts:155</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Adjusted form unit control.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="control" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> control</h3>
 					<div class="tsd-signature tsd-kind-icon">control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InBuilder</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides <a href="module__wesib_generic_forms.field.builder.html">Builder</a>.<a href="module__wesib_generic_forms.field.builder.html#control">control</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/field.ts#L117">wesib/generic/src/forms/field.ts:117</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/adjacent-field.ts#L145">wesib/generic/src/forms/adjacent-field.ts:145</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -144,13 +193,14 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="field" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> field</h3>
-					<div class="tsd-signature tsd-kind-icon">field<span class="tsd-signature-symbol">:</span> <a href="../classes/module__wesib_generic_forms.field-1.html" class="tsd-signature-type" data-tsd-kind="Class">Field</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">field<span class="tsd-signature-symbol">:</span> <a href="../classes/module__wesib_generic_forms.adjacentfield-1.html" class="tsd-signature-type" data-tsd-kind="Class">AdjacentField</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TAdjacentTo</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TAdjusted</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides <a href="module__wesib_generic_forms.field.builder.html">Builder</a>.<a href="module__wesib_generic_forms.field.builder.html#field">field</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/field.ts#L112">wesib/generic/src/forms/field.ts:112</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/adjacent-field.ts#L140">wesib/generic/src/forms/adjacent-field.ts:140</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -159,13 +209,14 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="sharer" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> sharer</h3>
 					<div class="tsd-signature tsd-kind-icon">sharer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides <a href="module__wesib_generic_forms.field.builder.html">Builder</a>.<a href="module__wesib_generic_forms.field.builder.html#sharer">sharer</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/field.ts#L107">wesib/generic/src/forms/field.ts:107</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/adjacent-field.ts#L135">wesib/generic/src/forms/adjacent-field.ts:135</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -189,29 +240,35 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic_forms.field.builder.html" class="tsd-kind-icon">Builder</a>
+						<a href="module__wesib_generic_forms.adjacentfield.builder.html" class="tsd-kind-icon">Builder</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_forms.field.builder.html#control" class="tsd-kind-icon">control</a>
+								<a href="module__wesib_generic_forms.adjacentfield.builder.html#adjacentto" class="tsd-kind-icon">adjacent<wbr>To</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_forms.field.builder.html#field" class="tsd-kind-icon">field</a>
+								<a href="module__wesib_generic_forms.adjacentfield.builder.html#adjusted" class="tsd-kind-icon">adjusted</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_forms.field.builder.html#sharer" class="tsd-kind-icon">sharer</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+								<a href="module__wesib_generic_forms.adjacentfield.builder.html#control" class="tsd-kind-icon">control</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+								<a href="module__wesib_generic_forms.adjacentfield.builder.html#field" class="tsd-kind-icon">field</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+								<a href="module__wesib_generic_forms.adjacentfield.builder.html#sharer" class="tsd-kind-icon">sharer</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic_forms.field.controls.html" class="tsd-kind-icon">Controls</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../modules/module__wesib_generic_forms.adjacentfield.html#provider" class="tsd-kind-icon">Provider</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_forms.field.html#provider" class="tsd-kind-icon">Provider</a>
+						<a href="../modules/module__wesib_generic_forms.adjacentfield.html#tofield" class="tsd-kind-icon">To<wbr>Field</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_forms.field.html#valuetype" class="tsd-kind-icon">Value<wbr>Type</a>
+						<a href="../modules/module__wesib_generic_forms.adjacentfield.html#toform" class="tsd-kind-icon">To<wbr>Form</a>
 					</li>
 				</ul>
 			</nav>

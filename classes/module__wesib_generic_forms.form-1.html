@@ -73,11 +73,11 @@
 					<div class="lead">
 						<p>User input form.</p>
 					</div>
-					<p>A component <a href="../modules/module__wesib_generic_forms.formshare.html">shares</a> form (e.g. using <a href="../modules/module__wesib_generic_forms.sharedform.html">@SharedForm</a> decorator) to make its
+					<p>A component <a href="module__wesib_generic_forms.formshare.html">shares</a> form (e.g. using <a href="../modules/module__wesib_generic_forms.sharedform.html">@SharedForm</a> decorator) to make its
 					accessible by component itself and nested ones. E.g. to add <a href="../modules/module__wesib_generic_forms.field.html">fields</a> to it or submit it.</p>
 					<p>A form may be nested within another one, as it implements a <a href="../modules/module__wesib_generic_forms.field.html">Field</a> interface.</p>
 					<p>The form instance is not usable until it is bound to its sharer component. The latter is done automatically when the
-					form is shared by <a href="../modules/module__wesib_generic_forms.formshare.html">FormShare</a>.</p>
+					form is shared by <a href="module__wesib_generic_forms.formshare.html">FormShare</a>.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
@@ -117,15 +117,14 @@
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">Form</span>
+								<ul class="tsd-hierarchy">
+									<li>
+										<a href="../interfaces/module__wesib_generic_forms.form.aspect.html" class="tsd-signature-type" data-tsd-kind="Interface">Aspect</a>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implements</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/module__wesib_generic_forms.form.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -177,7 +176,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="module__wesib_generic_forms.formunit-1.html">FormUnit</a>.<a href="module__wesib_generic_forms.formunit-1.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form.ts#L132">wesib/generic/src/forms/form.ts:132</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/form.ts#L139">wesib/generic/src/forms/form.ts:139</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -217,22 +216,21 @@
 					<a name="control" class="tsd-anchor"></a>
 					<h3>control</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> control<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> control<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/module__wesib_generic_forms.form.controls.html">Controls</a>.<a href="../interfaces/module__wesib_generic_forms.form.controls.html#control">control</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form-unit.ts#L42">wesib/generic/src/forms/form-unit.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/form-unit.ts#L41">wesib/generic/src/forms/form-unit.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Input control.</p>
+									<p>Input control of the field, if present.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -240,24 +238,23 @@
 					<a name="element" class="tsd-anchor"></a>
 					<h3>element</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> element<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> element<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/module__wesib_generic_forms.form.controls.html">Controls</a>.<a href="../interfaces/module__wesib_generic_forms.form.controls.html#element">element</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form.ts#L151">wesib/generic/src/forms/form.ts:151</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/form.ts#L158">wesib/generic/src/forms/form.ts:158</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Form element control.</p>
+									<p>Form element control, if present.</p>
 								</div>
 								<p>Unlike <a href="module__wesib_generic_forms.form-1.html#control">input control</a> this one is not supposed to be submitted, but rather contains a <code>&lt;form&gt;</code>
 								element issuing a <code>submit</code> event.</p>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -271,7 +268,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/shares/shareable.ts#L91">wesib/generic/src/shares/shareable.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/shares/shareable.ts#L85">wesib/generic/src/shares/shareable.ts:85</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -288,13 +285,13 @@
 					<a name="readcontrols" class="tsd-anchor"></a>
 					<h3>read<wbr>Controls</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> readControls<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TControls</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> readControls<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TControls</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form-unit.ts#L35">wesib/generic/src/forms/form-unit.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/form-unit.ts#L34">wesib/generic/src/forms/form-unit.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -302,7 +299,7 @@
 									<p>An <code>AfterEvent</code> keeper of form unit controls.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TControls</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TControls</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -316,7 +313,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/shares/shareable.ts#L66">wesib/generic/src/shares/shareable.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/shares/shareable.ts#L60">wesib/generic/src/shares/shareable.ts:60</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -327,13 +324,13 @@
 					<a name="_inaspect__symbol_" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> [<wbr>InAspect__symbol]</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> [InAspect__symbol]<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InAspect</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;default&quot;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> [InAspect__symbol]<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InAspect</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/module__wesib_generic_forms.form.aspect.html" class="tsd-signature-type" data-tsd-kind="Interface">Aspect</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;default&quot;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form.ts#L130">wesib/generic/src/forms/form.ts:130</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/form.ts#L137">wesib/generic/src/forms/form.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -342,7 +339,7 @@
 								</div>
 								<p>This aspect is available in <a href="../interfaces/module__wesib_generic_forms.form.controls.html#control">submittable form control</a> and <a href="../interfaces/module__wesib_generic_forms.form.controls.html#element">form element control</a>.</p>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">InAspect</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;default&quot;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">InAspect</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/module__wesib_generic_forms.form.aspect.html" class="tsd-signature-type" data-tsd-kind="Interface">Aspect</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;default&quot;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -353,17 +350,17 @@
 					<a name="_afterevent__symbol_" class="tsd-anchor"></a>
 					<h3>[<wbr>After<wbr>Event__symbol]</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">[<wbr>After<wbr>Event__symbol]<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/module__wesib_generic_forms.form.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">[<wbr>After<wbr>Event__symbol]<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/module__wesib_generic_forms.form.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="module__wesib_generic_forms.formunit-1.html">FormUnit</a>.<a href="module__wesib_generic_forms.formunit-1.html#_afterevent__symbol_">[AfterEvent__symbol]</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/shares/shareable.ts#L82">wesib/generic/src/shares/shareable.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/shares/shareable.ts#L76">wesib/generic/src/shares/shareable.ts:76</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/module__wesib_generic_forms.form.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/module__wesib_generic_forms.form.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -378,7 +375,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="module__wesib_generic_forms.formunit-1.html">FormUnit</a>.<a href="module__wesib_generic_forms.formunit-1.html#_contextual__symbol_">[Contextual__symbol]</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/shares/shareable.ts#L77">wesib/generic/src/shares/shareable.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/shares/shareable.ts#L71">wesib/generic/src/shares/shareable.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -410,7 +407,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form.ts#L155">wesib/generic/src/forms/form.ts:155</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/form.ts#L162">wesib/generic/src/forms/form.ts:162</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -427,7 +424,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form.ts#L76">wesib/generic/src/forms/form.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/form.ts#L75">wesib/generic/src/forms/form.ts:75</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -495,7 +492,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form.ts#L57">wesib/generic/src/forms/form.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/form.ts#L56">wesib/generic/src/forms/form.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -549,7 +546,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="module__wesib_generic_forms.formunit-1.html">FormUnit</a>.<a href="module__wesib_generic_forms.formunit-1.html#provider">provider</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/shares/shareable.ts#L35">wesib/generic/src/shares/shareable.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/shares/shareable.ts#L34">wesib/generic/src/shares/shareable.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -609,7 +606,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/f2dd4e0/src/forms/form.ts#L97">wesib/generic/src/forms/form.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/form.ts#L96">wesib/generic/src/forms/form.ts:96</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -695,6 +692,9 @@
 						<a href="module__wesib_generic_forms.abstractformpreset.html" class="tsd-kind-icon">Abstract<wbr>Form<wbr>Preset</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="module__wesib_generic_forms.adjacentfield-1.html" class="tsd-kind-icon">Adjacent<wbr>Field</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="module__wesib_generic_forms.field-1.html" class="tsd-kind-icon">Field</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
@@ -761,7 +761,7 @@
 						<a href="module__wesib_generic_forms.formpreset-1.html" class="tsd-kind-icon">Form<wbr>Preset</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="module__wesib_generic_forms.formshare-1.html" class="tsd-kind-icon">Form<wbr>Share</a>
+						<a href="module__wesib_generic_forms.formshare.html" class="tsd-kind-icon">Form<wbr>Share</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="module__wesib_generic_forms.formunit-1.html" class="tsd-kind-icon">Form<wbr>Unit</a>
