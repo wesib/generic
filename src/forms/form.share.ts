@@ -24,7 +24,7 @@ export class FormShare<TModel = any, TElt extends HTMLElement = HTMLElement> ext
     let instance = FormShare$map.get(this);
 
     if (!instance) {
-      instance = new this('field');
+      instance = new this('form');
       FormShare$map.set(this, instance);
     }
 
