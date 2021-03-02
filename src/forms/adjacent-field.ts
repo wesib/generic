@@ -70,7 +70,11 @@ export class AdjacentField<
       controls: Field.Controls<TValue> | AdjacentField.Provider<TValue, TAdjacentTo, TAdjusted, TSharer>,
       adjacentTo: ShareLocator.Mandatory<TAdjacentTo>,
   ) {
-    super(AdjacentField$provider(() => this, valueRecipe(controls), shareLocator(adjacentTo, { local: 'too' })));
+    super(AdjacentField$provider(
+        () => this,
+        valueRecipe(controls),
+        shareLocator(adjacentTo, { local: 'too' }),
+    ));
   }
 
   /**
@@ -98,6 +102,12 @@ export namespace AdjacentField {
       Field.Controls<unknown>,
       TSharer>;
 
+  /**
+   * A field adjacent to form.
+   *
+   * @typeParam TValue - Adjacent field value type.
+   * @typeParam TSharer - Adjacent field sharer component type.
+   */
   export type ToForm<TValue, TSharer extends object = any> = AdjacentField<
       TValue,
       Form<unknown>,

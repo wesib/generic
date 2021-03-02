@@ -32,7 +32,7 @@ export class ShareAccessor<T, TClass extends ComponentClass> {
       this.val = trackValue(value);
     }
 
-    // this.val.supply.needs(this._ctx);
+    this.val.supply.needs(this._ctx);
 
     // Bind to context as the very first operation
     this.val.read(value => isContextual(value) && value[Contextual__symbol](this._ctx));
