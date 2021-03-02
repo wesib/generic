@@ -1,9 +1,5 @@
-import { ContextKey__symbol } from '@proc7ts/context-values';
-import { Class } from '@proc7ts/primitives';
-import { Share, Share__symbol } from '../shares';
+import { DefaultShare } from '../shares';
 import { Field } from './field';
-
-const FieldShare$map = (/*#__PURE__*/ new WeakMap<Class, FieldShare<any>>());
 
 /**
  * A kind of component share containing a {@link Field form field}.
@@ -13,28 +9,10 @@ const FieldShare$map = (/*#__PURE__*/ new WeakMap<Class, FieldShare<any>>());
  *
  * @typeParam TValue - Field value type.
  */
-export class FieldShare<TValue = any> extends Share<Field<TValue>> {
+export class FieldShare<TValue = any> extends DefaultShare<Field<TValue>> {
 
-  /**
-   * Default field share instance.
-   */
-  static get [Share__symbol](): FieldShare {
-
-    let instance = FieldShare$map.get(this);
-
-    if (!instance) {
-      instance = new this('field');
-      FieldShare$map.set(this, instance);
-    }
-
-    return instance;
-  }
-
-  /**
-   * A key of component context value containing default field instance.
-   */
-  static get [ContextKey__symbol](): Share.Key<Field<any>> {
-    return this[Share__symbol][ContextKey__symbol];
+  static get defaultShareName(): string {
+    return 'field';
   }
 
 }
