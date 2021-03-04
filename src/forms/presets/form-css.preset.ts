@@ -1,6 +1,8 @@
-import { InCssClasses, inCssError, inCssInfo } from '@frontmeans/input-aspects';
+import { InControl, InCssClasses, inCssError, inCssInfo } from '@frontmeans/input-aspects';
+import { Supply } from '@proc7ts/primitives';
 import { Field } from '../field';
 import { Form } from '../form';
+import { ScopedFormConfig } from '../scoped-form-config';
 import { AbstractFormPreset } from './abstract-form-preset';
 
 /**
@@ -14,12 +16,12 @@ export class FormCssPreset extends AbstractFormPreset {
   /**
    * @internal
    */
-  private readonly _info: InCssClasses.Source | null;
+  private readonly _info: (control: InControl<any>) => Supply;
 
   /**
    * @internal
    */
-  private readonly _error: InCssClasses.Source | null;
+  private readonly _error: (control: InControl<any>) => Supply;
 
   /**
    * Constructs customized form CSS preset.
@@ -28,36 +30,36 @@ export class FormCssPreset extends AbstractFormPreset {
    */
   constructor(options: FormCssPreset.Options = {}) {
     super();
+    this._info = ScopedFormConfig.createSetup(
+        options.info,
+        opts => {
 
-    const { info = true, error = true } = options;
+          const src = inCssInfo(opts);
 
-    this._info = info ? inCssInfo(info === true ? undefined : info) : null;
-    this._error = error ? inCssError(error === true ? undefined : error) : null;
+          return control => control.aspect(InCssClasses).add(src);
+        },
+    );
+    this._error = ScopedFormConfig.createSetup(
+        options.error,
+        opts => {
+
+          const src = inCssError(opts);
+
+          return control => control.aspect(InCssClasses).add(src);
+        },
+    );
   }
 
   setupField<TValue, TSharer extends object>(
       builder: Field.Builder<TValue, TSharer>,
   ): void {
-
-    const { _info: info, _error: error } = this;
-
-    if (info) {
-      builder.control.setup(InCssClasses, css => css.add(info));
-    }
-    if (error) {
-      builder.control.setup(InCssClasses, css => css.add(error));
-    }
+    builder.control.setup(this._info).setup(this._error);
   }
 
   setupForm<TModel, TElt extends HTMLElement, TSharer extends object>(
       builder: Form.Builder<TModel, TElt, TSharer>,
   ): void {
-
-    const { _info: info } = this;
-
-    if (info) {
-      builder.control.setup(InCssClasses, css => css.add(info));
-    }
+    builder.control.setup(this._info);
     builder.element.setup(
         InCssClasses,
         (css, element) => css.add(
@@ -80,14 +82,14 @@ export namespace FormCssPreset {
      *
      * `false` to disable.
      */
-    readonly info?: Parameters<typeof inCssInfo>[0] | boolean;
+    readonly info?: ScopedFormConfig<Parameters<typeof inCssInfo>[0]>;
 
     /**
      * CSS error indication options.
      *
      * `false` to disable.
      */
-    readonly error?: Parameters<typeof inCssError>[0] | boolean;
+    readonly error?: ScopedFormConfig<Parameters<typeof inCssError>[0]>;
 
   }
 
