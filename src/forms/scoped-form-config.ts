@@ -12,7 +12,7 @@ import { FormScope } from './form-scope';
  * - `false` - to not apply configuration,
  * - `true` - to apply default configuration to every control,
  * - role name or array of role names - to apply default configuration only to controls with that roles,
- * - `undefined` or empty array - to apply default configuration only to controls with default role,
+ * - `null`, `undefined`, or empty array - to apply default configuration only to controls with default role,
  * - an array containing options as the first element, and role names as the rest of them - to apply these options
  *   only to controls with that roles,
  * - a tuple consisting of options and {@link FormScope scope} specifier - to apply these options to specified scope.

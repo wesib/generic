@@ -9,12 +9,13 @@ import { arrayOfElements, neverSupply, Supply, SupplyPeer } from '@proc7ts/primi
  * - `false` - to set up nothing,
  * - `true` - to set up every control,
  * - role name or array of role names - to set up only to controls with that roles,
- * - `undefined` or empty array - to set up only controls with default role.
+ * - `null`, `undefined`, or empty array - to set up only controls with default role.
  */
 export type FormScope =
     | boolean
     | string
     | readonly string[]
+    | null
     | undefined;
 
 export const FormScope = {
