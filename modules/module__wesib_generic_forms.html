@@ -109,6 +109,20 @@
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="module__wesib_generic_forms.html#formscope" class="tsd-kind-icon">Form<wbr>Scope</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="module__wesib_generic_forms.html#scopedformconfig" class="tsd-kind-icon">Scoped<wbr>Form<wbr>Config</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="module__wesib_generic_forms.html#formscope-1" class="tsd-kind-icon">Form<wbr>Scope</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="module__wesib_generic_forms.html#scopedformconfig-1" class="tsd-kind-icon">Scoped<wbr>Form<wbr>Config</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="module__wesib_generic_forms.html#fieldname" class="tsd-kind-icon">Field<wbr>Name</a></li>
@@ -119,6 +133,318 @@
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="module__wesib_generic_forms.html#sharedformunit-1" class="tsd-kind-icon">Shared<wbr>Form<wbr>Unit</a></li>
 							</ul>
 						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="formscope" class="tsd-anchor"></a>
+					<h3>Form<wbr>Scope</h3>
+					<div class="tsd-signature tsd-kind-icon">Form<wbr>Scope<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/form-scope.ts#L14">wesib/generic/src/forms/form-scope.ts:14</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A scope of form setup applicability.</p>
+						</div>
+						<p>Selects controls to set up:</p>
+						<ul>
+							<li><code>false</code> - to set up nothing,</li>
+							<li><code>true</code> - to set up every control,</li>
+							<li>role name or array of role names - to set up only to controls with that roles,</li>
+							<li><code>null</code>, <code>undefined</code>, or empty array - to set up only controls with default role.</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="scopedformconfig" class="tsd-anchor"></a>
+					<h3>Scoped<wbr>Form<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">Scoped<wbr>Form<wbr>Config&lt;TOptions&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol"> | </span><a href="module__wesib_generic_forms.html#formscope-1" class="tsd-signature-type" data-tsd-kind="Variable">FormScope</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol">, </span><a href="module__wesib_generic_forms.html#formscope-1" class="tsd-signature-type" data-tsd-kind="Variable">FormScope</a><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">...</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/scoped-form-config.ts#L22">wesib/generic/src/forms/scoped-form-config.ts:22</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Scoped form setup configuration.</p>
+						</div>
+						<p>Contains setup options along with the scope they applicable to.</p>
+						<p>May be one of:</p>
+						<ul>
+							<li><code>false</code> - to not apply configuration,</li>
+							<li><code>true</code> - to apply default configuration to every control,</li>
+							<li>role name or array of role names - to apply default configuration only to controls with that roles,</li>
+							<li><code>null</code>, <code>undefined</code>, or empty array - to apply default configuration only to controls with default role,</li>
+							<li>an array containing options as the first element, and role names as the rest of them - to apply these options
+							only to controls with that roles,</li>
+							<li>a tuple consisting of options and <a href="module__wesib_generic_forms.html#formscope">scope</a> specifier - to apply these options to specified scope.</li>
+						</ul>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>TOptions</h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of setup options.</p>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="formscope-1" class="tsd-anchor"></a>
+					<h3>Form<wbr>Scope</h3>
+					<div class="tsd-signature tsd-kind-icon">Form<wbr>Scope<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>createSetup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/form-scope.ts#L21">wesib/generic/src/forms/form-scope.ts:21</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>create<wbr>Setup<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal tsd-has-type-parameter">
+									<li class="tsd-signature tsd-kind-icon">create<wbr>Setup&lt;TControl, TValue&gt;<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="module__wesib_generic_forms.html#formscope-1" class="tsd-signature-type" data-tsd-kind="Variable">FormScope</a>, setup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">SupplyPeer</span>, defaultRole<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Supply</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/form-scope.ts#L36">wesib/generic/src/forms/form-scope.ts:36</a></li>
+											</ul>
+										</aside>
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p>Creates an input control setup procedure applied to the given scope.</p>
+											</div>
+										</div>
+										<h4 class="tsd-type-parameters-title">Type parameters</h4>
+										<ul class="tsd-type-parameters">
+											<li>
+												<h4>TControl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">&gt;</span></h4>
+												<div class="tsd-comment tsd-typography">
+													<p>Input control type.</p>
+												</div>
+											</li>
+											<li>
+												<h4>TValue = <span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">&gt;</span></h4>
+												<div class="tsd-comment tsd-typography">
+													<p>Input value type.</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>scope: <a href="module__wesib_generic_forms.html#formscope-1" class="tsd-signature-type" data-tsd-kind="Variable">FormScope</a></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>Setup applicability scope.</p>
+												</div>
+											</li>
+											<li>
+												<h5>setup: <span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">SupplyPeer</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>A setup procedure to apply. Accepts target control instance as parameter and returns a setup supply
+													peer. The setup should be reverted once this peer&#39;s supply cut off.</p>
+												</div>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter-signature">
+														<ul class="tsd-signatures tsd-kind-type-literal">
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SupplyPeer</span></li>
+														</ul>
+														<ul class="tsd-descriptions">
+															<li class="tsd-description">
+																<h4 class="tsd-parameters-title">Parameters</h4>
+																<ul class="tsd-parameters">
+																	<li>
+																		<h5>control: <span class="tsd-signature-type">TControl</span></h5>
+																	</li>
+																</ul>
+																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SupplyPeer</span></h4>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+											<li>
+												<h5>defaultRole: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>A role name to apply by default. <code>&#39;default&#39;</code> when omitted.</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Supply</span></h4>
+										<p>A setup procedure accepting target control as parameter and returning a setup supply. The setup is
+										reverted once this supply cut off.</p>
+										<ul class="tsd-parameters">
+											<li class="tsd-parameter-signature">
+												<ul class="tsd-signatures tsd-kind-type-literal">
+													<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Supply</span></li>
+												</ul>
+												<ul class="tsd-descriptions">
+													<li class="tsd-description">
+														<h4 class="tsd-parameters-title">Parameters</h4>
+														<ul class="tsd-parameters">
+															<li>
+																<h5>control: <span class="tsd-signature-type">TControl</span></h5>
+															</li>
+														</ul>
+														<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Supply</span></h4>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="scopedformconfig-1" class="tsd-anchor"></a>
+					<h3>Scoped<wbr>Form<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">Scoped<wbr>Form<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>createSetup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/scoped-form-config.ts#L28">wesib/generic/src/forms/scoped-form-config.ts:28</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>create<wbr>Setup<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal tsd-has-type-parameter">
+									<li class="tsd-signature tsd-kind-icon">create<wbr>Setup&lt;TOptions, TControl, TValue&gt;<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">: </span><a href="module__wesib_generic_forms.html#formscope-1" class="tsd-signature-type" data-tsd-kind="Variable">FormScope</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol">[]</span>, createSetup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">SupplyPeer</span>, defaultRole<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Supply</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/scoped-form-config.ts#L45">wesib/generic/src/forms/scoped-form-config.ts:45</a></li>
+											</ul>
+										</aside>
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p>Creates an input control setup procedure that applies the given configuration to appropriate scope.</p>
+											</div>
+										</div>
+										<h4 class="tsd-type-parameters-title">Type parameters</h4>
+										<ul class="tsd-type-parameters">
+											<li>
+												<h4>TOptions</h4>
+												<div class="tsd-comment tsd-typography">
+													<p>A type of setup options.</p>
+												</div>
+											</li>
+											<li>
+												<h4>TControl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">&gt;</span></h4>
+												<div class="tsd-comment tsd-typography">
+													<p>Input control type.</p>
+												</div>
+											</li>
+											<li>
+												<h4>TValue = <span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">&gt;</span></h4>
+												<div class="tsd-comment tsd-typography">
+													<p>Input value type.</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>config: <a href="module__wesib_generic_forms.html#formscope-1" class="tsd-signature-type" data-tsd-kind="Variable">FormScope</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol">[]</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>Scoped form setup configuration.</p>
+												</div>
+											</li>
+											<li>
+												<h5>createSetup: <span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">SupplyPeer</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>A function accepting setup options and returning a procedure that sets up the given control
+														with these options. The setup procedure returns a setup supply peer. The setup should be reverted once this peer&#39;s
+													supply cut off.</p>
+												</div>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter-signature">
+														<ul class="tsd-signatures tsd-kind-type-literal">
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">SupplyPeer</span></li>
+														</ul>
+														<ul class="tsd-descriptions">
+															<li class="tsd-description">
+																<h4 class="tsd-parameters-title">Parameters</h4>
+																<ul class="tsd-parameters">
+																	<li>
+																		<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">TOptions</span></h5>
+																	</li>
+																</ul>
+																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">SupplyPeer</span></h4>
+																<ul class="tsd-parameters">
+																	<li class="tsd-parameter-signature">
+																		<ul class="tsd-signatures tsd-kind-type-literal">
+																			<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SupplyPeer</span></li>
+																		</ul>
+																		<ul class="tsd-descriptions">
+																			<li class="tsd-description">
+																				<h4 class="tsd-parameters-title">Parameters</h4>
+																				<ul class="tsd-parameters">
+																					<li>
+																						<h5>control: <span class="tsd-signature-type">TControl</span></h5>
+																					</li>
+																				</ul>
+																				<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SupplyPeer</span></h4>
+																			</li>
+																		</ul>
+																	</li>
+																</ul>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> defaultRole: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>A role name to apply by default. <code>&#39;default&#39;</code> when omitted.</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Supply</span></h4>
+										<p>A setup procedure accepting target control as parameter and returning a setup supply. The setup is
+										reverted once this supply cut off.</p>
+										<ul class="tsd-parameters">
+											<li class="tsd-parameter-signature">
+												<ul class="tsd-signatures tsd-kind-type-literal">
+													<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>control<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TControl</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Supply</span></li>
+												</ul>
+												<ul class="tsd-descriptions">
+													<li class="tsd-description">
+														<h4 class="tsd-parameters-title">Parameters</h4>
+														<ul class="tsd-parameters">
+															<li>
+																<h5>control: <span class="tsd-signature-type">TControl</span></h5>
+															</li>
+														</ul>
+														<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Supply</span></h4>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</div>
 				</section>
 			</section>
@@ -134,7 +460,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/field-name.definer.ts#L46">wesib/generic/src/forms/field-name.definer.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/field-name.definer.ts#L46">wesib/generic/src/forms/field-name.definer.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -187,7 +513,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/field-name.definer.ts#L26">wesib/generic/src/forms/field-name.definer.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/field-name.definer.ts#L26">wesib/generic/src/forms/field-name.definer.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -246,7 +572,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/on-submit.decorator.ts#L21">wesib/generic/src/forms/on-submit.decorator.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/on-submit.decorator.ts#L21">wesib/generic/src/forms/on-submit.decorator.ts:21</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -303,7 +629,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/shared-field.decorator.ts#L23">wesib/generic/src/forms/shared-field.decorator.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/shared-field.decorator.ts#L23">wesib/generic/src/forms/shared-field.decorator.ts:23</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -353,7 +679,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/shared-field.decorator.ts#L42">wesib/generic/src/forms/shared-field.decorator.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/shared-field.decorator.ts#L42">wesib/generic/src/forms/shared-field.decorator.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -408,7 +734,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/shared-form.decorator.ts#L20">wesib/generic/src/forms/shared-form.decorator.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/shared-form.decorator.ts#L20">wesib/generic/src/forms/shared-form.decorator.ts:20</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -464,7 +790,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/shared-form.decorator.ts#L40">wesib/generic/src/forms/shared-form.decorator.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/shared-form.decorator.ts#L40">wesib/generic/src/forms/shared-form.decorator.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -523,7 +849,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/d482160/src/forms/shared-form-unit.decorator.ts#L18">wesib/generic/src/forms/shared-form-unit.decorator.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/223d55c/src/forms/shared-form-unit.decorator.ts#L18">wesib/generic/src/forms/shared-form-unit.decorator.ts:18</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -643,6 +969,18 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../interfaces/module__wesib_generic_forms.sharedformdef.html" class="tsd-kind-icon">Shared<wbr>Form<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="module__wesib_generic_forms.html#formscope" class="tsd-kind-icon">Form<wbr>Scope</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="module__wesib_generic_forms.html#scopedformconfig" class="tsd-kind-icon">Scoped<wbr>Form<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="module__wesib_generic_forms.html#formscope-1" class="tsd-kind-icon">Form<wbr>Scope</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="module__wesib_generic_forms.html#scopedformconfig-1" class="tsd-kind-icon">Scoped<wbr>Form<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="module__wesib_generic_forms.html#fieldname" class="tsd-kind-icon">Field<wbr>Name</a>
