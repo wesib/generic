@@ -1,5 +1,8 @@
 import { InControl } from '@frontmeans/input-aspects';
+import { Contextual__symbol } from '@proc7ts/context-values';
 import { AfterEvent, AfterEvent__symbol } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
+import { ComponentContext } from '@wesib/wesib';
 import { Shareable } from '../shares';
 
 /**
@@ -40,6 +43,12 @@ export abstract class FormUnit<
    */
   get control(): InControl<TValue> | undefined {
     return this.internals?.control;
+  }
+
+  [Contextual__symbol](sharer: ComponentContext): this {
+    super[Contextual__symbol](sharer);
+    this.readControls(noop).needs(sharer); // Create controls eagerly.
+    return this;
   }
 
 }
