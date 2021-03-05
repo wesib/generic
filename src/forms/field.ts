@@ -1,5 +1,5 @@
 import { InBuilder, InControl } from '@frontmeans/input-aspects';
-import { AfterEvent, afterValue, digAfter } from '@proc7ts/fun-events';
+import { AfterEvent, afterValue, deduplicateAfter, digAfter_ } from '@proc7ts/fun-events';
 import { valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { Shareable } from '../shares';
@@ -142,7 +142,7 @@ function Field$provider<TValue, TSharer extends object>(
     provider: Field.Provider<TValue>,
 ): Shareable.Provider<Field.Controls<TValue> | undefined, TSharer> {
   return sharer => sharer.get(FormPreset).rules.do(
-      digAfter(preset => {
+      digAfter_(preset => {
 
         const builder: Field.Builder<TValue, TSharer> = {
           sharer,
@@ -154,5 +154,17 @@ function Field$provider<TValue, TSharer extends object>(
 
         return afterValue(provider(builder));
       }),
+      deduplicateAfter(Field$isDuplicateControls, ([controls]) => controls),
   );
+}
+
+function Field$isDuplicateControls<TValue>(
+    prior?: Field.Controls<TValue>,
+    next?: Field.Controls<TValue>,
+): boolean {
+  if (prior?.control !== next?.control) {
+    prior?.control.supply.off();
+    return false;
+  }
+  return true;
 }

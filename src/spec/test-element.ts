@@ -68,6 +68,7 @@ export class MockElement {
 
   readonly dispatchEvent = jest.fn();
   readonly addEventListener = jest.fn();
+  readonly removeEventListener = jest.fn();
   private readonly _target: any;
   private readonly _attributes: { [name: string]: string | null } = {};
 

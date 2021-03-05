@@ -329,7 +329,7 @@ describe('forms', () => {
             };
 
             formPreset.setupField(builder1);
-            expect(createControls(builder1).control.it).toBe(1);
+            expect(createControls(builder1).control.it).toBe(2);
 
             ruleTracker.it = {
               setupField: (builder: Field.Builder<any, any>) => {
@@ -344,7 +344,7 @@ describe('forms', () => {
             };
 
             formPreset.setupField(builder2);
-            expect(createControls(builder2).control.it).toBe(12);
+            expect(createControls(builder2).control.it).toBe(14);
           });
         });
 
@@ -369,7 +369,7 @@ describe('forms', () => {
             };
 
             formPreset.setupForm(builder1);
-            expect(createControls(builder1).control.it.counter).toBe(1);
+            expect(createControls(builder1).control.it.counter).toBe(2);
 
             ruleTracker.it = {
               setupForm: (builder: Form.Builder<any, any, any>) => {
@@ -385,7 +385,7 @@ describe('forms', () => {
             };
 
             formPreset.setupForm(builder2);
-            expect(createControls(builder2).control.it.counter).toBe(12);
+            expect(createControls(builder2).control.it.counter).toBe(14);
           });
         });
 

@@ -9,7 +9,7 @@ import {
   InFormElement,
   nullInAspect,
 } from '@frontmeans/input-aspects';
-import { AfterEvent, afterValue, digAfter } from '@proc7ts/fun-events';
+import { AfterEvent, afterValue, deduplicateAfter, digAfter_ } from '@proc7ts/fun-events';
 import { lazyValue, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { Shareable } from '../shares';
@@ -183,7 +183,7 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
   });
 
   return sharer => sharer.get(FormPreset).rules.do(
-      digAfter(preset => {
+      digAfter_(preset => {
 
         const builder: Form.Builder<TModel, TElt, TSharer> = {
           sharer,
@@ -196,7 +196,27 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
 
         return afterValue(provider(builder));
       }),
+      deduplicateAfter(Form$isDuplicateControls, ([controls]) => controls),
   );
+}
+
+function Form$isDuplicateControls<TModel, TElt extends HTMLElement>(
+    prior?: Form.Controls<TModel, TElt>,
+    next?: Form.Controls<TModel, TElt>,
+): boolean {
+
+  let duplicate = true;
+
+  if (prior?.control !== next?.control) {
+    prior?.control.supply.off();
+    duplicate = false;
+  }
+  if (prior?.element !== next?.element) {
+    prior?.element.supply.off();
+    duplicate = false;
+  }
+
+  return duplicate;
 }
 
 export namespace Form {
