@@ -39,6 +39,9 @@ export default {
     if (id.startsWith(path.resolve('src', 'styp') + path.sep)) {
       return 'wesib.styp';
     }
+    if (id.startsWith(path.resolve('src', 'theme') + path.sep)) {
+      return 'wesib.styp';
+    }
     return 'wesib.generic';
   },
   output: [
@@ -69,6 +72,10 @@ export default {
               file: 'input/index.d.ts',
             },
             styp: {
+              file: 'styp/index.d.ts',
+            },
+            theme: {
+              as: 'styp',
               file: 'styp/index.d.ts',
             },
           },
