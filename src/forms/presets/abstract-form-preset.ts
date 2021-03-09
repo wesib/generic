@@ -1,11 +1,11 @@
 import { ContextBuilder, ContextBuilder__symbol, ContextRegistry } from '@proc7ts/context-values';
-import { Class, Supply, valueProvider } from '@proc7ts/primitives';
+import { Class, Supply } from '@proc7ts/primitives';
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { Field } from '../field';
 import { Form } from '../form';
 import { FormPreset } from '../form-preset';
 
-const AbstractFormPreset$feature__symbol = (/*#__PURE__*/ Symbol('AbstractFormPreset.feature'));
+const AbstractFormPreset$map = (/*#__PURE__*/ new WeakMap<typeof AbstractFormPreset, FeatureDef>());
 
 /**
  * Abstract form preset implementation.
@@ -22,13 +22,12 @@ export abstract class AbstractFormPreset implements FormPreset.Spec, ContextBuil
    * Feature definition of the preset.
    */
   static get [FeatureDef__symbol](): FeatureDef {
-    return this[AbstractFormPreset$feature__symbol]();
-  }
 
-  /**
-   * @internal
-   */
-  private static [AbstractFormPreset$feature__symbol](): FeatureDef {
+    const found = AbstractFormPreset$map.get(this);
+
+    if (found) {
+      return found;
+    }
 
     const preset = new (this as unknown as Class<AbstractFormPreset>)();
     const featureDef: FeatureDef = {
@@ -37,7 +36,7 @@ export abstract class AbstractFormPreset implements FormPreset.Spec, ContextBuil
       },
     };
 
-    this[AbstractFormPreset$feature__symbol] = valueProvider(featureDef);
+    AbstractFormPreset$map.set(this, featureDef);
 
     return featureDef;
   }
