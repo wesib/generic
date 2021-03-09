@@ -134,7 +134,7 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
    * This aspect is available in {@link Form.Controls.control submittable form control} and {@link Form.Controls.element
    * form element control}.
    */
-  static get [InAspect__symbol](): InAspect<Form.Aspect | null> {
+  static get [InAspect__symbol](): InAspect<Form.Whole | null> {
     return Form__aspect;
   }
 
@@ -159,6 +159,15 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
     return this.internals?.element;
   }
 
+  /**
+   * Returns this form if it is {@link Form.Whole whole}.
+   *
+   * @returns Either `this` form instance when it contains controls, or `undefined` otherwise.
+   */
+  asWhole(): Form.Whole<TModel, TElt, TSharer> | undefined {
+    return this.internals && (this as Form.Whole<TModel, TElt, TSharer>);
+  }
+
   toString(): string {
     return 'Form';
   }
@@ -177,7 +186,7 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
       return inconvertibleInAspect(
           control,
           Form,
-          form() as Form.Aspect,
+          form() as Form.Whole,
       ) as InAspect.Application.Result<TInstance, any, TKind>;
     },
   });
@@ -310,11 +319,10 @@ export namespace Form {
       ) => Controls<TModel, TElt> | AfterEvent<[Controls<TModel, TElt>?]>;
 
   /**
-   * Form aspect instance.
-   *
-   * Always contains control and element instances.
+   * A whole form instance containing controls.
    */
-  export interface Aspect<TModel = any> extends Form<TModel>, Form.Controls<TModel> {
+  export interface Whole<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = any>
+      extends Form<TModel, TElt, TSharer>, Form.Controls<TModel, TElt> {
 
      /**
       * Submittable form input control.
@@ -345,7 +353,7 @@ interface Form$Aspect extends InAspect<Form | null, 'form'> {
 /**
  * A form aspect applied to control.
  */
-type Form$Applied<TValue> = InAspect.Applied<TValue, Form.Aspect<TValue> | null, Form.Aspect<any> | null>;
+type Form$Applied<TValue> = InAspect.Applied<TValue, Form.Whole<TValue> | null, Form.Whole<any> | null>;
 
 declare module '@frontmeans/input-aspects' {
 
@@ -356,7 +364,7 @@ declare module '@frontmeans/input-aspects' {
       /**
        * Form aspect application type.
        */
-      form(): Form.Aspect<TValue> | null;
+      form(): Form.Whole<TValue> | null;
 
     }
 
