@@ -242,7 +242,12 @@ export namespace Form {
       TModel = any,
       TElt extends HTMLElement = HTMLElement,
       TSharer extends object = any>
-      extends Form<TModel, TElt, TSharer>, Form.Body<TModel, TElt> {
+      extends Form<TModel, TElt, TSharer> {
+
+    /**
+     * Form body.
+     */
+    readonly body: Body<TModel, TElt, TSharer>;
 
     /**
      * Submittable form input control.
