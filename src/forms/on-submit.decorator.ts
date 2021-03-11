@@ -9,7 +9,7 @@ import { FormShare } from './form.share';
 /**
  * Creates a decorator for component method to call on input form submit.
  *
- * The decorated method accepts {@link Form.Body controls of the form} about to be submitted, and a submit event as
+ * The decorated method accepts a {@link Form.Body body of the form} about to be submitted, and a submit event as
  * parameters.
  *
  * @typeParam TModel - Submitted model type.
