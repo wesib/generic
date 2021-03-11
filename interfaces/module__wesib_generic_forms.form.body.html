@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Builder | Wesib: Generic Components</title>
+	<title>Body | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -61,10 +61,10 @@
 					<a href="../modules/module__wesib_generic_forms.form.html">Form</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic_forms.form.builder.html">Builder</a>
+					<a href="module__wesib_generic_forms.form.body.html">Body</a>
 				</li>
 			</ul>
-			<h1>Interface Builder&lt;TModel, TElt, TSharer&gt;</h1>
+			<h1>Interface Body&lt;TModel, TElt, TSharer&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -74,7 +74,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Form builder.</p>
+						<p>Form body containing input controls.</p>
 					</div>
 				</div>
 			</section>
@@ -90,7 +90,7 @@
 						</div>
 					</li>
 					<li>
-						<h4>TElt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span></h4>
+						<h4>TElt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span> = <span class="tsd-signature-type">HTMLElement</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>A type of HTML form element.</p>
@@ -98,7 +98,12 @@
 						</div>
 					</li>
 					<li>
-						<h4>TSharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></h4>
+						<h4>TSharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-type">any</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Form sharer component type.</p>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</section>
@@ -106,7 +111,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Builder</span>
+						<a href="module__wesib_generic_forms.formunit.controls.html" class="tsd-signature-type" data-tsd-kind="Interface">Controls</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">Body</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -117,10 +127,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.form.builder.html#control" class="tsd-kind-icon">control</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.form.builder.html#element" class="tsd-kind-icon">element</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.form.builder.html#form" class="tsd-kind-icon">form</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.form.builder.html#sharer" class="tsd-kind-icon">sharer</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic_forms.form.body.html#control" class="tsd-kind-icon">control</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.form.body.html#element" class="tsd-kind-icon">element</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_forms.form.body.html#form" class="tsd-kind-icon">form</a></li>
 							</ul>
 						</section>
 					</div>
@@ -128,35 +137,36 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="control" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> control</h3>
-					<div class="tsd-signature tsd-kind-icon">control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InBuilder</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InControl</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides <a href="module__wesib_generic_forms.formunit.controls.html">Controls</a>.<a href="module__wesib_generic_forms.formunit.controls.html#control">control</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/forms/form.ts#L358">wesib/generic/src/forms/form.ts:358</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/forms/form.ts#L325">wesib/generic/src/forms/form.ts:325</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Submittable form control builder.</p>
+							<p>Submittable form input control.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="element" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> element</h3>
-					<div class="tsd-signature tsd-kind-icon">element<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InBuilder</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">element<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InFormElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/forms/form.ts#L366">wesib/generic/src/forms/form.ts:366</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/forms/form.ts#L333">wesib/generic/src/forms/form.ts:333</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Form element control builder.</p>
+							<p>Form element control.</p>
 						</div>
-						<p>Unlike <a href="module__wesib_generic_forms.form.builder.html#control">input control</a> this one is not supposed to be submitted, but rather contains a <code>&lt;form&gt;</code>
+						<p>Unlike <a href="module__wesib_generic_forms.form.body.html#control">input control</a> this one is not supposed to be submitted, but rather contains a <code>&lt;form&gt;</code>
 						element issuing a <code>submit</code> event.</p>
 					</div>
 				</section>
@@ -166,27 +176,12 @@
 					<div class="tsd-signature tsd-kind-icon">form<span class="tsd-signature-symbol">:</span> <a href="../classes/module__wesib_generic_forms.form-1.html" class="tsd-signature-type" data-tsd-kind="Class">Form</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TModel</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TElt</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/forms/form.ts#L353">wesib/generic/src/forms/form.ts:353</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/forms/form.ts#L320">wesib/generic/src/forms/form.ts:320</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Target form.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="sharer" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> sharer</h3>
-					<div class="tsd-signature tsd-kind-icon">sharer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/forms/form.ts#L348">wesib/generic/src/forms/form.ts:348</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Sharer component context.</p>
+							<p>A form the controls belong to.</p>
 						</div>
 					</div>
 				</section>
@@ -202,30 +197,27 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic_forms.form.body.html" class="tsd-kind-icon">Body</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic_forms.form.builder.html" class="tsd-kind-icon">Builder</a>
+						<a href="module__wesib_generic_forms.form.body.html" class="tsd-kind-icon">Body</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_forms.form.builder.html#control" class="tsd-kind-icon">control</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+								<a href="module__wesib_generic_forms.form.body.html#control" class="tsd-kind-icon">control</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_forms.form.builder.html#element" class="tsd-kind-icon">element</a>
+								<a href="module__wesib_generic_forms.form.body.html#element" class="tsd-kind-icon">element</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_forms.form.builder.html#form" class="tsd-kind-icon">form</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_forms.form.builder.html#sharer" class="tsd-kind-icon">sharer</a>
+								<a href="module__wesib_generic_forms.form.body.html#form" class="tsd-kind-icon">form</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="module__wesib_generic_forms.form.builder.html" class="tsd-kind-icon">Builder</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
 						<a href="module__wesib_generic_forms.form.controls.html" class="tsd-kind-icon">Controls</a>
 					</li>
