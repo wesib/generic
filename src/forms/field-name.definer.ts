@@ -30,7 +30,7 @@ export function FormName<
     TClass extends ComponentClass = Class>(
     def?: FieldNameDef,
 ): SharedForm.Definer<TForm, TModel, TElt, TClass> {
-  return FormUnitName<TForm, TModel, Form.Controls<TModel, TElt>, TClass>(def);
+  return FormUnitName<TForm, TModel, Form.Body<TModel, TElt>, TClass>(def);
 }
 
 /**
@@ -92,10 +92,10 @@ function FormUnitName<
           setup.whenComponent(context => {
             afterAll({
               unit: context.get(share).do(
-                  digAfter_(unit => unit ? unit.readControls : afterThe<[TControls?]>()),
+                  digAfter_(unit => unit ? unit.read : afterThe<[TControls?]>()),
               ),
               form: locateForm(context).do(
-                  digAfter_((form?, _sharer?) => form ? form.readControls : afterThe<[Form.Controls<any>?]>()),
+                  digAfter_((form?, _sharer?) => form ? form.read : afterThe<[Form.Body<any>?]>()),
               ),
             }).do(
                 consumeEvents(({ unit: [field], form: [form] }): Supply | undefined => {

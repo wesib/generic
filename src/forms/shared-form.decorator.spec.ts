@@ -44,21 +44,22 @@ describe('forms', () => {
 
       const element = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
-      const form = await context.get(FormShare);
+      const form = (await context.get(FormShare))!;
 
       expect(form).toBeInstanceOf(Form);
-      expect(form?.control).toBeUndefined();
-      expect(form?.element).toBeUndefined();
+      expect(form.control).toBeUndefined();
+      expect(form.element).toBeUndefined();
 
       hasControls.it = true;
-      expect(form?.control?.aspect(Form)).toBe(form);
-      expect(form?.element).toBeInstanceOf(InElement);
+      expect(form.control?.aspect(Form)).toBe(form);
+      expect(form.element).toBeInstanceOf(InElement);
 
-      const controls = await form?.readControls;
+      const body = await form?.read;
 
-      expect(controls).toEqual({
-        control: form?.control,
-        element: form?.element,
+      expect(body).toEqual({
+        form,
+        control: form.control,
+        element: form.element,
       });
     });
   });

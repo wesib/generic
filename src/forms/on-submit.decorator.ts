@@ -9,7 +9,8 @@ import { FormShare } from './form.share';
 /**
  * Creates a decorator for component method to call on input form submit.
  *
- * The decorated method accepts a {@link Form.Whole whole form} about to be submitted, and a submit event as parameters.
+ * The decorated method accepts {@link Form.Body controls of the form} about to be submitted, and a submit event as
+ * parameters.
  *
  * @typeParam TModel - Submitted model type.
  * @typeParam TElt - A type of HTML form element.
@@ -20,7 +21,7 @@ import { FormShare } from './form.share';
  */
 export function OnSubmit<TModel = any, TElt extends HTMLElement = HTMLElement, T extends ComponentClass = Class>(
     def: OnSubmitDef<TModel, TElt> = {},
-): ComponentPropertyDecorator<(form: Form.Whole<TModel, TElt, InstanceType<T>>, event: Event) => void, T> {
+): ComponentPropertyDecorator<(form: Form.Body<TModel, TElt, InstanceType<T>>, event: Event) => void, T> {
 
   const { form: formRef = FormShare, cancel = true } = def;
   const locateForm = shareLocator(formRef, { share: FormShare, local: 'too' });
@@ -36,13 +37,13 @@ export function OnSubmit<TModel = any, TElt extends HTMLElement = HTMLElement, T
             locateForm(context).do(
                 consumeEvents((form?: Form<TModel, TElt>, _sharer?: ComponentContext) => {
 
-                  const ready = form?.asWhole();
+                  const controls = form?.body;
 
-                  if (!ready) {
+                  if (!controls) {
                     return;
                   }
 
-                  let onSubmit = ready.element.events.on('submit');
+                  let onSubmit = controls.element.events.on('submit');
 
                   if (cancel) {
                     onSubmit = onSubmit.do(
@@ -51,7 +52,7 @@ export function OnSubmit<TModel = any, TElt extends HTMLElement = HTMLElement, T
                   }
 
                   return onSubmit(
-                      event => get(component).call(component, ready, event),
+                      event => get(component).call(component, controls, event),
                   );
                 }),
             ).needs(context);

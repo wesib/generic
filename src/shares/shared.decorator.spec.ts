@@ -1,5 +1,5 @@
 import { SingleContextKey } from '@proc7ts/context-values';
-import { AfterEvent, afterThe, trackValue } from '@proc7ts/fun-events';
+import { AfterEvent, afterSupplied, afterThe, trackValue } from '@proc7ts/fun-events';
 import {
   BootstrapContext,
   Component,
@@ -110,10 +110,6 @@ describe('shares', () => {
 
       class TestShareable extends Shareable<string> {
 
-        get it(): string {
-          return this.internals;
-        }
-
       }
 
       @Component({ extend: { type: Object } })
@@ -127,10 +123,11 @@ describe('shares', () => {
       const element = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
       const shared = context.get(share2);
-      const shareable = await shared;
+      const shareable = (await shared)!;
 
       expect(shareable).toBeInstanceOf(TestShareable);
-      expect(shareable?.it).toBe('test');
+      expect(shareable.body).toBe('test');
+      expect(await afterSupplied(shareable)).toBe('test');
     });
     it('applies share extension', async () => {
 

@@ -9,11 +9,10 @@ import {
   InFormElement,
   nullInAspect,
 } from '@frontmeans/input-aspects';
-import { AfterEvent, afterValue, deduplicateAfter, digAfter_ } from '@proc7ts/fun-events';
+import { AfterEvent, afterValue, deduplicateAfter_, digAfter_, mapAfter } from '@proc7ts/fun-events';
 import { lazyValue, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { Shareable } from '../shares';
-import { Field } from './field';
 import { FormPreset } from './form-preset';
 import { FormUnit } from './form-unit';
 
@@ -42,7 +41,7 @@ const Form__aspect: Form$Aspect = {
  * @typeParam TSharer - Form sharer component type.
  */
 export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = any>
-    extends FormUnit<TModel, Form.Controls<TModel, TElt>, TSharer> {
+    extends FormUnit<TModel, Form.Body<TModel, TElt>, TSharer> {
 
   /**
    * Builds a user input form for the given form control and HTML element.
@@ -112,8 +111,8 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
       let element = (): InFormElement<TElt> => builder.element.build(
           // Allow recurrent access to `Form` aspect during control setup.
           opts => (element = lazyValue(() => elementFactory({
-            ...opts,
             form: control(),
+            ...opts,
           })))(),
       );
 
@@ -131,8 +130,8 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
   /**
    * An input control aspect representing a form this control belongs to.
    *
-   * This aspect is available in {@link Form.Controls.control submittable form control} and {@link Form.Controls.element
-   * form element control}.
+   * This aspect is available in {@link Form.Body.control submittable form control} and {@link Form.Body.element form
+   * element control}.
    */
   static get [InAspect__symbol](): InAspect<Form.Whole | null> {
     return Form__aspect;
@@ -156,16 +155,7 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
    * element issuing a `submit` event.
    */
   get element(): InFormElement<TElt> | undefined {
-    return this.internals?.element;
-  }
-
-  /**
-   * Returns this form if it is {@link Form.Whole whole}.
-   *
-   * @returns Either `this` form instance when it contains controls, or `undefined` otherwise.
-   */
-  asWhole(): Form.Whole<TModel, TElt, TSharer> | undefined {
-    return this.internals && (this as Form.Whole<TModel, TElt, TSharer>);
+    return this.body?.element;
   }
 
   toString(): string {
@@ -177,7 +167,7 @@ export class Form<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer 
 function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>(
     form: () => Form<TModel, TElt, TSharer>,
     provider: Form.Provider<TModel, TElt, TSharer>,
-): Shareable.Provider<Form.Controls<TModel, TElt> | undefined, TSharer> {
+): Shareable.Provider<Form.Body<TModel, TElt> | undefined, TSharer> {
 
   const formAspect: InConverter.Aspect.Factory<any> = control => ({
     applyAspect<TInstance, TKind extends InAspect.Application.Kind>(
@@ -205,13 +195,24 @@ function Form$provider<TModel, TElt extends HTMLElement, TSharer extends object>
 
         return afterValue(provider(builder));
       }),
-      deduplicateAfter(Form$isDuplicateControls, ([controls]) => controls),
+      deduplicateAfter_(Form$isDuplicateControls, ([controls]) => controls),
+      mapAfter(controls => controls && {
+        get form() {
+          return form();
+        },
+        get control() {
+          return controls!.control;
+        },
+        get element() {
+          return controls!.element;
+        },
+      }),
   );
 }
 
 function Form$isDuplicateControls<TModel, TElt extends HTMLElement>(
-    prior?: Form.Controls<TModel, TElt>,
-    next?: Form.Controls<TModel, TElt>,
+    prior: Form.Controls<TModel, TElt> | undefined,
+    next: Form.Controls<TModel, TElt> | undefined,
 ): boolean {
 
   let duplicate = true;
@@ -241,7 +242,7 @@ export namespace Form {
       TModel = any,
       TElt extends HTMLElement = HTMLElement,
       TSharer extends object = any>
-      extends Form<TModel, TElt, TSharer>, Form.Controls<TModel, TElt> {
+      extends Form<TModel, TElt, TSharer>, Form.Body<TModel, TElt> {
 
     /**
      * Submittable form input control.
@@ -278,7 +279,7 @@ export namespace Form {
    * @typeParam TModel - A model type of the form, i.e. a type of its control value.
    * @typeParam TElt - A type of HTML form element.
    */
-  export interface Controls<TModel, TElt extends HTMLElement = HTMLElement> extends Field.Controls<TModel> {
+  export interface Controls<TModel, TElt extends HTMLElement = HTMLElement> extends FormUnit.Controls<TModel> {
 
     /**
      * Submittable form input control.
@@ -292,6 +293,39 @@ export namespace Form {
      * element issuing a `submit` event.
      */
     readonly element: InFormElement<TElt>;
+
+  }
+
+  /**
+   * Form body containing input controls.
+   *
+   * @typeParam TModel - A model type of the form, i.e. a type of its control value.
+   * @typeParam TElt - A type of HTML form element.
+   * @typeParam TSharer - Form sharer component type.
+   */
+  export interface Body<
+      TModel,
+      TElt extends HTMLElement = HTMLElement,
+      TSharer extends object = any,
+      > extends Controls<TModel, TElt> {
+
+    /**
+     * Submittable form input control.
+     */
+    readonly control: InControl<TModel>;
+
+    /**
+     * Form element control.
+     *
+     * Unlike {@link control input control} this one is not supposed to be submitted, but rather contains a `<form>`
+     * element issuing a `submit` event.
+     */
+    readonly element: InFormElement<TElt>;
+
+    /**
+     * A form the controls belong to.
+     */
+    readonly form: Form<TModel, TElt, TSharer>;
 
   }
 
