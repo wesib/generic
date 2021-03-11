@@ -1,6 +1,6 @@
 import { InControl } from '@frontmeans/input-aspects';
 import { SingleContextUpKey, SingleContextUpRef } from '@proc7ts/context-values/updatable';
-import { Supply } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { ComponentContext } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 

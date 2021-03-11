@@ -1,7 +1,7 @@
 import { InControl, InMode, inModeByValidity, InParents } from '@frontmeans/input-aspects';
 import { consumeEvents } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
 import { itsEach } from '@proc7ts/push-iterator';
+import { Supply } from '@proc7ts/supply';
 import { Field } from '../field';
 import { Form } from '../form';
 import { FormScope } from '../form-scope';

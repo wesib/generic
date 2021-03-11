@@ -12,8 +12,9 @@ import {
   supplyAfter,
   translateAfter_,
 } from '@proc7ts/fun-events';
-import { Class, noop, Supply } from '@proc7ts/primitives';
+import { Class, noop } from '@proc7ts/primitives';
 import { mapIt } from '@proc7ts/push-iterator';
+import { Supply } from '@proc7ts/supply';
 import {
   Component,
   ComponentClass,

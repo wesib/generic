@@ -1,5 +1,6 @@
 import { ContextBuilder, ContextBuilder__symbol, ContextRegistry } from '@proc7ts/context-values';
-import { Class, Supply } from '@proc7ts/primitives';
+import { Class } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { FeatureDef, FeatureDef__symbol } from '@wesib/wesib';
 import { Field } from '../field';
 import { Form } from '../form';

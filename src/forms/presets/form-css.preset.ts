@@ -1,5 +1,5 @@
 import { InControl, InCssClasses, inCssError, inCssInfo } from '@frontmeans/input-aspects';
-import { Supply } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { Field } from '../field';
 import { Form } from '../form';
 import { ScopedFormConfig } from '../scoped-form-config';

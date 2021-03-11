@@ -1,6 +1,7 @@
 import { InControl, InConverter } from '@frontmeans/input-aspects';
 import { afterAll, AfterEvent, afterThe, consumeEvents, digAfter_, EventKeeper } from '@proc7ts/fun-events';
-import { Class, Supply } from '@proc7ts/primitives';
+import { Class } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { Component, ComponentClass, ComponentContext, ComponentDecorator } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { DefaultInAspects } from './default-in-aspects';

@@ -1,6 +1,6 @@
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 import { trackValue, ValueTracker } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { bootstrapDefault, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
 import { Share } from './share';
 

@@ -1,7 +1,7 @@
 import { applyContextTo, ContextBuilder, ContextBuilder__symbol, ContextRegistry } from '@proc7ts/context-values';
 import { applyContextAfter } from '@proc7ts/context-values/updatable';
 import { AfterEvent, isAfterEvent, translateAfter } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { ComponentContext } from '@wesib/wesib';
 import { Share } from './share';
 import { Share__symbol } from './share-ref';

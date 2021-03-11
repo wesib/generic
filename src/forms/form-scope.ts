@@ -1,5 +1,6 @@
 import { InControl, InRole } from '@frontmeans/input-aspects';
-import { arrayOfElements, neverSupply, Supply, SupplyPeer } from '@proc7ts/primitives';
+import { arrayOfElements } from '@proc7ts/primitives';
+import { neverSupply, Supply, SupplyPeer } from '@proc7ts/supply';
 
 /**
  * A scope of form setup applicability.

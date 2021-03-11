@@ -1,5 +1,5 @@
 import { EventEmitter, OnEvent, ValueTracker } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { ComponentContext, ComponentState, domPropertyPathTo } from '@wesib/wesib';
 
 /**

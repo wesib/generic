@@ -1,6 +1,6 @@
 import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { AfterEvent } from '@proc7ts/fun-events';
-import { Supply, SupplyPeer } from '@proc7ts/primitives';
+import { Supply, SupplyPeer } from '@proc7ts/supply';
 import { ComponentContext } from '@wesib/wesib';
 import { ShareRef } from './share-ref';
 
