@@ -77,15 +77,6 @@ export class AdjacentField<
     ));
   }
 
-  /**
-   * Indicates that this field is adjacent to another form unit.
-   *
-   * Always `true`.
-   */
-  get isAdjacent(): true {
-    return true;
-  }
-
 }
 
 export namespace AdjacentField {

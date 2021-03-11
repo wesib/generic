@@ -78,7 +78,6 @@ describe('shares', () => {
       const button = await ButtonShare[Share__symbol].valueFor(context, { local: true });
 
       expect(button).toBeInstanceOf(AdjacentField);
-      expect(button?.isAdjacent).toBe(true);
       expect(button?.control).toBeInstanceOf(InElement);
     });
 
@@ -122,7 +121,6 @@ describe('shares', () => {
       const indicator = await IndicatorShare[Share__symbol].valueFor(context, { local: true });
 
       expect(indicator).toBeInstanceOf(AdjacentField);
-      expect(indicator?.isAdjacent).toBe(true);
       expect(indicator?.control).toBeUndefined();
 
       hasField.it = true;
