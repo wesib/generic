@@ -1,5 +1,5 @@
 import { InBuilder, InControl } from '@frontmeans/input-aspects';
-import { AfterEvent, afterValue, deduplicateAfter, digAfter_ } from '@proc7ts/fun-events';
+import { AfterEvent, afterValue, deduplicateAfter_, digAfter_, mapAfter } from '@proc7ts/fun-events';
 import { valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { Shareable } from '../shares';
@@ -18,7 +18,7 @@ import { FormUnit } from './form-unit';
  * @typeParam TValue - Field value type.
  * @typeParam TSharer - Field sharer component type.
  */
-export class Field<TValue, TSharer extends object = any> extends FormUnit<TValue, Field.Controls<TValue>, TSharer> {
+export class Field<TValue, TSharer extends object = any> extends FormUnit<TValue, Field.Body<TValue>, TSharer> {
 
   /**
    * Creates a form field by the given field control factory.
@@ -87,6 +87,25 @@ export namespace Field {
   }
 
   /**
+   * Form field body containing its input control.
+   *
+   * @typeParam TValue - Input value type.
+   */
+  export interface Body<TValue, TSharer extends object = any> extends FormUnit.Controls<TValue> {
+
+    /**
+     * A field the input control belongs to.
+     */
+    readonly field: Field<TValue, TSharer>;
+
+    /**
+     * Field input control.
+     */
+    readonly control: InControl<TValue>;
+
+  }
+
+  /**
    * Form field builder.
    *
    * @typeParam TValue - Field value type.
@@ -133,7 +152,7 @@ export namespace Field {
 function Field$provider<TValue, TSharer extends object>(
     field: () => Field<TValue, TSharer>,
     provider: Field.Provider<TValue>,
-): Shareable.Provider<Field.Controls<TValue> | undefined, TSharer> {
+): Shareable.Provider<Field.Body<TValue> | undefined, TSharer> {
   return sharer => sharer.get(FormPreset).rules.do(
       digAfter_(preset => {
 
@@ -147,7 +166,8 @@ function Field$provider<TValue, TSharer extends object>(
 
         return afterValue(provider(builder));
       }),
-      deduplicateAfter(Field$isDuplicateControls, ([controls]) => controls),
+      deduplicateAfter_(Field$isDuplicateControls, ([controls]) => controls),
+      mapAfter(controls => controls && { field: field(), control: controls.control }),
   );
 }
 

@@ -307,7 +307,12 @@ export namespace Form {
       TModel,
       TElt extends HTMLElement = HTMLElement,
       TSharer extends object = any,
-      > extends Controls<TModel, TElt> {
+      > extends FormUnit.Controls<TModel> {
+
+    /**
+     * A form the controls belong to.
+     */
+    readonly form: Form<TModel, TElt, TSharer>;
 
     /**
      * Submittable form input control.
@@ -321,11 +326,6 @@ export namespace Form {
      * element issuing a `submit` event.
      */
     readonly element: InFormElement<TElt>;
-
-    /**
-     * A form the controls belong to.
-     */
-    readonly form: Form<TModel, TElt, TSharer>;
 
   }
 
