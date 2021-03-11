@@ -43,7 +43,7 @@ describe('forms', () => {
 
         field[Contextual__symbol](context);
 
-        expect(field.control).toBe(control1);
+        expect(field.body).toEqual({ field, control: control1 });
         expect(control1.supply.isOff).toBe(false);
 
         controls.it = { control: control1 };

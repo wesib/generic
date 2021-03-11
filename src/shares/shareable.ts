@@ -15,30 +15,31 @@ const Shareable$Internals__symbol = (/*#__PURE__*/ Symbol('Shareable.internals')
 /**
  * Abstract implementation of value shareable by component.
  *
- * Shareable instance contains {@link internals} that become usable only when bound to sharer component.
+ * Shareable instance contains a {@link body} that become usable only when bound to sharer component.
  *
- * @typeParam TInternals - Internals data type.
+ * @typeParam TBody - Shareable body type.
  * @typeParam TSharer - Sharer component type.
  */
-export abstract class Shareable<TInternals = unknown, TSharer extends object = any>
-    implements EventKeeper<[TInternals]>, Contextual<Shareable<TInternals, TSharer>> {
+export class Shareable<TBody = unknown, TSharer extends object = any>
+    implements EventKeeper<[TBody]>, Contextual<Shareable<TBody, TSharer>> {
 
   /**
-   * Converts shareable internals or their provider to provider that always returns an `AfterEvent` keeper of
-   * shareable internals.
+   * Converts shareable body or its provider to provider that always returns an `AfterEvent` keeper of shareable body.
    *
-   * @param internals - Either shareable internals, or their provider.
+   * @typeParam TBody - Shareable body type.
+   * @typeParam TSharer - Sharer component type.
+   * @param body - Either shareable body, or its provider.
    *
-   * @returns Shareable internals provider.
+   * @returns Shareable body provider.
    */
-  static provider<TInternals = unknown, TSharer extends object = any>(
-      internals: TInternals | Shareable.Provider<TInternals, TSharer>,
+  static provider<TBody = unknown, TSharer extends object = any>(
+      body: TBody | Shareable.Provider<TBody, TSharer>,
   ): (
       this: void,
       sharer: ComponentContext<TSharer>,
-  ) => AfterEvent<[TInternals]> {
+  ) => AfterEvent<[TBody]> {
 
-    const provider = valueRecipe(internals);
+    const provider = valueRecipe(body);
 
     return context => afterValue(provider(context));
   }
@@ -46,19 +47,33 @@ export abstract class Shareable<TInternals = unknown, TSharer extends object = a
   /**
    * @internal
    */
-  private [Shareable$Internals__symbol]: Shareable$Internals<TInternals, TSharer>;
+  private [Shareable$Internals__symbol]: Shareable$Internals<TBody, TSharer>;
 
   /**
    * Constructs shareable instance.
    *
-   * @param internals - Either shareable internals, or their provider.
+   * @param body - Either shareable body, or its provider.
    */
-  constructor(internals: TInternals | Shareable.Provider<TInternals, TSharer>) {
-    this[Shareable$Internals__symbol] = new Shareable$Internals(this, internals);
+  constructor(body: TBody | Shareable.Provider<TBody, TSharer>) {
+    this[Shareable$Internals__symbol] = new Shareable$Internals(this, body);
   }
 
+  /**
+   * Sharer component context.
+   *
+   * Accessing it throws an exception until bound to sharer.
+   */
   get sharer(): ComponentContext<TSharer> {
     return this[Shareable$Internals__symbol].sharer();
+  }
+
+  /**
+   * An `AfterEvent` keeper of shareable body.
+   *
+   * An `[AfterEvent__symbol]` method always returns this value.
+   */
+  get read(): AfterEvent<[TBody]> {
+    return this[Shareable$Internals__symbol].get().read;
   }
 
   /**
@@ -73,16 +88,16 @@ export abstract class Shareable<TInternals = unknown, TSharer extends object = a
     return this;
   }
 
-  [AfterEvent__symbol](): AfterEvent<[TInternals]> {
-    return this[Shareable$Internals__symbol].get().read;
+  [AfterEvent__symbol](): AfterEvent<[TBody]> {
+    return this.read;
   }
 
   /**
-   * Shareable internals.
+   * Shareable body.
    *
-   * Accessing these internals throws an exception until bound to sharer.
+   * Accessing is throws an exception until bound to sharer.
    */
-  protected get internals(): TInternals {
+  get body(): TBody {
     return this[Shareable$Internals__symbol].get().it;
   }
 
@@ -93,43 +108,43 @@ export namespace Shareable {
   /**
    * Shareable provider signature.
    *
-   * Provides shareable internals rather the shareable instance itself.
+   * Provides shareable body rather the shareable instance itself.
    *
-   * @typeParam TInternals - Internals data type.
+   * @typeParam TBody - Shareable body type.
    * @typeParam TSharer - Sharer component type.
    */
-  export type Provider<TInternals = unknown, TSharer extends object = any> =
+  export type Provider<TBody = unknown, TSharer extends object = any> =
   /**
    * @param sharer - Sharer component context.
    *
-   * @returns Either shareable internals instance, or an `AfterEvent` keeper reporting one.
+   * @returns Either shareable body instance, or an `AfterEvent` keeper reporting one.
    */
       (
           this: void,
           sharer: ComponentContext<TSharer>,
-      ) => TInternals | AfterEvent<[TInternals]>;
+      ) => TBody | AfterEvent<[TBody]>;
 
 }
 
-class Shareable$Internals<TInternals, TSharer extends object> {
+class Shareable$Internals<TBody, TSharer extends object> {
 
   private readonly _get: (
       this: void,
       sharer: ComponentContext<TSharer>,
-  ) => AfterEvent<[TInternals]>;
+  ) => AfterEvent<[TBody]>;
 
   constructor(
-      private readonly _source: Shareable<TInternals, TSharer>,
-      internals: TInternals | Shareable.Provider<TInternals, TSharer>,
+      private readonly _source: Shareable<TBody, TSharer>,
+      body: TBody | Shareable.Provider<TBody, TSharer>,
   ) {
-    this._get = Shareable.provider(internals);
+    this._get = Shareable.provider(body);
   }
 
   sharer(): ComponentContext<TSharer> {
     this._notBound();
   }
 
-  get(): ValueTracker<TInternals> {
+  get(): ValueTracker<TBody> {
     this._notBound();
   }
 

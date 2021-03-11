@@ -66,7 +66,7 @@ export function adjacentToField<TValue, TSharer extends object = any>(
 export function adjacentToForm<TValue, TSharer extends object = any>(
     controls:
         | Field.Controls<TValue>
-        | AdjacentField.Provider<TValue, Form<unknown>, Form.Controls<unknown>, TSharer>,
+        | AdjacentField.Provider<TValue, Form<unknown>, Form.Body<unknown>, TSharer>,
     adjacentTo: ShareLocator.Mandatory<Form<unknown>> = FormShare,
 ): Field<TValue, TSharer> {
   return adjacentField(controls, adjacentTo);
@@ -152,7 +152,7 @@ function AdjacentField$provider<
 ): Field.Provider<TValue, TSharer> {
   return builder => adjacentLocator(builder.sharer).do(
       digAfter((adjacentTo?: TAdjacentTo, _sharer?): AfterEvent<[Field.Controls<TValue>?]> => adjacentTo
-          ? adjacentTo.readControls.do(
+          ? adjacentTo.read.do(
               digAfter((adjusted?: TAdjusted): AfterEvent<[Field.Controls<TValue>?]> => adjusted
                   ? afterValue(provider({
                     ...builder,

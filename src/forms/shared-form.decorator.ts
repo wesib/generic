@@ -56,7 +56,7 @@ export function SharedForm<
     ...define: SharedForm.Definer<TForm, TModel, TElt, TClass>[]
 ): ShareDecorator<TForm, TClass> {
   if (typeof defOrDefiner === 'function') {
-    return SharedFormUnit<TForm, TModel, Form.Controls<TModel, TElt>, TClass>(
+    return SharedFormUnit<TForm, TModel, Form.Body<TModel, TElt>, TClass>(
         FormShare as ShareRef<any> as ShareRef<TForm>,
         defOrDefiner,
         ...define,
@@ -65,7 +65,7 @@ export function SharedForm<
 
   const { share = FormShare as ShareRef<any> as ShareRef<TForm> } = defOrDefiner;
 
-  return SharedFormUnit<TForm, TModel, Form.Controls<TModel, TElt>, TClass>(share, ...define);
+  return SharedFormUnit<TForm, TModel, Form.Body<TModel, TElt>, TClass>(share, ...define);
 }
 
 /**
@@ -105,7 +105,7 @@ export namespace SharedForm {
       TModel = Form.ModelType<TForm>,
       TElt extends HTMLElement = Form.ElementType<TForm>,
       TClass extends ComponentClass = Class>
-      extends SharedFormUnit.Descriptor<TForm, TModel, Form.Controls<TModel, TElt>, TClass> {
+      extends SharedFormUnit.Descriptor<TForm, TModel, Form.Body<TModel, TElt>, TClass> {
 
     /**
      * Target form share instance.
@@ -152,6 +152,6 @@ export namespace SharedForm {
       TModel = Form.ModelType<TForm>,
       TElt extends HTMLElement = Form.ElementType<TForm>,
       TClass extends ComponentClass = Class> =
-      SharedFormUnit.Definition<TForm, TModel, Form.Controls<TModel, TElt>, TClass>;
+      SharedFormUnit.Definition<TForm, TModel, Form.Body<TModel, TElt>, TClass>;
 
 }
