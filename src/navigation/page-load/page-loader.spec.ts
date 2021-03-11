@@ -1,5 +1,6 @@
 import { EventReceiver, mapOn_, onEventBy, onPromise } from '@proc7ts/fun-events';
-import { noop, Supply } from '@proc7ts/primitives';
+import { noop } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { bootstrapComponents, BootstrapContext, Feature } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { Page } from '../page';

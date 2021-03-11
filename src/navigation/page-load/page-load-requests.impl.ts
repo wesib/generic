@@ -8,8 +8,9 @@ import {
   shareOn,
   supplyOn,
 } from '@proc7ts/fun-events';
-import { neverSupply, noop, Supply } from '@proc7ts/primitives';
+import { noop } from '@proc7ts/primitives';
 import { flatMapIt, itsEach, itsEvery, overIterator, PushIterable } from '@proc7ts/push-iterator';
+import { neverSupply, Supply } from '@proc7ts/supply';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageParam } from '../page-param';
@@ -87,7 +88,7 @@ export class PageLoadRequests {
   handle(): PageParam.Handle<void, PageLoadRequest> {
 
     const self = this;
-    const pageSupply = new Supply();
+    const pageSupply = new Supply(noop);
     let loadSupply = neverSupply();
 
     return {
@@ -112,7 +113,7 @@ export class PageLoadRequests {
           return;
         }
 
-        loadSupply = new Supply().needs(pageSupply);
+        loadSupply = new Supply(noop).needs(pageSupply);
 
         const onLoad = onEventBy<[PageLoadResponse]>(responseReceiver => {
 

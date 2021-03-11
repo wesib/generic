@@ -1,5 +1,5 @@
 import { InControl } from '@frontmeans/input-aspects';
-import { Supply, SupplyPeer } from '@proc7ts/primitives';
+import { Supply, SupplyPeer } from '@proc7ts/supply';
 import { FormScope } from './form-scope';
 
 /**

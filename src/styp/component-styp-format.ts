@@ -14,7 +14,8 @@ import {
   StypSubSelector,
 } from '@frontmeans/style-producer';
 import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
-import { elementOrArray, extendSetOfElements, setOfElements, Supply, valueProvider } from '@proc7ts/primitives';
+import { elementOrArray, extendSetOfElements, setOfElements, valueProvider } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { ComponentContext, ShadowContentRoot } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
 import { componentStypDomFormatConfig } from './component-styp-dom.format-config';

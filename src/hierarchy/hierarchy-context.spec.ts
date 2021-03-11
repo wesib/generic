@@ -1,6 +1,7 @@
 import { MultiContextUpKey, MultiContextUpRef } from '@proc7ts/context-values/updatable';
 import { onceAfter } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
+import { noop } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { bootstrapComponents, BootstrapRoot, Component, DefinitionContext, Feature } from '@wesib/wesib';
 import { HierarchyContext } from './hierarchy-context';
 
@@ -48,6 +49,10 @@ describe('hierarchy', () => {
       testHierarchy = defContext.mountTo(testElement).context.get(HierarchyContext);
     });
 
+    afterEach(() => {
+      Supply.onUnexpectedAbort();
+    });
+
     describe('up', () => {
 
       let parentHierarchy: HierarchyContext | undefined;
@@ -70,6 +75,7 @@ describe('hierarchy', () => {
         rootHierarchy.up.do(onceAfter)(upper => expect(upper).toBeUndefined());
       });
       it('is destroyed after component disconnection', () => {
+        Supply.onUnexpectedAbort(noop);
 
         const reason = 'test';
 

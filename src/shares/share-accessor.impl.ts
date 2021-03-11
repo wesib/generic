@@ -1,6 +1,7 @@
 import { Contextual__symbol, isContextual } from '@proc7ts/context-values';
 import { AfterEvent, isAfterEvent, trackValue, trackValueBy, ValueTracker } from '@proc7ts/fun-events';
-import { noop, Supply } from '@proc7ts/primitives';
+import { noop } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { ComponentClass, ComponentContext, ComponentInstance, ComponentProperty } from '@wesib/wesib';
 
 /**

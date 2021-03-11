@@ -1,5 +1,6 @@
 import { onceAfter } from '@proc7ts/fun-events';
-import { Class, noop, Supply, valueProvider } from '@proc7ts/primitives';
+import { Class, noop, valueProvider } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import {
   BootstrapWindow,
   Component,

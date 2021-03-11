@@ -40,19 +40,20 @@
     }
   },
   "peerDependencies": {
-    "@frontmeans/input-aspects": "^4.2.0",
+    "@frontmeans/input-aspects": "^4.3.0",
     "@frontmeans/namespace-aliaser": "^2.3.0",
-    "@frontmeans/style-producer": "^6.0.0",
-    "@proc7ts/context-values": "^6.0.0",
-    "@proc7ts/fun-events": "^10.3.1",
-    "@wesib/wesib": "^1.0.0-beta.34"
+    "@frontmeans/style-producer": "^6.1.0",
+    "@proc7ts/context-values": "^6.1.0",
+    "@proc7ts/fun-events": "^10.4.0",
+    "@wesib/wesib": "^1.0.0-beta.36"
   },
   "dependencies": {
-    "@frontmeans/dom-events": "^1.0.1",
+    "@frontmeans/dom-events": "^1.1.0",
     "@frontmeans/render-scheduler": "^1.5.0",
     "@hatsy/http-header-value": "^3.5.3",
-    "@proc7ts/primitives": "^1.8.1",
-    "@proc7ts/push-iterator": "^2.5.0"
+    "@proc7ts/primitives": "^2.0.0",
+    "@proc7ts/push-iterator": "^2.5.0",
+    "@proc7ts/supply": "^1.0.0"
   },
   "peerDependenciesMeta": {
     "@proc7ts/input-aspects": {
@@ -63,29 +64,29 @@
     }
   },
   "devDependencies": {
-    "@frontmeans/input-aspects": "^4.2.0",
+    "@frontmeans/input-aspects": "^4.3.0",
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/render-scheduler": "^1.5.0",
-    "@frontmeans/style-producer": "^6.0.0",
-    "@proc7ts/context-values": "^6.0.0",
-    "@proc7ts/fun-events": "^10.3.1",
+    "@frontmeans/style-producer": "^6.1.0",
+    "@proc7ts/context-values": "^6.1.0",
+    "@proc7ts/fun-events": "^10.4.0",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@run-z/eslint-config": "^1.2.1",
     "@run-z/rollup-helpers": "^1.0.0",
     "@types/jest": "^26.0.20",
-    "@types/jsdom": "^16.2.6",
+    "@types/jsdom": "^16.2.7",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
-    "@wesib/wesib": "^1.0.0-beta.34",
+    "@wesib/wesib": "^1.0.0-beta.36",
     "cross-fetch": "^3.0.6",
     "eslint": "^7.21.0",
-    "eslint-plugin-jest": "^24.1.9",
+    "eslint-plugin-jest": "^24.2.1",
     "gh-pages": "^3.1.0",
     "jest": "^26.6.3",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-junit": "^12.0.0",
-    "rollup": "^2.40.0",
+    "rollup": "^2.41.1",
     "rollup-plugin-flat-dts": "^1.0.3",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.30.0",

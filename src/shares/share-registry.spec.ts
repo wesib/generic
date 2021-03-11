@@ -1,5 +1,5 @@
 import { ValueTracker } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { BootstrapContext, Component, DefinitionContext } from '@wesib/wesib';
 import { testDefinition } from '../spec/test-element';
 import { Share } from './share';

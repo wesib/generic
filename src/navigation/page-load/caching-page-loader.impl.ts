@@ -1,5 +1,6 @@
 import { OnEvent, onEventBy, supplyOn, trackValue, valueOn_ } from '@proc7ts/fun-events';
-import { asis, Supply } from '@proc7ts/primitives';
+import { asis } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { Page } from '../page';
 import { PageLoadResponse } from './page-load-response';
 import { PageLoader } from './page-loader.impl';

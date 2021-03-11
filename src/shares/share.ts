@@ -13,7 +13,7 @@ import {
   shareAfter,
   translateAfter_,
 } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import {
   BootstrapContext,
   ComponentContext,

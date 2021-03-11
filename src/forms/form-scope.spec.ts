@@ -1,5 +1,6 @@
 import { InAspect, InAspect__symbol, InControl, InRole, inValue } from '@frontmeans/input-aspects';
-import { noop, Supply } from '@proc7ts/primitives';
+import { noop } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { FormScope } from './form-scope';
 
 describe('forms', () => {

@@ -1,6 +1,6 @@
 import { DomEventDispatcher } from '@frontmeans/dom-events';
 import { EventEmitter, onceOn, OnEvent, onEventBy } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';

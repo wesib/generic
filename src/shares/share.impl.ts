@@ -1,7 +1,8 @@
 import { html__naming } from '@frontmeans/namespace-aliaser';
 import { ContextUpKey } from '@proc7ts/context-values/updatable';
 import { AfterEvent } from '@proc7ts/fun-events';
-import { arrayOfElements, Supply } from '@proc7ts/primitives';
+import { arrayOfElements } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { BootstrapContext, DefinitionContext } from '@wesib/wesib';
 import { Share } from './share';
 import { ShareKey } from './share-key.impl';

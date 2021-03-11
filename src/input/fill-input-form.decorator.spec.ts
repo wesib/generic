@@ -1,6 +1,7 @@
 import { InControl, InElement, InFormElement, inFormElement, InGroup, inGroup } from '@frontmeans/input-aspects';
 import { afterThe, onceAfter } from '@proc7ts/fun-events';
-import { noop, Supply } from '@proc7ts/primitives';
+import { noop } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { bootstrapComponents, ComponentMount } from '@wesib/wesib';
 import { HierarchyContext } from '../hierarchy';
 import { FillInputForm, FillInputFormDef } from './fill-input-form.decorator';

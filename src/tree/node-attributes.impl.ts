@@ -1,5 +1,5 @@
 import { EventEmitter, eventReceiver, EventReceiver, OnEvent, onEventBy, ValueTracker } from '@proc7ts/fun-events';
-import { neverSupply, Supply } from '@proc7ts/primitives';
+import { neverSupply, Supply } from '@proc7ts/supply';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
 
 /**
