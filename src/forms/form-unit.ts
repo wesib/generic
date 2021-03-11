@@ -56,7 +56,7 @@ export abstract class FormUnit<
 export namespace FormUnit {
 
   /**
-   * A value type of the given form unit.
+   * A value type for the given form unit type.
    *
    * @typeParam TUnit - Target unit type.
    */
@@ -64,12 +64,20 @@ export namespace FormUnit {
       TUnit extends FormUnit<infer TValue, any, any> ? TValue : never;
 
   /**
-   * A controls type of the given form unit.
+   * A type of controls type for the given form unit type.
    *
    * @typeParam TUnit - Target unit type.
    */
   export type ControlsType<TUnit extends FormUnit<any, any, any>> =
-      TUnit extends FormUnit<any, any, infer TControls> ? TControls : never;
+      TUnit extends FormUnit<any, infer TControls, any> ? TControls : never;
+
+  /**
+   * A type of the sharer for the given form unit type.
+   *
+   * @typeParam TUnit - Target unit type.
+   */
+  export type SharerType<TUnit extends FormUnit<any, any, any>> =
+      TUnit extends FormUnit<any, any, infer TSharer> ? TSharer : never;
 
   /**
    * Form unit controls.

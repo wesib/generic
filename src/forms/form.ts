@@ -231,6 +231,34 @@ function Form$isDuplicateControls<TModel, TElt extends HTMLElement>(
 export namespace Form {
 
   /**
+   * A whole form instance containing controls.
+   *
+   * @typeParam TModel - A model type of the form, i.e. a type of its control value.
+   * @typeParam TElt - A type of HTML form element.
+   * @typeParam TSharer - Form sharer component type.
+   */
+  export interface Whole<
+      TModel = any,
+      TElt extends HTMLElement = HTMLElement,
+      TSharer extends object = any>
+      extends Form<TModel, TElt, TSharer>, Form.Controls<TModel, TElt> {
+
+    /**
+     * Submittable form input control.
+     */
+    readonly control: InControl<TModel>;
+
+    /**
+     * Form element control.
+     *
+     * Unlike {@link control input control} this one is not supposed to be submitted, but rather contains a `<form>`
+     * element issuing a `submit` event.
+     */
+    readonly element: InFormElement<any>;
+
+  }
+
+  /**
    * A model type of the given form.
    *
    * @typeParam TForm - Form type.
@@ -317,27 +345,6 @@ export namespace Form {
           this: void,
           builder: Builder<TModel, TElt, TSharer>,
       ) => Controls<TModel, TElt> | AfterEvent<[Controls<TModel, TElt>?]>;
-
-  /**
-   * A whole form instance containing controls.
-   */
-  export interface Whole<TModel = any, TElt extends HTMLElement = HTMLElement, TSharer extends object = any>
-      extends Form<TModel, TElt, TSharer>, Form.Controls<TModel, TElt> {
-
-     /**
-      * Submittable form input control.
-      */
-     readonly control: InControl<TModel>;
-
-     /**
-      * Form element control.
-      *
-      * Unlike {@link control input control} this one is not supposed to be submitted, but rather contains a `<form>`
-      * element issuing a `submit` event.
-      */
-     readonly element: InFormElement<any>;
-
-   }
 
 }
 
