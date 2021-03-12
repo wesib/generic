@@ -30,10 +30,6 @@
       "import": "./dist/wesib.forms.js",
       "require": "./dist/wesib.forms.cjs"
     },
-    "./input": {
-      "import": "./dist/wesib.input.js",
-      "require": "./dist/wesib.input.cjs"
-    },
     "./styp": {
       "import": "./dist/wesib.styp.js",
       "require": "./dist/wesib.styp.cjs"

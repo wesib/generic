@@ -11,7 +11,6 @@ export default {
   input: {
     'wesib.generic': './src/index.ts',
     'wesib.forms': './src/forms/index.ts',
-    'wesib.input': './src/input/index.ts',
     'wesib.styp': './src/styp/index.ts',
   },
   plugins: [
@@ -32,9 +31,6 @@ export default {
   manualChunks(id) {
     if (id.startsWith(path.resolve('src', 'forms') + path.sep)) {
       return 'wesib.forms';
-    }
-    if (id.startsWith(path.resolve('src', 'input') + path.sep)) {
-      return 'wesib.input';
     }
     if (id.startsWith(path.resolve('src', 'styp') + path.sep)) {
       return 'wesib.styp';
@@ -67,9 +63,6 @@ export default {
           entries: {
             forms: {
               file: 'forms/index.d.ts',
-            },
-            input: {
-              file: 'input/index.d.ts',
             },
             styp: {
               file: 'styp/index.d.ts',
