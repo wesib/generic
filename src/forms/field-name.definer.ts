@@ -1,6 +1,6 @@
 import { InGroup } from '@frontmeans/input-aspects';
-import { afterAll, afterThe, consumeEvents, digAfter_ } from '@proc7ts/fun-events';
-import { Class } from '@proc7ts/primitives';
+import { afterAll, consumeEvents, digAfter_ } from '@proc7ts/fun-events';
+import { asis, Class, valuesProvider } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { ComponentClass } from '@wesib/wesib';
 import { shareLocator, ShareLocator } from '../shares';
@@ -93,10 +93,10 @@ function FormUnitName<
           setup.whenComponent(context => {
             afterAll({
               unit: context.get(share).do(
-                  digAfter_(unit => unit ? unit.read : afterThe<[TControls?]>()),
+                  digAfter_(asis, valuesProvider<[TControls?]>()),
               ),
               form: locateForm(context).do(
-                  digAfter_((form?, _sharer?) => form ? form.read : afterThe<[Form.Body<any>?]>()),
+                  digAfter_((form?, _sharer?) => form, valuesProvider<[FormUnit.Controls<any>?]>()),
               ),
             }).do(
                 consumeEvents(({ unit: [field], form: [form] }): Supply | undefined => {
