@@ -1,4 +1,13 @@
-import { afterAll, AfterEvent, consumeEvents, trackValue } from '@proc7ts/fun-events';
+import {
+  afterAll,
+  AfterEvent,
+  afterThe,
+  consumeEvents,
+  isAfterEvent,
+  trackValue,
+  translateAfter_,
+} from '@proc7ts/fun-events';
+import { valueByRecipe } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
 import { getHashURL } from '../hash-url';
@@ -13,15 +22,29 @@ export class NavMenu {
   /**
    * @internal
    */
-  private readonly [NavMenu$Links__symbol]: NavLinks$Impl;
+  private readonly [NavMenu$Links__symbol]: NavMenu$Links;
 
   constructor(
       readonly context: ComponentContext,
-      links: AfterEvent<NavLink[]>,
+      links:
+          | Iterable<NavLink | NavLink.Provider>
+          | AfterEvent<(NavLink | NavLink.Provider)[]>
+          | ((this: void, menu: NavMenu) =>
+          | Iterable<NavLink | NavLink.Provider>
+          | AfterEvent<(NavLink | NavLink.Provider)[]>),
       options?: NavMenu.Options,
   ) {
-    this[NavMenu$Links__symbol] = new NavLinks$Impl(this, options);
-    links.do(consumeEvents((...links) => {
+    this[NavMenu$Links__symbol] = new NavMenu$Links(this, options);
+
+    const linkValues = valueByRecipe<
+        Iterable<NavLink | NavLink.Provider> | AfterEvent<(NavLink | NavLink.Provider)[]>,
+        [NavMenu]>(links, this);
+    const afterLinks: AfterEvent<(NavLink | NavLink.Provider)[]> = isAfterEvent(linkValues)
+        ? linkValues
+        : afterThe(linkValues).do(
+            translateAfter_((send, links) => send(...links)),
+        );
+    afterLinks.do(consumeEvents((...links) => {
       this[NavMenu$Links__symbol].replace(links);
     }));
   }
@@ -72,9 +95,9 @@ export namespace NavMenu {
 
 }
 
-class NavLinks$Impl {
+class NavMenu$Links {
 
-  private readonly _links = trackValue([new Map<NavLink, Supply>()]);
+  private readonly _links = trackValue([new Set<NavLink>()]);
   private readonly _active = new Map<NavLink, Supply>();
   private readonly _weigh: typeof defaultNavLinkWeight;
 
@@ -101,10 +124,15 @@ class NavLinks$Impl {
     });
   }
 
-  replace(replacement: readonly NavLink[]): void {
+  replace(replacement: readonly (NavLink | NavLink.Provider)[]): void {
+
+    const toAdd = new Set<NavLink>();
+
+    for (const linkOrProvider of replacement) {
+      toAdd.add(valueByRecipe(linkOrProvider, this._menu));
+    }
 
     const [links] = this._links.it;
-    const toAdd = new Set(replacement);
     const toRemove: NavLink[] = [];
 
     for (const link of links.keys()) {
@@ -115,23 +143,19 @@ class NavLinks$Impl {
 
     if (toAdd.size || toRemove.length) {
       for (const removed of toRemove) {
-
-        const supply = links.get(removed)!;
-
         links.delete(removed);
         this._deactivate(removed);
-
-        supply.off();
+        removed.supply?.off();
       }
       for (const added of toAdd) {
-        links.set(added, added.addTo(this._menu));
+        links.add(added);
       }
 
       this._links.it = [links];
     }
   }
 
-  private _updateActive(page: Page, links: Map<NavLink, Supply>): void {
+  private _updateActive(page: Page, links: Set<NavLink>): void {
 
     const toDeactivate: NavLink[] = [];
     const toActivate = this._selectActive(page, links);
@@ -156,7 +180,7 @@ class NavLinks$Impl {
     }
   }
 
-  private _selectActive(page: Page, links: Map<NavLink, Supply>): Set<NavLink> {
+  private _selectActive(page: Page, links: Set<NavLink>): Set<NavLink> {
 
     let maxWeight = 0;
     let active = new Set<NavLink>();

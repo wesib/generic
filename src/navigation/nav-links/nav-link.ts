@@ -10,13 +10,16 @@ export interface NavLink {
 
   readonly href: string;
 
-  addTo(menu: NavMenu): Supply;
+  readonly supply?: Supply;
 
   activate?({ menu, page }: { menu: NavMenu; page: Page }): Supply;
 
 }
 
 export namespace NavLink {
+
+  export type Provider =
+      (this: void, menu: NavMenu) => NavLink;
 
   export interface Options {
 
@@ -31,46 +34,48 @@ const NavLink$activeClass: QualifiedName = ['active', Wesib__NS];
 export function navAnchor(
     element: Element & { readonly href: string },
     options: NavLink.Options = {},
-): NavLink {
+): NavLink.Provider {
 
   const { active = NavLink$activeClass } = options;
   let activeClass: string;
 
-  return {
+  return menu => {
 
-    get href(): string {
-      return element.href;
-    },
+    activeClass = css__naming.name(active, menu.context.get(DefaultNamespaceAliaser));
 
-    addTo(menu: NavMenu) {
-      activeClass = css__naming.name(active, menu.context.get(DefaultNamespaceAliaser));
+    const navigation = menu.context.get(Navigation);
+    const supply = new DomEventDispatcher(element).on('click')(event => {
 
-      const navigation = menu.context.get(Navigation);
+      const { href } = element;
+      const pageURL = navigation.page.url;
+      const url = new URL(href, element.ownerDocument.baseURI);
 
-      return new DomEventDispatcher(element).on('click')(event => {
+      if (url.origin !== pageURL.origin) {
+        return; // External link
+      }
 
-        const { href } = element;
-        const pageURL = navigation.page.url;
-        const url = new URL(href, element.ownerDocument.baseURI);
+      event.preventDefault();
+      if (pageURL.href !== url.href) {
+        navigation.open(href).catch(console.error);
+      }
+    });
 
-        if (url.origin !== pageURL.origin) {
-          return; // External link
-        }
+    return ({
 
-        event.preventDefault();
-        if (pageURL.href !== url.href) {
-          navigation.open(href).catch(console.error);
-        }
-      });
-    },
+      get href(): string {
+        return element.href;
+      },
 
-    activate() {
-      element.classList.add(activeClass);
+      supply,
 
-      return new Supply(() => {
-        element.classList.remove(activeClass);
-      });
-    },
+      activate() {
+        element.classList.add(activeClass);
 
+        return new Supply(() => {
+          element.classList.remove(activeClass);
+        });
+      },
+
+    });
   };
 }
