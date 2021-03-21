@@ -17,7 +17,7 @@ import { NavLink } from './nav-link';
 
 const NavMenu$Links__symbol = (/*#__PURE__*/ Symbol('NavMenu.links'));
 
-export class NavMenu {
+export class NavMenu implements NavLink.Owner {
 
   /**
    * @internal
@@ -174,7 +174,7 @@ class NavMenu$Links {
       if (activated.activate) {
         this._active.set(
             activated,
-            activated.activate({ menu: this._menu, page: page }),
+            activated.activate({ page }),
         );
       }
     }

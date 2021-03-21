@@ -1,10 +1,9 @@
 import { DomEventDispatcher } from '@frontmeans/dom-events';
 import { css__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { Supply } from '@proc7ts/supply';
-import { DefaultNamespaceAliaser, Wesib__NS } from '@wesib/wesib';
+import { ComponentContext, DefaultNamespaceAliaser, Wesib__NS } from '@wesib/wesib';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
-import { NavMenu } from './nav-menu';
 
 export interface NavLink {
 
@@ -12,14 +11,20 @@ export interface NavLink {
 
   readonly supply?: Supply;
 
-  activate?({ menu, page }: { menu: NavMenu; page: Page }): Supply;
+  activate?({ page }: { page: Page }): Supply;
 
 }
 
 export namespace NavLink {
 
   export type Provider =
-      (this: void, menu: NavMenu) => NavLink;
+      (this: void, owner: Owner) => NavLink;
+
+  export interface Owner {
+
+    readonly context: ComponentContext;
+
+  }
 
   export interface Options {
 
@@ -39,11 +44,11 @@ export function navAnchor(
   const { active = NavLink$activeClass } = options;
   let activeClass: string;
 
-  return menu => {
+  return owner => {
 
-    activeClass = css__naming.name(active, menu.context.get(DefaultNamespaceAliaser));
+    activeClass = css__naming.name(active, owner.context.get(DefaultNamespaceAliaser));
 
-    const navigation = menu.context.get(Navigation);
+    const navigation = owner.context.get(Navigation);
     const supply = new DomEventDispatcher(element).on('click')(event => {
 
       const { href } = element;
