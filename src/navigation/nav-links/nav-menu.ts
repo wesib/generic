@@ -1,12 +1,4 @@
-import {
-  afterAll,
-  AfterEvent,
-  afterThe,
-  consumeEvents,
-  isAfterEvent,
-  trackValue,
-  translateAfter_,
-} from '@proc7ts/fun-events';
+import { afterAll, AfterEvent, afterThe, isAfterEvent, trackValue, translateAfter_ } from '@proc7ts/fun-events';
 import { valueByRecipe } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
@@ -17,6 +9,12 @@ import { NavLink } from './nav-link';
 
 const NavMenu$Links__symbol = (/*#__PURE__*/ Symbol('NavMenu.links'));
 
+/**
+ * Navigation menu.
+ *
+ * Serves as an {@link NavLink.Owner owner} of navigation links. Activates the links matching {@link Navigation.page
+ * current page}.
+ */
 export class NavMenu implements NavLink.Owner {
 
   /**
@@ -24,8 +22,21 @@ export class NavMenu implements NavLink.Owner {
    */
   private readonly [NavMenu$Links__symbol]: NavMenu$Links;
 
+  /**
+   * Owning component context.
+   */
+  readonly context: ComponentContext;
+
+  /**
+   * Constructs navigation menu.
+   *
+   * @param context - Owning component context.
+   * @param links - Navigation links of this menu. Either an iterable of navigation links or their providers,
+   * an `AfterEvent` keeper of the same, or a function accepting this menu as parameter and returning one of the above.
+   * @param options - Additional options.
+   */
   constructor(
-      readonly context: ComponentContext,
+      context: ComponentContext,
       links:
           | Iterable<NavLink | NavLink.Provider>
           | AfterEvent<(NavLink | NavLink.Provider)[]>
@@ -34,25 +45,36 @@ export class NavMenu implements NavLink.Owner {
           | AfterEvent<(NavLink | NavLink.Provider)[]>),
       options?: NavMenu.Options,
   ) {
+    this.context = context;
     this[NavMenu$Links__symbol] = new NavMenu$Links(this, options);
 
-    const linkValues = valueByRecipe<
-        Iterable<NavLink | NavLink.Provider> | AfterEvent<(NavLink | NavLink.Provider)[]>,
-        [NavMenu]>(links, this);
-    const afterLinks: AfterEvent<(NavLink | NavLink.Provider)[]> = isAfterEvent(linkValues)
-        ? linkValues
-        : afterThe(linkValues).do(
-            translateAfter_((send, links) => send(...links)),
-        );
-    afterLinks.do(consumeEvents((...links) => {
+    let afterLinks: AfterEvent<(NavLink | NavLink.Provider)[]>;
+
+    if (isAfterEvent(links)) {
+      afterLinks = links;
+    } else {
+
+      const linkValues = valueByRecipe(links, this);
+
+      afterLinks = isAfterEvent(linkValues)
+          ? linkValues
+          : afterThe(linkValues).do(
+              translateAfter_((send, links) => send(...links)),
+          );
+    }
+
+    afterLinks((...links) => {
       this[NavMenu$Links__symbol].replace(links);
-    }));
+    });
   }
 
 }
 
 export namespace NavMenu {
 
+  /**
+   * Navigation menu options.
+   */
   export interface Options {
 
     /**
@@ -172,7 +194,6 @@ class NavMenu$Links {
     }
 
     for (const deactivated of toDeactivate) {
-      this._active.delete(deactivated);
       this._deactivate(deactivated);
     }
     for (const activated of toActivate) {
