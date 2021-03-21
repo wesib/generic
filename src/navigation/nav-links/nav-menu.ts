@@ -129,7 +129,12 @@ class NavMenu$Links {
     const toAdd = new Set<NavLink>();
 
     for (const linkOrProvider of replacement) {
-      toAdd.add(valueByRecipe(linkOrProvider, this._menu));
+
+      const link = valueByRecipe(linkOrProvider, this._menu);
+
+      if (link) {
+        toAdd.add(link);
+      }
     }
 
     const [links] = this._links.it;
@@ -174,7 +179,7 @@ class NavMenu$Links {
       if (activated.activate) {
         this._active.set(
             activated,
-            activated.activate({ page }),
+            activated.activate(),
         );
       }
     }

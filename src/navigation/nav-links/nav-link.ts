@@ -1,86 +1,58 @@
-import { DomEventDispatcher } from '@frontmeans/dom-events';
-import { css__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { Supply } from '@proc7ts/supply';
-import { ComponentContext, DefaultNamespaceAliaser, Wesib__NS } from '@wesib/wesib';
-import { Navigation } from '../navigation';
-import { Page } from '../page';
+import { ComponentContext } from '@wesib/wesib';
 
+/**
+ * Navigation link.
+ */
 export interface NavLink {
 
+  /**
+   * An URI this navigation link refers to.
+   */
   readonly href: string;
 
+  /**
+   * Navigation link supply.
+   *
+   * Disables navigation link one cut off.
+   */
   readonly supply?: Supply;
 
-  activate?({ page }: { page: Page }): Supply;
+  /**
+   * Activates this navigation link.
+   *
+   * E.g. marks it as active with corresponding CSS class.
+   *
+   * @returns Activation supply that deactivates the link once cut off.
+   */
+  activate?(): Supply;
 
 }
 
 export namespace NavLink {
 
+  /**
+   * Navigation link provider.
+   */
   export type Provider =
-      (this: void, owner: Owner) => NavLink;
+  /**
+   * @param owner - Navigation link owner.
+   *
+   * @returns Either navigation link instance, or `null`/`undefined` if there is no one.
+   */
+      (this: void, owner: Owner) => NavLink | null | undefined;
 
+  /**
+   * Navigation link owner.
+   */
   export interface Owner {
 
+    /**
+     * Owning component context.
+     */
     readonly context: ComponentContext;
 
   }
 
-  export interface Options {
-
-    readonly active?: QualifiedName;
-
-  }
-
 }
 
-const NavLink$activeClass: QualifiedName = ['active', Wesib__NS];
-
-export function navAnchor(
-    element: Element & { readonly href: string },
-    options: NavLink.Options = {},
-): NavLink.Provider {
-
-  const { active = NavLink$activeClass } = options;
-  let activeClass: string;
-
-  return owner => {
-
-    activeClass = css__naming.name(active, owner.context.get(DefaultNamespaceAliaser));
-
-    const navigation = owner.context.get(Navigation);
-    const supply = new DomEventDispatcher(element).on('click')(event => {
-
-      const { href } = element;
-      const pageURL = navigation.page.url;
-      const url = new URL(href, element.ownerDocument.baseURI);
-
-      if (url.origin !== pageURL.origin) {
-        return; // External link
-      }
-
-      event.preventDefault();
-      if (pageURL.href !== url.href) {
-        navigation.open(href).catch(console.error);
-      }
-    });
-
-    return ({
-
-      get href(): string {
-        return element.href;
-      },
-
-      supply,
-
-      activate() {
-        element.classList.add(activeClass);
-
-        return new Supply(() => {
-          element.classList.remove(activeClass);
-        });
-      },
-
-    });
-  };
-}
