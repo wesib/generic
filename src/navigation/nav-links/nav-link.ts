@@ -14,7 +14,7 @@ export interface NavLink {
   /**
    * Navigation link supply.
    *
-   * Disables navigation link one cut off.
+   * Disables navigation link once cut off.
    */
   readonly supply?: Supply;
 
@@ -51,6 +51,13 @@ export namespace NavLink {
      * Owning component context.
      */
     readonly context: ComponentContext;
+
+    /**
+     * Owner supply.
+     *
+     * It is expected that constructed {@link NavLink.supply link supply} depends on this one.
+     */
+    readonly supply?: Supply;
 
   }
 

@@ -1,6 +1,6 @@
 import { afterAll, AfterEvent, afterThe, isAfterEvent, trackValue, translateAfter_ } from '@proc7ts/fun-events';
 import { valueByRecipe } from '@proc7ts/primitives';
-import { Supply } from '@proc7ts/supply';
+import { Supply, SupplyPeer } from '@proc7ts/supply';
 import { BootstrapWindow, ComponentContext } from '@wesib/wesib';
 import { getHashURL } from '../hash-url';
 import { Navigation } from '../navigation';
@@ -15,7 +15,7 @@ const NavMenu$Links__symbol = (/*#__PURE__*/ Symbol('NavMenu.links'));
  * Serves as an {@link NavLink.Owner owner} of navigation links. Activates the links matching {@link Navigation.page
  * current page}.
  */
-export class NavMenu implements NavLink.Owner {
+export class NavMenu implements NavLink.Owner, SupplyPeer {
 
   /**
    * @internal
@@ -25,7 +25,16 @@ export class NavMenu implements NavLink.Owner {
   /**
    * Owning component context.
    */
-  readonly context: ComponentContext;
+  get context(): ComponentContext {
+    return this[NavMenu$Links__symbol].context;
+  }
+
+  /**
+   * Navigation menu supply.
+   */
+  get supply(): Supply {
+    return this[NavMenu$Links__symbol].supply;
+  }
 
   /**
    * Constructs navigation menu.
@@ -45,8 +54,7 @@ export class NavMenu implements NavLink.Owner {
           | AfterEvent<(NavLink | NavLink.Provider)[]>),
       options?: NavMenu.Options,
   ) {
-    this.context = context;
-    this[NavMenu$Links__symbol] = new NavMenu$Links(this, options);
+    this[NavMenu$Links__symbol] = new NavMenu$Links(this, context, options);
 
     let afterLinks: AfterEvent<(NavLink | NavLink.Provider)[]>;
 
@@ -119,18 +127,20 @@ export namespace NavMenu {
 
 class NavMenu$Links {
 
+  readonly supply: Supply;
   private readonly _links = trackValue([new Set<NavLink>()]);
   private readonly _active = new Map<NavLink, Supply>();
   private readonly _weigh: typeof defaultNavLinkWeight;
 
   constructor(
       private readonly _menu: NavMenu,
+      readonly context: ComponentContext,
       options: NavMenu.Options = {},
   ) {
+    this.supply = new Supply().cuts(this._links);
     this._weigh = options.weigh ? options.weigh.bind(options) : defaultNavLinkWeight;
-    this._links.supply.needs(_menu.context);
 
-    _menu.context.whenConnected(context => {
+    context.whenConnected(context => {
 
       const navigation = context.get(Navigation);
 
@@ -175,6 +185,24 @@ class NavMenu$Links {
         removed.supply?.off();
       }
       for (const added of toAdd) {
+
+        const { supply } = added;
+
+        if (supply) {
+          if (supply.isOff) {
+            continue; // Exclude disabled nav link.
+          }
+
+          supply.needs(this).whenOff(() => {
+            // Handle nav link removal
+
+            const [links] = this._links.it;
+
+            links.delete(added);
+            this._links.it = [links];
+          });
+        }
+
         links.add(added);
       }
 

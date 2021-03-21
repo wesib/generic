@@ -94,6 +94,49 @@ describe('navigation', () => {
       links.it = [link3];
       expect(lastActivation(link1).isOff).toBe(true);
     });
+    it('does not accept disabled nav link', () => {
+
+      const link1 = testLink('index/path');
+      const link2 = testLink('index');
+      const link3 = testLink('other');
+
+      link2.supply.off();
+      new NavMenu(context, [link1, link2, link3]);
+
+      expect(link1.activate).not.toHaveBeenCalled();
+      expect(link2.activate).not.toHaveBeenCalled();
+      expect(link3.activate).not.toHaveBeenCalled();
+    });
+    it('removes disabled nav link', () => {
+
+      const link1 = testLink('index/path');
+      const link2 = testLink('index');
+      const link3 = testLink('other');
+
+      new NavMenu(context, [link1, link2, link3]);
+
+      link2.supply.off();
+
+      expect(link1.activate).not.toHaveBeenCalled();
+      expect(link2.activate).toHaveBeenCalledTimes(1);
+      expect(link3.activate).not.toHaveBeenCalled();
+      expect(lastActivation(link2).isOff).toBe(true);
+    });
+
+    describe('supply', () => {
+      it('disables nav links', () => {
+
+        const link1 = testLink('index/path');
+        const link2 = testLink('index');
+        const link3 = testLink('other');
+
+        new NavMenu(context, [link1, link2, link3]).supply.off();
+
+        expect(link1.supply.isOff).toBe(true);
+        expect(link2.supply.isOff).toBe(true);
+        expect(link3.supply.isOff).toBe(true);
+      });
+    });
 
     describe('activation by path', () => {
 

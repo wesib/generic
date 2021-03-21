@@ -107,14 +107,14 @@ export function navAnchor(
       return;
     }
 
-    const { context } = owner;
+    const { context, supply: ownerSupply = context.supply } = owner;
 
     activeClass = css__naming.name(active, context.get(DefaultNamespaceAliaser));
 
     const navigation = context.get(Navigation);
     const scheduler = context.get(ElementRenderScheduler);
     const schedule = scheduler(options.render);
-    const supply = new Supply();
+    const supply = new Supply().needs(ownerSupply);
     const handleClick: EventReceiver<[Event]> = {
       supply,
       receive(_ctx, event) {
@@ -135,6 +135,7 @@ export function navAnchor(
     };
     const eventDispatcher = new DomEventDispatcher(anchor);
 
+    supply.cuts(eventDispatcher);
     for (const event of events) {
       eventDispatcher.on(event)(handleClick);
     }
