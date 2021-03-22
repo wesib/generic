@@ -1,4 +1,9 @@
-import { ManualRenderScheduler, newManualRenderScheduler, RenderSchedule } from '@frontmeans/render-scheduler';
+import {
+  immediateRenderScheduler,
+  ManualRenderScheduler,
+  newManualRenderScheduler,
+  setRenderScheduler,
+} from '@frontmeans/render-scheduler';
 import { addCssClass } from './add-css-class';
 
 describe('util', () => {
@@ -6,29 +11,32 @@ describe('util', () => {
 
     let element: Element;
     let scheduler: ManualRenderScheduler;
-    let schedule: RenderSchedule;
 
     beforeEach(() => {
       element = document.createElement('span');
       scheduler = newManualRenderScheduler();
-      schedule = scheduler();
     });
 
     it('adds CSS class', () => {
-      addCssClass(element, 'test', schedule);
+      addCssClass(element, 'test', { scheduler });
       expect(element.classList).not.toContain('test');
 
       scheduler.render();
       expect(element.classList).toContain('test');
     });
-    it('adds CSS class immediately when schedule omitted', () => {
-      addCssClass(element, 'test');
-      expect(element.classList).toContain('test');
+    it('utilizes default render scheduler when omitted', () => {
+      setRenderScheduler(immediateRenderScheduler);
+      try {
+        addCssClass(element, 'test');
+        expect(element.classList).toContain('test');
+      } finally {
+        setRenderScheduler();
+      }
     });
     it('removes CSS class when the last supply cut off', () => {
 
-      const supply1 = addCssClass(element, 'test', schedule);
-      const supply2 = addCssClass(element, 'test', schedule);
+      const supply1 = addCssClass(element, 'test', { scheduler });
+      const supply2 = addCssClass(element, 'test', { scheduler });
 
       scheduler.render();
 
@@ -41,7 +49,7 @@ describe('util', () => {
       expect(element.classList).not.toContain('test');
     });
     it('does not add CSS class when supply cut off', () => {
-      addCssClass(element, 'test', schedule).off();
+      addCssClass(element, 'test', { scheduler }).off();
       scheduler.render();
       expect(element.classList).not.toContain('test');
     });
