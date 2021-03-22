@@ -87,6 +87,13 @@ export namespace NavMenu {
   export interface Options {
 
     /**
+     * Whether to activate navigation links.
+     *
+     * `true` by default.
+     */
+    readonly activate?: boolean;
+
+    /**
      * Weighs matching navigation link.
      *
      * This method will be called for each navigation link on each current page update.
@@ -134,6 +141,7 @@ class NavMenu$Links {
   readonly supply: Supply;
   private readonly _links = trackValue([new Set<NavLink>()]);
   private readonly _active = new Map<NavLink, Supply>();
+  private readonly _activate: boolean;
   private readonly _weigh: typeof defaultNavLinkWeight;
 
   constructor(
@@ -147,7 +155,11 @@ class NavMenu$Links {
       options: NavMenu.Options = {},
   ) {
     this.supply = new Supply().cuts(this._links);
-    this._weigh = options.weigh ? options.weigh.bind(options) : defaultNavLinkWeight;
+
+    const { activate = true, weigh } = options;
+
+    this._activate = activate;
+    this._weigh = weigh ? weigh.bind(options) : defaultNavLinkWeight;
   }
 
   bindTo(context: ComponentContext): void {
@@ -178,17 +190,20 @@ class NavMenu$Links {
         this._replace(owner, links);
       });
 
-      const navigation = context.get(Navigation);
+      if (this._activate) {
 
-      afterAll({
-        page: navigation,
-        links: this._links,
-      })(({
-        page: [page],
-        links: [[links]],
-      }) => {
-        this._updateActive(context, page, links);
-      });
+        const navigation = context.get(Navigation);
+
+        afterAll({
+          page: navigation,
+          links: this._links,
+        })(({
+          page: [page],
+          links: [[links]],
+        }) => {
+          this._updateActive(context, page, links);
+        });
+      }
     });
   }
 

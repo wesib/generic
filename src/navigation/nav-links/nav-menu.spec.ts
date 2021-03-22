@@ -120,6 +120,18 @@ describe('navigation', () => {
       expect(link3.activate).not.toHaveBeenCalled();
       expect(lastActivation(link2).isOff).toBe(true);
     });
+    it('allows to disable nav links activation', () => {
+
+      const link1 = testLink('index/path');
+      const link2 = testLink('index');
+      const link3 = testLink('other');
+
+      new NavMenu([link1, link2, link3], { activate: false }).bindTo(context);
+
+      expect(link1.activate).not.toHaveBeenCalled();
+      expect(link2.activate).not.toHaveBeenCalled();
+      expect(link3.activate).not.toHaveBeenCalled();
+    });
 
     describe('supply', () => {
       it('disables nav links', () => {
