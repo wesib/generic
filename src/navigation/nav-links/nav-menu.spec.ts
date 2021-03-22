@@ -1,3 +1,4 @@
+import { Contextual__symbol } from '@proc7ts/context-values';
 import { afterThe, trackValue, translateAfter_ } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
 import { BootstrapWindow, Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
@@ -46,7 +47,7 @@ describe('navigation', () => {
       const link2 = testLink('index');
       const link3 = testLink('other');
 
-      new NavMenu(context, () => afterThe(link1, link2, link3));
+      new NavMenu(() => afterThe(link1, link2, link3)).bindTo(context);
 
       expect(link1.activate).not.toHaveBeenCalled();
       expect(link2.activate).toHaveBeenCalledTimes(1);
@@ -58,7 +59,7 @@ describe('navigation', () => {
       const link2 = testLink('index');
       const link3 = testLink('other');
 
-      new NavMenu(context, () => [link1, () => null, link3]);
+      new NavMenu(() => [link1, () => null, link3]).bindTo(context);
 
       expect(link1.activate).not.toHaveBeenCalled();
       expect(link2.activate).not.toHaveBeenCalled();
@@ -74,12 +75,9 @@ describe('navigation', () => {
 
       const links = trackValue<NavLink[]>([link1, link2, link3]);
 
-      new NavMenu(
-          context,
-          links.read.do(
-              translateAfter_((send, links) => send(...links)),
-          ),
-      );
+      new NavMenu(links.read.do(
+          translateAfter_((send, links) => send(...links)),
+      )).bindTo(context);
 
       expect(link1.activate).not.toHaveBeenCalled();
       expect(link3.activate).not.toHaveBeenCalled();
@@ -101,7 +99,7 @@ describe('navigation', () => {
       const link3 = testLink('other');
 
       link2.supply.off();
-      new NavMenu(context, [link1, link2, link3]);
+      new NavMenu([link1, link2, link3]).bindTo(context);
 
       expect(link1.activate).not.toHaveBeenCalled();
       expect(link2.activate).not.toHaveBeenCalled();
@@ -113,7 +111,7 @@ describe('navigation', () => {
       const link2 = testLink('index');
       const link3 = testLink('other');
 
-      new NavMenu(context, [link1, link2, link3]);
+      new NavMenu([link1, link2, link3]).bindTo(context);
 
       link2.supply.off();
 
@@ -130,7 +128,7 @@ describe('navigation', () => {
         const link2 = testLink('index');
         const link3 = testLink('other');
 
-        new NavMenu(context, [link1, link2, link3]).supply.off();
+        new NavMenu([link1, link2, link3]).bindTo(context).supply.off();
 
         expect(link1.supply.isOff).toBe(true);
         expect(link2.supply.isOff).toBe(true);
@@ -151,7 +149,7 @@ describe('navigation', () => {
       });
 
       it('activates nav link with longest matching URL', () => {
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3])[Contextual__symbol](context);
 
         expect(link1.activate).not.toHaveBeenCalled();
         expect(link2.activate).toHaveBeenCalledTimes(1);
@@ -160,14 +158,14 @@ describe('navigation', () => {
       it('activates multiple nav link with longest matching URL', () => {
         link3 = testLink('index');
 
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         expect(link1.activate).not.toHaveBeenCalled();
         expect(link2.activate).toHaveBeenCalledTimes(1);
         expect(link3.activate).toHaveBeenCalledTimes(1);
       });
       it('moves active nav link after navigation', async () => {
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -179,7 +177,7 @@ describe('navigation', () => {
         expect(lastActivation(link2).isOff).toBe(true);
       });
       it('does not deactivate nav link after navigation to matching page', async () => {
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -190,7 +188,7 @@ describe('navigation', () => {
         expect(link3.activate).not.toHaveBeenCalled();
       });
       it('deactivates all links when navigated to non-matching location', async () => {
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -204,7 +202,7 @@ describe('navigation', () => {
       it('never activates nav link with another origin', async () => {
         link2 = testLink('https://test.com/');
 
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -216,12 +214,9 @@ describe('navigation', () => {
 
         const links = trackValue<NavLink[]>([link1, link2, link3]);
 
-        new NavMenu(
-            context,
-            links.read.do(
-                translateAfter_((send, links) => send(...links)),
-            ),
-        );
+        new NavMenu(links.read.do(
+            translateAfter_((send, links) => send(...links)),
+        )).bindTo(context);
         const navigation = context.get(Navigation);
 
         await navigation.open('index/path');
@@ -239,12 +234,9 @@ describe('navigation', () => {
 
         const links = trackValue<NavLink[]>([link1, link2, link3]);
 
-        new NavMenu(
-            context,
-            links.read.do(
-                translateAfter_((send, links) => send(...links)),
-            ),
-        );
+        new NavMenu(links.read.do(
+            translateAfter_((send, links) => send(...links)),
+        )).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -265,12 +257,9 @@ describe('navigation', () => {
 
         const links = trackValue<NavLink[]>([link1, link2, link3]);
 
-        new NavMenu(
-            context,
-            links.read.do(
-                translateAfter_((send, links) => send(...links)),
-            ),
-        );
+        new NavMenu(links.read.do(
+            translateAfter_((send, links) => send(...links)),
+        )).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -290,12 +279,9 @@ describe('navigation', () => {
 
         const links = trackValue<NavLink[]>([link1, link2, link3]);
 
-        new NavMenu(
-            context,
-            links.read.do(
-                translateAfter_((send, links) => send(...links)),
-            ),
-        );
+        new NavMenu(links.read.do(
+            translateAfter_((send, links) => send(...links)),
+        )).bindTo(context);
 
         links.it = [link1, link2, link3];
 
@@ -319,7 +305,7 @@ describe('navigation', () => {
       });
 
       it('activates nav link with all matching parameters', async () => {
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -330,7 +316,7 @@ describe('navigation', () => {
         expect(link3.activate).not.toHaveBeenCalled();
       });
       it('activates nav link with most matching parameters', async () => {
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -344,7 +330,7 @@ describe('navigation', () => {
       it('does not activate nav link with different search parameters', async () => {
         link3 = testLink('index?a=1&b=33');
 
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -357,7 +343,7 @@ describe('navigation', () => {
       });
       it('ignores double-underscored parameters', async () => {
         link3 = testLink('index?a=1&b=2&__ignore__=1');
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -370,7 +356,7 @@ describe('navigation', () => {
       });
       it('activates nav link with the same dir path', async () => {
         link1 = testLink('index/?a=1');
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -383,7 +369,7 @@ describe('navigation', () => {
       });
       it('does not activate nav link with different path', async () => {
         link1 = testLink('other?a=1');
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -408,7 +394,7 @@ describe('navigation', () => {
       });
 
       it('activates nav link with matching hash', async () => {
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -422,7 +408,7 @@ describe('navigation', () => {
         link1 = testLink('path?foo=bar#/hash?a=1');
         link2 = testLink('path?foo=bar#/hash?a=1&b=2&b=3');
         link3 = testLink('path?foo=bar#/hash?a=1&b=2');
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -434,7 +420,7 @@ describe('navigation', () => {
       });
       it('does not activate nav link with different path', async () => {
         link1 = testLink('other?a=1#hash?a=1');
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -446,7 +432,7 @@ describe('navigation', () => {
       });
       it('does not activate nav link with lesser search params', async () => {
         link1 = testLink('path?foo=1#hash?a=1');
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -458,7 +444,7 @@ describe('navigation', () => {
       });
       it('does not activate nav link with more search params', async () => {
         link1 = testLink('path?foo=1&bar=2&bar=3#hash?a=1');
-        new NavMenu(context, [link1, link2, link3]);
+        new NavMenu([link1, link2, link3]).bindTo(context);
 
         const navigation = context.get(Navigation);
 
@@ -487,7 +473,7 @@ describe('navigation', () => {
       });
 
       it('activates nav link with highest weights', () => {
-        new NavMenu(context, [link1, link2, link3], { weigh });
+        new NavMenu([link1, link2, link3], { weigh }).bindTo(context);
 
         expect(link1.activate).not.toHaveBeenCalled();
         expect(link2.activate).toHaveBeenCalledTimes(1);
