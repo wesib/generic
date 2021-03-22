@@ -97,10 +97,10 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_styp.componentstypformatconfig.html#hostselector" class="tsd-kind-icon">host<wbr>Selector</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_styp.componentstypformatconfig.html#nsalias" class="tsd-kind-icon">ns<wbr>Alias</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_styp.componentstypformatconfig.html#renderer" class="tsd-kind-icon">renderer</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_styp.componentstypformatconfig.html#rootselector" class="tsd-kind-icon">root<wbr>Selector</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_styp.componentstypformatconfig.html#scheduler" class="tsd-kind-icon">scheduler</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic_styp.componentstypformatconfig.html#nsalias" class="tsd-kind-icon">ns<wbr>Alias</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic_styp.componentstypformatconfig.html#renderer" class="tsd-kind-icon">renderer</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic_styp.componentstypformatconfig.html#rootselector" class="tsd-kind-icon">root<wbr>Selector</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic_styp.componentstypformatconfig.html#scheduler" class="tsd-kind-icon">scheduler</a></li>
 							</ul>
 						</section>
 					</div>
@@ -114,7 +114,7 @@
 					<div class="tsd-signature tsd-kind-icon">host<wbr>Selector<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Part</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/styp/component-styp-format.ts#L57">wesib/generic/src/styp/component-styp-format.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/styp/component-styp-format.ts#L57">wesib/generic/src/styp/component-styp-format.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -142,13 +142,14 @@
 						<p>This selector should not contain a <code>:host</code> sub-selector.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="nsalias" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> ns<wbr>Alias</h3>
 					<div class="tsd-signature tsd-kind-icon">ns<wbr>Alias<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NamespaceAliaser</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides StypFormatConfig.nsAlias</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/styp/component-styp-format.ts#L78">wesib/generic/src/styp/component-styp-format.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/styp/component-styp-format.ts#L78">wesib/generic/src/styp/component-styp-format.ts:78</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -158,11 +159,12 @@
 						<p><code>DefaultNamespaceAliaser</code> is used when omitted.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="renderer" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> renderer</h3>
 					<div class="tsd-signature tsd-kind-icon">renderer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StypRenderer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">StypRenderer</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from StypFormatConfig.renderer</p>
 						<ul>
 							<li>Defined in frontmeans/style-producer/index.d.ts:2417</li>
 						</ul>
@@ -173,13 +175,14 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="rootselector" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> root<wbr>Selector</h3>
 					<div class="tsd-signature tsd-kind-icon">root<wbr>Selector<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides StypFormatConfig.rootSelector</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/styp/component-styp-format.ts#L62">wesib/generic/src/styp/component-styp-format.ts:62</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/styp/component-styp-format.ts#L62">wesib/generic/src/styp/component-styp-format.ts:62</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -188,13 +191,14 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="scheduler" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> scheduler</h3>
 					<div class="tsd-signature tsd-kind-icon">scheduler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RenderScheduler</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides StypFormatConfig.scheduler</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/styp/component-styp-format.ts#L71">wesib/generic/src/styp/component-styp-format.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/styp/component-styp-format.ts#L71">wesib/generic/src/styp/component-styp-format.ts:71</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -218,9 +222,6 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/module__wesib_generic_forms.html">Module @wesib/generic/forms</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/module__wesib_generic_input.html">Module @wesib/generic/input</a>
 					</li>
 					<li class="current tsd-kind-module">
 						<a href="../modules/module__wesib_generic_styp.html">Module @wesib/generic/styp</a>
@@ -252,16 +253,16 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="module__wesib_generic_styp.componentstypformatconfig.html#hostselector" class="tsd-kind-icon">host<wbr>Selector</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 								<a href="module__wesib_generic_styp.componentstypformatconfig.html#nsalias" class="tsd-kind-icon">ns<wbr>Alias</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="module__wesib_generic_styp.componentstypformatconfig.html#renderer" class="tsd-kind-icon">renderer</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 								<a href="module__wesib_generic_styp.componentstypformatconfig.html#rootselector" class="tsd-kind-icon">root<wbr>Selector</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 								<a href="module__wesib_generic_styp.componentstypformatconfig.html#scheduler" class="tsd-kind-icon">scheduler</a>
 							</li>
 						</ul>

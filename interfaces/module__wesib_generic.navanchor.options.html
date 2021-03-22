@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ComponentPickMode | Wesib: Generic Components</title>
+	<title>Options | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,13 @@
 					<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic.componentpickmode.html">ComponentPickMode</a>
+					<a href="../modules/module__wesib_generic.navanchor.html">NavAnchor</a>
+				</li>
+				<li>
+					<a href="module__wesib_generic.navanchor.options.html">Options</a>
 				</li>
 			</ul>
-			<h1>Interface ComponentPickMode</h1>
+			<h1>Interface Options</h1>
 		</div>
 	</div>
 </header>
@@ -71,7 +74,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A mode that picks component nodes from component tree.</p>
+						<p>Navigation anchor construction options.</p>
 					</div>
 				</div>
 			</section>
@@ -79,12 +82,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="module__wesib_generic.elementpickmode.html" class="tsd-signature-type" data-tsd-kind="Interface">ElementPickMode</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">ComponentPickMode</span>
-							</li>
-						</ul>
+						<span class="target">Options</span>
 					</li>
 				</ul>
 			</section>
@@ -95,8 +93,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__wesib_generic.componentpickmode.html#all" class="tsd-kind-icon">all</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="module__wesib_generic.componentpickmode.html#deep" class="tsd-kind-icon">deep</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navanchor.options.html#active" class="tsd-kind-icon">active</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navanchor.options.html#event" class="tsd-kind-icon">event</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navanchor.options.html#render" class="tsd-kind-icon">render</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,35 +103,50 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="all" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> all</h3>
-					<div class="tsd-signature tsd-kind-icon">all<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="active" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> active</h3>
+					<div class="tsd-signature tsd-kind-icon">active<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">QualifiedName</span></div>
 					<aside class="tsd-sources">
-						<p>Overrides <a href="module__wesib_generic.elementpickmode.html">ElementPickMode</a>.<a href="module__wesib_generic.elementpickmode.html#all">all</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/tree/element-node.ts#L158">wesib/generic/src/tree/element-node.ts:158</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-anchor.ts#L39">wesib/generic/src/navigation/nav-links/nav-anchor.ts:39</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Set to <code>true</code> to select arbitrary nodes. Otherwise - select only component nodes.</p>
+							<p>Qualified name of CSS class to mark the active anchor element with.</p>
 						</div>
+						<p>The <code>active</code> class in Wesib namespace is used by default.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="deep" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> deep</h3>
-					<div class="tsd-signature tsd-kind-icon">deep<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="event" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> event</h3>
+					<div class="tsd-signature tsd-kind-icon">event<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="module__wesib_generic.elementpickmode.html">ElementPickMode</a>.<a href="module__wesib_generic.elementpickmode.html#deep">deep</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/tree/element-node.ts#L149">wesib/generic/src/tree/element-node.ts:149</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-anchor.ts#L32">wesib/generic/src/navigation/nav-links/nav-anchor.ts:32</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Set to <code>true</code> to select from entire subtree. Otherwise - select from element child nodes only.</p>
+							<p>Type or types of events to handle.</p>
+						</div>
+						<p><code>click</code> by default.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="render" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> render</h3>
+					<div class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Options</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-anchor.ts#L44">wesib/generic/src/navigation/nav-links/nav-anchor.ts:44</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Rendering definition options to pass to nav links render scheduler.</p>
 						</div>
 					</div>
 				</section>
@@ -144,32 +158,26 @@
 					<li class=" ">
 						<a href="../modules.html">Modules</a>
 					</li>
-					<li class="current tsd-kind-module">
-						<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/module__wesib_generic_forms.html">Module @wesib/generic/forms</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/module__wesib_generic_input.html">Module @wesib/generic/input</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/module__wesib_generic_styp.html">Module @wesib/generic/styp</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="module__wesib_generic.navanchor.element.html" class="tsd-kind-icon">Element</a>
+					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="module__wesib_generic.componentpickmode.html" class="tsd-kind-icon">Component<wbr>Pick<wbr>Mode</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="module__wesib_generic.navanchor.options.html" class="tsd-kind-icon">Options</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="module__wesib_generic.componentpickmode.html#all" class="tsd-kind-icon">all</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="module__wesib_generic.navanchor.options.html#active" class="tsd-kind-icon">active</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="module__wesib_generic.componentpickmode.html#deep" class="tsd-kind-icon">deep</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="module__wesib_generic.navanchor.options.html#event" class="tsd-kind-icon">event</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="module__wesib_generic.navanchor.options.html#render" class="tsd-kind-icon">render</a>
 							</li>
 						</ul>
 					</li>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>OnSubmitDef | Wesib: Generic Components</title>
+	<title>NavLink | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="../modules/module__wesib_generic_input.html">Module @wesib/generic/input</a>
+					<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic_input.onsubmitdef.html">OnSubmitDef</a>
+					<a href="module__wesib_generic.navlink-1.html">NavLink</a>
 				</li>
 			</ul>
-			<h1>Interface OnSubmitDef</h1>
+			<h1>Interface NavLink</h1>
 		</div>
 	</div>
 </header>
@@ -71,16 +71,15 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Form submit handler definition.</p>
+						<p>Navigation link.</p>
 					</div>
-					<p>Configures <a href="../modules/module__wesib_generic_input.html#onsubmit">@OnSubmit</a> component property decorator.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">OnSubmitDef</span>
+						<span class="target">NavLink</span>
 					</li>
 				</ul>
 			</section>
@@ -91,7 +90,14 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_input.onsubmitdef.html#cancel" class="tsd-kind-icon">cancel</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navlink-1.html#href" class="tsd-kind-icon">href</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navlink-1.html#supply" class="tsd-kind-icon">supply</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="module__wesib_generic.navlink-1.html#activate" class="tsd-kind-icon">activate</a></li>
 							</ul>
 						</section>
 					</div>
@@ -100,20 +106,62 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="cancel" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cancel</h3>
-					<div class="tsd-signature tsd-kind-icon">cancel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="href" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> href</h3>
+					<div class="tsd-signature tsd-kind-icon">href<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/input/on-submit.decorator.ts#L68">wesib/generic/src/input/on-submit.decorator.ts:68</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-link.ts#L12">wesib/generic/src/navigation/nav-links/nav-link.ts:12</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Whether to cancel default submit handler.</p>
+							<p>An URI this navigation link refers to.</p>
 						</div>
-						<p><code>true</code> by default.</p>
 					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="supply" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> supply</h3>
+					<div class="tsd-signature tsd-kind-icon">supply<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Supply</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-link.ts#L19">wesib/generic/src/navigation/nav-links/nav-link.ts:19</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Navigation link supply.</p>
+						</div>
+						<p>Disables navigation link once cut off.</p>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="activate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> activate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">activate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Supply</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-link.ts#L28">wesib/generic/src/navigation/nav-links/nav-link.ts:28</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Activates this navigation link.</p>
+								</div>
+								<p>E.g. marks it as active with corresponding CSS class.</p>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Supply</span></h4>
+							<p>Activation supply that deactivates the link once cut off.</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -123,14 +171,11 @@
 					<li class=" ">
 						<a href="../modules.html">Modules</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/module__wesib_generic_forms.html">Module @wesib/generic/forms</a>
-					</li>
-					<li class="current tsd-kind-module">
-						<a href="../modules/module__wesib_generic_input.html">Module @wesib/generic/input</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/module__wesib_generic_styp.html">Module @wesib/generic/styp</a>
@@ -139,72 +184,24 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="module__wesib_generic_input.fillinputformdef.html" class="tsd-kind-icon">Fill<wbr>Input<wbr>Form<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="module__wesib_generic_input.inputfromcontrol.html" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="module__wesib_generic_input.inputtoform.html" class="tsd-kind-icon">Input<wbr>ToForm</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="module__wesib_generic_input.noinputfromcontrol.html" class="tsd-kind-icon">No<wbr>Input<wbr>From<wbr>Control</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="module__wesib_generic_input.noinputtoform.html" class="tsd-kind-icon">No<wbr>Input<wbr>ToForm</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="module__wesib_generic_input.onsubmitdef.html" class="tsd-kind-icon">On<wbr>Submit<wbr>Def</a>
+						<a href="module__wesib_generic.navlink-1.html" class="tsd-kind-icon">Nav<wbr>Link</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_input.onsubmitdef.html#cancel" class="tsd-kind-icon">cancel</a>
+								<a href="module__wesib_generic.navlink-1.html#href" class="tsd-kind-icon">href</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="module__wesib_generic.navlink-1.html#supply" class="tsd-kind-icon">supply</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="module__wesib_generic.navlink-1.html#activate" class="tsd-kind-icon">activate</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="module__wesib_generic_input.useinputelementdef.html" class="tsd-kind-icon">Use<wbr>Input<wbr>Element<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#convertinputdef" class="tsd-kind-icon">Convert<wbr>Input<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/module__wesib_generic_input.html#defaultinaspects" class="tsd-kind-icon">Default<wbr>InAspects</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="../modules/module__wesib_generic_input.html#defaultinaspects-1" class="tsd-kind-icon">Default<wbr>InAspects</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="../modules/module__wesib_generic_input.html#inputfromcontrol-1" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="../modules/module__wesib_generic_input.html#inputtoform-1" class="tsd-kind-icon">Input<wbr>ToForm</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#convertinput" class="tsd-kind-icon">Convert<wbr>Input</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#fillinputform" class="tsd-kind-icon">Fill<wbr>Input<wbr>Form</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#onsubmit" class="tsd-kind-icon">On<wbr>Submit</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#setinputname" class="tsd-kind-icon">Set<wbr>Input<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#useinputelement" class="tsd-kind-icon">Use<wbr>Input<wbr>Element</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#inputfromcontrol-2" class="tsd-kind-icon">input<wbr>From<wbr>Control</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#inputtoform-2" class="tsd-kind-icon">input<wbr>ToForm</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
@@ -226,6 +223,7 @@
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>

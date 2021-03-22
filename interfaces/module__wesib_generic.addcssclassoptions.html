@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>NoInputFromControl | Wesib: Generic Components</title>
+	<title>AddCssClassOptions | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="../modules/module__wesib_generic_input.html">Module @wesib/generic/input</a>
+					<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic_input.noinputfromcontrol.html">NoInputFromControl</a>
+					<a href="module__wesib_generic.addcssclassoptions.html">AddCssClassOptions</a>
 				</li>
 			</ul>
-			<h1>Interface NoInputFromControl</h1>
+			<h1>Interface AddCssClassOptions</h1>
 		</div>
 	</div>
 </header>
@@ -71,7 +71,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>No user input originated from control.</p>
+						<p>Added CSS class rendering options.</p>
 					</div>
 				</div>
 			</section>
@@ -79,7 +79,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">NoInputFromControl</span>
+						<span class="target">AddCssClassOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -90,7 +90,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_input.noinputfromcontrol.html#control" class="tsd-kind-icon">control</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.addcssclassoptions.html#scheduler" class="tsd-kind-icon">scheduler</a></li>
 							</ul>
 						</section>
 					</div>
@@ -99,14 +99,20 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="control" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> control</h3>
-					<div class="tsd-signature tsd-kind-icon">control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span></div>
+					<a name="scheduler" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> scheduler</h3>
+					<div class="tsd-signature tsd-kind-icon">scheduler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RenderScheduler</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/e6ae613/src/input/input-from-control.ts#L35">wesib/generic/src/input/input-from-control.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/util/add-css-class.ts#L22">wesib/generic/src/util/add-css-class.ts:22</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Render scheduler to use for DOM manipulations.</p>
+						</div>
+						<p>Default render scheduler when omitted.</p>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -116,14 +122,11 @@
 					<li class=" ">
 						<a href="../modules.html">Modules</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/module__wesib_generic_forms.html">Module @wesib/generic/forms</a>
-					</li>
-					<li class="current tsd-kind-module">
-						<a href="../modules/module__wesib_generic_input.html">Module @wesib/generic/input</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/module__wesib_generic_styp.html">Module @wesib/generic/styp</a>
@@ -132,72 +135,18 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="module__wesib_generic_input.fillinputformdef.html" class="tsd-kind-icon">Fill<wbr>Input<wbr>Form<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="module__wesib_generic_input.inputfromcontrol.html" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="module__wesib_generic_input.inputtoform.html" class="tsd-kind-icon">Input<wbr>ToForm</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="module__wesib_generic_input.noinputfromcontrol.html" class="tsd-kind-icon">No<wbr>Input<wbr>From<wbr>Control</a>
+						<a href="module__wesib_generic.addcssclassoptions.html" class="tsd-kind-icon">Add<wbr>Css<wbr>Class<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_input.noinputfromcontrol.html#control" class="tsd-kind-icon">control</a>
+								<a href="module__wesib_generic.addcssclassoptions.html#scheduler" class="tsd-kind-icon">scheduler</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="module__wesib_generic_input.noinputtoform.html" class="tsd-kind-icon">No<wbr>Input<wbr>ToForm</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="module__wesib_generic_input.onsubmitdef.html" class="tsd-kind-icon">On<wbr>Submit<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="module__wesib_generic_input.useinputelementdef.html" class="tsd-kind-icon">Use<wbr>Input<wbr>Element<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#convertinputdef" class="tsd-kind-icon">Convert<wbr>Input<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/module__wesib_generic_input.html#defaultinaspects" class="tsd-kind-icon">Default<wbr>InAspects</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="../modules/module__wesib_generic_input.html#defaultinaspects-1" class="tsd-kind-icon">Default<wbr>InAspects</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="../modules/module__wesib_generic_input.html#inputfromcontrol-1" class="tsd-kind-icon">Input<wbr>From<wbr>Control</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="../modules/module__wesib_generic_input.html#inputtoform-1" class="tsd-kind-icon">Input<wbr>ToForm</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#convertinput" class="tsd-kind-icon">Convert<wbr>Input</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#fillinputform" class="tsd-kind-icon">Fill<wbr>Input<wbr>Form</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#onsubmit" class="tsd-kind-icon">On<wbr>Submit</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#setinputname" class="tsd-kind-icon">Set<wbr>Input<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#useinputelement" class="tsd-kind-icon">Use<wbr>Input<wbr>Element</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#inputfromcontrol-2" class="tsd-kind-icon">input<wbr>From<wbr>Control</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/module__wesib_generic_input.html#inputtoform-2" class="tsd-kind-icon">input<wbr>ToForm</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

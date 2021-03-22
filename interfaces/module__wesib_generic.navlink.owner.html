@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Options | Wesib: Generic Components</title>
+	<title>Owner | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,13 +58,13 @@
 					<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 				</li>
 				<li>
-					<a href="../modules/module__wesib_generic.sharedvalue.html">SharedValue</a>
+					<a href="../modules/module__wesib_generic.navlink.html">NavLink</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic.sharedvalue.options.html">Options</a>
+					<a href="module__wesib_generic.navlink.owner.html">Owner</a>
 				</li>
 			</ul>
-			<h1>Interface Options</h1>
+			<h1>Interface Owner</h1>
 		</div>
 	</div>
 </header>
@@ -74,16 +74,15 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Value sharing options.</p>
+						<p>Navigation link owner.</p>
 					</div>
-					<p>Declare availability of the shared value.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Options</span>
+						<span class="target">Owner</span>
 					</li>
 				</ul>
 			</section>
@@ -94,8 +93,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.sharedvalue.options.html#local" class="tsd-kind-icon">local</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.sharedvalue.options.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navlink.owner.html#context" class="tsd-kind-icon">context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navlink.owner.html#supply" class="tsd-kind-icon">supply</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,38 +103,34 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="local" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> local</h3>
-					<div class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="context" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> context</h3>
+					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/shares/shared-value.ts#L44">wesib/generic/src/shares/shared-value.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-link.ts#L53">wesib/generic/src/navigation/nav-links/nav-link.ts:53</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Whether the share is local.</p>
+							<p>Owning component context.</p>
 						</div>
-						<ul>
-							<li><code>true</code> to make the value available only locally, i.e. only when requested by sharer context.</li>
-							<li><code>false</code> (by default) to make the value available to nested components too.</li>
-						</ul>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="name" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">QualifiedName</span></div>
+					<a name="supply" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> supply</h3>
+					<div class="tsd-signature tsd-kind-icon">supply<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Supply</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/shares/shared-value.ts#L36">wesib/generic/src/shares/shared-value.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-link.ts#L60">wesib/generic/src/navigation/nav-links/nav-link.ts:60</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The name of the element the sharer component is bound to. Defaults to component&#39;s element name.</p>
+							<p>Owner supply.</p>
 						</div>
-						<p>Ignored for <a href="module__wesib_generic.sharedvalue.options.html#local">local</a> shares</p>
+						<p>It is expected that constructed <a href="module__wesib_generic.navlink-1.html#supply">link supply</a> depends on this one.</p>
 					</div>
 				</section>
 			</section>
@@ -150,32 +145,23 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic.sharedvalue.detailed.html" class="tsd-kind-icon">Detailed</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic.sharedvalue.details.html" class="tsd-kind-icon">Details</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="module__wesib_generic.sharedvalue.options.html" class="tsd-kind-icon">Options</a>
+						<a href="module__wesib_generic.navlink.owner.html" class="tsd-kind-icon">Owner</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic.sharedvalue.options.html#local" class="tsd-kind-icon">local</a>
+								<a href="module__wesib_generic.navlink.owner.html#context" class="tsd-kind-icon">context</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic.sharedvalue.options.html#name" class="tsd-kind-icon">name</a>
+								<a href="module__wesib_generic.navlink.owner.html#supply" class="tsd-kind-icon">supply</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic.sharedvalue.provider.html" class="tsd-kind-icon">Provider</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__wesib_generic.sharedvalue.registrar.html" class="tsd-kind-icon">Registrar</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
+						<a href="../modules/module__wesib_generic.navlink.html#provider" class="tsd-kind-icon">Provider</a>
 					</li>
 				</ul>
 			</nav>

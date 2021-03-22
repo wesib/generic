@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Extension | Wesib: Generic Components</title>
+	<title>Options | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,16 +55,16 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="../modules/module__wesib_generic_styp.html">Module @wesib/generic/styp</a>
+					<a href="../modules/module__wesib_generic.html">Module @wesib/generic</a>
 				</li>
 				<li>
-					<a href="../modules/module__wesib_generic_styp.themestyle.html">ThemeStyle</a>
+					<a href="../modules/module__wesib_generic.navelement.html">NavElement</a>
 				</li>
 				<li>
-					<a href="module__wesib_generic_styp.themestyle.extension.html">Extension</a>
+					<a href="module__wesib_generic.navelement.options.html">Options</a>
 				</li>
 			</ul>
-			<h1>Interface Extension</h1>
+			<h1>Interface Options&lt;TElement&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -74,16 +74,28 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Theme style extension.</p>
+						<p>Navigation element construction options.</p>
 					</div>
-					<p>An extension should be registered in bootstrap context in order to be applied.</p>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>TElement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Element</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Navigation element type.</p>
+							</div>
+						</div>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Extension</span>
+						<span class="target">Options</span>
 					</li>
 				</ul>
 			</section>
@@ -94,13 +106,15 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic_styp.themestyle.extension.html#style" class="tsd-kind-icon">style</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navelement.options.html#active" class="tsd-kind-icon">active</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navelement.options.html#event" class="tsd-kind-icon">event</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="module__wesib_generic.navelement.options.html#render" class="tsd-kind-icon">render</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="module__wesib_generic_styp.themestyle.extension.html#provide" class="tsd-kind-icon">provide</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="module__wesib_generic.navelement.options.html#href" class="tsd-kind-icon">href</a></li>
 							</ul>
 						</section>
 					</div>
@@ -109,17 +123,49 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="style" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> style</h3>
-					<div class="tsd-signature tsd-kind-icon">style<span class="tsd-signature-symbol">:</span> <a href="../modules/module__wesib_generic_styp.themestyle.html#provider" class="tsd-signature-type" data-tsd-kind="Type alias">Provider</a></div>
+					<a name="active" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> active</h3>
+					<div class="tsd-signature tsd-kind-icon">active<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">QualifiedName</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/theme/theme-style.ts#L43">wesib/generic/src/theme/theme-style.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-element.ts#L32">wesib/generic/src/navigation/nav-links/nav-element.ts:32</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A theme style provider to extend.</p>
+							<p>Qualified name of CSS class to mark the active anchor element with.</p>
+						</div>
+						<p>The <code>active</code> class in Wesib namespace is used by default.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="event" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> event</h3>
+					<div class="tsd-signature tsd-kind-icon">event<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-element.ts#L25">wesib/generic/src/navigation/nav-links/nav-element.ts:25</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Type or types of events to handle.</p>
+						</div>
+						<p><code>click</code> by default.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="render" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> render</h3>
+					<div class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Options</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-element.ts#L37">wesib/generic/src/navigation/nav-links/nav-element.ts:37</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Rendering definition options to pass to nav links render scheduler.</p>
 						</div>
 					</div>
 				</section>
@@ -127,36 +173,34 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="provide" class="tsd-anchor"></a>
-					<h3>provide</h3>
+					<a name="href" class="tsd-anchor"></a>
+					<h3>href</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">provide<span class="tsd-signature-symbol">(</span>theme<span class="tsd-signature-symbol">: </span><a href="../classes/module__wesib_generic_styp.theme.html" class="tsd-signature-type" data-tsd-kind="Class">Theme</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StypRules</span></li>
+						<li class="tsd-signature tsd-kind-icon">href<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/theme/theme-style.ts#L56">wesib/generic/src/theme/theme-style.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/ef891a4/src/navigation/nav-links/nav-element.ts#L46">wesib/generic/src/navigation/nav-links/nav-element.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Extends the theme style.</p>
+									<p>Extracts an <a href="module__wesib_generic.navlink-1.html#href">URI</a> the navigation link refers to.</p>
 								</div>
-								<p>This method is called at most once per theme to apply styles to the latter. E.g. by declaring CSS rules.</p>
-								<p>It will be called after the style provider it extends.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>theme: <a href="../classes/module__wesib_generic_styp.theme.html" class="tsd-signature-type" data-tsd-kind="Class">Theme</a></h5>
+									<h5>element: <span class="tsd-signature-type">TElement</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>A theme to apply styling to.</p>
+										<p>Navigation element instance.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StypRules</span></h4>
-							<p>Dynamically updated CSS rule set containing the applied styling.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>Navigation URI.</p>
 						</li>
 					</ul>
 				</section>
@@ -174,25 +218,25 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="module__wesib_generic_styp.themestyle.extension.html" class="tsd-kind-icon">Extension</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="module__wesib_generic.navelement.options.html" class="tsd-kind-icon">Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="module__wesib_generic_styp.themestyle.extension.html#style" class="tsd-kind-icon">style</a>
+								<a href="module__wesib_generic.navelement.options.html#active" class="tsd-kind-icon">active</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="module__wesib_generic.navelement.options.html#event" class="tsd-kind-icon">event</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="module__wesib_generic.navelement.options.html#render" class="tsd-kind-icon">render</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="module__wesib_generic_styp.themestyle.extension.html#provide" class="tsd-kind-icon">provide</a>
+								<a href="module__wesib_generic.navelement.options.html#href" class="tsd-kind-icon">href</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
-						<a href="../modules/module__wesib_generic_styp.themestyle.html#byid" class="tsd-kind-icon">By<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
-						<a href="../modules/module__wesib_generic_styp.themestyle.html#provider" class="tsd-kind-icon">Provider</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
