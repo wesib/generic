@@ -252,8 +252,9 @@ class NavMenu$Links {
 
             const [links] = this._links.it;
 
-            links.delete(added);
-            this._links.it = [links];
+            if (links.delete(added)) {
+              this._links.it = [links];
+            }
           });
         }
 
