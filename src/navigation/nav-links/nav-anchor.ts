@@ -4,6 +4,7 @@ import { EventReceiver } from '@proc7ts/fun-events';
 import { setOfElements, valueByRecipe } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { DefaultNamespaceAliaser, ElementRenderScheduler, RenderDef, Wesib__NS } from '@wesib/wesib';
+import { addCssClass } from '../../util/add-css-class';
 import { Navigation } from '../navigation';
 import { NavLink } from './nav-link';
 
@@ -53,6 +54,15 @@ export namespace NavAnchor {
 
 const NavAnchor$activeClass: QualifiedName = ['active', Wesib__NS];
 
+const NavAnchor$activeCounters = (/*#__PURE__*/ Symbol('NavAnchor.activeCounter'));
+
+interface NavAnchor$Element extends NavAnchor.Element {
+
+  [NavAnchor$activeCounters]?: { [className: string]: number | undefined };
+
+
+}
+
 /**
  * Creates navigation link for the given anchor element.
  *
@@ -88,8 +98,8 @@ export function navAnchor(
 
 export function navAnchor(
     element:
-        | NavAnchor.Element
-        | ((this: void, owner: NavLink.Owner) => NavAnchor.Element | null | undefined)
+        | NavAnchor$Element
+        | ((this: void, owner: NavLink.Owner) => NavAnchor$Element | null | undefined)
         | null
         | undefined,
     options: NavAnchor.Options = {},
@@ -101,7 +111,7 @@ export function navAnchor(
 
   return owner => {
 
-    const anchor = valueByRecipe(element, owner);
+    const anchor: NavAnchor$Element | undefined | null = valueByRecipe(element, owner);
 
     if (!anchor) {
       return;
@@ -149,15 +159,7 @@ export function navAnchor(
       supply,
 
       activate() {
-        schedule(() => {
-          anchor.classList.add(activeClass);
-        });
-
-        return new Supply(() => {
-          schedule(() => {
-            anchor.classList.remove(activeClass);
-          });
-        });
+        return addCssClass(anchor, activeClass, schedule);
       },
 
     });

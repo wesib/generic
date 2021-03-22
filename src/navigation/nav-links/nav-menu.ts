@@ -293,7 +293,7 @@ class NavMenu$Links {
     let maxWeight = 0;
     let active = new Set<NavLink>();
 
-    for (const link of links.keys()) {
+    for (const link of links) {
 
       const weight = this._weigh({ link, menu: this._menu, context, page });
 
