@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@frontmeans/dom-events": "^1.1.0",
-    "@frontmeans/render-scheduler": "^1.5.0",
+    "@frontmeans/render-scheduler": "^1.5.1",
     "@hatsy/http-header-value": "^3.5.3",
     "@proc7ts/primitives": "^2.0.0",
     "@proc7ts/push-iterator": "^2.5.0",
