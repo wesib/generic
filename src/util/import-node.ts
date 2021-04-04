@@ -1,5 +1,5 @@
+import { isElementNode } from '@frontmeans/drek';
 import { itsEach, overArray } from '@proc7ts/push-iterator';
-import { isElement } from '@wesib/wesib';
 
 /**
  * Imports DOM node from one document to another.
@@ -53,7 +53,7 @@ export function importNode<TNode extends Node>(
 
   const doc = to.ownerDocument!;
 
-  if (isElement(from)) {
+  if (isElementNode(from)) {
 
     const elementClone = doc.createElement(from.tagName.toLowerCase()) as Node as (Element & TNode);
 

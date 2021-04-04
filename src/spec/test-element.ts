@@ -1,10 +1,10 @@
+import { CustomElementClass } from '@frontmeans/drek';
 import { OnEvent } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import {
   bootstrapComponents,
   ComponentClass,
   ComponentDef,
-  CustomElementClass,
   CustomElements,
   DefinitionContext,
   Feature,
