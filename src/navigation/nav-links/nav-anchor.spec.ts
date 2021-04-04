@@ -1,13 +1,6 @@
 import { immediateRenderScheduler } from '@frontmeans/render-scheduler';
 import { mapOn_, trackValue, ValueTracker } from '@proc7ts/fun-events';
-import {
-  bootstrapComponents,
-  Component,
-  ComponentContext,
-  ComponentMount,
-  DefaultRenderScheduler,
-  Feature,
-} from '@wesib/wesib';
+import { bootstrapComponents, Component, ComponentContext, DefaultRenderScheduler, Feature } from '@wesib/wesib';
 import { Navigation } from '../navigation';
 import { navAnchor, NavAnchor } from './nav-anchor';
 import { NavLink } from './nav-link';
@@ -15,15 +8,21 @@ import { NavLink } from './nav-link';
 describe('navigation', () => {
   describe('navAnchor', () => {
 
+    let doc: Document;
+
+    beforeEach(() => {
+      doc = document.implementation.createHTMLDocument('test');
+    });
+
     let baseURI: string;
     let element: Element;
     let anchor: HTMLAnchorElement;
 
     beforeEach(() => {
       baseURI = 'http://localhost.localdomain:8888';
-      jest.spyOn(document, 'baseURI', 'get').mockImplementation(() => baseURI);
-      element = document.body.appendChild(document.createElement('test-element'));
-      anchor = element.appendChild(document.createElement('a'));
+      jest.spyOn(doc, 'baseURI', 'get').mockImplementation(() => baseURI);
+      element = doc.body.appendChild(doc.createElement('test-element'));
+      anchor = element.appendChild(doc.createElement('a'));
     });
     afterEach(() => {
       element.remove();
@@ -94,16 +93,16 @@ describe('navigation', () => {
     });
     it('does not create a link when absent', async () => {
 
-      const owner = await bootstrap();
+      const context = await bootstrap();
 
-      expect(navAnchor(null)(owner)).toBeUndefined();
+      expect(navAnchor(null)({ context })).toBeUndefined();
     });
 
     describe('href', () => {
       it('reflects anchor href', async () => {
         anchor.href = `${baseURI}/test`;
 
-        const { context: { component: { navLink } } } = await bootstrap();
+        const { component: { navLink } } = await bootstrap();
 
         expect(navLink.href).toBe(anchor.href);
 
@@ -115,7 +114,7 @@ describe('navigation', () => {
     describe('activate', () => {
       it('appends CSS class to anchor', async () => {
 
-        const { context: { component: { navLink } } } = await bootstrap();
+        const { component: { navLink } } = await bootstrap();
 
         navLink.activate!();
 
@@ -123,7 +122,7 @@ describe('navigation', () => {
       });
       it('appends custom CSS class to anchor', async () => {
 
-        const { context: { component: { navLink } } } = await bootstrap({ active: 'custom-active' });
+        const { component: { navLink } } = await bootstrap({ active: 'custom-active' });
 
         navLink.activate!();
 
@@ -132,7 +131,7 @@ describe('navigation', () => {
       });
       it('removes CSS class from anchor when deactivated', async () => {
 
-        const { context: { component: { navLink } } } = await bootstrap({ event: 'test:click' });
+        const { component: { navLink } } = await bootstrap({ event: 'test:click' });
 
         navLink.activate!().off();
 
@@ -140,7 +139,7 @@ describe('navigation', () => {
       });
     });
 
-    async function bootstrap(options?: NavAnchor.Options): Promise<ComponentMount<{ readonly navLink: NavLink }>> {
+    async function bootstrap(options?: NavAnchor.Options): Promise<ComponentContext<{ readonly navLink: NavLink }>> {
 
       @Component()
       @Feature({

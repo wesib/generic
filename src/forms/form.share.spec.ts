@@ -5,7 +5,7 @@ import { BootstrapContext, Component, ComponentContext, ComponentSlot, Definitio
 import { Share, Share__symbol } from '../shares';
 import { ShareRegistry } from '../shares/share-registry.impl';
 import { SharedValue$ContextBuilder } from '../shares/shared-value.impl';
-import { testDefinition, testElement } from '../spec/test-element';
+import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { Form } from './form';
 import { FormShare } from './form.share';
 
@@ -59,7 +59,7 @@ describe('forms', () => {
 
         @Component({
           name: 'test-component',
-          extend: { type: Object },
+          extend: { type: MockElement },
         })
         class TestComponent {
         }

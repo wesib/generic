@@ -17,6 +17,12 @@ import { TargetShare } from './target-share';
 describe('shares', () => {
   describe('@Shared', () => {
 
+    let doc: Document;
+
+    beforeEach(() => {
+      doc = document.implementation.createHTMLDocument('test');
+    });
+
     let share: Share<string>;
 
     beforeEach(() => {
@@ -25,7 +31,7 @@ describe('shares', () => {
 
     it('shares static component property value', async () => {
 
-      @Component({ extend: { type: Object } })
+      @Component({ extend: { type: MockElement } })
       class TestComponent {
 
         @Shared(share)
@@ -40,7 +46,7 @@ describe('shares', () => {
     });
     it('handles component property value updates', async () => {
 
-      @Component({ extend: { type: Object } })
+      @Component({ extend: { type: MockElement } })
       class TestComponent {
 
         @Shared(share)
@@ -62,7 +68,7 @@ describe('shares', () => {
 
       const value = trackValue('test1');
 
-      @Component({ extend: { type: Object } })
+      @Component({ extend: { type: MockElement } })
       class TestComponent {
 
         @Shared(share)
@@ -85,7 +91,7 @@ describe('shares', () => {
     });
     it('handles updatable component property value change', async () => {
 
-      @Component({ extend: { type: Object } })
+      @Component({ extend: { type: MockElement } })
       class TestComponent {
 
         @Shared(share)
@@ -112,7 +118,7 @@ describe('shares', () => {
 
       }
 
-      @Component({ extend: { type: Object } })
+      @Component({ extend: { type: MockElement } })
       class TestComponent {
 
         @Shared(share2)
@@ -134,7 +140,7 @@ describe('shares', () => {
       const extKey1 = new SingleContextKey<Share<string>>('ext-key1');
       const extKey2 = new SingleContextKey<ComponentClass>('ext-key2');
 
-      @Component({ extend: { type: Object } })
+      @Component({ extend: { type: MockElement } })
       class TestComponent {
 
         @Shared(
@@ -238,15 +244,15 @@ describe('shares', () => {
 
         }
 
-        const outerElt = document.createElement('outer-element');
-        const innerElt = outerElt.appendChild(document.createElement('inner-element'));
+        const outerElt = doc.body.appendChild(doc.createElement('outer-element'));
+        const innerElt = outerElt.appendChild(doc.createElement('inner-element'));
 
         const innerDef = await testDefinition(InnerComponent);
         const outerDef = await innerDef.get(BootstrapContext).whenDefined(OuterComponent);
 
-        outerDef.connectTo(outerElt);
+        outerDef.mountTo(outerElt);
 
-        return innerDef.connectTo(innerElt).context;
+        return innerDef.mountTo(innerElt);
       }
 
     });

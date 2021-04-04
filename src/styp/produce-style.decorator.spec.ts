@@ -5,7 +5,6 @@ import {
   Component,
   ComponentContext,
   ComponentDef,
-  ComponentMount,
   DefaultRenderScheduler,
   Feature,
   ShadowContentRoot,
@@ -24,8 +23,7 @@ describe('styp', () => {
     let element: HTMLElement;
 
     beforeEach(() => {
-      element = document.createElement('test-component') as any;
-      document.body.append(element);
+      element = document.body.appendChild(document.createElement('test-component'));
     });
     afterEach(() => {
       element.remove();
@@ -118,7 +116,7 @@ describe('styp', () => {
     });
     it('does not remove styles on component destruction', async () => {
 
-      const { context } = await mount(
+      const context = await mount(
           () => stypRoot({ display: 'block' }).rules,
           {
             name: 'text-component',
@@ -146,7 +144,7 @@ describe('styp', () => {
     });
     it('prepends element id class to CSS rule selector', async () => {
 
-      const context = (await mount()).context;
+      const context = await mount();
       const rule = cssStyleRule();
       const idClass = context.get(ElementIdClass);
 
@@ -154,7 +152,7 @@ describe('styp', () => {
     });
     it('prepends element id class to CSS rule selector of anonymous component', async () => {
 
-      const context = (await mount(undefined, {})).context;
+      const context = await mount(undefined, {});
       const rule = cssStyleRule();
       const idClass = context.get(ElementIdClass);
       const selector = stypSelectorText({ c: idClass });
@@ -183,7 +181,7 @@ describe('styp', () => {
         rules: StypRules.Source = stypRoot({ display: 'block' }),
         def: ComponentDef = { name: 'test-component' },
         config?: ComponentStypFormatConfig,
-    ): Promise<ComponentMount> {
+    ): Promise<ComponentContext> {
 
       @Component(def)
       @Feature({

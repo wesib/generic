@@ -13,6 +13,12 @@ import { FormModePreset } from './form-mode.preset';
 describe('forms', () => {
   describe('FormModePreset', () => {
 
+    let doc: Document;
+
+    beforeEach(() => {
+      doc = document.implementation.createHTMLDocument('test');
+    });
+
     it('reflects form validity by default', async () => {
 
       const [{ control }] = await bootstrap();
@@ -64,70 +70,69 @@ describe('forms', () => {
       expect(await field?.aspect(InMode).read).toBe('off');
     });
 
-  });
+    async function bootstrap(options?: FormModePreset.Options): Promise<[form: Form, field: Field<string>]> {
 
-  async function bootstrap(options?: FormModePreset.Options): Promise<[form: Form, field: Field<string>]> {
-
-    @Component(
-        'test-form',
-        {
-          extend: { type: MockElement },
-          feature: {
-            needs: options ? [] : FormModePreset,
-            setup: setup => {
-              if (options) {
-                setup.provide(new FormModePreset(options));
-              }
+      @Component(
+          'test-form',
+          {
+            extend: { type: MockElement },
+            feature: {
+              needs: options ? [] : FormModePreset,
+              setup: setup => {
+                if (options) {
+                  setup.provide(new FormModePreset(options));
+                }
+              },
             },
           },
-        },
-    )
-    class TestFormComponent {
+      )
+      class TestFormComponent {
 
-      @SharedForm()
-      readonly form: Form;
+        @SharedForm()
+        readonly form: Form;
 
-      constructor(context: ComponentContext) {
-        this.form = Form.by<any>(
-            opts => inGroup({}, opts),
-            opts => inFormElement(context.element, opts),
-        );
+        constructor(context: ComponentContext) {
+          this.form = Form.by<any>(
+              opts => inGroup({}, opts),
+              opts => inFormElement(context.element, opts),
+          );
+        }
+
       }
 
-    }
-
-    @Component(
-        'test-field',
-        {
-          extend: { type: MockElement },
-          feature: {
-            needs: TestFormComponent,
+      @Component(
+          'test-field',
+          {
+            extend: { type: MockElement },
+            feature: {
+              needs: TestFormComponent,
+            },
           },
-        },
-    )
-    class TestFieldComponent {
+      )
+      class TestFieldComponent {
 
-      @SharedField()
-      readonly field: Field<string>;
+        @SharedField()
+        readonly field: Field<string>;
 
-      constructor() {
-        this.field = Field.by(opts => inValue('test', opts));
+        constructor() {
+          this.field = Field.by(opts => inValue('test', opts));
+        }
+
       }
 
+      const fieldDef = await testDefinition(TestFieldComponent);
+      const formDef = await fieldDef.get(BootstrapContext).whenDefined(TestFormComponent);
+
+      const formEl = doc.body.appendChild(doc.createElement('test-form'));
+      const fieldEl = formEl.appendChild(doc.createElement('test-field'));
+
+      const form = (await formDef.mountTo(formEl).get(FormShare))!;
+      const field = (await fieldDef.mountTo(fieldEl).get(FieldShare))!;
+
+      expect(form).not.toBe(field);
+
+      return [form, field];
     }
 
-    const fieldDef = await testDefinition(TestFieldComponent);
-    const formDef = await fieldDef.get(BootstrapContext).whenDefined(TestFormComponent);
-
-    const formEl = document.createElement('test-form');
-    const fieldEl = formEl.appendChild(document.createElement('test-field'));
-
-    const form = (await formDef.connectTo(formEl).context.get(FormShare))!;
-    const field = (await fieldDef.connectTo(fieldEl).context.get(FieldShare))!;
-
-    expect(form).not.toBe(field);
-
-    return [form, field];
-  }
-
+  });
 });

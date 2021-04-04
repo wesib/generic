@@ -17,7 +17,6 @@ import { ContextRegistry } from '@proc7ts/context-values';
 import { trackValue } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
 import {
-  BootstrapWindow,
   ComponentContext,
   ComponentState,
   DefaultNamespaceAliaser,
@@ -118,13 +117,8 @@ describe('styp', () => {
 
     describe('config', () => {
       describe('document', () => {
-        it('defaults to bootstrap window document', () => {
-
-          const doc = document.implementation.createHTMLDocument('test');
-
-          registry.provide({ a: BootstrapWindow, is: { document: doc } as BootstrapWindow });
-
-          expect(format.config()).toMatchObject({ document: doc });
+        it('defaults to component document', () => {
+          expect(format.config()).toMatchObject({ document: context.document });
         });
         it('respects explicit value', () => {
 

@@ -14,6 +14,12 @@ import { FormCssPreset } from './form-css.preset';
 describe('forms', () => {
   describe('FormCssPreset', () => {
 
+    let doc: Document;
+
+    beforeEach(() => {
+      doc = document.implementation.createHTMLDocument('test');
+    });
+
     it('reflects field validity by default', async () => {
 
       const [, { control }] = await bootstrap();
@@ -132,11 +138,11 @@ describe('forms', () => {
       const fieldDef = await testDefinition(TestFieldComponent);
       const formDef = await fieldDef.get(BootstrapContext).whenDefined(TestFormComponent);
 
-      const formEl = document.createElement('test-form');
-      const fieldEl = formEl.appendChild(document.createElement('test-field'));
+      const formEl = doc.body.appendChild(doc.createElement('test-form'));
+      const fieldEl = formEl.appendChild(doc.createElement('test-field'));
 
-      const form = (await formDef.connectTo(formEl).context.get(FormShare))!;
-      const field = (await fieldDef.connectTo(fieldEl).context.get(FieldShare))!;
+      const form = (await formDef.mountTo(formEl).get(FormShare))!;
+      const field = (await fieldDef.mountTo(fieldEl).get(FieldShare))!;
 
       expect(form).not.toBe(field);
 

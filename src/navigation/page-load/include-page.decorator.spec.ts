@@ -1,7 +1,13 @@
 import { immediateRenderScheduler } from '@frontmeans/render-scheduler';
 import { afterThe } from '@proc7ts/fun-events';
 import { valueProvider } from '@proc7ts/primitives';
-import { bootstrapComponents, BootstrapWindow, Component, ComponentMount, DefaultRenderScheduler } from '@wesib/wesib';
+import {
+  bootstrapComponents,
+  BootstrapWindow,
+  Component,
+  ComponentContext,
+  DefaultRenderScheduler,
+} from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
@@ -13,10 +19,16 @@ import Mock = jest.Mock;
 describe('navigation', () => {
   describe('@IncludePage', () => {
 
+    let doc: Document;
+
+    beforeEach(() => {
+      doc = document.implementation.createHTMLDocument('test');
+    });
+
     let element: Element;
 
     beforeEach(() => {
-      element = document.body.appendChild(document.createElement('page-content'));
+      element = doc.body.appendChild(doc.createElement('page-content'));
     });
     afterEach(() => {
       element.remove();
@@ -26,7 +38,7 @@ describe('navigation', () => {
     let locationMock: LocationMock;
 
     beforeEach(() => {
-      locationMock = new LocationMock({ win: window, doc: document });
+      locationMock = new LocationMock({ win: window, doc });
     });
     afterEach(() => {
       locationMock.down();
@@ -51,7 +63,7 @@ describe('navigation', () => {
     it('includes loaded page fragment', async () => {
       html = '<page-content>included content</page-content>';
 
-      const { context } = await bootstrap();
+      const context = await bootstrap();
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -72,7 +84,7 @@ describe('navigation', () => {
 `;
       element.id = 'test';
 
-      const { context } = await bootstrap();
+      const context = await bootstrap();
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -91,7 +103,7 @@ describe('navigation', () => {
 <page-content>not included content</page-content>
 <requested-fragment>included content</requested-fragment>
 `;
-      const { context } = await bootstrap({ fragment: { tag: 'requested-fragment' } });
+      const context = await bootstrap({ fragment: { tag: 'requested-fragment' } });
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -110,7 +122,7 @@ describe('navigation', () => {
 <other-fragment>included content</other-fragment>
 `;
 
-      const { context } = await bootstrap({ fragment: { tag: 'requested-fragment' } });
+      const context = await bootstrap({ fragment: { tag: 'requested-fragment' } });
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -128,7 +140,7 @@ describe('navigation', () => {
       html = '<page-content>included content</page-content>';
 
       const onResponse = jest.fn();
-      const { context } = await bootstrap({ onResponse });
+      const context = await bootstrap({ onResponse });
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -151,7 +163,7 @@ describe('navigation', () => {
       html = '<page-content>included content</page-content>';
 
       const onResponse = jest.fn();
-      const { context } = await bootstrap({ onResponse });
+      const context = await bootstrap({ onResponse });
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -169,7 +181,7 @@ describe('navigation', () => {
       html = '<page-content>included content</page-content>';
 
       const onResponse = jest.fn();
-      const { context } = await bootstrap({ onResponse, contentKey: valueProvider('same') });
+      const context = await bootstrap({ onResponse, contentKey: valueProvider('same') });
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -184,7 +196,7 @@ describe('navigation', () => {
       expect(onResponse).not.toHaveBeenCalled();
     });
 
-    async function bootstrap(def?: IncludePageDef): Promise<ComponentMount> {
+    async function bootstrap(def?: IncludePageDef): Promise<ComponentContext> {
 
       @Component(
           {
