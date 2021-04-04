@@ -1,10 +1,10 @@
 import { DomEventDispatcher } from '@frontmeans/dom-events';
+import { deriveDrekContext, drekContextOf, drekCssClassesOf } from '@frontmeans/drek';
 import { css__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { EventReceiver } from '@proc7ts/fun-events';
 import { setOfElements, valueByRecipe } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { DefaultNamespaceAliaser, ElementRenderScheduler, RenderDef, Wesib__NS } from '@wesib/wesib';
-import { addCssClass } from '../../util';
 import { Navigation } from '../navigation';
 import { NavLink } from './nav-link';
 
@@ -141,6 +141,16 @@ export function navElement<TElement extends Element>(
       eventDispatcher.on(event)(handleClick);
     }
 
+    const css = drekCssClassesOf(anchor)
+        .renderIn(
+            deriveDrekContext(
+                drekContextOf(anchor),
+                {
+                  scheduler: _opts => schedule,
+                },
+            ),
+        );
+
     return ({
 
       get href(): string {
@@ -150,13 +160,7 @@ export function navElement<TElement extends Element>(
       supply,
 
       activate() {
-        return addCssClass(
-            anchor,
-            activeClass,
-            {
-              scheduler: () => schedule,
-            },
-        );
+        return css.add(activeClass);
       },
 
     });
