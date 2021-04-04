@@ -1,3 +1,4 @@
+import { documentOf } from '@frontmeans/drek';
 import { StypDomFormatConfig } from '@frontmeans/style-producer';
 import { ComponentContext, DefaultNamespaceAliaser, ElementRenderScheduler, RenderDef } from '@wesib/wesib';
 import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
@@ -26,7 +27,7 @@ export function componentStypDomFormatConfig(
 
   return {
     ...config,
-    document: config.document || context.document,
+    document: config.document || documentOf(context.element),
     parent: config.parent || context.contentRoot,
     rootSelector: [],
     scheduler: config.scheduler || defaultStypRenderScheduler(context, render),

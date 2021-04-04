@@ -23,7 +23,10 @@ describe('styp', () => {
 
       registry.provide({ a: ElementRenderScheduler, is: scheduler });
 
-      context = registry.newValues() as ComponentContext;
+      context = {
+        element: document.createElement('test-element'),
+        get: registry.newValues().get,
+      } as ComponentContext;
       format = {
         context,
         renderer(): ElementRenderer {

@@ -1,3 +1,4 @@
+import { documentOf } from '@frontmeans/drek';
 import { newNamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import {
   immediateRenderScheduler,
@@ -50,6 +51,7 @@ describe('styp', () => {
     const ready = trackValue<ComponentContext>();
 
     context = {
+      element: document.createElement('test-element'),
       supply: new Supply(),
       whenReady: ready.read,
       whenSettled: ready.read,
@@ -118,7 +120,7 @@ describe('styp', () => {
     describe('config', () => {
       describe('document', () => {
         it('defaults to component document', () => {
-          expect(format.config()).toMatchObject({ document: context.document });
+          expect(format.config()).toMatchObject({ document: documentOf(context.element) });
         });
         it('respects explicit value', () => {
 
