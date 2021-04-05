@@ -1,3 +1,4 @@
+import { nodeDocument } from '@frontmeans/dom-primitives';
 import { newNamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import {
   immediateRenderScheduler,
@@ -17,7 +18,6 @@ import { ContextRegistry } from '@proc7ts/context-values';
 import { trackValue } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
 import {
-  BootstrapWindow,
   ComponentContext,
   ComponentState,
   DefaultNamespaceAliaser,
@@ -51,6 +51,7 @@ describe('styp', () => {
     const ready = trackValue<ComponentContext>();
 
     context = {
+      element: document.createElement('test-element'),
       supply: new Supply(),
       whenReady: ready.read,
       whenSettled: ready.read,
@@ -118,13 +119,8 @@ describe('styp', () => {
 
     describe('config', () => {
       describe('document', () => {
-        it('defaults to bootstrap window document', () => {
-
-          const doc = document.implementation.createHTMLDocument('test');
-
-          registry.provide({ a: BootstrapWindow, is: { document: doc } as BootstrapWindow });
-
-          expect(format.config()).toMatchObject({ document: doc });
+        it('defaults to component document', () => {
+          expect(format.config()).toMatchObject({ document: nodeDocument(context.element) });
         });
         it('respects explicit value', () => {
 

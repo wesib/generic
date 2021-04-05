@@ -1,3 +1,4 @@
+import { drekContextOf } from '@frontmeans/drek';
 import { ContextBuilder, ContextKey__symbol } from '@proc7ts/context-values';
 import { AfterEvent, afterEventBy, trackValue } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
@@ -6,7 +7,6 @@ import {
   Component,
   ComponentContext,
   ComponentElement,
-  ComponentMount,
   ComponentSlot,
   DefinitionContext,
 } from '@wesib/wesib';
@@ -17,6 +17,12 @@ import { SharedValue$ContextBuilder } from './shared-value.impl';
 
 describe('shares', () => {
   describe('Share', () => {
+
+    let doc: Document;
+
+    beforeEach(() => {
+      doc = document.implementation.createHTMLDocument('test');
+    });
 
     let share: Share<string>;
 
@@ -98,7 +104,7 @@ describe('shares', () => {
 
         @Component({
           name: 'test-component',
-          extend: { type: Object },
+          extend: { type: MockElement },
         })
         class TestComponent {
         }
@@ -162,7 +168,7 @@ describe('shares', () => {
 
         @Component({
           name: 'test-component',
-          extend: { type: Object },
+          extend: { type: MockElement },
         })
         class TestComponent {
         }
@@ -297,16 +303,16 @@ describe('shares', () => {
       });
 
       let sharerEl: ComponentElement;
-      let sharerMount: ComponentMount;
+      let sharerContext: ComponentContext;
       let testEl: ComponentElement;
       let testCtx: ComponentContext;
 
       beforeEach(() => {
-        sharerEl = document.createElement('sharer-el');
-        sharerMount = sharerDefContext.mountTo(sharerEl);
+        sharerEl = doc.createElement('sharer-el');
+        sharerContext = sharerDefContext.mountTo(sharerEl);
 
-        testEl = sharerEl.appendChild(document.createElement('test-el'));
-        testCtx = testDefContext.mountTo(testEl).context;
+        testEl = sharerEl.appendChild(doc.createElement('test-el'));
+        testCtx = testDefContext.mountTo(testEl);
       });
 
       it('reports nothing without sharer registered', () => {
@@ -337,11 +343,15 @@ describe('shares', () => {
         const receiver = jest.fn();
 
         share.valueFor(testCtx)(receiver);
-        expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerContext);
         expect(receiver).toHaveBeenCalledTimes(1);
 
-        sharerMount.connect();
-        expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        const sharerDrc = drekContextOf(sharerEl);
+
+        doc.body.appendChild(sharerEl);
+        sharerDrc.lift();
+
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerContext);
         expect(receiver).toHaveBeenCalledTimes(1);
       });
       it('reports value shared by component itself when `local` set to `true`', () => {
@@ -357,10 +367,10 @@ describe('shares', () => {
         expect(receiver).toHaveBeenCalledTimes(1);
       });
       it('reports value shared by mounted parent sharer', () => {
-        sharerEl = document.createElement('sharer-el');
+        sharerEl = doc.createElement('sharer-el');
 
-        testEl = sharerEl.appendChild(document.createElement('test-el'));
-        testCtx = testDefContext.mountTo(testEl).context;
+        testEl = sharerEl.appendChild(doc.createElement('test-el'));
+        testCtx = testDefContext.mountTo(testEl);
 
         share.addSharer(sharerDefContext, { name: 'sharer-el' });
         sharerDefContext.perComponent(shareValue(share, () => 'test'));
@@ -370,9 +380,14 @@ describe('shares', () => {
         share.valueFor(testCtx)(receiver);
         expect(receiver).toHaveBeenLastCalledWith();
 
-        sharerMount = sharerDefContext.mountTo(sharerEl);
-        sharerMount.connect();
-        expect(receiver).toHaveBeenLastCalledWith('test', sharerMount.context);
+        sharerContext = sharerDefContext.mountTo(sharerEl);
+
+        const sharerDrc = drekContextOf(sharerEl);
+
+        sharerEl.appendChild(doc.body);
+        sharerDrc.lift();
+
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerContext);
         expect(receiver).toHaveBeenCalledTimes(2);
       });
     });

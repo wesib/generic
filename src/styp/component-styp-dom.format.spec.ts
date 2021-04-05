@@ -2,13 +2,7 @@ import { newNamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import { immediateRenderScheduler } from '@frontmeans/render-scheduler';
 import { ContextRegistry } from '@proc7ts/context-values';
 import { noop } from '@proc7ts/primitives';
-import {
-  BootstrapWindow,
-  ComponentContext,
-  DefaultNamespaceAliaser,
-  ElementRenderer,
-  ElementRenderScheduler,
-} from '@wesib/wesib';
+import { ComponentContext, DefaultNamespaceAliaser, ElementRenderer, ElementRenderScheduler } from '@wesib/wesib';
 import { componentStypDomFormatConfig } from './component-styp-dom.format-config';
 import { ComponentStypFormat } from './component-styp-format';
 
@@ -23,14 +17,16 @@ describe('styp', () => {
 
       const registry = new ContextRegistry<ComponentContext>();
 
-      registry.provide({ a: BootstrapWindow, is: window });
       registry.provide({ a: DefaultNamespaceAliaser, by: newNamespaceAliaser });
 
       scheduler = jest.fn(immediateRenderScheduler);
 
       registry.provide({ a: ElementRenderScheduler, is: scheduler });
 
-      context = registry.newValues() as ComponentContext;
+      context = {
+        element: document.createElement('test-element'),
+        get: registry.newValues().get,
+      } as ComponentContext;
       format = {
         context,
         renderer(): ElementRenderer {

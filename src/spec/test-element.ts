@@ -1,3 +1,4 @@
+import { CustomHTMLElementClass } from '@frontmeans/dom-primitives';
 import { OnEvent } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import {
@@ -66,14 +67,20 @@ export async function testElement(componentType: ComponentClass<any>): Promise<C
 
 export class MockElement {
 
+  readonly ownerDocument: Document;
   readonly dispatchEvent = jest.fn();
   readonly addEventListener = jest.fn();
   readonly removeEventListener = jest.fn();
   private readonly _target: any;
   private readonly _attributes: { [name: string]: string | null } = {};
 
-  constructor() {
-    this._target = new.target;
+  constructor({ ownerDocument = document }: { ownerDocument?: Document } = {}) {
+    this.ownerDocument = ownerDocument;
+    this._target = new.target as unknown as CustomHTMLElementClass;
+  }
+
+  getRootNode(): Node {
+    return this.ownerDocument;
   }
 
   getAttribute(name: string): string | null {

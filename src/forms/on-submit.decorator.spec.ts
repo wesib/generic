@@ -1,7 +1,7 @@
 import { inFormElement, InGroup, inGroup } from '@frontmeans/input-aspects';
 import { afterThe } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import { ComponentMount } from '@wesib/wesib';
+import { ComponentContext } from '@wesib/wesib';
 import { testDefinition } from '../spec/test-element';
 import { Form } from './form';
 import { OnSubmit, OnSubmitDef } from './on-submit.decorator';
@@ -9,6 +9,12 @@ import { SharedForm, SharedFormDef } from './shared-form.decorator';
 
 describe('forms', () => {
   describe('@OnSubmit', () => {
+
+    let doc: Document;
+
+    beforeEach(() => {
+      doc = document.implementation.createHTMLDocument('test');
+    });
 
     interface TestData {
       property?: string;
@@ -18,8 +24,8 @@ describe('forms', () => {
     let formElement: HTMLFormElement;
 
     beforeEach(() => {
-      element = document.body.appendChild(document.createElement('custom-element'));
-      formElement = element.appendChild(document.createElement('form'));
+      element = doc.body.appendChild(doc.createElement('custom-element'));
+      formElement = element.appendChild(doc.createElement('form'));
     });
     afterEach(() => {
       element.remove();
@@ -74,7 +80,7 @@ describe('forms', () => {
         onSubmit: (form: Form<TestData>, event: Event) => void,
         def?: OnSubmitDef,
         formDef?: SharedFormDef<Form<TestData>>,
-    ): Promise<ComponentMount> {
+    ): Promise<ComponentContext> {
 
       class TestElement {
 

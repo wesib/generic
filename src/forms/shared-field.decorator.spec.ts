@@ -13,6 +13,13 @@ import { SharedForm } from './shared-form.decorator';
 
 describe('forms', () => {
   describe('@SharedField', () => {
+
+    let doc: Document;
+
+    beforeEach(() => {
+      doc = document.implementation.createHTMLDocument('test');
+    });
+
     it('shares field', async () => {
 
       @Component('test-element', { extend: { type: MockElement } })
@@ -341,12 +348,12 @@ describe('forms', () => {
       const fieldDef = await testDefinition(componentType);
       const formDef = await fieldDef.get(BootstrapContext).whenDefined(formComponentType);
 
-      const formEl = document.createElement('form-element');
-      const fieldEl = formEl.appendChild(document.createElement('field-element'));
+      const formEl = doc.body.appendChild(doc.createElement('form-element'));
+      const fieldEl = formEl.appendChild(doc.createElement('field-element'));
 
       return {
-        formCtx: formDef.connectTo(formEl).context,
-        fieldCtx: fieldDef.connectTo(fieldEl).context,
+        formCtx: formDef.mountTo(formEl),
+        fieldCtx: fieldDef.mountTo(fieldEl),
       };
     }
   });

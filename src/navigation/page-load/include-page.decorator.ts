@@ -1,8 +1,8 @@
+import { nodeDocument } from '@frontmeans/dom-primitives';
 import { onceAfter } from '@proc7ts/fun-events';
 import { Class, noop, valueProvider } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import {
-  BootstrapWindow,
   Component,
   ComponentClass,
   ComponentContext,
@@ -49,7 +49,7 @@ export function IncludePage<T extends ComponentClass = Class>(
       context.whenComponent(context => {
 
         const { fragment, render } = def;
-        const document = context.get(BootstrapWindow).document;
+        const document = nodeDocument(context.element);
         const schedule = context.get(ElementRenderScheduler)(render);
         const navigation = context.get(Navigation);
         let lastPageURL = contentKey(navigation.page);

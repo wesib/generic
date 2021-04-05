@@ -1,3 +1,4 @@
+import { nodeHost } from '@frontmeans/dom-primitives';
 import { ContextKey__symbol, ContextRegistry } from '@proc7ts/context-values';
 import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import {
@@ -14,14 +15,7 @@ import {
   translateAfter_,
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
-import {
-  BootstrapContext,
-  ComponentContext,
-  ComponentElement,
-  ComponentSlot,
-  DefinitionContext,
-  parentElement,
-} from '@wesib/wesib';
+import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
 import { ShareLocator } from './share-locator';
 import { Share__symbol, ShareRef } from './share-ref';
 import { ShareRegistry } from './share-registry.impl';
@@ -165,7 +159,7 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
             }
           }
 
-          let element: ComponentElement | null = parentElement(consumer.element);
+          let element: ComponentElement | undefined = nodeHost(consumer.element);
 
           while (element) {
             if (sharers.names.has(element.tagName.toLowerCase())) {
@@ -174,7 +168,7 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
               );
             }
 
-            element = parentElement(element);
+            element = nodeHost(element);
           }
 
           return afterThe();
