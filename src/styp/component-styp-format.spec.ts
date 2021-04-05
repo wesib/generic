@@ -1,4 +1,4 @@
-import { documentOf } from '@frontmeans/drek';
+import { nodeDocument } from '@frontmeans/dom-primitives';
 import { newNamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import {
   immediateRenderScheduler,
@@ -120,7 +120,7 @@ describe('styp', () => {
     describe('config', () => {
       describe('document', () => {
         it('defaults to component document', () => {
-          expect(format.config()).toMatchObject({ document: documentOf(context.element) });
+          expect(format.config()).toMatchObject({ document: nodeDocument(context.element) });
         });
         it('respects explicit value', () => {
 

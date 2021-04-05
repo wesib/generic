@@ -1,4 +1,4 @@
-import { parentElementOf } from '@frontmeans/drek';
+import { nodeHost } from '@frontmeans/dom-primitives';
 import { ContextKey__symbol, ContextRegistry } from '@proc7ts/context-values';
 import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import {
@@ -159,7 +159,7 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
             }
           }
 
-          let element: ComponentElement | null = parentElementOf(consumer.element);
+          let element: ComponentElement | undefined = nodeHost(consumer.element);
 
           while (element) {
             if (sharers.names.has(element.tagName.toLowerCase())) {
@@ -168,7 +168,7 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
               );
             }
 
-            element = parentElementOf(element);
+            element = nodeHost(element);
           }
 
           return afterThe();

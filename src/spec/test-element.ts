@@ -1,4 +1,4 @@
-import { CustomElementClass } from '@frontmeans/drek';
+import { CustomHTMLElementClass } from '@frontmeans/dom-primitives';
 import { OnEvent } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import {
@@ -76,7 +76,7 @@ export class MockElement {
 
   constructor({ ownerDocument = document }: { ownerDocument?: Document } = {}) {
     this.ownerDocument = ownerDocument;
-    this._target = new.target as unknown as CustomElementClass;
+    this._target = new.target as unknown as CustomHTMLElementClass;
   }
 
   getRootNode(): Node {

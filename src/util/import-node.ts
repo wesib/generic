@@ -1,4 +1,4 @@
-import { isElementNode } from '@frontmeans/drek';
+import { isElementNode } from '@frontmeans/dom-primitives';
 import { itsEach, overArray } from '@proc7ts/push-iterator';
 
 /**
