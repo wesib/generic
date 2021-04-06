@@ -19,9 +19,9 @@ import { trackValue } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
 import {
   ComponentContext,
+  ComponentRenderScheduler,
   ComponentState,
   DefaultNamespaceAliaser,
-  ElementRenderScheduler,
   ShadowContentRoot,
 } from '@wesib/wesib';
 import { ComponentStyleProducer } from './component-style-producer';
@@ -79,7 +79,7 @@ describe('styp', () => {
 
   beforeEach(() => {
     mockRenderScheduler = jest.fn(immediateRenderScheduler);
-    registry.provide({ a: ElementRenderScheduler, is: mockRenderScheduler });
+    registry.provide({ a: ComponentRenderScheduler, is: mockRenderScheduler });
   });
 
   let elementId: ElementIdClass;

@@ -1,12 +1,12 @@
 import { nodeDocument } from '@frontmeans/dom-primitives';
 import { StypDomFormatConfig } from '@frontmeans/style-producer';
-import { ComponentContext, DefaultNamespaceAliaser, ElementRenderScheduler, RenderDef } from '@wesib/wesib';
+import { ComponentContext, ComponentRenderScheduler, DefaultNamespaceAliaser, RenderDef } from '@wesib/wesib';
 import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
 
 /**
  * Builds configuration of DOM style production format.
  *
- * Schedules style rendering in `ElementRenderScheduler` by default.
+ * Schedules style rendering in `ComponentRenderScheduler` by default.
  *
  * Utilizes `DefaultNamespaceAliaser` by default.
  *
@@ -42,9 +42,9 @@ export function componentStypDomFormatConfig(
 function defaultStypRenderScheduler(
     context: ComponentContext,
     render: RenderDef = {},
-): ElementRenderScheduler {
+): ComponentRenderScheduler {
 
-  const scheduler = context.get(ElementRenderScheduler);
+  const scheduler = context.get(ComponentRenderScheduler);
 
   return (opts = {}) => scheduler({ ...opts, ...render });
 }

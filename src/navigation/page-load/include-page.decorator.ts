@@ -7,7 +7,7 @@ import {
   ComponentClass,
   ComponentContext,
   ComponentDecorator,
-  ElementRenderScheduler,
+  ComponentRenderScheduler,
   RenderDef,
 } from '@wesib/wesib';
 import { importNodeContent } from '../../util';
@@ -50,7 +50,7 @@ export function IncludePage<T extends ComponentClass = Class>(
 
         const { fragment, render } = def;
         const document = nodeDocument(context.element);
-        const schedule = context.get(ElementRenderScheduler)(render);
+        const schedule = context.get(ComponentRenderScheduler)(render);
         const navigation = context.get(Navigation);
         let lastPageURL = contentKey(navigation.page);
         let detectFragment: () => PageFragmentRequest;
