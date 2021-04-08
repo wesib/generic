@@ -1,8 +1,9 @@
 import { newNamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import { immediateRenderScheduler } from '@frontmeans/render-scheduler';
+import { StypRenderer } from '@frontmeans/style-producer';
 import { ContextRegistry } from '@proc7ts/context-values';
 import { noop } from '@proc7ts/primitives';
-import { ComponentContext, ComponentRenderer, ComponentRenderScheduler, DefaultNamespaceAliaser } from '@wesib/wesib';
+import { ComponentContext, ComponentRenderScheduler, DefaultNamespaceAliaser } from '@wesib/wesib';
 import { componentStypDomFormatConfig } from './component-styp-dom.format-config';
 import { ComponentStypFormat } from './component-styp-format';
 
@@ -29,7 +30,7 @@ describe('styp', () => {
       } as ComponentContext;
       format = {
         context,
-        renderer(): ComponentRenderer {
+        renderer(): StypRenderer {
           return noop;
         },
       } as any;
