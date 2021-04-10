@@ -1,4 +1,4 @@
-import { nodeDocument } from '@frontmeans/dom-primitives';
+import { importNodeContent, nodeDocument } from '@frontmeans/dom-primitives';
 import { onceAfter } from '@proc7ts/fun-events';
 import { Class, noop, valueProvider } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
@@ -10,7 +10,6 @@ import {
   ComponentRenderScheduler,
   RenderDef,
 } from '@wesib/wesib';
-import { importNodeContent } from '../../util';
 import { Navigation } from '../navigation';
 import { Page } from '../page';
 import { PageLoadParam } from './page-load-param';
