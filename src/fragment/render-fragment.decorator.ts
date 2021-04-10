@@ -8,28 +8,63 @@ import {
   ComponentProperty,
   ComponentPropertyDecorator,
   ComponentRenderCtl,
-  ComponentRenderer,
   DefaultPreRenderScheduler,
   RenderDef,
 } from '@wesib/wesib';
 import { FragmentRendererExecution } from './fragment-renderer';
 
-export type RenderFragmentDef<TSpec extends RenderFragmentDef.Spec = RenderFragmentDef.Spec> =
-  | RenderFragmentDef.Spec
-  | RenderDef.Provider<TSpec>;
+/**
+ * Fragment rendering definition.
+ *
+ * This is either a {@link RenderFragmentDef.Spec rendering specifier}, or its {@link RenderFragmentDef.Provider
+ * provider function}.
+ */
+export type RenderFragmentDef =
+    | RenderFragmentDef.Spec
+    | RenderDef.Provider<RenderFragmentDef.Spec>;
 
 export namespace RenderFragmentDef {
 
+  /**
+   * Fragment rendering specifier.
+   */
   export interface Spec extends RenderDef.Spec {
 
+    /**
+     * A rendering target to place the rendered fragment contents to.
+     *
+     * By default, the content will be wrapped into element with `display: contents;` CSS style and the wrapper element
+     * will be appended to component's content root.
+     */
     readonly target?: DrekTarget;
 
+    /**
+     * Whether to settle the rendered fragment contents prior to placing them to {@link target}.
+     *
+     * When enabled custom elements within rendered contents will be [upgraded], then settled by calling
+     * `DrekFragment.settle()` method. This allows nested custom elements to render their contents offline into document
+     * fragment prior to placing to the document.
+     *
+     * Enabled (`true`) by default.
+     *
+     * [upgraded]: https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/upgrade
+     */
     readonly settle?: boolean;
 
   }
 
 }
 
+/**
+ * Creates a {@link FragmentRenderer fragment renderer} method decorator.
+ *
+ * The decorated method accepts a {@link FragmentRendererExecution fragment rendering context} as its only parameter.
+ *
+ * @typeParam TClass - A type of decorated component class.
+ * @param def - Non-mandatory rendering definition.
+ *
+ * @returns Component method decorator.
+ */
 export function RenderFragment<TClass extends ComponentClass>(
     def: RenderFragmentDef = {},
 ): ComponentPropertyDecorator<(execution: FragmentRendererExecution) => void, TClass> {
@@ -40,7 +75,9 @@ export function RenderFragment<TClass extends ComponentClass>(
           context.whenReady(() => {
 
             const spec = valueByRecipe(def, context);
-            const { settle = true } = spec;
+            const renderFragment = spec.settle === false
+                ? RenderFragment$justRender
+                : RenderFragment$settleThenRender;
             const { component } = context;
             const renderer = get(component).bind(component);
             const preScheduler = context.get(DefaultPreRenderScheduler);
@@ -52,57 +89,47 @@ export function RenderFragment<TClass extends ComponentClass>(
 
               const on = new EventEmitter();
 
-              renderCtl.renderBy(() => fragment.render(), { on }).needs(supply);
+              renderCtl.renderBy(
+                  () => renderFragment(fragment),
+                  { on },
+              ).needs(supply);
 
-              // Just send a render signal on attempt to render content next time.
+              // Next time just send a render signal.
               placeContent = _supply => on.send();
-
-              placeContent(supply);
             };
 
             renderCtl.preRenderBy(
                 preExec => {
-                  fragment.innerContext.scheduler()(fragExec => {
 
-                    let nextRenderer: ComponentRenderer | undefined;
-                    const exec: FragmentRendererExecution = {
-                      ...fragExec,
-                      ...preExec,
-                      postpone(postponed) {
-                        fragExec.postpone(() => postponed(exec));
-                      },
-                      renderBy(renderer) {
-                        nextRenderer = renderer;
-                      },
-                      done() {
-                        nextRenderer = ({ supply }) => {
-                          // Place the rendered content to the document.
-                          supply.off();
-                        };
-                      },
-                    };
-
-                    renderer(exec);
-
-                    if (settle) {
-                      fragExec.postpone(() => {
-                        fragment.innerContext.window.customElements.upgrade(fragment.content);
-                        fragment.settle();
-                      });
-                    }
-
-                    if (nextRenderer) {
-                      // Delegate rendering to the next renderer.
+                  let done = false;
+                  const exec: FragmentRendererExecution = {
+                    ...preExec,
+                    fragment,
+                    content: fragment.content,
+                    postpone(postponed) {
+                      preExec.postpone(() => postponed(exec));
+                    },
+                    renderBy(renderer) {
+                      done = true;
                       preExec.renderBy(renderExec => {
-                        fragment.render();
-                        nextRenderer!(renderExec);
+                        renderFragment(fragment);
+                        renderExec.renderBy(renderer);
                       });
-                    } else {
-                      // Just place the rendered content.
-                      // This may happen again.
-                      placeContent(preExec.supply);
-                    }
-                  });
+                    },
+                    done() {
+                      done = true;
+                      preExec.renderBy(({ supply }) => {
+                        renderFragment(fragment);
+                        supply.off();
+                      });
+                    },
+                  };
+
+                  renderer(exec);
+
+                  if (!done) {
+                    placeContent(preExec.supply);
+                  }
                 },
                 spec,
             );
@@ -115,4 +142,14 @@ export function RenderFragment<TClass extends ComponentClass>(
 
 function RenderFragment$defaultTarget({ contentRoot }: ComponentContext): DrekTarget {
   return drekCharger(drekAppender(contentRoot));
+}
+
+function RenderFragment$settleThenRender(fragment: DrekFragment): void {
+  fragment.innerContext.window.customElements.upgrade(fragment.content);
+  fragment.settle();
+  fragment.render();
+}
+
+function RenderFragment$justRender(fragment: DrekFragment): void {
+  fragment.render();
 }
