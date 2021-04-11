@@ -1,3 +1,4 @@
+import { removeNodeContent } from '@frontmeans/dom-primitives';
 import { drekAppender, drekCharger, DrekFragment, DrekTarget } from '@frontmeans/drek';
 import { ContextKey, SingleContextKey } from '@proc7ts/context-values';
 import { EventEmitter } from '@proc7ts/fun-events';
@@ -107,6 +108,7 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
             },
           };
 
+          removeNodeContent(fragment.content);
           renderer(exec);
 
           if (!done) {
