@@ -1,6 +1,7 @@
 import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf } from '@frontmeans/drek';
 import { queuedRenderScheduler, RenderSchedule, RenderScheduleOptions } from '@frontmeans/render-scheduler';
+import { Supply } from '@proc7ts/supply';
 import {
   Component,
   ComponentContext,
@@ -10,7 +11,8 @@ import {
 } from '@wesib/wesib';
 import { testDefinition } from '../spec/test-element';
 import { FragmentRendererExecution } from './fragment-renderer';
-import { RenderFragment, RenderFragmentDef } from './render-fragment.decorator';
+import { RenderFragmentDef } from './render-fragment-def';
+import { RenderFragment } from './render-fragment.decorator';
 
 describe('fragment', () => {
   describe('@RenderFragment', () => {
@@ -156,6 +158,28 @@ describe('fragment', () => {
         context.updateState(statePropertyPathTo('test'), 1, 2);
         expect(element.textContent).toBe('test-2');
         expect(postponed).toHaveBeenCalledTimes(2);
+      });
+    });
+
+    describe('supply', () => {
+      it('prevents re-rendering when cut off', async () => {
+
+        let counter = 0;
+        let fragmentSupply!: Supply;
+
+        render.mockImplementation(({ content, supply }) => {
+          content.appendChild(doc.createTextNode(`test-${++counter}`));
+          fragmentSupply = supply;
+        });
+
+        const context = await bootstrap();
+
+        expect(element.textContent).toBe('test-1');
+        fragmentSupply.off();
+
+        context.updateState(statePropertyPathTo('test'), 1, 2);
+        expect(element.textContent).toBe('test-1');
+        expect(render).toHaveBeenCalledTimes(1);
       });
     });
 
