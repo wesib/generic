@@ -8,7 +8,6 @@ import {
   ComponentProperty,
   ComponentPropertyDecorator,
   ComponentRenderCtl,
-  DefaultPreRenderScheduler,
   RenderDef,
 } from '@wesib/wesib';
 import { FragmentRendererExecution } from './fragment-renderer';
@@ -80,10 +79,9 @@ export function RenderFragment<TClass extends ComponentClass>(
                 : RenderFragment$settleThenRender;
             const { component } = context;
             const renderer = get(component).bind(component);
-            const preScheduler = context.get(DefaultPreRenderScheduler);
             const renderCtl = context.get(ComponentRenderCtl);
             const { target = RenderFragment$defaultTarget(context) } = spec;
-            const fragment = new DrekFragment(target, { scheduler: preScheduler });
+            const fragment = new DrekFragment(target);
 
             let placeContent = (supply: Supply): void => {
 
