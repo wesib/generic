@@ -114,7 +114,7 @@ describe('styp', () => {
       expect(produceSpy).toHaveBeenCalled();
       expect(cssStyle().display).toBe('block');
     });
-    it('does not remove styles on component destruction', async () => {
+    it('does not remove styles on component disposal', async () => {
 
       const context = await mount(
           () => stypRoot({ display: 'block' }).rules,
@@ -126,7 +126,7 @@ describe('styp', () => {
           },
       );
 
-      context.destroy();
+      context.supply.off();
       expect(element.querySelector('style')!.textContent).toContain(
           '{\n'
           + '  display: block;\n'
