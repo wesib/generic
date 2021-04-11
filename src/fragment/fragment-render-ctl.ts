@@ -1,4 +1,3 @@
-import { removeNodeContent } from '@frontmeans/dom-primitives';
 import { drekAppender, drekCharger, DrekFragment, DrekTarget } from '@frontmeans/drek';
 import { ContextKey, SingleContextKey } from '@proc7ts/context-values';
 import { EventEmitter } from '@proc7ts/fun-events';
@@ -60,9 +59,8 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
         : RenderFragment$settleThenRender;
     const renderCtl = this._context.get(ComponentRenderCtl);
     const { target = RenderFragment$defaultTarget(this._context) } = spec;
-    const fragment = new DrekFragment(target);
 
-    let placeContent = (supply: Supply): void => {
+    let placeContent = (fragment: DrekFragment, supply: Supply): void => {
 
       const on = new EventEmitter();
 
@@ -73,7 +71,8 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
       ).needs(supply);
 
       // Next time just send a render signal.
-      placeContent = _supply => {
+      placeContent = (newFragment, _supply) => {
+        fragment = newFragment;
         on.send();
       };
     };
@@ -83,6 +82,7 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
     const renderSupply = renderCtl.preRenderBy(
         preExec => {
 
+          const fragment = new DrekFragment(target);
           let done = false;
           const exec: FragmentRendererExecution = {
             ...preExec,
@@ -101,18 +101,17 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
             },
             done() {
               done = true;
-              preExec.renderBy(({ supply: rSupply }) => {
+              preExec.renderBy(({ supply }) => {
                 renderFragment(fragment);
-                renderSupply.as(rSupply).off(RenderFragment$done);
+                renderSupply.as(supply).off(RenderFragment$done);
               });
             },
           };
 
-          removeNodeContent(fragment.content);
           renderer(exec);
 
           if (!done) {
-            placeContent(preExec.supply);
+            placeContent(fragment, preExec.supply);
           }
         },
         spec,
