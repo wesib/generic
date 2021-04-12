@@ -31,10 +31,7 @@ describe('navigation', () => {
 
     beforeEach(() => {
       element = doc.body.appendChild(doc.createElement('page-content'));
-    });
-    afterEach(() => {
-      element.remove();
-      element.innerHTML = 'original content';
+      element.innerHTML = '(original content)';
     });
 
     let locationMock: LocationMock;
@@ -62,6 +59,13 @@ describe('navigation', () => {
       mockAgent = jest.fn((next, _request) => next());
     });
 
+    it('retains initial content', async () => {
+      html = '<page-content>included content</page-content>';
+
+      await bootstrap();
+
+      expect(element.textContent).toBe('(original content)');
+    });
     it('includes loaded page fragment', async () => {
       html = '<page-content>included content</page-content>';
 
@@ -77,7 +81,7 @@ describe('navigation', () => {
         ).open('page').catch(reject);
       });
 
-      expect(element.textContent).toBe('included content');
+      expect(element.textContent).toBe('(original content)included content');
     });
     it('includes identified page fragment', async () => {
       html = `
@@ -98,7 +102,7 @@ describe('navigation', () => {
         ).open('page').catch(reject);
       });
 
-      expect(element.textContent).toBe('included content');
+      expect(element.textContent).toBe('(original content)included content');
     });
     it('includes requested page fragment', async () => {
       html = `
@@ -117,7 +121,7 @@ describe('navigation', () => {
         ).open('page').catch(reject);
       });
 
-      expect(element.textContent).toBe('included content');
+      expect(element.textContent).toBe('(original content)included content');
     });
     it('clears content if requested fragment not loaded', async () => {
       html = `

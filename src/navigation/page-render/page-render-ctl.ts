@@ -76,13 +76,14 @@ class PageRenderCtl$ implements PageRenderCtl {
     const supply = renderCtl.renderFragmentBy(
         fragExec => {
 
-          const responseAndURL = responseTracker.it;
+          const responseAndKey = responseTracker.it;
 
-          if (!responseAndURL) {
+          if (!responseAndKey) {
+            fragExec.retainContent();
             return;
           }
 
-          const [response, pageKey] = responseAndURL;
+          const [response, pageKey] = responseAndKey;
           const exec: PageRendererExecution = {
             ...fragExec,
             postpone(postponed) {
