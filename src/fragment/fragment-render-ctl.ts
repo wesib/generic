@@ -54,35 +54,41 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
   renderFragmentBy(renderer: FragmentRenderer, def: RenderFragmentDef = {}): Supply {
 
     const spec = valueByRecipe(def, this._context);
-    const renderFragment = spec.settle === false
+    const doRenderFragment = spec.settle === false
         ? RenderFragment$justRender
         : RenderFragment$settleThenRender;
-    const renderCtl = this._context.get(ComponentRenderCtl);
+    const renderFragment = (fragment: DrekFragment, retainContent: boolean): void => {
+      if (!retainContent) {
+        doRenderFragment(fragment);
+      }
+    };
     const { target = RenderFragment$defaultTarget(this._context) } = spec;
+    const renderCtl = this._context.get(ComponentRenderCtl);
 
-    let placeContent = (fragment: DrekFragment, supply: Supply): void => {
+    let placeContent = (fragment: DrekFragment, retainContent: boolean, supply: Supply): void => {
 
       const on = new EventEmitter();
 
       supply.cuts(on);
       renderCtl.renderBy(
-          () => renderFragment(fragment),
+          () => renderFragment(fragment, retainContent),
           { on },
       ).needs(supply);
 
       // Next time just send a render signal.
-      placeContent = (newFragment, _supply) => {
+      placeContent = (newFragment, newRetainContent, _supply) => {
         fragment = newFragment;
+        retainContent = newRetainContent;
         on.send();
       };
     };
 
     const supply = new Supply();
-
     const renderSupply = renderCtl.preRenderBy(
         preExec => {
 
           const fragment = new DrekFragment(target);
+          let retainContent = false;
           let done = false;
           const exec: FragmentRendererExecution = {
             ...preExec,
@@ -95,14 +101,17 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
             renderBy(renderer) {
               done = true;
               preExec.renderBy(renderExec => {
-                renderFragment(fragment);
+                renderFragment(fragment, retainContent);
                 renderExec.renderBy(renderer);
               });
+            },
+            retainContent(retain = true) {
+              retainContent = retain;
             },
             done() {
               done = true;
               preExec.renderBy(({ supply }) => {
-                renderFragment(fragment);
+                renderFragment(fragment, retainContent);
                 renderSupply.as(supply).off(RenderFragment$done);
               });
             },
@@ -111,7 +120,7 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
           renderer(exec);
 
           if (!done) {
-            placeContent(fragment, preExec.supply);
+            placeContent(fragment, retainContent, preExec.supply);
           }
         },
         spec,

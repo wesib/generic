@@ -31,6 +31,13 @@ export interface FragmentRendererExecution extends ComponentRendererExecution {
   readonly content: DocumentFragment;
 
   /**
+   * Allows to retain the document content instead of replacing it with pre-rendered one.
+   *
+   * @param retain - Whether to retain the document content. `true` by default.
+   */
+  retainContent(retain?: boolean): void;
+
+  /**
    * Stops fragment re-rendering.
    *
    * After calling this method the rendered fragment will be placed to the document once and no further rendering would

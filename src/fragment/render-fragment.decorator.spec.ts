@@ -1,5 +1,5 @@
 import { nodeWindow } from '@frontmeans/dom-primitives';
-import { drekContextOf } from '@frontmeans/drek';
+import { drekContextOf, drekReplacer } from '@frontmeans/drek';
 import { queuedRenderScheduler, RenderSchedule, RenderScheduleOptions } from '@frontmeans/render-scheduler';
 import { Supply } from '@proc7ts/supply';
 import {
@@ -135,6 +135,47 @@ describe('fragment', () => {
 
         context.updateState(statePropertyPathTo('test'), 1, 2);
         expect(element.textContent).toBe('test-1');
+        expect(delegate).toHaveBeenCalledTimes(2);
+      });
+    });
+
+    describe('retainContent', () => {
+      it('retains document content', async () => {
+        element.appendChild(doc.createTextNode('initial content'));
+
+        let counter = 0;
+
+        render.mockImplementation(({ content, retainContent }) => {
+          retainContent(!counter);
+          content.appendChild(doc.createTextNode(`test-${++counter}`));
+        });
+
+        const context = await bootstrap({ target: drekReplacer(element) });
+
+        expect(element.textContent).toBe('initial content');
+
+        context.updateState(statePropertyPathTo('test'), 1, 2);
+        expect(element.textContent).toBe('test-2');
+      });
+      it('allows to delegate to another renderer', async () => {
+        element.appendChild(doc.createTextNode('initial content'));
+
+        const delegate = jest.fn();
+        let counter = 0;
+
+        render.mockImplementation(({ content, renderBy, retainContent }) => {
+          content.appendChild(doc.createTextNode(`test-${++counter}`));
+          retainContent();
+          renderBy(delegate);
+        });
+
+        const context = await bootstrap();
+
+        expect(element.textContent).toBe('initial content');
+        expect(delegate).toHaveBeenCalledTimes(1);
+
+        context.updateState(statePropertyPathTo('test'), 1, 2);
+        expect(element.textContent).toBe('initial content');
         expect(delegate).toHaveBeenCalledTimes(2);
       });
     });
