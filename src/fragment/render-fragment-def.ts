@@ -1,5 +1,5 @@
 import { DrekTarget } from '@frontmeans/drek';
-import { RenderDef } from '@wesib/wesib';
+import { ComponentContext, RenderDef } from '@wesib/wesib';
 
 /**
  * Fragment rendering definition.
@@ -18,12 +18,16 @@ export namespace RenderFragmentDef {
   export interface Spec extends RenderDef.Spec {
 
     /**
-     * A rendering target to place the rendered fragment contents to.
+     * Creates rendering target to place the rendered fragment contents to.
      *
      * By default, the content will be wrapped into element with `display: contents;` CSS style and the wrapper element
      * will be appended to component's content root.
+     *
+     * @param context - Component context.
+     *
+     * @returns Rendering target.
      */
-    readonly target?: DrekTarget;
+    target?(this: void, context: ComponentContext): DrekTarget;
 
     /**
      * Whether to settle the rendered fragment contents prior to placing them to {@link target}.

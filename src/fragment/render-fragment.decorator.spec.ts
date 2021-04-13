@@ -150,7 +150,7 @@ describe('fragment', () => {
           content.appendChild(doc.createTextNode(`test-${++counter}`));
         });
 
-        const context = await bootstrap({ target: drekReplacer(element) });
+        const context = await bootstrap({ target: () => drekReplacer(element) });
 
         expect(element.textContent).toBe('initial content');
 
