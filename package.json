@@ -46,7 +46,7 @@
   "dependencies": {
     "@frontmeans/dom-events": "^1.1.0",
     "@frontmeans/dom-primitives": "^1.0.0-dev.1",
-    "@frontmeans/drek": "^1.0.0-dev.4",
+    "@frontmeans/drek": "^1.0.0-dev.5",
     "@frontmeans/render-scheduler": "^1.5.1",
     "@hatsy/http-header-value": "^3.5.3",
     "@proc7ts/primitives": "^2.0.0",
