@@ -1,6 +1,7 @@
 import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf, drekReplacer } from '@frontmeans/drek';
 import { queuedRenderScheduler, RenderSchedule, RenderScheduleOptions } from '@frontmeans/render-scheduler';
+import { Class } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import {
   Component,
@@ -39,6 +40,32 @@ describe('fragment', () => {
       render = jest.fn();
     });
 
+    it('includes property name into enclosing comments', async () => {
+      render.mockImplementation(({ content }) => {
+        content.appendChild(doc.createTextNode('test'));
+      });
+
+      await bootstrap({}, 'custom');
+
+      const [start, content, end] = Array.from(element.childNodes);
+
+      expect(start.textContent).toBe(' [[ custom [[ ');
+      expect(content.textContent).toBe('test');
+      expect(end.textContent).toBe(' ]] custom ]] ');
+    });
+    it('includes property name without `render` prefix into enclosing comments', async () => {
+      render.mockImplementation(({ content }) => {
+        content.appendChild(doc.createTextNode('test'));
+      });
+
+      await bootstrap();
+
+      const [start, content, end] = Array.from(element.childNodes);
+
+      expect(start.textContent).toBe(' [[ Fragment [[ ');
+      expect(content.textContent).toBe('test');
+      expect(end.textContent).toBe(' ]] Fragment ]] ');
+    });
     it('re-renders fragment on state update', async () => {
 
       let counter = 0;
@@ -53,26 +80,6 @@ describe('fragment', () => {
 
       context.updateState(statePropertyPathTo('test'), 1, 2);
       expect(element.textContent).toBe('test-2');
-    });
-    it('upgrades custom elements', async () => {
-
-      const upgradeSpy = jest.spyOn(nodeWindow(doc).customElements, 'upgrade');
-
-      await bootstrap();
-
-      expect(upgradeSpy).toHaveBeenCalled();
-    });
-    it('settles pre-rendered content', async () => {
-
-      const whenSettled = jest.fn();
-
-      render.mockImplementation(({ content }) => {
-        drekContextOf(content).whenSettled(whenSettled);
-      });
-
-      await bootstrap();
-
-      expect(whenSettled).toHaveBeenCalledWith({ connected: false, withinFragment: 'rendered' });
     });
 
     describe('{ settle: false }', () => {
@@ -224,26 +231,55 @@ describe('fragment', () => {
       });
     });
 
-    async function bootstrap(def?: RenderFragmentDef): Promise<ComponentContext> {
+    async function bootstrap(
+        def?: RenderFragmentDef,
+        key: 'renderFragment' | 'custom' = 'renderFragment',
+    ): Promise<ComponentContext> {
 
-      @Component({
-        feature: {
-          setup(setup) {
-            setup.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
-            setup.provide({ a: DefaultPreRenderScheduler, is: mockPreRenderScheduler });
+      let testComponent: Class;
+
+      if (key === 'renderFragment') {
+
+        @Component({
+          feature: {
+            setup(setup) {
+              setup.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
+              setup.provide({ a: DefaultPreRenderScheduler, is: mockPreRenderScheduler });
+            },
           },
-        },
-      })
-      class TestComponent {
+        })
+        class TestComponent {
 
-        @RenderFragment(def)
-        readonly render = render;
+          @RenderFragment(def)
+          readonly renderFragment = render;
 
+        }
+
+        testComponent = TestComponent;
+      } else {
+
+        @Component({
+          feature: {
+            setup(setup) {
+              setup.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
+              setup.provide({ a: DefaultPreRenderScheduler, is: mockPreRenderScheduler });
+            },
+          },
+        })
+        class TestComponent {
+
+          @RenderFragment(def)
+          readonly custom = render;
+
+        }
+
+        testComponent = TestComponent;
       }
 
-      const defContext = await testDefinition(TestComponent);
+      const defContext = await testDefinition(testComponent);
 
       return defContext.mountTo(element);
     }
   });
+
 });
