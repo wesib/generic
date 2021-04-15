@@ -1,8 +1,9 @@
 import { newNamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import { immediateRenderScheduler } from '@frontmeans/render-scheduler';
+import { StypRenderer } from '@frontmeans/style-producer';
 import { ContextRegistry } from '@proc7ts/context-values';
 import { noop } from '@proc7ts/primitives';
-import { ComponentContext, DefaultNamespaceAliaser, ElementRenderer, ElementRenderScheduler } from '@wesib/wesib';
+import { ComponentContext, ComponentRenderScheduler, DefaultNamespaceAliaser } from '@wesib/wesib';
 import { componentStypDomFormatConfig } from './component-styp-dom.format-config';
 import { ComponentStypFormat } from './component-styp-format';
 
@@ -21,7 +22,7 @@ describe('styp', () => {
 
       scheduler = jest.fn(immediateRenderScheduler);
 
-      registry.provide({ a: ElementRenderScheduler, is: scheduler });
+      registry.provide({ a: ComponentRenderScheduler, is: scheduler });
 
       context = {
         element: document.createElement('test-element'),
@@ -29,7 +30,7 @@ describe('styp', () => {
       } as ComponentContext;
       format = {
         context,
-        renderer(): ElementRenderer {
+        renderer(): StypRenderer {
           return noop;
         },
       } as any;

@@ -7,3 +7,4 @@ export * from './page';
 export * from './page-load';
 export * from './page-param';
 export * from './page-param-context';
+export * from './page-render';

@@ -1,7 +1,7 @@
+import { importNode } from '@frontmeans/dom-primitives';
 import { mapOn_ } from '@proc7ts/fun-events';
 import { filterArray, filterIt, itsEach, mapIt, PushIterable } from '@proc7ts/push-iterator';
 import { BootstrapContext, BootstrapWindow } from '@wesib/wesib';
-import { importNode } from '../../util';
 import { PageLoadAgent } from './page-load-agent';
 
 /**

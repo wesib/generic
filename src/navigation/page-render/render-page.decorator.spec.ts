@@ -1,23 +1,25 @@
-import { immediateRenderScheduler } from '@frontmeans/render-scheduler';
+import { queuedRenderScheduler } from '@frontmeans/render-scheduler';
 import { afterThe } from '@proc7ts/fun-events';
-import { valueProvider } from '@proc7ts/primitives';
+import { noop, valueProvider } from '@proc7ts/primitives';
 import {
   bootstrapComponents,
   BootstrapWindow,
   Component,
   ComponentContext,
+  DefaultPreRenderScheduler,
   DefaultRenderScheduler,
 } from '@wesib/wesib';
 import { HttpFetch } from '../../fetch';
 import { LocationMock } from '../../spec/location-mock';
 import { Navigation } from '../navigation';
-import { IncludePage, IncludePageDef } from './include-page.decorator';
-import { PageLoadAgent } from './page-load-agent';
-import { PageLoadParam } from './page-load-param';
+import { PageLoadAgent, PageLoadParam } from '../page-load';
+import { PageRenderer, PageRendererExecution } from './page-renderer';
+import { RenderPageDef } from './render-page-def';
+import { RenderPage } from './render-page.decorator';
 import Mock = jest.Mock;
 
 describe('navigation', () => {
-  describe('@IncludePage', () => {
+  describe('@RenderPage', () => {
 
     let doc: Document;
 
@@ -29,10 +31,7 @@ describe('navigation', () => {
 
     beforeEach(() => {
       element = doc.body.appendChild(doc.createElement('page-content'));
-    });
-    afterEach(() => {
-      element.remove();
-      element.innerHTML = 'original content';
+      element.innerHTML = '(original content)';
     });
 
     let locationMock: LocationMock;
@@ -60,6 +59,13 @@ describe('navigation', () => {
       mockAgent = jest.fn((next, _request) => next());
     });
 
+    it('retains initial content', async () => {
+      html = '<page-content>included content</page-content>';
+
+      await bootstrap();
+
+      expect(element.textContent).toBe('(original content)');
+    });
     it('includes loaded page fragment', async () => {
       html = '<page-content>included content</page-content>';
 
@@ -75,7 +81,7 @@ describe('navigation', () => {
         ).open('page').catch(reject);
       });
 
-      expect(element.textContent).toBe('included content');
+      expect(element.textContent).toBe('(original content)included content');
     });
     it('includes identified page fragment', async () => {
       html = `
@@ -96,7 +102,7 @@ describe('navigation', () => {
         ).open('page').catch(reject);
       });
 
-      expect(element.textContent).toBe('included content');
+      expect(element.textContent).toBe('(original content)included content');
     });
     it('includes requested page fragment', async () => {
       html = `
@@ -115,7 +121,7 @@ describe('navigation', () => {
         ).open('page').catch(reject);
       });
 
-      expect(element.textContent).toBe('included content');
+      expect(element.textContent).toBe('(original content)included content');
     });
     it('clears content if requested fragment not loaded', async () => {
       html = `
@@ -134,13 +140,13 @@ describe('navigation', () => {
         ).open('page').catch(reject);
       });
 
-      expect(element.childNodes).toHaveLength(0);
+      expect(element.childNodes[0].childNodes).toHaveLength(0);
     });
     it('reports page load progress', async () => {
       html = '<page-content>included content</page-content>';
 
-      const onResponse = jest.fn();
-      const context = await bootstrap({ onResponse });
+      const render = jest.fn();
+      const context = await bootstrap(undefined, render);
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -152,18 +158,16 @@ describe('navigation', () => {
         ).open('page').catch(reject);
       });
 
-      expect(onResponse).toHaveBeenLastCalledWith({
-        context,
+      expect(render).toHaveBeenLastCalledWith(expect.objectContaining({
         response: expect.objectContaining({ ok: true }),
-        range: expect.any(Range),
-      });
-      expect(onResponse).toHaveBeenCalledTimes(2);
+      }));
+      expect(render).toHaveBeenCalledTimes(2);
     });
     it('does not refresh included content if only URL hash changed', async () => {
       html = '<page-content>included content</page-content>';
 
-      const onResponse = jest.fn();
-      const context = await bootstrap({ onResponse });
+      const render = jest.fn();
+      const context = await bootstrap({}, render);
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -175,13 +179,13 @@ describe('navigation', () => {
         ).open(new URL('#another-hash', navigation.page.url)).catch(reject);
       });
 
-      expect(onResponse).not.toHaveBeenCalled();
+      expect(render).not.toHaveBeenCalled();
     });
     it('does not refresh included content if content key did not change', async () => {
       html = '<page-content>included content</page-content>';
 
-      const onResponse = jest.fn();
-      const context = await bootstrap({ onResponse, contentKey: valueProvider('same') });
+      const render = jest.fn();
+      const context = await bootstrap({ contentKey: valueProvider('same') }, render);
       const navigation = context.get(Navigation);
 
       await new Promise<void>((resolve, reject) => {
@@ -193,25 +197,55 @@ describe('navigation', () => {
         ).open('other').catch(reject);
       });
 
-      expect(onResponse).not.toHaveBeenCalled();
+      expect(render).not.toHaveBeenCalled();
     });
 
-    async function bootstrap(def?: IncludePageDef): Promise<ComponentContext> {
+    describe('postpone', () => {
+      it('postpones rendering when content rendered', async () => {
+        html = '<page-content>included content</page-content>';
+
+        let textContent: string | null = null;
+        const postponed = jest.fn(({ content }: PageRendererExecution) => {
+          textContent = content.textContent;
+        });
+        const context = await bootstrap(undefined, ({ postpone }) => postpone(postponed));
+        const navigation = context.get(Navigation);
+
+        await new Promise<void>((resolve, reject) => {
+          navigation.with(
+              PageLoadParam,
+              {
+                receiver: r => r.ok && resolve(),
+              },
+          ).open('page').catch(reject);
+        });
+
+        expect(postponed).toHaveBeenCalled();
+        expect(textContent).toBe('included content');
+      });
+    });
+
+    async function bootstrap(def?: RenderPageDef, renderer: PageRenderer = noop): Promise<ComponentContext> {
 
       @Component(
           {
             feature: {
               setup(setup) {
                 setup.provide({ a: BootstrapWindow, is: locationMock.window });
-                setup.provide({ a: DefaultRenderScheduler, is: immediateRenderScheduler });
+                setup.provide({ a: DefaultRenderScheduler, is: queuedRenderScheduler });
+                setup.provide({ a: DefaultPreRenderScheduler, is: queuedRenderScheduler });
                 setup.provide({ a: HttpFetch, is: mockFetch });
                 setup.provide({ a: PageLoadAgent, is: mockAgent });
               },
             },
           },
-          IncludePage(def),
       )
-      class PageContent {}
+      class PageContent {
+
+        @RenderPage(def)
+        render = renderer;
+
+      }
 
       const bsContext = await bootstrapComponents(PageContent).whenReady;
       const defContext = await bsContext.whenDefined(PageContent);

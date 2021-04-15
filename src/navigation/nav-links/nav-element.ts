@@ -4,7 +4,7 @@ import { css__naming, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { EventReceiver } from '@proc7ts/fun-events';
 import { setOfElements, valueByRecipe } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
-import { DefaultNamespaceAliaser, ElementRenderScheduler, RenderDef, Wesib__NS } from '@wesib/wesib';
+import { ComponentRenderScheduler, DefaultNamespaceAliaser, RenderDef, Wesib__NS } from '@wesib/wesib';
 import { Navigation } from '../navigation';
 import { NavLink } from './nav-link';
 
@@ -113,7 +113,7 @@ export function navElement<TElement extends Element>(
     activeClass = css__naming.name(active, context.get(DefaultNamespaceAliaser));
 
     const navigation = context.get(Navigation);
-    const scheduler = context.get(ElementRenderScheduler);
+    const scheduler = context.get(ComponentRenderScheduler);
     const schedule = scheduler({ node: anchor });
     const supply = new Supply().needs(ownerSupply);
     const handleClick: EventReceiver<[Event]> = {

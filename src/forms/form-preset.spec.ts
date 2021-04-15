@@ -17,9 +17,9 @@ import { afterSupplied, trackValue, ValueTracker } from '@proc7ts/fun-events';
 import {
   Component,
   ComponentContext,
+  ComponentRenderScheduler,
   ComponentSlot,
   DefaultNamespaceAliaser,
-  ElementRenderScheduler,
 } from '@wesib/wesib';
 import { MockElement, testElement } from '../spec/test-element';
 import { Field } from './field';
@@ -203,7 +203,7 @@ describe('forms', () => {
               extend: { type: MockElement },
               feature: {
                 setup(setup) {
-                  setup.perComponent({ a: ElementRenderScheduler, is: mockRenderScheduler });
+                  setup.perComponent({ a: ComponentRenderScheduler, is: mockRenderScheduler });
                 },
               },
             },
@@ -233,7 +233,7 @@ describe('forms', () => {
       });
 
       describe('form control', () => {
-        it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
+        it('delegates `InRenderScheduler` to `ComponentRenderScheduler`', () => {
 
           const scheduler = form.control!.aspect(InRenderScheduler);
           const opts = { node: document.createElement('div') };
@@ -248,7 +248,7 @@ describe('forms', () => {
       });
 
       describe('form element', () => {
-        it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
+        it('delegates `InRenderScheduler` to `ComponentRenderScheduler`', () => {
 
           const scheduler = form.element!.aspect(InRenderScheduler);
           const opts = { node: document.createElement('div') };
@@ -263,7 +263,7 @@ describe('forms', () => {
       });
 
       describe('field', () => {
-        it('delegates `InRenderScheduler` to `ElementRenderScheduler`', () => {
+        it('delegates `InRenderScheduler` to `ComponentRenderScheduler`', () => {
 
           const scheduler = field.control!.aspect(InRenderScheduler);
           const opts = { node: document.createElement('div') };
