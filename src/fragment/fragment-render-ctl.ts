@@ -3,7 +3,7 @@ import { ContextKey, SingleContextKey } from '@proc7ts/context-values';
 import { EventEmitter } from '@proc7ts/fun-events';
 import { lazyValue, valueByRecipe } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
-import { ComponentContext, ComponentRenderCtl, DefaultPreRenderScheduler } from '@wesib/wesib';
+import { ComponentContext, ComponentRenderCtl } from '@wesib/wesib';
 import { FragmentRenderer, FragmentRendererExecution } from './fragment-renderer';
 import { RenderFragmentDef } from './render-fragment-def';
 
@@ -65,7 +65,6 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
     const { target = RenderFragment$defaultTarget } = spec;
     const getTarget: () => DrekTarget = lazyValue(() => target(this._context));
     const renderCtl = this._context.get(ComponentRenderCtl);
-    const scheduler = this._context.get(DefaultPreRenderScheduler);
 
     let placeContent = (fragment: DrekFragment, retainContent: boolean, supply: Supply): void => {
 
@@ -89,7 +88,7 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
     const renderSupply = renderCtl.preRenderBy(
         preExec => {
 
-          const fragment = new DrekFragment(getTarget(), { scheduler });
+          const fragment = new DrekFragment(getTarget());
           let retainContent = false;
           let done = false;
           const exec: FragmentRendererExecution = {
