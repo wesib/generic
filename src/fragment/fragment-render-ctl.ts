@@ -1,6 +1,5 @@
 import { drekAppender, drekCharger, DrekFragment, DrekTarget } from '@frontmeans/drek';
 import { ContextKey, SingleContextKey } from '@proc7ts/context-values';
-import { EventEmitter } from '@proc7ts/fun-events';
 import { lazyValue, valueByRecipe } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { ComponentContext, ComponentRenderCtl, DefaultPreRenderScheduler } from '@wesib/wesib';
@@ -66,32 +65,12 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
     const getTarget: () => DrekTarget = lazyValue(() => target(this._context));
     const renderCtl = this._context.get(ComponentRenderCtl);
     const scheduler = this._context.get(DefaultPreRenderScheduler);
-
-    let placeContent = (fragment: DrekFragment, retainContent: boolean, supply: Supply): void => {
-
-      const on = new EventEmitter();
-
-      supply.cuts(on);
-      renderCtl.renderBy(
-          () => renderFragment(fragment, retainContent),
-          { on },
-      ).needs(supply);
-
-      // Next time just send a render signal.
-      placeContent = (newFragment, newRetainContent, _supply) => {
-        fragment = newFragment;
-        retainContent = newRetainContent;
-        on.send();
-      };
-    };
-
     const supply = new Supply();
     const renderSupply = renderCtl.preRenderBy(
         preExec => {
 
           const fragment = new DrekFragment(getTarget(), { scheduler });
           let retainContent = false;
-          let done = false;
           const exec: FragmentRendererExecution = {
             ...preExec,
             supply,
@@ -101,9 +80,7 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
               preExec.postpone(() => postponed(exec));
             },
             renderBy(renderer) {
-              done = true;
               preExec.renderBy(renderExec => {
-                renderFragment(fragment, retainContent);
                 renderExec.renderBy(renderer);
               });
             },
@@ -111,19 +88,14 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
               retainContent = retain;
             },
             done() {
-              done = true;
               preExec.renderBy(({ supply }) => {
-                renderFragment(fragment, retainContent);
                 renderSupply.as(supply).off(RenderFragment$done);
               });
             },
           };
 
           renderer(exec);
-
-          if (!done) {
-            placeContent(fragment, retainContent, preExec.supply);
-          }
+          renderFragment(fragment, retainContent);
         },
         spec,
     ).needs(
@@ -144,7 +116,13 @@ function RenderFragment$defaultTarget({ contentRoot }: ComponentContext): DrekTa
 }
 
 function RenderFragment$settleThenRender(fragment: DrekFragment): void {
-  fragment.innerContext.window.customElements.upgrade(fragment.content);
+
+  const { innerContext } = fragment;
+  const { window } = innerContext;
+
+  innerContext.scheduler()(() => {
+    window.customElements.upgrade(fragment.content);
+  });
   fragment.settle();
   fragment.render();
 }
