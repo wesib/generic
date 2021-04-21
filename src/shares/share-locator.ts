@@ -1,3 +1,4 @@
+import { nodeHost } from '@frontmeans/dom-primitives';
 import { AfterEvent } from '@proc7ts/fun-events';
 import { ComponentContext } from '@wesib/wesib';
 import { isShareRef, Share__symbol, ShareRef } from './share-ref';
@@ -66,32 +67,44 @@ export function shareLocator<T>(
 
     return (consumer, options = {}) => {
 
-      const { local = defaultSpec.local } = options;
+      const { host = defaultSpec.host, local = defaultSpec.local } = options;
 
-      return share.valueFor(consumer, { local });
+      return share.valueFor(consumer, { host, local });
     };
   }
 
   if (typeof locator === 'function') {
 
-    const { local: localByDefault = false, share: shareByDefault } = defaultSpec;
+    const {
+      host: hostByDefault = nodeHost,
+      local: localByDefault = false,
+      share: shareByDefault,
+    } = defaultSpec;
 
     return (consumer, options = {}) => {
 
-      const { share = shareByDefault!, local = localByDefault } = options;
+      const {
+        share = shareByDefault!,
+        host = hostByDefault,
+        local = localByDefault,
+      } = options;
 
-      return locator(consumer, { share, local });
+      return locator(consumer, { share, host, local });
     };
   }
 
-  const { share: shareRef = defaultSpec.share!, local: localByDefault = defaultSpec.local } = locator || {};
+  const {
+    share: shareRef = defaultSpec.share!,
+    host: hostByDefault = defaultSpec.host,
+    local: localByDefault = defaultSpec.local,
+  } = locator || {};
   const share = shareRef[Share__symbol];
 
   return (consumer, options = {}) => {
 
-    const { local = localByDefault } = options;
+    const { host = hostByDefault, local = localByDefault } = options;
 
-    return share.valueFor(consumer, { local });
+    return share.valueFor(consumer, { host, local });
   };
 }
 
@@ -119,6 +132,19 @@ export namespace ShareLocator {
    * Shared value location options.
    */
   export interface Options {
+
+    /**
+     * Detects a host element of the given one.
+     *
+     * By default utilizes a `nodeHost()` function that founds parent element crossing shadow DOM bounds.
+     *
+     * A `drekHost()` can be uses to also cross a rendered fragment bounds.
+     *
+     * @param element - An element to detect a host of.
+     *
+     * @returns Either a host element, or `undefined` if no host found.
+     */
+    readonly host?: (this: void, element: Element) => Element | undefined;
 
     /**
      * Whether to search locally, in consumer component itself.

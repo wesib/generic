@@ -138,11 +138,11 @@ describe('fragment', () => {
         const context = await bootstrap();
 
         expect(element.textContent).toBe('test-1');
-        expect(delegate).toHaveBeenCalledTimes(1);
+        expect(delegate).toHaveBeenCalledTimes(2);
 
         context.updateState(statePropertyPathTo('test'), 1, 2);
         expect(element.textContent).toBe('test-1');
-        expect(delegate).toHaveBeenCalledTimes(2);
+        expect(delegate).toHaveBeenCalledTimes(3);
       });
     });
 
@@ -179,11 +179,11 @@ describe('fragment', () => {
         const context = await bootstrap();
 
         expect(element.textContent).toBe('initial content');
-        expect(delegate).toHaveBeenCalledTimes(1);
+        expect(delegate).toHaveBeenCalledTimes(2);
 
         context.updateState(statePropertyPathTo('test'), 1, 2);
         expect(element.textContent).toBe('initial content');
-        expect(delegate).toHaveBeenCalledTimes(2);
+        expect(delegate).toHaveBeenCalledTimes(3);
       });
     });
 

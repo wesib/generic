@@ -41,13 +41,13 @@
     "@frontmeans/style-producer": "^6.1.0",
     "@proc7ts/context-values": "^6.1.0",
     "@proc7ts/fun-events": "^10.4.0",
-    "@wesib/wesib": "^1.0.0-beta.39"
+    "@wesib/wesib": "^1.0.0-beta.40"
   },
   "dependencies": {
     "@frontmeans/dom-events": "^1.1.0",
     "@frontmeans/dom-primitives": "^1.0.0",
-    "@frontmeans/drek": "^1.0.0",
-    "@frontmeans/render-scheduler": "^1.5.1",
+    "@frontmeans/drek": "^1.1.0",
+    "@frontmeans/render-scheduler": "^1.6.0",
     "@hatsy/http-header-value": "^3.5.3",
     "@proc7ts/primitives": "^2.0.0",
     "@proc7ts/push-iterator": "^2.5.0",
@@ -76,7 +76,7 @@
     "@types/jsdom": "^16.2.10",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
-    "@wesib/wesib": "^1.0.0-beta.39",
+    "@wesib/wesib": "^1.0.0-beta.40",
     "cross-fetch": "^3.1.4",
     "eslint": "^7.24.0",
     "eslint-plugin-jest": "^24.3.5",
@@ -88,9 +88,9 @@
     "rollup-plugin-flat-dts": "^1.2.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.30.0",
-    "run-z": "^1.7.1",
+    "run-z": "^1.7.2",
     "shx": "^0.3.3",
-    "ts-jest": "^26.5.4",
+    "ts-jest": "^26.5.5",
     "tslib": "^2.2.0",
     "typedoc": "^0.20.35",
     "typescript": "^4.2.4"

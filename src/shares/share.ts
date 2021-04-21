@@ -136,7 +136,7 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
       options: ShareLocator.Options = {},
   ): AfterEvent<[T, ComponentContext] | []> {
 
-    const { local } = options;
+    const { host = nodeHost, local } = options;
     const sharers = consumer.get(BootstrapContext).get(ShareRegistry).sharers(this);
     const status = consumer.readStatus.do(
         deduplicateAfter_(
@@ -159,7 +159,7 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
             }
           }
 
-          let element: ComponentElement | undefined = nodeHost(consumer.element);
+          let element: ComponentElement | undefined = host(consumer.element);
 
           while (element) {
             if (sharers.names.has(element.tagName.toLowerCase())) {
@@ -168,7 +168,7 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
               );
             }
 
-            element = nodeHost(element);
+            element = host(element);
           }
 
           return afterThe();
