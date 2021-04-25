@@ -2,10 +2,10 @@ import { inFormElement, inGroup } from '@frontmeans/input-aspects';
 import { ContextBuilder } from '@proc7ts/context-values';
 import { AfterEvent } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext, ComponentSlot, DefinitionContext } from '@wesib/wesib';
+import { MockElement, testDefinition, testElement } from '@wesib/wesib/testing';
 import { Share, Share__symbol } from '../shares';
 import { ShareRegistry } from '../shares/share-registry.impl';
 import { SharedValue$ContextBuilder } from '../shares/shared-value.impl';
-import { MockElement, testDefinition, testElement } from '../spec/test-element';
 import { Form } from './form';
 import { FormShare } from './form.share';
 

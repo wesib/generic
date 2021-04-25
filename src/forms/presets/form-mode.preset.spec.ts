@@ -1,7 +1,7 @@
 import { inFormElement, inGroup, InMode, InValidation, inValue } from '@frontmeans/input-aspects';
 import { afterThe } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext } from '@wesib/wesib';
-import { MockElement, testDefinition } from '../../spec/test-element';
+import { MockElement, testDefinition } from '@wesib/wesib/testing';
 import { Field } from '../field';
 import { FieldShare } from '../field.share';
 import { Form } from '../form';

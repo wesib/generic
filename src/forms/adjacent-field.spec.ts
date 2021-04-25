@@ -12,8 +12,8 @@ import {
 import { AfterEvent, mapAfter, trackValue } from '@proc7ts/fun-events';
 import { arrayOfElements } from '@proc7ts/primitives';
 import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
+import { MockElement, testElement } from '@wesib/wesib/testing';
 import { Share__symbol } from '../shares';
-import { MockElement, testElement } from '../spec/test-element';
 import { adjacentToField, adjacentToForm } from './adjacent-field';
 import { Field } from './field';
 import { FieldShare } from './field.share';

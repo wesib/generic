@@ -9,7 +9,7 @@ import {
   Feature,
   ShadowContentRoot,
 } from '@wesib/wesib';
-import { testDefinition } from '../spec/test-element';
+import { testDefinition } from '@wesib/wesib/testing';
 import { ComponentStypDomFormat } from './component-styp-dom.format';
 import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
 import { ComponentStypRenderer } from './component-styp-renderer';

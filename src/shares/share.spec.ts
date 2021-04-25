@@ -10,7 +10,7 @@ import {
   ComponentSlot,
   DefinitionContext,
 } from '@wesib/wesib';
-import { MockElement, testDefinition, testElement } from '../spec/test-element';
+import { MockElement, testDefinition, testElement } from '@wesib/wesib/testing';
 import { Share } from './share';
 import { ShareRegistry } from './share-registry.impl';
 import { SharedValue$ContextBuilder } from './shared-value.impl';

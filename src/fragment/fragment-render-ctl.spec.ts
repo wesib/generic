@@ -4,7 +4,7 @@ import { queuedRenderScheduler, RenderSchedule, RenderScheduleOptions } from '@f
 import { EventEmitter } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Component, ComponentContext, DefaultPreRenderScheduler, DefaultRenderScheduler } from '@wesib/wesib';
-import { testDefinition } from '../spec/test-element';
+import { testDefinition } from '@wesib/wesib/testing';
 import { FragmentRenderCtl } from './fragment-render-ctl';
 
 describe('fragment', () => {

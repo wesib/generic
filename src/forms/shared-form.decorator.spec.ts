@@ -1,7 +1,7 @@
 import { InElement, inFormElement, inGroup } from '@frontmeans/input-aspects';
 import { mapAfter, trackValue } from '@proc7ts/fun-events';
 import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
-import { MockElement, testElement } from '../spec/test-element';
+import { MockElement, testElement } from '@wesib/wesib/testing';
 import { Form } from './form';
 import { FormShare } from './form.share';
 import { SharedForm } from './shared-form.decorator';

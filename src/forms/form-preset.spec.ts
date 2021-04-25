@@ -21,7 +21,7 @@ import {
   ComponentSlot,
   DefaultNamespaceAliaser,
 } from '@wesib/wesib';
-import { MockElement, testElement } from '../spec/test-element';
+import { MockElement, testElement } from '@wesib/wesib/testing';
 import { Field } from './field';
 import { FieldShare } from './field.share';
 import { Form } from './form';

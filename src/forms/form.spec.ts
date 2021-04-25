@@ -2,7 +2,7 @@ import { inFormElement, inGroup, inValue } from '@frontmeans/input-aspects';
 import { Contextual__symbol } from '@proc7ts/context-values';
 import { trackValue } from '@proc7ts/fun-events';
 import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
-import { MockElement, testElement } from '../spec/test-element';
+import { MockElement, testElement } from '@wesib/wesib/testing';
 import { Form } from './form';
 
 describe('forms', () => {
