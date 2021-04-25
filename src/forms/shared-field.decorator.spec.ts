@@ -2,7 +2,7 @@ import { InGroup, inGroup, inList, InList, InParents, inValue } from '@frontmean
 import { AfterEvent, afterThe, mapAfter, trackValue } from '@proc7ts/fun-events';
 import { valueProvider } from '@proc7ts/primitives';
 import { BootstrapContext, Component, ComponentClass, ComponentContext, ComponentSlot, FeatureDef } from '@wesib/wesib';
-import { MockElement, testDefinition, testElement } from '../spec/test-element';
+import { MockElement, testDefinition, testElement } from '@wesib/wesib/testing';
 import { Field } from './field';
 import { FieldName, FormName } from './field-name.definer';
 import { FieldShare } from './field.share';

@@ -2,7 +2,7 @@ import { InCssClasses, inFormElement, inGroup, InMode, InValidation, inValue } f
 import { DEFAULT__NS } from '@frontmeans/namespace-aliaser';
 import { trackValue, trackValueBy } from '@proc7ts/fun-events';
 import { BootstrapContext, Component, ComponentContext } from '@wesib/wesib';
-import { MockElement, testDefinition } from '../../spec/test-element';
+import { MockElement, testDefinition } from '@wesib/wesib/testing';
 import { Field } from '../field';
 import { FieldShare } from '../field.share';
 import { Form } from '../form';
