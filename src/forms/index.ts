@@ -12,7 +12,7 @@ export * from './form-preset';
 export * from './form-scope';
 export * from './form-unit';
 export * from './presets';
-export * from './on-submit.decorator';
+export * from './on-submit.amendment';
 export * from './scoped-form-config';
 export * from './shared-field.decorator';
 export * from './shared-form.decorator';
