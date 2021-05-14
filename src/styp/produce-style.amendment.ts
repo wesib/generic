@@ -18,7 +18,8 @@ import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp
  */
 export function ProduceStyle<
     TClass extends ComponentClass,
-    TAmended extends AeComponentMember<ProduceStyleDef.Source, TClass>>(
+    TAmended extends AeComponentMember<ProduceStyleDef.Source, TClass> =
+        AeComponentMember<ProduceStyleDef.Source, TClass>>(
     config?: ComponentStypFormatConfig,
 ): ComponentMemberAmendment<ProduceStyleDef.Source, TClass, ProduceStyleDef.Source, TAmended> {
   return ComponentMember<ProduceStyleDef.Source, TClass, ProduceStyleDef.Source, TAmended>((
