@@ -13,7 +13,7 @@ import {
 import { testDefinition } from '@wesib/wesib/testing';
 import { FragmentRendererExecution } from './fragment-renderer';
 import { RenderFragmentDef } from './render-fragment-def';
-import { RenderFragment } from './render-fragment.decorator';
+import { RenderFragment } from './render-fragment.amendment';
 
 describe('fragment', () => {
   describe('@RenderFragment', () => {

@@ -17,7 +17,7 @@ import { RenderPageDef } from './render-page-def';
  * @typeParam TAmended - Amended component member entity type.
  * @param def - Page inclusion definition.
  *
- * @returns New component decorator.
+ * @returns New component method amendment.
  */
 export function RenderPage<
     TClass extends ComponentClass,
