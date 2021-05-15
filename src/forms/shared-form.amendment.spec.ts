@@ -4,7 +4,7 @@ import { Component, ComponentContext, ComponentSlot } from '@wesib/wesib';
 import { MockElement, testElement } from '@wesib/wesib/testing';
 import { Form } from './form';
 import { FormShare } from './form.share';
-import { SharedForm } from './shared-form.decorator';
+import { SharedForm } from './shared-form.amendment';
 
 describe('forms', () => {
   describe('@SharedForm', () => {

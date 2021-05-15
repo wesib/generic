@@ -1,26 +1,27 @@
 import { Contextual__symbol, isContextual } from '@proc7ts/context-values';
-import { AfterEvent, isAfterEvent, trackValue, trackValueBy, ValueTracker } from '@proc7ts/fun-events';
+import { isAfterEvent, trackValue, trackValueBy, ValueTracker } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
-import { ComponentClass, ComponentContext, ComponentInstance, ComponentProperty } from '@wesib/wesib';
+import { AeComponentMember, ComponentClass, ComponentContext, ComponentInstance } from '@wesib/wesib';
+import { SharedDef } from './shared.amendment';
 
 /**
  * @internal
  */
-export class ShareAccessor<T, TClass extends ComponentClass> {
+export class ShareAccessor<T, TValue extends SharedDef.Value<T>, TClass extends ComponentClass> {
 
-  private readonly _get: () => T | AfterEvent<[T?]>;
-  private readonly _set: (value: T | AfterEvent<[T?]>) => void;
+  private readonly _get: () => TValue;
+  private readonly _set: (value: TValue) => void;
   private readonly _ctx: ComponentContext<InstanceType<TClass>>;
   private _valSupply?: Supply;
   readonly val: ValueTracker<T | undefined>;
 
   constructor(
-      desc: ComponentProperty.Descriptor<T | AfterEvent<[T?]>, TClass>,
+      target: AeComponentMember<TValue, TClass>,
       component: ComponentInstance<InstanceType<TClass>>,
   ) {
-    this._get = desc.get.bind(undefined, component);
-    this._set = desc.writable ? desc.set.bind(undefined, component) : noop;
+    this._get = target.get.bind(undefined, component);
+    this._set = target.writable ? target.set.bind(undefined, component) : noop;
     this._ctx = ComponentContext.of(component);
 
     const value = this._get();
@@ -30,7 +31,7 @@ export class ShareAccessor<T, TClass extends ComponentClass> {
       dynSync = true;
       this.val = trackValueBy(value);
     } else {
-      this.val = trackValue(value);
+      this.val = trackValue(value as T);
     }
 
     this.val.supply.needs(this._ctx);
@@ -45,23 +46,23 @@ export class ShareAccessor<T, TClass extends ComponentClass> {
     }
   }
 
-  get(): T | AfterEvent<[T?]> {
-    return this._valSupply ? this.val.it! : this.val.read;
+  get(): TValue {
+    return (this._valSupply ? this.val.it! : this.val.read) as TValue;
   }
 
-  set(value: T | AfterEvent<[T?]>): void {
+  set(value: TValue): void {
     if (isAfterEvent(value)) {
       this.val.by(value);
       this._syncDyn();
     } else {
-      this.val.it = value;
+      this.val.it = value as T;
       this._syncVal();
     }
   }
 
   private _syncVal(): void {
     if (!this._valSupply) {
-      this._valSupply = this.val.read(value => this._set(value!));
+      this._valSupply = this.val.read(value => this._set(value as TValue));
     }
   }
 
@@ -69,7 +70,7 @@ export class ShareAccessor<T, TClass extends ComponentClass> {
     if (this._valSupply) {
       this._valSupply.off();
       this._valSupply = undefined;
-      this._set(this.val.read);
+      this._set(this.val.read as TValue);
     }
   }
 

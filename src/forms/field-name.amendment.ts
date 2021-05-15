@@ -1,20 +1,21 @@
 import { InGroup } from '@frontmeans/input-aspects';
+import { Amendment } from '@proc7ts/amend';
 import { afterAll, consumeEvents, digAfter_ } from '@proc7ts/fun-events';
 import { asis, Class, valuesProvider } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { ComponentClass } from '@wesib/wesib';
-import { shareLocator, ShareLocator } from '../shares';
+import { SharedDef, shareLocator, ShareLocator } from '../shares';
 import { Field } from './field';
 import { Field$nameByKey } from './field.impl';
 import { Form } from './form';
 import { FormUnit } from './form-unit';
 import { FormShare } from './form.share';
-import { SharedField } from './shared-field.decorator';
-import { SharedFormUnit } from './shared-form-unit.decorator';
-import { SharedForm } from './shared-form.decorator';
+import { AeSharedField } from './shared-field.amendment';
+import { AeSharedFormUnit } from './shared-form-unit.amendment';
+import { AeSharedForm } from './shared-form.amendment';
 
 /**
- * Builds a {@link SharedForm shared form} definition builder that adds nested form to enclosing one.
+ * Creates a {@link SharedForm shared form} member amendment that adds nested form to enclosing one.
  *
  * @typeParam TForm - Nested form type.
  * @typeParam TModel - Nested form model type.
@@ -30,12 +31,12 @@ export function FormName<
     TElt extends HTMLElement = Form.ElementType<TForm>,
     TClass extends ComponentClass = Class>(
     def?: FieldNameDef,
-): SharedForm.Definer<TForm, TModel, TElt, TClass> {
-  return FormUnitName<TForm, TModel, Form.Body<TModel, TElt>, TClass>(def);
+): Amendment<AeSharedForm<TForm, SharedDef.Value<TForm>, TModel, TElt, TClass>> {
+  return FormUnitName<TForm, TModel, Form.Controls<TModel, TElt>, TClass>(def);
 }
 
 /**
- * Builds a {@link SharedField shared form field} definition builder that adds the field to enclosing form.
+ * Creates a {@link SharedField shared field} member amendment that adds the field to enclosing form.
  *
  * @typeParam TField - Field type.
  * @typeParam TValue - Field value type.
@@ -45,26 +46,27 @@ export function FormName<
  * @returns Shared field definition builder.
  */
 export function FieldName<
-    TField extends Field<TValue>,
-    TValue = Field.ValueType<TField>,
+    TField extends Field<TFieldValue>,
+    TFieldValue = Field.ValueType<TField>,
     TClass extends ComponentClass = Class>(
     def: FieldNameDef = {},
-): SharedField.Definer<TField, TValue, TClass> {
-  return FormUnitName<TField, TValue, Field.Controls<TValue>, TClass>(def);
+): Amendment<AeSharedField<TField, SharedDef.Value<TField>, TFieldValue, TClass>> {
+  return FormUnitName<TField, TFieldValue, Field.Controls<TFieldValue>, TClass>(def);
 }
 
 function FormUnitName<
-    TUnit extends FormUnit<TValue, TControls, any>,
-    TValue,
-    TControls extends FormUnit.Controls<TValue>,
+    TUnit extends FormUnit<TUnitValue, TControls, any>,
+    TUnitValue,
+    TControls extends FormUnit.Controls<TUnitValue>,
     TClass extends ComponentClass = Class>(
     def: FieldNameDef = {},
-): SharedFormUnit.Definer<TUnit, TValue, TControls, TClass> {
+): Amendment<AeSharedFormUnit<TUnit, SharedDef.Value<TUnit>, TUnitValue, TControls, TClass>> {
   return ({
     key,
     share,
     locateForm: defaultForm,
     name: defaultName,
+    amend,
   }) => {
 
     const { name = defaultName } = def;
@@ -87,7 +89,7 @@ function FormUnitName<
 
     const locateForm = shareLocator(def.form || defaultForm, { share: FormShare });
 
-    return {
+    amend({
       componentDef: {
         setup(setup) {
           setup.whenComponent(context => {
@@ -116,7 +118,7 @@ function FormUnitName<
           });
         },
       },
-    };
+    });
   };
 }
 
