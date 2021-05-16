@@ -25,7 +25,7 @@ import { FormShare } from './form.share';
  * @returns New component property decorator.
  */
 export function OnSubmit<
-    TModel,
+    TModel = any, /* `any`, because decorators fail to infer the model */
     TElt extends HTMLElement = HTMLElement,
     TClass extends ComponentClass = Class,
     TAmended extends AeComponentMember<OnSubmitDef.Method<TModel, TElt, TClass>, TClass> =
