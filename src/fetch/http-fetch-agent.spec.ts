@@ -50,7 +50,7 @@ describe('fetch', () => {
       const emitter2 = new EventEmitter<[Response]>();
       const mockAgent = jest.fn(() => emitter2.on);
 
-      registry.provide({ a: HttpFetchAgent, is: mockAgent });
+      registry.provide<HttpFetchAgent, []>({ a: HttpFetchAgent, is: mockAgent });
 
       const response1 = new Response('response1');
       const response2 = new Response('response2');
@@ -63,7 +63,7 @@ describe('fetch', () => {
       expect(response).toBe(response2);
     });
     it('performs the fetch by calling `next`', () => {
-      registry.provide({ a: HttpFetchAgent, is: next => next() });
+      registry.provide<HttpFetchAgent, []>({ a: HttpFetchAgent, is: next => next() });
 
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
@@ -74,8 +74,8 @@ describe('fetch', () => {
           (next, _request) => next(),
       );
 
-      registry.provide({ a: HttpFetchAgent, is: next => next() });
-      registry.provide({ a: HttpFetchAgent, is: mockAgent });
+      registry.provide<HttpFetchAgent, []>({ a: HttpFetchAgent, is: next => next() });
+      registry.provide<HttpFetchAgent, []>({ a: HttpFetchAgent, is: mockAgent });
 
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request);
