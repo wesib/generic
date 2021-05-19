@@ -27,8 +27,8 @@ import { FieldShare } from './field.share';
 import { Form } from './form';
 import { FormPreset } from './form-preset';
 import { FormShare } from './form.share';
-import { SharedField } from './shared-field.decorator';
-import { SharedForm } from './shared-form.decorator';
+import { SharedField } from './shared-field.amendment';
+import { SharedForm } from './shared-form.amendment';
 
 describe('forms', () => {
   describe('FormPreset', () => {

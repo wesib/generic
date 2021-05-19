@@ -15,7 +15,7 @@ import { Navigation } from '../navigation';
 import { PageLoadAgent, PageLoadParam } from '../page-load';
 import { PageRenderer, PageRendererExecution } from './page-renderer';
 import { RenderPageDef } from './render-page-def';
-import { RenderPage } from './render-page.decorator';
+import { RenderPage } from './render-page.amendment';
 import Mock = jest.Mock;
 
 describe('navigation', () => {

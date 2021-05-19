@@ -14,7 +14,7 @@ import { ComponentStypDomFormat } from './component-styp-dom.format';
 import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
 import { ComponentStypRenderer } from './component-styp-renderer';
 import { ElementIdClass } from './element-id-class.impl';
-import { ProduceStyle } from './produce-style.decorator';
+import { ProduceStyle } from './produce-style.amendment';
 import { StyleProducerSupport } from './style-producer-support.feature';
 
 describe('styp', () => {

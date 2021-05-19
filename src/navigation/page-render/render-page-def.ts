@@ -2,6 +2,7 @@ import { RenderDef } from '@wesib/wesib';
 import { RenderFragmentDef } from '../../fragment';
 import { Page } from '../page';
 import { PageFragmentRequest } from '../page-load';
+import { PageRendererExecution } from './page-renderer';
 
 /**
  * Page rendering definition.
@@ -13,6 +14,15 @@ export type RenderPageDef =
     | RenderDef.Provider<RenderPageDef.Spec>;
 
 export namespace RenderPageDef {
+
+  /**
+   * Page rendering method signature.
+   */
+  export type Method =
+  /**
+   * @param execution - Page renderer execution context.
+   */
+      (execution: PageRendererExecution) => void;
 
   /**
    * Page rendering specifier.

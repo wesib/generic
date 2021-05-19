@@ -4,7 +4,7 @@ import { BootstrapContext, Component, DefinitionContext } from '@wesib/wesib';
 import { testDefinition } from '@wesib/wesib/testing';
 import { Share } from './share';
 import { ShareRegistry, Sharers } from './share-registry.impl';
-import { Shared } from './shared.decorator';
+import { Shared } from './shared.amendment';
 
 describe('shares', () => {
   describe('ShareRegistry', () => {

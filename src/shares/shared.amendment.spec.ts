@@ -11,7 +11,7 @@ import {
 import { MockElement, testDefinition, testElement } from '@wesib/wesib/testing';
 import { Share } from './share';
 import { Shareable } from './shareable';
-import { Shared } from './shared.decorator';
+import { Shared } from './shared.amendment';
 import { TargetShare } from './target-share';
 
 describe('shares', () => {
@@ -67,11 +67,17 @@ describe('shares', () => {
     it('shares updatable component property value', async () => {
 
       const value = trackValue('test1');
+      let getShared!: (instance: TestComponent) => AfterEvent<[string?]>;
 
       @Component({ extend: { type: MockElement } })
       class TestComponent {
 
-        @Shared(share)
+        @Shared(
+            share,
+            ({ amend }) => {
+              getShared = amend()().getShared;
+            },
+        )
         get sharedValue(): AfterEvent<[string]> {
           return value.read;
         }
@@ -83,6 +89,7 @@ describe('shares', () => {
       const shared = context.get(share);
 
       expect(await shared).toBe('test1');
+      expect(await getShared(context.component)).toBe('test1');
       expect(await context.component.sharedValue).toBe('test1');
 
       value.it = 'test2';
@@ -145,11 +152,11 @@ describe('shares', () => {
 
         @Shared(
             share,
-            ({ share, type }) => ({
+            ({ amendedClass, share, amend }) => amend({
               componentDef: {
                 setup(setup) {
                   setup.perComponent({ a: extKey1, is: share });
-                  setup.perComponent({ a: extKey2, is: type });
+                  setup.perComponent({ a: extKey2, is: amendedClass });
                 },
               },
             }),

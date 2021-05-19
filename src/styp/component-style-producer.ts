@@ -15,6 +15,7 @@ export type ComponentStyleProducer =
  * @returns Styles supply. Once cut off (i.e. its `off()` method is called) the produced stylesheets are removed.
  */
     (
+        this: void,
         rules: StypRules,
         format: StypFormat,
     ) => Supply;

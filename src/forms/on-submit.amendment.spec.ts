@@ -4,8 +4,8 @@ import { noop } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { testDefinition } from '@wesib/wesib/testing';
 import { Form } from './form';
-import { OnSubmit, OnSubmitDef } from './on-submit.decorator';
-import { SharedForm, SharedFormDef } from './shared-form.decorator';
+import { OnSubmit, OnSubmitDef } from './on-submit.amendment';
+import { SharedForm, SharedFormDef } from './shared-form.amendment';
 
 describe('forms', () => {
   describe('@OnSubmit', () => {

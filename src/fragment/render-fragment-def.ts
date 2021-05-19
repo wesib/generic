@@ -1,5 +1,6 @@
 import { DrekTarget } from '@frontmeans/drek';
 import { ComponentContext, RenderDef } from '@wesib/wesib';
+import { FragmentRendererExecution } from './fragment-renderer';
 
 /**
  * Fragment rendering definition.
@@ -11,6 +12,15 @@ export type RenderFragmentDef =
     | RenderDef.Provider<RenderFragmentDef.Spec>;
 
 export namespace RenderFragmentDef {
+
+  /**
+   * Component fragment renderer method signature.
+   */
+  export type Method =
+  /**
+   * @param execution - Component fragment renderer execution context
+   */
+      (execution: FragmentRendererExecution) => void;
 
   /**
    * Fragment rendering specifier.

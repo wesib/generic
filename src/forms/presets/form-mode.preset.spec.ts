@@ -6,8 +6,8 @@ import { Field } from '../field';
 import { FieldShare } from '../field.share';
 import { Form } from '../form';
 import { FormShare } from '../form.share';
-import { SharedField } from '../shared-field.decorator';
-import { SharedForm } from '../shared-form.decorator';
+import { SharedField } from '../shared-field.amendment';
+import { SharedForm } from '../shared-form.amendment';
 import { FormModePreset } from './form-mode.preset';
 
 describe('forms', () => {

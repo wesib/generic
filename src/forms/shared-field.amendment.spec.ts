@@ -4,12 +4,12 @@ import { valueProvider } from '@proc7ts/primitives';
 import { BootstrapContext, Component, ComponentClass, ComponentContext, ComponentSlot, FeatureDef } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '@wesib/wesib/testing';
 import { Field } from './field';
-import { FieldName, FormName } from './field-name.definer';
+import { FieldName, FormName } from './field-name.amendment';
 import { FieldShare } from './field.share';
 import { Form } from './form';
 import { FormShare } from './form.share';
-import { SharedField } from './shared-field.decorator';
-import { SharedForm } from './shared-form.decorator';
+import { SharedField } from './shared-field.amendment';
+import { SharedForm } from './shared-form.amendment';
 
 describe('forms', () => {
   describe('@SharedField', () => {
@@ -213,6 +213,31 @@ describe('forms', () => {
 
       hasForm.it = true;
       expect([...(await field.control!.aspect(InParents).read)]).toHaveLength(1);
+    });
+    it('applies additional amendments', async () => {
+      @Component(
+          'field-element',
+          {
+            extend: { type: MockElement },
+          },
+      )
+      class FieldComponent {
+
+        @SharedField(({ amend }) => {
+          amend()().amend({ name: 'customField' });
+        })
+        readonly field = new Field<string>({ control: inValue('test') });
+
+      }
+
+      const { formCtx, fieldCtx } = await bootstrap(FieldComponent);
+
+      const form = await formCtx.get(FormShare);
+      const field = await fieldCtx.get(FieldShare);
+      const controls = await form!.control!.aspect(InGroup)!.controls.read;
+
+      expect(controls.get('field')).toBeUndefined();
+      expect(controls.get('customField')).toBe(field!.control);
     });
 
     describe('FieldName', () => {

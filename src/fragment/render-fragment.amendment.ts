@@ -1,24 +1,33 @@
 import { drekAppender, drekCharger } from '@frontmeans/drek';
 import { valueByRecipe } from '@proc7ts/primitives';
-import { ComponentClass, ComponentContext, ComponentProperty, ComponentPropertyDecorator } from '@wesib/wesib';
+import {
+  AeComponentMember,
+  AeComponentMemberTarget,
+  ComponentClass,
+  ComponentContext,
+  ComponentMember,
+  ComponentMemberAmendment,
+} from '@wesib/wesib';
 import { FragmentRenderCtl } from './fragment-render-ctl';
-import { FragmentRendererExecution } from './fragment-renderer';
 import { RenderFragmentDef } from './render-fragment-def';
 
 /**
- * Creates a {@link FragmentRenderer fragment renderer} method decorator.
+ * Creates a {@link RenderFragmentDef.Method fragment renderer method} amendment (amd decorator).
  *
- * The decorated method accepts a {@link FragmentRendererExecution fragment rendering context} as its only parameter.
- *
- * @typeParam TClass - A type of decorated component class.
+ * @typeParam TClass - Amended component class type.
+ * @typeParam TAmended - Amended component member entity type.
  * @param def - Non-mandatory rendering definition.
  *
- * @returns Component method decorator.
+ * @returns New component method amendment.
  */
-export function RenderFragment<TClass extends ComponentClass>(
+export function RenderFragment<
+    TClass extends ComponentClass,
+    TAmended extends AeComponentMember<RenderFragmentDef.Method, TClass>>(
     def?: RenderFragmentDef,
-): ComponentPropertyDecorator<(execution: FragmentRendererExecution) => void, TClass> {
-  return ComponentProperty(({ key, get }) => ({
+): ComponentMemberAmendment<RenderFragmentDef.Method, TClass, RenderFragmentDef.Method, TAmended> {
+  return ComponentMember<RenderFragmentDef.Method, TClass, RenderFragmentDef.Method, TAmended>((
+      { key, get, amend }: AeComponentMemberTarget<RenderFragmentDef.Method, TClass>,
+  ) => amend({
     componentDef: {
       define(defContext) {
         defContext.whenComponent(context => {

@@ -4,7 +4,7 @@ import { PageParamContext } from './page-param-context';
 /**
  * A key of {@link PageParam.Ref page parameter request} property containing requested page parameter.
  */
-export const PageParam__symbol = (/*#__PURE__*/ Symbol('page-param'));
+export const PageParam__symbol = (/*#__PURE__*/ Symbol('PageParam'));
 
 /**
  * Page navigation parameter.

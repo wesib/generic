@@ -55,7 +55,10 @@ describe('navigation', () => {
       expect(response).toBe(response2);
     });
     it('performs the load by calling `next`', () => {
-      registry.provide({ a: PageLoadAgent, is: next => next() });
+      registry.provide<PageLoadAgent, []>({
+        a: PageLoadAgent,
+        is: next => next(),
+      });
 
       expect(agent(mockLoad, request)).toBe(emitter.on);
       expect(mockLoad).toHaveBeenCalledWith(request);
@@ -66,8 +69,14 @@ describe('navigation', () => {
           (next, _request) => next(),
       );
 
-      registry.provide({ a: PageLoadAgent, is: next => next() });
-      registry.provide({ a: PageLoadAgent, is: mockAgent });
+      registry.provide<PageLoadAgent, []>({
+        a: PageLoadAgent,
+        is: next => next(),
+      });
+      registry.provide<PageLoadAgent, []>({
+        a: PageLoadAgent,
+        is: mockAgent,
+      });
 
       expect(agent(mockLoad, request)).toBe(emitter.on);
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request);

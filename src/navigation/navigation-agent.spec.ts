@@ -79,13 +79,19 @@ describe('navigation', () => {
           ) => next(),
       );
 
-      registry.provide({ a: NavigationAgent, is: mockAgent });
+      registry.provide<NavigationAgent, []>({
+        a: NavigationAgent,
+        is: mockAgent,
+      });
 
       agent(mockNavigate, when, from, to);
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), when, from, to);
     });
     it('performs navigation by calling `next`', () => {
-      registry.provide({ a: NavigationAgent, is: next => next() });
+      registry.provide<NavigationAgent, []>({
+        a: NavigationAgent,
+        is: next => next(),
+      });
 
       agent(mockNavigate, when, from, to);
       expect(mockNavigate).toHaveBeenCalledWith({
@@ -95,7 +101,10 @@ describe('navigation', () => {
       });
     });
     it('updates URL', () => {
-      registry.provide({ a: NavigationAgent, is: next => next({ url: new URL('http://localhost/other') }) });
+      registry.provide<NavigationAgent, []>({
+        a: NavigationAgent,
+        is: next => next({ url: new URL('http://localhost/other') }),
+      });
 
       agent(mockNavigate, when, from, to);
       expect(mockNavigate).toHaveBeenCalledWith({
@@ -106,7 +115,10 @@ describe('navigation', () => {
       });
     });
     it('updates URL using path', () => {
-      registry.provide({ a: NavigationAgent, is: next => next({ url: 'other' }) });
+      registry.provide<NavigationAgent, []>({
+        a: NavigationAgent,
+        is: next => next({ url: 'other' }),
+      });
 
       agent(mockNavigate, when, from, to);
       expect(mockNavigate).toHaveBeenCalledWith({
@@ -117,7 +129,10 @@ describe('navigation', () => {
       });
     });
     it('updates title', () => {
-      registry.provide({ a: NavigationAgent, is: next => next({ title: 'other title' }) });
+      registry.provide<NavigationAgent, []>({
+        a: NavigationAgent,
+        is: next => next({ title: 'other title' }),
+      });
 
       agent(mockNavigate, when, from, to);
       expect(mockNavigate).toHaveBeenCalledWith({
@@ -128,7 +143,10 @@ describe('navigation', () => {
       });
     });
     it('updates data', () => {
-      registry.provide({ a: NavigationAgent, is: next => next({ data: 'other data' }) });
+      registry.provide<NavigationAgent, []>({
+        a: NavigationAgent,
+        is: next => next({ data: 'other data' }),
+      });
 
       agent(mockNavigate, when, from, to);
       expect(mockNavigate).toHaveBeenCalledWith({
@@ -142,7 +160,7 @@ describe('navigation', () => {
 
       const [param] = testPageParam();
 
-      registry.provide({
+      registry.provide<NavigationAgent, []>({
         a: NavigationAgent,
         is: next => next(),
       });
@@ -161,7 +179,7 @@ describe('navigation', () => {
 
       const [param] = testPageParam();
 
-      registry.provide({
+      registry.provide<NavigationAgent, []>({
         a: NavigationAgent,
         is: next => next(),
       });
