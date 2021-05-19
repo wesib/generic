@@ -1,10 +1,10 @@
 import {
   AeClass,
+  allAmender,
   Amender,
   Amendment,
   AmendRequest,
   AmendTarget,
-  combineAmendments,
   isAmendatory,
   MemberAmendment,
   newAmendTarget,
@@ -152,11 +152,11 @@ export function SharedField<
 
   if (typeof defOrAmendment === 'function' || isAmendatory(defOrAmendment)) {
     def = {};
-    amender = combineAmendments([defOrAmendment, ...amendments, FieldName()]);
+    amender = allAmender([defOrAmendment, ...amendments, FieldName()]);
   } else {
     def = defOrAmendment;
     fieldName = defOrAmendment.name;
-    amender = combineAmendments([...amendments, FieldName({ name: fieldName })]);
+    amender = allAmender([...amendments, FieldName({ name: fieldName })]);
   }
 
   const {

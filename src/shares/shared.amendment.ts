@@ -1,9 +1,9 @@
 import {
   AeClass,
+  allAmender,
   Amendment,
   AmendRequest,
   AmendTarget,
-  combineAmendments,
   MemberAmendment,
   newAmendTarget,
 } from '@proc7ts/amend';
@@ -145,7 +145,7 @@ export function Shared<
       });
     };
 
-    combineAmendments([...amendments, lastAmender])(newAmendTarget({
+    allAmender([...amendments, lastAmender])(newAmendTarget({
       base: {
         ...baseTarget as TAmended,
         share: share$default,
