@@ -1,9 +1,9 @@
 import { handleDomEvents } from '@frontmeans/dom-events';
-import { AmendTarget } from '@proc7ts/amend';
 import { consumeEvents } from '@proc7ts/fun-events';
 import { Class } from '@proc7ts/primitives';
 import {
   AeComponentMember,
+  AeComponentMemberTarget,
   ComponentClass,
   ComponentContext,
   ComponentMember,
@@ -45,7 +45,7 @@ export function OnSubmit<
       TClass,
       OnSubmitDef.Method<TModel, TElt, TClass>,
       TAmended>((
-      { get, amend }: AmendTarget<AeComponentMember<OnSubmitDef.Method<TModel, TElt, TClass>, TClass>>,
+      { get, amend }: AeComponentMemberTarget<OnSubmitDef.Method<TModel, TElt, TClass>, TClass>,
   ) => amend({
     componentDef: {
       define(defContext) {

@@ -1,8 +1,8 @@
 import { drekAppender, drekCharger } from '@frontmeans/drek';
-import { AmendTarget } from '@proc7ts/amend';
 import { valueByRecipe } from '@proc7ts/primitives';
 import {
   AeComponentMember,
+  AeComponentMemberTarget,
   ComponentClass,
   ComponentContext,
   ComponentMember,
@@ -26,7 +26,7 @@ export function RenderFragment<
     def?: RenderFragmentDef,
 ): ComponentMemberAmendment<RenderFragmentDef.Method, TClass, RenderFragmentDef.Method, TAmended> {
   return ComponentMember<RenderFragmentDef.Method, TClass, RenderFragmentDef.Method, TAmended>((
-      { key, get, amend }: AmendTarget<AeComponentMember<RenderFragmentDef.Method, TClass>>,
+      { key, get, amend }: AeComponentMemberTarget<RenderFragmentDef.Method, TClass>,
   ) => amend({
     componentDef: {
       define(defContext) {

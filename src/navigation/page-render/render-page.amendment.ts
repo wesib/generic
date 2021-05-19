@@ -1,5 +1,10 @@
-import { AmendTarget } from '@proc7ts/amend';
-import { AeComponentMember, ComponentClass, ComponentMember, ComponentMemberAmendment } from '@wesib/wesib';
+import {
+  AeComponentMember,
+  AeComponentMemberTarget,
+  ComponentClass,
+  ComponentMember,
+  ComponentMemberAmendment,
+} from '@wesib/wesib';
 import { PageLoadSupport } from '../page-load';
 import { PageRenderCtl } from './page-render-ctl';
 import { RenderPageDef } from './render-page-def';
@@ -26,7 +31,7 @@ export function RenderPage<
     def?: RenderPageDef,
 ): ComponentMemberAmendment<RenderPageDef.Method, TClass, RenderPageDef.Method, TAmended> {
   return ComponentMember<RenderPageDef.Method, TClass, RenderPageDef.Method, TAmended>((
-      { get, amend }: AmendTarget<AeComponentMember<RenderPageDef.Method, TClass>>,
+      { get, amend }: AeComponentMemberTarget<RenderPageDef.Method, TClass>,
   ) => amend({
     componentDef: {
       feature: {

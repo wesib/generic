@@ -1,6 +1,11 @@
 import { StypRule, StypRules } from '@frontmeans/style-producer';
-import { AmendTarget } from '@proc7ts/amend';
-import { AeComponentMember, ComponentClass, ComponentMember, ComponentMemberAmendment } from '@wesib/wesib';
+import {
+  AeComponentMember,
+  AeComponentMemberTarget,
+  ComponentClass,
+  ComponentMember,
+  ComponentMemberAmendment,
+} from '@wesib/wesib';
 import { ComponentStypFormat, ComponentStypFormatConfig } from './component-styp-format';
 
 /**
@@ -23,7 +28,7 @@ export function ProduceStyle<
     config?: ComponentStypFormatConfig,
 ): ComponentMemberAmendment<ProduceStyleDef.Source, TClass, ProduceStyleDef.Source, TAmended> {
   return ComponentMember<ProduceStyleDef.Source, TClass, ProduceStyleDef.Source, TAmended>((
-      { get, amend }: AmendTarget<AeComponentMember<ProduceStyleDef.Source, TClass>>,
+      { get, amend }: AeComponentMemberTarget<ProduceStyleDef.Source, TClass>,
   ) => amend({
     componentDef: {
       define(defContext) {
