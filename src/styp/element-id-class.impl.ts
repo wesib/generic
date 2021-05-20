@@ -1,6 +1,6 @@
-import { css__naming, html__naming, NamespaceDef, QualifiedName } from '@frontmeans/namespace-aliaser';
+import { css__naming, NamespaceDef, QualifiedName } from '@frontmeans/namespace-aliaser';
 import { ContextValues, SingleContextKey, SingleContextRef } from '@proc7ts/context-values';
-import { ComponentContext, DefaultNamespaceAliaser, ElementDef } from '@wesib/wesib';
+import { ComponentContext, DefaultNamespaceAliaser, DefinitionContext } from '@wesib/wesib';
 
 /**
  * @internal
@@ -36,9 +36,8 @@ function assignElementId(contextValues: ContextValues): ElementIdClass {
 
   const aliaser = contextValues.get(DefaultNamespaceAliaser);
   const context = contextValues.get(ComponentContext);
-  const elementDef = context.get(ElementDef);
-  const name: string = elementDef.name ? html__naming.name(elementDef.name, aliaser) : 'component';
-  const local = `${name}#${++uniqueClassSeq}`;
+  const { tagName = 'component' } = context.get(DefinitionContext).elementDef;
+  const local = `${tagName}#${++uniqueClassSeq}`;
   const qualified = ElementIdClass__NS.name(aliaser(ElementIdClass__NS), local, css__naming);
   const element = context.element as Element;
 
