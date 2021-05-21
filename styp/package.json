@@ -1,5 +1,0 @@
-{
-  "main": "../dist/wesib.styp.cjs",
-  "module": "../dist/wesib.styp.js",
-  "types": "./index.d.ts"
-}

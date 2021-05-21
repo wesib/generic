@@ -20,18 +20,11 @@
   "module": "./dist/wesib.generic.js",
   "types": "./index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/wesib.generic.js",
-      "require": "./dist/wesib.generic.cjs"
-    },
-    "./styp": {
-      "import": "./dist/wesib.styp.js",
-      "require": "./dist/wesib.styp.cjs"
-    }
+    "import": "./dist/wesib.generic.js",
+    "require": "./dist/wesib.generic.cjs"
   },
   "peerDependencies": {
     "@frontmeans/namespace-aliaser": "^2.3.0",
-    "@frontmeans/style-producer": "^6.1.0",
     "@proc7ts/context-values": "^6.1.0",
     "@proc7ts/fun-events": "^10.4.0",
     "@wesib/wesib": "^1.0.0-beta.42"
@@ -47,15 +40,9 @@
     "@proc7ts/push-iterator": "^2.5.0",
     "@proc7ts/supply": "^1.0.0"
   },
-  "peerDependenciesMeta": {
-    "@proc7ts/style-producer": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/render-scheduler": "^1.5.0",
-    "@frontmeans/style-producer": "^6.1.0",
     "@proc7ts/context-values": "^6.1.0",
     "@proc7ts/fun-events": "^10.4.0",
     "@rollup/plugin-commonjs": "^19.0.0",
