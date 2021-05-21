@@ -1,11 +1,9 @@
 {
   "name": "@wesib/generic",
-  "version": "1.0.0-beta.42",
+  "version": "1.0.0-beta.43",
   "description": "Wesib: Generic Components",
   "keywords": [
-    "web-components",
-    "library",
-    "typescript"
+    "web-components"
   ],
   "homepage": "https://github.com/wesib/generic",
   "repository": {
@@ -15,7 +13,7 @@
   "license": "MIT",
   "author": "Ruslan Lopatin <ruslan.lopatin@gmail.com>",
   "bugs": {
-    "url": "https://github.com/wesib/wesib/issues"
+    "url": "https://github.com/wesib/generic/issues"
   },
   "type": "module",
   "main": "./dist/wesib.generic.cjs",
