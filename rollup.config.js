@@ -10,7 +10,6 @@ import typescript from 'typescript';
 export default {
   input: {
     'wesib.generic': './src/index.ts',
-    'wesib.forms': './src/forms/index.ts',
     'wesib.styp': './src/styp/index.ts',
   },
   plugins: [
@@ -29,9 +28,6 @@ export default {
     moduleSideEffects: false,
   },
   manualChunks(id) {
-    if (id.startsWith(path.resolve('src', 'forms') + path.sep)) {
-      return 'wesib.forms';
-    }
     if (id.startsWith(path.resolve('src', 'styp') + path.sep)) {
       return 'wesib.styp';
     }
@@ -64,9 +60,6 @@ export default {
             declarationMap: true,
           },
           entries: {
-            forms: {
-              file: 'forms/index.d.ts',
-            },
             styp: {
               file: 'styp/index.d.ts',
             },

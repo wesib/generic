@@ -24,10 +24,6 @@
       "import": "./dist/wesib.generic.js",
       "require": "./dist/wesib.generic.cjs"
     },
-    "./forms": {
-      "import": "./dist/wesib.forms.js",
-      "require": "./dist/wesib.forms.cjs"
-    },
     "./styp": {
       "import": "./dist/wesib.styp.js",
       "require": "./dist/wesib.styp.cjs"

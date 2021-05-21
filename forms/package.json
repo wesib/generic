@@ -1,5 +1,0 @@
-{
-  "main": "../dist/wesib.forms.cjs",
-  "module": "../dist/wesib.forms.js",
-  "types": "./index.d.ts"
-}

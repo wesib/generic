@@ -1,5 +1,5 @@
 import { SingleContextKey } from '@proc7ts/context-values';
-import { AfterEvent, afterSupplied, afterThe, trackValue } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, trackValue } from '@proc7ts/fun-events';
 import {
   BootstrapContext,
   Component,
@@ -10,7 +10,6 @@ import {
 } from '@wesib/wesib';
 import { MockElement, testDefinition, testElement } from '@wesib/wesib/testing';
 import { Share } from './share';
-import { Shareable } from './shareable';
 import { Shared } from './shared.amendment';
 import { TargetShare } from './target-share';
 
@@ -116,31 +115,6 @@ describe('shares', () => {
       context.component.sharedValue = afterThe('test2');
       expect(await shared).toBe('test2');
       expect(await context.component.sharedValue).toBe('test2');
-    });
-    it('shares shareable component property value', async () => {
-
-      const share2 = new Share<TestShareable>('shareable-share');
-
-      class TestShareable extends Shareable<string> {
-
-      }
-
-      @Component({ extend: { type: MockElement } })
-      class TestComponent {
-
-        @Shared(share2)
-        shareable = new TestShareable(() => 'test');
-
-      }
-
-      const element = new (await testElement(TestComponent))();
-      const context = await ComponentSlot.of(element).whenReady;
-      const shared = context.get(share2);
-      const shareable = (await shared)!;
-
-      expect(shareable).toBeInstanceOf(TestShareable);
-      expect(shareable.body).toBe('test');
-      expect(await afterSupplied(shareable)).toBe('test');
     });
     it('applies share extension', async () => {
 
