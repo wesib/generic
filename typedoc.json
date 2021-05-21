@@ -1,8 +1,6 @@
 {
   "entryPoints": [
-    "src/index.ts",
-    "src/forms/index.ts",
-    "src/styp/index.ts"
+    "src/index.ts"
   ],
   "name": "Wesib: Generic Components",
   "out": "./target/typedoc",

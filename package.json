@@ -1,11 +1,9 @@
 {
   "name": "@wesib/generic",
-  "version": "1.0.0-beta.42",
+  "version": "1.0.0-beta.43",
   "description": "Wesib: Generic Components",
   "keywords": [
-    "web-components",
-    "library",
-    "typescript"
+    "web-components"
   ],
   "homepage": "https://github.com/wesib/generic",
   "repository": {
@@ -15,30 +13,18 @@
   "license": "MIT",
   "author": "Ruslan Lopatin <ruslan.lopatin@gmail.com>",
   "bugs": {
-    "url": "https://github.com/wesib/wesib/issues"
+    "url": "https://github.com/wesib/generic/issues"
   },
   "type": "module",
   "main": "./dist/wesib.generic.cjs",
   "module": "./dist/wesib.generic.js",
   "types": "./index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/wesib.generic.js",
-      "require": "./dist/wesib.generic.cjs"
-    },
-    "./forms": {
-      "import": "./dist/wesib.forms.js",
-      "require": "./dist/wesib.forms.cjs"
-    },
-    "./styp": {
-      "import": "./dist/wesib.styp.js",
-      "require": "./dist/wesib.styp.cjs"
-    }
+    "import": "./dist/wesib.generic.js",
+    "require": "./dist/wesib.generic.cjs"
   },
   "peerDependencies": {
-    "@frontmeans/input-aspects": "^4.3.0",
     "@frontmeans/namespace-aliaser": "^2.3.0",
-    "@frontmeans/style-producer": "^6.1.0",
     "@proc7ts/context-values": "^6.1.0",
     "@proc7ts/fun-events": "^10.4.0",
     "@wesib/wesib": "^1.0.0-beta.42"
@@ -54,19 +40,9 @@
     "@proc7ts/push-iterator": "^2.5.0",
     "@proc7ts/supply": "^1.0.0"
   },
-  "peerDependenciesMeta": {
-    "@proc7ts/input-aspects": {
-      "optional": true
-    },
-    "@proc7ts/style-producer": {
-      "optional": true
-    }
-  },
   "devDependencies": {
-    "@frontmeans/input-aspects": "^4.3.0",
     "@frontmeans/namespace-aliaser": "^2.3.0",
     "@frontmeans/render-scheduler": "^1.5.0",
-    "@frontmeans/style-producer": "^6.1.0",
     "@proc7ts/context-values": "^6.1.0",
     "@proc7ts/fun-events": "^10.4.0",
     "@rollup/plugin-commonjs": "^19.0.0",

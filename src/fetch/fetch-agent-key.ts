@@ -2,27 +2,18 @@ import { ContextValueSlot } from '@proc7ts/context-values';
 import { contextDestroyed, ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
 import { AfterEvent, afterThe, digAfter, EventSender, OnEvent, onSupplied } from '@proc7ts/fun-events';
 
-/**
- * @internal
- */
-type FetchAgent<TResponse extends any[]> = (
+export type FetchAgent<TResponse extends any[]> = (
     this: void,
     next: (this: void, request?: Request) => OnEvent<TResponse>,
     request: Request,
 ) => EventSender<TResponse>;
 
-/**
- * @internal
- */
-type CombinedFetchAgent<TResponse extends any[]> = (
+export type CombinedFetchAgent<TResponse extends any[]> = (
     this: void,
     next: (this: void, request: Request) => OnEvent<TResponse>,
     request: Request,
 ) => OnEvent<TResponse>;
 
-/**
- * @internal
- */
 export class FetchAgentKey<TResponse extends any[]>
     extends ContextUpKey<CombinedFetchAgent<TResponse>, FetchAgent<TResponse>>
     implements ContextUpRef<CombinedFetchAgent<TResponse>, FetchAgent<TResponse>> {
@@ -70,9 +61,6 @@ export class FetchAgentKey<TResponse extends any[]>
 
 }
 
-/**
- * @internal
- */
 function defaultFetchAgent<TResponse extends any[]>(
     next: (this: void, request: Request) => OnEvent<TResponse>,
     request: Request,
@@ -80,10 +68,7 @@ function defaultFetchAgent<TResponse extends any[]>(
   return next(request);
 }
 
-/**
- * @internal
- */
-export function combineFetchAgents<TResponse extends any[]>(
+function combineFetchAgents<TResponse extends any[]>(
     agents: FetchAgent<TResponse>[],
 ): CombinedFetchAgent<TResponse> {
   return (next, request) => {
