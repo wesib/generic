@@ -1,16 +1,16 @@
-import Mock = jest.Mock;
-import Mocked = jest.Mocked;
-import SpyInstance = jest.SpyInstance;
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { EventReceiver } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
+import { MockObject } from '@wesib/wesib/testing';
+import { Mock, SpyInstance } from 'jest-mock';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
 
 describe('fetch', () => {
 
-  let mockWindow: Mocked<BootstrapWindow>;
+  let mockWindow: MockObject<BootstrapWindow>;
   let request: RequestInfo;
   let init: RequestInit | undefined;
   let response: Response;
@@ -97,7 +97,7 @@ describe('fetch', () => {
     describe('abort signal', () => {
 
       let target: HTMLElement;
-      let AbortControllerSpy: SpyInstance<AbortController>;
+      let AbortControllerSpy: SpyInstance<AbortController, any[]>;
       let abortController: AbortController;
       let abortSpy: SpyInstance<void, []>;
 

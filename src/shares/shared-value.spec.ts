@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { noop, valueProvider } from '@proc7ts/primitives';
 import { SharedValue, SharedValue__symbol } from './shared-value';
 

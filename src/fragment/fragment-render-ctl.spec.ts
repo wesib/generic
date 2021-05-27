@@ -1,10 +1,12 @@
 import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf } from '@frontmeans/drek';
 import { queuedRenderScheduler, RenderSchedule, RenderScheduleOptions } from '@frontmeans/render-scheduler';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { EventEmitter } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Component, ComponentContext, DefaultPreRenderScheduler, DefaultRenderScheduler } from '@wesib/wesib';
 import { testDefinition } from '@wesib/wesib/testing';
+import { Mock } from 'jest-mock';
 import { FragmentRenderCtl } from './fragment-render-ctl';
 
 describe('fragment', () => {
@@ -18,8 +20,8 @@ describe('fragment', () => {
       element = doc.body.appendChild(doc.createElement('test-element'));
     });
 
-    let mockRenderScheduler: jest.Mock<RenderSchedule, [RenderScheduleOptions?]>;
-    let mockPreRenderScheduler: jest.Mock<RenderSchedule, [RenderScheduleOptions?]>;
+    let mockRenderScheduler: Mock<RenderSchedule, [RenderScheduleOptions?]>;
+    let mockPreRenderScheduler: Mock<RenderSchedule, [RenderScheduleOptions?]>;
 
     beforeEach(() => {
       mockRenderScheduler = jest.fn(queuedRenderScheduler);

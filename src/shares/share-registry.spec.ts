@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from '@jest/globals';
 import { ValueTracker } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
 import { BootstrapContext, Component, DefinitionContext } from '@wesib/wesib';

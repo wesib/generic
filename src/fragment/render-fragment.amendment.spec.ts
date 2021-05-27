@@ -1,6 +1,7 @@
 import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf, drekReplacer } from '@frontmeans/drek';
 import { queuedRenderScheduler, RenderSchedule, RenderScheduleOptions } from '@frontmeans/render-scheduler';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { Class } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import {
@@ -11,6 +12,7 @@ import {
   statePropertyPathTo,
 } from '@wesib/wesib';
 import { testDefinition } from '@wesib/wesib/testing';
+import { Mock } from 'jest-mock';
 import { FragmentRendererExecution } from './fragment-renderer';
 import { RenderFragmentDef } from './render-fragment-def';
 import { RenderFragment } from './render-fragment.amendment';
@@ -26,15 +28,15 @@ describe('fragment', () => {
       element = doc.body.appendChild(doc.createElement('test-element'));
     });
 
-    let mockRenderScheduler: jest.Mock<RenderSchedule, [RenderScheduleOptions?]>;
-    let mockPreRenderScheduler: jest.Mock<RenderSchedule, [RenderScheduleOptions?]>;
+    let mockRenderScheduler: Mock<RenderSchedule, [RenderScheduleOptions?]>;
+    let mockPreRenderScheduler: Mock<RenderSchedule, [RenderScheduleOptions?]>;
 
     beforeEach(() => {
       mockRenderScheduler = jest.fn(queuedRenderScheduler);
       mockPreRenderScheduler = jest.fn(queuedRenderScheduler);
     });
 
-    let render: jest.Mock<void, [FragmentRendererExecution]>;
+    let render: Mock<void, [FragmentRendererExecution]>;
 
     beforeEach(() => {
       render = jest.fn();
