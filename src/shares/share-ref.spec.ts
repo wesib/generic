@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
 import { Share } from './share';
 import { isShareRef, Share__symbol } from './share-ref';

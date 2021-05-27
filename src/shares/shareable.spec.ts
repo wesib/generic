@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { afterSupplied } from '@proc7ts/fun-events';
 import { Component, ComponentSlot } from '@wesib/wesib';
 import { MockElement, testElement } from '@wesib/wesib/testing';
@@ -39,7 +40,7 @@ describe('shares', () => {
 
         const shareable = new TestShareable('test');
 
-        expect(() => shareable.body).toThrow(TypeError);
+        expect(() => shareable.body).toThrow(new TypeError('[object Object] is not properly shared yet'));
       });
     });
     describe('sharer', () => {
@@ -47,7 +48,7 @@ describe('shares', () => {
 
         const shareable = new TestShareable('test');
 
-        expect(() => shareable.sharer).toThrow(TypeError);
+        expect(() => shareable.sharer).toThrow(new TypeError('[object Object] is not properly shared yet'));
       });
     });
   });
