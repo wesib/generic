@@ -3,8 +3,8 @@ import { EventReceiver } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
-import { MockObject } from '@wesib/wesib/testing';
 import { Mock, SpyInstance } from 'jest-mock';
+import { MockObject } from '../spec';
 import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
 

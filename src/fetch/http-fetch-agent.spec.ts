@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { ContextRegistry, ContextSupply } from '@proc7ts/context-values';
 import { EventEmitter, onceOn, OnEvent, onSupplied } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
-import { MockFn } from '@wesib/wesib/testing';
 import { Mock } from 'jest-mock';
+import { MockFn } from '../spec';
 import { HttpFetchAgent } from './http-fetch-agent';
 
 describe('fetch', () => {

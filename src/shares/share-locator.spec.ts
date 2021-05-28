@@ -3,7 +3,7 @@ import { drekHost } from '@frontmeans/drek';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { afterThe } from '@proc7ts/fun-events';
 import { ComponentContext } from '@wesib/wesib';
-import { MockFn, MockObject } from '@wesib/wesib/testing';
+import { MockFn, MockObject } from '../spec';
 import { Share } from './share';
 import { ShareLocator, shareLocator } from './share-locator';
 import { Share__symbol, ShareRef } from './share-ref';
