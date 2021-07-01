@@ -1,8 +1,7 @@
 import { Share } from './share';
 
 /**
- * A key of {@link ShareRef component share reference} property containing a {@link Share component
- * share} instance.
+ * A key of {@link ShareRef component share reference} property containing a {@link Share component share} instance.
  */
 export const Share__symbol = (/*#__PURE__*/ Symbol('Share'));
 

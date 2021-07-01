@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
-import { SingleContextKey } from '@proc7ts/context-values';
+import { cxConstAsset } from '@proc7ts/context-builder';
+import { CxEntry, cxSingle } from '@proc7ts/context-values';
 import { AfterEvent, afterThe, trackValue } from '@proc7ts/fun-events';
 import {
   BootstrapContext,
@@ -119,8 +120,8 @@ describe('shares', () => {
     });
     it('applies share extension', async () => {
 
-      const extKey1 = new SingleContextKey<Share<string>>('ext-key1');
-      const extKey2 = new SingleContextKey<ComponentClass>('ext-key2');
+      const extEntry1: CxEntry<Share<string>> = { perContext: cxSingle() };
+      const extEntry2: CxEntry<ComponentClass> = { perContext: cxSingle() };
 
       @Component({ extend: { type: MockElement } })
       class TestComponent {
@@ -130,8 +131,8 @@ describe('shares', () => {
             ({ amendedClass, share, amend }) => amend({
               componentDef: {
                 setup(setup) {
-                  setup.perComponent({ a: extKey1, is: share });
-                  setup.perComponent({ a: extKey2, is: amendedClass });
+                  setup.perComponent(cxConstAsset(extEntry1, share));
+                  setup.perComponent(cxConstAsset(extEntry2, amendedClass));
                 },
               },
             }),
@@ -147,8 +148,8 @@ describe('shares', () => {
       const shared = context.get(share);
 
       expect(await shared).toBe('test');
-      expect(context.get(extKey1)).toBe(share);
-      expect(context.get(extKey2)).toBe(TestComponent);
+      expect(context.get(extEntry1)).toBe(share);
+      expect(context.get(extEntry2)).toBe(TestComponent);
     });
 
     describe('scoping', () => {

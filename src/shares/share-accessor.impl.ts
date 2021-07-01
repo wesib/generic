@@ -1,13 +1,10 @@
-import { Contextual__symbol, isContextual } from '@proc7ts/context-values';
 import { isAfterEvent, trackValue, trackValueBy, ValueTracker } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { AeComponentMember, ComponentClass, ComponentContext, ComponentInstance } from '@wesib/wesib';
 import { SharedDef } from './shared.amendment';
+import { isSharerAware } from './sharer-aware';
 
-/**
- * @internal
- */
 export class ShareAccessor<T, TValue extends SharedDef.Value<T>, TClass extends ComponentClass> {
 
   private readonly _get: () => TValue;
@@ -36,8 +33,8 @@ export class ShareAccessor<T, TValue extends SharedDef.Value<T>, TClass extends 
 
     this.val.supply.needs(this._ctx);
 
-    // Bind to context as the very first operation
-    this.val.read(value => isContextual(value) && value[Contextual__symbol](this._ctx));
+    // Inform on sharer as the very first operation
+    this.val.read(value => isSharerAware(value) && value.sharedBy(this._ctx));
 
     if (dynSync) {
       this._syncDyn();

@@ -1,4 +1,3 @@
-import { Contextual, Contextual__symbol } from '@proc7ts/context-values';
 import {
   AfterEvent,
   AfterEvent__symbol,
@@ -9,6 +8,7 @@ import {
 } from '@proc7ts/fun-events';
 import { noop, valueProvider, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
+import { SharerAware } from './sharer-aware';
 
 const Shareable$Internals__symbol = (/*#__PURE__*/ Symbol('Shareable.internals'));
 
@@ -21,7 +21,7 @@ const Shareable$Internals__symbol = (/*#__PURE__*/ Symbol('Shareable.internals')
  * @typeParam TSharer - Sharer component type.
  */
 export class Shareable<TBody = unknown, TSharer extends object = any>
-    implements EventKeeper<[TBody]>, Contextual<Shareable<TBody, TSharer>> {
+    implements EventKeeper<[TBody]>, SharerAware {
 
   /**
    * Converts shareable body or its provider to provider that always returns an `AfterEvent` keeper of shareable body.
@@ -77,15 +77,12 @@ export class Shareable<TBody = unknown, TSharer extends object = any>
   }
 
   /**
-   * Binds this shareable instance to sharer component.
+   * Informs this shareable instance on its sharer component.
    *
    * @param sharer - Sharer component context.
-   *
-   * @returns `this` instance.
    */
-  [Contextual__symbol](sharer: ComponentContext): this {
-    this[Shareable$Internals__symbol].bind(sharer);
-    return this;
+  sharedBy(sharer: ComponentContext): void {
+    this[Shareable$Internals__symbol].sharedBy(sharer);
   }
 
   [AfterEvent__symbol](): AfterEvent<[TBody]> {
@@ -148,8 +145,8 @@ class Shareable$Internals<TBody, TSharer extends object> {
     this._notBound();
   }
 
-  bind(sharer: ComponentContext<TSharer>): void {
-    this.bind = noop;
+  sharedBy(sharer: ComponentContext<TSharer>): void {
+    this.sharedBy = noop;
     this.sharer = valueProvider(sharer);
     this.get = () => {
 

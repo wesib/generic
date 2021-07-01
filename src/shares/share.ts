@@ -1,8 +1,8 @@
 import { nodeHost } from '@frontmeans/dom-primitives';
-import { ContextKey__symbol, ContextRegistry } from '@proc7ts/context-values';
-import { ContextUpKey, ContextUpRef } from '@proc7ts/context-values/updatable';
+import { CxEntry } from '@proc7ts/context-values';
 import {
   afterAll,
+  afterEach,
   AfterEvent,
   afterEventBy,
   afterThe,
@@ -12,6 +12,7 @@ import {
   isAfterEvent,
   sendEventsTo,
   shareAfter,
+  supplyAfter,
   translateAfter_,
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
@@ -39,7 +40,7 @@ import { SharedValue$Registrar } from './shared-value.impl';
  *
  * @typeParam T - Shared value type.
  */
-export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, SharedValue<T>> {
+export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedValue<T> | AfterEvent<SharedValue<T>[]>> {
 
   /**
    * @internal
@@ -70,11 +71,19 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
     return this[Share$impl__symbol].name;
   }
 
-  /**
-   * A key of the sharer component context value containing an `AfterEvent` keeper of the shared value.
-   */
-  get [ContextKey__symbol](): ContextUpKey<AfterEvent<[T?]>, SharedValue<T>> {
-    return this[Share$impl__symbol].key;
+  get [Symbol.toStringTag](): string {
+    return this.name;
+  }
+
+  perContext(target: Share.Target<T>): CxEntry.Definition<AfterEvent<[T?]>> {
+
+    const track: () => AfterEvent<[T?]> = target.lazy(target => Share$track(this, target));
+
+    return {
+      assign(assigner) {
+        assigner(track());
+      },
+    };
   }
 
   /**
@@ -108,16 +117,19 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
    * Creates a shared value registrar that shares a value created by the given provider.
    *
    * @typeParam TSharer - Sharer component type.
-   * @param registry - Target component context registry.
+   * @param target - Shared value definition target.
    * @param provider - Shared value provider.
    *
    * @returns New shared value registrar.
    */
   createRegistrar<TSharer extends object>(
-      registry: ContextRegistry<ComponentContext<TSharer>>,
+      target: CxEntry.Target<
+          AfterEvent<[T?]>,
+          SharedValue<T> | AfterEvent<SharedValue<T>[]>,
+          ComponentContext<TSharer>>,
       provider: SharedValue.Provider<T, TSharer>,
   ): SharedValue.Registrar<T> {
-    return SharedValue$Registrar(registry, provider);
+    return SharedValue$Registrar(target, provider);
   }
 
   /**
@@ -231,6 +243,10 @@ export class Share<T> implements ShareRef<T>, ContextUpRef<AfterEvent<[T?]>, Sha
     );
   }
 
+  toString(): string {
+    return `[Share ${this[Symbol.toStringTag]}]`;
+  }
+
 }
 
 export namespace Share {
@@ -253,22 +269,41 @@ export namespace Share {
   }
 
   /**
-   * A key of context value containing an `AfterEvent` keeper of shared value.
+   * Shared value definition target.
    *
    * @typeParam T - Shared value type.
+   * @typeParam TSharer - Sharer component type.
    */
-  export type Key<T> = ContextUpKey<AfterEvent<[T?]>, SharedValue<T>>;
+  export type Target<T, TSharer extends object = any> = CxEntry.Target<
+      AfterEvent<[T?]>,
+      SharedValue<T> | AfterEvent<SharedValue<T>[]>,
+      ComponentContext<TSharer>>;
 
-  /**
-   * A source value accepted by {@link Share component share} context value.
-   *
-   * Either a single shared value, its {@link SharedValue.Detailed detailed descriptor}, or an `AfterEvent`
-   * keeper of the above.
-   *
-   * @typeParam T - Shared value type.
-   */
-  export type Source<T> = ContextUpKey.Source<SharedValue<T>>;
+}
 
+function Share$track<T>(share: Share<T>, target: Share.Target<T>): AfterEvent<[T?]> {
+
+  const shared = afterEventBy<AfterEvent<SharedValue<T>[]>[]>(receiver => {
+
+    const dispatch = sendEventsTo(receiver);
+
+    target.trackAssetList(assetList => dispatch(...assetList.flatMap(provided => {
+
+      const assets: AfterEvent<SharedValue<T>[]>[] = [];
+
+      provided.eachAsset((asset: SharedValue<T> | AfterEvent<SharedValue<T>[]>) => {
+        assets.push(isAfterEvent(asset) ? asset : afterThe(asset));
+      });
+
+      return assets;
+    })));
+  });
+
+  return shared.do(
+      digAfter_(afterEach),
+      digAfter_((...values: SharedValue<T>[][]) => share.selectValue(...values.flat())),
+      supplyAfter(target.supply),
+  );
 }
 
 function Share$consumerStatus([{ settled, connected }]: [ComponentContext]): 0 | 1 | 2 {

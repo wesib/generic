@@ -1,28 +1,19 @@
-import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
+import { CxEntry, cxEvaluated, cxScoped } from '@proc7ts/context-values';
 import { trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
-import { bootstrapDefault, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
+import { BootstrapContext, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
 import { Share } from './share';
 
-const ShareRegistry__key = (/*#__PURE__*/ new SingleContextKey(
-    'share-registry',
-    {
-      byDefault: bootstrapDefault(bsContext => new ShareRegistry(bsContext.get(DefaultNamespaceAliaser))),
-    },
-));
-
-/**
- * @internal
- */
 export class ShareRegistry {
 
-  static get [ContextKey__symbol](): ContextKey<ShareRegistry> {
-    return ShareRegistry__key;
-  }
+  static readonly perContext: CxEntry.Definer<ShareRegistry> = cxScoped(
+      BootstrapContext,
+      cxEvaluated(target => new ShareRegistry(target.get(DefaultNamespaceAliaser))),
+  );
 
   private readonly _sharers = new Map<Share<unknown>, ValueTracker<Sharers>>();
 
-  constructor(readonly nsAlias: DefaultNamespaceAliaser) {
+  private constructor(readonly nsAlias: DefaultNamespaceAliaser) {
   }
 
   addSharer(
@@ -60,9 +51,6 @@ export class ShareRegistry {
 
 }
 
-/**
- * @internal
- */
 export interface Sharers {
 
   readonly names: Map<string, number>;

@@ -1,23 +1,23 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { ContextRegistry, ContextSupply } from '@proc7ts/context-values';
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { CxBuilder, cxConstAsset } from '@proc7ts/context-builder';
+import { CxReferenceError, CxValues } from '@proc7ts/context-values';
 import { EventEmitter, onceOn, OnEvent, onSupplied } from '@proc7ts/fun-events';
+import { noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { Mock } from 'jest-mock';
-import { MockFn } from '../spec';
 import { HttpFetchAgent } from './http-fetch-agent';
 
 describe('fetch', () => {
   describe('HttpFetchAgent', () => {
 
-    let registry: ContextRegistry;
+    let cxBuilder: CxBuilder;
+    let context: CxValues;
     let agent: HttpFetchAgent;
 
     beforeEach(() => {
-      registry = new ContextRegistry();
-
-      const values = registry.newValues();
-
-      agent = values.get(HttpFetchAgent);
+      cxBuilder = new CxBuilder(get => ({ get }));
+      context = cxBuilder.context;
+      agent = context.get(HttpFetchAgent);
     });
 
     let request: Request;
@@ -30,29 +30,28 @@ describe('fetch', () => {
       mockFetch = jest.fn((_request?, _init?) => emitter.on);
     });
 
+    beforeEach(() => {
+      Supply.onUnexpectedAbort(noop);
+    });
+    afterEach(() => {
+      Supply.onUnexpectedAbort();
+    });
+
     it('performs the fetch without agents', () => {
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('performs the fetch without agents with `null` fallback value', () => {
-      agent = registry.newValues().get(HttpFetchAgent, { or: null })!;
+      agent = context.get(HttpFetchAgent, { or: null })!;
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
-    });
-    it('performs the fetch without agents by fallback agent', () => {
-
-      const mockAgent: MockFn<HttpFetchAgent.Combined> = jest.fn();
-
-      agent = registry.newValues().get(HttpFetchAgent, { or: mockAgent });
-      agent(mockFetch, request);
-      expect(mockAgent).toHaveBeenCalledWith(expect.anything(), request);
     });
     it('calls the registered agent', async () => {
 
       const emitter2 = new EventEmitter<[Response]>();
-      const mockAgent = jest.fn(() => emitter2.on);
+      const mockAgent = jest.fn<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>>(() => emitter2.on);
 
-      registry.provide<HttpFetchAgent, []>({ a: HttpFetchAgent, is: mockAgent });
+      cxBuilder.provide(cxConstAsset(HttpFetchAgent, mockAgent));
 
       const response1 = new Response('response1');
       const response2 = new Response('response2');
@@ -65,19 +64,19 @@ describe('fetch', () => {
       expect(response).toBe(response2);
     });
     it('performs the fetch by calling `next`', () => {
-      registry.provide<HttpFetchAgent, []>({ a: HttpFetchAgent, is: next => next() });
+      cxBuilder.provide(cxConstAsset(HttpFetchAgent, next => next()));
 
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('calls the next agent in chain by calling `next`', () => {
 
-      const mockAgent: Mock<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>> = jest.fn(
+      const mockAgent = jest.fn<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>>(
           (next, _request) => next(),
       );
 
-      registry.provide<HttpFetchAgent, []>({ a: HttpFetchAgent, is: next => next() });
-      registry.provide<HttpFetchAgent, []>({ a: HttpFetchAgent, is: mockAgent });
+      cxBuilder.provide(cxConstAsset(HttpFetchAgent, next => next()));
+      cxBuilder.provide(cxConstAsset(HttpFetchAgent, mockAgent));
 
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request);
@@ -85,19 +84,15 @@ describe('fetch', () => {
     });
     it('throws when context destroyed', () => {
 
-      const contextSupply = new Supply();
-
-      registry.provide({ a: ContextSupply, is: contextSupply });
-
-      const values = registry.newValues();
-
-      agent = values.get(HttpFetchAgent);
-
       const reason = new Error('reason');
 
-      contextSupply.off(reason);
+      cxBuilder.supply.off(reason);
 
-      expect(() => agent(mockFetch, request)).toThrow(reason);
+      expect(() => agent(mockFetch, request)).toThrow(new CxReferenceError(
+          HttpFetchAgent,
+          'The [HttpFetchAgent] is unavailable',
+          reason,
+      ));
       expect(mockFetch).not.toHaveBeenCalled();
     });
   });

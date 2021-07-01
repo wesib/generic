@@ -1,7 +1,7 @@
 import { QualifiedName } from '@frontmeans/namespace-aliaser';
 import { AfterEvent } from '@proc7ts/fun-events';
 import { Supply, SupplyPeer } from '@proc7ts/supply';
-import { ComponentContext } from '@wesib/wesib';
+import { Share } from './share';
 import { ShareRef } from './share-ref';
 
 /**
@@ -153,11 +153,11 @@ export namespace SharedValue {
      * Provides shared value for the given component context.
      *
      * @typeParam TComponent - Actual sharer component type.
-     * @param context - Sharer component context to provide value for.
+     * @param target - Shared value definition target.
      *
      * @returns Either a shared value, or its `AfterEvent` keeper.
      */
-    provide<TComponent extends TSharer>(context: ComponentContext<TComponent>): T | AfterEvent<[T?]>;
+    provide<TComponent extends TSharer>(target: Share.Target<T, TComponent>): T | AfterEvent<[T?]>;
 
   }
 

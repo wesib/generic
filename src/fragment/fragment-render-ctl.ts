@@ -1,5 +1,5 @@
 import { drekAppender, drekCharger, DrekFragment, DrekTarget } from '@frontmeans/drek';
-import { ContextKey, SingleContextKey } from '@proc7ts/context-values';
+import { CxEntry, cxSingle } from '@proc7ts/context-values';
 import { lazyValue, valueByRecipe } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { ComponentContext, ComponentRenderCtl, DefaultPreRenderScheduler } from '@wesib/wesib';
@@ -30,18 +30,13 @@ export interface FragmentRenderCtl {
 }
 
 /**
- * A key of component context value containing {@link FragmentRenderCtl fragment render control}.
+ * Component context entry containing {@link FragmentRenderCtl fragment render control}.
  */
-export const FragmentRenderCtl: ContextKey<FragmentRenderCtl> = (
-    /*#__PURE__*/ new SingleContextKey(
-        'fragment-render-ctl',
-        {
-          byDefault(context) {
-            return new FragmentRenderCtl$(context.get(ComponentContext));
-          },
-        },
-    )
-);
+export const FragmentRenderCtl: CxEntry<FragmentRenderCtl> = {
+  perContext: (/*#__PURE__*/ cxSingle({
+    byDefault: target => new FragmentRenderCtl$(target.get(ComponentContext)),
+  })),
+};
 
 const RenderFragment$done = {};
 

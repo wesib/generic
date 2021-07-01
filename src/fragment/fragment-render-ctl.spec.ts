@@ -2,6 +2,7 @@ import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf } from '@frontmeans/drek';
 import { queuedRenderScheduler, RenderSchedule, RenderScheduleOptions } from '@frontmeans/render-scheduler';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { cxConstAsset } from '@proc7ts/context-builder';
 import { EventEmitter } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Component, ComponentContext, DefaultPreRenderScheduler, DefaultRenderScheduler } from '@wesib/wesib';
@@ -35,8 +36,8 @@ describe('fragment', () => {
       @Component({
         feature: {
           setup(setup) {
-            setup.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
-            setup.provide({ a: DefaultPreRenderScheduler, is: mockPreRenderScheduler });
+            setup.provide(cxConstAsset(DefaultRenderScheduler, mockRenderScheduler));
+            setup.provide(cxConstAsset(DefaultPreRenderScheduler, mockPreRenderScheduler));
           },
         },
       })

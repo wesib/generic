@@ -125,11 +125,11 @@ export function Shared<
             ? (component, value) => accessorOf(component).set(value)
             : undefined,
         componentDef: {
-          setup(setup: DefinitionSetup<InstanceType<TClass>>): void {
+          setup(setup: DefinitionSetup<Component>): void {
             setup.perComponent(SharedValue$ContextBuilder(
                 target.share,
                 {
-                  provide: context => context.onceReady.do(
+                  provide: ({ context }: Share.Target<T>) => context.onceReady.do(
                       digAfter_(
                           ({ component }) => accessorOf(component).val,
                           valuesProvider<[T?]>(),
