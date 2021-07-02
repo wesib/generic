@@ -41,10 +41,9 @@ describe('fetch', () => {
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
-    it('performs the fetch without agents with `null` fallback value', () => {
+    it('returns `null` fallback value without agents', () => {
       agent = context.get(HttpFetchAgent, { or: null })!;
-      expect(agent(mockFetch, request)).toBe(emitter.on);
-      expect(mockFetch).toHaveBeenCalledWith(request);
+      expect(agent).toBeNull();
     });
     it('calls the registered agent', async () => {
 
