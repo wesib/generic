@@ -109,6 +109,12 @@ describe('shares', () => {
 
     });
 
+    describe('toString', () => {
+      it('returns string representation', () => {
+        expect(String(ShareRegistry)).toBe('[ShareRegistry]');
+      });
+    });
+
     function sharerNames(sharers: ValueTracker<Sharers>): readonly string[] {
       return [...sharers.it.names.keys()];
     }

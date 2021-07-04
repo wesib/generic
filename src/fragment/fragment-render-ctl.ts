@@ -36,6 +36,7 @@ export const FragmentRenderCtl: CxEntry<FragmentRenderCtl> = {
   perContext: (/*#__PURE__*/ cxSingle({
     byDefault: target => new FragmentRenderCtl$(target.get(ComponentContext)),
   })),
+  toString: () => '[FragmentRenderCtl]',
 };
 
 const RenderFragment$done = {};

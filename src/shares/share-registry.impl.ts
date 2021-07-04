@@ -4,16 +4,24 @@ import { Supply } from '@proc7ts/supply';
 import { BootstrapContext, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
 import { Share } from './share';
 
+const ShareRegistry$perContext: CxEntry.Definer<ShareRegistry> = (/*#__PURE__*/ cxScoped(
+    BootstrapContext,
+    cxEvaluated(target => new ShareRegistry(target.get(DefaultNamespaceAliaser))),
+));
+
 export class ShareRegistry {
 
-  static readonly perContext: CxEntry.Definer<ShareRegistry> = cxScoped(
-      BootstrapContext,
-      cxEvaluated(target => new ShareRegistry(target.get(DefaultNamespaceAliaser))),
-  );
+  static perContext(target: CxEntry.Target<ShareRegistry>): CxEntry.Definition<ShareRegistry> {
+    return ShareRegistry$perContext(target);
+  }
+
+  static toString(): string {
+    return '[ShareRegistry]';
+  }
 
   private readonly _sharers = new Map<Share<unknown>, ValueTracker<Sharers>>();
 
-  private constructor(readonly nsAlias: DefaultNamespaceAliaser) {
+  constructor(readonly nsAlias: DefaultNamespaceAliaser) {
   }
 
   addSharer(

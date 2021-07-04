@@ -87,5 +87,11 @@ describe('fragment', () => {
         expect(whenSettled).toHaveBeenCalledWith({ connected: false, withinFragment: 'rendered' });
       });
     });
+
+    describe('toString', () => {
+      it('returns string representation', () => {
+        expect(String(FragmentRenderCtl)).toBe('[FragmentRenderCtl]');
+      });
+    });
   });
 });
