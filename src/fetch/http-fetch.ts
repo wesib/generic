@@ -37,7 +37,7 @@ export const HttpFetch: CxEntry<HttpFetch> = {
   perContext: (/*#__PURE__*/ cxRecent<HttpFetch, HttpFetch, HttpFetch>({
     create: asis,
     byDefault: HttpFetch$createDefault,
-    access: get => () => (input, init) => get()(input, init),
+    assign: ({ get }) => receiver => receiver((input, init) => get()(input, init)),
   })),
   toString: () => '[HttpFetch]',
 };

@@ -80,8 +80,8 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
     const track: () => AfterEvent<[T?]> = target.lazy(target => Share$track(this, target));
 
     return {
-      assign(assigner) {
-        assigner(track());
+      assign(receiver) {
+        receiver(track());
       },
     };
   }
