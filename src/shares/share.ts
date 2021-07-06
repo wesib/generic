@@ -75,7 +75,7 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
     return this.name;
   }
 
-  perContext(target: Share.Target<T>): CxEntry.Definition<AfterEvent<[T?]>> {
+  perContext(target: Share.Target<T>): Share.Definition<T> {
 
     const track: () => AfterEvent<[T?]> = target.lazy(target => Share$track(this, target));
 
@@ -278,6 +278,13 @@ export namespace Share {
       AfterEvent<[T?]>,
       SharedValue<T> | AfterEvent<SharedValue<T>[]>,
       ComponentContext<TSharer>>;
+
+  /**
+   * Shared value definition.
+   *
+   * @typeParam T - Shared value type.
+   */
+  export type Definition<T> = CxEntry.Definition<AfterEvent<[T?]>>;
 
 }
 
