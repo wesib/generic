@@ -1,4 +1,3 @@
-import { cxBuildAsset } from '@proc7ts/context-builder';
 import { CxAsset } from '@proc7ts/context-values';
 import { AfterEvent, isAfterEvent, mapAfter, translateAfter } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
@@ -47,12 +46,13 @@ function SharedValue$BoundRegistrar<T, TSharer extends object>(
     supply,
     shareAs: (alias, newPriority = priority) => {
       newPriority = Math.max(0, newPriority);
-      target.provide(cxBuildAsset(
-          alias[Share__symbol],
-          newPriority
-              ? SharedValue$detailedProvider(provide, newPriority)
-              : SharedValue$bareProvider(provide),
-      )).as(supply);
+      target.provide({
+        entry: alias[Share__symbol],
+        placeAsset: newPriority
+            ? SharedValue$placeDetailed(provide, newPriority)
+            : SharedValue$placeBare(provide),
+        supply,
+      });
     },
     withPriority: newPriority => SharedValue$BoundRegistrar(
         target,
@@ -90,32 +90,30 @@ function SharedValue$bindProvider<T, TSharer extends object>(
   };
 }
 
-function SharedValue$bareProvider<T, TSharer extends object>(
+function SharedValue$placeBare<T, TSharer extends object>(
     provider: (target: Share.Target<T, TSharer>) => T | AfterEvent<[T?]>,
 ): (
     target: Share.Target<T, TSharer>,
-) => T | AfterEvent<T[]> | null | undefined {
-  return target => {
+    collector: CxAsset.Collector<T | AfterEvent<T[]>>,
+) => void {
+  return (target, collector) => {
 
     const value = provider(target);
 
-    if (isAfterEvent(value)) {
-      return value.do(
-          translateAfter((send, value?) => value !== undefined ? send(value) : send()),
-      );
-    }
-
-    return value;
+    collector(isAfterEvent(value)
+        ? value.do(translateAfter((send, value?) => value !== undefined ? send(value) : send()))
+        : value);
   };
 }
 
-function SharedValue$detailedProvider<T, TSharer extends object>(
+function SharedValue$placeDetailed<T, TSharer extends object>(
     provider: (target: Share.Target<T, TSharer>) => T | AfterEvent<[T?]>,
     priority: number,
 ): (
     target: Share.Target<T, TSharer>,
-) => SharedValue.Detailed<T> {
-  return target => ({
+    collector: CxAsset.Collector<SharedValue.Detailed<T>>,
+) => void {
+  return (target, collector) => collector({
     [SharedValue__symbol]: {
       priority,
       get: () => provider(target),
