@@ -41,6 +41,10 @@ describe('fetch', () => {
       expect(agent(mockFetch, request)).toBe(emitter.on);
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
+    it('returns `null` fallback value without agents', () => {
+      agent = context.get(HttpFetchAgent, { or: null })!;
+      expect(agent).toBeNull();
+    });
     it('calls the registered agent', async () => {
 
       const emitter2 = new EventEmitter<[Response]>();

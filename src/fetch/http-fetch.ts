@@ -36,15 +36,20 @@ export type HttpFetch =
 export const HttpFetch: CxEntry<HttpFetch> = {
   perContext: (/*#__PURE__*/ cxRecent<HttpFetch, HttpFetch, HttpFetch>({
     create: asis,
-    byDefault: HttpFetch$createDefault,
-    assign: ({ get }) => receiver => receiver((input, init) => get()(input, init)),
+    byDefault: HttpFetch$byDefault,
+    assign: ({ get, to }) => {
+
+      const fetch: HttpFetch = (input, init) => get()(input, init);
+
+      return receiver => to((_, by) => receiver(fetch, by));
+    },
   })),
   toString: () => '[HttpFetch]',
 };
 
 const HttpFetchAborted = {};
 
-function HttpFetch$createDefault(target: CxEntry.Target<HttpFetch>): HttpFetch {
+function HttpFetch$byDefault(target: CxEntry.Target<HttpFetch>): HttpFetch {
 
   const window = target.get(BootstrapWindow);
   const agent = target.get(HttpFetchAgent);

@@ -18,7 +18,12 @@ export function cxFetchAgent<TResponse extends unknown[]>():
   return cxDynamic<CombinedFetchAgent<TResponse>, FetchAgent<TResponse>, CombinedFetchAgent<TResponse>>({
     create: FetchAgent$combine,
     byDefault: _ => FetchAgent$default,
-    assign: ({ get }) => receiver => receiver((next, request) => get()(next, request)),
+    assign: ({ get, to }) => {
+
+      const agent: CombinedFetchAgent<TResponse> = (next, request) => get()(next, request);
+
+      return receiver => to((_, by) => receiver(agent, by));
+    },
   });
 }
 
