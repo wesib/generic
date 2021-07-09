@@ -3,7 +3,6 @@ import { arrayOfElements } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { BootstrapContext, DefinitionContext } from '@wesib/wesib';
 import { Share } from './share';
-import { Share__symbol } from './share-ref';
 import { ShareRegistry } from './share-registry.impl';
 import { SharedValue } from './shared-value';
 
@@ -18,7 +17,7 @@ export class Share$<T> {
       readonly name: string,
       options: Share.Options<T>,
   ) {
-    this._aliases = arrayOfElements(options.as).map(alias => alias[Share__symbol]);
+    this._aliases = arrayOfElements(options.as).map(alias => alias.share);
   }
 
   addSharer(defContext: DefinitionContext, options: SharedValue.Options = {}): Supply {

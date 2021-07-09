@@ -19,9 +19,8 @@ import {
 } from '@wesib/wesib';
 import { Share } from './share';
 import { ShareAccessor } from './share-accessor.impl';
-import { Share__symbol } from './share-ref';
 import { SharedValue$ContextBuilder } from './shared-value.impl';
-import { targetShare, TargetShare } from './target-share';
+import { TargetShare } from './target-share';
 
 /**
  * An amended entity representing a shared component member to amend.
@@ -102,7 +101,7 @@ export function Shared<
     ...amendments: Amendment<TAmended>[]
 ): SharedAmendment<T, TValue, TClass, TAmended> {
 
-  const { share: { [Share__symbol]: share$default }, local: localShare$default = false } = targetShare(share);
+  const { share: { share: share$default }, local: localShare$default = false } = share;
 
   return ComponentMember<TValue, TClass, TValue, TAmended>(baseTarget => {
 

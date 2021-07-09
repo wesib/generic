@@ -3,7 +3,6 @@ import { AfterEvent, isAfterEvent, mapAfter, translateAfter } from '@proc7ts/fun
 import { Supply } from '@proc7ts/supply';
 import { ComponentContext } from '@wesib/wesib';
 import { Share } from './share';
-import { Share__symbol } from './share-ref';
 import { SharedValue, SharedValue__symbol } from './shared-value';
 import { shareValueBy } from './sharer-aware';
 
@@ -47,7 +46,7 @@ function SharedValue$BoundRegistrar<T, TSharer extends object>(
     shareAs: (alias, newPriority = priority) => {
       newPriority = Math.max(0, newPriority);
       target.provide({
-        entry: alias[Share__symbol],
+        entry: alias.share,
         placeAsset: newPriority
             ? SharedValue$placeDetailed(provide, newPriority)
             : SharedValue$placeBare(provide),

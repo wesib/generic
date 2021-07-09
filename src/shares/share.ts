@@ -18,7 +18,7 @@ import {
 import { Supply } from '@proc7ts/supply';
 import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
 import { ShareLocator } from './share-locator';
-import { Share__symbol, ShareRef } from './share-ref';
+import { ShareRef } from './share-ref';
 import { ShareRegistry } from './share-registry.impl';
 import { Share$, Share$impl__symbol } from './share.impl';
 import { SharedValue, SharedValue__symbol } from './shared-value';
@@ -60,7 +60,7 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
   /**
    * Refers to itself.
    */
-  get [Share__symbol](): this {
+  get share(): this {
     return this;
   }
 
