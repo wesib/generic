@@ -1,5 +1,6 @@
+import { cxTrackAsset } from '@proc7ts/context-builder';
 import { CxAsset } from '@proc7ts/context-values';
-import { AfterEvent, isAfterEvent, mapAfter, translateAfter } from '@proc7ts/fun-events';
+import { AfterEvent, afterValue, isAfterEvent, mapAfter } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
 import { ComponentContext } from '@wesib/wesib';
 import { Share } from './share';
@@ -9,12 +10,9 @@ import { shareValueBy } from './sharer-aware';
 export function SharedValue$ContextBuilder<T, TSharer extends object>(
     share: Share<T>,
     provider: SharedValue.Provider<T, TSharer>,
-): CxAsset<AfterEvent<[T?]>, SharedValue<T> | AfterEvent<SharedValue<T>[]>, ComponentContext<TSharer>> {
+): CxAsset<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>> {
   return {
     entry: share,
-    placeAsset(_target) {
-      // Nothing to place.
-    },
     setupAsset(target) {
 
       const registrar = share.createRegistrar(target, provider);
@@ -43,15 +41,11 @@ function SharedValue$BoundRegistrar<T, TSharer extends object>(
   return {
     priority,
     supply,
-    shareAs: (alias, newPriority = priority) => {
+    shareAs: ({ share }, newPriority = priority) => {
       newPriority = Math.max(0, newPriority);
-      target.provide({
-        entry: alias.share,
-        placeAsset: newPriority
-            ? SharedValue$placeDetailed(provide, newPriority)
-            : SharedValue$placeBare(provide),
-        supply,
-      });
+      target.provide(newPriority
+            ? SharedValue$placeDetailed(share, provide, newPriority)
+            : SharedValue$placeBare(share, provide));
     },
     withPriority: newPriority => SharedValue$BoundRegistrar(
         target,
@@ -90,32 +84,45 @@ function SharedValue$bindProvider<T, TSharer extends object>(
 }
 
 function SharedValue$placeBare<T, TSharer extends object>(
+    share: Share<T>,
     provider: (target: Share.Target<T, TSharer>) => T | AfterEvent<[T?]>,
-): (
-    target: Share.Target<T, TSharer>,
-    collector: CxAsset.Collector<T | AfterEvent<T[]>>,
-) => void {
-  return (target, collector) => {
-
-    const value = provider(target);
-
-    collector(isAfterEvent(value)
-        ? value.do(translateAfter((send, value?) => value !== undefined ? send(value) : send()))
-        : value);
-  };
+): CxAsset<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>> {
+  return cxTrackAsset(
+      share,
+      (target, receiver, supply) => {
+        afterValue<T | undefined>(provider(target))({
+          receive(_, asset) {
+            if (asset !== undefined) {
+              receiver(asset);
+            }
+          },
+          supply,
+        });
+      },
+  );
 }
 
 function SharedValue$placeDetailed<T, TSharer extends object>(
+    share: Share<T>,
     provider: (target: Share.Target<T, TSharer>) => T | AfterEvent<[T?]>,
     priority: number,
-): (
-    target: Share.Target<T, TSharer>,
-    collector: CxAsset.Collector<SharedValue.Detailed<T>>,
-) => void {
-  return (target, collector) => collector({
-    [SharedValue__symbol]: {
-      priority,
-      get: () => provider(target),
-    },
-  });
+): CxAsset<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>> {
+  return cxTrackAsset(
+      share,
+      (target, receiver, supply) => {
+        afterValue<T | undefined>(provider(target))({
+          receive(_, asset) {
+            if (asset !== undefined) {
+              receiver({
+                [SharedValue__symbol]: {
+                  priority,
+                  value: asset,
+                },
+              });
+            }
+          },
+          supply,
+        });
+      },
+  );
 }

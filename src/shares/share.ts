@@ -2,16 +2,14 @@ import { nodeHost } from '@frontmeans/dom-primitives';
 import { CxEntry } from '@proc7ts/context-values';
 import {
   afterAll,
-  afterEach,
   AfterEvent,
   afterEventBy,
   afterThe,
   deduplicateAfter,
   deduplicateAfter_,
   digAfter_,
-  isAfterEvent,
+  mapAfter_,
   sendEventsTo,
-  shareAfter,
   supplyAfter,
   translateAfter_,
 } from '@proc7ts/fun-events';
@@ -40,7 +38,7 @@ import { SharedValue$Registrar } from './shared-value.impl';
  *
  * @typeParam T - Shared value type.
  */
-export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedValue<T> | AfterEvent<SharedValue<T>[]>> {
+export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedValue<T>> {
 
   /**
    * @internal
@@ -204,9 +202,9 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
    * @param values - The values shared by sharers. May contain a {@link SharedValue.Detailed detailed value
    * specifiers} in addition to pure values.
    *
-   * @returns An `AfterEvent` keeper of selected value, if present.
+   * @returns Either selected value, or `undefined` when not present.
    */
-  selectValue(...values: SharedValue<T>[]): AfterEvent<[T?]> {
+  selectValue(...values: SharedValue<T>[]): T | undefined {
 
     let selected: SharedValue.Details<T> | undefined;
 
@@ -215,7 +213,7 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
       const value = values[i];
 
       if (!SharedValue.hasDetails(value)) {
-        return afterThe(value);
+        return value;
       }
 
       const details = value[SharedValue__symbol];
@@ -225,22 +223,7 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
       }
     }
 
-    if (!selected) {
-      return afterThe();
-    }
-
-    return afterEventBy<[T?]>(receiver => {
-
-      const value = selected!.get();
-
-      if (isAfterEvent(value)) {
-        value(receiver);
-      } else {
-        sendEventsTo(receiver)(value);
-      }
-    }).do(
-        shareAfter,
-    );
+    return selected && selected.value;
   }
 
   toString(): string {
@@ -274,10 +257,8 @@ export namespace Share {
    * @typeParam T - Shared value type.
    * @typeParam TSharer - Sharer component type.
    */
-  export type Target<T, TSharer extends object = any> = CxEntry.Target<
-      AfterEvent<[T?]>,
-      SharedValue<T> | AfterEvent<SharedValue<T>[]>,
-      ComponentContext<TSharer>>;
+  export type Target<T, TSharer extends object = any> =
+      CxEntry.Target<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>>;
 
   /**
    * Shared value definition.
@@ -290,16 +271,16 @@ export namespace Share {
 
 function Share$track<T>(share: Share<T>, target: Share.Target<T>): AfterEvent<[T?]> {
 
-  const shared = afterEventBy<AfterEvent<SharedValue<T>[]>[]>(receiver => {
+  const shared = afterEventBy<SharedValue<T>[]>(receiver => {
 
     const dispatch = sendEventsTo(receiver);
 
     target.trackAssetList(assetList => dispatch(...assetList.flatMap(provided => {
 
-      const assets: AfterEvent<SharedValue<T>[]>[] = [];
+      const assets: SharedValue<T>[] = [];
 
-      provided.eachAsset((asset: SharedValue<T> | AfterEvent<SharedValue<T>[]>) => {
-        assets.push(isAfterEvent(asset) ? asset : afterThe(asset));
+      provided.eachAsset((asset: SharedValue<T>) => {
+        assets.push(asset);
       });
 
       return assets;
@@ -307,8 +288,7 @@ function Share$track<T>(share: Share<T>, target: Share.Target<T>): AfterEvent<[T
   });
 
   return shared.do(
-      digAfter_(afterEach),
-      digAfter_((...values: SharedValue<T>[][]) => share.selectValue(...values.flat())),
+      mapAfter_((...values: SharedValue<T>[]) => share.selectValue(...values)),
       supplyAfter(target.supply),
   );
 }

@@ -26,14 +26,10 @@ import { TargetShare } from './target-share';
  * An amended entity representing a shared component member to amend.
  *
  * @typeParam T - Shared value type.
- * @typeParam TValue - Amended member value type.
  * @typeParam TClass - Amended component class type.
  */
-export interface AeShared<
-    T,
-    TValue extends SharedDef.Value<T> = SharedDef.Value<T>,
-    TClass extends ComponentClass = Class>
-    extends AeComponentMember<TValue, TClass> {
+export interface AeShared<T, TClass extends ComponentClass = Class>
+    extends AeComponentMember<T | undefined, TClass> {
 
   /**
    * Target share instance.
@@ -67,23 +63,19 @@ export interface AeShared<
  * Constructed by {@link Shared} function.
  *
  * @typeParam T - Shared value type.
- * @typeParam TValue - Amended member value type.
  * @typeParam TClass - Amended component class type.
  * @typeParam TAmended - Amended shared member entity type.
  */
 export type SharedAmendment<
     T,
-    TValue extends SharedDef.Value<T>,
     TClass extends ComponentClass = Class,
-    TAmended extends AeShared<T, TValue, TClass> = AeShared<T, TValue, TClass>> =
-    MemberAmendment.ForBase<AeClass<TClass>, AeShared<T, TValue, TClass>, TValue, TClass, TValue, TAmended>;
+    TAmended extends AeShared<T, TClass> = AeShared<T, TClass>> =
+    MemberAmendment.ForBase<AeClass<TClass>, AeShared<T, TClass>, T | undefined, TClass, T | undefined, TAmended>;
 
 /**
  * Creates an amendment (and decorator) of component member that {@link Share shares} its value.
  *
- * The amended member should contain either a static value, or its `AfterEvent` keeper.
- *
- * Applies current component context to {@link Contextual} shared values.
+ * Applies current component context to {@link SharerAware sharer-aware} values.
  *
  * @typeParam T - Shared value type.
  * @typeParam TClass - A type of decorated component class.
@@ -94,29 +86,28 @@ export type SharedAmendment<
  */
 export function Shared<
     T,
-    TValue extends SharedDef.Value<T> = SharedDef.Value<T>,
     TClass extends ComponentClass = Class,
-    TAmended extends AeShared<T, TValue, TClass> = AeShared<T, TValue, TClass>>(
+    TAmended extends AeShared<T, TClass> = AeShared<T, TClass>>(
     share: TargetShare<T>,
     ...amendments: Amendment<TAmended>[]
-): SharedAmendment<T, TValue, TClass, TAmended> {
+): SharedAmendment<T, TClass, TAmended> {
 
   const { share: { share: share$default }, local: localShare$default = false } = share;
 
-  return ComponentMember<TValue, TClass, TValue, TAmended>(baseTarget => {
+  return ComponentMember<T | undefined, TClass, T | undefined, TAmended>(baseTarget => {
 
     const accessorKey = Symbol(`${String(baseTarget.key)}:shared`);
 
     type Component = ComponentInstance<InstanceType<TClass>> & {
-      [accessorKey]?: ShareAccessor<T, TValue, TClass>;
+      [accessorKey]?: ShareAccessor<T, TClass>;
     };
 
-    let lastTarget: AeComponentMember<TValue, TClass> = baseTarget;
-    const accessorOf = (component: Component): ShareAccessor<T, TValue, TClass> => component[accessorKey]
+    let lastTarget: AeComponentMember<T | undefined, TClass> = baseTarget;
+    const accessorOf = (component: Component): ShareAccessor<T, TClass> => component[accessorKey]
         || (component[accessorKey] = new ShareAccessor(lastTarget, component));
     const getShared = (component: InstanceType<TClass>): AfterEvent<[T?]> => accessorOf(component).val.read;
 
-    const lastAmender = (target: AmendTarget<AeShared<T, TValue, TClass>>): void => {
+    const lastAmender = (target: AmendTarget<AeShared<T, TClass>>): void => {
       lastTarget = target;
       target.amend({
         get: component => accessorOf(component).get(),
@@ -173,18 +164,5 @@ export function Shared<
         } as AmendTarget.Draft<TBase & TExt>);
       },
     }));
-  }) as SharedAmendment<T, TValue, TClass, TAmended>;
-}
-
-export namespace SharedDef {
-
-  /**
-   * Shared member value type.
-   *
-   * Either shared value, or its `AfterEvent` keeper.
-   *
-   * @typeParam T - Shared value type.
-   */
-  export type Value<T> = T | AfterEvent<[T?]>;
-
+  }) as SharedAmendment<T, TClass, TAmended>;
 }

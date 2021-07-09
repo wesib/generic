@@ -334,6 +334,19 @@ describe('shares', () => {
         share.valueFor(testCtx)(receiver);
         expect(receiver).toHaveBeenCalledWith();
       });
+      it('does not report missing value with lower priority', () => {
+        share.addSharer(sharerDefContext, { name: 'sharer-el' });
+
+        const value = afterEventBy<[]>(noop, () => []);
+
+        sharerDefContext.perComponent(shareValue<string>(share, () => value, 1));
+        sharerDefContext.perComponent(shareValue<string>(share, () => 'test', 2));
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerContext);
+      });
       it('reports value shared by parent sharer', () => {
         share.addSharer(sharerDefContext, { name: 'sharer-el' });
         share.addSharer(testDefContext, { name: 'test-el' });
@@ -392,11 +405,11 @@ describe('shares', () => {
     });
   });
 
-  function shareValue<T, TSharer extends object>(
+  function shareValue<T, TSharer extends object = any>(
       share: Share<T>,
       provide: <TCtx extends TSharer>(target: Share.Target<T, TCtx>) => T | AfterEvent<[T?]>,
       priority?: number,
-  ): CxAsset<AfterEvent<[T?]>, SharedValue<T> | AfterEvent<SharedValue<T>[]>, ComponentContext<TSharer>> {
+  ): CxAsset<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>> {
     return SharedValue$ContextBuilder<T, TSharer>(
         share,
         {

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import { cxConstAsset } from '@proc7ts/context-builder';
 import { CxEntry, cxSingle } from '@proc7ts/context-values';
-import { AfterEvent, afterThe, trackValue } from '@proc7ts/fun-events';
+import { AfterEvent } from '@proc7ts/fun-events';
 import {
   BootstrapContext,
   Component,
@@ -47,27 +47,6 @@ describe('shares', () => {
     });
     it('handles component property value updates', async () => {
 
-      @Component({ extend: { type: MockElement } })
-      class TestComponent {
-
-        @Shared(share)
-        sharedValue = 'test';
-
-      }
-
-      const element = new (await testElement(TestComponent))();
-      const context = await ComponentSlot.of<TestComponent>(element).whenReady;
-
-      expect(await context.get(share)).toBe('test');
-      expect(context.component.sharedValue).toBe('test');
-
-      context.component.sharedValue = 'other';
-      expect(await context.get(share)).toBe('other');
-      expect(context.component.sharedValue).toBe('other');
-    });
-    it('shares updatable component property value', async () => {
-
-      const value = trackValue('test1');
       let getShared!: (instance: TestComponent) => AfterEvent<[string?]>;
 
       @Component({ extend: { type: MockElement } })
@@ -79,44 +58,21 @@ describe('shares', () => {
               getShared = amend()().getShared;
             },
         )
-        get sharedValue(): AfterEvent<[string]> {
-          return value.read;
-        }
+        sharedValue = 'test';
 
       }
 
       const element = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of<TestComponent>(element).whenReady;
-      const shared = context.get(share);
 
-      expect(await shared).toBe('test1');
-      expect(await getShared(context.component)).toBe('test1');
-      expect(await context.component.sharedValue).toBe('test1');
+      expect(await context.get(share)).toBe('test');
+      expect(await getShared(context.component)).toBe('test');
+      expect(context.component.sharedValue).toBe('test');
 
-      value.it = 'test2';
-      expect(await shared).toBe('test2');
-      expect(await context.component.sharedValue).toBe('test2');
-    });
-    it('handles updatable component property value change', async () => {
-
-      @Component({ extend: { type: MockElement } })
-      class TestComponent {
-
-        @Shared(share)
-        sharedValue = afterThe('test1');
-
-      }
-
-      const element = new (await testElement(TestComponent))();
-      const context = await ComponentSlot.of<TestComponent>(element).whenReady;
-      const shared = context.get(share);
-
-      expect(await shared).toBe('test1');
-      expect(await context.component.sharedValue).toBe('test1');
-
-      context.component.sharedValue = afterThe('test2');
-      expect(await shared).toBe('test2');
-      expect(await context.component.sharedValue).toBe('test2');
+      context.component.sharedValue = 'other';
+      expect(await context.get(share)).toBe('other');
+      expect(await getShared(context.component)).toBe('other');
+      expect(context.component.sharedValue).toBe('other');
     });
     it('applies share extension', async () => {
 

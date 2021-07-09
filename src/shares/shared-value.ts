@@ -73,11 +73,9 @@ export namespace SharedValue {
     readonly priority: number;
 
     /**
-     * Builds the shared value.
-     *
-     * @returns Either the shared value, or its `AfterEvent` keeper.
+     * Shared value.
      */
-    get(): T | AfterEvent<[T?]>;
+    readonly value: T;
 
   }
 
