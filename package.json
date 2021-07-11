@@ -30,8 +30,8 @@
     "@frontmeans/namespace-aliaser": "^2.5.0",
     "@frontmeans/render-scheduler": "^1.7.0",
     "@proc7ts/amend": "^1.0.0",
-    "@proc7ts/context-builder": "^7.0.0-dev.12",
-    "@proc7ts/context-values": "^7.0.0-dev.11",
+    "@proc7ts/context-builder": "^7.0.0-dev.13",
+    "@proc7ts/context-values": "^7.0.0-dev.13",
     "@proc7ts/primitives": "^3.0.2",
     "@proc7ts/supply": "^1.2.3"
   },
