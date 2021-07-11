@@ -1,14 +1,13 @@
 import { nodeHost } from '@frontmeans/dom-primitives';
 import { AfterEvent } from '@proc7ts/fun-events';
 import { ComponentContext } from '@wesib/wesib';
-import { isShareRef, Share__symbol, ShareRef } from './share-ref';
+import { ShareRef } from './share-ref';
 
 /**
  * Shared value locator.
  *
  * Can be one of:
  *
- * - component share {@link ShareRef reference},
  * - shared value locator specified {@link ShareLocator.Spec},
  * - {@link ShareLocator.CustomWithFallback custom} shared value locator, or
  * - `null`/`undefined` to locate a fallback share.
@@ -18,7 +17,6 @@ import { isShareRef, Share__symbol, ShareRef } from './share-ref';
  * @typeParam T - Shared value type.
  */
 export type ShareLocator<T> =
-    | ShareRef<T>
     | ShareLocator.Spec<T>
     | ShareLocator.CustomWithFallback<T>
     | null
@@ -54,26 +52,13 @@ export function shareLocator<T>(
 
 export function shareLocator<T>(
     locator:
-        | ShareRef<T>
         | Partial<ShareLocator.MandatorySpec<T>>
         | ShareLocator.CustomWithFallback<T>
         | null
         | undefined,
     defaultSpec: ShareLocator.Spec<T> = {},
 ): ShareLocator.Fn<T> {
-  if (isShareRef(locator)) {
-
-    const share = locator[Share__symbol];
-
-    return (consumer, options = {}) => {
-
-      const { host = defaultSpec.host, local = defaultSpec.local } = options;
-
-      return share.valueFor(consumer, { host, local });
-    };
-  }
-
-  if (typeof locator === 'function') {
+  if (isCustomShareLocator(locator)) {
 
     const {
       host: hostByDefault = nodeHost,
@@ -98,7 +83,7 @@ export function shareLocator<T>(
     host: hostByDefault = defaultSpec.host,
     local: localByDefault = defaultSpec.local,
   } = locator || {};
-  const share = shareRef[Share__symbol];
+  const share = shareRef.share;
 
   return (consumer, options = {}) => {
 
@@ -106,6 +91,14 @@ export function shareLocator<T>(
 
     return share.valueFor(consumer, { host, local });
   };
+}
+
+function isCustomShareLocator<T>(locator:
+    | Partial<ShareLocator.MandatorySpec<T>>
+    | ShareLocator.CustomWithFallback<T>
+    | null
+    | undefined): locator is ShareLocator.CustomWithFallback<T> {
+  return typeof locator === 'function' && !('share' in locator as Partial<ShareLocator.Spec<T>>);
 }
 
 export namespace ShareLocator {

@@ -1,7 +1,10 @@
-import { FnContextKey, FnContextRef } from '@proc7ts/context-values/updatable';
-import { OnEvent } from '@proc7ts/fun-events';
-import { bootstrapDefault } from '@wesib/wesib';
-import { newHttpFetch } from './http-fetch.impl';
+import { DomEventDispatcher } from '@frontmeans/dom-events';
+import { CxEntry, cxRecent } from '@proc7ts/context-values';
+import { EventEmitter, onceOn, OnEvent, onEventBy } from '@proc7ts/fun-events';
+import { asis } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
+import { BootstrapWindow } from '@wesib/wesib';
+import { HttpFetchAgent } from './http-fetch-agent';
 
 /**
  * HTTP fetch function signature.
@@ -28,13 +31,79 @@ export type HttpFetch =
     (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>;
 
 /**
- * A key of bootstrap context value containing an {@link HttpFetch} instance.
+ * Bootstrap context entity containing an {@link HttpFetch} instance.
  */
-export const HttpFetch: FnContextRef<Parameters<HttpFetch>, ReturnType<HttpFetch>> = (
-    /*#__PURE__*/ new FnContextKey<Parameters<HttpFetch>, ReturnType<HttpFetch>>(
-        'http-fetch',
-        {
-          byDefault: bootstrapDefault(newHttpFetch),
-        },
-    )
-);
+export const HttpFetch: CxEntry<HttpFetch> = {
+  perContext: (/*#__PURE__*/ cxRecent<HttpFetch, HttpFetch, HttpFetch>({
+    create: asis,
+    byDefault: HttpFetch$byDefault,
+    assign: ({ get, to }) => {
+
+      const fetch: HttpFetch = (input, init) => get()(input, init);
+
+      return receiver => to((_, by) => receiver(fetch, by));
+    },
+  })),
+  toString: () => '[HttpFetch]',
+};
+
+const HttpFetchAborted = {};
+
+function HttpFetch$byDefault(target: CxEntry.Target<HttpFetch>): HttpFetch {
+
+  const window = target.get(BootstrapWindow);
+  const agent = target.get(HttpFetchAgent);
+
+  return (input, init) => agent(fetch, new Request(input, init));
+
+  function fetch(request: Request): OnEvent<[Response]> {
+    return onEventBy(receiver => {
+
+      const responseEmitter = new EventEmitter<[Response]>();
+      let supply: Supply;
+
+      if ('AbortController' in window) {
+
+        const abortController = new window.AbortController();
+        const { signal } = abortController;
+
+        supply = new Supply(reason => {
+          if (reason === HttpFetchAborted) {
+            abortController.abort();
+          }
+        });
+        receiver.supply.whenOff(() => supply.off(HttpFetchAborted)).needs(supply);
+        responseEmitter.on({
+          supply,
+          receive(ctx, response) {
+            receiver.receive(ctx, response);
+          },
+        });
+
+        const customSignal = request.signal;
+
+        if (customSignal) {
+          new DomEventDispatcher(customSignal)
+              .on('abort')
+              .do(onceOn)(
+                  () => abortController.abort(),
+              );
+          if (customSignal.aborted) {
+            abortController.abort();
+          }
+        }
+
+        request = new Request(request, { signal });
+      } else {
+        supply = responseEmitter.on(receiver);
+      }
+
+      window.fetch(request)
+          .then(response => {
+            responseEmitter.send(response);
+            supply.off();
+          })
+          .catch(reason => supply.off(reason));
+    });
+  }
+}

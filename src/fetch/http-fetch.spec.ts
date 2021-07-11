@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { cxConstAsset } from '@proc7ts/context-builder';
 import { EventReceiver } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
@@ -33,8 +34,8 @@ describe('fetch', () => {
 
     @Feature({
       setup(setup) {
-        setup.provide({ a: BootstrapWindow, is: mockWindow });
-        setup.provide({ a: HttpFetchAgent, is: mockAgent });
+        setup.provide(cxConstAsset(BootstrapWindow, mockWindow));
+        setup.provide(cxConstAsset(HttpFetchAgent, mockAgent));
       },
     })
     class TestFeature {}
@@ -52,6 +53,9 @@ describe('fetch', () => {
 
     it('is available in bootstrap context', () => {
       expect(httpFetch).toBeInstanceOf(Function);
+    });
+    it('has string representation', () => {
+      expect(`${HttpFetch}`).toBe('[HttpFetch]');
     });
     it('fetches using `fetch()`', async () => {
 

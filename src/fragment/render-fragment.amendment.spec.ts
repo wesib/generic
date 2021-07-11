@@ -2,6 +2,7 @@ import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf, drekReplacer } from '@frontmeans/drek';
 import { queuedRenderScheduler, RenderSchedule, RenderScheduleOptions } from '@frontmeans/render-scheduler';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { cxConstAsset } from '@proc7ts/context-builder';
 import { Class } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import {
@@ -245,8 +246,8 @@ describe('fragment', () => {
         @Component({
           feature: {
             setup(setup) {
-              setup.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
-              setup.provide({ a: DefaultPreRenderScheduler, is: mockPreRenderScheduler });
+              setup.provide(cxConstAsset(DefaultRenderScheduler, mockRenderScheduler));
+              setup.provide(cxConstAsset(DefaultPreRenderScheduler, mockPreRenderScheduler));
             },
           },
         })
@@ -263,8 +264,8 @@ describe('fragment', () => {
         @Component({
           feature: {
             setup(setup) {
-              setup.provide({ a: DefaultRenderScheduler, is: mockRenderScheduler });
-              setup.provide({ a: DefaultPreRenderScheduler, is: mockPreRenderScheduler });
+              setup.provide(cxConstAsset(DefaultRenderScheduler, mockRenderScheduler));
+              setup.provide(cxConstAsset(DefaultPreRenderScheduler, mockPreRenderScheduler));
             },
           },
         })

@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { noop, valueProvider } from '@proc7ts/primitives';
+import { noop } from '@proc7ts/primitives';
 import { SharedValue, SharedValue__symbol } from './shared-value';
 
 describe('shares', () => {
@@ -28,7 +28,7 @@ describe('shares', () => {
         const value: SharedValue.Detailed<string> = {
           [SharedValue__symbol]: {
             priority: 1,
-            get: valueProvider('test'),
+            value: 'test',
           },
         };
 

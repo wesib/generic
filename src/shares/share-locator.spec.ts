@@ -6,7 +6,7 @@ import { ComponentContext } from '@wesib/wesib';
 import { MockFn, MockObject } from '../spec';
 import { Share } from './share';
 import { ShareLocator, shareLocator } from './share-locator';
-import { Share__symbol, ShareRef } from './share-ref';
+import { ShareRef } from './share-ref';
 
 describe('shares', () => {
   describe('ShareLocator', () => {
@@ -19,10 +19,16 @@ describe('shares', () => {
     beforeEach(() => {
       mockSharer = { name: 'Mock sharer' } as any;
       mockConsumer = { name: 'Mock consumer' } as any;
-      mockShare = { valueFor: jest.fn((_consumer, _options?) => afterThe('found', mockSharer)) } as
-          Partial<MockObject<Share<string>>> as
+      mockShare = {
+        get share() {
+          return mockShare;
+        },
+        valueFor: jest.fn(
+            (_consumer, _options?) => afterThe('found', mockSharer),
+        ),
+      } as Partial<MockObject<Share<string>>> as
           MockObject<Share<string>>;
-      shareRef = { [Share__symbol]: mockShare };
+      shareRef = { share: mockShare };
     });
 
     describe('by share reference', () => {

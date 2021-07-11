@@ -1,23 +1,21 @@
-import { applyContextTo, ContextBuilder, ContextBuilder__symbol, ContextRegistry } from '@proc7ts/context-values';
-import { applyContextAfter } from '@proc7ts/context-values/updatable';
-import { AfterEvent, isAfterEvent, translateAfter } from '@proc7ts/fun-events';
+import { cxTrackAsset } from '@proc7ts/context-builder';
+import { CxAsset } from '@proc7ts/context-values';
+import { AfterEvent, afterValue, isAfterEvent, mapAfter } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
 import { ComponentContext } from '@wesib/wesib';
 import { Share } from './share';
-import { Share__symbol } from './share-ref';
 import { SharedValue, SharedValue__symbol } from './shared-value';
+import { shareValueBy } from './sharer-aware';
 
-/**
- * @internal
- */
 export function SharedValue$ContextBuilder<T, TSharer extends object>(
     share: Share<T>,
     provider: SharedValue.Provider<T, TSharer>,
-): ContextBuilder<ComponentContext<TSharer>> {
+): CxAsset<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>> {
   return {
-    [ContextBuilder__symbol]: registry => {
+    entry: share,
+    setupAsset(target) {
 
-      const registrar = share.createRegistrar(registry, provider);
+      const registrar = share.createRegistrar(target, provider);
 
       share.shareValue(registrar);
 
@@ -26,18 +24,15 @@ export function SharedValue$ContextBuilder<T, TSharer extends object>(
   };
 }
 
-/**
- * @internal
- */
 export function SharedValue$Registrar<T, TSharer extends object>(
-    registry: ContextRegistry<ComponentContext<TSharer>>,
+    target: Share.Target<T, TSharer>,
     provider: SharedValue.Provider<T, TSharer>,
 ): SharedValue.Registrar<T> {
-  return SharedValue$BoundRegistrar(registry, SharedValue$bindProvider(provider));
+  return SharedValue$BoundRegistrar(target, SharedValue$bindProvider(provider));
 }
 
 function SharedValue$BoundRegistrar<T, TSharer extends object>(
-    registry: ContextRegistry<ComponentContext<TSharer>>,
+    target: Share.Target<T, TSharer>,
     provider: SharedValue$BoundProvider<T, TSharer>,
 ): SharedValue.Registrar<T> {
 
@@ -46,17 +41,14 @@ function SharedValue$BoundRegistrar<T, TSharer extends object>(
   return {
     priority,
     supply,
-    shareAs: (alias, newPriority = priority) => {
+    shareAs: ({ share }, newPriority = priority) => {
       newPriority = Math.max(0, newPriority);
-      registry.provide({
-        a: alias[Share__symbol],
-        by: newPriority
-            ? SharedValue$detailedProvider(provide, newPriority)
-            : SharedValue$bareProvider(provide),
-      }).as(supply);
+      target.provide(newPriority
+            ? SharedValue$placeDetailed(share, provide, newPriority)
+            : SharedValue$placeBare(share, provide));
     },
     withPriority: newPriority => SharedValue$BoundRegistrar(
-        registry,
+        target,
         { ...provider, priority: Math.max(0, newPriority) },
     ),
   };
@@ -65,11 +57,11 @@ function SharedValue$BoundRegistrar<T, TSharer extends object>(
 interface SharedValue$BoundProvider<T, TSharer extends object> {
   readonly priority: number;
   readonly supply: Supply;
-  provide(this: void, context: ComponentContext<TSharer>): T | AfterEvent<[T?]>;
+  provide(this: void, target: Share.Target<T, TSharer>): T | AfterEvent<[T?]>;
 }
 
 function SharedValue$bindProvider<T, TSharer extends object>(
-    provider: SharedValue.Provider<T>,
+    provider: SharedValue.Provider<T, TSharer>,
 ): SharedValue$BoundProvider<T, TSharer> {
 
   const priority = provider.priority ? Math.max(0, provider.priority) : 0;
@@ -78,50 +70,59 @@ function SharedValue$bindProvider<T, TSharer extends object>(
   return {
     priority,
     supply,
-    provide: (context: ComponentContext): T | AfterEvent<[T?]> => {
+    provide: (target: Share.Target<T, TSharer>): T | AfterEvent<[T?]> => {
 
-      const value = provider.provide(context);
+      const valueOrKeeper = provider.provide(target);
 
-      if (isAfterEvent(value)) {
-        return value.do(
-            applyContextAfter(context),
-        );
-      }
-
-      return applyContextTo(value)(context);
+      return isAfterEvent(valueOrKeeper)
+          ? valueOrKeeper.do(
+              mapAfter((value?: T) => shareValueBy(target.context, value)),
+          )
+          : shareValueBy(target.context, valueOrKeeper);
     },
   };
 }
 
-function SharedValue$bareProvider<T, TComponent extends object>(
-    provider: (context: ComponentContext<TComponent>) => T | AfterEvent<[T?]>,
-): (
-    context: ComponentContext<TComponent>,
-) => T | AfterEvent<T[]> | null | undefined {
-  return context => {
-
-    const value = provider(context);
-
-    if (isAfterEvent(value)) {
-      return value.do(
-          translateAfter((send, value?) => value !== undefined ? send(value) : send()),
-      );
-    }
-
-    return value;
-  };
+function SharedValue$placeBare<T, TSharer extends object>(
+    share: Share<T>,
+    provider: (target: Share.Target<T, TSharer>) => T | AfterEvent<[T?]>,
+): CxAsset<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>> {
+  return cxTrackAsset(
+      share,
+      (target, receiver, supply) => {
+        afterValue<T | undefined>(provider(target))({
+          receive(_, asset) {
+            if (asset !== undefined) {
+              receiver(asset);
+            }
+          },
+          supply,
+        });
+      },
+  );
 }
 
-function SharedValue$detailedProvider<T, TComponent extends object>(
-    provider: (context: ComponentContext<TComponent>) => T | AfterEvent<[T?]>,
+function SharedValue$placeDetailed<T, TSharer extends object>(
+    share: Share<T>,
+    provider: (target: Share.Target<T, TSharer>) => T | AfterEvent<[T?]>,
     priority: number,
-): (
-    context: ComponentContext<TComponent>,
-) => SharedValue.Detailed<T> {
-  return context => ({
-    [SharedValue__symbol]: {
-      priority,
-      get: () => provider(context),
-    },
-  });
+): CxAsset<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>> {
+  return cxTrackAsset(
+      share,
+      (target, receiver, supply) => {
+        afterValue<T | undefined>(provider(target))({
+          receive(_, asset) {
+            if (asset !== undefined) {
+              receiver({
+                [SharedValue__symbol]: {
+                  priority,
+                  value: asset,
+                },
+              });
+            }
+          },
+          supply,
+        });
+      },
+  );
 }

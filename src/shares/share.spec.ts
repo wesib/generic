@@ -1,6 +1,6 @@
 import { drekContextOf } from '@frontmeans/drek';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { ContextBuilder, ContextKey__symbol } from '@proc7ts/context-values';
+import { CxAsset } from '@proc7ts/context-values';
 import { AfterEvent, afterEventBy, trackValue } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import {
@@ -14,6 +14,7 @@ import {
 import { MockElement, testDefinition, testElement } from '@wesib/wesib/testing';
 import { Share } from './share';
 import { ShareRegistry } from './share-registry.impl';
+import { SharedValue } from './shared-value';
 import { SharedValue$ContextBuilder } from './shared-value.impl';
 
 describe('shares', () => {
@@ -37,12 +38,9 @@ describe('shares', () => {
       });
     });
 
-    describe('[ContextKey__symbol]', () => {
-      it('is updatable context key', () => {
-
-        const key = share[ContextKey__symbol];
-
-        expect(key.upKey).toBe(key);
+    describe('toString', () => {
+      it('returns string representation', () => {
+        expect(`${share}`).toBe('[Share test-share]');
       });
     });
 
@@ -336,6 +334,19 @@ describe('shares', () => {
         share.valueFor(testCtx)(receiver);
         expect(receiver).toHaveBeenCalledWith();
       });
+      it('does not report missing value with lower priority', () => {
+        share.addSharer(sharerDefContext, { name: 'sharer-el' });
+
+        const value = afterEventBy<[]>(noop, () => []);
+
+        sharerDefContext.perComponent(shareValue<string>(share, () => value, 1));
+        sharerDefContext.perComponent(shareValue<string>(share, () => 'test', 2));
+
+        const receiver = jest.fn();
+
+        share.valueFor(testCtx)(receiver);
+        expect(receiver).toHaveBeenLastCalledWith('test', sharerContext);
+      });
       it('reports value shared by parent sharer', () => {
         share.addSharer(sharerDefContext, { name: 'sharer-el' });
         share.addSharer(testDefContext, { name: 'test-el' });
@@ -394,12 +405,12 @@ describe('shares', () => {
     });
   });
 
-  function shareValue<T, TComponent extends object>(
+  function shareValue<T, TSharer extends object = any>(
       share: Share<T>,
-      provide: <TCtx extends TComponent>(context: ComponentContext<TCtx>) => T | AfterEvent<[T?]>,
+      provide: <TCtx extends TSharer>(target: Share.Target<T, TCtx>) => T | AfterEvent<[T?]>,
       priority?: number,
-  ): ContextBuilder<ComponentContext<TComponent>> {
-    return SharedValue$ContextBuilder<T, TComponent>(
+  ): CxAsset<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>> {
+    return SharedValue$ContextBuilder<T, TSharer>(
         share,
         {
           priority,
