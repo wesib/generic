@@ -21,7 +21,7 @@
   "exports": "./dist/wesib.generic.js",
   "peerDependencies": {
     "@proc7ts/fun-events": "^10.5.0",
-    "@wesib/wesib": "^2.0.0-dev.0"
+    "@wesib/wesib": "^2.0.0"
   },
   "dependencies": {
     "@frontmeans/dom-events": "^1.2.0",

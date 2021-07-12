@@ -89,7 +89,7 @@ describe('fetch', () => {
 
       expect(() => agent(mockFetch, request)).toThrow(new CxReferenceError(
           HttpFetchAgent,
-          'The [HttpFetchAgent] is unavailable',
+          'The [HttpFetchAgent] is no longer available',
           reason,
       ));
       expect(mockFetch).not.toHaveBeenCalled();
