@@ -1,9 +1,9 @@
 import { DomEventDispatcher } from '@frontmeans/dom-events';
+import { CxWindow } from '@frontmeans/render-scheduler';
 import { CxEntry, cxRecent } from '@proc7ts/context-values';
 import { EventEmitter, onceOn, OnEvent, onEventBy } from '@proc7ts/fun-events';
 import { asis } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
-import { BootstrapWindow } from '@wesib/wesib';
 import { HttpFetchAgent } from './http-fetch-agent';
 
 /**
@@ -51,7 +51,7 @@ const HttpFetchAborted = {};
 
 function HttpFetch$byDefault(target: CxEntry.Target<HttpFetch>): HttpFetch {
 
-  const window = target.get(BootstrapWindow);
+  const window = target.get(CxWindow);
   const agent = target.get(HttpFetchAgent);
 
   return (input, init) => agent(fetch, new Request(input, init));

@@ -1,12 +1,13 @@
+import { NamespaceAliaser } from '@frontmeans/namespace-aliaser';
 import { CxEntry, cxEvaluated, cxScoped } from '@proc7ts/context-values';
 import { trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
-import { BootstrapContext, ComponentClass, DefaultNamespaceAliaser } from '@wesib/wesib';
+import { BootstrapContext, ComponentClass } from '@wesib/wesib';
 import { Share } from './share';
 
 const ShareRegistry$perContext: CxEntry.Definer<ShareRegistry> = (/*#__PURE__*/ cxScoped(
     BootstrapContext,
-    cxEvaluated(target => new ShareRegistry(target.get(DefaultNamespaceAliaser))),
+    cxEvaluated(target => new ShareRegistry(target.get(NamespaceAliaser))),
 ));
 
 export class ShareRegistry {
@@ -21,7 +22,7 @@ export class ShareRegistry {
 
   private readonly _sharers = new Map<Share<unknown>, ValueTracker<Sharers>>();
 
-  constructor(readonly nsAlias: DefaultNamespaceAliaser) {
+  constructor(readonly nsAlias: NamespaceAliaser) {
   }
 
   addSharer(

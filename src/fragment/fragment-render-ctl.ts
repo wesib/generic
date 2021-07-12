@@ -1,8 +1,9 @@
 import { drekAppender, drekCharger, DrekFragment, DrekTarget } from '@frontmeans/drek';
+import { PreRenderScheduler } from '@frontmeans/render-scheduler';
 import { CxEntry, cxSingle } from '@proc7ts/context-values';
 import { lazyValue, valueByRecipe } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
-import { ComponentContext, ComponentRenderCtl, DefaultPreRenderScheduler } from '@wesib/wesib';
+import { ComponentContext, ComponentRenderCtl } from '@wesib/wesib';
 import { FragmentRenderer, FragmentRendererExecution } from './fragment-renderer';
 import { RenderFragmentDef } from './render-fragment-def';
 
@@ -60,7 +61,7 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
     const { target = RenderFragment$defaultTarget } = spec;
     const getTarget: () => DrekTarget = lazyValue(() => target(this._context));
     const renderCtl = this._context.get(ComponentRenderCtl);
-    const scheduler = this._context.get(DefaultPreRenderScheduler);
+    const scheduler = this._context.get(PreRenderScheduler);
     const supply = new Supply();
     const renderSupply = renderCtl.preRenderBy(
         preExec => {

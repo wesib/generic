@@ -1,11 +1,17 @@
 import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf } from '@frontmeans/drek';
-import { queuedRenderScheduler, RenderSchedule, RenderScheduleOptions } from '@frontmeans/render-scheduler';
+import {
+  PreRenderScheduler,
+  queuedRenderScheduler,
+  RenderSchedule,
+  RenderScheduleOptions,
+  RenderScheduler,
+} from '@frontmeans/render-scheduler';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { cxConstAsset } from '@proc7ts/context-builder';
 import { EventEmitter } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import { Component, ComponentContext, DefaultPreRenderScheduler, DefaultRenderScheduler } from '@wesib/wesib';
+import { Component, ComponentContext } from '@wesib/wesib';
 import { testDefinition } from '@wesib/wesib/testing';
 import { Mock } from 'jest-mock';
 import { FragmentRenderCtl } from './fragment-render-ctl';
@@ -36,8 +42,8 @@ describe('fragment', () => {
       @Component({
         feature: {
           setup(setup) {
-            setup.provide(cxConstAsset(DefaultRenderScheduler, mockRenderScheduler));
-            setup.provide(cxConstAsset(DefaultPreRenderScheduler, mockPreRenderScheduler));
+            setup.provide(cxConstAsset(RenderScheduler, mockRenderScheduler));
+            setup.provide(cxConstAsset(PreRenderScheduler, mockPreRenderScheduler));
           },
         },
       })
