@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Shareable | Wesib: Generic Components</title>
+	<title>RenderFragmentDef | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="shareable.html">Shareable</a>
+					<a href="RenderFragmentDef.html">RenderFragmentDef</a>
 				</li>
 			</ul>
-			<h1>Namespace Shareable</h1>
+			<h1>Namespace RenderFragmentDef</h1>
 		</div>
 	</div>
 </header>
@@ -70,9 +70,15 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/RenderFragmentDef.Spec.html" class="tsd-kind-icon">Spec</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="shareable.html#provider" class="tsd-kind-icon">Provider</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="RenderFragmentDef.html#Method" class="tsd-kind-icon">Method</a></li>
 							</ul>
 						</section>
 					</div>
@@ -80,59 +86,36 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-					<a name="provider" class="tsd-anchor"></a>
-					<h3>Provider</h3>
-					<div class="tsd-signature tsd-kind-icon">Provider&lt;TBody, TSharer&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, sharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TBody</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TBody</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace">
+					<a name="Method" class="tsd-anchor"></a>
+					<h3>Method</h3>
+					<div class="tsd-signature tsd-kind-icon">Method<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>execution<span class="tsd-signature-symbol">: </span><a href="../interfaces/FragmentRendererExecution.html" class="tsd-signature-type" data-tsd-kind="Interface">FragmentRendererExecution</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/07a14bd/src/shares/shareable.ts#L116">wesib/generic/src/shares/shareable.ts:116</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/57e5875/src/fragment/render-fragment-def.ts#L19">wesib/generic/src/fragment/render-fragment-def.ts:19</a></li>
 						</ul>
 					</aside>
-					<h4 class="tsd-type-parameters-title">Type parameters</h4>
-					<ul class="tsd-type-parameters">
-						<li>
-							<h4>TBody = <span class="tsd-signature-type">unknown</span></h4>
-							<div class="tsd-comment tsd-typography">
-								<p>Shareable body type.</p>
-							</div>
-						</li>
-						<li>
-							<h4>TSharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-type">any</span></h4>
-							<div class="tsd-comment tsd-typography">
-								<p>Sharer component type.</p>
-							</div>
-						</li>
-					</ul>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, sharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TBody</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TBody</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>execution<span class="tsd-signature-symbol">: </span><a href="../interfaces/FragmentRendererExecution.html" class="tsd-signature-type" data-tsd-kind="Interface">FragmentRendererExecution</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<div class="tsd-comment tsd-typography">
 											<div class="lead">
-												<p>Shareable provider signature.</p>
+												<p>Component fragment renderer method signature.</p>
 											</div>
-											<p>Provides shareable body rather the shareable instance itself.</p>
 										</div>
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
-												<h5>this: <span class="tsd-signature-type">void</span></h5>
-											</li>
-											<li>
-												<h5>sharer: <span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span></h5>
-												<div class="tsd-comment tsd-typography">
-													<p>Sharer component context.</p>
-												</div>
+												<h5>execution: <a href="../interfaces/FragmentRendererExecution.html" class="tsd-signature-type" data-tsd-kind="Interface">FragmentRendererExecution</a></h5>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TBody</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TBody</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-										<p>Either shareable body instance, or an <code>AfterEvent</code> keeper reporting one.</p>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 									</li>
 								</ul>
 							</li>
@@ -148,35 +131,32 @@
 						<a href="../modules.html">Exports</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="renderfragmentdef.html">Render<wbr>Fragment<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="share.html">Share</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="sharelocator.html">Share<wbr>Locator</a>
+						<a href="HttpFetchAgent.html">Http<wbr>Fetch<wbr>Agent</a>
 					</li>
 					<li class="current tsd-kind-namespace">
-						<a href="shareable.html">Shareable</a>
+						<a href="RenderFragmentDef.html">Render<wbr>Fragment<wbr>Def</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="shareddef.html">Shared<wbr>Def</a>
+						<a href="Share.html">Share</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="sharedvalue.html">Shared<wbr>Value</a>
+						<a href="ShareLocator.html">Share<wbr>Locator</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="targetshare.html">Target<wbr>Share</a>
+						<a href="Shareable.html">Shareable</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="SharedValue.html">Shared<wbr>Value</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="shareable.html#provider" class="tsd-kind-icon">Provider</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="../interfaces/RenderFragmentDef.Spec.html" class="tsd-kind-icon">Spec</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
+						<a href="RenderFragmentDef.html#Method" class="tsd-kind-icon">Method</a>
 					</li>
 				</ul>
 			</nav>

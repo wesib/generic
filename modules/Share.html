@@ -55,7 +55,7 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="share.html">Share</a>
+					<a href="Share.html">Share</a>
 				</li>
 			</ul>
 			<h1>Namespace Share</h1>
@@ -72,14 +72,14 @@
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/share.options.html" class="tsd-kind-icon">Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/Share.Options.html" class="tsd-kind-icon">Options</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="share.html#key" class="tsd-kind-icon">Key</a></li>
-								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="share.html#source" class="tsd-kind-icon">Source</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="Share.html#Definition" class="tsd-kind-icon">Definition</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="Share.html#Target" class="tsd-kind-icon">Target</a></li>
 							</ul>
 						</section>
 					</div>
@@ -88,17 +88,17 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-					<a name="key" class="tsd-anchor"></a>
-					<h3>Key</h3>
-					<div class="tsd-signature tsd-kind-icon">Key&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ContextUpKey</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules.html#sharedvalue" class="tsd-signature-type" data-tsd-kind="Variable">SharedValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="Definition" class="tsd-anchor"></a>
+					<h3>Definition</h3>
+					<div class="tsd-signature tsd-kind-icon">Definition&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CxEntry.Definition</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/07a14bd/src/shares/share.ts#L260">wesib/generic/src/shares/share.ts:260</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/57e5875/src/shares/share.ts#L268">wesib/generic/src/shares/share.ts:268</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A key of context value containing an <code>AfterEvent</code> keeper of shared value.</p>
+							<p>Shared value definition.</p>
 						</div>
 					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -112,20 +112,18 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-					<a name="source" class="tsd-anchor"></a>
-					<h3>Source</h3>
-					<div class="tsd-signature tsd-kind-icon">Source&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ContextUpKey.Source</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules.html#sharedvalue" class="tsd-signature-type" data-tsd-kind="Variable">SharedValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="Target" class="tsd-anchor"></a>
+					<h3>Target</h3>
+					<div class="tsd-signature tsd-kind-icon">Target&lt;T, TSharer&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CxEntry.Target</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules.html#SharedValue" class="tsd-signature-type" data-tsd-kind="Variable">SharedValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ComponentContext</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSharer</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/07a14bd/src/shares/share.ts#L270">wesib/generic/src/shares/share.ts:270</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/57e5875/src/shares/share.ts#L260">wesib/generic/src/shares/share.ts:260</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A source value accepted by <a href="../classes/share.html">component share</a> context value.</p>
+							<p>Shared value definition target.</p>
 						</div>
-						<p>Either a single shared value, its <a href="../interfaces/sharedvalue.detailed.html">detailed descriptor</a>, or an <code>AfterEvent</code>
-						keeper of the above.</p>
 					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
@@ -133,6 +131,12 @@
 							<h4>T</h4>
 							<div class="tsd-comment tsd-typography">
 								<p>Shared value type.</p>
+							</div>
+						</li>
+						<li>
+							<h4>TSharer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-type">any</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<p>Sharer component type.</p>
 							</div>
 						</li>
 					</ul>
@@ -146,41 +150,35 @@
 						<a href="../modules.html">Exports</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
+						<a href="HttpFetchAgent.html">Http<wbr>Fetch<wbr>Agent</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="renderfragmentdef.html">Render<wbr>Fragment<wbr>Def</a>
+						<a href="RenderFragmentDef.html">Render<wbr>Fragment<wbr>Def</a>
 					</li>
 					<li class="current tsd-kind-namespace">
-						<a href="share.html">Share</a>
+						<a href="Share.html">Share</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="sharelocator.html">Share<wbr>Locator</a>
+						<a href="ShareLocator.html">Share<wbr>Locator</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="shareable.html">Shareable</a>
+						<a href="Shareable.html">Shareable</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="shareddef.html">Shared<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="sharedvalue.html">Shared<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="targetshare.html">Target<wbr>Share</a>
+						<a href="SharedValue.html">Shared<wbr>Value</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../interfaces/share.options.html" class="tsd-kind-icon">Options</a>
+						<a href="../interfaces/Share.Options.html" class="tsd-kind-icon">Options</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="share.html#key" class="tsd-kind-icon">Key</a>
+						<a href="Share.html#Definition" class="tsd-kind-icon">Definition</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="share.html#source" class="tsd-kind-icon">Source</a>
+						<a href="Share.html#Target" class="tsd-kind-icon">Target</a>
 					</li>
 				</ul>
 			</nav>

@@ -55,7 +55,7 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="httpfetchagent.html">HttpFetchAgent</a>
+					<a href="HttpFetchAgent.html">HttpFetchAgent</a>
 				</li>
 			</ul>
 			<h1>Namespace HttpFetchAgent</h1>
@@ -72,7 +72,7 @@
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="httpfetchagent.html#combined" class="tsd-kind-icon">Combined</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="HttpFetchAgent.html#Combined" class="tsd-kind-icon">Combined</a></li>
 							</ul>
 						</section>
 					</div>
@@ -81,12 +81,12 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace">
-					<a name="combined" class="tsd-anchor"></a>
+					<a name="Combined" class="tsd-anchor"></a>
 					<h3>Combined</h3>
 					<div class="tsd-signature tsd-kind-icon">Combined<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/07a14bd/src/fetch/http-fetch-agent.ts#L34">wesib/generic/src/fetch/http-fetch-agent.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/57e5875/src/fetch/http-fetch-agent.ts#L38">wesib/generic/src/fetch/http-fetch-agent.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -102,7 +102,7 @@
 											<div class="lead">
 												<p>Combined HTTP fetch agent signature.</p>
 											</div>
-											<p>This is what is available under <a href="../modules.html#httpfetchagent">HttpFetchAgent</a> key.</p>
+											<p>This is what is available under <a href="../modules.html#HttpFetchAgent">HttpFetchAgent</a> key.</p>
 										</div>
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
@@ -112,8 +112,10 @@
 											<li>
 												<h5>next: <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h5>
 												<div class="tsd-comment tsd-typography">
-													<p>Either calls the next agent in chain, or actually fetches the data if this agent is the last one.
-													Accepts <code>Request</code> parameter.</p>
+													<div class="lead">
+														<p>Either calls the next agent in chain, or actually fetches the data if this agent is the last one.
+														Accepts <code>Request</code> parameter.</p>
+													</div>
 												</div>
 												<ul class="tsd-parameters">
 													<li class="tsd-parameter-signature">
@@ -140,12 +142,14 @@
 											<li>
 												<h5>request: <span class="tsd-signature-type">Request</span></h5>
 												<div class="tsd-comment tsd-typography">
-													<p>HTTP request.</p>
+													<div class="lead">
+														<p>HTTP request.</p>
+													</div>
 												</div>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OnEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-										<p>An <code>OnEvent</code> sender of response object(s) receivers. It is returned as a result of <a href="../modules.html#httpfetch">HttpFetch</a> call.</p>
+										<p>An <code>OnEvent</code> sender of response object(s) receivers. It is returned as a result of <a href="../modules.html#HttpFetch">HttpFetch</a> call.</p>
 									</li>
 								</ul>
 							</li>
@@ -161,35 +165,29 @@
 						<a href="../modules.html">Exports</a>
 					</li>
 					<li class="current tsd-kind-namespace">
-						<a href="httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
+						<a href="HttpFetchAgent.html">Http<wbr>Fetch<wbr>Agent</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="renderfragmentdef.html">Render<wbr>Fragment<wbr>Def</a>
+						<a href="RenderFragmentDef.html">Render<wbr>Fragment<wbr>Def</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="share.html">Share</a>
+						<a href="Share.html">Share</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="sharelocator.html">Share<wbr>Locator</a>
+						<a href="ShareLocator.html">Share<wbr>Locator</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="shareable.html">Shareable</a>
+						<a href="Shareable.html">Shareable</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="shareddef.html">Shared<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="sharedvalue.html">Shared<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="targetshare.html">Target<wbr>Share</a>
+						<a href="SharedValue.html">Shared<wbr>Value</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
-						<a href="httpfetchagent.html#combined" class="tsd-kind-icon">Combined</a>
+						<a href="HttpFetchAgent.html#Combined" class="tsd-kind-icon">Combined</a>
 					</li>
 				</ul>
 			</nav>

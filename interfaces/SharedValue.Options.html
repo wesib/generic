@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>SharedValue | Wesib: Generic Components</title>
+	<title>Options | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,30 +55,84 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="sharedvalue.html">SharedValue</a>
+					<a href="../modules/SharedValue.html">SharedValue</a>
+				</li>
+				<li>
+					<a href="SharedValue.Options.html">Options</a>
 				</li>
 			</ul>
-			<h1>Namespace SharedValue</h1>
+			<h1>Interface Options</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Value sharing options.</p>
+					</div>
+					<p>Declare availability of the shared value.</p>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">Options</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/sharedvalue.detailed.html" class="tsd-kind-icon">Detailed</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/sharedvalue.details.html" class="tsd-kind-icon">Details</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/sharedvalue.options.html" class="tsd-kind-icon">Options</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/sharedvalue.provider.html" class="tsd-kind-icon">Provider</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/sharedvalue.registrar.html" class="tsd-kind-icon">Registrar</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="SharedValue.Options.html#local" class="tsd-kind-icon">local</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="SharedValue.Options.html#name" class="tsd-kind-icon">name</a></li>
 							</ul>
 						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="local" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> local</h3>
+					<div class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/57e5875/src/shares/shared-value.ts#L44">wesib/generic/src/shares/shared-value.ts:44</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether the share is local.</p>
+						</div>
+						<ul>
+							<li><code>true</code> to make the value available only locally, i.e. only when requested by sharer context.</li>
+							<li><code>false</code> (by default) to make the value available to nested components too.</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="name" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">QualifiedName</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/57e5875/src/shares/shared-value.ts#L36">wesib/generic/src/shares/shared-value.ts:36</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The name of the element the sharer component is bound to. Defaults to component&#39;s element name.</p>
+						</div>
+						<p>Ignored for <a href="SharedValue.Options.html#local">local</a> shares</p>
 					</div>
 				</section>
 			</section>
@@ -90,47 +144,53 @@
 						<a href="../modules.html">Exports</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
+						<a href="../modules/HttpFetchAgent.html">Http<wbr>Fetch<wbr>Agent</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="renderfragmentdef.html">Render<wbr>Fragment<wbr>Def</a>
+						<a href="../modules/RenderFragmentDef.html">Render<wbr>Fragment<wbr>Def</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="share.html">Share</a>
+						<a href="../modules/Share.html">Share</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="sharelocator.html">Share<wbr>Locator</a>
+						<a href="../modules/ShareLocator.html">Share<wbr>Locator</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="shareable.html">Shareable</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="shareddef.html">Shared<wbr>Def</a>
+						<a href="../modules/Shareable.html">Shareable</a>
 					</li>
 					<li class="current tsd-kind-namespace">
-						<a href="sharedvalue.html">Shared<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="targetshare.html">Target<wbr>Share</a>
+						<a href="../modules/SharedValue.html">Shared<wbr>Value</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../interfaces/sharedvalue.detailed.html" class="tsd-kind-icon">Detailed</a>
+						<a href="SharedValue.Detailed.html" class="tsd-kind-icon">Detailed</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../interfaces/sharedvalue.details.html" class="tsd-kind-icon">Details</a>
+						<a href="SharedValue.Details.html" class="tsd-kind-icon">Details</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="../interfaces/sharedvalue.options.html" class="tsd-kind-icon">Options</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="SharedValue.Options.html" class="tsd-kind-icon">Options</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="SharedValue.Options.html#local" class="tsd-kind-icon">local</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="SharedValue.Options.html#name" class="tsd-kind-icon">name</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="SharedValue.Provider.html" class="tsd-kind-icon">Provider</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../interfaces/sharedvalue.provider.html" class="tsd-kind-icon">Provider</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../interfaces/sharedvalue.registrar.html" class="tsd-kind-icon">Registrar</a>
+						<a href="SharedValue.Registrar.html" class="tsd-kind-icon">Registrar</a>
 					</li>
 				</ul>
 			</nav>

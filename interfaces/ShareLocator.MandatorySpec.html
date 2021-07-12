@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Spec | Wesib: Generic Components</title>
+	<title>MandatorySpec | Wesib: Generic Components</title>
 	<meta name="description" content="Documentation for Wesib: Generic Components">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">Wesib: Generic Components</a>
 				</li>
 				<li>
-					<a href="../modules/sharelocator.html">ShareLocator</a>
+					<a href="../modules/ShareLocator.html">ShareLocator</a>
 				</li>
 				<li>
-					<a href="sharelocator.spec.html">Spec</a>
+					<a href="ShareLocator.MandatorySpec.html">MandatorySpec</a>
 				</li>
 			</ul>
-			<h1>Interface Spec&lt;T&gt;</h1>
+			<h1>Interface MandatorySpec&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -71,7 +71,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Shared value locator specifier.</p>
+						<p>Mandatory shared value locator specifier.</p>
 					</div>
 				</div>
 			</section>
@@ -92,15 +92,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="sharelocator.options.html" class="tsd-signature-type" data-tsd-kind="Interface">Options</a>
+						<a href="ShareLocator.Spec.html" class="tsd-signature-type" data-tsd-kind="Interface">Spec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">Spec</span>
-								<ul class="tsd-hierarchy">
-									<li>
-										<a href="sharelocator.mandatoryspec.html" class="tsd-signature-type" data-tsd-kind="Interface">MandatorySpec</a>
-									</li>
-								</ul>
+								<span class="target">MandatorySpec</span>
 							</li>
 						</ul>
 					</li>
@@ -113,9 +108,14 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="sharelocator.spec.html#host" class="tsd-kind-icon">host</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="sharelocator.spec.html#local" class="tsd-kind-icon">local</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="sharelocator.spec.html#share" class="tsd-kind-icon">share</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ShareLocator.MandatorySpec.html#local" class="tsd-kind-icon">local</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="ShareLocator.MandatorySpec.html#share" class="tsd-kind-icon">share</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="ShareLocator.MandatorySpec.html#host" class="tsd-kind-icon">host</a></li>
 							</ul>
 						</section>
 					</div>
@@ -124,58 +124,13 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="host" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> host</h3>
-					<div class="tsd-signature tsd-kind-icon">host<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Element</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Element</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="sharelocator.options.html">Options</a>.<a href="sharelocator.options.html#host">host</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/07a14bd/src/shares/share-locator.ts#L147">wesib/generic/src/shares/share-locator.ts:147</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-signature">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-interface">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Element</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Element</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<div class="tsd-comment tsd-typography">
-											<div class="lead">
-												<p>Detects a host element of the given one.</p>
-											</div>
-											<p>By default utilizes a <code>nodeHost()</code> function that founds parent element crossing shadow DOM bounds.</p>
-											<p>A <code>drekHost()</code> can be uses to also cross a rendered fragment bounds.</p>
-										</div>
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>element: <span class="tsd-signature-type">Element</span></h5>
-												<div class="tsd-comment tsd-typography">
-													<div class="lead">
-														<p>An element to detect a host of.</p>
-													</div>
-												</div>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Element</span></h4>
-										<p>Either a host element, or <code>undefined</code> if no host found.</p>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="local" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> local</h3>
 					<div class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;too&quot;</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="sharelocator.options.html">Options</a>.<a href="sharelocator.options.html#local">local</a></p>
+						<p>Inherited from <a href="ShareLocator.Spec.html">Spec</a>.<a href="ShareLocator.Spec.html#local">local</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/07a14bd/src/shares/share-locator.ts#L156">wesib/generic/src/shares/share-locator.ts:156</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/57e5875/src/shares/share-locator.ts#L149">wesib/generic/src/shares/share-locator.ts:149</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -189,13 +144,14 @@
 						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="share" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> share</h3>
-					<div class="tsd-signature tsd-kind-icon">share<span class="tsd-signature-symbol">:</span> <a href="shareref.html" class="tsd-signature-type" data-tsd-kind="Interface">ShareRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> share</h3>
+					<div class="tsd-signature tsd-kind-icon">share<span class="tsd-signature-symbol">:</span> <a href="ShareRef.html" class="tsd-signature-type" data-tsd-kind="Interface">ShareRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides <a href="ShareLocator.Spec.html">Spec</a>.<a href="ShareLocator.Spec.html#share">share</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/wesib/generic/blob/07a14bd/src/shares/share-locator.ts#L175">wesib/generic/src/shares/share-locator.ts:175</a></li>
+							<li>Defined in <a href="https://github.com/wesib/generic/blob/57e5875/src/shares/share-locator.ts#L182">wesib/generic/src/shares/share-locator.ts:182</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -203,6 +159,44 @@
 							<p>Target share.</p>
 						</div>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="host" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> host</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">host<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Element</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Element</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="ShareLocator.Spec.html">Spec</a>.<a href="ShareLocator.Spec.html#host">host</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/wesib/generic/blob/57e5875/src/shares/share-locator.ts#L140">wesib/generic/src/shares/share-locator.ts:140</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Detects a host element of the given one.</p>
+								</div>
+								<p>By default utilizes a <code>nodeHost()</code> function that founds parent element crossing shadow DOM bounds.</p>
+								<p>A <code>drekHost()</code> can be uses to also cross a rendered fragment bounds.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">Element</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>An element to detect a host of.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Element</span></h4>
+							<p>Either a host element, or <code>undefined</code> if no host found.</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -213,74 +207,68 @@
 						<a href="../modules.html">Exports</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="../modules/httpfetchagent.html">Http<wbr>Fetch<wbr>Agent</a>
+						<a href="../modules/HttpFetchAgent.html">Http<wbr>Fetch<wbr>Agent</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="../modules/renderfragmentdef.html">Render<wbr>Fragment<wbr>Def</a>
+						<a href="../modules/RenderFragmentDef.html">Render<wbr>Fragment<wbr>Def</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="../modules/share.html">Share</a>
+						<a href="../modules/Share.html">Share</a>
 					</li>
 					<li class="current tsd-kind-namespace">
-						<a href="../modules/sharelocator.html">Share<wbr>Locator</a>
+						<a href="../modules/ShareLocator.html">Share<wbr>Locator</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="../modules/shareable.html">Shareable</a>
+						<a href="../modules/Shareable.html">Shareable</a>
 					</li>
 					<li class=" tsd-kind-namespace">
-						<a href="../modules/shareddef.html">Shared<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="../modules/sharedvalue.html">Shared<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="../modules/targetshare.html">Target<wbr>Share</a>
+						<a href="../modules/SharedValue.html">Shared<wbr>Value</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="sharelocator.mandatoryspec.html" class="tsd-kind-icon">Mandatory<wbr>Spec</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="sharelocator.options.html" class="tsd-kind-icon">Options</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="sharelocator.spec.html" class="tsd-kind-icon">Spec</a>
+						<a href="ShareLocator.MandatorySpec.html" class="tsd-kind-icon">Mandatory<wbr>Spec</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="sharelocator.spec.html#host" class="tsd-kind-icon">host</a>
+								<a href="ShareLocator.MandatorySpec.html#local" class="tsd-kind-icon">local</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="sharelocator.spec.html#local" class="tsd-kind-icon">local</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+								<a href="ShareLocator.MandatorySpec.html#share" class="tsd-kind-icon">share</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="sharelocator.spec.html#share" class="tsd-kind-icon">share</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="ShareLocator.MandatorySpec.html#host" class="tsd-kind-icon">host</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/sharelocator.html#custom" class="tsd-kind-icon">Custom</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="ShareLocator.Options.html" class="tsd-kind-icon">Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="ShareLocator.Spec.html" class="tsd-kind-icon">Spec</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/sharelocator.html#customwithfallback" class="tsd-kind-icon">Custom<wbr>With<wbr>Fallback</a>
+						<a href="../modules/ShareLocator.html#Custom" class="tsd-kind-icon">Custom</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/sharelocator.html#fn" class="tsd-kind-icon">Fn</a>
+						<a href="../modules/ShareLocator.html#CustomWithFallback" class="tsd-kind-icon">Custom<wbr>With<wbr>Fallback</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../modules/ShareLocator.html#Fn" class="tsd-kind-icon">Fn</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
-						<a href="../modules/sharelocator.html#fulloptions" class="tsd-kind-icon">Full<wbr>Options</a>
+						<a href="../modules/ShareLocator.html#FullOptions" class="tsd-kind-icon">Full<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/sharelocator.html#fullspec" class="tsd-kind-icon">Full<wbr>Spec</a>
+						<a href="../modules/ShareLocator.html#FullSpec" class="tsd-kind-icon">Full<wbr>Spec</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/sharelocator.html#mandatory" class="tsd-kind-icon">Mandatory</a>
+						<a href="../modules/ShareLocator.html#Mandatory" class="tsd-kind-icon">Mandatory</a>
 					</li>
 				</ul>
 			</nav>
