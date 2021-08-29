@@ -247,7 +247,7 @@ export namespace Share {
      * The order of aliases is important. It defines the {@link SharedValue.Details.priority priority} of the
      * value shared for the corresponding share.
      */
-    readonly as?: ShareRef<T> | readonly ShareRef<T>[];
+    readonly as?: ShareRef<T> | readonly ShareRef<T>[] | undefined;
 
   }
 

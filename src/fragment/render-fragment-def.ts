@@ -50,7 +50,7 @@ export namespace RenderFragmentDef {
      *
      * [upgraded]: https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/upgrade
      */
-    readonly settle?: boolean;
+    readonly settle?: boolean | undefined;
 
   }
 

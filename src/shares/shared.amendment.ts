@@ -99,7 +99,7 @@ export function Shared<
     const accessorKey = Symbol(`${String(baseTarget.key)}:shared`);
 
     type Component = ComponentInstance<InstanceType<TClass>> & {
-      [accessorKey]?: ShareAccessor<T, TClass>;
+      [accessorKey]?: ShareAccessor<T, TClass> | undefined;
     };
 
     let lastTarget: AeComponentMember<T | undefined, TClass> = baseTarget;

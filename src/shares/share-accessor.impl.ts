@@ -9,7 +9,7 @@ export class ShareAccessor<T, TClass extends ComponentClass> {
   private readonly _get: () => T | undefined;
   private readonly _set: (value: T | undefined) => void;
   private readonly _ctx: ComponentContext<InstanceType<TClass>>;
-  private _valSupply?: Supply;
+  private _valSupply?: Supply | undefined;
   readonly val: ValueTracker<T | undefined>;
 
   constructor(

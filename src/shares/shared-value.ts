@@ -33,7 +33,7 @@ export namespace SharedValue {
      *
      * Ignored for {@link local} shares
      */
-    readonly name?: QualifiedName;
+    readonly name?: QualifiedName | undefined;
 
     /**
      * Whether the share is local.
@@ -41,7 +41,7 @@ export namespace SharedValue {
      * - `true` to make the value available only locally, i.e. only when requested by sharer context.
      * - `false` (by default) to make the value available to nested components too.
      */
-    readonly local?: boolean;
+    readonly local?: boolean | undefined;
 
   }
 
@@ -136,7 +136,7 @@ export namespace SharedValue {
      *
      * Equals to `0` when absent or negative.
      */
-    readonly priority?: number;
+    readonly priority?: number | undefined;
 
     /**
      * Shared value supply.
@@ -145,7 +145,7 @@ export namespace SharedValue {
      *
      * New supply instance will be created when absent.
      */
-    readonly supply?: Supply;
+    readonly supply?: Supply | undefined;
 
     /**
      * Provides shared value for the given component context.

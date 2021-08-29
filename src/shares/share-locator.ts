@@ -137,7 +137,7 @@ export namespace ShareLocator {
      *
      * @returns Either a host element, or `undefined` if no host found.
      */
-    readonly host?: (this: void, element: Element) => Element | undefined;
+    readonly host?: ((this: void, element: Element) => Element | undefined) | undefined;
 
     /**
      * Whether to search locally, in consumer component itself.
@@ -146,7 +146,7 @@ export namespace ShareLocator {
      * - `true` to search locally, i.e. only in consumer component, or
      * - `'too'` to start the search from consumer component.
      */
-    readonly local?: boolean | 'too';
+    readonly local?: boolean | 'too' | undefined;
 
   }
 
@@ -165,7 +165,7 @@ export namespace ShareLocator {
     /**
      * Target share.
      */
-    readonly share?: ShareRef<T>;
+    readonly share?: ShareRef<T> | undefined;
 
   }
 

@@ -18,6 +18,6 @@ export interface TargetShare<T> {
    * - `true` to make the value available only locally, i.e. only when requested by sharer context.
    * - `false` (by default) to make the value available to nested components too.
    */
-  readonly local?: boolean;
+  readonly local?: boolean | undefined;
 
 }
