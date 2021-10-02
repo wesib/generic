@@ -114,6 +114,7 @@ describe('fetch', () => {
         AbortControllerSpy = jest.spyOn(window as any, 'AbortController').mockImplementation(() => {
           abortController = new Original();
           abortSpy = jest.spyOn(abortController, 'abort');
+
           return abortController;
         });
 

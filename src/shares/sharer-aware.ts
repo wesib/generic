@@ -40,5 +40,6 @@ export function shareValueBy<T>(sharer: ComponentContext, value: T): T {
   if (isSharerAware(value)) {
     value.sharedBy(sharer);
   }
+
   return value;
 }
