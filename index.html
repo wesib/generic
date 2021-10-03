@@ -1,316 +1,51 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Wesib: Generic Components</title>
-	<meta name="description" content="Documentation for Wesib: Generic Components">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-	<script async src="assets/js/search.js" id="search-script"></script>
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">Wesib: Generic Components</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<h1>Wesib: Generic Components</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#wesib-generic-components" id="wesib-generic-components" style="color: inherit; text-decoration: none;">
-					<h1>Wesib: Generic Components</h1>
-				</a>
-				<p><a href="https://www.npmjs.com/package/@wesib/generic"><img src="https://img.shields.io/npm/v/@wesib/generic.svg?logo=npm" alt="NPM"></a>
-					<a href="https://github.com/wesib/generic/actions?query=workflow:Build"><img src="https://github.com/wesib/generic/workflows/Build/badge.svg" alt="Build Status"></a>
-					<a href="https://www.codacy.com/gh/wesib/generic/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=wesib/generic&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/0fe115c6ca67457dbf8abfa5f2376ab4" alt="Code Quality"></a>
-					<a href="https://www.codacy.com/gh/wesib/generic/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=wesib/generic&amp;utm_campaign=Badge_Coverage"><img src="https://app.codacy.com/project/badge/Coverage/0fe115c6ca67457dbf8abfa5f2376ab4" alt="Coverage"></a>
-					<a href="https://github.com/wesib/generic"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
-				<a href="https://wesib.github.io/generic/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
-				<a href="#component-shares" id="component-shares" style="color: inherit; text-decoration: none;">
-					<h2>Component Shares</h2>
-				</a>
-				<p>Shares allow enclosing component to share and update some data with nested ones.</p>
-				<p>To share something:</p>
-				<ol>
-					<li><p>Create a <code>Share</code> class (or its subclass) instance.</p>
-						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Share</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@wesib/generic&#039;</span><span style="color: #000000">;</span>
+<!DOCTYPE html><html class="default no-js"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Wesib: Generic Components</title><meta name="description" content="Documentation for Wesib: Generic Components"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">Wesib: Generic Components</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>Wesib: Generic Components</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#wesib-generic-components" id="wesib-generic-components" style="color: inherit; text-decoration: none;">
+  <h1>Wesib: Generic Components</h1>
+</a>
+<p><a href="https://www.npmjs.com/package/@wesib/generic"><img src="https://img.shields.io/npm/v/@wesib/generic.svg?logo=npm" alt="NPM"></a>
+<a href="https://github.com/wesib/generic/actions?query=workflow:Build"><img src="https://github.com/wesib/generic/workflows/Build/badge.svg" alt="Build Status"></a>
+<a href="https://www.codacy.com/gh/wesib/generic/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=wesib/generic&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/0fe115c6ca67457dbf8abfa5f2376ab4" alt="Code Quality"></a>
+<a href="https://www.codacy.com/gh/wesib/generic/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=wesib/generic&amp;utm_campaign=Badge_Coverage"><img src="https://app.codacy.com/project/badge/Coverage/0fe115c6ca67457dbf8abfa5f2376ab4" alt="Coverage"></a>
+<a href="https://github.com/wesib/generic"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
+<a href="https://wesib.github.io/generic/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">MyShare</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Share</span><span style="color: #000000">&lt;</span><span style="color: #267F99">MyData</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;my-share&#039;</span><span style="color: #000000">);</span>
+<a href="#component-shares" id="component-shares" style="color: inherit; text-decoration: none;">
+  <h2>Component Shares</h2>
+</a>
+<p>Shares allow enclosing component to share and update some data with nested ones.</p>
+<p>To share something:</p>
+<ol>
+<li><p>Create a <code>Share</code> class (or its subclass) instance.</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">Share</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@wesib/generic&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">MyShare</span><span class="hl-1"> = </span><span class="hl-4">new</span><span class="hl-1"> </span><span class="hl-6">Share</span><span class="hl-1">&lt;</span><span class="hl-7">MyData</span><span class="hl-1">&gt;(</span><span class="hl-3">&#39;my-share&#39;</span><span class="hl-1">);</span>
 </code></pre>
-					</li>
-					<li><p>Amend enclosing component&#39;s property containing a data to share with <code>@Shared()</code> decorator:</p>
-						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Shared</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@wesib/generic&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Component</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@wesib/wesib&#039;</span><span style="color: #000000">; </span>
-
-<span style="color: #000000">@</span><span style="color: #795E26">Component</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;my-container&#039;</span><span style="color: #000000">)</span>
-<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyContainerComponent</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span>
-<span style="color: #000000">  @</span><span style="color: #795E26">Shared</span><span style="color: #000000">(</span><span style="color: #001080">MyShare</span><span style="color: #000000">)</span>
-<span style="color: #000000">  </span><span style="color: #001080">mySharedData</span><span style="color: #000000">?: </span><span style="color: #267F99">MyData</span><span style="color: #000000">;</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">// Update the `mySharedData` property when the data is ready to be shared.   </span>
-<span style="color: #000000">}</span>
+</li>
+<li><p>Amend enclosing component&#39;s property containing a data to share with <code>@Shared()</code> decorator:</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">Shared</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@wesib/generic&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">Component</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@wesib/wesib&#39;</span><span class="hl-1">; </span><br/><br/><span class="hl-1">@</span><span class="hl-6">Component</span><span class="hl-1">(</span><span class="hl-3">&#39;my-container&#39;</span><span class="hl-1">)</span><br/><span class="hl-4">class</span><span class="hl-1"> </span><span class="hl-7">MyContainerComponent</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><br/><span class="hl-1">  @</span><span class="hl-6">Shared</span><span class="hl-1">(</span><span class="hl-2">MyShare</span><span class="hl-1">)</span><br/><span class="hl-1">  </span><span class="hl-2">mySharedData</span><span class="hl-1">?: </span><span class="hl-7">MyData</span><span class="hl-1">;</span><br/><br/><span class="hl-1">  </span><span class="hl-8">// Update the `mySharedData` property when the data is ready to be shared.   </span><br/><span class="hl-1">}</span>
 </code></pre>
-					</li>
-					<li><p>Consume the shared data in nested component.</p>
-						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">AfterEvent</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/fun-events&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Component</span><span style="color: #000000">, </span><span style="color: #001080">ComponentContext</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@wesib/wesib&#039;</span><span style="color: #000000">; </span>
-
-<span style="color: #000000">@</span><span style="color: #795E26">Component</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;my-nested&#039;</span><span style="color: #000000">)</span>
-<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyNestedComponent</span><span style="color: #000000"> {</span>
-
-<span style="color: #000000">  </span><span style="color: #0000FF">readonly</span><span style="color: #000000"> </span><span style="color: #001080">myContainerData</span><span style="color: #000000">: </span><span style="color: #267F99">AfterEvent</span><span style="color: #000000">&lt;[</span><span style="color: #267F99">MyShare</span><span style="color: #000000">?]&gt;;</span>
-<span style="color: #000000">  </span>
-<span style="color: #000000">  </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span><span style="color: #001080">context</span><span style="color: #000000">: </span><span style="color: #267F99">ComponentContext</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">myContainerData</span><span style="color: #000000"> = </span><span style="color: #001080">MyShare</span><span style="color: #000000">.</span><span style="color: #795E26">valueFor</span><span style="color: #000000">(</span><span style="color: #001080">context</span><span style="color: #000000">);</span>
-<span style="color: #000000">  }   </span>
-<span style="color: #000000">  </span>
-<span style="color: #000000">  </span><span style="color: #008000">// Consume shared data when it is reported by `myContainerData`.</span>
-<span style="color: #000000">}</span>
+</li>
+<li><p>Consume the shared data in nested component.</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">AfterEvent</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@proc7ts/fun-events&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">Component</span><span class="hl-1">, </span><span class="hl-2">ComponentContext</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@wesib/wesib&#39;</span><span class="hl-1">; </span><br/><br/><span class="hl-1">@</span><span class="hl-6">Component</span><span class="hl-1">(</span><span class="hl-3">&#39;my-nested&#39;</span><span class="hl-1">)</span><br/><span class="hl-4">class</span><span class="hl-1"> </span><span class="hl-7">MyNestedComponent</span><span class="hl-1"> {</span><br/><br/><span class="hl-1">  </span><span class="hl-4">readonly</span><span class="hl-1"> </span><span class="hl-2">myContainerData</span><span class="hl-1">: </span><span class="hl-7">AfterEvent</span><span class="hl-1">&lt;[</span><span class="hl-7">MyShare</span><span class="hl-1">?]&gt;;</span><br/><span class="hl-1">  </span><br/><span class="hl-1">  </span><span class="hl-4">constructor</span><span class="hl-1">(</span><span class="hl-2">context</span><span class="hl-1">: </span><span class="hl-7">ComponentContext</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-4">this</span><span class="hl-1">.</span><span class="hl-2">myContainerData</span><span class="hl-1"> = </span><span class="hl-2">MyShare</span><span class="hl-1">.</span><span class="hl-6">valueFor</span><span class="hl-1">(</span><span class="hl-2">context</span><span class="hl-1">);</span><br/><span class="hl-1">  }   </span><br/><span class="hl-1">  </span><br/><span class="hl-1">  </span><span class="hl-8">// Consume shared data when it is reported by `myContainerData`.</span><br/><span class="hl-1">}</span>
 </code></pre>
-					</li>
-				</ol>
-				<p>The sharing mechanism works despite sharer and consumer components instantiation order.</p>
-				<a href="#buffered-fragment-rendering" id="buffered-fragment-rendering" style="color: inherit; text-decoration: none;">
-					<h2>Buffered Fragment Rendering</h2>
-				</a>
-				<p>Buffered rendering is useful when there is a lot of content to add to the page. This content may even contain nested
-				components.</p>
-				<p>For the sake of performance, it is reasonable to add such content to <a href="https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment">DocumentFragment</a> first, initialize nested
-				components, and then add already rendered fragment to the document. E.g. using <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame">requestAnimationFrame</a>.</p>
-				<p>A <code>@RenderFragment()</code> amendment (and decorator) handle this:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Attribute</span><span style="color: #000000">, </span><span style="color: #001080">Component</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@wesib/wesib&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">FragmentRendererExecution</span><span style="color: #000000">, </span><span style="color: #001080">RenderFragment</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@wesib/generic&#039;</span><span style="color: #000000">;</span>
+</li>
+</ol>
+<p>The sharing mechanism works despite sharer and consumer components instantiation order.</p>
 
-<span style="color: #000000">@</span><span style="color: #795E26">Component</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;my-list&#039;</span><span style="color: #000000">)</span>
-<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyList</span><span style="color: #000000"> {</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">/**</span>
-<span style="color: #008000">   * Declares `item-list` attribute.</span>
-<span style="color: #008000">   * </span>
-<span style="color: #008000">   * Contains comma-separated `name=value` pairs.</span>
-<span style="color: #008000">   */</span><span style="color: #000000">  </span>
-<span style="color: #000000">  @</span><span style="color: #795E26">Attribute</span><span style="color: #000000">()  </span>
-<span style="color: #000000">  </span><span style="color: #001080">itemList</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">/**</span>
-<span style="color: #008000">   * Renders item list.</span>
-<span style="color: #008000">   * </span>
-<span style="color: #008000">   * This method will be called each time the `item-list` attribute updated.</span>
-<span style="color: #008000">   */</span>
-<span style="color: #000000">  @</span><span style="color: #795E26">RenderFragment</span><span style="color: #000000">()</span>
-<span style="color: #000000">  </span><span style="color: #795E26">render</span><span style="color: #000000">({ </span><span style="color: #001080">content</span><span style="color: #000000"> }: </span><span style="color: #267F99">FragmentRendererExecution</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #008000">// `content` is a `DocumentFragment` instance.</span>
-<span style="color: #000000">    </span><span style="color: #008000">// This method fills this `content` on each call.</span>
-<span style="color: #000000">    </span><span style="color: #008000">// The `content` will be added to the document at proper time.</span>
-<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">ul</span><span style="color: #000000"> = </span><span style="color: #001080">content</span><span style="color: #000000">.</span><span style="color: #795E26">appendChild</span><span style="color: #000000">(</span><span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #795E26">createElement</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;ul&#039;</span><span style="color: #000000">));  </span>
-<span style="color: #000000">    </span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">item</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">itemList</span><span style="color: #000000">.</span><span style="color: #795E26">split</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;,&#039;</span><span style="color: #000000">)) {</span>
-<span style="color: #000000">      </span>
-<span style="color: #000000">      </span><span style="color: #0000FF">const</span><span style="color: #000000"> [</span><span style="color: #0070C1">name</span><span style="color: #000000">, </span><span style="color: #0070C1">value</span><span style="color: #000000">] = </span><span style="color: #001080">item</span><span style="color: #000000">.</span><span style="color: #795E26">split</span><span style="color: #000000">(</span><span style="color: #001080">item</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;=&#039;</span><span style="color: #000000">);  </span>
-<span style="color: #000000">      </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">li</span><span style="color: #000000"> = </span><span style="color: #001080">ul</span><span style="color: #000000">.</span><span style="color: #795E26">appendChild</span><span style="color: #000000">(</span><span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #795E26">createElement</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;li&#039;</span><span style="color: #000000">));</span>
-<span style="color: #000000">      </span>
-<span style="color: #000000">      </span><span style="color: #008000">// Each `my-item` component will be settled after this method call, and _before_ it is added to the document.</span>
-<span style="color: #000000">      </span><span style="color: #008000">// If `my-item` renders its own content, this content will be added to this component&#039;s `content` fragment,</span>
-<span style="color: #000000">      </span><span style="color: #008000">// rather directly to document.</span>
-<span style="color: #000000">      </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">link</span><span style="color: #000000"> = </span><span style="color: #001080">li</span><span style="color: #000000">.</span><span style="color: #795E26">appendChild</span><span style="color: #000000">(</span><span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #795E26">createelement</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;my-item&#039;</span><span style="color: #000000">));</span>
-<span style="color: #000000">   </span>
-<span style="color: #000000">      </span><span style="color: #001080">link</span><span style="color: #000000">.</span><span style="color: #795E26">setAttribute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;name&#039;</span><span style="color: #000000">, </span><span style="color: #001080">name</span><span style="color: #000000">);</span>
-<span style="color: #000000">      </span><span style="color: #001080">link</span><span style="color: #000000">.</span><span style="color: #795E26">setAttribute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;value&#039;</span><span style="color: #000000">, </span><span style="color: #001080">value</span><span style="color: #000000">);</span>
-<span style="color: #000000">    }   </span>
-<span style="color: #000000">  }</span>
-
-<span style="color: #000000">}</span>
+<a href="#buffered-fragment-rendering" id="buffered-fragment-rendering" style="color: inherit; text-decoration: none;">
+  <h2>Buffered Fragment Rendering</h2>
+</a>
+<p>Buffered rendering is useful when there is a lot of content to add to the page. This content may even contain nested
+components.</p>
+<p>For the sake of performance, it is reasonable to add such content to <a href="https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment">DocumentFragment</a> first, initialize nested
+components, and then add already rendered fragment to the document. E.g. using <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame">requestAnimationFrame</a>.</p>
+<p>A <code>@RenderFragment()</code> amendment (and decorator) handle this:</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">Attribute</span><span class="hl-1">, </span><span class="hl-2">Component</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@wesib/wesib&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">FragmentRendererExecution</span><span class="hl-1">, </span><span class="hl-2">RenderFragment</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@wesib/generic&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-1">@</span><span class="hl-6">Component</span><span class="hl-1">(</span><span class="hl-3">&#39;my-list&#39;</span><span class="hl-1">)</span><br/><span class="hl-4">class</span><span class="hl-1"> </span><span class="hl-7">MyList</span><span class="hl-1"> {</span><br/><br/><span class="hl-1">  </span><span class="hl-8">/**</span><br/><span class="hl-8">   * Declares `item-list` attribute.</span><br/><span class="hl-8">   * </span><br/><span class="hl-8">   * Contains comma-separated `name=value` pairs.</span><br/><span class="hl-8">   */</span><span class="hl-1">  </span><br/><span class="hl-1">  @</span><span class="hl-6">Attribute</span><span class="hl-1">()  </span><br/><span class="hl-1">  </span><span class="hl-2">itemList</span><span class="hl-1">: </span><span class="hl-7">string</span><span class="hl-1"> = </span><span class="hl-3">&#39;&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-1">  </span><span class="hl-8">/**</span><br/><span class="hl-8">   * Renders item list.</span><br/><span class="hl-8">   * </span><br/><span class="hl-8">   * This method will be called each time the `item-list` attribute updated.</span><br/><span class="hl-8">   */</span><br/><span class="hl-1">  @</span><span class="hl-6">RenderFragment</span><span class="hl-1">()</span><br/><span class="hl-1">  </span><span class="hl-6">render</span><span class="hl-1">({ </span><span class="hl-2">content</span><span class="hl-1"> }: </span><span class="hl-7">FragmentRendererExecution</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-8">// `content` is a `DocumentFragment` instance.</span><br/><span class="hl-1">    </span><span class="hl-8">// This method fills this `content` on each call.</span><br/><span class="hl-1">    </span><span class="hl-8">// The `content` will be added to the document at proper time.</span><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">ul</span><span class="hl-1"> = </span><span class="hl-2">content</span><span class="hl-1">.</span><span class="hl-6">appendChild</span><span class="hl-1">(</span><span class="hl-2">document</span><span class="hl-1">.</span><span class="hl-6">createElement</span><span class="hl-1">(</span><span class="hl-3">&#39;ul&#39;</span><span class="hl-1">));  </span><br/><span class="hl-1">    </span><br/><span class="hl-1">    </span><span class="hl-0">for</span><span class="hl-1"> (</span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">item</span><span class="hl-1"> </span><span class="hl-4">of</span><span class="hl-1"> </span><span class="hl-4">this</span><span class="hl-1">.</span><span class="hl-2">itemList</span><span class="hl-1">.</span><span class="hl-6">split</span><span class="hl-1">(</span><span class="hl-3">&#39;,&#39;</span><span class="hl-1">)) {</span><br/><span class="hl-1">      </span><br/><span class="hl-1">      </span><span class="hl-4">const</span><span class="hl-1"> [</span><span class="hl-5">name</span><span class="hl-1">, </span><span class="hl-5">value</span><span class="hl-1">] = </span><span class="hl-2">item</span><span class="hl-1">.</span><span class="hl-6">split</span><span class="hl-1">(</span><span class="hl-2">item</span><span class="hl-1">, </span><span class="hl-3">&#39;=&#39;</span><span class="hl-1">);  </span><br/><span class="hl-1">      </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">li</span><span class="hl-1"> = </span><span class="hl-2">ul</span><span class="hl-1">.</span><span class="hl-6">appendChild</span><span class="hl-1">(</span><span class="hl-2">document</span><span class="hl-1">.</span><span class="hl-6">createElement</span><span class="hl-1">(</span><span class="hl-3">&#39;li&#39;</span><span class="hl-1">));</span><br/><span class="hl-1">      </span><br/><span class="hl-1">      </span><span class="hl-8">// Each `my-item` component will be settled after this method call, and _before_ it is added to the document.</span><br/><span class="hl-1">      </span><span class="hl-8">// If `my-item` renders its own content, this content will be added to this component&#39;s `content` fragment,</span><br/><span class="hl-1">      </span><span class="hl-8">// rather directly to document.</span><br/><span class="hl-1">      </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">link</span><span class="hl-1"> = </span><span class="hl-2">li</span><span class="hl-1">.</span><span class="hl-6">appendChild</span><span class="hl-1">(</span><span class="hl-2">document</span><span class="hl-1">.</span><span class="hl-6">createelement</span><span class="hl-1">(</span><span class="hl-3">&#39;my-item&#39;</span><span class="hl-1">));</span><br/><span class="hl-1">   </span><br/><span class="hl-1">      </span><span class="hl-2">link</span><span class="hl-1">.</span><span class="hl-6">setAttribute</span><span class="hl-1">(</span><span class="hl-3">&#39;name&#39;</span><span class="hl-1">, </span><span class="hl-2">name</span><span class="hl-1">);</span><br/><span class="hl-1">      </span><span class="hl-2">link</span><span class="hl-1">.</span><span class="hl-6">setAttribute</span><span class="hl-1">(</span><span class="hl-3">&#39;value&#39;</span><span class="hl-1">, </span><span class="hl-2">value</span><span class="hl-1">);</span><br/><span class="hl-1">    }   </span><br/><span class="hl-1">  }</span><br/><br/><span class="hl-1">}</span>
 </code></pre>
-				<a href="#http-fetch" id="http-fetch" style="color: inherit; text-decoration: none;">
-					<h2>HTTP Fetch</h2>
-				</a>
-				<p>An <code>HttpFetch</code> is a function available is bootstrap context. It resembles the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>, but returns an <code>OnEvent</code>
-				event sender, that sends a <code>Response</code> event(s), rather a promise resolving to the one. </p>
-				<p>An <code>HttpFetchAgent</code> can be provided in bootstrap context to intercept HTTP requests. E.g. to modify the request and/or
-				response.</p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class=" ">
-						<a href="modules.html">Exports</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/HttpFetchAgent.html">Http<wbr>Fetch<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/RenderFragmentDef.html">Render<wbr>Fragment<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/Share.html">Share</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/ShareLocator.html">Share<wbr>Locator</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/Shareable.html">Shareable</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/SharedValue.html">Shared<wbr>Value</a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/Share.html" class="tsd-kind-icon">Share</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/Shareable.html" class="tsd-kind-icon">Shareable</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/AeShared.html" class="tsd-kind-icon">Ae<wbr>Shared</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/FragmentRenderCtl.html" class="tsd-kind-icon">Fragment<wbr>Render<wbr>Ctl</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/FragmentRendererExecution.html" class="tsd-kind-icon">Fragment<wbr>Renderer<wbr>Execution</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/ShareRef.html" class="tsd-kind-icon">Share<wbr>Ref</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/SharerAware.html" class="tsd-kind-icon">Sharer<wbr>Aware</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/TargetShare.html" class="tsd-kind-icon">Target<wbr>Share</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#CombinedFetchAgent" class="tsd-kind-icon">Combined<wbr>Fetch<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#FetchAgent" class="tsd-kind-icon">Fetch<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#FragmentRenderer" class="tsd-kind-icon">Fragment<wbr>Renderer</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="modules.html#HttpFetch" class="tsd-kind-icon">Http<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="modules.html#HttpFetchAgent" class="tsd-kind-icon">Http<wbr>Fetch<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="modules.html#RenderFragmentDef" class="tsd-kind-icon">Render<wbr>Fragment<wbr>Def</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#ShareLocator" class="tsd-kind-icon">Share<wbr>Locator</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#SharedAmendment" class="tsd-kind-icon">Shared<wbr>Amendment</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#SharedValue" class="tsd-kind-icon">Shared<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#FragmentRenderCtl" class="tsd-kind-icon">Fragment<wbr>Render<wbr>Ctl</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#HttpFetch" class="tsd-kind-icon">Http<wbr>Fetch</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#HttpFetchAgent" class="tsd-kind-icon">Http<wbr>Fetch<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#SharedValue" class="tsd-kind-icon">Shared<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#SharedValue__symbol" class="tsd-kind-icon">Shared<wbr>Value__symbol</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#RenderFragment" class="tsd-kind-icon">Render<wbr>Fragment</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#Shared" class="tsd-kind-icon">Shared</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#cxFetchAgent" class="tsd-kind-icon">cx<wbr>Fetch<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#isSharerAware" class="tsd-kind-icon">is<wbr>Sharer<wbr>Aware</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#shareLocator" class="tsd-kind-icon">share<wbr>Locator</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#shareValueBy" class="tsd-kind-icon">share<wbr>Value<wbr>By</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+
+<a href="#http-fetch" id="http-fetch" style="color: inherit; text-decoration: none;">
+  <h2>HTTP Fetch</h2>
+</a>
+<p>An <code>HttpFetch</code> is a function available is bootstrap context. It resembles the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>, but returns an <code>OnEvent</code>
+event sender, that sends a <code>Response</code> event(s), rather a promise resolving to the one. </p>
+<p>An <code>HttpFetchAgent</code> can be provided in bootstrap context to intercept HTTP requests. E.g. to modify the request and/or
+response.</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li><li class=" tsd-kind-namespace"><a href="modules/HttpFetchAgent.html">Http<wbr/>Fetch<wbr/>Agent</a></li><li class=" tsd-kind-namespace"><a href="modules/RenderFragmentDef.html">Render<wbr/>Fragment<wbr/>Def</a></li><li class=" tsd-kind-namespace"><a href="modules/Share.html">Share</a></li><li class=" tsd-kind-namespace"><a href="modules/ShareLocator.html">Share<wbr/>Locator</a></li><li class=" tsd-kind-namespace"><a href="modules/Shareable.html">Shareable</a></li><li class=" tsd-kind-namespace"><a href="modules/SharedValue.html">Shared<wbr/>Value</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/Share.html" class="tsd-kind-icon">Share</a></li><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/Shareable.html" class="tsd-kind-icon">Shareable</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/AeShared.html" class="tsd-kind-icon">Ae<wbr/>Shared</a></li><li class="tsd-kind-interface"><a href="interfaces/FragmentRenderCtl.html" class="tsd-kind-icon">Fragment<wbr/>Render<wbr/>Ctl</a></li><li class="tsd-kind-interface"><a href="interfaces/FragmentRendererExecution.html" class="tsd-kind-icon">Fragment<wbr/>Renderer<wbr/>Execution</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/ShareRef.html" class="tsd-kind-icon">Share<wbr/>Ref</a></li><li class="tsd-kind-interface"><a href="interfaces/SharerAware.html" class="tsd-kind-icon">Sharer<wbr/>Aware</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/TargetShare.html" class="tsd-kind-icon">Target<wbr/>Share</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#CombinedFetchAgent" class="tsd-kind-icon">Combined<wbr/>Fetch<wbr/>Agent</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#FetchAgent" class="tsd-kind-icon">Fetch<wbr/>Agent</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#FragmentRenderer" class="tsd-kind-icon">Fragment<wbr/>Renderer</a></li><li class="tsd-kind-type-alias"><a href="modules.html#HttpFetch" class="tsd-kind-icon">Http<wbr/>Fetch</a></li><li class="tsd-kind-type-alias"><a href="modules.html#HttpFetchAgent" class="tsd-kind-icon">Http<wbr/>Fetch<wbr/>Agent</a></li><li class="tsd-kind-type-alias"><a href="modules.html#RenderFragmentDef" class="tsd-kind-icon">Render<wbr/>Fragment<wbr/>Def</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#ShareLocator" class="tsd-kind-icon">Share<wbr/>Locator</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#SharedAmendment" class="tsd-kind-icon">Shared<wbr/>Amendment</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#SharedValue" class="tsd-kind-icon">Shared<wbr/>Value</a></li><li class="tsd-kind-variable"><a href="modules.html#FragmentRenderCtl" class="tsd-kind-icon">Fragment<wbr/>Render<wbr/>Ctl</a></li><li class="tsd-kind-variable"><a href="modules.html#HttpFetch" class="tsd-kind-icon">Http<wbr/>Fetch</a></li><li class="tsd-kind-variable"><a href="modules.html#HttpFetchAgent" class="tsd-kind-icon">Http<wbr/>Fetch<wbr/>Agent</a></li><li class="tsd-kind-variable"><a href="modules.html#SharedValue" class="tsd-kind-icon">Shared<wbr/>Value</a></li><li class="tsd-kind-variable"><a href="modules.html#SharedValue__symbol" class="tsd-kind-icon">Shared<wbr/>Value__symbol</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#RenderFragment" class="tsd-kind-icon">Render<wbr/>Fragment</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#Shared" class="tsd-kind-icon">Shared</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#cxFetchAgent" class="tsd-kind-icon">cx<wbr/>Fetch<wbr/>Agent</a></li><li class="tsd-kind-function"><a href="modules.html#isSharerAware" class="tsd-kind-icon">is<wbr/>Sharer<wbr/>Aware</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#shareLocator" class="tsd-kind-icon">share<wbr/>Locator</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#shareValueBy" class="tsd-kind-icon">share<wbr/>Value<wbr/>By</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
