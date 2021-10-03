@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module Module @wesib/generic
+ * @module @wesib/generic
  */
 export * from './fetch';
 export * from './fragment';
