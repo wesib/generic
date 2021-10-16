@@ -7,6 +7,7 @@ import {
   Component,
   ComponentClass,
   ComponentContext,
+  ComponentElement,
   ComponentSlot,
   DefinitionContext,
 } from '@wesib/wesib';
@@ -40,7 +41,7 @@ describe('shares', () => {
 
       }
 
-      const element = new (await testElement(TestComponent))();
+      const element: ComponentElement = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
 
       expect(await context.get(share)).toBe('test');
@@ -62,8 +63,8 @@ describe('shares', () => {
 
       }
 
-      const element = new (await testElement(TestComponent))();
-      const context = await ComponentSlot.of<TestComponent>(element).whenReady;
+      const element: ComponentElement<TestComponent> = new (await testElement(TestComponent))();
+      const context = await ComponentSlot.of(element).whenReady;
 
       expect(await context.get(share)).toBe('test');
       expect(await getShared(context.component)).toBe('test');
@@ -99,7 +100,7 @@ describe('shares', () => {
 
       }
 
-      const element = new (await testElement(TestComponent))();
+      const element: ComponentElement<TestComponent> = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
       const shared = context.get(share);
 

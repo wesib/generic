@@ -169,7 +169,7 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
             }
           }
 
-          let element: ComponentElement | undefined = host(consumer.element);
+          let element: ComponentElement | undefined = host(consumer.element as Element);
 
           while (element) {
             if (sharers.names.has(element.tagName.toLowerCase())) {

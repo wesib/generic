@@ -12,6 +12,7 @@ import { Class, valuesProvider } from '@proc7ts/primitives';
 import {
   AeComponentMember,
   ComponentClass,
+  ComponentContext,
   ComponentInstance,
   ComponentMember,
   DefinitionContext,
@@ -121,7 +122,7 @@ export function Shared<
                 {
                   provide: ({ context }: Share.Target<T>) => context.onceReady.do(
                       digAfter_(
-                          ({ component }) => accessorOf(component).val,
+                          ({ component }: ComponentContext<Component>) => accessorOf(component).val,
                           valuesProvider<[T?]>(),
                       ),
                   ),

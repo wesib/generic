@@ -30,7 +30,7 @@ export function RenderFragment<
   ) => amend({
     componentDef: {
       define(defContext) {
-        defContext.whenComponent(context => {
+        defContext.whenComponent((context: ComponentContext<InstanceType<TClass>>) => {
           context.whenReady(() => {
 
             const { component } = context;

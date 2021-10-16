@@ -81,7 +81,7 @@ export class Shareable<TBody = unknown, TSharer extends object = any>
    *
    * @param sharer - Sharer component context.
    */
-  sharedBy(sharer: ComponentContext): void {
+  sharedBy(sharer: ComponentContext<TSharer>): void {
     this[Shareable$Internals__symbol].sharedBy(sharer);
   }
 

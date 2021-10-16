@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { afterSupplied } from '@proc7ts/fun-events';
-import { Component, ComponentSlot } from '@wesib/wesib';
+import { Component, ComponentElement, ComponentSlot } from '@wesib/wesib';
 import { MockElement, testElement } from '@wesib/wesib/testing';
 import { Share } from './share';
 import { Shareable } from './shareable';
@@ -24,7 +24,7 @@ describe('shares', () => {
 
       }
 
-      const element = new (await testElement(TestComponent))();
+      const element: ComponentElement = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
       const shared = context.get(share);
       const shareable = (await shared)!;

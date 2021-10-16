@@ -108,7 +108,7 @@ describe('shares', () => {
         class TestComponent {
         }
 
-        const element = new (await testElement(TestComponent))();
+        const element: ComponentElement = new (await testElement(TestComponent))();
 
         context = await ComponentSlot.of(element).whenReady;
         defContext = context.get(DefinitionContext);
@@ -119,34 +119,34 @@ describe('shares', () => {
       });
       it('shares static value', async () => {
         defContext.perComponent(shareValue(share, () => 'test'));
-        expect(await context.get(share)).toEqual('test');
+        expect(await context.get(share)).toBe('test');
       });
       it('shares updatable value', async () => {
 
         const value = trackValue('test1');
 
         defContext.perComponent(shareValue(share, () => value.read));
-        expect(await context.get(share)).toEqual('test1');
+        expect(await context.get(share)).toBe('test1');
 
         value.it = 'test2';
-        expect(await context.get(share)).toEqual('test2');
+        expect(await context.get(share)).toBe('test2');
       });
       it('shares static value for aliased shares', async () => {
         defContext.perComponent(shareValue(share2, () => 'test'));
-        expect(await context.get(share)).toEqual('test');
-        expect(await context.get(share2)).toEqual('test');
+        expect(await context.get(share)).toBe('test');
+        expect(await context.get(share2)).toBe('test');
       });
       it('shares updatable value for aliased shares', async () => {
 
         const value = trackValue('test1');
 
         defContext.perComponent(shareValue(share2, () => value.read));
-        expect(await context.get(share)).toEqual('test1');
-        expect(await context.get(share2)).toEqual('test1');
+        expect(await context.get(share)).toBe('test1');
+        expect(await context.get(share2)).toBe('test1');
 
         value.it = 'test2';
-        expect(await context.get(share)).toEqual('test2');
-        expect(await context.get(share2)).toEqual('test2');
+        expect(await context.get(share)).toBe('test2');
+        expect(await context.get(share2)).toBe('test2');
       });
     });
 
@@ -172,7 +172,7 @@ describe('shares', () => {
         class TestComponent {
         }
 
-        const element = new (await testElement(TestComponent))();
+        const element: ComponentElement = new (await testElement(TestComponent))();
 
         context = await ComponentSlot.of(element).whenReady;
         defContext = context.get(DefinitionContext);
@@ -185,16 +185,16 @@ describe('shares', () => {
 
         defContext.perComponent(shareValue(share, () => value1.read));
         defContext.perComponent(shareValue(share2, () => value2.read));
-        expect(await context.get(share)).toEqual('test1');
-        expect(await context.get(share2)).toEqual('test2');
+        expect(await context.get(share)).toBe('test1');
+        expect(await context.get(share2)).toBe('test2');
 
         value2.it = 'test2b';
-        expect(await context.get(share)).toEqual('test1');
-        expect(await context.get(share2)).toEqual('test2b');
+        expect(await context.get(share)).toBe('test1');
+        expect(await context.get(share2)).toBe('test2b');
 
         value1.it = 'test1b';
-        expect(await context.get(share)).toEqual('test1b');
-        expect(await context.get(share2)).toEqual('test2b');
+        expect(await context.get(share)).toBe('test1b');
+        expect(await context.get(share2)).toBe('test2b');
       });
       it('prefers bare value despite the order of sharing', async () => {
 
@@ -203,16 +203,16 @@ describe('shares', () => {
 
         defContext.perComponent(shareValue(share, () => value1.read));
         defContext.perComponent(shareValue(share2, () => value2.read));
-        expect(await context.get(share)).toEqual('test1');
-        expect(await context.get(share2)).toEqual('test2');
+        expect(await context.get(share)).toBe('test1');
+        expect(await context.get(share2)).toBe('test2');
 
         value2.it = 'test2b';
-        expect(await context.get(share)).toEqual('test1');
-        expect(await context.get(share2)).toEqual('test2b');
+        expect(await context.get(share)).toBe('test1');
+        expect(await context.get(share2)).toBe('test2b');
 
         value1.it = 'test1b';
-        expect(await context.get(share)).toEqual('test1b');
-        expect(await context.get(share2)).toEqual('test2b');
+        expect(await context.get(share)).toBe('test1b');
+        expect(await context.get(share2)).toBe('test2b');
       });
       it('prefers detailed value with lower priority', async () => {
 
@@ -221,13 +221,13 @@ describe('shares', () => {
 
         defContext.perComponent(shareValue(share, () => value1.read, 1));
         defContext.perComponent(shareValue(share, () => value2.read, 2));
-        expect(await context.get(share)).toEqual('test1');
+        expect(await context.get(share)).toBe('test1');
 
         value2.it = 'test2b';
-        expect(await context.get(share)).toEqual('test1');
+        expect(await context.get(share)).toBe('test1');
 
         value1.it = 'test1b';
-        expect(await context.get(share)).toEqual('test1b');
+        expect(await context.get(share)).toBe('test1b');
       });
       it('prefers shared value with earlier aliasing order', async () => {
 
@@ -236,19 +236,19 @@ describe('shares', () => {
 
         defContext.perComponent(shareValue(share2, () => value2.read));
         defContext.perComponent(shareValue(share3, () => value3.read));
-        expect(await context.get(share)).toEqual('test2');
-        expect(await context.get(share2)).toEqual('test2');
-        expect(await context.get(share3)).toEqual('test3');
+        expect(await context.get(share)).toBe('test2');
+        expect(await context.get(share2)).toBe('test2');
+        expect(await context.get(share3)).toBe('test3');
 
         value2.it = 'test2b';
-        expect(await context.get(share)).toEqual('test2b');
-        expect(await context.get(share2)).toEqual('test2b');
-        expect(await context.get(share3)).toEqual('test3');
+        expect(await context.get(share)).toBe('test2b');
+        expect(await context.get(share2)).toBe('test2b');
+        expect(await context.get(share3)).toBe('test3');
 
         value3.it = 'test3b';
-        expect(await context.get(share)).toEqual('test2b');
-        expect(await context.get(share2)).toEqual('test2b');
-        expect(await context.get(share3)).toEqual('test3b');
+        expect(await context.get(share)).toBe('test2b');
+        expect(await context.get(share2)).toBe('test2b');
+        expect(await context.get(share3)).toBe('test3b');
       });
       it('prefers shared value with earlier aliasing order despite the order of sharing', async () => {
 
@@ -257,19 +257,19 @@ describe('shares', () => {
 
         defContext.perComponent(shareValue(share3, () => value3.read));
         defContext.perComponent(shareValue(share2, () => value2.read));
-        expect(await context.get(share)).toEqual('test2');
-        expect(await context.get(share2)).toEqual('test2');
-        expect(await context.get(share3)).toEqual('test3');
+        expect(await context.get(share)).toBe('test2');
+        expect(await context.get(share2)).toBe('test2');
+        expect(await context.get(share3)).toBe('test3');
 
         value2.it = 'test2b';
-        expect(await context.get(share)).toEqual('test2b');
-        expect(await context.get(share2)).toEqual('test2b');
-        expect(await context.get(share3)).toEqual('test3');
+        expect(await context.get(share)).toBe('test2b');
+        expect(await context.get(share2)).toBe('test2b');
+        expect(await context.get(share3)).toBe('test3');
 
         value3.it = 'test3b';
-        expect(await context.get(share)).toEqual('test2b');
-        expect(await context.get(share2)).toEqual('test2b');
-        expect(await context.get(share3)).toEqual('test3b');
+        expect(await context.get(share)).toBe('test2b');
+        expect(await context.get(share2)).toBe('test2b');
+        expect(await context.get(share3)).toBe('test3b');
       });
     });
 
