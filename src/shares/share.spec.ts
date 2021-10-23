@@ -320,7 +320,7 @@ describe('shares', () => {
         const receiver = jest.fn();
 
         share.valueFor(testCtx)(receiver);
-        expect(receiver).toHaveBeenCalledWith();
+        expect(receiver).toHaveBeenCalledWith(...([] as unknown[] as [unknown, unknown[]]));
       });
       it('reports nothing without value shared', () => {
         share.addSharer(sharerDefContext, { name: 'sharer-el' });
@@ -332,7 +332,7 @@ describe('shares', () => {
         const receiver = jest.fn();
 
         share.valueFor(testCtx)(receiver);
-        expect(receiver).toHaveBeenCalledWith();
+        expect(receiver).toHaveBeenCalledWith(...([] as unknown[] as [unknown, unknown[]]));
       });
       it('does not report missing value with lower priority', () => {
         share.addSharer(sharerDefContext, { name: 'sharer-el' });
@@ -390,7 +390,7 @@ describe('shares', () => {
         const receiver = jest.fn();
 
         share.valueFor(testCtx)(receiver);
-        expect(receiver).toHaveBeenLastCalledWith();
+        expect(receiver).toHaveBeenLastCalledWith(...([] as unknown[] as [unknown, unknown[]]));
 
         sharerContext = sharerDefContext.mountTo(sharerEl);
 
