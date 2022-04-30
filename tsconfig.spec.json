@@ -7,7 +7,5 @@
     "importHelpers": false,
     "noEmitHelpers": false
   },
-  "include": [
-    "./src/**/*.spec.ts"
-  ]
+  "include": ["./src/**/*.spec.ts"]
 }

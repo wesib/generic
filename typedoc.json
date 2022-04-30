@@ -1,7 +1,5 @@
 {
-  "entryPoints": [
-    "src/index.ts"
-  ],
+  "entryPoints": ["src/index.ts"],
   "name": "Wesib: Generic Components",
   "out": "./target/typedoc",
   "tsconfig": "tsconfig.main.json"
