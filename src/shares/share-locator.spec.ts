@@ -3,7 +3,8 @@ import { drekHost } from '@frontmeans/drek';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { afterThe } from '@proc7ts/fun-events';
 import { ComponentContext } from '@wesib/wesib';
-import { MockFn, MockObject } from '../spec';
+import { Mock } from 'jest-mock';
+import { MockObject } from '../spec';
 import { Share } from './share';
 import { ShareLocator, shareLocator } from './share-locator';
 import { ShareRef } from './share-ref';
@@ -122,7 +123,7 @@ describe('shares', () => {
 
     describe('by custom locator', () => {
 
-      let custom: MockFn<ShareLocator.Custom<string>>;
+      let custom: Mock<ShareLocator.Custom<string>>;
 
       beforeEach(() => {
         custom = jest.fn((_consumer, _options) => afterThe('found', mockSharer));

@@ -27,7 +27,7 @@ describe('fetch', () => {
   });
 
   let bsContext: BootstrapContext;
-  let mockAgent: Mock<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>>;
+  let mockAgent: Mock<HttpFetchAgent>;
 
   beforeEach(async () => {
     mockAgent = jest.fn((next, _request) => next());
@@ -101,9 +101,9 @@ describe('fetch', () => {
     describe('abort signal', () => {
 
       let target: HTMLElement;
-      let AbortControllerSpy: SpyInstance<AbortController, any[]>;
+      let AbortControllerSpy: SpyInstance<() => AbortController>;
       let abortController: AbortController;
-      let abortSpy: SpyInstance<void, []>;
+      let abortSpy: SpyInstance<() => void>;
 
       beforeEach(() => {
         target = document.createElement('span');

@@ -21,7 +21,7 @@ describe('fetch', () => {
     });
 
     let request: Request;
-    let mockFetch: Mock<OnEvent<[Response]>, [RequestInfo?, RequestInit?]>;
+    let mockFetch: Mock<(request?: RequestInfo, init?: RequestInit) => OnEvent<[Response]>>;
     let emitter: EventEmitter<[Response]>;
 
     beforeEach(() => {
@@ -48,7 +48,7 @@ describe('fetch', () => {
     it('calls the registered agent', async () => {
 
       const emitter2 = new EventEmitter<[Response]>();
-      const mockAgent = jest.fn<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>>(() => emitter2.on);
+      const mockAgent = jest.fn<HttpFetchAgent>(() => emitter2.on);
 
       cxBuilder.provide(cxConstAsset(HttpFetchAgent, mockAgent));
 
@@ -70,7 +70,7 @@ describe('fetch', () => {
     });
     it('calls the next agent in chain by calling `next`', () => {
 
-      const mockAgent = jest.fn<ReturnType<HttpFetchAgent>, Parameters<HttpFetchAgent>>(
+      const mockAgent = jest.fn<HttpFetchAgent>(
           (next, _request) => next(),
       );
 

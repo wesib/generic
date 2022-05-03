@@ -1,12 +1,6 @@
 import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf } from '@frontmeans/drek';
-import {
-  PreRenderScheduler,
-  queuedRenderScheduler,
-  RenderSchedule,
-  RenderScheduleOptions,
-  RenderScheduler,
-} from '@frontmeans/render-scheduler';
+import { PreRenderScheduler, queuedRenderScheduler, RenderScheduler } from '@frontmeans/render-scheduler';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { cxConstAsset } from '@proc7ts/context-builder';
 import { EventEmitter } from '@proc7ts/fun-events';
@@ -27,8 +21,8 @@ describe('fragment', () => {
       element = doc.body.appendChild(doc.createElement('test-element'));
     });
 
-    let mockRenderScheduler: Mock<RenderSchedule, [RenderScheduleOptions?]>;
-    let mockPreRenderScheduler: Mock<RenderSchedule, [RenderScheduleOptions?]>;
+    let mockRenderScheduler: Mock<RenderScheduler>;
+    let mockPreRenderScheduler: Mock<RenderScheduler>;
 
     beforeEach(() => {
       mockRenderScheduler = jest.fn(queuedRenderScheduler);
