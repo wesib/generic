@@ -8,7 +8,7 @@ import {
   newAmendTarget,
 } from '@proc7ts/amend';
 import { AfterEvent, digAfter_ } from '@proc7ts/fun-events';
-import { Class, valuesProvider } from '@proc7ts/primitives';
+import { Class, valueProvider } from '@proc7ts/primitives';
 import {
   AeComponentMember,
   ComponentClass,
@@ -123,7 +123,7 @@ export function Shared<
                   provide: ({ context }: Share.Target<T>) => context.onceReady.do(
                       digAfter_(
                           ({ component }: ComponentContext<Component>) => accessorOf(component).val,
-                          valuesProvider<[T?]>(),
+                          valueProvider<[T?]>([]),
                       ),
                   ),
                 },
