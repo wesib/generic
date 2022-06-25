@@ -187,7 +187,7 @@ describe('fetch', () => {
 
     function fetch(
         receiver: EventReceiver<[Response]> = noop,
-        done: (reason?: any) => void = noop,
+        done: (reason?: unknown) => void = noop,
     ): Promise<Supply> {
       return new Promise<Supply>(resolve => {
 
