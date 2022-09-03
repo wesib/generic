@@ -1,7 +1,12 @@
 import { trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
-import { AeComponentMember, ComponentClass, ComponentContext, ComponentInstance } from '@wesib/wesib';
+import {
+  AeComponentMember,
+  ComponentClass,
+  ComponentContext,
+  ComponentInstance,
+} from '@wesib/wesib';
 import { shareValueBy } from './sharer-aware';
 
 export class ShareAccessor<T, TClass extends ComponentClass> {
@@ -13,8 +18,8 @@ export class ShareAccessor<T, TClass extends ComponentClass> {
   readonly val: ValueTracker<T | undefined>;
 
   constructor(
-      target: AeComponentMember<T | undefined, TClass>,
-      component: ComponentInstance<InstanceType<TClass>>,
+    target: AeComponentMember<T | undefined, TClass>,
+    component: ComponentInstance<InstanceType<TClass>>,
   ) {
     this._get = target.get.bind(undefined, component);
     this._set = target.writable ? target.set.bind(undefined, component) : noop;

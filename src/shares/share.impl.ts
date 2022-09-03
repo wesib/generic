@@ -6,29 +6,24 @@ import { Share } from './share';
 import { ShareRegistry } from './share-registry.impl';
 import { SharedValue } from './shared-value';
 
-export const Share$impl__symbol = (/*#__PURE__*/ Symbol('Share.impl'));
+export const Share$impl__symbol = /*#__PURE__*/ Symbol('Share.impl');
 
 export class Share$<T> {
 
   private readonly _aliases: readonly Share<T>[];
 
-  constructor(
-      private readonly _share: Share<T>,
-      readonly name: string,
-      options: Share.Options<T>,
-  ) {
+  constructor(private readonly _share: Share<T>, readonly name: string, options: Share.Options<T>) {
     this._aliases = arrayOfElements(options.as).map(alias => alias.share);
   }
 
   addSharer(defContext: DefinitionContext, options: SharedValue.Options = {}): Supply {
-
     const { local, name = defContext.elementDef.name } = options;
     const registry = defContext.get(BootstrapContext).get(ShareRegistry);
     const supply = new Supply();
     const { componentType } = defContext;
     const elementName = local
-        ? undefined
-        : name && html__naming.name(name, registry.nsAlias).toLowerCase();
+      ? undefined
+      : name && html__naming.name(name, registry.nsAlias).toLowerCase();
 
     registry.addSharer(this._share, componentType, elementName, supply);
     for (const alias of this._aliases) {

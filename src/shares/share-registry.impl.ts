@@ -5,10 +5,10 @@ import { Supply } from '@proc7ts/supply';
 import { BootstrapContext, ComponentClass } from '@wesib/wesib';
 import { Share } from './share';
 
-const ShareRegistry$perContext: CxEntry.Definer<ShareRegistry> = (/*#__PURE__*/ cxScoped(
-    BootstrapContext,
-    cxEvaluated(target => new ShareRegistry(target.get(NamespaceAliaser))),
-));
+const ShareRegistry$perContext: CxEntry.Definer<ShareRegistry> = /*#__PURE__*/ cxScoped(
+  BootstrapContext,
+  cxEvaluated(target => new ShareRegistry(target.get(NamespaceAliaser))),
+);
 
 export class ShareRegistry {
 
@@ -22,16 +22,14 @@ export class ShareRegistry {
 
   private readonly _sharers = new Map<Share<unknown>, ValueTracker<Sharers>>();
 
-  constructor(readonly nsAlias: NamespaceAliaser) {
-  }
+  constructor(readonly nsAlias: NamespaceAliaser) {}
 
   addSharer(
-      share: Share<unknown>,
-      componentType: ComponentClass,
-      elementName: string | undefined,
-      supply: Supply,
+    share: Share<unknown>,
+    componentType: ComponentClass,
+    elementName: string | undefined,
+    supply: Supply,
   ): void {
-
     let sharers = this._sharers.get(share);
 
     if (!sharers) {
@@ -47,7 +45,6 @@ export class ShareRegistry {
   }
 
   sharers(share: Share<unknown>): ValueTracker<Sharers> {
-
     let sharers = this._sharers.get(share);
 
     if (!sharers) {
@@ -61,10 +58,8 @@ export class ShareRegistry {
 }
 
 export interface Sharers {
-
   readonly names: Map<string, number>;
   readonly sharers: Map<ComponentClass, number>;
-
 }
 
 function Sharers$new(): ValueTracker<Sharers> {
@@ -72,9 +67,9 @@ function Sharers$new(): ValueTracker<Sharers> {
 }
 
 function Sharers$addName(
-    tracker: ValueTracker<Sharers>,
-    name: string | undefined,
-    supply: Supply,
+  tracker: ValueTracker<Sharers>,
+  name: string | undefined,
+  supply: Supply,
 ): void {
   if (!name) {
     return;
@@ -85,7 +80,6 @@ function Sharers$addName(
 
   sharers.names.set(name, counter + 1);
   supply.whenOff(() => {
-
     const counter = sharers.names.get(name)! - 1;
 
     if (counter > 0) {
@@ -99,17 +93,15 @@ function Sharers$addName(
 }
 
 function Sharers$addSharer(
-    tracker: ValueTracker<Sharers>,
-    componentType: ComponentClass,
-    supply: Supply,
+  tracker: ValueTracker<Sharers>,
+  componentType: ComponentClass,
+  supply: Supply,
 ): void {
-
   const sharers = tracker.it;
   const counter = sharers.sharers.get(componentType) || 0;
 
   sharers.sharers.set(componentType, counter + 1);
   supply.whenOff(() => {
-
     const counter = sharers.sharers.get(componentType)! - 1;
 
     if (counter > 0) {

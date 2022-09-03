@@ -17,13 +17,12 @@ import { cxFetchAgent } from './fetch-agent.entry';
  * {@link HttpFetch} call.
  */
 export type HttpFetchAgent = (
-    this: void,
-    next: (this: void, request?: Request) => OnEvent<[Response]>,
-    request: Request,
+  this: void,
+  next: (this: void, request?: Request) => OnEvent<[Response]>,
+  request: Request,
 ) => EventSender<[Response]>;
 
 export namespace HttpFetchAgent {
-
   /**
    * Combined HTTP fetch agent signature.
    *
@@ -36,11 +35,10 @@ export namespace HttpFetchAgent {
    * @returns An `OnEvent` sender of response object(s) receivers. It is returned as a result of {@link HttpFetch} call.
    */
   export type Combined = (
-      this: void,
-      next: (this: void, request: Request) => OnEvent<[Response]>,
-      request: Request,
+    this: void,
+    next: (this: void, request: Request) => OnEvent<[Response]>,
+    request: Request,
   ) => OnEvent<[Response]>;
-
 }
 
 /**
@@ -49,6 +47,6 @@ export namespace HttpFetchAgent {
  * The agent returned combines all registered agents into one. If no agent registered it just performs the fetch.
  */
 export const HttpFetchAgent: CxEntry<HttpFetchAgent.Combined, HttpFetchAgent> = {
-  perContext: (/*#__PURE__*/ cxFetchAgent()),
+  perContext: /*#__PURE__*/ cxFetchAgent(),
   toString: () => '[HttpFetchAgent]',
 };

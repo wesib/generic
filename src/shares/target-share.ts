@@ -6,7 +6,6 @@ import { ShareRef } from './share-ref';
  * @typeParam T - Shared value type.
  */
 export interface TargetShare<T> {
-
   /**
    * Target component share reference.
    */
@@ -19,5 +18,4 @@ export interface TargetShare<T> {
    * - `false` (by default) to make the value available to nested components too.
    */
   readonly local?: boolean | undefined;
-
 }

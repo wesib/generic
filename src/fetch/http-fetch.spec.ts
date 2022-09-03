@@ -10,7 +10,6 @@ import { HttpFetch } from './http-fetch';
 import { HttpFetchAgent } from './http-fetch-agent';
 
 describe('fetch', () => {
-
   let mockWindow: MockObject<BootstrapWindow>;
   let request: RequestInfo;
   let init: RequestInit | undefined;
@@ -44,7 +43,6 @@ describe('fetch', () => {
   });
 
   describe('HttpFetch', () => {
-
     let httpFetch: HttpFetch;
 
     beforeEach(() => {
@@ -58,7 +56,6 @@ describe('fetch', () => {
       expect(`${HttpFetch}`).toBe('[HttpFetch]');
     });
     it('fetches using `fetch()`', async () => {
-
       const receiver = jest.fn();
       const done = jest.fn();
       const supply = await fetch(receiver, done);
@@ -74,7 +71,6 @@ describe('fetch', () => {
       expect(mockWindow.fetch).toHaveBeenCalledWith(new Request(request, init));
     });
     it('respects agent modification', async () => {
-
       const request2 = new Request('http://localhost/test2');
 
       mockAgent.mockImplementation(next => next(request2));
@@ -84,7 +80,6 @@ describe('fetch', () => {
       expect(mockWindow.fetch).toHaveBeenCalledWith(request2);
     });
     it('reports error when fetch fails', async () => {
-
       const receiver = jest.fn();
       const done = jest.fn();
       const error = new Error('Some error');
@@ -99,7 +94,6 @@ describe('fetch', () => {
     });
 
     describe('abort signal', () => {
-
       let target: HTMLElement;
       let AbortControllerSpy: SpyInstance<() => AbortController>;
       let abortController: AbortController;
@@ -126,16 +120,18 @@ describe('fetch', () => {
 
       it('applies abort controller', async () => {
         await fetch();
-        expect(mockWindow.fetch)
-            .toHaveBeenCalledWith(new Request(request, { ...init, signal: abortController.signal }));
+        expect(mockWindow.fetch).toHaveBeenCalledWith(
+          new Request(request, { ...init, signal: abortController.signal }),
+        );
       });
       it('applies abort controller to absent init options', async () => {
         init = undefined;
         await fetch();
-        expect(mockWindow.fetch).toHaveBeenCalledWith(new Request(request, { signal: abortController.signal }));
+        expect(mockWindow.fetch).toHaveBeenCalledWith(
+          new Request(request, { signal: abortController.signal }),
+        );
       });
       it('supply cut off aborts the fetch', () => {
-
         const receiver = jest.fn();
         const done = jest.fn();
         const supply = httpFetch(request, init)(receiver).whenOff(done);
@@ -149,7 +145,6 @@ describe('fetch', () => {
         expect(abortSpy).not.toHaveBeenCalled();
       });
       it('does not abort controller when supply cut off after fetch completed', async () => {
-
         const supply = await fetch();
 
         supply.off();
@@ -186,11 +181,10 @@ describe('fetch', () => {
     });
 
     function fetch(
-        receiver: EventReceiver<[Response]> = noop,
-        done: (reason?: unknown) => void = noop,
+      receiver: EventReceiver<[Response]> = noop,
+      done: (reason?: unknown) => void = noop,
     ): Promise<Supply> {
       return new Promise<Supply>(resolve => {
-
         const supply = httpFetch(request, init)(receiver);
 
         supply.whenOff(reason => {
@@ -200,5 +194,4 @@ describe('fetch', () => {
       });
     }
   });
-
 });

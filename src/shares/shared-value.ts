@@ -8,7 +8,7 @@ import { ShareRef } from './share-ref';
  * A key of the {@link SharedValue.Detailed detailed shared value descriptor} containing the
  * {@link SharedValue.Details shared value details}.
  */
-export const SharedValue__symbol = (/*#__PURE__*/ Symbol('SharedValue'));
+export const SharedValue__symbol = /*#__PURE__*/ Symbol('SharedValue');
 
 /**
  * A value shared by component.
@@ -20,14 +20,12 @@ export const SharedValue__symbol = (/*#__PURE__*/ Symbol('SharedValue'));
 export type SharedValue<T> = T | SharedValue.Detailed<T>;
 
 export namespace SharedValue {
-
   /**
    * Value sharing options.
    *
    * Declare availability of the shared value.
    */
   export interface Options {
-
     /**
      * The name of the element the sharer component is bound to. Defaults to component's element name.
      *
@@ -42,7 +40,6 @@ export namespace SharedValue {
      * - `false` (by default) to make the value available to nested components too.
      */
     readonly local?: boolean | undefined;
-
   }
 
   /**
@@ -51,19 +48,16 @@ export namespace SharedValue {
    * @typeParam T - Shared value type.
    */
   export interface Detailed<T> {
-
     /**
      * Shared value details.
      */
     readonly [SharedValue__symbol]: Details<T>;
-
   }
 
   /**
    * Details of the shared value.
    */
   export interface Details<T> {
-
     /**
      * A priority of the shared value.
      *
@@ -76,7 +70,6 @@ export namespace SharedValue {
      * Shared value.
      */
     readonly value: T;
-
   }
 
   /**
@@ -87,7 +80,6 @@ export namespace SharedValue {
    * @typeParam T - Shared value type.
    */
   export interface Registrar<T> extends SupplyPeer {
-
     /**
      * The default priority of the shared value.
      *
@@ -118,7 +110,6 @@ export namespace SharedValue {
      * @returns New registrar instance with {@link priority} set to the given value.
      */
     withPriority(this: void, priority: number): Registrar<T>;
-
   }
 
   /**
@@ -130,7 +121,6 @@ export namespace SharedValue {
    * @typeParam T - Shared value type.
    */
   export interface Provider<T, TSharer extends object = any> {
-
     /**
      * The default priority of the shared value.
      *
@@ -156,13 +146,10 @@ export namespace SharedValue {
      * @returns Either a shared value, or its `AfterEvent` keeper.
      */
     provide<TComponent extends TSharer>(target: Share.Target<T, TComponent>): T | AfterEvent<[T?]>;
-
   }
-
 }
 
 export const SharedValue = {
-
   /**
    * Checks whether the given value shared by component is has details.
    *
@@ -171,13 +158,11 @@ export const SharedValue = {
    *
    * @returns `true` if the given value is an object implementing a {@link SharedValue.Detailed} interface.
    */
-  hasDetails<T>(
-      this: void,
-      value: SharedValue<T>,
-  ): value is SharedValue.Detailed<T> {
-    return !!value
-        && typeof value === 'object'
-        && typeof (value as SharedValue.Detailed<T>)[SharedValue__symbol] === 'object';
+  hasDetails<T>(this: void, value: SharedValue<T>): value is SharedValue.Detailed<T> {
+    return (
+      !!value
+      && typeof value === 'object'
+      && typeof (value as SharedValue.Detailed<T>)[SharedValue__symbol] === 'object'
+    );
   },
-
 };

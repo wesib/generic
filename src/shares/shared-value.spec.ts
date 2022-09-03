@@ -24,7 +24,6 @@ describe('shares', () => {
         expect(SharedValue.hasDetails({ [SharedValue__symbol]: 1 })).toBe(false);
       });
       it('returns `true` for detailed shared value', () => {
-
         const value: SharedValue.Detailed<string> = {
           [SharedValue__symbol]: {
             priority: 1,

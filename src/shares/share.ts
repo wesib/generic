@@ -14,7 +14,13 @@ import {
   translateAfter_,
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/supply';
-import { BootstrapContext, ComponentContext, ComponentElement, ComponentSlot, DefinitionContext } from '@wesib/wesib';
+import {
+  BootstrapContext,
+  ComponentContext,
+  ComponentElement,
+  ComponentSlot,
+  DefinitionContext,
+} from '@wesib/wesib';
 import { ShareLocator } from './share-locator';
 import { ShareRef } from './share-ref';
 import { ShareRegistry } from './share-registry.impl';
@@ -74,7 +80,6 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
   }
 
   perContext(target: Share.Target<T>): Share.Definition<T> {
-
     const track: () => AfterEvent<[T?]> = target.lazy(target => Share$track(this, target));
 
     return {
@@ -105,9 +110,7 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
    *
    * @return A builder of shared value for component context.
    */
-  shareValue(
-      registrar: SharedValue.Registrar<T>,
-  ): void {
+  shareValue(registrar: SharedValue.Registrar<T>): void {
     this[Share$impl__symbol].shareValue(registrar);
   }
 
@@ -121,11 +124,12 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
    * @returns New shared value registrar.
    */
   createRegistrar<TSharer extends object>(
-      target: CxEntry.Target<
-          AfterEvent<[T?]>,
-          SharedValue<T> | AfterEvent<SharedValue<T>[]>,
-          ComponentContext<TSharer>>,
-      provider: SharedValue.Provider<T, TSharer>,
+    target: CxEntry.Target<
+      AfterEvent<[T?]>,
+      SharedValue<T> | AfterEvent<SharedValue<T>[]>,
+      ComponentContext<TSharer>
+    >,
+    provider: SharedValue.Provider<T, TSharer>,
   ): SharedValue.Registrar<T> {
     return SharedValue$Registrar(target, provider);
   }
@@ -142,48 +146,44 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
    * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
   valueFor(
-      consumer: ComponentContext,
-      options: ShareLocator.Options = {},
+    consumer: ComponentContext,
+    options: ShareLocator.Options = {},
   ): AfterEvent<[T, ComponentContext] | []> {
-
     const { host = nodeHost, local } = options;
     const sharers = consumer.get(BootstrapContext).get(ShareRegistry).sharers(this);
     const status = consumer.readStatus.do(
-        deduplicateAfter_(
-            (a, b) => a === b,
-            Share$consumerStatus,
-        ),
+      deduplicateAfter_((a, b) => a === b, Share$consumerStatus),
     );
 
     return afterAll({
       sharers,
       status,
     }).do(
-        digAfter_(({ sharers: [sharers] }): AfterEvent<[T, ComponentContext] | []> => {
-          if (local) {
-            if (sharers.sharers.has(consumer.componentType)) {
-              return Share$sharedValue(this, consumer);
-            }
-            if (local === true) {
-              return afterThe();
-            }
+      digAfter_(({ sharers: [sharers] }): AfterEvent<[T, ComponentContext] | []> => {
+        if (local) {
+          if (sharers.sharers.has(consumer.componentType)) {
+            return Share$sharedValue(this, consumer);
+          }
+          if (local === true) {
+            return afterThe();
+          }
+        }
+
+        let element: ComponentElement | undefined = host(consumer.element as Element);
+
+        while (element) {
+          if (sharers.names.has(element.tagName.toLowerCase())) {
+            return ComponentSlot.of(element).read.do(
+              digAfter_(sharer => (sharer ? Share$sharedValue(this, sharer) : afterThe())),
+            );
           }
 
-          let element: ComponentElement | undefined = host(consumer.element as Element);
+          element = host(element);
+        }
 
-          while (element) {
-            if (sharers.names.has(element.tagName.toLowerCase())) {
-              return ComponentSlot.of(element).read.do(
-                  digAfter_(sharer => sharer ? Share$sharedValue(this, sharer) : afterThe()),
-              );
-            }
-
-            element = host(element);
-          }
-
-          return afterThe();
-        }),
-        deduplicateAfter(),
+        return afterThe();
+      }),
+      deduplicateAfter(),
     );
   }
 
@@ -205,11 +205,9 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
    * @returns Either selected value, or `undefined` when not present.
    */
   selectValue(...values: SharedValue<T>[]): T | undefined {
-
     let selected: SharedValue.Details<T> | undefined;
 
     for (let i = values.length - 1; i >= 0; --i) {
-
       const value = values[i];
 
       if (!SharedValue.hasDetails(value)) {
@@ -233,14 +231,12 @@ export class Share<T> implements ShareRef<T>, CxEntry<AfterEvent<[T?]>, SharedVa
 }
 
 export namespace Share {
-
   /**
    * {@link Share Component share} options.
    *
    * @typeParam T - Shared value type.
    */
   export interface Options<T> {
-
     /**
      * Component share reference(s) the share provides a value for in addition to the one it provides for itself.
      *
@@ -248,7 +244,6 @@ export namespace Share {
      * value shared for the corresponding share.
      */
     readonly as?: ShareRef<T> | readonly ShareRef<T>[] | undefined;
-
   }
 
   /**
@@ -257,8 +252,11 @@ export namespace Share {
    * @typeParam T - Shared value type.
    * @typeParam TSharer - Sharer component type.
    */
-  export type Target<T, TSharer extends object = any> =
-      CxEntry.Target<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>>;
+  export type Target<T, TSharer extends object = any> = CxEntry.Target<
+    AfterEvent<[T?]>,
+    SharedValue<T>,
+    ComponentContext<TSharer>
+  >;
 
   /**
    * Shared value definition.
@@ -266,30 +264,28 @@ export namespace Share {
    * @typeParam T - Shared value type.
    */
   export type Definition<T> = CxEntry.Definition<AfterEvent<[T?]>>;
-
 }
 
 function Share$track<T>(share: Share<T>, target: Share.Target<T>): AfterEvent<[T?]> {
-
   const shared = afterEventBy<SharedValue<T>[]>(receiver => {
-
     const dispatch = sendEventsTo(receiver);
 
-    target.trackAssetList(assetList => dispatch(...assetList.flatMap(provided => {
+    target.trackAssetList(assetList => dispatch(
+        ...assetList.flatMap(provided => {
+          const assets: SharedValue<T>[] = [];
 
-      const assets: SharedValue<T>[] = [];
+          provided.eachAsset((asset: SharedValue<T>) => {
+            assets.push(asset);
+          });
 
-      provided.eachAsset((asset: SharedValue<T>) => {
-        assets.push(asset);
-      });
-
-      return assets;
-    })));
+          return assets;
+        }),
+      ));
   });
 
   return shared.do(
-      mapAfter_((...values: SharedValue<T>[]) => share.selectValue(...values)),
-      supplyAfter(target.supply),
+    mapAfter_((...values: SharedValue<T>[]) => share.selectValue(...values)),
+    supplyAfter(target.supply),
   );
 }
 
@@ -298,10 +294,10 @@ function Share$consumerStatus([{ settled, connected }]: [ComponentContext]): 0 |
 }
 
 function Share$sharedValue<T>(
-    share: Share<T>,
-    sharer: ComponentContext,
+  share: Share<T>,
+  sharer: ComponentContext,
 ): AfterEvent<[T, ComponentContext] | []> {
-  return sharer.get(share).do(
-      translateAfter_((send, value?) => value ? send(value, sharer) : send()),
-  );
+  return sharer
+    .get(share)
+    .do(translateAfter_((send, value?) => (value ? send(value, sharer) : send())));
 }

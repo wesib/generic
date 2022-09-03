@@ -19,7 +19,6 @@ import { SharedValue$ContextBuilder } from './shared-value.impl';
 
 describe('shares', () => {
   describe('Share', () => {
-
     let doc: Document;
 
     beforeEach(() => {
@@ -45,16 +44,13 @@ describe('shares', () => {
     });
 
     describe('addSharer', () => {
-
       let bsContext: BootstrapContext;
       let defContext: DefinitionContext;
       let registry: ShareRegistry;
 
       beforeEach(async () => {
-
         @Component('test-component')
-        class TestComponent {
-        }
+        class TestComponent {}
 
         defContext = await testDefinition(TestComponent);
         bsContext = defContext.get(BootstrapContext);
@@ -62,7 +58,6 @@ describe('shares', () => {
       });
 
       it('registers sharer', () => {
-
         const supply = share.addSharer(defContext);
 
         expect(sharerNames(share)).toEqual(['test-component']);
@@ -71,7 +66,6 @@ describe('shares', () => {
         expect(sharerNames(share)).toHaveLength(0);
       });
       it('registers sharer for aliased shares', () => {
-
         const share2 = new Share('other-share', { as: share });
         const supply = share2.addSharer(defContext);
 
@@ -89,7 +83,6 @@ describe('shares', () => {
     });
 
     describe('shareValue', () => {
-
       let share2: Share<string>;
 
       beforeEach(() => {
@@ -100,13 +93,11 @@ describe('shares', () => {
       let context: ComponentContext;
 
       beforeEach(async () => {
-
         @Component({
           name: 'test-component',
           extend: { type: MockElement },
         })
-        class TestComponent {
-        }
+        class TestComponent {}
 
         const element: ComponentElement = new (await testElement(TestComponent))();
 
@@ -122,7 +113,6 @@ describe('shares', () => {
         expect(await context.get(share)).toBe('test');
       });
       it('shares updatable value', async () => {
-
         const value = trackValue('test1');
 
         defContext.perComponent(shareValue(share, () => value.read));
@@ -137,7 +127,6 @@ describe('shares', () => {
         expect(await context.get(share2)).toBe('test');
       });
       it('shares updatable value for aliased shares', async () => {
-
         const value = trackValue('test1');
 
         defContext.perComponent(shareValue(share2, () => value.read));
@@ -151,7 +140,6 @@ describe('shares', () => {
     });
 
     describe('selectValue', () => {
-
       let share2: Share<string>;
       let share3: Share<string>;
 
@@ -164,13 +152,11 @@ describe('shares', () => {
       let context: ComponentContext;
 
       beforeEach(async () => {
-
         @Component({
           name: 'test-component',
           extend: { type: MockElement },
         })
-        class TestComponent {
-        }
+        class TestComponent {}
 
         const element: ComponentElement = new (await testElement(TestComponent))();
 
@@ -179,7 +165,6 @@ describe('shares', () => {
       });
 
       it('prefers explicitly shared value', async () => {
-
         const value1 = trackValue('test1');
         const value2 = trackValue('test2');
 
@@ -197,7 +182,6 @@ describe('shares', () => {
         expect(await context.get(share2)).toBe('test2b');
       });
       it('prefers bare value despite the order of sharing', async () => {
-
         const value1 = trackValue('test1');
         const value2 = trackValue('test2');
 
@@ -215,7 +199,6 @@ describe('shares', () => {
         expect(await context.get(share2)).toBe('test2b');
       });
       it('prefers detailed value with lower priority', async () => {
-
         const value1 = trackValue('test1');
         const value2 = trackValue('test2');
 
@@ -230,7 +213,6 @@ describe('shares', () => {
         expect(await context.get(share)).toBe('test1b');
       });
       it('prefers shared value with earlier aliasing order', async () => {
-
         const value2 = trackValue('test2');
         const value3 = trackValue('test3');
 
@@ -251,7 +233,6 @@ describe('shares', () => {
         expect(await context.get(share3)).toBe('test3b');
       });
       it('prefers shared value with earlier aliasing order despite the order of sharing', async () => {
-
         const value2 = trackValue('test2');
         const value3 = trackValue('test3');
 
@@ -274,20 +255,17 @@ describe('shares', () => {
     });
 
     describe('valueFor', () => {
-
       let sharerDefContext: DefinitionContext;
       let testDefContext: DefinitionContext;
 
       beforeEach(async () => {
-
         @Component({
           extend: { type: MockElement },
           define(defContext) {
             testDefContext = defContext;
           },
         })
-        class TestComponent {
-        }
+        class TestComponent {}
 
         @Component({
           extend: { type: MockElement },
@@ -295,8 +273,7 @@ describe('shares', () => {
             needs: TestComponent,
           },
         })
-        class SharerComponent {
-        }
+        class SharerComponent {}
 
         sharerDefContext = await testDefinition(SharerComponent);
       });
@@ -406,17 +383,13 @@ describe('shares', () => {
   });
 
   function shareValue<T, TSharer extends object = any>(
-      share: Share<T>,
-      provide: <TCtx extends TSharer>(target: Share.Target<T, TCtx>) => T | AfterEvent<[T?]>,
-      priority?: number,
+    share: Share<T>,
+    provide: <TCtx extends TSharer>(target: Share.Target<T, TCtx>) => T | AfterEvent<[T?]>,
+    priority?: number,
   ): CxAsset<AfterEvent<[T?]>, SharedValue<T>, ComponentContext<TSharer>> {
-    return SharedValue$ContextBuilder<T, TSharer>(
-        share,
-        {
-          priority,
-          provide,
-        },
-    );
+    return SharedValue$ContextBuilder<T, TSharer>(share, {
+      priority,
+      provide,
+    });
   }
-
 });

@@ -1,6 +1,10 @@
 import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf, drekReplacer } from '@frontmeans/drek';
-import { PreRenderScheduler, queuedRenderScheduler, RenderScheduler } from '@frontmeans/render-scheduler';
+import {
+  PreRenderScheduler,
+  queuedRenderScheduler,
+  RenderScheduler,
+} from '@frontmeans/render-scheduler';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { cxConstAsset } from '@proc7ts/context-builder';
 import { Class } from '@proc7ts/primitives';
@@ -14,7 +18,6 @@ import { RenderFragment } from './render-fragment.amendment';
 
 describe('fragment', () => {
   describe('@RenderFragment', () => {
-
     let doc: Document;
     let element: Element;
 
@@ -64,7 +67,6 @@ describe('fragment', () => {
       expect(end.textContent).toBe(' ]] Fragment ]] ');
     });
     it('re-renders fragment on state update', async () => {
-
       let counter = 0;
 
       render.mockImplementation(({ content }) => {
@@ -81,7 +83,6 @@ describe('fragment', () => {
 
     describe('{ settle: false }', () => {
       it('does not upgrade custom elements', async () => {
-
         const upgradeSpy = jest.spyOn(nodeWindow(doc).customElements, 'upgrade');
 
         await bootstrap({ settle: false });
@@ -89,7 +90,6 @@ describe('fragment', () => {
         expect(upgradeSpy).not.toHaveBeenCalled();
       });
       it('settles content when it is placed to document', async () => {
-
         const whenSettled = jest.fn();
 
         render.mockImplementation(({ content }) => {
@@ -104,7 +104,6 @@ describe('fragment', () => {
 
     describe('done', () => {
       it('prevents fragment re-rendering', async () => {
-
         let counter = 0;
 
         render.mockImplementation(({ content, done }) => {
@@ -123,7 +122,6 @@ describe('fragment', () => {
 
     describe('renderBy', () => {
       it('delegates to another renderer', async () => {
-
         const delegate = jest.fn();
         let counter = 0;
 
@@ -186,7 +184,6 @@ describe('fragment', () => {
 
     describe('postpone', () => {
       it('postpones renderer', async () => {
-
         const postponed = jest.fn();
         let counter = 0;
 
@@ -208,7 +205,6 @@ describe('fragment', () => {
 
     describe('supply', () => {
       it('prevents re-rendering when cut off', async () => {
-
         let counter = 0;
         let fragmentSupply!: Supply;
 
@@ -229,14 +225,12 @@ describe('fragment', () => {
     });
 
     async function bootstrap(
-        def?: RenderFragmentDef,
-        key: 'renderFragment' | 'custom' = 'renderFragment',
+      def?: RenderFragmentDef,
+      key: 'renderFragment' | 'custom' = 'renderFragment',
     ): Promise<ComponentContext> {
-
       let testComponent: Class;
 
       if (key === 'renderFragment') {
-
         @Component({
           feature: {
             setup(setup) {
@@ -250,11 +244,10 @@ describe('fragment', () => {
           @RenderFragment(def)
           readonly renderFragment = render;
 
-        }
+}
 
         testComponent = TestComponent;
       } else {
-
         @Component({
           feature: {
             setup(setup) {
@@ -268,7 +261,7 @@ describe('fragment', () => {
           @RenderFragment(def)
           readonly custom = render;
 
-        }
+}
 
         testComponent = TestComponent;
       }
@@ -278,5 +271,4 @@ describe('fragment', () => {
       return defContext.mountTo(element);
     }
   });
-
 });

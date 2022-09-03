@@ -22,35 +22,33 @@ import { HttpFetchAgent } from './http-fetch-agent';
  * An instance of {@link HttpFetch} is available from bootstrap context.
  */
 export type HttpFetch =
-/**
- * @param input - The resource to fetch. This can either an URL string, or a `Request` object.
- * @param init - Custom settings to apply to the request.
- *
- * @returns An `OnEvent` sender of responses.
- */
-    (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>;
+  /**
+   * @param input - The resource to fetch. This can either an URL string, or a `Request` object.
+   * @param init - Custom settings to apply to the request.
+   *
+   * @returns An `OnEvent` sender of responses.
+   */
+  (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>;
 
 /**
  * Bootstrap context entity containing an {@link HttpFetch} instance.
  */
 export const HttpFetch: CxEntry<HttpFetch> = {
-  perContext: (/*#__PURE__*/ cxRecent<HttpFetch, HttpFetch, HttpFetch>({
+  perContext: /*#__PURE__*/ cxRecent<HttpFetch, HttpFetch, HttpFetch>({
     create: asis,
     byDefault: HttpFetch$byDefault,
     assign: ({ get, to }) => {
-
       const fetch: HttpFetch = (input, init) => get()(input, init);
 
       return receiver => to((_, by) => receiver(fetch, by));
     },
-  })),
+  }),
   toString: () => '[HttpFetch]',
 };
 
 const HttpFetchAborted = {};
 
 function HttpFetch$byDefault(target: CxEntry.Target<HttpFetch>): HttpFetch {
-
   const window = target.get(CxWindow);
   const agent = target.get(HttpFetchAgent);
 
@@ -58,12 +56,10 @@ function HttpFetch$byDefault(target: CxEntry.Target<HttpFetch>): HttpFetch {
 
   function fetch(request: Request): OnEvent<[Response]> {
     return onEventBy(receiver => {
-
       const responseEmitter = new EventEmitter<[Response]>();
       let supply: Supply;
 
       if ('AbortController' in window) {
-
         const abortController = new window.AbortController();
         const { signal } = abortController;
 
@@ -83,11 +79,7 @@ function HttpFetch$byDefault(target: CxEntry.Target<HttpFetch>): HttpFetch {
         const customSignal = request.signal;
 
         if (customSignal) {
-          new DomEventDispatcher(customSignal)
-              .on('abort')
-              .do(onceOn)(
-                  () => abortController.abort(),
-              );
+          new DomEventDispatcher(customSignal).on('abort').do(onceOn)(() => abortController.abort());
           if (customSignal.aborted) {
             abortController.abort();
           }
@@ -98,12 +90,13 @@ function HttpFetch$byDefault(target: CxEntry.Target<HttpFetch>): HttpFetch {
         supply = responseEmitter.on(receiver);
       }
 
-      window.fetch(request)
-          .then(response => {
-            responseEmitter.send(response);
-            supply.off();
-          })
-          .catch(reason => supply.off(reason));
+      window
+        .fetch(request)
+        .then(response => {
+          responseEmitter.send(response);
+          supply.off();
+        })
+        .catch(reason => supply.off(reason));
     });
   }
 }

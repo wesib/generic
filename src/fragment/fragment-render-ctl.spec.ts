@@ -1,6 +1,10 @@
 import { nodeWindow } from '@frontmeans/dom-primitives';
 import { drekContextOf } from '@frontmeans/drek';
-import { PreRenderScheduler, queuedRenderScheduler, RenderScheduler } from '@frontmeans/render-scheduler';
+import {
+  PreRenderScheduler,
+  queuedRenderScheduler,
+  RenderScheduler,
+} from '@frontmeans/render-scheduler';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { cxConstAsset } from '@proc7ts/context-builder';
 import { EventEmitter } from '@proc7ts/fun-events';
@@ -12,7 +16,6 @@ import { FragmentRenderCtl } from './fragment-render-ctl';
 
 describe('fragment', () => {
   describe('FragmentRenderCtl', () => {
-
     let doc: Document;
     let element: Element;
 
@@ -41,8 +44,7 @@ describe('fragment', () => {
           },
         },
       })
-      class TestComponent {
-      }
+      class TestComponent {}
 
       const defContext = await testDefinition(TestComponent);
 
@@ -52,15 +54,14 @@ describe('fragment', () => {
 
     describe('renderFragmentBy', () => {
       it('re-renders fragment on state update', () => {
-
         const update = new EventEmitter();
         let counter = 0;
 
         renderCtl.renderFragmentBy(
-            ({ content }) => {
-              content.appendChild(doc.createTextNode(`test-${++counter}`));
-            },
-            { on: update },
+          ({ content }) => {
+            content.appendChild(doc.createTextNode(`test-${++counter}`));
+          },
+          { on: update },
         );
 
         expect(element.textContent).toBe('test-1');
@@ -69,7 +70,6 @@ describe('fragment', () => {
         expect(element.textContent).toBe('test-2');
       });
       it('upgrades custom elements', () => {
-
         const upgradeSpy = jest.spyOn(nodeWindow(doc).customElements, 'upgrade');
 
         renderCtl.renderFragmentBy(noop);
@@ -77,7 +77,6 @@ describe('fragment', () => {
         expect(upgradeSpy).toHaveBeenCalled();
       });
       it('settles pre-rendered content', () => {
-
         const whenSettled = jest.fn();
 
         renderCtl.renderFragmentBy(({ content }) => {

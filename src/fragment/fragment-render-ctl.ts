@@ -15,7 +15,6 @@ import { RenderFragmentDef } from './render-fragment-def';
  * Available in component context.
  */
 export interface FragmentRenderCtl {
-
   /**
    * Enables fragment rendering by the given `renderer`.
    *
@@ -27,16 +26,15 @@ export interface FragmentRenderCtl {
    * @returns Renderer supply. The rendering would stop once this supply is cut off.
    */
   renderFragmentBy(renderer: FragmentRenderer, def?: RenderFragmentDef): Supply;
-
 }
 
 /**
  * Component context entry containing {@link FragmentRenderCtl fragment render control}.
  */
 export const FragmentRenderCtl: CxEntry<FragmentRenderCtl> = {
-  perContext: (/*#__PURE__*/ cxSingle({
+  perContext: /*#__PURE__*/ cxSingle({
     byDefault: target => new FragmentRenderCtl$(target.get(ComponentContext)),
-  })),
+  }),
   toString: () => '[FragmentRenderCtl]',
 };
 
@@ -44,15 +42,12 @@ const RenderFragment$done = {};
 
 class FragmentRenderCtl$ implements FragmentRenderCtl {
 
-  constructor(private readonly _context: ComponentContext) {
-  }
+  constructor(private readonly _context: ComponentContext) {}
 
   renderFragmentBy(renderer: FragmentRenderer, def: RenderFragmentDef = {}): Supply {
-
     const spec = valueByRecipe(def, this._context);
-    const doRenderFragment = spec.settle === false
-        ? RenderFragment$justRender
-        : RenderFragment$settleThenRender;
+    const doRenderFragment =
+      spec.settle === false ? RenderFragment$justRender : RenderFragment$settleThenRender;
     const renderFragment = (fragment: DrekFragment, retainContent: boolean): void => {
       if (!retainContent) {
         doRenderFragment(fragment);
@@ -63,45 +58,42 @@ class FragmentRenderCtl$ implements FragmentRenderCtl {
     const renderCtl = this._context.get(ComponentRenderCtl);
     const scheduler = this._context.get(PreRenderScheduler);
     const supply = new Supply();
-    const renderSupply = renderCtl.preRenderBy(
-        preExec => {
+    const renderSupply = renderCtl
+      .preRenderBy(preExec => {
+        const fragment = new DrekFragment(getTarget(), { scheduler });
+        let retainContent = false;
+        const exec: FragmentRendererExecution = {
+          ...preExec,
+          supply,
+          fragment,
+          content: fragment.content,
+          postpone(postponed) {
+            preExec.postpone(() => postponed(exec));
+          },
+          renderBy(renderer) {
+            preExec.renderBy(renderExec => {
+              renderExec.renderBy(renderer);
+            });
+          },
+          retainContent(retain = true) {
+            retainContent = retain;
+          },
+          done() {
+            preExec.renderBy(({ supply }) => {
+              renderSupply.as(supply).off(RenderFragment$done);
+            });
+          },
+        };
 
-          const fragment = new DrekFragment(getTarget(), { scheduler });
-          let retainContent = false;
-          const exec: FragmentRendererExecution = {
-            ...preExec,
-            supply,
-            fragment,
-            content: fragment.content,
-            postpone(postponed) {
-              preExec.postpone(() => postponed(exec));
-            },
-            renderBy(renderer) {
-              preExec.renderBy(renderExec => {
-                renderExec.renderBy(renderer);
-              });
-            },
-            retainContent(retain = true) {
-              retainContent = retain;
-            },
-            done() {
-              preExec.renderBy(({ supply }) => {
-                renderSupply.as(supply).off(RenderFragment$done);
-              });
-            },
-          };
-
-          renderer(exec);
-          renderFragment(fragment, retainContent);
-        },
-        spec,
-    ).needs(
-        supply,
-    ).whenOff(reason => {
-      if (reason !== RenderFragment$done) {
-        supply.off(reason);
-      }
-    });
+        renderer(exec);
+        renderFragment(fragment, retainContent);
+      }, spec)
+      .needs(supply)
+      .whenOff(reason => {
+        if (reason !== RenderFragment$done) {
+          supply.off(reason);
+        }
+      });
 
     return supply;
   }
@@ -113,7 +105,6 @@ function RenderFragment$defaultTarget({ contentRoot }: ComponentContext): DrekTa
 }
 
 function RenderFragment$settleThenRender(fragment: DrekFragment): void {
-
   const { innerContext } = fragment;
   const { window } = innerContext;
 

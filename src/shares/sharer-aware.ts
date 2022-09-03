@@ -4,14 +4,12 @@ import { ComponentContext } from '@wesib/wesib';
  * An interface to implement by shared value to be aware of its sharer component.
  */
 export interface SharerAware {
-
   /**
    * Informs this shared value on its sharer component.
    *
    * @param sharer - Sharer component context.
    */
   sharedBy(sharer: ComponentContext): void;
-
 }
 
 /**
@@ -22,8 +20,10 @@ export interface SharerAware {
  * @returns `true` if `value` has {@link SharerAware.sharedBy sharedBy} method, or `false` otherwise.
  */
 export function isSharerAware(value: unknown): value is SharerAware {
-  return (typeof value === 'object' && !!value || typeof value === 'function')
-      && typeof (value as Partial<SharerAware>).sharedBy === 'function';
+  return (
+    ((typeof value === 'object' && !!value) || typeof value === 'function')
+    && typeof (value as Partial<SharerAware>).sharedBy === 'function'
+  );
 }
 
 /**

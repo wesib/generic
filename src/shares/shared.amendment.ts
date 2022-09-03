@@ -30,8 +30,7 @@ import { TargetShare } from './target-share';
  * @typeParam TClass - Amended component class type.
  */
 export interface AeShared<T, TClass extends ComponentClass = Class>
-    extends AeComponentMember<T | undefined, TClass> {
-
+  extends AeComponentMember<T | undefined, TClass> {
   /**
    * Target share instance.
    */
@@ -55,7 +54,6 @@ export interface AeShared<T, TClass extends ComponentClass = Class>
    * @returns An `AfterEvent` keeper of shared value.
    */
   getShared(this: void, component: InstanceType<TClass>): AfterEvent<[T?]>;
-
 }
 
 /**
@@ -68,10 +66,17 @@ export interface AeShared<T, TClass extends ComponentClass = Class>
  * @typeParam TAmended - Amended shared member entity type.
  */
 export type SharedAmendment<
-    T,
-    TClass extends ComponentClass = Class,
-    TAmended extends AeShared<T, TClass> = AeShared<T, TClass>> =
-    MemberAmendment.ForBase<AeClass<TClass>, AeShared<T, TClass>, T | undefined, TClass, T | undefined, TAmended>;
+  T,
+  TClass extends ComponentClass = Class,
+  TAmended extends AeShared<T, TClass> = AeShared<T, TClass>,
+> = MemberAmendment.ForBase<
+  AeClass<TClass>,
+  AeShared<T, TClass>,
+  T | undefined,
+  TClass,
+  T | undefined,
+  TAmended
+>;
 
 /**
  * Creates an amendment (and decorator) of component member that {@link Share shares} its value.
@@ -86,17 +91,19 @@ export type SharedAmendment<
  * @returns New shared member amendment.
  */
 export function Shared<
-    T,
-    TClass extends ComponentClass = Class,
-    TAmended extends AeShared<T, TClass> = AeShared<T, TClass>>(
-    share: TargetShare<T>,
-    ...amendments: Amendment<TAmended>[]
+  T,
+  TClass extends ComponentClass = Class,
+  TAmended extends AeShared<T, TClass> = AeShared<T, TClass>,
+>(
+  share: TargetShare<T>,
+  ...amendments: Amendment<TAmended>[]
 ): SharedAmendment<T, TClass, TAmended> {
-
-  const { share: { share: share$default }, local: localShare$default = false } = share;
+  const {
+    share: { share: share$default },
+    local: localShare$default = false,
+  } = share;
 
   return ComponentMember<T | undefined, TClass, T | undefined, TAmended>(baseTarget => {
-
     const accessorKey = Symbol(`${String(baseTarget.key)}:shared`);
 
     type Component = ComponentInstance<InstanceType<TClass>> & {
@@ -104,30 +111,32 @@ export function Shared<
     };
 
     let lastTarget: AeComponentMember<T | undefined, TClass> = baseTarget;
-    const accessorOf = (component: Component): ShareAccessor<T, TClass> => component[accessorKey]
-        || (component[accessorKey] = new ShareAccessor(lastTarget, component));
+    const accessorOf = (component: Component): ShareAccessor<T, TClass> => {
+      if (!component[accessorKey]) {
+        component[accessorKey] = new ShareAccessor(lastTarget, component);
+      }
+
+      return component[accessorKey];
+    };
     const getShared = (component: InstanceType<TClass>): AfterEvent<[T?]> => accessorOf(component).val.read;
 
     const lastAmender = (target: AmendTarget<AeShared<T, TClass>>): void => {
       lastTarget = target;
       target.amend({
         get: component => accessorOf(component).get(),
-        set: target.writable
-            ? (component, value) => accessorOf(component).set(value)
-            : undefined,
+        set: target.writable ? (component, value) => accessorOf(component).set(value) : undefined,
         componentDef: {
           setup(setup: DefinitionSetup<Component>): void {
-            setup.perComponent(SharedValue$ContextBuilder(
-                target.share,
-                {
-                  provide: ({ context }: Share.Target<T>) => context.onceReady.do(
-                      digAfter_(
-                          ({ component }: ComponentContext<Component>) => accessorOf(component).val,
-                          valueProvider<[T?]>([]),
-                      ),
+            setup.perComponent(
+              SharedValue$ContextBuilder(target.share, {
+                provide: ({ context }: Share.Target<T>) => context.onceReady.do(
+                    digAfter_(
+                      ({ component }: ComponentContext<Component>) => accessorOf(component).val,
+                      valueProvider<[T?]>([]),
+                    ),
                   ),
-                },
-            ));
+              }),
+            );
           },
           define(defContext: DefinitionContext<InstanceType<TClass>>) {
             target.share.addSharer(defContext, { local: target.localShare });
@@ -136,34 +145,35 @@ export function Shared<
       });
     };
 
-    allAmender([...amendments, lastAmender])(newAmendTarget({
-      base: {
-        ...baseTarget as TAmended,
-        share: share$default,
-        localShare: localShare$default,
-        getShared,
-      },
-      amend<TBase extends TAmended, TExt>(
+    allAmender([...amendments, lastAmender])(
+      newAmendTarget({
+        base: {
+          ...(baseTarget as TAmended),
+          share: share$default,
+          localShare: localShare$default,
+          getShared,
+        },
+        amend<TBase extends TAmended, TExt>(
           base: TBase,
           request = {} as AmendRequest<TBase, TExt>,
-      ): () => AmendTarget.Draft<TBase & TExt> {
+        ): () => AmendTarget.Draft<TBase & TExt> {
+          const {
+            share = base.share,
+            localShare = base.localShare,
+            getShared: $getShared,
+            ...baseRequest
+          } = request;
 
-        const {
-          share = base.share,
-          localShare = base.localShare,
-          getShared: $getShared,
-          ...baseRequest
-        } = request;
+          const createBaseTarget = baseTarget.amend(baseRequest as AmendRequest<any>);
 
-        const createBaseTarget = baseTarget.amend(baseRequest as AmendRequest<any>);
-
-        return () => ({
-          ...createBaseTarget(),
-          share,
-          localShare,
-          getShared,
-        } as AmendTarget.Draft<TBase & TExt>);
-      },
-    }));
+          return () => ({
+              ...createBaseTarget(),
+              share,
+              localShare,
+              getShared,
+            } as AmendTarget.Draft<TBase & TExt>);
+        },
+      }),
+    );
   }) as SharedAmendment<T, TClass, TAmended>;
 }

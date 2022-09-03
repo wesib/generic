@@ -10,8 +10,9 @@ import { ComponentRenderer, ComponentRendererExecution } from '@wesib/wesib';
  *
  * @typeParam TExecution - A type of supported fragment renderer execution.
  */
-export type FragmentRenderer<TExecution extends FragmentRendererExecution = FragmentRendererExecution> =
-    ComponentRenderer<TExecution>;
+export type FragmentRenderer<
+  TExecution extends FragmentRendererExecution = FragmentRendererExecution,
+> = ComponentRenderer<TExecution>;
 
 /**
  * Component fragment renderer execution context.
@@ -19,7 +20,6 @@ export type FragmentRenderer<TExecution extends FragmentRendererExecution = Frag
  * This is passed to {@link FragmentRenderer fragment renderer} when the latter executed.
  */
 export interface FragmentRendererExecution extends ComponentRendererExecution {
-
   /**
    * Rendered fragment instance.
    */
@@ -44,5 +44,4 @@ export interface FragmentRendererExecution extends ComponentRendererExecution {
    * happen, unless a {@link renderBy} is also called.
    */
   done(this: void): void;
-
 }

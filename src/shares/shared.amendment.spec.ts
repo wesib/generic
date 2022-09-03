@@ -18,7 +18,6 @@ import { TargetShare } from './target-share';
 
 describe('shares', () => {
   describe('@Shared', () => {
-
     let doc: Document;
 
     beforeEach(() => {
@@ -32,14 +31,13 @@ describe('shares', () => {
     });
 
     it('shares static component property value', async () => {
-
       @Component({ extend: { type: MockElement } })
       class TestComponent {
 
         @Shared(share)
         sharedValue = 'test';
 
-      }
+}
 
       const element: ComponentElement = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
@@ -47,21 +45,17 @@ describe('shares', () => {
       expect(await context.get(share)).toBe('test');
     });
     it('handles component property value updates', async () => {
-
       let getShared!: (instance: TestComponent) => AfterEvent<[string?]>;
 
       @Component({ extend: { type: MockElement } })
       class TestComponent {
 
-        @Shared(
-            share,
-            ({ amend }) => {
-              getShared = amend()().getShared;
-            },
-        )
+        @Shared(share, ({ amend }) => {
+          getShared = amend()().getShared;
+        })
         sharedValue = 'test';
 
-      }
+}
 
       const element: ComponentElement<TestComponent> = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
@@ -76,29 +70,25 @@ describe('shares', () => {
       expect(context.component.sharedValue).toBe('other');
     });
     it('applies share extension', async () => {
-
       const extEntry1: CxEntry<Share<string>> = { perContext: cxSingle() };
       const extEntry2: CxEntry<ComponentClass> = { perContext: cxSingle() };
 
       @Component({ extend: { type: MockElement } })
       class TestComponent {
 
-        @Shared(
-            share,
-            ({ amendedClass, share, amend }) => amend({
-              componentDef: {
-                setup(setup) {
-                  setup.perComponent(cxConstAsset(extEntry1, share));
-                  setup.perComponent(cxConstAsset(extEntry2, amendedClass));
-                },
+        @Shared(share, ({ amendedClass, share, amend }) => amend({
+            componentDef: {
+              setup(setup) {
+                setup.perComponent(cxConstAsset(extEntry1, share));
+                setup.perComponent(cxConstAsset(extEntry2, amendedClass));
               },
-            }),
-        )
+            },
+          }))
         get sharedValue(): string {
           return 'test';
         }
 
-      }
+}
 
       const element: ComponentElement<TestComponent> = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
@@ -110,7 +100,6 @@ describe('shares', () => {
     });
 
     describe('scoping', () => {
-
       let share2: Share<string>;
 
       beforeEach(() => {
@@ -118,22 +107,23 @@ describe('shares', () => {
       });
 
       it('makes shared value available to nested component by default', async () => {
-
         const consumer = await bootstrap();
 
         expect(await share.valueFor(consumer)).toBe('outer');
         expect(await share2.valueFor(consumer)).toBe('outer2');
       });
       it('makes shared value available locally', async () => {
-
         const consumer = await bootstrap();
 
         expect(await share.valueFor(consumer, { local: 'too' })).toBe('inner');
         expect(await share.valueFor(consumer, { local: true })).toBe('inner');
       });
       it('allows to share only locally', async () => {
-
-        const consumer = await bootstrap(share, { share, local: true }, { share: share2, local: true });
+        const consumer = await bootstrap(
+          share,
+          { share, local: true },
+          { share: share2, local: true },
+        );
 
         expect(await share.valueFor(consumer)).toBeUndefined();
         expect(await share.valueFor(consumer, { local: true })).toBe('inner');
@@ -142,7 +132,6 @@ describe('shares', () => {
         expect(await share2.valueFor(consumer, { local: 'too' })).toBeUndefined();
       });
       it('allows to register sharer more than once', async () => {
-
         const consumer = await bootstrap();
         const supply = share.addSharer(consumer.get(DefinitionContext));
 
@@ -153,15 +142,11 @@ describe('shares', () => {
       });
 
       async function bootstrap(
-          innerShare: TargetShare<string> = share,
-          outerShare: TargetShare<string> = share,
-          outerShare2: TargetShare<string> = share2,
+        innerShare: TargetShare<string> = share,
+        outerShare: TargetShare<string> = share,
+        outerShare2: TargetShare<string> = share2,
       ): Promise<ComponentContext> {
-
-        @Component(
-            'outer-element',
-            { extend: { type: MockElement } },
-        )
+        @Component('outer-element', { extend: { type: MockElement } })
         class OuterComponent {
 
           @Shared(outerShare)
@@ -170,19 +155,19 @@ describe('shares', () => {
           @Shared(outerShare2)
           shared2 = 'outer2';
 
-        }
+}
 
         @Component(
-            'inner-element',
-            { extend: { type: MockElement } },
-            { feature: { needs: OuterComponent } },
+          'inner-element',
+          { extend: { type: MockElement } },
+          { feature: { needs: OuterComponent } },
         )
         class InnerComponent {
 
           @Shared(innerShare)
           shared = 'inner';
 
-        }
+}
 
         const outerElt = doc.body.appendChild(doc.createElement('outer-element'));
         const innerElt = outerElt.appendChild(doc.createElement('inner-element'));
@@ -194,7 +179,6 @@ describe('shares', () => {
 
         return innerDef.mountTo(innerElt);
       }
-
     });
   });
 });

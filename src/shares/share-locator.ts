@@ -17,10 +17,10 @@ import { ShareRef } from './share-ref';
  * @typeParam T - Shared value type.
  */
 export type ShareLocator<T> =
-    | ShareLocator.Spec<T>
-    | ShareLocator.CustomWithFallback<T>
-    | null
-    | undefined;
+  | ShareLocator.Spec<T>
+  | ShareLocator.CustomWithFallback<T>
+  | null
+  | undefined;
 
 /**
  * Converts mandatory shared value locator to locator function.
@@ -32,8 +32,8 @@ export type ShareLocator<T> =
  * @returns Shared value locator function.
  */
 export function shareLocator<T>(
-    locator: ShareLocator.Mandatory<T>,
-    defaultOptions?: ShareLocator.Options,
+  locator: ShareLocator.Mandatory<T>,
+  defaultOptions?: ShareLocator.Options,
 ): ShareLocator.Fn<T>;
 
 /**
@@ -46,20 +46,19 @@ export function shareLocator<T>(
  * @returns Shared value locator function.
  */
 export function shareLocator<T>(
-    locator: ShareLocator<T>,
-    defaultSpec: ShareLocator.MandatorySpec<T>,
+  locator: ShareLocator<T>,
+  defaultSpec: ShareLocator.MandatorySpec<T>,
 ): ShareLocator.Fn<T>;
 
 export function shareLocator<T>(
-    locator:
-        | Partial<ShareLocator.MandatorySpec<T>>
-        | ShareLocator.CustomWithFallback<T>
-        | null
-        | undefined,
-    defaultSpec: ShareLocator.Spec<T> = {},
+  locator:
+    | Partial<ShareLocator.MandatorySpec<T>>
+    | ShareLocator.CustomWithFallback<T>
+    | null
+    | undefined,
+  defaultSpec: ShareLocator.Spec<T> = {},
 ): ShareLocator.Fn<T> {
   if (isCustomShareLocator(locator)) {
-
     const {
       host: hostByDefault = nodeHost,
       local: localByDefault = false,
@@ -67,12 +66,7 @@ export function shareLocator<T>(
     } = defaultSpec;
 
     return (consumer, options = {}) => {
-
-      const {
-        share = shareByDefault!,
-        host = hostByDefault,
-        local = localByDefault,
-      } = options;
+      const { share = shareByDefault!, host = hostByDefault, local = localByDefault } = options;
 
       return locator(consumer, { share, host, local });
     };
@@ -86,23 +80,23 @@ export function shareLocator<T>(
   const share = shareRef.share;
 
   return (consumer, options = {}) => {
-
     const { host = hostByDefault, local = localByDefault } = options;
 
     return share.valueFor(consumer, { host, local });
   };
 }
 
-function isCustomShareLocator<T>(locator:
+function isCustomShareLocator<T>(
+  locator:
     | Partial<ShareLocator.MandatorySpec<T>>
     | ShareLocator.CustomWithFallback<T>
     | null
-    | undefined): locator is ShareLocator.CustomWithFallback<T> {
-  return typeof locator === 'function' && !('share' in locator as Partial<ShareLocator.Spec<T>>);
+    | undefined,
+): locator is ShareLocator.CustomWithFallback<T> {
+  return typeof locator === 'function' && !(('share' in locator) as Partial<ShareLocator.Spec<T>>);
 }
 
 export namespace ShareLocator {
-
   /**
    * Mandatory shared value locator.
    *
@@ -116,16 +110,12 @@ export namespace ShareLocator {
    *
    * @typeParam T - Shared value type.
    */
-  export type Mandatory<T> =
-      | ShareRef<T>
-      | MandatorySpec<T>
-      | Custom<T>;
+  export type Mandatory<T> = ShareRef<T> | MandatorySpec<T> | Custom<T>;
 
   /**
    * Shared value location options.
    */
   export interface Options {
-
     /**
      * Detects a host element of the given one.
      *
@@ -147,7 +137,6 @@ export namespace ShareLocator {
      * - `'too'` to start the search from consumer component.
      */
     readonly local?: boolean | 'too' | undefined;
-
   }
 
   /**
@@ -161,12 +150,10 @@ export namespace ShareLocator {
    * @typeParam T - Share value type.
    */
   export interface Spec<T> extends Options {
-
     /**
      * Target share.
      */
     readonly share?: ShareRef<T> | undefined;
-
   }
 
   /**
@@ -175,12 +162,10 @@ export namespace ShareLocator {
    * @typeParam T - Share value type.
    */
   export interface MandatorySpec<T> extends Spec<T> {
-
     /**
      * Target share.
      */
     readonly share: ShareRef<T>;
-
   }
 
   /**
@@ -200,17 +185,17 @@ export namespace ShareLocator {
    * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
   export type Custom<T> =
-  /**
-   * @param consumer - Consumer component context.
-   * @param options - Full shared value location options.
-   *
-   * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
-   */
-      (
-          this: void,
-          consumer: ComponentContext,
-          options: FullOptions,
-      ) => AfterEvent<[] | [T, ComponentContext]>;
+    /**
+     * @param consumer - Consumer component context.
+     * @param options - Full shared value location options.
+     *
+     * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
+     */
+    (
+      this: void,
+      consumer: ComponentContext,
+      options: FullOptions,
+    ) => AfterEvent<[] | [T, ComponentContext]>;
 
   /**
    * Signature of custom shared value locator that expects a fallback share reference to be specified.
@@ -218,17 +203,17 @@ export namespace ShareLocator {
    * @typeParam T - Shared value type.
    */
   export type CustomWithFallback<T> =
-  /**
-   * @param consumer - Consumer component context.
-   * @param options - Full shared value location specifier, including fallback share reference.
-   *
-   * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
-   */
-      (
-          this: void,
-          consumer: ComponentContext,
-          spec: FullSpec<T>,
-      ) => AfterEvent<[] | [T, ComponentContext]>;
+    /**
+     * @param consumer - Consumer component context.
+     * @param options - Full shared value location specifier, including fallback share reference.
+     *
+     * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
+     */
+    (
+      this: void,
+      consumer: ComponentContext,
+      spec: FullSpec<T>,
+    ) => AfterEvent<[] | [T, ComponentContext]>;
 
   /**
    * Signature of shared value locator function.
@@ -238,16 +223,15 @@ export namespace ShareLocator {
    * @typeParam T - Shared value type.
    */
   export type Fn<T> =
-  /**
-   * @param consumer - Consumer component context.
-   * @param options - Shared value location options.
-   *
-   * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
-   */
-      (
-          this: void,
-          consumer: ComponentContext,
-          defaultSpec?: Spec<T>,
-      ) => AfterEvent<[] | [T, ComponentContext]>;
-
+    /**
+     * @param consumer - Consumer component context.
+     * @param options - Shared value location options.
+     *
+     * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
+     */
+    (
+      this: void,
+      consumer: ComponentContext,
+      defaultSpec?: Spec<T>,
+    ) => AfterEvent<[] | [T, ComponentContext]>;
 }

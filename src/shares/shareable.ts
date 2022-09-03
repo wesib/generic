@@ -10,7 +10,7 @@ import { noop, valueProvider, valueRecipe } from '@proc7ts/primitives';
 import { ComponentContext } from '@wesib/wesib';
 import { SharerAware } from './sharer-aware';
 
-const Shareable$Internals__symbol = (/*#__PURE__*/ Symbol('Shareable.internals'));
+const Shareable$Internals__symbol = /*#__PURE__*/ Symbol('Shareable.internals');
 
 /**
  * Abstract implementation of value shareable by component.
@@ -21,7 +21,7 @@ const Shareable$Internals__symbol = (/*#__PURE__*/ Symbol('Shareable.internals')
  * @typeParam TSharer - Sharer component type.
  */
 export class Shareable<TBody = unknown, TSharer extends object = any>
-    implements EventKeeper<[TBody]>, SharerAware {
+  implements EventKeeper<[TBody]>, SharerAware {
 
   /**
    * Converts shareable body or its provider to provider that always returns an `AfterEvent` keeper of shareable body.
@@ -33,12 +33,8 @@ export class Shareable<TBody = unknown, TSharer extends object = any>
    * @returns Shareable body provider.
    */
   static provider<TBody = unknown, TSharer extends object = any>(
-      body: TBody | Shareable.Provider<TBody, TSharer>,
-  ): (
-      this: void,
-      sharer: ComponentContext<TSharer>,
-  ) => AfterEvent<[TBody]> {
-
+    body: TBody | Shareable.Provider<TBody, TSharer>,
+  ): (this: void, sharer: ComponentContext<TSharer>) => AfterEvent<[TBody]> {
     const provider = valueRecipe(body);
 
     return context => afterValue(provider(context));
@@ -101,7 +97,6 @@ export class Shareable<TBody = unknown, TSharer extends object = any>
 }
 
 export namespace Shareable {
-
   /**
    * Shareable provider signature.
    *
@@ -111,28 +106,21 @@ export namespace Shareable {
    * @typeParam TSharer - Sharer component type.
    */
   export type Provider<TBody = unknown, TSharer extends object = any> =
-  /**
-   * @param sharer - Sharer component context.
-   *
-   * @returns Either shareable body instance, or an `AfterEvent` keeper reporting one.
-   */
-      (
-          this: void,
-          sharer: ComponentContext<TSharer>,
-      ) => TBody | AfterEvent<[TBody]>;
-
+    /**
+     * @param sharer - Sharer component context.
+     *
+     * @returns Either shareable body instance, or an `AfterEvent` keeper reporting one.
+     */
+    (this: void, sharer: ComponentContext<TSharer>) => TBody | AfterEvent<[TBody]>;
 }
 
 class Shareable$Internals<TBody, TSharer extends object> {
 
-  private readonly _get: (
-      this: void,
-      sharer: ComponentContext<TSharer>,
-  ) => AfterEvent<[TBody]>;
+  private readonly _get: (this: void, sharer: ComponentContext<TSharer>) => AfterEvent<[TBody]>;
 
   constructor(
-      private readonly _source: Shareable<TBody, TSharer>,
-      body: TBody | Shareable.Provider<TBody, TSharer>,
+    private readonly _source: Shareable<TBody, TSharer>,
+    body: TBody | Shareable.Provider<TBody, TSharer>,
   ) {
     this._get = Shareable.provider(body);
   }
@@ -149,7 +137,6 @@ class Shareable$Internals<TBody, TSharer extends object> {
     this.sharedBy = noop;
     this.sharer = valueProvider(sharer);
     this.get = () => {
-
       const tracker = trackValueBy(this._get(sharer));
 
       this.get = valueProvider(tracker);

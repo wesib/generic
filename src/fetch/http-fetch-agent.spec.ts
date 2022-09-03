@@ -9,7 +9,6 @@ import { HttpFetchAgent } from './http-fetch-agent';
 
 describe('fetch', () => {
   describe('HttpFetchAgent', () => {
-
     let cxBuilder: CxBuilder;
     let context: CxValues;
     let agent: HttpFetchAgent;
@@ -46,7 +45,6 @@ describe('fetch', () => {
       expect(agent).toBeNull();
     });
     it('calls the registered agent', async () => {
-
       const emitter2 = new EventEmitter<[Response]>();
       const mockAgent = jest.fn<HttpFetchAgent>(() => emitter2.on);
 
@@ -69,10 +67,7 @@ describe('fetch', () => {
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('calls the next agent in chain by calling `next`', () => {
-
-      const mockAgent = jest.fn<HttpFetchAgent>(
-          (next, _request) => next(),
-      );
+      const mockAgent = jest.fn<HttpFetchAgent>((next, _request) => next());
 
       cxBuilder.provide(cxConstAsset(HttpFetchAgent, next => next()));
       cxBuilder.provide(cxConstAsset(HttpFetchAgent, mockAgent));
@@ -82,16 +77,13 @@ describe('fetch', () => {
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('throws when context destroyed', () => {
-
       const reason = new Error('reason');
 
       cxBuilder.supply.off(reason);
 
-      expect(() => agent(mockFetch, request)).toThrow(new CxReferenceError(
-          HttpFetchAgent,
-          'The [HttpFetchAgent] is no longer available',
-          reason,
-      ));
+      expect(() => agent(mockFetch, request)).toThrow(
+        new CxReferenceError(HttpFetchAgent, 'The [HttpFetchAgent] is no longer available', reason),
+      );
       expect(mockFetch).not.toHaveBeenCalled();
     });
   });

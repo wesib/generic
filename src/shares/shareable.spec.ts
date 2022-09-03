@@ -8,21 +8,18 @@ import { Shared } from './shared.amendment';
 
 describe('shares', () => {
   describe('Shareable', () => {
-
     const share = new Share<TestShareable>('shareable-share');
 
-    class TestShareable extends Shareable<string> {
-    }
+    class TestShareable extends Shareable<string> {}
 
     it('is bound to sharer when shared', async () => {
-
       @Component({ extend: { type: MockElement } })
       class TestComponent {
 
         @Shared(share)
         shareable = new TestShareable(() => 'test');
 
-      }
+}
 
       const element: ComponentElement = new (await testElement(TestComponent))();
       const context = await ComponentSlot.of(element).whenReady;
@@ -37,18 +34,20 @@ describe('shares', () => {
 
     describe('body', () => {
       it('is not available until shared', () => {
-
         const shareable = new TestShareable('test');
 
-        expect(() => shareable.body).toThrow(new TypeError('[object Object] is not properly shared yet'));
+        expect(() => shareable.body).toThrow(
+          new TypeError('[object Object] is not properly shared yet'),
+        );
       });
     });
     describe('sharer', () => {
       it('is not available until shared', () => {
-
         const shareable = new TestShareable('test');
 
-        expect(() => shareable.sharer).toThrow(new TypeError('[object Object] is not properly shared yet'));
+        expect(() => shareable.sharer).toThrow(
+          new TypeError('[object Object] is not properly shared yet'),
+        );
       });
     });
   });

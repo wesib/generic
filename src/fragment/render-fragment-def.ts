@@ -7,26 +7,22 @@ import { FragmentRendererExecution } from './fragment-renderer';
  *
  * This is either a {@link RenderFragmentDef.Spec rendering specifier}, or its provider function.
  */
-export type RenderFragmentDef =
-    | RenderFragmentDef.Spec
-    | RenderDef.Provider<RenderFragmentDef.Spec>;
+export type RenderFragmentDef = RenderFragmentDef.Spec | RenderDef.Provider<RenderFragmentDef.Spec>;
 
 export namespace RenderFragmentDef {
-
   /**
    * Component fragment renderer method signature.
    */
   export type Method =
-  /**
-   * @param execution - Component fragment renderer execution context
-   */
-      (execution: FragmentRendererExecution) => void;
+    /**
+     * @param execution - Component fragment renderer execution context
+     */
+    (execution: FragmentRendererExecution) => void;
 
   /**
    * Fragment rendering specifier.
    */
   export interface Spec extends RenderDef.Spec {
-
     /**
      * Creates rendering target to place the rendered fragment contents to.
      *
@@ -51,7 +47,5 @@ export namespace RenderFragmentDef {
      * [upgraded]: https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/upgrade
      */
     readonly settle?: boolean | undefined;
-
   }
-
 }

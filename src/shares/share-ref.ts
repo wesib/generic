@@ -6,10 +6,8 @@ import { Share } from './share';
  * @typeParam T - Shared value type.
  */
 export interface ShareRef<T> {
-
   /**
    * Component share instance.
    */
   readonly share: Share<T>;
-
 }
