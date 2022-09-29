@@ -73,7 +73,10 @@ describe('fetch', () => {
       cxBuilder.provide(cxConstAsset(HttpFetchAgent, mockAgent));
 
       expect(agent(mockFetch, request)).toBe(emitter.on);
-      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), request);
+      expect(mockAgent).toHaveBeenCalledWith(
+        expect.any(Function) as unknown as (this: void, request?: Request) => OnEvent<[Response]>,
+        request,
+      );
       expect(mockFetch).toHaveBeenCalledWith(request);
     });
     it('throws when context destroyed', () => {

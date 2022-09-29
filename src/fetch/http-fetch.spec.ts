@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { cxConstAsset } from '@proc7ts/context-builder';
-import { EventReceiver } from '@proc7ts/fun-events';
+import { EventReceiver, OnEvent } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { bootstrapComponents, BootstrapContext, BootstrapWindow, Feature } from '@wesib/wesib';
@@ -67,7 +67,10 @@ describe('fetch', () => {
     });
     it('calls agent', async () => {
       await fetch();
-      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), new Request(request, init));
+      expect(mockAgent).toHaveBeenCalledWith(
+        expect.any(Function) as unknown as (this: void, request?: Request) => OnEvent<[Response]>,
+        new Request(request, init),
+      );
       expect(mockWindow.fetch).toHaveBeenCalledWith(new Request(request, init));
     });
     it('respects agent modification', async () => {
@@ -76,7 +79,10 @@ describe('fetch', () => {
       mockAgent.mockImplementation(next => next(request2));
 
       await fetch();
-      expect(mockAgent).toHaveBeenCalledWith(expect.any(Function), new Request(request, init));
+      expect(mockAgent).toHaveBeenCalledWith(
+        expect.any(Function) as unknown as (this: void, request?: Request) => OnEvent<[Response]>,
+        new Request(request, init),
+      );
       expect(mockWindow.fetch).toHaveBeenCalledWith(request2);
     });
     it('reports error when fetch fails', async () => {

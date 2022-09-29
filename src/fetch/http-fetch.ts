@@ -20,15 +20,13 @@ import { HttpFetchAgent } from './http-fetch-agent';
  * The fetch can be aborted by cutting off the response supply. I.e. by calling its `off()` method.
  *
  * An instance of {@link HttpFetch} is available from bootstrap context.
+ *
+ * @param input - The resource to fetch. This can either an URL string, or a `Request` object.
+ * @param init - Custom settings to apply to the request.
+ *
+ * @returns An `OnEvent` sender of responses.
  */
-export type HttpFetch =
-  /**
-   * @param input - The resource to fetch. This can either an URL string, or a `Request` object.
-   * @param init - Custom settings to apply to the request.
-   *
-   * @returns An `OnEvent` sender of responses.
-   */
-  (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>;
+export type HttpFetch = (this: void, input: RequestInfo, init?: RequestInit) => OnEvent<[Response]>;
 
 /**
  * Bootstrap context entity containing an {@link HttpFetch} instance.
