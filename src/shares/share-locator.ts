@@ -93,7 +93,7 @@ function isCustomShareLocator<T>(
     | null
     | undefined,
 ): locator is ShareLocator.CustomWithFallback<T> {
-  return typeof locator === 'function' && !(('share' in locator) as Partial<ShareLocator.Spec<T>>);
+  return typeof locator === 'function' && !('share' in locator);
 }
 
 export namespace ShareLocator {
@@ -179,41 +179,31 @@ export namespace ShareLocator {
    * Signature of custom shared value locator.
    *
    * @typeParam T - Shared value type.
-   * @typeParam consumer - Consumer component context.
-   * @typeParam options - Shared value location options.
+   * @param consumer - Consumer component context.
+   * @param options - Full shared value location options.
    *
    * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
-  export type Custom<T> =
-    /**
-     * @param consumer - Consumer component context.
-     * @param options - Full shared value location options.
-     *
-     * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
-     */
-    (
-      this: void,
-      consumer: ComponentContext,
-      options: FullOptions,
-    ) => AfterEvent<[] | [T, ComponentContext]>;
+  export type Custom<T> = (
+    this: void,
+    consumer: ComponentContext,
+    options: FullOptions,
+  ) => AfterEvent<[] | [T, ComponentContext]>;
 
   /**
    * Signature of custom shared value locator that expects a fallback share reference to be specified.
    *
    * @typeParam T - Shared value type.
+   * @param consumer - Consumer component context.
+   * @param options - Full shared value location specifier, including fallback share reference.
+   *
+   * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
-  export type CustomWithFallback<T> =
-    /**
-     * @param consumer - Consumer component context.
-     * @param options - Full shared value location specifier, including fallback share reference.
-     *
-     * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
-     */
-    (
-      this: void,
-      consumer: ComponentContext,
-      spec: FullSpec<T>,
-    ) => AfterEvent<[] | [T, ComponentContext]>;
+  export type CustomWithFallback<T> = (
+    this: void,
+    consumer: ComponentContext,
+    spec: FullSpec<T>,
+  ) => AfterEvent<[] | [T, ComponentContext]>;
 
   /**
    * Signature of shared value locator function.
@@ -221,17 +211,14 @@ export namespace ShareLocator {
    * Can be constructed by {@link shareLocator} function.
    *
    * @typeParam T - Shared value type.
+   * @param consumer - Consumer component context.
+   * @param options - Shared value location options.
+   *
+   * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
    */
-  export type Fn<T> =
-    /**
-     * @param consumer - Consumer component context.
-     * @param options - Shared value location options.
-     *
-     * @returns An `AfterEvent` keeper of the shared value and its sharer context, if found.
-     */
-    (
-      this: void,
-      consumer: ComponentContext,
-      defaultSpec?: Spec<T>,
-    ) => AfterEvent<[] | [T, ComponentContext]>;
+  export type Fn<T> = (
+    this: void,
+    consumer: ComponentContext,
+    defaultSpec?: Spec<T>,
+  ) => AfterEvent<[] | [T, ComponentContext]>;
 }
